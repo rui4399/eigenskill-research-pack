@@ -144,6 +144,32 @@ This is not a benchmark against GPTQ/AWQ/SmoothQuant/QuaRot. It is local
 negative evidence that short SFT on a tiny model is the wrong place to execute
 deterministic numeric policy rules.
 
+### Sensitivity-rate-distortion allocation scaffold
+
+The next experiment scaffold is a dependency-free allocator that compares
+uniform, random budgeted, greedy, and rate-distortion bit allocation over
+synthetic layer/group statistics:
+
+```powershell
+python train_python\rate_distortion_allocator.py `
+  --budget-avg-bits 3.2 `
+  --out-json outputs\rate_distortion_allocation_summary.json `
+  --out-md outputs\rate_distortion_allocation_report.md
+```
+
+It is not a real model-quantization result. It validates the allocation API and
+reporting format before replacing synthetic statistics with calibration-derived
+activation, Hessian/Fisher, outlier, and hardware-cost statistics.
+
+Evidence files:
+
+```text
+train_python/rate_distortion_allocator.py
+outputs/rate_distortion_sweep_report.md
+outputs/rate_distortion_allocation*_summary.json
+outputs/rate_distortion_allocation*_report.md
+```
+
 ### 8-skill hybrid routing, v2
 
 Base model:
