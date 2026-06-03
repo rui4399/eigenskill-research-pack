@@ -128,3 +128,20 @@ Not yet completed:
 
 Do not present the swarm or spectral-routing pieces as completed experimental
 results yet; they are research directions and architecture proposals.
+
+## EigenSkill-Q Quantization Policy Update
+
+The repository now includes a cleaner quantization-policy skill dataset under
+data_eval/eigenskill_quant_v0/. It uses disjoint train/eval/test templates and
+records a no-leak audit in udit.json.
+
+A local 1-epoch LoRA run completed on SmolLM2-360M; the adapter weights are not
+committed, but the training summary is available at:
+
+`	ext
+outputs/EigenSkill-Q-quant-v0-training-update.md
+`
+
+Current direction: treat the old v2 hybrid result as an engineering PoC and move
+the publication track toward sensitivity-rate-distortion guided mixed-precision
+LLM quantization.

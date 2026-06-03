@@ -1,0 +1,45 @@
+{
+  "counts": {
+    "train": 900,
+    "eval": 300,
+    "test": 300
+  },
+  "train_eval_exact_overlap": 0,
+  "train_eval_input_overlap": 0,
+  "train_test_exact_overlap": 0,
+  "train_test_input_overlap": 0,
+  "eval_test_exact_overlap": 0,
+  "eval_test_input_overlap": 0,
+  "per_skill": {
+    "train": {
+      "rotation_select": 180,
+      "residual_patch": 180,
+      "outlier_detect": 180,
+      "kv_policy": 180,
+      "bit_allocate": 180
+    },
+    "eval": {
+      "rotation_select": 60,
+      "bit_allocate": 60,
+      "kv_policy": 60,
+      "residual_patch": 60,
+      "outlier_detect": 60
+    },
+    "test": {
+      "residual_patch": 60,
+      "outlier_detect": 60,
+      "bit_allocate": 60,
+      "rotation_select": 60,
+      "kv_policy": 60
+    }
+  },
+  "skills": [
+    "outlier_detect",
+    "bit_allocate",
+    "rotation_select",
+    "residual_patch",
+    "kv_policy"
+  ],
+  "seed": 1314,
+  "template_split": "disjoint_by_split"
+}
