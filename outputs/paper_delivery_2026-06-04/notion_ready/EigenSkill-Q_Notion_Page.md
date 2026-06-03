@@ -100,15 +100,21 @@ measured per-module loss sensitivity 能显著优于 uniform INT4 和旧 RD 分�
 | uniform INT3 | 1154.44 | 4.1981 | 3:225 |
 | activation-stat RD 4/8 | 24.51 | 0.3459 | 4:172, 8:53 |
 | loss-sensitive 4/8 | 24.14 | 0.3305 | 4:172, 8:53 |
+| loss-sensitive exact knapsack 4/8 | 24.36 | 0.3396 | 4:175, 8:50 |
 
 128 prompt 结果保持同样排序：loss-sensitive 优于 uniform INT4，也略优于
 activation-stat RD。
+
+新增 exact knapsack 检查后，局部 one-module sensitivity 目标的精确最优不等于
+全局 PPL 最优：exact knapsack 保护更多局部 loss，但 PPL 略差于 greedy。这为
+后续 Fisher/Hessian/interaction-aware/RL allocation 提供了更强问题动机。
 
 新增证据文件：
 
 ```text
 train_python/measure_module_quant_sensitivity.py
 train_python/build_dataset_prompts.py
+train_python/build_loss_sensitive_knapsack_alloc.py
 data_eval/eval_configs/smollm2_group128_compare_allocations.json
 data_eval/text_prompts/wikitext2_validation_32.txt
 data_eval/text_prompts/wikitext2_validation_128.txt
@@ -121,6 +127,7 @@ outputs/smollm2_fake_quant_ppl_loss_sensitive_4to8_group128_limit8_summary.json
 outputs/smollm2_fake_quant_ppl_loss_sensitive_4to8_group128_wikitext2_32_summary.json
 outputs/smollm2_fake_quant_ppl_activation_rd_4to8_group128_wikitext2_32_summary.json
 outputs/smollm2_fake_quant_ppl_compare_allocations_group128_wikitext2_128_summary.json
+outputs/smollm2_fake_quant_ppl_compare_allocations_exact_group128_wikitext2_128_summary.json
 ```
 
 ## 数学主线

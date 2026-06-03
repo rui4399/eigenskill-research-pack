@@ -268,6 +268,7 @@ uniform INT4                  27.82
 uniform INT3                1154.44
 activation-stat RD {4,8}      24.51
 loss-sensitive {4,8}          24.14
+loss-sensitive exact knapsack 24.36
 ```
 
 This is the first positive real-model signal for the quantization track: the
@@ -275,8 +276,13 @@ activation-stat proxy was weaker than uniform INT4, while measured per-module
 loss sensitivity substantially improves over both uniform INT4 and the earlier
 RD allocation. The WikiText2 slice shows the same direction on a public text
 dataset; there, the margin over the old activation-stat RD allocation is small
-but still positive on both the 32-prompt and 128-prompt slices. It is still fake
-quantization and does not prove compressed runtime memory, latency, or
+but still positive on both the 32-prompt and 128-prompt slices. An exact
+0/1-knapsack optimizer over the measured one-module sensitivity objective
+protects slightly more local loss than the greedy allocator, but gives slightly
+worse 128-prompt PPL (`24.36` vs `24.14`). This is useful evidence that module
+interactions matter and that a serious paper should compare greedy, exact
+knapsack, Fisher/Hessian proxies, and learned policy/RL allocation. It is still
+fake quantization and does not prove compressed runtime memory, latency, or
 board-level energy savings.
 
 Evidence files:
@@ -285,6 +291,7 @@ Evidence files:
 train_python/eval_weight_quant_ppl.py
 train_python/measure_module_quant_sensitivity.py
 train_python/build_dataset_prompts.py
+train_python/build_loss_sensitive_knapsack_alloc.py
 data_eval/eval_configs/smollm2_group128_compare_allocations.json
 data_eval/text_prompts/wikitext2_validation_32.txt
 data_eval/text_prompts/wikitext2_validation_128.txt
@@ -299,6 +306,9 @@ outputs/smollm2_fake_quant_ppl_loss_sensitive_4to8_group128_limit8_summary.json
 outputs/smollm2_fake_quant_ppl_loss_sensitive_4to8_group128_wikitext2_32_summary.json
 outputs/smollm2_fake_quant_ppl_activation_rd_4to8_group128_wikitext2_32_summary.json
 outputs/smollm2_fake_quant_ppl_compare_allocations_group128_wikitext2_128_summary.json
+outputs/smollm2_loss_sensitive_exact_knapsack_alloc_4to8_limit4_group128_summary.json
+outputs/smollm2_loss_sensitive_exact_knapsack_alloc_4to8_limit4_group128_report.md
+outputs/smollm2_fake_quant_ppl_compare_allocations_exact_group128_wikitext2_128_summary.json
 ```
 
 ### 8-skill hybrid routing, v2

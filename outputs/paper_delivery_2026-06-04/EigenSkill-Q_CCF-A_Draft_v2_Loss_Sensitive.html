@@ -277,8 +277,8 @@ weight is restored before probing the next module. For
 <p>Modules are upgraded in descending <code>score_i</code> while the
 budget allows.</p>
 <h3
-id="proposition-1-optimality-under-uniform-costs-and-additive-loss">Proposition
-1: Optimality Under Uniform Costs And Additive Loss</h3>
+id="proposition-1-optimality-under-uniform-costs-and-additive-local-loss">Proposition
+1: Optimality Under Uniform Costs And Additive Local Loss</h3>
 <p>Assume all modules have equal cost and the first-order loss protected
 by upgrading a set <code>S</code> is additive:</p>
 <pre class="text"><code>Protected(S) = sum_{i in S} s_i.</code></pre>
@@ -288,9 +288,24 @@ the <code>k</code> largest <code>s_i</code> maximizes
 <p>This simple proposition explains the ranking rule under equal costs.
 With non-uniform costs, the problem becomes a 0/1 knapsack over
 <code>(s_i, Delta M_i)</code>; the greedy score is a
-fractional-relaxation heuristic. A submission-grade version should
-compare greedy, exact dynamic programming on small models, and learned
-policy approximations.</p>
+fractional-relaxation heuristic. We therefore also build an exact
+dynamic-programming knapsack solver over the measured one-module
+sensitivity objective.</p>
+<h3
+id="proposition-2-local-sensitivity-additivity-is-not-global-ppl-additivity">Proposition
+2: Local Sensitivity Additivity Is Not Global PPL Additivity</h3>
+<p>Let:</p>
+<pre class="text"><code>s_i = L(Q_i(W_i)) - L(W)</code></pre>
+<p>be the one-module perturbation loss. For a multi-module allocation
+<code>S</code>, the true loss is generally:</p>
+<pre class="text"><code>L(Q_S(W)) - L(W)
+  = sum_{i in S} s_i + sum_{i&lt;j} I_{ij} + higher-order terms,</code></pre>
+<p>where <code>I_{ij}</code> captures interaction between quantization
+errors in modules <code>i</code> and <code>j</code>. Exact optimization
+of <code>sum_i s_i</code> can therefore be suboptimal for the global PPL
+objective when interaction terms are non-negligible. This motivates
+interaction-aware features, Fisher/Hessian approximations, and learned
+allocation policies.</p>
 <h2 id="4-learning-and-reinforcement-learning-view">4. Learning And
 Reinforcement Learning View</h2>
 <p>The offline allocation can be treated as supervised policy
@@ -509,12 +524,26 @@ positive loss protected:    57.83%</code></pre>
 <td style="text-align: right;">0.3305</td>
 <td>4:172, 8:53</td>
 </tr>
+<tr>
+<td>loss-sensitive exact knapsack 4/8</td>
+<td style="text-align: right;">24.36</td>
+<td style="text-align: right;">0.3396</td>
+<td>4:175, 8:50</td>
+</tr>
 </tbody>
 </table>
 <p>The important result is not that this fake-quant scaffold beats
 production quantizers. It does not. The important result is that direct
 measured perturbation fixes the activation-proxy failure and gives a
 measurable target for ML/RL policy learning.</p>
+<p>The exact knapsack check is especially informative. It protects
+slightly more local one-module positive loss than the greedy allocator
+(<code>57.87%</code> versus <code>57.83%</code>), but its global
+WikiText2-128 PPL is slightly worse (<code>24.36</code> versus
+<code>24.14</code>). This supports Proposition 2: the additive local
+objective is a useful proxy but not the final objective. A stronger
+CCF-A version should model module interactions explicitly or learn the
+allocation reward from calibration tasks.</p>
 <h2 id="7-limitations">7. Limitations</h2>
 <p>This draft is not yet a CCF-A submission. The current limitations are
 explicit:</p>
@@ -546,6 +575,8 @@ protocol.</li>
 </ul></li>
 <li>Replace greedy allocation with exact knapsack and learned amortized
 policies.</li>
+<li>Add interaction-aware allocation features and compare local
+additive, pairwise, and learned reward models.</li>
 <li>Train a constrained contextual bandit using calibration tasks and
 hardware budgets.</li>
 <li>Report compressed runtime memory and latency only after implementing

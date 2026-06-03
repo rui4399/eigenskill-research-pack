@@ -232,6 +232,52 @@ data_eval/text_prompts/wikitext2_validation_128.txt
 outputs/smollm2_fake_quant_ppl_compare_allocations_group128_wikitext2_128_summary.json
 ```
 
+## Exact Knapsack Check
+
+The greedy loss-sensitive allocator was also compared with an exact 0/1
+knapsack optimizer over the same measured one-module sensitivity objective. The
+exact solver scales module costs by their greatest common divisor and solves the
+budgeted selection problem by dynamic programming.
+
+Knapsack allocation summary:
+
+```text
+base bits:                  4
+high bits:                  8
+selected 8-bit modules:     50
+remaining 4-bit modules:    175
+weighted average bits:      4.4993
+positive loss protected:    57.87%
+scaled parameter unit:      61440
+```
+
+Compared with the greedy allocator, exact knapsack protects slightly more local
+one-module sensitivity (`57.87%` vs `57.83%`) but gives slightly worse global
+WikiText2-128 PPL:
+
+| method | prompt count | PPL | delta NLL vs FP16 | bit histogram |
+|---|---:|---:|---:|---|
+| FP16 | 128 | 17.3436 | 0.0000 | 16:225 |
+| uniform INT4 | 128 | 27.8236 | 0.4727 | 4:225 |
+| activation-stat RD 4/8 | 128 | 24.5117 | 0.3459 | 4:172, 8:53 |
+| loss-sensitive greedy 4/8 | 128 | 24.1374 | 0.3305 | 4:172, 8:53 |
+| loss-sensitive exact knapsack 4/8 | 128 | 24.3565 | 0.3396 | 4:175, 8:50 |
+
+This is a useful caution for the paper: optimizing additive one-module
+sensitivity exactly is not identical to optimizing global model PPL. The result
+supports a stronger ML/RL direction where sensitivity features, interaction
+terms, exact combinatorial solvers, and learned allocation policies are compared
+under the same budget.
+
+Evidence files:
+
+```text
+train_python/build_loss_sensitive_knapsack_alloc.py
+outputs/smollm2_loss_sensitive_exact_knapsack_alloc_4to8_limit4_group128_summary.json
+outputs/smollm2_loss_sensitive_exact_knapsack_alloc_4to8_limit4_group128_report.md
+outputs/smollm2_fake_quant_ppl_compare_allocations_exact_group128_wikitext2_128_summary.json
+```
+
 ## Negative Result From 2/3/4/8 Allocation
 
 The earlier 3.2 average-bit allocation over `{2,3,4,8}` was much worse than

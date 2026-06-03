@@ -104,9 +104,17 @@ PPL       26.13 -> 25.92 vs activation-stat RD
 | uniform INT3 | 1154.44 | 4.1981 | 3:225 |
 | activation-stat RD 4/8 | 24.51 | 0.3459 | 4:172, 8:53 |
 | loss-sensitive 4/8 | 24.14 | 0.3305 | 4:172, 8:53 |
+| loss-sensitive exact knapsack 4/8 | 24.36 | 0.3396 | 4:175, 8:50 |
 
 这比 32 prompt 更稳，说明新分配在公开文本切片上也持续优于 uniform INT4，
 并且略优于旧 activation-stat RD 分配。
+
+同时我补了一个严格的 0/1 knapsack 检查：exact solver 在 measured one-module
+sensitivity 目标上保护了更多局部正向 loss（57.87% vs 贪心 57.83%），但
+全局 WikiText2-128 PPL 反而略差于贪心（24.36 vs 24.14）。这不是坏事，
+它说明模块之间存在交互项，论文里不能只讲“精确优化局部目标必然更好”，
+而应把它上升为更严肃的 ML/RL 问题：学习或估计包含交互的 allocation
+reward。
 
 ## 对论文主线的意义
 
@@ -160,8 +168,10 @@ outputs/smollm2_loss_sensitive_alloc_4to8_limit4_group128_summary.json
 outputs/smollm2_fake_quant_ppl_loss_sensitive_4to8_group128_limit8_summary.json
 data_eval/text_prompts/wikitext2_validation_32.txt
 data_eval/text_prompts/wikitext2_validation_128.txt
+train_python/build_loss_sensitive_knapsack_alloc.py
 outputs/smollm2_fake_quant_ppl_loss_sensitive_4to8_group128_wikitext2_32_summary.json
 outputs/smollm2_fake_quant_ppl_activation_rd_4to8_group128_wikitext2_32_summary.json
 outputs/smollm2_fake_quant_ppl_compare_allocations_group128_wikitext2_128_summary.json
+outputs/smollm2_fake_quant_ppl_compare_allocations_exact_group128_wikitext2_128_summary.json
 outputs/smollm2_fake_quant_ppl_report.md
 ```
