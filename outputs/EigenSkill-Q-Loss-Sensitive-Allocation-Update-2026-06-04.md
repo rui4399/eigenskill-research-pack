@@ -95,6 +95,19 @@ delta NLL 0.5062 -> 0.3514
 PPL       26.13 -> 25.92 vs activation-stat RD
 ```
 
+进一步扩大到 WikiText2 validation 128 prompts 后，排序保持一致：
+
+| method | PPL | delta NLL vs FP16 | bit histogram |
+|---|---:|---:|---|
+| FP16 | 17.34 | 0.0000 | 16:225 |
+| uniform INT4 | 27.82 | 0.4727 | 4:225 |
+| uniform INT3 | 1154.44 | 4.1981 | 3:225 |
+| activation-stat RD 4/8 | 24.51 | 0.3459 | 4:172, 8:53 |
+| loss-sensitive 4/8 | 24.14 | 0.3305 | 4:172, 8:53 |
+
+这比 32 prompt 更稳，说明新分配在公开文本切片上也持续优于 uniform INT4，
+并且略优于旧 activation-stat RD 分配。
+
 ## 对论文主线的意义
 
 此前 activation-stat sensitivity proxy 在 group-wise quantization 下输给
@@ -146,7 +159,9 @@ outputs/smollm2_module_loss_sensitivity_limit4_group128_report.md
 outputs/smollm2_loss_sensitive_alloc_4to8_limit4_group128_summary.json
 outputs/smollm2_fake_quant_ppl_loss_sensitive_4to8_group128_limit8_summary.json
 data_eval/text_prompts/wikitext2_validation_32.txt
+data_eval/text_prompts/wikitext2_validation_128.txt
 outputs/smollm2_fake_quant_ppl_loss_sensitive_4to8_group128_wikitext2_32_summary.json
 outputs/smollm2_fake_quant_ppl_activation_rd_4to8_group128_wikitext2_32_summary.json
+outputs/smollm2_fake_quant_ppl_compare_allocations_group128_wikitext2_128_summary.json
 outputs/smollm2_fake_quant_ppl_report.md
 ```

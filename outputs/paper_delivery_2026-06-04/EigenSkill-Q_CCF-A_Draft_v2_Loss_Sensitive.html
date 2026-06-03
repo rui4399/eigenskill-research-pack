@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>EigenSkill-Q_CCF-A_Draft_v2_Loss_Sensitive</title>
+  <style>
+    /* Default styles provided by pandoc.
+    ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+    */
+    html {
+      color: #1a1a1a;
+      background-color: #fdfdfd;
+    }
+    body {
+      margin: 0 auto;
+      max-width: 36em;
+      padding-left: 50px;
+      padding-right: 50px;
+      padding-top: 50px;
+      padding-bottom: 50px;
+      hyphens: auto;
+      overflow-wrap: break-word;
+      text-rendering: optimizeLegibility;
+      font-kerning: normal;
+    }
+    @media (max-width: 600px) {
+      body {
+        font-size: 0.9em;
+        padding: 12px;
+      }
+      h1 {
+        font-size: 1.8em;
+      }
+    }
+    @media print {
+      html {
+        background-color: white;
+      }
+      body {
+        background-color: transparent;
+        color: black;
+        font-size: 12pt;
+      }
+      p, h2, h3 {
+        orphans: 3;
+        widows: 3;
+      }
+      h2, h3, h4 {
+        page-break-after: avoid;
+      }
+    }
+    p {
+      margin: 1em 0;
+    }
+    a {
+      color: #1a1a1a;
+    }
+    a:visited {
+      color: #1a1a1a;
+    }
+    img {
+      max-width: 100%;
+    }
+    svg {
+      height: auto;
+      max-width: 100%;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 1.4em;
+    }
+    h5, h6 {
+      font-size: 1em;
+      font-style: italic;
+    }
+    h6 {
+      font-weight: normal;
+    }
+    ol, ul {
+      padding-left: 1.7em;
+      margin-top: 1em;
+    }
+    li > ol, li > ul {
+      margin-top: 0;
+    }
+    blockquote {
+      margin: 1em 0 1em 1.7em;
+      padding-left: 1em;
+      border-left: 2px solid #e6e6e6;
+      color: #606060;
+    }
+    code {
+      font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+      font-size: 85%;
+      margin: 0;
+      hyphens: manual;
+    }
+    pre {
+      margin: 1em 0;
+      overflow: auto;
+    }
+    pre code {
+      padding: 0;
+      overflow: visible;
+      overflow-wrap: normal;
+    }
+    .sourceCode {
+     background-color: transparent;
+     overflow: visible;
+    }
+    hr {
+      border: none;
+      border-top: 1px solid #1a1a1a;
+      height: 1px;
+      margin: 1em 0;
+    }
+    table {
+      margin: 1em 0;
+      border-collapse: collapse;
+      width: 100%;
+      overflow-x: auto;
+      display: block;
+      font-variant-numeric: lining-nums tabular-nums;
+    }
+    table caption {
+      margin-bottom: 0.75em;
+    }
+    tbody {
+      margin-top: 0.5em;
+      border-top: 1px solid #1a1a1a;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    th {
+      border-top: 1px solid #1a1a1a;
+      padding: 0.25em 0.5em 0.25em 0.5em;
+    }
+    td {
+      padding: 0.125em 0.5em 0.25em 0.5em;
+    }
+    header {
+      margin-bottom: 4em;
+      text-align: center;
+    }
+    #TOC li {
+      list-style: none;
+    }
+    #TOC ul {
+      padding-left: 1.3em;
+    }
+    #TOC > ul {
+      padding-left: 0;
+    }
+    #TOC a:not(:hover) {
+      text-decoration: none;
+    }
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+  </style>
+</head>
+<body>
+<h1
+id="eigenskill-q-loss-sensitive-constrained-mixed-precision-allocation-for-verifiable-llm-quantization-control">EigenSkill-Q:
+Loss-Sensitive Constrained Mixed-Precision Allocation for Verifiable LLM
+Quantization Control</h1>
+<p><strong>Manuscript draft v2.</strong><br />
+Date: 2026-06-04<br />
+Target posture: ICML / IJCAI / AAAI style research draft.<br />
+Status: stronger than the first draft, but not yet submission-ready
+because GPTQ/AWQ/SmoothQuant/rotation baselines and real
+compressed-runtime measurements are still missing.</p>
+<h2 id="abstract">Abstract</h2>
+<p>Mixed-precision quantization is a constrained decision problem: each
+module must choose a numerical format under memory, latency, and quality
+constraints. Many current workflows rely on heuristic layer statistics
+or offline quantization pipelines, while LLM-agent systems sometimes ask
+a small model to emit structured quantization decisions directly. Both
+routes are fragile: cheap activation proxies can mis-rank modules, and
+language-model generation is unreliable for low-entropy numerical
+policies.</p>
+<p>We propose <strong>EigenSkill-Q</strong>, a verifiable policy-control
+framework for LLM quantization. The framework separates semantic routing
+from numerical policy execution. Quantization choices are formulated as
+constrained optimization or constrained contextual bandits, while
+safety-critical low-entropy decisions are executed by deterministic
+policy kernels. As a concrete first step, we study loss-sensitive
+<code>{4,8}</code> mixed-precision weight allocation. For each Linear
+module, we quantize only that module, measure the resulting calibration
+loss increase, restore the original weight, and allocate 8-bit precision
+to modules with the largest loss increase per parameter cost under a 4.5
+weighted-average-bit budget.</p>
+<p>On <code>HuggingFaceTB/SmolLM2-360M-Instruct</code>, this direct
+perturbation signal outperforms both uniform INT4 and an
+activation-statistic rate-distortion proxy in a simple group-wise
+fake-quantization scaffold. On an 8-prompt diagnostic set, PPL improves
+from <code>272.18</code> under uniform INT4 to <code>212.69</code> under
+loss-sensitive 4/8 allocation. On WikiText2 validation slices, the same
+allocation improves PPL from <code>30.26</code> to <code>25.92</code> on
+32 prompts and from <code>27.82</code> to <code>24.14</code> on 128
+prompts, slightly outperforming the activation-statistic RD allocation
+in both cases. These results do not claim production quantization
+superiority; they establish a measurable direction for learning- and
+optimization-guided policy control.</p>
+<h2 id="1-introduction">1. Introduction</h2>
+<p>Post-training quantization has become a core mechanism for serving
+LLMs under resource constraints. The practical problem is not simply
+"choose INT4". Modern systems must decide which modules keep more
+precision, which activations require outlier protection, whether
+rotations or smoothing are needed, whether residual correction is worth
+its cost, and how KV-cache formats should adapt to context length.</p>
+<p>These decisions are structured numerical policies. They have schemas,
+constraints, and measurable consequences. A language model may be useful
+for semantic routing or explanation, but it is a poor final executor for
+deterministic threshold logic, bit budgets, and safety-critical policy
+fields. This motivates the core EigenSkill-Q principle:</p>
+<pre class="text"><code>Use learned models to recognize and adapt policy context.
+Use verifiable kernels to execute low-entropy numerical decisions.</code></pre>
+<p>The first EigenSkill draft overreached by connecting this idea to
+speculative edge/swarm/eigen-routing claims. This v2 draft narrows the
+contribution to a publishable machine-learning problem:
+<strong>loss-sensitive constrained mixed-precision allocation with
+verifiable policy execution</strong>.</p>
+<h2 id="2-problem-formulation">2. Problem Formulation</h2>
+<p>Consider a transformer with quantizable modules indexed by
+<code>i = 1, ..., n</code>. Each module has weight tensor
+<code>W_i</code>, calibration data <code>D_cal</code>, and parameter
+cost <code>c_i</code>. A mixed-precision policy chooses bit width
+<code>b_i</code> from a discrete set <code>B</code>, such as
+<code>{4, 8}</code>:</p>
+<pre class="text"><code>pi = (b_1, ..., b_n),      b_i in B.</code></pre>
+<p>Let <code>Q_i(W_i; b_i)</code> denote the quantized-dequantized
+operator used for fake quantization diagnostics, and let
+<code>L(pi; D_cal)</code> be next-token negative log-likelihood after
+applying the allocation. A constrained allocation objective is:</p>
+<pre class="text"><code>minimize_pi   L(pi; D_cal)
+subject to    sum_i c_i b_i &lt;= B_mem
+              b_i in B.</code></pre>
+<p>For a broader quantization policy, the action can also include
+rotations, outlier protection, residual rank, and KV-cache format:</p>
+<pre class="text"><code>a_i = (b_i, R_i, o_i, r_i, k_i).</code></pre>
+<p>Then the objective becomes:</p>
+<pre class="text"><code>minimize    sum_i D_i(W_i, A_i, a_i) + alpha C_i(a_i)
+subject to  sum_i M_i(a_i) &lt;= B_mem
+            sum_i T_i(a_i) &lt;= B_lat
+            Risk_i(a_i) &lt;= epsilon_i.</code></pre>
+<p><code>D_i</code> may be measured loss increase, activation
+reconstruction error, output KL, or a Fisher/Hessian-weighted proxy.
+<code>C_i</code>, <code>M_i</code>, and <code>T_i</code> capture
+algorithmic and hardware costs.</p>
+<h2 id="3-loss-sensitive-module-scoring">3. Loss-Sensitive Module
+Scoring</h2>
+<p>The activation-statistic proxy used in the first scaffold estimates
+sensitivity from input magnitude, variance, and outlier ratios. This is
+cheap but indirect. The v2 method measures a direct perturbation
+signal:</p>
+<pre class="text"><code>s_i = max(0, L(Q_i^{b_low}(W_i); D_cal) - L(W; D_cal)).</code></pre>
+<p>Only one module is quantized during each probe, and the original
+weight is restored before probing the next module. For
+<code>{4,8}</code> allocation, the base policy sets all modules to
+4-bit. Upgrading module <code>i</code> to 8-bit consumes:</p>
+<pre class="text"><code>Delta M_i = c_i (8 - 4).</code></pre>
+<p>The current implementation uses a greedy budgeted rule:</p>
+<pre class="text"><code>score_i = s_i / Delta M_i.</code></pre>
+<p>Modules are upgraded in descending <code>score_i</code> while the
+budget allows.</p>
+<h3
+id="proposition-1-optimality-under-uniform-costs-and-additive-loss">Proposition
+1: Optimality Under Uniform Costs And Additive Loss</h3>
+<p>Assume all modules have equal cost and the first-order loss protected
+by upgrading a set <code>S</code> is additive:</p>
+<pre class="text"><code>Protected(S) = sum_{i in S} s_i.</code></pre>
+<p>For a budget that upgrades exactly <code>k</code> modules, selecting
+the <code>k</code> largest <code>s_i</code> maximizes
+<code>Protected(S)</code>.</p>
+<p>This simple proposition explains the ranking rule under equal costs.
+With non-uniform costs, the problem becomes a 0/1 knapsack over
+<code>(s_i, Delta M_i)</code>; the greedy score is a
+fractional-relaxation heuristic. A submission-grade version should
+compare greedy, exact dynamic programming on small models, and learned
+policy approximations.</p>
+<h2 id="4-learning-and-reinforcement-learning-view">4. Learning And
+Reinforcement Learning View</h2>
+<p>The offline allocation can be treated as supervised policy
+learning:</p>
+<pre class="text"><code>x_i = phi(W_i, A_i, hardware, budget)
+y_i = b_i^*</code></pre>
+<p>where <code>b_i^*</code> comes from measured perturbation, exact
+knapsack, or a stronger quantizer oracle. A model
+<code>pi_theta(b | x_i)</code> can then amortize allocation for new
+models or devices.</p>
+<p>The online variant is a constrained contextual bandit. At request or
+deployment time, context <code>x_t</code> includes model statistics,
+prompt/domain features, current memory pressure, latency target, and
+device state. The policy action <code>a_t</code> selects a quantization
+configuration:</p>
+<pre class="text"><code>a_t ~ pi_theta(. | x_t).</code></pre>
+<p>A practical reward is:</p>
+<pre class="text"><code>R_t = -QualityDrop_t - beta_M Memory_t - beta_T Latency_t.</code></pre>
+<p>The constrained objective is:</p>
+<pre class="text"><code>maximize    E[R_t]
+subject to  E[Memory_t] &lt;= B
+            E[Latency_t] &lt;= T
+            P(QualityDrop_t &gt; delta) &lt;= eta.</code></pre>
+<p>A primal-dual update can optimize:</p>
+<pre class="text"><code>J(theta, lambda) =
+  E[-R_t]
+  + lambda_M E[(Memory_t - B)_+]
+  + lambda_T E[(Latency_t - T)_+]
+  + lambda_Q E[(QualityDrop_t - delta)_+].</code></pre>
+<p>The deterministic C++ kernel corresponds to a fixed, auditable
+policy. The learned bandit/RL policy is only introduced when it can beat
+deterministic rules while satisfying measured constraints.</p>
+<h2 id="5-system-design">5. System Design</h2>
+<p>EigenSkill-Q separates three roles:</p>
+<ol type="1">
+<li><strong>Router:</strong> detects that an input or calibration
+context requires a quantization-policy skill.</li>
+<li><strong>Policy estimator:</strong> computes sensitivity or predicts
+allocation candidates.</li>
+<li><strong>Verifiable executor:</strong> applies deterministic
+schema-safe policy decisions.</li>
+</ol>
+<p>The current repository contains a C++ policy evaluator for five
+structured quantization-policy skills:</p>
+<pre class="text"><code>outlier_detect
+bit_allocate
+rotation_select
+residual_patch
+kv_policy</code></pre>
+<p>This is not yet a full runtime quantizer. It is a control-plane
+artifact showing that structured numerical policy decisions can be
+executed outside of LLM text generation.</p>
+<h2 id="6-experiments">6. Experiments</h2>
+<h3 id="61-deterministic-policy-kernel">6.1 Deterministic Policy
+Kernel</h3>
+<p>The no-leak synthetic policy split contains 400 eval and 400 test
+samples. The C++ evaluator reaches exact decision agreement:</p>
+<table>
+<thead>
+<tr>
+<th>split</th>
+<th style="text-align: right;">rows</th>
+<th style="text-align: right;">policy_fields_exact</th>
+<th style="text-align: right;">decision_exact</th>
+<th style="text-align: right;">parse_error</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>eval</td>
+<td style="text-align: right;">400</td>
+<td style="text-align: right;">1.0000</td>
+<td style="text-align: right;">1.0000</td>
+<td style="text-align: right;">0.0000</td>
+</tr>
+<tr>
+<td>test</td>
+<td style="text-align: right;">400</td>
+<td style="text-align: right;">1.0000</td>
+<td style="text-align: right;">1.0000</td>
+<td style="text-align: right;">0.0000</td>
+</tr>
+</tbody>
+</table>
+<p>This supports the bypass premise: low-entropy policy rules can be
+executed more reliably by a deterministic kernel than by asking a small
+model to emit numeric JSON.</p>
+<h3 id="62-loss-sensitive-allocation">6.2 Loss-Sensitive Allocation</h3>
+<p>Model:</p>
+<pre class="text"><code>HuggingFaceTB/SmolLM2-360M-Instruct</code></pre>
+<p>Probe:</p>
+<pre class="text"><code>Linear modules:             225
+probe prompts:              4
+group size:                 128
+budget avg bits:            4.5
+allocation:                 4-bit=172, 8-bit=53
+positive loss protected:    57.83%</code></pre>
+<p>8-prompt diagnostic set:</p>
+<table>
+<thead>
+<tr>
+<th>method</th>
+<th style="text-align: right;">PPL</th>
+<th style="text-align: right;">delta NLL vs FP16</th>
+<th>bit histogram</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>FP16</td>
+<td style="text-align: right;">179.14</td>
+<td style="text-align: right;">0.0000</td>
+<td>16:225</td>
+</tr>
+<tr>
+<td>uniform INT4</td>
+<td style="text-align: right;">272.18</td>
+<td style="text-align: right;">0.4183</td>
+<td>4:225</td>
+</tr>
+<tr>
+<td>activation-stat RD 4/8</td>
+<td style="text-align: right;">292.01</td>
+<td style="text-align: right;">0.4886</td>
+<td>4:172, 8:53</td>
+</tr>
+<tr>
+<td>loss-sensitive 4/8</td>
+<td style="text-align: right;">212.69</td>
+<td style="text-align: right;">0.1717</td>
+<td>4:172, 8:53</td>
+</tr>
+</tbody>
+</table>
+<p>WikiText2 validation, 32 prompts:</p>
+<table>
+<thead>
+<tr>
+<th>method</th>
+<th style="text-align: right;">PPL</th>
+<th style="text-align: right;">delta NLL vs FP16</th>
+<th>bit histogram</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>FP16</td>
+<td style="text-align: right;">18.24</td>
+<td style="text-align: right;">0.0000</td>
+<td>16:225</td>
+</tr>
+<tr>
+<td>uniform INT4</td>
+<td style="text-align: right;">30.26</td>
+<td style="text-align: right;">0.5062</td>
+<td>4:225</td>
+</tr>
+<tr>
+<td>uniform INT3</td>
+<td style="text-align: right;">1678.70</td>
+<td style="text-align: right;">4.5221</td>
+<td>3:225</td>
+</tr>
+<tr>
+<td>activation-stat RD 4/8</td>
+<td style="text-align: right;">26.13</td>
+<td style="text-align: right;">0.3593</td>
+<td>4:172, 8:53</td>
+</tr>
+<tr>
+<td>loss-sensitive 4/8</td>
+<td style="text-align: right;">25.92</td>
+<td style="text-align: right;">0.3514</td>
+<td>4:172, 8:53</td>
+</tr>
+</tbody>
+</table>
+<p>WikiText2 validation, 128 prompts:</p>
+<table>
+<thead>
+<tr>
+<th>method</th>
+<th style="text-align: right;">PPL</th>
+<th style="text-align: right;">delta NLL vs FP16</th>
+<th>bit histogram</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>FP16</td>
+<td style="text-align: right;">17.34</td>
+<td style="text-align: right;">0.0000</td>
+<td>16:225</td>
+</tr>
+<tr>
+<td>uniform INT4</td>
+<td style="text-align: right;">27.82</td>
+<td style="text-align: right;">0.4727</td>
+<td>4:225</td>
+</tr>
+<tr>
+<td>uniform INT3</td>
+<td style="text-align: right;">1154.44</td>
+<td style="text-align: right;">4.1981</td>
+<td>3:225</td>
+</tr>
+<tr>
+<td>activation-stat RD 4/8</td>
+<td style="text-align: right;">24.51</td>
+<td style="text-align: right;">0.3459</td>
+<td>4:172, 8:53</td>
+</tr>
+<tr>
+<td>loss-sensitive 4/8</td>
+<td style="text-align: right;">24.14</td>
+<td style="text-align: right;">0.3305</td>
+<td>4:172, 8:53</td>
+</tr>
+</tbody>
+</table>
+<p>The important result is not that this fake-quant scaffold beats
+production quantizers. It does not. The important result is that direct
+measured perturbation fixes the activation-proxy failure and gives a
+measurable target for ML/RL policy learning.</p>
+<h2 id="7-limitations">7. Limitations</h2>
+<p>This draft is not yet a CCF-A submission. The current limitations are
+explicit:</p>
+<ul>
+<li>fake quantization dequantizes weights back to floating point;</li>
+<li>memory and latency reductions are not proven;</li>
+<li>no GPTQ/AWQ/SmoothQuant/QuaRot/SpinQuant baselines are included
+yet;</li>
+<li>WikiText2 slices are still small;</li>
+<li>the learned contextual bandit/RL component is formulated but not
+trained;</li>
+<li>edge-board and NPU measurements remain future work;</li>
+<li>spectral/eigen-routing and swarm/acoustic concepts are out of
+scope.</li>
+</ul>
+<h2 id="8-next-experiments-required-for-a-serious-submission">8. Next
+Experiments Required For A Serious Submission</h2>
+<ol type="1">
+<li>Evaluate on WikiText2/C4 with standard token-level PPL
+protocol.</li>
+<li>Add RTN, GPTQ, AWQ, SmoothQuant, QuaRot/SpinQuant baselines.</li>
+<li>Compare sensitivity estimators:
+<ul>
+<li>one-module measured loss delta;</li>
+<li>Fisher diagonal;</li>
+<li>Hessian proxy;</li>
+<li>activation reconstruction error;</li>
+<li>output KL divergence.</li>
+</ul></li>
+<li>Replace greedy allocation with exact knapsack and learned amortized
+policies.</li>
+<li>Train a constrained contextual bandit using calibration tasks and
+hardware budgets.</li>
+<li>Report compressed runtime memory and latency only after implementing
+a real quantized representation or using an established quantization
+runtime.</li>
+</ol>
+<h2 id="9-recommended-venue-framing">9. Recommended Venue Framing</h2>
+<p>The best near-term framing is not NeurIPS/MLSys and not speculative
+edge swarm. The credible route is:</p>
+<ul>
+<li><strong>ICML:</strong> if the loss-sensitive/RL formulation is
+strengthened with theory and strong baselines.</li>
+<li><strong>IJCAI / AAAI:</strong> if the contribution is positioned as
+verifiable AI policy control for quantization decisions.</li>
+<li><strong>ACL:</strong> if the routing/tool-use angle and structured
+generation reliability become central.</li>
+<li><strong>JMLR / AI / TPAMI:</strong> only after the theory,
+experiments, and baselines are substantially expanded.</li>
+</ul>
+<h2 id="10-current-evidence-files">10. Current Evidence Files</h2>
+<pre class="text"><code>train_python/measure_module_quant_sensitivity.py
+train_python/build_dataset_prompts.py
+train_python/eval_weight_quant_ppl.py
+inference_cpp/src/quant_policy_bypass.cpp
+outputs/smollm2_module_loss_sensitivity_limit4_group128.json
+outputs/smollm2_fake_quant_ppl_compare_allocations_group128_wikitext2_128_summary.json
+outputs/smollm2_fake_quant_ppl_report.md
+outputs/EigenSkill-Q-Loss-Sensitive-Allocation-Update-2026-06-04.md</code></pre>
+</body>
+</html>

@@ -200,9 +200,36 @@ Evidence files:
 
 ```text
 train_python/build_dataset_prompts.py
+data_eval/eval_configs/smollm2_group128_compare_allocations.json
 data_eval/text_prompts/wikitext2_validation_32.txt
 outputs/smollm2_fake_quant_ppl_loss_sensitive_4to8_group128_wikitext2_32_summary.json
 outputs/smollm2_fake_quant_ppl_activation_rd_4to8_group128_wikitext2_32_summary.json
+```
+
+The slice was then expanded to 128 prompts and evaluated with one shared config
+containing both allocation methods:
+
+| method | prompt count | PPL | delta NLL vs FP16 | bit histogram |
+|---|---:|---:|---:|---|
+| FP16 | 128 | 17.3436 | 0.0000 | 16:225 |
+| uniform INT4 | 128 | 27.8236 | 0.4727 | 4:225 |
+| uniform INT3 | 128 | 1154.4350 | 4.1981 | 3:225 |
+| activation-stat RD 4/8 | 128 | 24.5117 | 0.3459 | 4:172, 8:53 |
+| loss-sensitive 4/8 | 128 | 24.1374 | 0.3305 | 4:172, 8:53 |
+
+The 128-prompt slice keeps the same ordering:
+
+```text
+PPL:       27.82 -> 24.14 vs uniform INT4
+delta NLL: 0.4727 -> 0.3305 vs uniform INT4
+PPL:       24.51 -> 24.14 vs activation-stat RD 4/8
+```
+
+Evidence files:
+
+```text
+data_eval/text_prompts/wikitext2_validation_128.txt
+outputs/smollm2_fake_quant_ppl_compare_allocations_group128_wikitext2_128_summary.json
 ```
 
 ## Negative Result From 2/3/4/8 Allocation
@@ -220,8 +247,8 @@ Treat 2/3-bit as a later experiment requiring stronger compensation.
 
 The next meaningful benchmark is:
 
-1. Expand the measured loss-sensitive allocation to WikiText2/C4 slices rather
-   than only the current 32-prompt WikiText2 smoke slice.
+1. Expand the measured loss-sensitive allocation to C4 and larger WikiText2
+   slices beyond the current 128-prompt check.
 2. Compare against Fisher/Hessian proxies and activation reconstruction error.
 3. Add calibration-aware scaling or GPTQ/AWQ/SmoothQuant/rotation baselines.
 4. Repeat across calibration prompt sets and report variance.

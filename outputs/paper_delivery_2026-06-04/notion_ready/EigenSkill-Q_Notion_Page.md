@@ -39,6 +39,9 @@ Mixed-Precision LLM Quantization
 ```text
 outputs/EigenSkill-Q-Cpp-Policy-Bypass-Report.md
 outputs/paper_delivery_2026-06-04/EigenSkill-Q_CCF-A_Draft.md
+outputs/paper_delivery_2026-06-04/EigenSkill-Q_CCF-A_Draft_v2_Loss_Sensitive.md
+outputs/paper_delivery_2026-06-04/EigenSkill-Q_CCF-A_Draft_v2_Loss_Sensitive.docx
+outputs/paper_delivery_2026-06-04/EigenSkill-Q_CCF-A_Draft_v2_Loss_Sensitive.html
 outputs/paper_delivery_2026-06-04/导师速览.md
 outputs/paper_delivery_2026-06-04/authorization-and-channel-audit.md
 ```
@@ -88,19 +91,36 @@ measured per-module loss sensitivity 能显著优于 uniform INT4 和旧 RD 分�
 
 这给论文主线补上了比手写 prompt 更可信的公共文本切片证据。
 
+扩大到 WikiText2 validation 128 prompts 后：
+
+| method | PPL | delta NLL vs FP16 | bit histogram |
+|---|---:|---:|---|
+| FP16 | 17.34 | 0.0000 | 16:225 |
+| uniform INT4 | 27.82 | 0.4727 | 4:225 |
+| uniform INT3 | 1154.44 | 4.1981 | 3:225 |
+| activation-stat RD 4/8 | 24.51 | 0.3459 | 4:172, 8:53 |
+| loss-sensitive 4/8 | 24.14 | 0.3305 | 4:172, 8:53 |
+
+128 prompt 结果保持同样排序：loss-sensitive 优于 uniform INT4，也略优于
+activation-stat RD。
+
 新增证据文件：
 
 ```text
 train_python/measure_module_quant_sensitivity.py
 train_python/build_dataset_prompts.py
+data_eval/eval_configs/smollm2_group128_compare_allocations.json
 data_eval/text_prompts/wikitext2_validation_32.txt
+data_eval/text_prompts/wikitext2_validation_128.txt
 outputs/EigenSkill-Q-Loss-Sensitive-Allocation-Update-2026-06-04.md
+outputs/paper_delivery_2026-06-04/EigenSkill-Q_CCF-A_Draft_v2_Loss_Sensitive.md
 outputs/smollm2_module_loss_sensitivity_limit4_group128.json
 outputs/smollm2_module_loss_sensitivity_limit4_group128_report.md
 outputs/smollm2_loss_sensitive_alloc_4to8_limit4_group128_summary.json
 outputs/smollm2_fake_quant_ppl_loss_sensitive_4to8_group128_limit8_summary.json
 outputs/smollm2_fake_quant_ppl_loss_sensitive_4to8_group128_wikitext2_32_summary.json
 outputs/smollm2_fake_quant_ppl_activation_rd_4to8_group128_wikitext2_32_summary.json
+outputs/smollm2_fake_quant_ppl_compare_allocations_group128_wikitext2_128_summary.json
 ```
 
 ## 数学主线

@@ -261,6 +261,13 @@ uniform INT4                  30.26
 uniform INT3                1678.70
 activation-stat RD {4,8}      26.13
 loss-sensitive {4,8}          25.92
+
+WikiText2 validation slice, 128 prompts:
+FP16                          17.34
+uniform INT4                  27.82
+uniform INT3                1154.44
+activation-stat RD {4,8}      24.51
+loss-sensitive {4,8}          24.14
 ```
 
 This is the first positive real-model signal for the quantization track: the
@@ -268,8 +275,9 @@ activation-stat proxy was weaker than uniform INT4, while measured per-module
 loss sensitivity substantially improves over both uniform INT4 and the earlier
 RD allocation. The WikiText2 slice shows the same direction on a public text
 dataset; there, the margin over the old activation-stat RD allocation is small
-but still positive. It is still fake quantization and does not prove compressed
-runtime memory, latency, or board-level energy savings.
+but still positive on both the 32-prompt and 128-prompt slices. It is still fake
+quantization and does not prove compressed runtime memory, latency, or
+board-level energy savings.
 
 Evidence files:
 
@@ -277,7 +285,9 @@ Evidence files:
 train_python/eval_weight_quant_ppl.py
 train_python/measure_module_quant_sensitivity.py
 train_python/build_dataset_prompts.py
+data_eval/eval_configs/smollm2_group128_compare_allocations.json
 data_eval/text_prompts/wikitext2_validation_32.txt
+data_eval/text_prompts/wikitext2_validation_128.txt
 outputs/smollm2_fake_quant_ppl_report.md
 outputs/smollm2_fake_quant_ppl_4to8_limit8_summary.json
 outputs/smollm2_fake_quant_ppl_4to8_group128_limit8_summary.json
@@ -288,6 +298,7 @@ outputs/smollm2_loss_sensitive_alloc_4to8_limit4_group128_summary.json
 outputs/smollm2_fake_quant_ppl_loss_sensitive_4to8_group128_limit8_summary.json
 outputs/smollm2_fake_quant_ppl_loss_sensitive_4to8_group128_wikitext2_32_summary.json
 outputs/smollm2_fake_quant_ppl_activation_rd_4to8_group128_wikitext2_32_summary.json
+outputs/smollm2_fake_quant_ppl_compare_allocations_group128_wikitext2_128_summary.json
 ```
 
 ### 8-skill hybrid routing, v2
@@ -476,6 +487,15 @@ drafts. Treat that directory as historical scaffolding. In particular:
 - the edge-runtime draft lacks real board-level latency and energy results;
 - the current credible direction is quantization-policy bypass plus honest
   routing evaluation.
+
+The current paper-facing draft is:
+
+```text
+outputs/paper_delivery_2026-06-04/EigenSkill-Q_CCF-A_Draft_v2_Loss_Sensitive.md
+```
+
+It reframes the project around loss-sensitive constrained mixed-precision
+allocation, deterministic policy kernels, and a contextual-bandit/RL extension.
 
 ## Next Work
 
