@@ -69,6 +69,24 @@ def make_synthetic_groups(layers: int, groups_per_layer: int, seed: int) -> list
     return groups
 
 
+def load_groups(path: str) -> list[GroupStat]:
+    data = json.loads(Path(path).read_text(encoding="utf-8"))
+    raw_groups = data["groups"] if isinstance(data, dict) and "groups" in data else data
+    groups = []
+    for idx, item in enumerate(raw_groups):
+        groups.append(
+            GroupStat(
+                layer=int(item.get("layer", idx)),
+                group=int(item.get("group", 0)),
+                sensitivity=float(item["sensitivity"]),
+                variance=float(item["variance"]),
+                cost=float(item.get("cost", 1.0)),
+                outlier=float(item.get("outlier", 0.0)),
+            )
+        )
+    return groups
+
+
 def uniform_alloc(n: int, bits: int) -> list[int]:
     return [bits] * n
 
@@ -236,13 +254,14 @@ def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--layers", type=int, default=24)
     parser.add_argument("--groups-per-layer", type=int, default=16)
+    parser.add_argument("--stats-json", default="", help="Optional calibration stats JSON with a groups array")
     parser.add_argument("--budget-avg-bits", type=float, default=3.2)
     parser.add_argument("--seed", type=int, default=20260604)
     parser.add_argument("--out-json", default="outputs/rate_distortion_allocation_summary.json")
     parser.add_argument("--out-md", default="outputs/rate_distortion_allocation_report.md")
     args = parser.parse_args()
 
-    groups = make_synthetic_groups(args.layers, args.groups_per_layer, args.seed)
+    groups = load_groups(args.stats_json) if args.stats_json else make_synthetic_groups(args.layers, args.groups_per_layer, args.seed)
     budget = args.budget_avg_bits * sum(g.cost for g in groups)
     allocs = {
         "uniform_int2": uniform_alloc(len(groups), 2),
@@ -255,8 +274,9 @@ def main() -> None:
     summaries = [summarize(name, groups, alloc, budget) for name, alloc in allocs.items()]
     result = {
         "seed": args.seed,
-        "layers": args.layers,
-        "groups_per_layer": args.groups_per_layer,
+        "stats_json": args.stats_json,
+        "layers": args.layers if not args.stats_json else len({g.layer for g in groups}),
+        "groups_per_layer": args.groups_per_layer if not args.stats_json else None,
         "budget_avg_bits": args.budget_avg_bits,
         "bits": BITS,
         "groups": [asdict(g) for g in groups],

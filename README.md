@@ -170,6 +170,36 @@ outputs/rate_distortion_allocation*_summary.json
 outputs/rate_distortion_allocation*_report.md
 ```
 
+### Real-model calibration bridge
+
+The allocation scaffold has also been connected to cached
+`HuggingFaceTB/SmolLM2-360M-Instruct` activation statistics. This is still not a
+quantized-model quality benchmark, but it verifies the chain:
+
+```text
+small LLM -> Linear-module activation stats -> allocator GroupStat records
+          -> mixed-precision bit allocation
+```
+
+Local WSL evidence:
+
+```text
+GPU: NVIDIA GeForce RTX 5070 Laptop GPU
+torch: 2.12.0+cu130
+CUDA available: true
+calibrated Linear modules: 225
+```
+
+Evidence files:
+
+```text
+train_python/collect_calibration_stats.py
+outputs/calibration_stats_smollm2_360m_limit4.json
+outputs/smollm2_calibration_allocation_report.md
+outputs/smollm2_calib_limit4_rd_alloc*.json
+outputs/smollm2_calib_limit4_rd_alloc*.md
+```
+
 ### 8-skill hybrid routing, v2
 
 Base model:
