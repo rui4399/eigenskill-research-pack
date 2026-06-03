@@ -30,6 +30,10 @@ These claims are supported by committed data, scripts, or reports:
   overlap according to `data_eval/eigenskill_quant_v1/audit.json`.
 - A deterministic Python bypass reaches 100% `exact_json` and 100%
   `decision_exact` on the committed v1 eval and test splits.
+- A deterministic C++ policy evaluator reaches 100%
+  `policy_fields_exact` and 100% `decision_exact` on the committed v1 eval
+  and test splits. This checks the decision-bearing fields, not every
+  auxiliary JSON field.
 - A short SmolLM2-360M LoRA smoke run does not learn the quantization-policy
   decisions in a 60-row generation check; this is negative evidence for using
   small SFT alone as the policy executor.
@@ -105,4 +109,3 @@ Required before a serious submission:
    hardware or energy claims.
 5. Separate speculative swarm/acoustic material into a future vision document,
    not the main paper contribution.
-

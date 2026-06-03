@@ -1,5 +1,7 @@
 param(
   [string]$Configuration = "Release",
+  [ValidateSet("bench", "quant-policy")]
+  [string]$Target = "bench",
   [switch]$NoAvx2
 )
 
@@ -7,8 +9,13 @@ $ErrorActionPreference = "Stop"
 
 $Root = Split-Path -Parent $PSScriptRoot
 $BuildDir = Join-Path $PSScriptRoot "build"
-$Source = Join-Path $PSScriptRoot "src\eigenskill_bench.cpp"
-$Exe = Join-Path $BuildDir "eigenskill_bench.exe"
+if ($Target -eq "quant-policy") {
+  $Source = Join-Path $PSScriptRoot "src\quant_policy_bypass.cpp"
+  $Exe = Join-Path $BuildDir "quant_policy_bypass.exe"
+} else {
+  $Source = Join-Path $PSScriptRoot "src\eigenskill_bench.cpp"
+  $Exe = Join-Path $BuildDir "eigenskill_bench.exe"
+}
 
 New-Item -ItemType Directory -Force -Path $BuildDir | Out-Null
 
@@ -39,4 +46,3 @@ if (-not (Test-Path -LiteralPath $Exe)) {
 }
 
 Write-Host "Built: $Exe"
-

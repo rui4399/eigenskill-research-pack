@@ -7,7 +7,8 @@ The current repository is not a finished edge inference engine. Its verified
 core is narrower:
 
 1. synthetic skill datasets for routing and quantization-policy decisions;
-2. deterministic bypass evaluators for low-entropy skills;
+2. deterministic bypass evaluators for low-entropy skills, including a C++
+   quantization-policy evaluator;
 3. a small LoRA/adapter training pipeline around
    `HuggingFaceTB/SmolLM2-360M-Instruct`;
 4. a C++ low-rank GEMV microbenchmark that measures an isolated best-case
@@ -99,8 +100,30 @@ Evidence files:
 data_eval/eigenskill_quant_v1/audit.json
 outputs/eigenskill_quant_v1_eval_hybrid_policy_summary.json
 outputs/eigenskill_quant_v1_test_hybrid_policy_summary.json
+outputs/eigenskill_quant_v1_eval_cpp_policy_summary.json
+outputs/eigenskill_quant_v1_test_cpp_policy_summary.json
 docs/obsidian_quant_route/12-quant-v1-data-fix-and-bypass-baseline.md
 ```
+
+C++ policy bypass check, Windows/MSVC:
+
+```text
+eval n:                 400
+eval policy_fields:     400/400 = 100%
+eval decision_exact:    400/400 = 100%
+eval parse_error:       0/400 = 0%
+eval throughput:        8261 rows/s
+
+test n:                 400
+test policy_fields:     400/400 = 100%
+test decision_exact:    400/400 = 100%
+test parse_error:       0/400 = 0%
+test throughput:        6924 rows/s
+```
+
+The C++ metric `policy_fields_exact` checks the decision-bearing fields for
+each skill. The stricter full-response `exact_json`, including auxiliary
+fields such as `risk` and `score`, is covered by the Python baseline above.
 
 ### Pure LoRA negative evidence
 
@@ -204,6 +227,8 @@ outputs/eigenskill_cpp_benchmark.txt
 ```text
 train_python/                 data generation, LoRA training, eval, bypass scripts
 inference_cpp/                C++ low-rank GEMV microbenchmark
+inference_cpp/src/quant_policy_bypass.cpp
+                              C++ deterministic quantization-policy evaluator
 data_eval/eigenskill_v2/      older 8-skill PoC split with severe overlap
 data_eval/eigenskill_quant_v1/cleaner quantization-policy split
 outputs/                      selected summaries, reports, and benchmark outputs
@@ -233,6 +258,22 @@ python train_python/hybrid_eval_quant_policy.py \
 python train_python/hybrid_eval_quant_policy.py \
   --data data_eval/eigenskill_quant_v1/test.jsonl \
   --out outputs/eigenskill_quant_v1_test_hybrid_policy_summary.json
+```
+
+## Reproduce The C++ Quantization-Policy Bypass
+
+Build and run the standalone C++ evaluator on Windows/MSVC:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\inference_cpp\build-msvc.ps1 -Target quant-policy
+
+.\inference_cpp\build\quant_policy_bypass.exe `
+  --data data_eval\eigenskill_quant_v1\eval.jsonl `
+  --out outputs\eigenskill_quant_v1_eval_cpp_policy_summary.json
+
+.\inference_cpp\build\quant_policy_bypass.exe `
+  --data data_eval\eigenskill_quant_v1\test.jsonl `
+  --out outputs\eigenskill_quant_v1_test_cpp_policy_summary.json
 ```
 
 On Windows/PowerShell, the same commands work with `python` if the repo root is

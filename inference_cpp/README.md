@@ -1,8 +1,11 @@
-# EigenSkill C++ Microbenchmark
+# EigenSkill C++ Artifacts
 
-This is the first systems artifact for EigenSkill. It does not depend on
-llama.cpp, RKNN, ExecuTorch, or any model runtime. The goal is to isolate the
-core kernel claim:
+This directory contains standalone C++ artifacts for EigenSkill. They do not
+depend on llama.cpp, RKNN, ExecuTorch, or any model runtime.
+
+## Low-Rank GEMV Microbenchmark
+
+The first artifact isolates the core low-rank arithmetic claim:
 
 ```text
 dense path:      y = W x
@@ -65,3 +68,55 @@ mathematically equivalent up to floating-point accumulation differences. This
 intentionally measures the best-case systems ceiling. Later experiments should
 add an arbitrary dense `W`, train or fit `U/A`, and report approximation error.
 
+## Quantization-Policy Bypass Evaluator
+
+The second artifact is a deterministic C++ evaluator for the v1
+quantization-policy skills:
+
+```text
+outlier_detect
+bit_allocate
+rotation_select
+residual_patch
+kv_policy
+```
+
+It parses the committed JSONL split, applies the same policy rules as
+`train_python/hybrid_eval_quant_policy.py`, and reports whether the
+decision-bearing fields match the gold JSON. This is a policy-kernel evaluator,
+not a general JSON parser and not an integrated LLM runtime.
+
+### Build
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\inference_cpp\build-msvc.ps1 -Target quant-policy
+```
+
+Output:
+
+```text
+inference_cpp\build\quant_policy_bypass.exe
+```
+
+### Run
+
+```powershell
+.\inference_cpp\build\quant_policy_bypass.exe `
+  --data data_eval\eigenskill_quant_v1\eval.jsonl `
+  --out outputs\eigenskill_quant_v1_eval_cpp_policy_summary.json
+
+.\inference_cpp\build\quant_policy_bypass.exe `
+  --data data_eval\eigenskill_quant_v1\test.jsonl `
+  --out outputs\eigenskill_quant_v1_test_cpp_policy_summary.json
+```
+
+Verified local Windows/MSVC result:
+
+```text
+eval: n=400, policy_fields_exact=1.0, decision_exact=1.0, parse_error=0.0
+test: n=400, policy_fields_exact=1.0, decision_exact=1.0, parse_error=0.0
+```
+
+The Python evaluator remains the stricter full JSON baseline because it checks
+auxiliary numeric fields such as `risk` and `score`. The C++ evaluator is scoped
+to the fields that determine the downstream quantization-policy decision.
