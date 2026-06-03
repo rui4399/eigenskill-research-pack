@@ -51,6 +51,10 @@ PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True python3 \
 
 ## Result
 
+### Per-row scale
+
+One symmetric scale per output row:
+
 | method | prompt count | PPL | delta NLL vs FP16 | bit histogram |
 |---|---:|---:|---:|---|
 | FP16 | 8 | 179.1357 | 0.0000 | 16:225 |
@@ -58,10 +62,25 @@ PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True python3 \
 | uniform INT3 | 8 | 9460847.9860 | 10.8745 | 3:225 |
 | RD allocation 4/8 | 8 | 1931.2498 | 2.3778 | 4:172, 8:53 |
 
+### Group-wise scale
+
+Symmetric scales are recomputed per output row and per input group.
+
+| group size | method | prompt count | PPL | delta NLL vs FP16 | bit histogram |
+|---:|---|---:|---:|---:|---|
+| 128 | FP16 | 8 | 179.1357 | 0.0000 | 16:225 |
+| 128 | uniform INT4 | 8 | 272.1800 | 0.4183 | 4:225 |
+| 128 | uniform INT3 | 8 | 9212.2025 | 3.9401 | 3:225 |
+| 128 | RD allocation 4/8 | 8 | 292.0088 | 0.4886 | 4:172, 8:53 |
+| 64 | FP16 | 8 | 179.1357 | 0.0000 | 16:225 |
+| 64 | uniform INT4 | 8 | 281.1517 | 0.4508 | 4:225 |
+| 64 | uniform INT3 | 8 | 2612.1018 | 2.6798 | 3:225 |
+| 64 | RD allocation 4/8 | 8 | 296.8040 | 0.5049 | 4:172, 8:53 |
+
 ## Interpretation
 
-The conservative 4/8 rate-distortion allocation improves over uniform INT4 on
-this short sanity set:
+With per-row scales, the conservative 4/8 rate-distortion allocation improves
+over uniform INT4 on this short sanity set:
 
 ```text
 PPL:       2196.14 -> 1931.25
@@ -72,6 +91,25 @@ The result is directionally useful but still weak as scientific evidence. The
 absolute PPL degradation is large because the quantizer is a naive fake-quant
 baseline without GPTQ/AWQ compensation, activation smoothing, rotations, or
 group-wise calibration.
+
+After group-wise scaling is added, uniform INT4 becomes much stronger than the
+per-row baseline:
+
+```text
+uniform INT4 PPL: 2196.14 -> 272.18 with group size 128
+```
+
+However, the current rate-distortion allocation becomes worse than uniform INT4:
+
+```text
+group size 128: uniform INT4 PPL 272.18, RD 4/8 PPL 292.01
+group size 64:  uniform INT4 PPL 281.15, RD 4/8 PPL 296.80
+```
+
+This is a useful negative result. The current sensitivity proxy is not yet
+aligned with actual PPL sensitivity. The next allocation must use a stronger
+calibration signal, such as per-module loss increase, activation reconstruction
+error after fake quantization, or a Hessian/Fisher proxy.
 
 ## Negative Result From 2/3/4/8 Allocation
 
@@ -89,7 +127,9 @@ Treat 2/3-bit as a later experiment requiring stronger compensation.
 The next meaningful benchmark is:
 
 1. Replace naive fake quantization with group-wise quantization.
-2. Add calibration-aware scaling or GPTQ/AWQ baselines.
-3. Evaluate on WikiText2/C4 slices rather than eight hand-written prompts.
-4. Report memory/latency only after weights are actually stored in compressed
+2. Replace the current sensitivity proxy with measured PPL/loss sensitivity or
+   Hessian/Fisher proxies.
+3. Add calibration-aware scaling or GPTQ/AWQ baselines.
+4. Evaluate on WikiText2/C4 slices rather than eight hand-written prompts.
+5. Report memory/latency only after weights are actually stored in compressed
    form or run through a quantized runtime.

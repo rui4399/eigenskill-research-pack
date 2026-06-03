@@ -200,7 +200,7 @@ outputs/smollm2_calib_limit4_rd_alloc*.json
 outputs/smollm2_calib_limit4_rd_alloc*.md
 ```
 
-First fake-quant quality signal:
+First fake-quant quality signal, per-row scale:
 
 ```text
 method                 PPL       delta NLL vs FP16
@@ -215,12 +215,33 @@ It is not a production quantizer or a memory/latency claim. It does show that a
 conservative `{4,8}` rate-distortion allocation can improve the short-prompt PPL
 signal over uniform INT4 in this scaffold.
 
+After adding group-wise scales, uniform INT4 becomes much stronger:
+
+```text
+group size 128:
+FP16                   PPL 179.14
+uniform INT4           PPL 272.18
+uniform INT3           PPL 9212.20
+RD allocation {4,8}    PPL 292.01
+
+group size 64:
+uniform INT4           PPL 281.15
+RD allocation {4,8}    PPL 296.80
+```
+
+This is useful negative evidence: the current activation-stat sensitivity proxy
+is not yet aligned with actual PPL sensitivity. The next allocator should use
+measured loss increase, activation reconstruction error, or Hessian/Fisher
+proxies.
+
 Evidence files:
 
 ```text
 train_python/eval_weight_quant_ppl.py
 outputs/smollm2_fake_quant_ppl_report.md
 outputs/smollm2_fake_quant_ppl_4to8_limit8_summary.json
+outputs/smollm2_fake_quant_ppl_4to8_group128_limit8_summary.json
+outputs/smollm2_fake_quant_ppl_4to8_group64_limit8_summary.json
 ```
 
 ### 8-skill hybrid routing, v2

@@ -74,7 +74,7 @@ def load_allocation(path: str, method: str) -> tuple[dict[str, int], dict]:
     return module_bits, data
 
 
-def quantize_per_row(weight: torch.Tensor, bits: int) -> torch.Tensor:
+def quantize_weight(weight: torch.Tensor, bits: int, group_size: int = 0) -> torch.Tensor:
     if bits >= 16:
         return weight
     qmax = (2 ** (bits - 1)) - 1
@@ -82,13 +82,22 @@ def quantize_per_row(weight: torch.Tensor, bits: int) -> torch.Tensor:
         raise ValueError(f"unsupported bits: {bits}")
     w = weight.detach().float()
     flat = w.reshape(w.shape[0], -1)
-    scale = flat.abs().amax(dim=1, keepdim=True).clamp_min(1.0e-8) / qmax
-    q = torch.round(flat / scale).clamp(-qmax, qmax)
-    deq = (q * scale).reshape_as(w)
+    if group_size and group_size > 0 and group_size < flat.shape[1]:
+        pieces = []
+        for start in range(0, flat.shape[1], group_size):
+            chunk = flat[:, start : start + group_size]
+            scale = chunk.abs().amax(dim=1, keepdim=True).clamp_min(1.0e-8) / qmax
+            q = torch.round(chunk / scale).clamp(-qmax, qmax)
+            pieces.append(q * scale)
+        deq = torch.cat(pieces, dim=1).reshape_as(w)
+    else:
+        scale = flat.abs().amax(dim=1, keepdim=True).clamp_min(1.0e-8) / qmax
+        q = torch.round(flat / scale).clamp(-qmax, qmax)
+        deq = (q * scale).reshape_as(w)
     return deq.to(dtype=weight.dtype, device=weight.device)
 
 
-def apply_fake_quant(model: torch.nn.Module, mode: str, module_bits: dict[str, int] | None = None) -> dict:
+def apply_fake_quant(model: torch.nn.Module, mode: str, module_bits: dict[str, int] | None = None, group_size: int = 0) -> dict:
     bit_hist: dict[str, int] = {}
     touched = 0
     with torch.no_grad():
@@ -106,10 +115,10 @@ def apply_fake_quant(model: torch.nn.Module, mode: str, module_bits: dict[str, i
             else:
                 raise ValueError(f"unknown quant mode: {mode}")
             if bits < 16:
-                module.weight.data.copy_(quantize_per_row(module.weight.data, bits))
+                module.weight.data.copy_(quantize_weight(module.weight.data, bits, group_size=group_size))
             bit_hist[str(bits)] = bit_hist.get(str(bits), 0) + 1
             touched += 1
-    return {"linear_modules_touched": touched, "bit_hist": bit_hist}
+    return {"linear_modules_touched": touched, "bit_hist": bit_hist, "group_size": group_size}
 
 
 def eval_ppl(model: torch.nn.Module, tokenizer, prompts: list[str], device: str, max_length: int) -> dict:
@@ -148,7 +157,7 @@ def run_config(args, tokenizer, config: dict, prompts: list[str]) -> dict:
     allocation_meta = None
     if config["mode"] == "allocation":
         module_bits, allocation_meta = load_allocation(config["allocation"], config["method"])
-    quant_meta = apply_fake_quant(model, config["mode"], module_bits)
+    quant_meta = apply_fake_quant(model, config["mode"], module_bits, group_size=args.group_size)
     metrics = eval_ppl(model, tokenizer, prompts, args.device, args.max_length)
     result = {
         "name": config["name"],
@@ -200,6 +209,7 @@ def main() -> None:
     parser.add_argument("--dtype", choices=["float16", "bfloat16", "float32"], default="float16")
     parser.add_argument("--allocation", default="")
     parser.add_argument("--allocation-method", default="rate_distortion")
+    parser.add_argument("--group-size", type=int, default=0, help="0 means one scale per output row")
     parser.add_argument("--config-json", default="")
     parser.add_argument("--out", default="outputs/smollm2_fake_quant_ppl_summary.json")
     args = parser.parse_args()
