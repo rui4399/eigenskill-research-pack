@@ -93,7 +93,7 @@ def uniform_alloc(n: int, bits: int) -> list[int]:
 
 def random_alloc(groups: list[GroupStat], budget: float, seed: int) -> list[int]:
     rng = random.Random(seed)
-    alloc = [2] * len(groups)
+    alloc = [min(BITS)] * len(groups)
     order = list(range(len(groups)))
     rng.shuffle(order)
     for idx in order:
@@ -109,7 +109,7 @@ def random_alloc(groups: list[GroupStat], budget: float, seed: int) -> list[int]
 
 
 def greedy_margin_alloc(groups: list[GroupStat], budget: float) -> list[int]:
-    alloc = [2] * len(groups)
+    alloc = [min(BITS)] * len(groups)
     if memory(groups, alloc) > budget:
         return alloc
     while True:
@@ -136,7 +136,7 @@ def continuous_bits(group: GroupStat, lam: float) -> float:
     # From minimizing S*sigma^2*2^(-2b) + lambda*c*b.
     numerator = 2.0 * math.log(2.0) * group.sensitivity * group.variance
     raw = 0.5 * math.log2(max(numerator / max(lam * group.cost, 1.0e-30), 1.0e-30))
-    return min(8.0, max(2.0, raw))
+    return min(float(max(BITS)), max(float(min(BITS)), raw))
 
 
 def rate_distortion_alloc(groups: list[GroupStat], budget: float) -> list[int]:
@@ -155,7 +155,7 @@ def rate_distortion_alloc(groups: list[GroupStat], budget: float) -> list[int]:
     alloc = []
     for b in cont:
         candidates = [x for x in BITS if x <= b]
-        alloc.append(max(candidates) if candidates else 2)
+        alloc.append(max(candidates) if candidates else min(BITS))
     return greedy_from_alloc(groups, alloc, budget)
 
 
@@ -200,7 +200,7 @@ def greedy_from_alloc(groups: list[GroupStat], alloc: list[int], budget: float) 
 
 
 def summarize(name: str, groups: list[GroupStat], alloc: list[int], budget: float) -> dict:
-    bit_hist = {str(b): alloc.count(b) for b in BITS}
+    bit_hist = {str(b): alloc.count(b) for b in sorted(set(BITS) | set(alloc))}
     mem = memory(groups, alloc)
     dist = total_distortion(groups, alloc)
     avg_bits = mem / max(sum(g.cost for g in groups), 1.0e-12)
@@ -256,11 +256,16 @@ def main() -> None:
     parser.add_argument("--groups-per-layer", type=int, default=16)
     parser.add_argument("--stats-json", default="", help="Optional calibration stats JSON with a groups array")
     parser.add_argument("--budget-avg-bits", type=float, default=3.2)
+    parser.add_argument("--bits", default="2,3,4,8", help="Comma-separated candidate bit widths")
     parser.add_argument("--seed", type=int, default=20260604)
     parser.add_argument("--out-json", default="outputs/rate_distortion_allocation_summary.json")
     parser.add_argument("--out-md", default="outputs/rate_distortion_allocation_report.md")
     args = parser.parse_args()
 
+    global BITS
+    BITS = sorted({int(x) for x in args.bits.split(",") if x.strip()})
+    if len(BITS) < 2:
+        raise SystemExit("--bits must contain at least two candidate widths")
     groups = load_groups(args.stats_json) if args.stats_json else make_synthetic_groups(args.layers, args.groups_per_layer, args.seed)
     budget = args.budget_avg_bits * sum(g.cost for g in groups)
     allocs = {

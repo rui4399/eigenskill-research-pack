@@ -200,6 +200,29 @@ outputs/smollm2_calib_limit4_rd_alloc*.json
 outputs/smollm2_calib_limit4_rd_alloc*.md
 ```
 
+First fake-quant quality signal:
+
+```text
+method                 PPL       delta NLL vs FP16
+FP16                   179.14    0.0000
+uniform INT4           2196.14   2.5063
+uniform INT3           9460848   10.8745
+RD allocation {4,8}    1931.25   2.3778
+```
+
+This uses naive per-output-channel symmetric fake quantization and short prompts.
+It is not a production quantizer or a memory/latency claim. It does show that a
+conservative `{4,8}` rate-distortion allocation can improve the short-prompt PPL
+signal over uniform INT4 in this scaffold.
+
+Evidence files:
+
+```text
+train_python/eval_weight_quant_ppl.py
+outputs/smollm2_fake_quant_ppl_report.md
+outputs/smollm2_fake_quant_ppl_4to8_limit8_summary.json
+```
+
 ### 8-skill hybrid routing, v2
 
 Base model:

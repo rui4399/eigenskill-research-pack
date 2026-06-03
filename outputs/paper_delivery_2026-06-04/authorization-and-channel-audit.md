@@ -9,10 +9,10 @@ status:
 
 | Channel | Status | Evidence / Missing Item |
 |---|---|---|
-| GitHub | Usable | `gh auth status` previously succeeded for `rui13181593055`; repo is public. Must still push current commit. |
-| Notion | OAuth completed, write tools not visible in current session | `codex mcp login notion` previously returned successful login. Current `tool_search` still does not expose Notion create/update/fetch tools, so current session likely needs MCP/tool hot reload or Codex restart. |
+| GitHub | Usable and updated | Repo is public at `https://github.com/rui4399/eigenskill-research-pack`; latest pushed commit after continued experiments is `81cda81`. |
+| Notion | OAuth completed, write tools not visible in current session | `codex mcp list` shows `notion https://mcp.notion.com/mcp enabled OAuth`, but current `tool_search` still does not expose Notion create/update/fetch tools, so current session likely needs MCP/tool hot reload or Codex restart. |
 | NotebookLM Enterprise | Not configured | Enterprise API check reported missing `NOTEBOOKLM_PROJECT_NUMBER` / location. Personal NotebookLM browser flow is separate and not a callable API here. |
-| WeChat | Bridge likely usable; verify immediately before send | Prior maintenance showed live bridge/companion/worker PIDs and fresh poll heartbeat. Must run maintenance again before final file send. |
+| WeChat | Usable and delivered | ZIP file send returned `ok: true`; GitHub link/update text sends also returned `ok: true`. |
 
 ## What Is Still Missing
 
@@ -26,20 +26,21 @@ status:
    Cloud project configuration, NotebookLM Enterprise cannot be used through the
    API.
 
-3. **Final WeChat file send evidence.**
-   Sending the ZIP must be verified by the bridge tool output. If WeChat returns
-   a stale-session error such as `sendmessage failed: ret=-2`, the user needs to
-   send one fresh inbound message and the file send should be retried.
+3. **NotebookLM Enterprise configuration.**
+   The personal/browser NotebookLM source workflow is separate from Enterprise
+   API access. Enterprise remains blocked until project number/location are
+   configured.
 
-4. **GitHub update for this exact stage.**
-   The repo was already public before this stage. The current C++ evaluator,
-   report, and paper package still need to be committed and pushed.
+4. **Submission-grade experiment evidence.**
+   The current package is a research draft plus artifacts. A real CCF-A attempt
+   still needs quantized-model PPL/accuracy, latency/memory, and GPTQ/AWQ/
+   SmoothQuant/rotation baselines.
 
 ## Current Safe Fallbacks
 
 - Notion: use `outputs/paper_delivery_2026-06-04/notion_ready/EigenSkill-Q_Notion_Page.md`.
 - NotebookLM: keep source links and paper references in the repo; do not claim
   NotebookLM Enterprise ingestion.
-- WeChat: use
-  `C:\Users\18042\Documents\Codex\2026-05-21\unlinearity-cli-wechat-bridge-codex\tools\wechat-send-file.mjs`.
-- GitHub: commit and push through local `git` / `gh`.
+- WeChat: already delivered the ZIP and GitHub update text through the bridge.
+- GitHub: commit and push through local `git` / `gh`; current latest pushed
+  commit is `81cda81`.

@@ -1,0 +1,151 @@
+{
+  "model": "HuggingFaceTB/SmolLM2-360M-Instruct",
+  "prompt_count": 2,
+  "max_length": 128,
+  "device": "cuda",
+  "dtype": "float16",
+  "results": [
+    {
+      "name": "fp16",
+      "mode": "fp16",
+      "allocation": "",
+      "method": "",
+      "quant_meta": {
+        "linear_modules_touched": 225,
+        "bit_hist": {
+          "16": 225
+        }
+      },
+      "metrics": {
+        "prompt_count": 2,
+        "tokens": 35,
+        "mean_nll": 5.000395665849958,
+        "ppl": 148.471892739999,
+        "per_prompt": [
+          {
+            "tokens": 16,
+            "loss": 4.052806377410889,
+            "ppl": 57.558762208056656
+          },
+          {
+            "tokens": 19,
+            "loss": 5.798365592956543,
+            "ppl": 329.7601569045919
+          }
+        ]
+      },
+      "delta_nll_vs_fp16": 0.0,
+      "ppl_ratio_vs_fp16": 1.0
+    },
+    {
+      "name": "uniform_int4",
+      "mode": "uniform_int4",
+      "allocation": "",
+      "method": "",
+      "quant_meta": {
+        "linear_modules_touched": 225,
+        "bit_hist": {
+          "4": 225
+        }
+      },
+      "metrics": {
+        "prompt_count": 2,
+        "tokens": 35,
+        "mean_nll": 7.767850412641253,
+        "ppl": 2363.385520523795,
+        "per_prompt": [
+          {
+            "tokens": 16,
+            "loss": 6.806388854980469,
+            "ppl": 903.6018708032869
+          },
+          {
+            "tokens": 19,
+            "loss": 8.577502250671387,
+            "ppl": 5310.823838374008
+          }
+        ]
+      },
+      "delta_nll_vs_fp16": 2.7674547467912944,
+      "ppl_ratio_vs_fp16": 15.91806689406532
+    },
+    {
+      "name": "uniform_int3",
+      "mode": "uniform_int3",
+      "allocation": "",
+      "method": "",
+      "quant_meta": {
+        "linear_modules_touched": 225,
+        "bit_hist": {
+          "3": 225
+        }
+      },
+      "metrics": {
+        "prompt_count": 2,
+        "tokens": 35,
+        "mean_nll": 17.164313997541154,
+        "ppl": 28468648.797094446,
+        "per_prompt": [
+          {
+            "tokens": 16,
+            "loss": 18.08423614501953,
+            "ppl": 71430545.57645023
+          },
+          {
+            "tokens": 19,
+            "loss": 16.3896427154541,
+            "ppl": 13119926.186745003
+          }
+        ]
+      },
+      "delta_nll_vs_fp16": 12.163918331691196,
+      "ppl_ratio_vs_fp16": 191744.365022329
+    },
+    {
+      "name": "allocation_rate_distortion",
+      "mode": "allocation",
+      "allocation": "outputs/smollm2_calib_limit4_rd_alloc_4to8_budget45_summary.json",
+      "method": "rate_distortion",
+      "quant_meta": {
+        "linear_modules_touched": 225,
+        "bit_hist": {
+          "4": 172,
+          "8": 53
+        }
+      },
+      "metrics": {
+        "prompt_count": 2,
+        "tokens": 35,
+        "mean_nll": 7.578388949802943,
+        "ppl": 1955.4760562368097,
+        "per_prompt": [
+          {
+            "tokens": 16,
+            "loss": 6.88352108001709,
+            "ppl": 976.0570914272269
+          },
+          {
+            "tokens": 19,
+            "loss": 8.163540840148926,
+            "ppl": 3510.5950785869736
+          }
+        ]
+      },
+      "allocation_summary": {
+        "name": "rate_distortion",
+        "groups": 225,
+        "budget": 1627.9142399999998,
+        "memory": 1627.6684799999998,
+        "budget_used": 0.9998490338164251,
+        "avg_bits": 4.499320652173913,
+        "distortion": 0.4944277827228774,
+        "bit_hist": {
+          "4": 172,
+          "8": 53
+        }
+      },
+      "delta_nll_vs_fp16": 2.577993283952985,
+      "ppl_ratio_vs_fp16": 13.170681804812714
+    }
+  ]
+}

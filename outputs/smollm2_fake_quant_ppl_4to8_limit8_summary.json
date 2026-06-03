@@ -1,0 +1,271 @@
+{
+  "model": "HuggingFaceTB/SmolLM2-360M-Instruct",
+  "prompt_count": 8,
+  "max_length": 160,
+  "device": "cuda",
+  "dtype": "float16",
+  "results": [
+    {
+      "name": "fp16",
+      "mode": "fp16",
+      "allocation": "",
+      "method": "",
+      "quant_meta": {
+        "linear_modules_touched": 225,
+        "bit_hist": {
+          "16": 225
+        }
+      },
+      "metrics": {
+        "prompt_count": 8,
+        "tokens": 147,
+        "mean_nll": 5.188143606899547,
+        "ppl": 179.13569779899777,
+        "per_prompt": [
+          {
+            "tokens": 16,
+            "loss": 4.052806377410889,
+            "ppl": 57.558762208056656
+          },
+          {
+            "tokens": 19,
+            "loss": 5.798365592956543,
+            "ppl": 329.7601569045919
+          },
+          {
+            "tokens": 27,
+            "loss": 4.487728595733643,
+            "ppl": 88.91924477342675
+          },
+          {
+            "tokens": 13,
+            "loss": 6.357726097106934,
+            "ppl": 576.9329741487791
+          },
+          {
+            "tokens": 16,
+            "loss": 4.659302234649658,
+            "ppl": 105.56239866866669
+          },
+          {
+            "tokens": 21,
+            "loss": 5.257314205169678,
+            "ppl": 191.96521911391113
+          },
+          {
+            "tokens": 18,
+            "loss": 4.843783855438232,
+            "ppl": 126.94879998382555
+          },
+          {
+            "tokens": 17,
+            "loss": 6.569623947143555,
+            "ppl": 713.1016288001997
+          }
+        ]
+      },
+      "delta_nll_vs_fp16": 0.0,
+      "ppl_ratio_vs_fp16": 1.0
+    },
+    {
+      "name": "uniform_int4",
+      "mode": "uniform_int4",
+      "allocation": "",
+      "method": "",
+      "quant_meta": {
+        "linear_modules_touched": 225,
+        "bit_hist": {
+          "4": 225
+        }
+      },
+      "metrics": {
+        "prompt_count": 8,
+        "tokens": 147,
+        "mean_nll": 7.694455928542987,
+        "ppl": 2196.1386288816816,
+        "per_prompt": [
+          {
+            "tokens": 16,
+            "loss": 6.806388854980469,
+            "ppl": 903.6018708032869
+          },
+          {
+            "tokens": 19,
+            "loss": 8.577502250671387,
+            "ppl": 5310.823838374008
+          },
+          {
+            "tokens": 27,
+            "loss": 7.022527694702148,
+            "ppl": 1121.6181458647018
+          },
+          {
+            "tokens": 13,
+            "loss": 8.182086944580078,
+            "ppl": 3576.3104399073272
+          },
+          {
+            "tokens": 16,
+            "loss": 7.851030349731445,
+            "ppl": 2568.379282885144
+          },
+          {
+            "tokens": 21,
+            "loss": 7.199095249176025,
+            "ppl": 1338.219461353016
+          },
+          {
+            "tokens": 18,
+            "loss": 7.700368881225586,
+            "ppl": 2209.1627602681165
+          },
+          {
+            "tokens": 17,
+            "loss": 8.695926666259766,
+            "ppl": 5978.510085140939
+          }
+        ]
+      },
+      "delta_nll_vs_fp16": 2.50631232164344,
+      "ppl_ratio_vs_fp16": 12.25963700069372
+    },
+    {
+      "name": "uniform_int3",
+      "mode": "uniform_int3",
+      "allocation": "",
+      "method": "",
+      "quant_meta": {
+        "linear_modules_touched": 225,
+        "bit_hist": {
+          "3": 225
+        }
+      },
+      "metrics": {
+        "prompt_count": 8,
+        "tokens": 147,
+        "mean_nll": 16.062672576125788,
+        "ppl": 9460847.986028586,
+        "per_prompt": [
+          {
+            "tokens": 16,
+            "loss": 18.08423614501953,
+            "ppl": 71430545.57645023
+          },
+          {
+            "tokens": 19,
+            "loss": 16.3896427154541,
+            "ppl": 13119926.186745003
+          },
+          {
+            "tokens": 27,
+            "loss": 14.925423622131348,
+            "ppl": 3034094.611427522
+          },
+          {
+            "tokens": 13,
+            "loss": 15.619762420654297,
+            "ppl": 6075424.496120553
+          },
+          {
+            "tokens": 16,
+            "loss": 14.294770240783691,
+            "ppl": 1614878.437299152
+          },
+          {
+            "tokens": 21,
+            "loss": 17.635787963867188,
+            "ppl": 45616860.95231082
+          },
+          {
+            "tokens": 18,
+            "loss": 15.51820182800293,
+            "ppl": 5488699.103852357
+          },
+          {
+            "tokens": 17,
+            "loss": 16.236648559570312,
+            "ppl": 11258664.405568413
+          }
+        ]
+      },
+      "delta_nll_vs_fp16": 10.87452896922624,
+      "ppl_ratio_vs_fp16": 52813.8617945614
+    },
+    {
+      "name": "allocation_rate_distortion",
+      "mode": "allocation",
+      "allocation": "outputs/smollm2_calib_limit4_rd_alloc_4to8_budget45_summary.json",
+      "method": "rate_distortion",
+      "quant_meta": {
+        "linear_modules_touched": 225,
+        "bit_hist": {
+          "4": 172,
+          "8": 53
+        }
+      },
+      "metrics": {
+        "prompt_count": 8,
+        "tokens": 147,
+        "mean_nll": 7.565922659270617,
+        "ppl": 1931.249842843691,
+        "per_prompt": [
+          {
+            "tokens": 16,
+            "loss": 6.88352108001709,
+            "ppl": 976.0570914272269
+          },
+          {
+            "tokens": 19,
+            "loss": 8.163540840148926,
+            "ppl": 3510.5950785869736
+          },
+          {
+            "tokens": 27,
+            "loss": 6.533803462982178,
+            "ppl": 688.0100621071771
+          },
+          {
+            "tokens": 13,
+            "loss": 8.115636825561523,
+            "ppl": 3346.3879711644
+          },
+          {
+            "tokens": 16,
+            "loss": 8.078225135803223,
+            "ppl": 3223.5068694552074
+          },
+          {
+            "tokens": 21,
+            "loss": 6.9095892906188965,
+            "ppl": 1001.8356944647194
+          },
+          {
+            "tokens": 18,
+            "loss": 7.552735328674316,
+            "ppl": 1905.9490046232895
+          },
+          {
+            "tokens": 17,
+            "loss": 9.101696014404297,
+            "ppl": 8970.493895979223
+          }
+        ]
+      },
+      "allocation_summary": {
+        "name": "rate_distortion",
+        "groups": 225,
+        "budget": 1627.9142399999998,
+        "memory": 1627.6684799999998,
+        "budget_used": 0.9998490338164251,
+        "avg_bits": 4.499320652173913,
+        "distortion": 0.4944277827228774,
+        "bit_hist": {
+          "4": 172,
+          "8": 53
+        }
+      },
+      "delta_nll_vs_fp16": 2.3777790523710705,
+      "ppl_ratio_vs_fp16": 10.780932368994831
+    }
+  ]
+}
