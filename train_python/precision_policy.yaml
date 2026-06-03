@@ -1,0 +1,34 @@
+default_training:
+  adapter: lora
+  base_model: HuggingFaceTB/SmolLM2-360M-Instruct
+  load_dtype_when_cuda: fp16
+  load_dtype_when_cpu: fp32
+  quantization_during_training: none
+
+exports:
+  preferred:
+    name: merged_fp16
+    dtype: fp16
+    rationale: "Highest practical fidelity for first skill package."
+  optional:
+    name: dynamic_int8_cpu_state_dict
+    dtype: int8_dynamic
+    rationale: "CPU-side high-fidelity-ish compression; not for final paper numbers."
+
+avoid_in_v0:
+  - int4
+  - gptq
+  - awq
+  - 1bit
+  - 1.58bit
+
+skills:
+  - intent_routing
+  - json_repair
+  - field_extraction
+  - command_normalization
+  - sensor_event_triage
+  - packet_encode
+  - safety_gate
+  - unit_time_normalize
+

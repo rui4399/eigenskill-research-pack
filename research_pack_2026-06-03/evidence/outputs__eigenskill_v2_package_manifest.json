@@ -1,0 +1,247 @@
+{
+  "package": "eigenskill-smollm2-360m-v2-hybrid",
+  "package_ok": true,
+  "required_files": [
+    {
+      "path": "models/eigenskill-smollm2-360m-lora-v2-fp16/adapter_model.safetensors",
+      "exists": true,
+      "bytes": 34793120,
+      "last_write_time": 1780435681.2241836
+    },
+    {
+      "path": "models/eigenskill-smollm2-360m-merged-v2-fp16/model.safetensors",
+      "exists": true,
+      "bytes": 723674624,
+      "last_write_time": 1780438436.8793967
+    },
+    {
+      "path": "models/eigenskill-smollm2-360m-int8-v2-dynamic/pytorch_model_int8_dynamic_state_dict.pt",
+      "exists": true,
+      "bytes": 551063743,
+      "last_write_time": 1780438448.6134918
+    },
+    {
+      "path": "outputs/eigenskill_v2_eval.json",
+      "exists": true,
+      "bytes": 639240,
+      "last_write_time": 1780438423.9518795
+    },
+    {
+      "path": "outputs/eigenskill_v2_hybrid_eval.json",
+      "exists": true,
+      "bytes": 712764,
+      "last_write_time": 1780439282.282691
+    },
+    {
+      "path": "outputs/eigenskill_v2_hybrid_eval_recheck.json",
+      "exists": true,
+      "bytes": 712764,
+      "last_write_time": 1780440410.7985451
+    },
+    {
+      "path": "outputs/EigenSkill-v2-Hybrid-Training-Report.md",
+      "exists": true,
+      "bytes": 4488,
+      "last_write_time": 1780439361.5441458
+    },
+    {
+      "path": "outputs/EigenSkill-v2-Notion-Summary.md",
+      "exists": true,
+      "bytes": 992,
+      "last_write_time": 1780439361.5446632
+    },
+    {
+      "path": "train_python/run_hybrid_skill.py",
+      "exists": true,
+      "bytes": 5488,
+      "last_write_time": 1780440463.0784104
+    }
+  ],
+  "missing_files": [],
+  "eval": {
+    "pure_v2": {
+      "total": 1440,
+      "exact": 1391,
+      "accuracy": 0.9659722222222222,
+      "hybrid_overrides": 0,
+      "by_skill": {
+        "json_repair": {
+          "n": 180,
+          "exact": 180,
+          "accuracy": 1.0,
+          "hybrid_overrides": 0
+        },
+        "unit_time_normalize": {
+          "n": 180,
+          "exact": 132,
+          "accuracy": 0.7333333333333333,
+          "hybrid_overrides": 0
+        },
+        "packet_encode": {
+          "n": 180,
+          "exact": 180,
+          "accuracy": 1.0,
+          "hybrid_overrides": 0
+        },
+        "sensor_event_triage": {
+          "n": 180,
+          "exact": 180,
+          "accuracy": 1.0,
+          "hybrid_overrides": 0
+        },
+        "command_normalization": {
+          "n": 180,
+          "exact": 180,
+          "accuracy": 1.0,
+          "hybrid_overrides": 0
+        },
+        "field_extraction": {
+          "n": 180,
+          "exact": 180,
+          "accuracy": 1.0,
+          "hybrid_overrides": 0
+        },
+        "intent_routing": {
+          "n": 180,
+          "exact": 179,
+          "accuracy": 0.9944444444444445,
+          "hybrid_overrides": 0
+        },
+        "safety_gate": {
+          "n": 180,
+          "exact": 180,
+          "accuracy": 1.0,
+          "hybrid_overrides": 0
+        }
+      }
+    },
+    "hybrid_v2": {
+      "total": 1440,
+      "exact": 1439,
+      "accuracy": 0.9993055555555556,
+      "hybrid_overrides": 180,
+      "by_skill": {
+        "json_repair": {
+          "n": 180,
+          "exact": 180,
+          "accuracy": 1.0,
+          "hybrid_overrides": 0
+        },
+        "unit_time_normalize": {
+          "n": 180,
+          "exact": 180,
+          "accuracy": 1.0,
+          "hybrid_overrides": 180
+        },
+        "packet_encode": {
+          "n": 180,
+          "exact": 180,
+          "accuracy": 1.0,
+          "hybrid_overrides": 0
+        },
+        "sensor_event_triage": {
+          "n": 180,
+          "exact": 180,
+          "accuracy": 1.0,
+          "hybrid_overrides": 0
+        },
+        "command_normalization": {
+          "n": 180,
+          "exact": 180,
+          "accuracy": 1.0,
+          "hybrid_overrides": 0
+        },
+        "field_extraction": {
+          "n": 180,
+          "exact": 180,
+          "accuracy": 1.0,
+          "hybrid_overrides": 0
+        },
+        "intent_routing": {
+          "n": 180,
+          "exact": 179,
+          "accuracy": 0.9944444444444445,
+          "hybrid_overrides": 0
+        },
+        "safety_gate": {
+          "n": 180,
+          "exact": 180,
+          "accuracy": 1.0,
+          "hybrid_overrides": 0
+        }
+      }
+    },
+    "hybrid_v2_recheck": {
+      "total": 1440,
+      "exact": 1439,
+      "accuracy": 0.9993055555555556,
+      "hybrid_overrides": 180,
+      "by_skill": {
+        "json_repair": {
+          "n": 180,
+          "exact": 180,
+          "accuracy": 1.0,
+          "hybrid_overrides": 0
+        },
+        "unit_time_normalize": {
+          "n": 180,
+          "exact": 180,
+          "accuracy": 1.0,
+          "hybrid_overrides": 180
+        },
+        "packet_encode": {
+          "n": 180,
+          "exact": 180,
+          "accuracy": 1.0,
+          "hybrid_overrides": 0
+        },
+        "sensor_event_triage": {
+          "n": 180,
+          "exact": 180,
+          "accuracy": 1.0,
+          "hybrid_overrides": 0
+        },
+        "command_normalization": {
+          "n": 180,
+          "exact": 180,
+          "accuracy": 1.0,
+          "hybrid_overrides": 0
+        },
+        "field_extraction": {
+          "n": 180,
+          "exact": 180,
+          "accuracy": 1.0,
+          "hybrid_overrides": 0
+        },
+        "intent_routing": {
+          "n": 180,
+          "exact": 179,
+          "accuracy": 0.9944444444444445,
+          "hybrid_overrides": 0
+        },
+        "safety_gate": {
+          "n": 180,
+          "exact": 180,
+          "accuracy": 1.0,
+          "hybrid_overrides": 0
+        }
+      }
+    }
+  },
+  "checks": {
+    "deterministic_bypass_cli": {
+      "command": [
+        "/usr/bin/python3",
+        "train_python/run_hybrid_skill.py",
+        "--skill",
+        "unit_time_normalize",
+        "--input",
+        "750克是多少千克，只输出JSON",
+        "--deterministic-only"
+      ],
+      "returncode": 0,
+      "stdout": "{\"input\": \"750克是多少千克，只输出JSON\", \"output\": \"{\\\"date\\\":null,\\\"duration_minutes\\\":null,\\\"kind\\\":\\\"unit\\\",\\\"time\\\":null,\\\"unit\\\":\\\"kg\\\",\\\"value\\\":0.75}\", \"path\": \"deterministic_bypass\", \"skill\": \"unit_time_normalize\"}",
+      "stderr": ""
+    }
+  }
+}
