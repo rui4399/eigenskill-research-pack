@@ -146,6 +146,30 @@ def sample_params(skill, rng, split):
     raise ValueError(skill)
 
 
+def round_visible(skill, p):
+    p = dict(p)
+    if skill == "outlier_detect":
+        p["mx"] = round(p["mx"], 2)
+        p["p99"] = round(p["p99"], 2)
+        p["kurt"] = round(p["kurt"], 2)
+    elif skill == "bit_allocate":
+        p["sens"] = round(p["sens"], 3)
+        p["var"] = round(p["var"], 3)
+    elif skill == "rotation_select":
+        p["block"] = round(p["block"], 3)
+        p["kurt"] = round(p["kurt"], 2)
+    elif skill == "residual_patch":
+        p["e1"] = round(p["e1"], 3)
+        p["e4"] = round(p["e4"], 3)
+        p["e8"] = round(p["e8"], 3)
+    elif skill == "kv_policy":
+        p["ks"] = round(p["ks"], 3)
+        p["vs"] = round(p["vs"], 3)
+    else:
+        raise ValueError(skill)
+    return p
+
+
 def label(skill, p):
     if skill == "outlier_detect": return choose_outlier(p["mx"], p["p99"], p["kurt"])
     if skill == "bit_allocate": return choose_bits(p["sens"], p["var"], p["budget"])
@@ -157,7 +181,7 @@ def label(skill, p):
 
 def make_row(skill, rng, split):
     templates = {"train": TRAIN_TEMPLATES, "eval": EVAL_TEMPLATES, "test": TEST_TEMPLATES}[split]
-    p = sample_params(skill, rng, split)
+    p = round_visible(skill, sample_params(skill, rng, split))
     text = rng.choice(templates[skill]).format(**p)
     response = json.dumps(label(skill, p), ensure_ascii=False, sort_keys=True)
     return {"skill": skill, "split": split, "input": text, "prompt": f"<quant_skill:{skill}> {text}\nReturn compact JSON.", "response": response, "template_family": split}

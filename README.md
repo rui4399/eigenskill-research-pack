@@ -131,17 +131,60 @@ results yet; they are research directions and architecture proposals.
 
 ## EigenSkill-Q Quantization Policy Update
 
-The repository now includes a cleaner quantization-policy skill dataset under
-data_eval/eigenskill_quant_v0/. It uses disjoint train/eval/test templates and
-records a no-leak audit in udit.json.
+The repository now includes a quantization-policy skill track. The latest
+dataset is:
 
-A local 1-epoch LoRA run completed on SmolLM2-360M; the adapter weights are not
-committed, but the training summary is available at:
+```text
+data_eval/eigenskill_quant_v1/
+```
 
-`	ext
-outputs/EigenSkill-Q-quant-v0-training-update.md
-`
+It covers five policy skills:
+
+```text
+outlier_detect
+bit_allocate
+rotation_select
+residual_patch
+kv_policy
+```
+
+The v1 split is deliberately small and auditable:
+
+```text
+train: 1200 rows
+eval:   400 rows
+test:   400 rows
+train/eval/test exact overlap: 0
+train/eval/test input overlap: 0
+```
+
+The deterministic quantization bypass baseline reaches:
+
+```text
+eval exact_json:      400/400 = 100%
+eval decision_exact:  400/400 = 100%
+test exact_json:      400/400 = 100%
+test decision_exact:  400/400 = 100%
+```
+
+The pure LoRA smoke runs are intentionally reported as negative evidence:
+short SFT on SmolLM2-360M learns JSON-like surface form but does not reliably
+learn the numeric threshold policies. This supports the current EigenSkill-Q
+framing: let the model route/trigger the skill contract, then execute
+rate-distortion, outlier, rotation, residual, and KV-cache decisions through a
+verified lightweight bypass micro-kernel.
+
+Useful files:
+
+```text
+train_python/generate_quant_skill_data.py
+train_python/eval_quant_policy.py
+train_python/hybrid_eval_quant_policy.py
+outputs/eigenskill_quant_v1_eval_hybrid_policy_summary.json
+outputs/eigenskill_quant_v1_test_hybrid_policy_summary.json
+docs/obsidian_quant_route/12-quant-v1-data-fix-and-bypass-baseline.md
+```
 
 Current direction: treat the old v2 hybrid result as an engineering PoC and move
 the publication track toward sensitivity-rate-distortion guided mixed-precision
-LLM quantization.
+LLM quantization with a verified bypass runtime.
