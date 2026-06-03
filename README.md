@@ -234,14 +234,47 @@ is not yet aligned with actual PPL sensitivity. The next allocator should use
 measured loss increase, activation reconstruction error, or Hessian/Fisher
 proxies.
 
+Measured per-module loss sensitivity closes that gap on the same fake-quant
+scaffold. The probe quantizes one Linear module at a time with group-wise INT4,
+measures the short-prompt loss increase, restores the original weight, and then
+assigns 8-bit precision to the highest loss-per-cost modules under a 4.5
+average-bit budget:
+
+```text
+sensitivity probe:
+Linear modules          225
+probe prompts           4
+group size              128
+allocation bits         4:172, 8:53
+weighted avg bits       4.4993
+positive loss protected 57.83%
+
+8-prompt group-wise PPL:
+FP16                         179.14
+uniform INT4                 272.18
+activation-stat RD {4,8}     292.01
+loss-sensitive {4,8}         212.69
+```
+
+This is the first positive real-model signal for the quantization track: the
+activation-stat proxy was weaker than uniform INT4, while measured per-module
+loss sensitivity substantially improves over both uniform INT4 and the earlier
+RD allocation. It is still fake quantization and does not prove compressed
+runtime memory, latency, or board-level energy savings.
+
 Evidence files:
 
 ```text
 train_python/eval_weight_quant_ppl.py
+train_python/measure_module_quant_sensitivity.py
 outputs/smollm2_fake_quant_ppl_report.md
 outputs/smollm2_fake_quant_ppl_4to8_limit8_summary.json
 outputs/smollm2_fake_quant_ppl_4to8_group128_limit8_summary.json
 outputs/smollm2_fake_quant_ppl_4to8_group64_limit8_summary.json
+outputs/smollm2_module_loss_sensitivity_limit4_group128.json
+outputs/smollm2_module_loss_sensitivity_limit4_group128_report.md
+outputs/smollm2_loss_sensitive_alloc_4to8_limit4_group128_summary.json
+outputs/smollm2_fake_quant_ppl_loss_sensitive_4to8_group128_limit8_summary.json
 ```
 
 ### 8-skill hybrid routing, v2
@@ -433,13 +466,17 @@ drafts. Treat that directory as historical scaffolding. In particular:
 
 ## Next Work
 
-1. Replace the overlapping v2 skill split with a no-leak split and rerun the
-   routing/bypass evaluation.
-2. Add public baselines for quantization-policy decisions, including RTN, GPTQ,
+1. Expand the loss-sensitive allocation benchmark to WikiText2/C4 slices,
+   repeated calibration sets, and larger prompt counts.
+2. Add public baselines for quantization decisions, including RTN, GPTQ,
    AWQ, SmoothQuant, QuaRot, and SpinQuant-style rotations where applicable.
-3. Move the deterministic quantization policy kernels from Python into C++ and
+3. Compare measured loss sensitivity against Fisher/Hessian proxies and
+   activation reconstruction error after fake quantization.
+4. Move the deterministic quantization policy kernels from Python into C++ and
    measure overhead against a real model runtime.
-4. Run board-level latency and energy measurements on an ARM board before using
+5. Replace the overlapping v2 skill split with a no-leak split and rerun the
+   routing/bypass evaluation.
+6. Run board-level latency and energy measurements on an ARM board before using
    "edge" as an empirical claim.
-5. Keep spectral/eigen-routing as a separate theory track until a toy nonlinear
+7. Keep spectral/eigen-routing as a separate theory track until a toy nonlinear
    proof and trained-layer experiment exist.

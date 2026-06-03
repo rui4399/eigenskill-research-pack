@@ -111,6 +111,55 @@ aligned with actual PPL sensitivity. The next allocation must use a stronger
 calibration signal, such as per-module loss increase, activation reconstruction
 error after fake quantization, or a Hessian/Fisher proxy.
 
+## Measured Loss-Sensitive Allocation
+
+The next allocation replaces the activation-stat sensitivity proxy with direct
+per-module fake-quant loss sensitivity. It probes all 225 Linear modules by
+quantizing one module at a time to group-wise INT4, evaluating short-prompt
+loss, and restoring the original weight.
+
+Sensitivity probe:
+
+```text
+probe prompts:              4
+max length:                 128
+group size:                 128
+Linear modules:             225
+loss-sensitive bit hist:    4-bit=172, 8-bit=53
+weighted average bits:      4.4993
+positive loss protected:    57.83%
+```
+
+The generated allocation is then evaluated on the same 8-prompt PPL setting
+used above:
+
+| method | prompt count | PPL | delta NLL vs FP16 | bit histogram |
+|---|---:|---:|---:|---|
+| FP16 | 8 | 179.1357 | 0.0000 | 16:225 |
+| uniform INT4 | 8 | 272.1800 | 0.4183 | 4:225 |
+| activation-stat RD 4/8 | 8 | 292.0088 | 0.4886 | 4:172, 8:53 |
+| loss-sensitive 4/8 | 8 | 212.6878 | 0.1717 | 4:172, 8:53 |
+
+This is the first positive real-model signal for the quantization track. The
+measured loss-sensitive allocation improves over uniform INT4 and fixes the
+activation-stat RD failure on this scaffold:
+
+```text
+PPL:       272.18 -> 212.69 vs uniform INT4
+delta NLL: 0.4183 -> 0.1717 vs uniform INT4
+PPL:       292.01 -> 212.69 vs activation-stat RD 4/8
+```
+
+Evidence files:
+
+```text
+train_python/measure_module_quant_sensitivity.py
+outputs/smollm2_module_loss_sensitivity_limit4_group128.json
+outputs/smollm2_module_loss_sensitivity_limit4_group128_report.md
+outputs/smollm2_loss_sensitive_alloc_4to8_limit4_group128_summary.json
+outputs/smollm2_fake_quant_ppl_loss_sensitive_4to8_group128_limit8_summary.json
+```
+
 ## Negative Result From 2/3/4/8 Allocation
 
 The earlier 3.2 average-bit allocation over `{2,3,4,8}` was much worse than
@@ -126,10 +175,10 @@ Treat 2/3-bit as a later experiment requiring stronger compensation.
 
 The next meaningful benchmark is:
 
-1. Replace naive fake quantization with group-wise quantization.
-2. Replace the current sensitivity proxy with measured PPL/loss sensitivity or
-   Hessian/Fisher proxies.
-3. Add calibration-aware scaling or GPTQ/AWQ baselines.
-4. Evaluate on WikiText2/C4 slices rather than eight hand-written prompts.
+1. Expand the measured loss-sensitive allocation to WikiText2/C4 slices rather
+   than eight hand-written prompts.
+2. Compare against Fisher/Hessian proxies and activation reconstruction error.
+3. Add calibration-aware scaling or GPTQ/AWQ/SmoothQuant/rotation baselines.
+4. Repeat across calibration prompt sets and report variance.
 5. Report memory/latency only after weights are actually stored in compressed
    form or run through a quantized runtime.

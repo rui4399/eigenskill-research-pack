@@ -9,8 +9,8 @@ status:
 
 | Channel | Status | Evidence / Missing Item |
 |---|---|---|
-| GitHub | Usable and updated | Repo is public at `https://github.com/rui4399/eigenskill-research-pack`; latest pushed commit after continued experiments is `81cda81`. |
-| Notion | OAuth completed, write tools not visible in current session | `codex mcp list` shows `notion https://mcp.notion.com/mcp enabled OAuth`, but current `tool_search` still does not expose Notion create/update/fetch tools, so current session likely needs MCP/tool hot reload or Codex restart. |
+| GitHub | Usable | Repo is public at `https://github.com/rui4399/eigenskill-research-pack`; local `git`/`gh` remains the reliable update path for the current checkout. |
+| Notion | OAuth completed, write tools not visible in current session | `codex mcp list` previously showed `notion https://mcp.notion.com/mcp enabled OAuth`, but current `tool_search` still does not expose Notion create/update/fetch tools, so current session likely needs MCP/tool hot reload or Codex restart. |
 | NotebookLM Enterprise | Not configured | Enterprise API check reported missing `NOTEBOOKLM_PROJECT_NUMBER` / location. Personal NotebookLM browser flow is separate and not a callable API here. |
 | WeChat | Usable and delivered | ZIP file send returned `ok: true`; GitHub link/update text sends also returned `ok: true`. |
 
@@ -42,5 +42,5 @@ status:
 - NotebookLM: keep source links and paper references in the repo; do not claim
   NotebookLM Enterprise ingestion.
 - WeChat: already delivered the ZIP and GitHub update text through the bridge.
-- GitHub: commit and push through local `git` / `gh`; current latest pushed
-  commit is `81cda81`.
+- GitHub: commit and push through local `git` / `gh`; verify the exact latest
+  commit with `git rev-parse HEAD` after each push.
