@@ -160,6 +160,46 @@ outputs/smollm2_loss_sensitive_alloc_4to8_limit4_group128_summary.json
 outputs/smollm2_fake_quant_ppl_loss_sensitive_4to8_group128_limit8_summary.json
 ```
 
+## WikiText2 Validation Slice
+
+To check whether the direction holds beyond the eight hand-written prompts, a
+32-prompt slice was built from WikiText2 validation:
+
+```bash
+python3 train_python/build_dataset_prompts.py \
+  --dataset wikitext \
+  --name wikitext-2-raw-v1 \
+  --split validation \
+  --limit 32 \
+  --out data_eval/text_prompts/wikitext2_validation_32.txt
+```
+
+The same loss-sensitive allocation was evaluated with group size 128:
+
+| method | prompt count | PPL | delta NLL vs FP16 | bit histogram |
+|---|---:|---:|---:|---|
+| FP16 | 32 | 18.2407 | 0.0000 | 16:225 |
+| uniform INT4 | 32 | 30.2604 | 0.5062 | 4:225 |
+| uniform INT3 | 32 | 1678.6969 | 4.5221 | 3:225 |
+| loss-sensitive 4/8 | 32 | 25.9215 | 0.3514 | 4:172, 8:53 |
+
+This is still a small slice, but it is a more credible signal than only using
+hand-written prompts. The measured loss-sensitive allocation preserves the same
+direction:
+
+```text
+PPL:       30.26 -> 25.92 vs uniform INT4
+delta NLL: 0.5062 -> 0.3514 vs uniform INT4
+```
+
+Evidence files:
+
+```text
+train_python/build_dataset_prompts.py
+data_eval/text_prompts/wikitext2_validation_32.txt
+outputs/smollm2_fake_quant_ppl_loss_sensitive_4to8_group128_wikitext2_32_summary.json
+```
+
 ## Negative Result From 2/3/4/8 Allocation
 
 The earlier 3.2 average-bit allocation over `{2,3,4,8}` was much worse than
@@ -176,7 +216,7 @@ Treat 2/3-bit as a later experiment requiring stronger compensation.
 The next meaningful benchmark is:
 
 1. Expand the measured loss-sensitive allocation to WikiText2/C4 slices rather
-   than eight hand-written prompts.
+   than only the current 32-prompt WikiText2 smoke slice.
 2. Compare against Fisher/Hessian proxies and activation reconstruction error.
 3. Add calibration-aware scaling or GPTQ/AWQ/SmoothQuant/rotation baselines.
 4. Repeat across calibration prompt sets and report variance.

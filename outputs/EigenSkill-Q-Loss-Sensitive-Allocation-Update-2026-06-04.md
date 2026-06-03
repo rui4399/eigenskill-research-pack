@@ -76,6 +76,23 @@ PPL       292.01 -> 212.69
 delta NLL 0.4886 -> 0.1717
 ```
 
+公共数据集切片补充，WikiText2 validation 32 prompts，max length 160，
+group size 128：
+
+| method | PPL | delta NLL vs FP16 | bit histogram |
+|---|---:|---:|---|
+| FP16 | 18.24 | 0.0000 | 16:225 |
+| uniform INT4 | 30.26 | 0.5062 | 4:225 |
+| uniform INT3 | 1678.70 | 4.5221 | 3:225 |
+| loss-sensitive 4/8 | 25.92 | 0.3514 | 4:172, 8:53 |
+
+这个结果说明正向趋势不仅存在于手写 prompt，在公开文本切片上也成立：
+
+```text
+PPL       30.26 -> 25.92
+delta NLL 0.5062 -> 0.3514
+```
+
 ## 对论文主线的意义
 
 此前 activation-stat sensitivity proxy 在 group-wise quantization 下输给
@@ -126,5 +143,7 @@ outputs/smollm2_module_loss_sensitivity_limit4_group128.json
 outputs/smollm2_module_loss_sensitivity_limit4_group128_report.md
 outputs/smollm2_loss_sensitive_alloc_4to8_limit4_group128_summary.json
 outputs/smollm2_fake_quant_ppl_loss_sensitive_4to8_group128_limit8_summary.json
+data_eval/text_prompts/wikitext2_validation_32.txt
+outputs/smollm2_fake_quant_ppl_loss_sensitive_4to8_group128_wikitext2_32_summary.json
 outputs/smollm2_fake_quant_ppl_report.md
 ```

@@ -76,15 +76,29 @@ positive loss protected:     57.83%
 measured per-module loss sensitivity 能显著优于 uniform INT4 和旧 RD 分配。
 它仍然只是 fake quant 诊断，不能声称真实显存、延迟或能耗下降。
 
+公共数据集补充，WikiText2 validation 32 prompts：
+
+| method | PPL | delta NLL vs FP16 | bit histogram |
+|---|---:|---:|---|
+| FP16 | 18.24 | 0.0000 | 16:225 |
+| uniform INT4 | 30.26 | 0.5062 | 4:225 |
+| uniform INT3 | 1678.70 | 4.5221 | 3:225 |
+| loss-sensitive 4/8 | 25.92 | 0.3514 | 4:172, 8:53 |
+
+这给论文主线补上了比手写 prompt 更可信的公共文本切片证据。
+
 新增证据文件：
 
 ```text
 train_python/measure_module_quant_sensitivity.py
+train_python/build_dataset_prompts.py
+data_eval/text_prompts/wikitext2_validation_32.txt
 outputs/EigenSkill-Q-Loss-Sensitive-Allocation-Update-2026-06-04.md
 outputs/smollm2_module_loss_sensitivity_limit4_group128.json
 outputs/smollm2_module_loss_sensitivity_limit4_group128_report.md
 outputs/smollm2_loss_sensitive_alloc_4to8_limit4_group128_summary.json
 outputs/smollm2_fake_quant_ppl_loss_sensitive_4to8_group128_limit8_summary.json
+outputs/smollm2_fake_quant_ppl_loss_sensitive_4to8_group128_wikitext2_32_summary.json
 ```
 
 ## 数学主线

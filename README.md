@@ -254,19 +254,28 @@ FP16                         179.14
 uniform INT4                 272.18
 activation-stat RD {4,8}     292.01
 loss-sensitive {4,8}         212.69
+
+WikiText2 validation slice, 32 prompts:
+FP16                          18.24
+uniform INT4                  30.26
+uniform INT3                1678.70
+loss-sensitive {4,8}          25.92
 ```
 
 This is the first positive real-model signal for the quantization track: the
 activation-stat proxy was weaker than uniform INT4, while measured per-module
 loss sensitivity substantially improves over both uniform INT4 and the earlier
-RD allocation. It is still fake quantization and does not prove compressed
-runtime memory, latency, or board-level energy savings.
+RD allocation. The WikiText2 slice shows the same direction on a public text
+dataset. It is still fake quantization and does not prove compressed runtime
+memory, latency, or board-level energy savings.
 
 Evidence files:
 
 ```text
 train_python/eval_weight_quant_ppl.py
 train_python/measure_module_quant_sensitivity.py
+train_python/build_dataset_prompts.py
+data_eval/text_prompts/wikitext2_validation_32.txt
 outputs/smollm2_fake_quant_ppl_report.md
 outputs/smollm2_fake_quant_ppl_4to8_limit8_summary.json
 outputs/smollm2_fake_quant_ppl_4to8_group128_limit8_summary.json
@@ -275,6 +284,7 @@ outputs/smollm2_module_loss_sensitivity_limit4_group128.json
 outputs/smollm2_module_loss_sensitivity_limit4_group128_report.md
 outputs/smollm2_loss_sensitive_alloc_4to8_limit4_group128_summary.json
 outputs/smollm2_fake_quant_ppl_loss_sensitive_4to8_group128_limit8_summary.json
+outputs/smollm2_fake_quant_ppl_loss_sensitive_4to8_group128_wikitext2_32_summary.json
 ```
 
 ### 8-skill hybrid routing, v2
