@@ -84,6 +84,7 @@ group size 128：
 | FP16 | 18.24 | 0.0000 | 16:225 |
 | uniform INT4 | 30.26 | 0.5062 | 4:225 |
 | uniform INT3 | 1678.70 | 4.5221 | 3:225 |
+| activation-stat RD 4/8 | 26.13 | 0.3593 | 4:172, 8:53 |
 | loss-sensitive 4/8 | 25.92 | 0.3514 | 4:172, 8:53 |
 
 这个结果说明正向趋势不仅存在于手写 prompt，在公开文本切片上也成立：
@@ -91,6 +92,7 @@ group size 128：
 ```text
 PPL       30.26 -> 25.92
 delta NLL 0.5062 -> 0.3514
+PPL       26.13 -> 25.92 vs activation-stat RD
 ```
 
 ## 对论文主线的意义
@@ -145,5 +147,6 @@ outputs/smollm2_loss_sensitive_alloc_4to8_limit4_group128_summary.json
 outputs/smollm2_fake_quant_ppl_loss_sensitive_4to8_group128_limit8_summary.json
 data_eval/text_prompts/wikitext2_validation_32.txt
 outputs/smollm2_fake_quant_ppl_loss_sensitive_4to8_group128_wikitext2_32_summary.json
+outputs/smollm2_fake_quant_ppl_activation_rd_4to8_group128_wikitext2_32_summary.json
 outputs/smollm2_fake_quant_ppl_report.md
 ```

@@ -181,15 +181,19 @@ The same loss-sensitive allocation was evaluated with group size 128:
 | FP16 | 32 | 18.2407 | 0.0000 | 16:225 |
 | uniform INT4 | 32 | 30.2604 | 0.5062 | 4:225 |
 | uniform INT3 | 32 | 1678.6969 | 4.5221 | 3:225 |
+| activation-stat RD 4/8 | 32 | 26.1269 | 0.3593 | 4:172, 8:53 |
 | loss-sensitive 4/8 | 32 | 25.9215 | 0.3514 | 4:172, 8:53 |
 
 This is still a small slice, but it is a more credible signal than only using
 hand-written prompts. The measured loss-sensitive allocation preserves the same
-direction:
+direction. On this slice it is also slightly better than the activation-stat RD
+allocation, but the margin is small enough that larger slices and repeated
+calibration sets are required:
 
 ```text
 PPL:       30.26 -> 25.92 vs uniform INT4
 delta NLL: 0.5062 -> 0.3514 vs uniform INT4
+PPL:       26.13 -> 25.92 vs activation-stat RD 4/8
 ```
 
 Evidence files:
@@ -198,6 +202,7 @@ Evidence files:
 train_python/build_dataset_prompts.py
 data_eval/text_prompts/wikitext2_validation_32.txt
 outputs/smollm2_fake_quant_ppl_loss_sensitive_4to8_group128_wikitext2_32_summary.json
+outputs/smollm2_fake_quant_ppl_activation_rd_4to8_group128_wikitext2_32_summary.json
 ```
 
 ## Negative Result From 2/3/4/8 Allocation
