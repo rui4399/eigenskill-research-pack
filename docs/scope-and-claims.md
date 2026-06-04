@@ -100,6 +100,15 @@ These claims are supported by committed data, scripts, or reports:
   average-bit budget. This is the current best in-repository Qwen3-1.7B
   fake-quant allocation, but the 64-prompt gain is small and should not be
   advertised as field-leading without broader baselines.
+- A non-Qwen `allenai/OLMo-2-0425-1B-Instruct` uniform fake-quant smoke run
+  completed under the GPU guard. On the 16-prompt WikiText2 slice, FP16 PPL is
+  `17.12`, uniform INT4 PPL is `20.70`, and uniform INT3 PPL is `58.84`.
+  The run touched 113 Linear modules and peaked at `4004/8151 MiB` (`49.12%`).
+  This is model-family breadth evidence for the fake-quant diagnostic harness,
+  not an allocator result yet.
+- A `google/gemma-3-1b-it` candidate was attempted but blocked by gated
+  Hugging Face access in this environment. Report it only as an access
+  blocker, not as a failed quantization result or quality datapoint.
 - The GPU guard script can enforce a max-memory ratio before and during CUDA
   runs. A Qwen2.5-1.5B 16-prompt comparison completed at 56.85% peak GPU
   memory after the fake-quant evaluator was changed to in-place group-wise

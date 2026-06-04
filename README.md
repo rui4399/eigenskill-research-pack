@@ -534,6 +534,12 @@ C++ random budget {4,8}      PPL 28.38  avg bits 4.4973
 C++ category budget {4,8}    PPL 27.48  avg bits 4.4827
 C++ hybrid budget {4,8}      PPL 27.68  avg bits 4.4925
 C++ blend sweep best {4,8}   PPL 27.48  avg bits 4.4827
+
+OLMo-2-0425-1B-Instruct, WikiText2 16 prompts, uniform smoke:
+
+FP16                         PPL 17.12
+uniform INT4                 PPL 20.70
+uniform INT3                 PPL 58.84
 ```
 
 This is still a small sanity slice, but it addresses a concrete reviewer
@@ -562,7 +568,13 @@ improves the 16-prompt slice from category `23.84` to `23.52` PPL and the
 This is the current best in-repo Qwen3-1.7B fake-quant allocation, but the
 64-prompt gain is small and still needs broader datasets/models before any
 external best-in-field claim. This remains a short-slice fake-quant diagnostic,
-not a production quantizer or SOTA claim.
+not a production quantizer or SOTA claim. The OLMo2 run adds a non-Qwen,
+2025-era 1B model smoke check: uniform INT4 has a moderate short-slice PPL
+increase (`17.12` to `20.70`), while uniform INT3 is much more destructive
+(`58.84`). It used 113 Linear modules and peaked at `4004/8151 MiB`
+(`49.12%`) under the GPU guard. A Gemma-3-1B candidate was also attempted, but
+the Hugging Face repository was gated in this environment, so it is recorded
+only as an access blocker, not a model result.
 
 Evidence files:
 
@@ -632,6 +644,10 @@ outputs/qwen3_1p7b_cpp_blend_sweep_gpu_guard_wikitext2_16.json
 outputs/qwen3_1p7b_cpp_blend_winners_ppl_wikitext2_64_summary.json
 outputs/qwen3_1p7b_cpp_blend_winners_gpu_guard_wikitext2_64.json
 outputs/Qwen3-1.7B-Lowmem-Sensitivity-Cpp-Planner-2026-06-05.md
+outputs/olmo2_0425_1b_instruct_uniform_fake_quant_ppl_wikitext2_16_summary.json
+outputs/olmo2_0425_1b_instruct_uniform_gpu_guard_wikitext2_16.json
+outputs/gemma3_1b_uniform_gpu_guard_wikitext2_16.json
+outputs/OLMo2-0425-1B-Uniform-Smoke-2026-06-05.md
 outputs/smollm2_module_loss_sensitivity_limit4_group128.json
 outputs/smollm2_module_loss_sensitivity_limit4_group128_report.md
 outputs/smollm2_loss_sensitive_alloc_4to8_limit4_group128_summary.json
