@@ -72,10 +72,10 @@ runtime, hardware result, or SOTA quantizer comparison.
 ```text
 Qwen3-1.7B, group size 128, average 4.5 bits:
 WikiText2-64  FP16 21.6552  uniform INT4 31.1885  consensus 26.3260
-              random min/mean/max 27.6685 / 27.9124 / 28.1563
+              random16 min/mean/max 27.6685 / 28.2905 / 29.9682
               consensus margin vs best random +1.3425 PPL
 C4-64         FP16 25.5510  uniform INT4 30.7410  consensus 28.3303
-              random min/mean/max 28.4562 / 28.7118 / 28.9674
+              random16 min/mean/max 28.4562 / 29.4357 / 30.0408
               consensus margin vs best random +0.1259 PPL
 
 OLMo2-0425-1B-Instruct, group size 128, average 4.5 bits:
@@ -96,8 +96,8 @@ random on WikiText2 but lost to the best random seed on C4.
 Evidence files:
 
 ```text
-data_eval/eval_configs/qwen3_1p7b_wikitext_c4_consensus_compare.json
-outputs/qwen3_1p7b_wikitext_c4_consensus_evidence_matrix.md
+data_eval/eval_configs/qwen3_1p7b_wikitext_c4_consensus_random16_compare.json
+outputs/qwen3_1p7b_wikitext_c4_consensus_random16_evidence_matrix.md
 outputs/qwen3_1p7b_wikitext_c4_consensus_audit.md
 data_eval/eval_configs/olmo2_0425_1b_wikitext_c4_consensus_compare.json
 outputs/olmo2_0425_1b_wikitext_c4_consensus_evidence_matrix.md
@@ -822,6 +822,13 @@ outputs/qwen3_1p7b_wikitext_c4_consensus_wikitext2_64_summary.md
 outputs/qwen3_1p7b_wikitext_c4_consensus_c4_64_summary.md
 outputs/qwen3_1p7b_wikitext_c4_consensus_evidence_matrix.md
 outputs/qwen3_1p7b_wikitext_c4_consensus_evidence_matrix.csv
+data_eval/eval_configs/qwen3_1p7b_wikitext_c4_consensus_random16_compare.json
+outputs/qwen3_1p7b_wikitext_c4_consensus_random16_ppl_wikitext2_64_summary.json
+outputs/qwen3_1p7b_wikitext_c4_consensus_random16_gpu_guard_wikitext2_64.json
+outputs/qwen3_1p7b_wikitext_c4_consensus_random16_ppl_c4_64_summary.json
+outputs/qwen3_1p7b_wikitext_c4_consensus_random16_gpu_guard_c4_64.json
+outputs/qwen3_1p7b_wikitext_c4_consensus_random16_evidence_matrix.md
+outputs/qwen3_1p7b_wikitext_c4_consensus_random16_evidence_matrix.csv
 outputs/Qwen3-1.7B-Lowmem-Sensitivity-Cpp-Planner-2026-06-05.md
 outputs/olmo2_0425_1b_instruct_uniform_fake_quant_ppl_wikitext2_16_summary.json
 outputs/olmo2_0425_1b_instruct_uniform_gpu_guard_wikitext2_16.json

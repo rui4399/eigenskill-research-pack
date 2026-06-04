@@ -203,16 +203,32 @@ outputs/qwen3_1p7b_wikitext_c4_consensus_gpu_guard_c4_64.json
 outputs/qwen3_1p7b_wikitext_c4_consensus_evidence_matrix.md
 ```
 
-| dataset | FP16 | uniform INT4 | consensus | category | best listed random | target vs uniform | target vs best random |
-|---|---:|---:|---:|---:|---:|---:|---:|
-| WikiText2-64 | 21.6552 | 31.1885 | 26.3260 | 27.4838 | 27.6685 | 4.8626 | 1.3425 |
-| C4-64 | 25.5510 | 30.7410 | 28.3303 | 29.2760 | 28.4562 | 2.4107 | 0.1259 |
+The same consensus allocation was then re-evaluated against all 16 random
+budget repeats from `qwen3_1p7b_cpp_allocation_planner_random16_4p5_summary.json`
+instead of only the two representative random seeds used in the first consensus
+config:
+
+```text
+data_eval/eval_configs/qwen3_1p7b_wikitext_c4_consensus_random16_compare.json
+outputs/qwen3_1p7b_wikitext_c4_consensus_random16_ppl_wikitext2_64_summary.json
+outputs/qwen3_1p7b_wikitext_c4_consensus_random16_gpu_guard_wikitext2_64.json
+outputs/qwen3_1p7b_wikitext_c4_consensus_random16_ppl_c4_64_summary.json
+outputs/qwen3_1p7b_wikitext_c4_consensus_random16_gpu_guard_c4_64.json
+outputs/qwen3_1p7b_wikitext_c4_consensus_random16_evidence_matrix.md
+```
+
+| dataset | FP16 | uniform INT4 | consensus | category | random16 min/mean/max | target vs uniform | target vs best random | target vs random mean |
+|---|---:|---:|---:|---:|---|---:|---:|---:|
+| WikiText2-64 | 21.6552 | 31.1885 | 26.3260 | 27.4838 | 27.6685 / 28.2905 / 29.9682 | 4.8626 | 1.3425 | 1.9646 |
+| C4-64 | 25.5510 | 30.7410 | 28.3303 | 29.2760 | 28.4562 / 29.4357 / 30.0408 | 2.4107 | 0.1259 | 1.1053 |
 
 Consensus evaluation guards:
 
 ```text
 WikiText2-64 peak: 5612 / 8151 MiB = 68.85%, killed_by_guard=false
 C4-64 peak:        5618 / 8151 MiB = 68.92%, killed_by_guard=false
+Full random16 WikiText2-64 peak: 5644 / 8151 MiB = 69.24%, killed_by_guard=false
+Full random16 C4-64 peak:        5642 / 8151 MiB = 69.22%, killed_by_guard=false
 ```
 
 ## Interpretation
