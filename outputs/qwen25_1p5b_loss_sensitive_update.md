@@ -85,6 +85,7 @@ Downstream fake-quant PPL:
 | C4-32 | 23.5711 | 22.8859 | 21.9642 | 22.1526 |
 | WikiText2-64 | 17.2441 | 16.1788 | 15.7520 | 15.7966 |
 | C4-64 | 23.9949 | 23.2682 | 22.3620 | 22.4891 |
+| WikiText2-128 | 17.4996 | 16.6503 | 16.0781 | 16.1356 |
 
 The 8-prompt calibration improves the C4 slice materially and is tied with the
 2-prompt allocation on WikiText2. The consensus allocation is more stable with
@@ -94,6 +95,9 @@ It is the best WikiText2-16 point in this short smoke slice, while the direct
 8-prompt allocation is the best C4-32 point. On the larger 64-prompt slices,
 the 8-prompt allocation is the best measured point on both WikiText2 and C4,
 while consensus remains close and more stable by construction.
+A longer WikiText2-128 run keeps the same ordering. It is not paired with C4-128
+because the current committed C4 prompt slice contains 64 rows and the 1.5B
+128-prompt run briefly exceeded the preferred 85% GPU-memory target.
 
 Evidence files:
 
@@ -125,4 +129,6 @@ outputs/qwen25_1p5b_loss_sensitive_2p8p_consensus_ppl_table.md
 outputs/qwen25_1p5b_fake_quant_ppl_compare_2p8p_consensus_group128_wikitext2_64_summary.json
 outputs/qwen25_1p5b_fake_quant_ppl_compare_2p8p_consensus_group128_c4_en_validation_64_summary.json
 outputs/qwen25_1p5b_loss_sensitive_compare_2p8p_consensus_ppl64_table.md
+outputs/qwen25_1p5b_fake_quant_ppl_compare_2p8p_consensus_group128_wikitext2_128_summary.json
+outputs/qwen25_1p5b_loss_sensitive_compare_2p8p_consensus_wikitext2_128_table.md
 ```

@@ -427,6 +427,13 @@ Linear modules touched       197
 8p bit histogram             4-bit=136, 8-bit=61, avg bits=4.4953
 consensus bit histogram      4-bit=132, 8-bit=65, avg bits=4.4993
 2p/8p 8-bit Jaccard          0.6351
+
+WikiText2 validation slice, 128 prompts:
+FP16                         PPL 13.13
+uniform INT4                 PPL 17.50
+loss-sensitive {4,8}, 2p     PPL 16.65
+loss-sensitive {4,8}, 8p     PPL 16.08
+loss-sensitive consensus     PPL 16.14
 ```
 
 This result only validates that the fake-quant evaluator runs on a stronger
@@ -449,6 +456,9 @@ allocation. The consensus allocation prioritizes modules selected by both
 probes, then fills the remaining budget by average loss-per-cost score. In this
 slice it is slightly behind the direct 8-prompt allocation but remains
 substantially better than uniform INT4 on both WikiText2-64 and C4-64.
+The same ordering holds on a longer WikiText2-128 slice. The 128-prompt run
+temporarily reached about 7.3 GiB of 8.15 GiB GPU memory, so larger 1.5B
+evaluations should be staged carefully or run with smaller config batches.
 
 Evidence files:
 
@@ -534,6 +544,8 @@ outputs/qwen25_1p5b_loss_sensitive_2p8p_consensus_ppl_table.md
 outputs/qwen25_1p5b_fake_quant_ppl_compare_2p8p_consensus_group128_wikitext2_64_summary.json
 outputs/qwen25_1p5b_fake_quant_ppl_compare_2p8p_consensus_group128_c4_en_validation_64_summary.json
 outputs/qwen25_1p5b_loss_sensitive_compare_2p8p_consensus_ppl64_table.md
+outputs/qwen25_1p5b_fake_quant_ppl_compare_2p8p_consensus_group128_wikitext2_128_summary.json
+outputs/qwen25_1p5b_loss_sensitive_compare_2p8p_consensus_wikitext2_128_table.md
 outputs/qwen25_0p5b_loss_sensitive_consensus_alloc_4to8_group128_report.md
 outputs/qwen25_0p5b_fake_quant_ppl_uniform_group128_wikitext2_128_summary.json
 outputs/qwen25_0p5b_fake_quant_ppl_uniform_group128_c4_en_validation_64_summary.json
