@@ -592,14 +592,22 @@ C++ loss-sensitive {4,8}     PPL 34.84  avg bits 4.4997
 C++ random budget {4,8}      PPL 39.18  avg bits 4.4997
 C++ category budget {4,8}    PPL 37.57  avg bits 4.4997
 
-Qwen3-0.6B, WikiText2 64 prompts, same 4-prompt calibration allocation:
+Qwen3-0.6B, WikiText2/C4 64 prompts, same 4-prompt WikiText2 calibration allocation:
 
-FP16                         PPL 31.18
-uniform INT4                 PPL 49.79
-C++ loss-sensitive {4,8}     PPL 39.01  avg bits 4.4997
-C++ category budget {4,8}    PPL 42.19  avg bits 4.4939
-random16 min/mean/max        PPL 41.91 / 44.06 / 46.40
-target margin vs best random +2.90 PPL
+WikiText2-64:
+  FP16                         PPL 31.18
+  uniform INT4                 PPL 49.79
+  C++ loss-sensitive {4,8}     PPL 39.01  avg bits 4.4997
+  C++ category budget {4,8}    PPL 42.19  avg bits 4.4939
+  random16 min/mean/max        PPL 41.91 / 44.06 / 46.40
+  target margin vs best random +2.90 PPL
+C4-64:
+  FP16                         PPL 36.14
+  uniform INT4                 PPL 52.94
+  C++ loss-sensitive {4,8}     PPL 45.06  avg bits 4.4997
+  C++ category budget {4,8}    PPL 47.72  avg bits 4.4939
+  random16 min/mean/max        PPL 47.17 / 48.53 / 50.03
+  target margin vs best random +2.10 PPL
 
 Qwen3-1.7B, WikiText2 16 prompts, uniform smoke:
 
@@ -812,7 +820,10 @@ outputs/qwen3_0p6b_cpp_allocation_planner_random16_4p5_summary.json
 data_eval/eval_configs/qwen3_0p6b_cpp_random16_compare.json
 outputs/qwen3_0p6b_cpp_random16_ppl_wikitext2_64_summary.json
 outputs/qwen3_0p6b_cpp_random16_gpu_guard_wikitext2_64.json
+outputs/qwen3_0p6b_cpp_random16_ppl_c4_64_summary.json
+outputs/qwen3_0p6b_cpp_random16_gpu_guard_c4_64.json
 outputs/qwen3_0p6b_cpp_random16_evidence_matrix.md
+outputs/qwen3_0p6b_cpp_random16_wikitext_c4_evidence_matrix.md
 outputs/qwen3_1p7b_uniform_fake_quant_ppl_wikitext2_16_summary.json
 outputs/qwen3_1p7b_uniform_gpu_guard_wikitext2_16.json
 outputs/qwen3_1p7b_sensitivity_gpu_guard_limit2_group128.json

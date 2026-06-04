@@ -93,8 +93,12 @@ These claims are supported by committed data, scripts, or reports:
   WikiText2 slice gives FP16 `31.18`, uniform INT4 `49.79`, loss-sensitive
   `39.01`, category `42.19`, and random min/mean/max
   `41.91 / 44.06 / 46.40`. The target is ahead of the best listed random seed
-  by `2.90` PPL and the random mean by `5.05` PPL. This is still a short-cycle
-  signal rather than a mature benchmark.
+  by `2.90` PPL and the random mean by `5.05` PPL. On a C4-64 check using the
+  same WikiText2-calibrated allocation, FP16 is `36.14`, uniform INT4 is
+  `52.94`, loss-sensitive is `45.06`, category is `47.72`, and random
+  min/mean/max is `47.17 / 48.53 / 50.03`, leaving the target ahead of the best
+  random seed by `2.10` PPL. This is still a short-cycle signal rather than a
+  mature benchmark.
 - A Qwen3-1.7B uniform fake-quant smoke run also completed under the GPU guard:
   FP16 PPL `18.97`, uniform INT4 PPL `27.45`, and uniform INT3 PPL `312.57`
   on the 16-prompt WikiText2 slice. Peak GPU memory was `5525/8151 MiB`
