@@ -135,11 +135,13 @@ outputs/olmo2_0425_1b_wikitext_c4_consensus_audit.md
 outputs/olmo2_0425_1b_wikitext_c4_sensitivity_stability_report.md
 outputs/olmo2_0425_1b_wikitext_c4_sensitivity_stability_cpp.md
 outputs/consensus_budget_curve_report.md
+outputs/consensus_budget_curve.svg
 inference_cpp/src/quant_evidence_matrix.cpp
 inference_cpp/src/quant_consensus_audit.cpp
 inference_cpp/src/quant_sensitivity_stability.cpp
 train_python/compare_sensitivity_splits.py
 train_python/summarize_budget_curve.py
+train_python/plot_budget_curve_svg.py
 ```
 
 ### Quantization-policy bypass, v1
@@ -1379,6 +1381,7 @@ The current paper-facing draft is:
 
 ```text
 outputs/paper_delivery_2026-06-04/EigenSkill-Q_CCF-A_Draft_v2_Loss_Sensitive.md
+docs/paper-targets-and-readiness.md
 ```
 
 It reframes the project around loss-sensitive constrained mixed-precision

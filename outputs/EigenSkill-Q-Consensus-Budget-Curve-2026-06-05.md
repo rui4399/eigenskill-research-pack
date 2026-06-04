@@ -35,6 +35,8 @@ All model runs used the GPU guard with `--max-memory-ratio 0.85`.
 
 ## Results
 
+Figure: `outputs/consensus_budget_curve.svg`
+
 | dataset | model | 4.25-bit PPL | 4.50-bit PPL | 4.75-bit PPL | uniform INT4 PPL |
 |---|---|---:|---:|---:|---:|
 | WikiText2-64 | Qwen3-1.7B | 28.0753 | 27.3180 | 26.6163 | 31.8353 |
@@ -89,6 +91,7 @@ required before a serious journal or conference submission.
 
 ```text
 outputs/consensus_budget_curve_report.md
+outputs/consensus_budget_curve.svg
 outputs/consensus_budget_curve_summary.json
 outputs/consensus_budget_curve_summary.csv
 data_eval/eval_configs/qwen3_1p7b_consensus_budget_curve.json
