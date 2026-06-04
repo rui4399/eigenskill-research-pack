@@ -125,6 +125,31 @@ peak memory: 4438/8151 MiB = 54.45%
 peak utilization: 78%
 ```
 
+## Random8 Baseline Check
+
+The C++ planner now supports `--random-repeats N`, which appends consecutive
+random-budget allocation summaries while preserving the original
+`random_budget` name for compatibility. This was used to compare against eight
+budget-matched random seeds.
+
+```text
+WikiText2-64:
+loss-sensitive       PPL 21.1191
+random8 min          PPL 21.4637
+random8 mean         PPL 21.6140
+random8 max          PPL 21.7550
+
+C4-64:
+loss-sensitive       PPL 35.8428
+random8 min          PPL 35.8512
+random8 mean         PPL 36.0334
+random8 max          PPL 36.3837
+```
+
+The WikiText2 margin is clear on this slice. The C4 margin is only `0.0084`
+PPL versus the best random seed, so it should be described as weak support
+rather than a strong cross-dataset win.
+
 ## Interpretation
 
 This is stronger than the earlier OLMo2 uniform smoke because it exercises the
@@ -155,4 +180,10 @@ outputs/olmo2_0425_1b_cpp_blend_winners_ppl_wikitext2_64_summary.json
 outputs/olmo2_0425_1b_cpp_blend_winners_gpu_guard_wikitext2_64.json
 outputs/olmo2_0425_1b_cpp_blend_winners_ppl_c4_64_summary.json
 outputs/olmo2_0425_1b_cpp_blend_winners_gpu_guard_c4_64.json
+outputs/olmo2_0425_1b_cpp_allocation_planner_random8_4p5_summary.json
+data_eval/eval_configs/olmo2_0425_1b_cpp_random8_compare.json
+outputs/olmo2_0425_1b_cpp_random8_ppl_wikitext2_64_summary.json
+outputs/olmo2_0425_1b_cpp_random8_gpu_guard_wikitext2_64.json
+outputs/olmo2_0425_1b_cpp_random8_ppl_c4_64_summary.json
+outputs/olmo2_0425_1b_cpp_random8_gpu_guard_c4_64.json
 ```

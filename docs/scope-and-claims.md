@@ -111,7 +111,10 @@ These claims are supported by committed data, scripts, or reports:
   better with `loss_sensitive_budget` (`21.12` PPL) than `blend_sensitivity_85`
   (`21.13` PPL). A C4-64 check with the same allocation improves over uniform
   INT4 (`35.84` vs `36.83`) and category (`35.84` vs `36.05`), but is nearly
-  tied with random budget (`35.84` vs `35.85`). Treat this as a second
+  tied with one random budget (`35.84` vs `35.85`). The C++ planner now
+  supports `--random-repeats`; an 8-seed random check leaves loss-sensitive
+  ahead of the best random seed on WikiText2-64 (`21.12` vs `21.46`) and C4-64
+  (`35.84` vs `35.85`), but the C4 margin is tiny. Treat this as a second
   model-family short-slice allocator signal with weak cross-dataset support,
   not as a production quantizer or broad benchmark.
 - A `google/gemma-3-1b-it` candidate was attempted but blocked by gated

@@ -568,6 +568,16 @@ C++ category budget {4,8}    PPL 36.05  avg bits 4.4984
 C++ random budget {4,8}      PPL 35.85  avg bits 4.4984
 C++ blend_sensitivity_85     PPL 35.88  avg bits 4.4984
 C++ loss-sensitive {4,8}     PPL 35.84  avg bits 4.4984
+
+OLMo-2-0425-1B-Instruct, random8 check with the same allocation budget:
+
+WikiText2-64:
+loss-sensitive               PPL 21.12
+random8 min/mean/max         PPL 21.46 / 21.61 / 21.76
+
+C4-64:
+loss-sensitive               PPL 35.84
+random8 min/mean/max         PPL 35.85 / 36.03 / 36.38
 ```
 
 This is still a small sanity slice, but it addresses a concrete reviewer
@@ -607,8 +617,11 @@ loss-sensitive budget was slightly stronger than the blend candidate (`21.12`
 vs `21.13`) and improved over uniform INT4, random budget, and category
 budget. A C4-64 cross-dataset check kept the same qualitative advantage over
 uniform INT4 and category, but random was nearly tied (`35.85` vs `35.84` PPL),
-so this should be treated as weak cross-dataset support that needs more random
-seeds and calibration splits. This gives a second model-family positive
+so this should be treated as weak cross-dataset support. A follow-up C++
+`--random-repeats 8` run keeps loss-sensitive ahead of the best random seed on
+both WikiText2-64 (`21.12` vs `21.46`) and C4-64 (`35.84` vs `35.85`), but the
+C4 margin is tiny and still needs more calibration splits. This gives a second
+model-family positive
 allocator signal, but it is still a short-slice fake-quant diagnostic, not a
 production quantizer. A
 Gemma-3-1B candidate was also attempted, but the Hugging Face repository was
@@ -700,6 +713,12 @@ outputs/olmo2_0425_1b_cpp_blend_winners_ppl_wikitext2_64_summary.json
 outputs/olmo2_0425_1b_cpp_blend_winners_gpu_guard_wikitext2_64.json
 outputs/olmo2_0425_1b_cpp_blend_winners_ppl_c4_64_summary.json
 outputs/olmo2_0425_1b_cpp_blend_winners_gpu_guard_c4_64.json
+outputs/olmo2_0425_1b_cpp_allocation_planner_random8_4p5_summary.json
+data_eval/eval_configs/olmo2_0425_1b_cpp_random8_compare.json
+outputs/olmo2_0425_1b_cpp_random8_ppl_wikitext2_64_summary.json
+outputs/olmo2_0425_1b_cpp_random8_gpu_guard_wikitext2_64.json
+outputs/olmo2_0425_1b_cpp_random8_ppl_c4_64_summary.json
+outputs/olmo2_0425_1b_cpp_random8_gpu_guard_c4_64.json
 outputs/OLMo2-0425-1B-Cpp-Planner-2026-06-05.md
 outputs/smollm2_module_loss_sensitivity_limit4_group128.json
 outputs/smollm2_module_loss_sensitivity_limit4_group128_report.md

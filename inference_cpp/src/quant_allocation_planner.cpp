@@ -30,6 +30,7 @@ struct Options {
     int high_bits = 8;
     double budget_avg_bits = 4.5;
     std::uint32_t seed = 20260604;
+    int random_repeats = 1;
     std::string emit = "json";
 };
 
@@ -329,12 +330,15 @@ Options parse_args(int argc, char** argv) {
             options.budget_avg_bits = std::stod(require_value("--budget-avg-bits"));
         } else if (arg == "--seed") {
             options.seed = static_cast<std::uint32_t>(std::stoul(require_value("--seed")));
+        } else if (arg == "--random-repeats") {
+            options.random_repeats = std::stoi(require_value("--random-repeats"));
         } else if (arg == "--emit") {
             options.emit = require_value("--emit");
         } else if (arg == "--help" || arg == "-h") {
             std::cout << "Usage: quant_allocation_planner (--csv groups.csv | --sensitivity-json summary.json)\n"
                          "                                [--low-bits 4] [--high-bits 8]\n"
                          "                                [--budget-avg-bits 4.5] [--seed 20260604]\n"
+                         "                                [--random-repeats 1]\n"
                          "                                [--emit json|csv]\n";
             std::exit(0);
         } else {
@@ -349,6 +353,9 @@ Options parse_args(int argc, char** argv) {
     }
     if (options.budget_avg_bits < options.low_bits || options.budget_avg_bits > options.high_bits) {
         throw std::runtime_error("--budget-avg-bits must be within [low_bits, high_bits]");
+    }
+    if (options.random_repeats < 1 || options.random_repeats > 1000) {
+        throw std::runtime_error("--random-repeats must be within [1, 1000]");
     }
     if (options.emit != "json" && options.emit != "csv") {
         throw std::runtime_error("--emit must be json or csv");
@@ -701,6 +708,14 @@ int main(int argc, char** argv) {
             groups,
             options,
             allocate_budgeted(groups, options, random_order(groups.size(), options.seed))));
+        for (int repeat = 1; repeat < options.random_repeats; ++repeat) {
+            const std::uint32_t repeat_seed = options.seed + static_cast<std::uint32_t>(repeat);
+            summaries.push_back(summarize(
+                "random_budget_seed_" + std::to_string(repeat_seed),
+                groups,
+                options,
+                allocate_budgeted(groups, options, random_order(groups.size(), repeat_seed))));
+        }
         summaries.push_back(summarize(
             "category_budget",
             groups,

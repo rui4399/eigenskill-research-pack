@@ -64,6 +64,24 @@ Qwen3-1.7B WikiText2 slices, `blend_sensitivity_05` and
 over `category_budget` on the 16-prompt slice and remain slightly better on
 the 64-prompt check at the same average-bit budget.
 
+The planner also supports `--random-repeats N`. The default remains one
+`random_budget` allocation for backward compatibility. When `N > 1`, it appends
+`random_budget_seed_<seed>` summaries using consecutive seeds. This is used by
+the OLMo2 C4/WikiText2 checks to avoid comparing against a single lucky or
+unlucky random budget.
+
+Example:
+
+```bash
+./inference_cpp/build-wsl/quant_allocation_planner \
+  --sensitivity-json outputs/olmo2_0425_1b_module_loss_sensitivity_limit2_group128.json \
+  --budget-avg-bits 4.5 \
+  --seed 20260605 \
+  --random-repeats 8 \
+  --emit json \
+  > outputs/olmo2_0425_1b_cpp_allocation_planner_random8_4p5_summary.json
+```
+
 ## Run
 
 ```powershell
