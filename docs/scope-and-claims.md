@@ -128,6 +128,12 @@ These claims are supported by committed data, scripts, or reports:
   claim: cross-distribution calibration consensus improves the current
   fake-quant diagnostic on Qwen3-1.7B. It is still not a production quantizer,
   packed runtime, or broad benchmark.
+- A split-stability audit supports the calibration-noise interpretation behind
+  the consensus method. For WikiText2-vs-C4 two-prompt sensitivity probes,
+  Qwen3-1.7B has score/cost Spearman `0.0734` and top-20 score-set Jaccard
+  `0.1429`; OLMo2 has score/cost Spearman `0.1845` and top-20 score-set
+  Jaccard `0.1111`. These low correlations justify reporting consensus
+  robustness, not single-split allocator dominance.
 - A non-Qwen `allenai/OLMo-2-0425-1B-Instruct` fake-quant run completed under
   the GPU guard. On the 16-prompt WikiText2 slice, FP16 PPL is `17.12`,
   uniform INT4 PPL is `20.70`, and uniform INT3 PPL is `58.84`. A 2-prompt

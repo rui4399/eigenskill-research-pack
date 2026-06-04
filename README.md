@@ -93,17 +93,28 @@ overlap and average loss-per-cost under the same bit budget. It addresses the
 earlier Qwen3 failure mode where a one-split loss-sensitive allocation beat
 random on WikiText2 but lost to the best random seed on C4.
 
+A split-stability audit confirms that the short calibration probes are noisy,
+which is the reason to prefer the consensus framing:
+
+```text
+Qwen3-1.7B: score/cost Spearman 0.0734, positive-set Jaccard 0.4512
+OLMo2-1B:   score/cost Spearman 0.1845, positive-set Jaccard 0.4512
+```
+
 Evidence files:
 
 ```text
 data_eval/eval_configs/qwen3_1p7b_wikitext_c4_consensus_random16_compare.json
 outputs/qwen3_1p7b_wikitext_c4_consensus_random16_evidence_matrix.md
 outputs/qwen3_1p7b_wikitext_c4_consensus_audit.md
+outputs/qwen3_1p7b_wikitext_c4_sensitivity_stability_report.md
 data_eval/eval_configs/olmo2_0425_1b_wikitext_c4_consensus_compare.json
 outputs/olmo2_0425_1b_wikitext_c4_consensus_evidence_matrix.md
 outputs/olmo2_0425_1b_wikitext_c4_consensus_audit.md
+outputs/olmo2_0425_1b_wikitext_c4_sensitivity_stability_report.md
 inference_cpp/src/quant_evidence_matrix.cpp
 inference_cpp/src/quant_consensus_audit.cpp
+train_python/compare_sensitivity_splits.py
 ```
 
 ### Quantization-policy bypass, v1

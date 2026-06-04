@@ -61,6 +61,27 @@ WikiText2-64 consensus PPL 21.0349 vs best listed random 21.4637
 C4-64        consensus PPL 35.4726 vs best listed random 35.8512
 ```
 
+The split-stability audit shows why consensus is needed. The WikiText2 and C4
+2-prompt sensitivity probes have low rank agreement:
+
+```text
+Qwen3-1.7B:
+shared modules                  197
+positive-set Jaccard            0.4512
+score/cost Spearman             0.0734
+top-20 score-set Jaccard        0.1429
+
+OLMo2-0425-1B-Instruct:
+shared modules                  113
+positive-set Jaccard            0.4512
+score/cost Spearman             0.1845
+top-20 score-set Jaccard        0.1111
+```
+
+This is explicit evidence of calibration-split noise. The current consensus
+method should be interpreted as a robustness heuristic that stabilizes noisy
+short-prompt sensitivity estimates before downstream PPL evaluation.
+
 The important claim is narrow: cross-dataset consensus improves this repository's
 short-slice fake-quant diagnostic over the earlier one-split allocation and the
 listed random repeats. It does not establish a compressed runtime, hardware
@@ -80,4 +101,10 @@ Read this audit together with downstream PPL matrices from:
 
 ```text
 inference_cpp/src/quant_evidence_matrix.cpp
+```
+
+The split-stability audit is implemented in:
+
+```text
+train_python/compare_sensitivity_splits.py
 ```
