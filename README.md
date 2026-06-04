@@ -460,10 +460,35 @@ The same ordering holds on a longer WikiText2-128 slice. The 128-prompt run
 temporarily reached about 7.3 GiB of 8.15 GiB GPU memory, so larger 1.5B
 evaluations should be staged carefully or run with smaller config batches.
 
+The evaluator now uses in-place group-wise fake quantization to avoid full
+matrix-sized temporary dequant tensors. A guarded 1.5B baseline comparison
+stayed under the requested GPU limit: peak `4634/8151 MiB` (`56.85%`) and max
+GPU utilization `62%` according to `train_python/run_with_gpu_guard.py`. On a
+16-prompt WikiText2 sanity slice, loss-sensitive allocation also beats
+budgeted random and budgeted structural heuristics:
+
+```text
+Qwen2.5-1.5B-Instruct, WikiText2 16 prompts, group size 128:
+
+FP16                         PPL 10.76
+uniform INT4                 PPL 15.04
+loss-sensitive {4,8}         PPL 13.14  avg bits 4.4953
+random budget-matched {4,8}  PPL 14.19  avg bits 4.4952
+category heuristic budget    PPL 14.44  avg bits 4.4709
+```
+
+This is still a small sanity slice, but it addresses a concrete reviewer
+question: the allocation is no longer compared only against uniform INT4. The
+budget-matched random baseline protects only `15.87%` of measured positive
+loss increase, while the loss-sensitive allocation protects `54.45%` at nearly
+the same average-bit budget.
+
 Evidence files:
 
 ```text
 train_python/eval_weight_quant_ppl.py
+train_python/build_baseline_allocations.py
+train_python/run_with_gpu_guard.py
 train_python/measure_module_quant_sensitivity.py
 train_python/build_dataset_prompts.py
 train_python/build_loss_sensitive_knapsack_alloc.py
@@ -478,6 +503,9 @@ outputs/smollm2_fake_quant_ppl_report.md
 outputs/smollm2_fake_quant_ppl_4to8_limit8_summary.json
 outputs/smollm2_fake_quant_ppl_4to8_group128_limit8_summary.json
 outputs/smollm2_fake_quant_ppl_4to8_group64_limit8_summary.json
+outputs/qwen25_1p5b_baseline_allocations_4to8_limit8_group128_summary.json
+outputs/qwen25_1p5b_baseline_budget_ppl_wikitext2_16_summary.json
+outputs/qwen25_1p5b_baseline_eval_gpu_guard_retry.json
 outputs/smollm2_module_loss_sensitivity_limit4_group128.json
 outputs/smollm2_module_loss_sensitivity_limit4_group128_report.md
 outputs/smollm2_loss_sensitive_alloc_4to8_limit4_group128_summary.json
@@ -647,8 +675,10 @@ fp32 dense GEMV
 AVX2 fp32 dense GEMV when available
 packed INT4 dequant GEMV with per-row scales
 packed INT3 dequant GEMV with per-row scales
+packed mixed-bit dequant GEMV with per-row 3/4/8-bit choices
 policy-selected output-row GEMV
 AVX2 policy-selected output-row GEMV when available
+mixed-bit policy-selected output-row GEMV
 scalar skill bypass, y = lambda x
 ```
 
@@ -684,6 +714,26 @@ INT3/INT4, confirming correctness and exposing the expected negative systems
 result: scalar bit-unpack low-bit GEMV is slower than AVX2 FP32 GEMV until a
 vectorized low-bit dot path is added.
 
+The current WSL mixed-bit benchmark adds per-row 3/4/8-bit storage and selected
+row execution over that mixed representation:
+
+```text
+d=2048, rows=16:
+dense=2.554907 ms, AVX2 dense=0.303719 ms
+mixed full dequant=11.888089 ms
+mixed selected-row=0.145753 ms
+selected-row AVX2 fp32=0.002909 ms
+mixed selected-row speedup vs scalar dense=17.53x
+mixed selected-row rel_l2 vs mixed full output rows=0.0
+
+mixed selected-row faster than dense: 7/9 cases
+full mixed-bit dequant faster than dense: 0/9 cases
+```
+
+The key systems claim is therefore narrow: mixed-bit storage can be represented
+and routed at row granularity, and selected-row execution over that format is a
+measurable bypass baseline. It is still not a production low-bit matmul.
+
 Evidence files:
 
 ```text
@@ -698,6 +748,8 @@ outputs/eigenskill_quant_kernel_verify_msvc.json
 outputs/EigenSkill-Q-Cpp-Quant-Kernel-API-Report.md
 outputs/eigenskill_quant_kernel_benchmark.txt
 outputs/eigenskill_quant_kernel_benchmark_summary.json
+outputs/eigenskill_quant_kernel_mixedbit_benchmark.txt
+outputs/eigenskill_quant_kernel_mixedbit_benchmark_summary.json
 outputs/EigenSkill-Q-Cpp-Quant-Kernel-Benchmark-Report.md
 ```
 

@@ -45,15 +45,23 @@ These claims are supported by committed data, scripts, or reports:
   where `W = U A U^T`.
 - The C++ quant-kernel API exposes FP32 dense GEMV, AVX2 dense GEMV,
   selected-row GEMV, scalar bypass, and row-scaled signed low-bit
-  pack/dequant GEMV for INT3/INT4-style storage. Current low-bit CPU kernels
-  are correctness/structure baselines, not speedup evidence.
+  pack/dequant GEMV for 2..8-bit storage, including a mixed-bit per-row matrix
+  format. Current low-bit CPU kernels are correctness/structure baselines, not
+  full low-bit matmul speedup evidence. The narrower supported systems result
+  is selected-row execution, including selected-row execution over mixed-bit
+  storage.
 - The fake weight-quantization scaffold has short-slice PPL evidence for
   SmolLM2-360M, Qwen2.5-0.5B, and a local Qwen2.5-1.5B checkpoint. These are
   quality diagnostics for allocation policies, not packed-runtime claims.
 - Measured per-module loss sensitivity can improve short-slice fake-quant PPL
   over uniform INT4 in the committed SmolLM2 and Qwen smoke runs. The
   Qwen2.5-1.5B evidence includes 2-prompt, 8-prompt, and consensus
-  allocations on WikiText2/C4 slices.
+  allocations on WikiText2/C4 slices, plus a 16-prompt budget-matched
+  comparison against random and structural heuristic mixed-precision baselines.
+- The GPU guard script can enforce a max-memory ratio before and during CUDA
+  runs. A Qwen2.5-1.5B 16-prompt comparison completed at 56.85% peak GPU
+  memory after the fake-quant evaluator was changed to in-place group-wise
+  quantization.
 
 ## Claims Not Supported Yet
 

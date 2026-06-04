@@ -29,6 +29,32 @@ void require_matrix(MatrixView w) {
     }
 }
 
+void require_mixed_matrix(const PackedMixedBitMatrix& packed) {
+    if (packed.rows <= 0 || packed.cols <= 0 ||
+        packed.row_bits.size() != static_cast<std::size_t>(packed.rows) ||
+        packed.row_bit_offsets.size() != static_cast<std::size_t>(packed.rows) ||
+        packed.row_scales.size() != static_cast<std::size_t>(packed.rows)) {
+        throw std::invalid_argument("inconsistent mixed low-bit matrix metadata");
+    }
+
+    std::uint64_t expected_bits = 0;
+    for (int row = 0; row < packed.rows; ++row) {
+        const std::size_t index = static_cast<std::size_t>(row);
+        const int bits = static_cast<int>(packed.row_bits[index]);
+        if (bits < 2 || bits > 8) {
+            throw std::invalid_argument("mixed low-bit matrix supports 2..8 bits per row");
+        }
+        if (packed.row_bit_offsets[index] != expected_bits) {
+            throw std::invalid_argument("mixed low-bit row offsets are not contiguous");
+        }
+        expected_bits += static_cast<std::uint64_t>(bits) * static_cast<std::uint64_t>(packed.cols);
+    }
+    const std::size_t expected_bytes = static_cast<std::size_t>((expected_bits + 7u) / 8u);
+    if (packed.bytes.size() != expected_bytes) {
+        throw std::invalid_argument("inconsistent mixed low-bit matrix storage");
+    }
+}
+
 #if EIGENSKILL_KERNEL_HAS_AVX2
 float horizontal_sum_avx(__m256 value) {
     __m128 low = _mm256_castps256_ps128(value);
@@ -176,7 +202,7 @@ void write_bits(std::vector<std::uint8_t>& bytes, std::size_t bit_offset, int bi
 }
 
 std::int8_t unpack_signed_bits(const std::uint8_t* bytes, std::size_t bit_offset, int bits) {
-    if (!bytes || bits <= 0 || bits > 7) {
+    if (!bytes || bits <= 0 || bits > 8) {
         throw std::invalid_argument("invalid signed bit unpack input");
     }
     std::uint8_t encoded = 0;
@@ -196,8 +222,8 @@ PackedLowBitMatrix pack_lowbit_per_row(const float* w, int rows, int cols, int b
     if (!w || rows <= 0 || cols <= 0) {
         throw std::invalid_argument("invalid low-bit pack input");
     }
-    if (bits < 2 || bits > 7) {
-        throw std::invalid_argument("low-bit pack supports 2..7 bits");
+    if (bits < 2 || bits > 8) {
+        throw std::invalid_argument("low-bit pack supports 2..8 bits");
     }
     PackedLowBitMatrix packed;
     packed.rows = rows;
@@ -241,7 +267,7 @@ PackedInt4Matrix pack_int4_per_row(const float* w, int rows, int cols) {
 EIGENSKILL_NOINLINE void lowbit_dequant_gemv(const PackedLowBitMatrix& packed,
                                              const float* EIGENSKILL_RESTRICT x,
                                              float* EIGENSKILL_RESTRICT y) {
-    if (packed.rows <= 0 || packed.cols <= 0 || packed.bits < 2 || packed.bits > 7 || !x || !y) {
+    if (packed.rows <= 0 || packed.cols <= 0 || packed.bits < 2 || packed.bits > 8 || !x || !y) {
         throw std::invalid_argument("invalid low-bit GEMV input");
     }
     const std::size_t values = static_cast<std::size_t>(packed.rows) * packed.cols;
@@ -262,6 +288,100 @@ EIGENSKILL_NOINLINE void lowbit_dequant_gemv(const PackedLowBitMatrix& packed,
             acc += static_cast<float>(q) * scale * x[col];
         }
         y[row] = acc;
+    }
+}
+
+PackedMixedBitMatrix pack_mixed_lowbit_per_row(const float* w, int rows, int cols, const std::uint8_t* row_bits) {
+    if (!w || !row_bits || rows <= 0 || cols <= 0) {
+        throw std::invalid_argument("invalid mixed low-bit pack input");
+    }
+
+    PackedMixedBitMatrix packed;
+    packed.rows = rows;
+    packed.cols = cols;
+    packed.row_bits.assign(row_bits, row_bits + rows);
+    packed.row_bit_offsets.assign(static_cast<std::size_t>(rows), 0);
+    packed.row_scales.assign(static_cast<std::size_t>(rows), 1.0f);
+
+    std::uint64_t total_bits = 0;
+    for (int row = 0; row < rows; ++row) {
+        const int bits = static_cast<int>(packed.row_bits[static_cast<std::size_t>(row)]);
+        if (bits < 2 || bits > 8) {
+            throw std::invalid_argument("mixed low-bit pack supports 2..8 bits per row");
+        }
+        packed.row_bit_offsets[static_cast<std::size_t>(row)] = total_bits;
+        total_bits += static_cast<std::uint64_t>(bits) * static_cast<std::uint64_t>(cols);
+    }
+    packed.bytes.assign(static_cast<std::size_t>((total_bits + 7u) / 8u), 0);
+
+    for (int row = 0; row < rows; ++row) {
+        const int bits = static_cast<int>(packed.row_bits[static_cast<std::size_t>(row)]);
+        const int qmax = (1 << (bits - 1)) - 1;
+        float max_abs = 0.0f;
+        for (int col = 0; col < cols; ++col) {
+            max_abs = std::max(max_abs, std::fabs(w[static_cast<std::size_t>(row) * cols + col]));
+        }
+        const float scale = std::max(max_abs / static_cast<float>(qmax), 1.0e-8f);
+        packed.row_scales[static_cast<std::size_t>(row)] = scale;
+        const std::uint64_t row_offset = packed.row_bit_offsets[static_cast<std::size_t>(row)];
+        for (int col = 0; col < cols; ++col) {
+            const float value = w[static_cast<std::size_t>(row) * cols + col] / scale;
+            int q = static_cast<int>(std::nearbyint(value));
+            q = std::max(-qmax, std::min(qmax, q));
+            const int full = 1 << bits;
+            const std::uint8_t encoded = static_cast<std::uint8_t>(q < 0 ? q + full : q);
+            const std::uint64_t bit_offset = row_offset + static_cast<std::uint64_t>(col) * static_cast<std::uint64_t>(bits);
+            write_bits(packed.bytes, static_cast<std::size_t>(bit_offset), bits, encoded);
+        }
+    }
+    return packed;
+}
+
+EIGENSKILL_NOINLINE void mixed_lowbit_dequant_gemv(const PackedMixedBitMatrix& packed,
+                                                   const float* EIGENSKILL_RESTRICT x,
+                                                   float* EIGENSKILL_RESTRICT y) {
+    if (!x || !y) {
+        throw std::invalid_argument("invalid mixed low-bit GEMV input");
+    }
+    require_mixed_matrix(packed);
+    for (int row = 0; row < packed.rows; ++row) {
+        const int bits = static_cast<int>(packed.row_bits[static_cast<std::size_t>(row)]);
+        float acc = 0.0f;
+        const float scale = packed.row_scales[static_cast<std::size_t>(row)];
+        const std::uint64_t row_offset = packed.row_bit_offsets[static_cast<std::size_t>(row)];
+        for (int col = 0; col < packed.cols; ++col) {
+            const std::uint64_t bit_offset = row_offset + static_cast<std::uint64_t>(col) * static_cast<std::uint64_t>(bits);
+            const std::int8_t q = unpack_signed_bits(packed.bytes.data(), static_cast<std::size_t>(bit_offset), bits);
+            acc += static_cast<float>(q) * scale * x[col];
+        }
+        y[row] = acc;
+    }
+}
+
+EIGENSKILL_NOINLINE void mixed_lowbit_selected_rows_gemv(const PackedMixedBitMatrix& packed,
+                                                        const float* EIGENSKILL_RESTRICT x,
+                                                        const int* EIGENSKILL_RESTRICT rows,
+                                                        int active_rows,
+                                                        float* EIGENSKILL_RESTRICT y) {
+    if (!x || !rows || !y || active_rows < 0) {
+        throw std::invalid_argument("invalid mixed selected-row GEMV input");
+    }
+    require_mixed_matrix(packed);
+    for (int out = 0; out < active_rows; ++out) {
+        const int row = rows[out];
+        if (row < 0 || row >= packed.rows) {
+            throw std::out_of_range("mixed selected row index out of range");
+        }
+        const int bits = static_cast<int>(packed.row_bits[static_cast<std::size_t>(row)]);
+        float acc = 0.0f;
+        const float scale = packed.row_scales[static_cast<std::size_t>(row)];
+        const std::uint64_t row_offset = packed.row_bit_offsets[static_cast<std::size_t>(row)];
+        for (int col = 0; col < packed.cols; ++col) {
+            const std::uint64_t bit_offset = row_offset + static_cast<std::uint64_t>(col) * static_cast<std::uint64_t>(bits);
+            const std::int8_t q = unpack_signed_bits(packed.bytes.data(), static_cast<std::size_t>(bit_offset), bits);
+            acc += static_cast<float>(q) * scale * x[col];
+        }
+        y[out] = acc;
     }
 }
 

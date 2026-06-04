@@ -122,10 +122,30 @@ consensus 4/8                PPL 16.1356
 C++ low-bit kernel API:
 
 ```text
-PackedLowBitMatrix supports signed row-scaled 2..7-bit storage.
-INT3 and INT4 finite-output checks pass in quant_kernel_verify.
+PackedLowBitMatrix supports signed row-scaled 2..8-bit storage.
+PackedMixedBitMatrix supports per-row mixed 2..8-bit storage.
+INT3, INT4, mixed-bit, selected-row, and scalar bypass checks pass in quant_kernel_verify.
 WSL/CMake/g++ 11.4 build and CTest pass.
 Naive scalar bit-unpack is slower than AVX2 FP32 GEMV; no low-bit speed claim.
+Mixed-bit selected-row GEMV is faster than scalar dense in 7/9 local benchmark cases,
+with best speedup 17.53x at d=2048 active_rows=16 and exact agreement with the
+corresponding mixed full-output rows.
+```
+
+Qwen2.5-1.5B budget-matched baseline sanity slice:
+
+```text
+WikiText2-16:
+FP16                         PPL 10.76298
+uniform INT4                 PPL 15.04498
+loss-sensitive 4/8           PPL 13.13882
+random budget-matched 4/8    PPL 14.18543
+category heuristic budget    PPL 14.43989
+
+GPU guard:
+peak memory                  4634 / 8151 MiB = 56.85%
+max utilization              62%
+killed_by_guard              false
 ```
 
 ## Claim Boundary

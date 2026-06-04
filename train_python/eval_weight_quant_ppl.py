@@ -97,6 +97,27 @@ def quantize_weight(weight: torch.Tensor, bits: int, group_size: int = 0) -> tor
     return deq.to(dtype=weight.dtype, device=weight.device)
 
 
+def quantize_weight_inplace(weight: torch.Tensor, bits: int, group_size: int = 0) -> None:
+    if bits >= 16:
+        return
+    qmax = (2 ** (bits - 1)) - 1
+    if qmax <= 0:
+        raise ValueError(f"unsupported bits: {bits}")
+
+    flat = weight.data.reshape(weight.shape[0], -1)
+    if group_size and group_size > 0 and group_size < flat.shape[1]:
+        ranges = [(start, min(start + group_size, flat.shape[1])) for start in range(0, flat.shape[1], group_size)]
+    else:
+        ranges = [(0, flat.shape[1])]
+
+    for start, end in ranges:
+        chunk = flat[:, start:end]
+        chunk_fp32 = chunk.detach().float()
+        scale = chunk_fp32.abs().amax(dim=1, keepdim=True).clamp_min(1.0e-8) / qmax
+        q = torch.round(chunk_fp32 / scale).clamp(-qmax, qmax)
+        chunk.copy_((q * scale).to(dtype=weight.dtype, device=weight.device))
+
+
 def apply_fake_quant(model: torch.nn.Module, mode: str, module_bits: dict[str, int] | None = None, group_size: int = 0) -> dict:
     bit_hist: dict[str, int] = {}
     touched = 0
@@ -115,7 +136,7 @@ def apply_fake_quant(model: torch.nn.Module, mode: str, module_bits: dict[str, i
             else:
                 raise ValueError(f"unknown quant mode: {mode}")
             if bits < 16:
-                module.weight.data.copy_(quantize_weight(module.weight.data, bits, group_size=group_size))
+                quantize_weight_inplace(module.weight, bits, group_size=group_size)
             bit_hist[str(bits)] = bit_hist.get(str(bits), 0) + 1
             touched += 1
     return {"linear_modules_touched": touched, "bit_hist": bit_hist, "group_size": group_size}

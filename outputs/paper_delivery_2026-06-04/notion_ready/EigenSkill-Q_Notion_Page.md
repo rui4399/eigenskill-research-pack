@@ -284,9 +284,13 @@ C++ 侧新增通用 row-scaled signed low-bit API：
 
 ```text
 PackedLowBitMatrix
-pack_lowbit_per_row(bits=2..7)
+PackedMixedBitMatrix
+pack_lowbit_per_row(bits=2..8)
+pack_mixed_lowbit_per_row(row_bits=2..8)
 unpack_signed_bits
 lowbit_dequant_gemv
+mixed_lowbit_dequant_gemv
+mixed_lowbit_selected_rows_gemv
 ```
 
 旧的 `PackedInt4Matrix / pack_int4_per_row / int4_dequant_gemv` 保持兼容，并基于通用 low-bit 路径实现。`quant_kernel_verify` 现在同时检查 INT4 和 INT3 输出有限、AVX2 dense GEMV、selected-row GEMV、scalar bypass。
@@ -313,6 +317,21 @@ scalar_ms=0.000019
 
 解释：当前 scalar bit-unpack INT3/INT4 GEMV 慢于 AVX2 FP32 dense GEMV。这是有价值的负结果：低比特存储格式本身不等于速度收益，后续需要 vectorized unpack、low-bit dot product、NEON/AVX2 专门路径或直接接入成熟 runtime。
 
+2026-06-04 追加 mixed-bit benchmark：
+
+```text
+d=2048, active_rows=16
+dense_ms=2.554907
+mixed_full_dequant_ms=11.888089
+mixed_selected_ms=0.145753
+mixed_selected speedup vs scalar dense=17.53x
+mixed_selected rel_l2 vs mixed full output rows=0.0
+mixed selected-row faster than dense: 7/9 cases
+full mixed-bit dequant faster than dense: 0/9 cases
+```
+
+解释：这支持“mixed-bit representation + selected-row bypass”的系统闭环，但仍不支持“低比特完整 GEMV 更快”的说法。
+
 ### 4. GPU 资源边界
 
 本机 GPU：NVIDIA GeForce RTX 5070 Laptop GPU，约 8.15 GiB 显存。
@@ -324,6 +343,34 @@ memory used: 7296 MiB / 8151 MiB
 ```
 
 这约等于 89.5%，超过预设的 85% 上限。因此后续不宜继续扩大 1.5B 单进程多配置评估；更大切片应拆分 config、降低并行驻留、或改用更省显存的评估路径。
+
+已新增 GPU guard 与低峰值 fake quant：
+
+```text
+train_python/run_with_gpu_guard.py
+eval_weight_quant_ppl.py: in-place group-wise fake quantization
+```
+
+修复前，1.5B 五配置 baseline 对比被 guard 终止，采样峰值为 `7643/8151 MiB`。
+修复后，同一 16-prompt Qwen2.5-1.5B baseline 对比成功完成：
+
+```text
+peak GPU memory: 4634 / 8151 MiB = 56.85%
+max GPU utilization: 62%
+guard killed: false
+```
+
+16-prompt WikiText2 budget baseline：
+
+| method | PPL | mean NLL delta vs FP16 | avg bits |
+|---|---:|---:|---:|
+| FP16 | 10.76298 | 0.00000 | 16.0000 |
+| uniform INT4 | 15.04498 | 0.33493 | 4.0000 |
+| loss-sensitive {4,8} | 13.13882 | 0.19946 | 4.4953 |
+| random budget-matched {4,8} | 14.18543 | 0.27610 | 4.4952 |
+| category heuristic budget | 14.43989 | 0.29388 | 4.4709 |
+
+解释：loss-sensitive 在这个小切片上不只优于 uniform INT4，也优于预算匹配的 random/heuristic mixed precision baseline。限制：这是 16-prompt sanity slice，不能替代完整基准。
 
 ### 5. 最新 GitHub 提交
 
