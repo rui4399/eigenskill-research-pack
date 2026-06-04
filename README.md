@@ -397,27 +397,27 @@ overlap with both calibration probes. Any paper-facing version should report
 calibration stability, not only the best PPL.
 
 The stronger-model smoke baseline now also includes a locally downloaded
-`Qwen/Qwen2.5-1.5B-Instruct` checkpoint. This is a small 16-prompt WikiText2
-and 32-prompt C4 slice, not a full benchmark:
+`Qwen/Qwen2.5-1.5B-Instruct` checkpoint. This is a small 64-prompt WikiText2
+and 64-prompt C4 slice, not a full benchmark:
 
 ```text
 Qwen2.5-1.5B-Instruct, group size 128:
 
-WikiText2 validation slice, 16 prompts:
-FP16                         PPL 11.28
-uniform INT4                 PPL 15.84
-uniform INT3                 PPL 381.73
-loss-sensitive {4,8}, 2p     PPL 13.77
-loss-sensitive {4,8}, 8p     PPL 13.76
-loss-sensitive consensus     PPL 13.71
+WikiText2 validation slice, 64 prompts:
+FP16                         PPL 12.85
+uniform INT4                 PPL 17.24
+uniform INT3                 PPL 273.95
+loss-sensitive {4,8}, 2p     PPL 16.18
+loss-sensitive {4,8}, 8p     PPL 15.75
+loss-sensitive consensus     PPL 15.80
 
-C4 English validation slice, 32 prompts:
-FP16                         PPL 17.88
-uniform INT4                 PPL 23.57
-uniform INT3                 PPL 289.19
-loss-sensitive {4,8}, 2p     PPL 22.89
-loss-sensitive {4,8}, 8p     PPL 21.96
-loss-sensitive consensus     PPL 22.15
+C4 English validation slice, 64 prompts:
+FP16                         PPL 18.17
+uniform INT4                 PPL 23.99
+uniform INT3                 PPL 293.82
+loss-sensitive {4,8}, 2p     PPL 23.27
+loss-sensitive {4,8}, 8p     PPL 22.36
+loss-sensitive consensus     PPL 22.49
 
 Local model path             C:\Users\18042\models\Qwen2.5-1.5B-Instruct
 model.safetensors bytes      3,087,467,144
@@ -443,11 +443,12 @@ large `lm_head` has the largest absolute loss increase but is not selected by
 the cost-normalized objective.
 
 The 8-prompt calibration is a stronger signal than the first 2-prompt probe.
-It is nearly tied with the 2-prompt allocation on WikiText2-16, improves C4-32
-from `22.89` to `21.96`, and changes 27 of 197 bit decisions. The consensus
-allocation prioritizes modules selected by both probes, then fills the remaining
-budget by average loss-per-cost score. In this slice it is best on WikiText2-16
-and remains substantially better than uniform INT4 on C4-32.
+It improves WikiText2-64 from `16.18` to `15.75`, improves C4-64 from `23.27`
+to `22.36`, and changes 27 of 197 bit decisions relative to the 2-prompt
+allocation. The consensus allocation prioritizes modules selected by both
+probes, then fills the remaining budget by average loss-per-cost score. In this
+slice it is slightly behind the direct 8-prompt allocation but remains
+substantially better than uniform INT4 on both WikiText2-64 and C4-64.
 
 Evidence files:
 
@@ -509,6 +510,7 @@ outputs/qwen25_1p5b_uniform_smoke_ppl_table.md
 data_eval/eval_configs/qwen25_1p5b_group128_with_loss_sensitive.json
 data_eval/eval_configs/qwen25_1p5b_group128_with_loss_sensitive_limit8.json
 data_eval/eval_configs/qwen25_1p5b_group128_with_consensus.json
+data_eval/eval_configs/qwen25_1p5b_group128_compare_2p8p_consensus.json
 outputs/qwen25_1p5b_loss_sensitive_update.md
 outputs/qwen25_1p5b_module_loss_sensitivity_limit2_group128.json
 outputs/qwen25_1p5b_loss_sensitive_alloc_4to8_limit2_group128_summary.json
@@ -529,6 +531,9 @@ outputs/qwen25_1p5b_loss_sensitive_consensus_alloc_4to8_group128_report.md
 outputs/qwen25_1p5b_fake_quant_ppl_consensus_group128_wikitext2_16_summary.json
 outputs/qwen25_1p5b_fake_quant_ppl_consensus_group128_c4_en_validation_32_summary.json
 outputs/qwen25_1p5b_loss_sensitive_2p8p_consensus_ppl_table.md
+outputs/qwen25_1p5b_fake_quant_ppl_compare_2p8p_consensus_group128_wikitext2_64_summary.json
+outputs/qwen25_1p5b_fake_quant_ppl_compare_2p8p_consensus_group128_c4_en_validation_64_summary.json
+outputs/qwen25_1p5b_loss_sensitive_compare_2p8p_consensus_ppl64_table.md
 outputs/qwen25_0p5b_loss_sensitive_consensus_alloc_4to8_group128_report.md
 outputs/qwen25_0p5b_fake_quant_ppl_uniform_group128_wikitext2_128_summary.json
 outputs/qwen25_0p5b_fake_quant_ppl_uniform_group128_c4_en_validation_64_summary.json

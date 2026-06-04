@@ -83,13 +83,17 @@ Downstream fake-quant PPL:
 |---|---:|---:|---:|---:|
 | WikiText2-16 | 15.8383 | 13.7652 | 13.7622 | 13.7140 |
 | C4-32 | 23.5711 | 22.8859 | 21.9642 | 22.1526 |
+| WikiText2-64 | 17.2441 | 16.1788 | 15.7520 | 15.7966 |
+| C4-64 | 23.9949 | 23.2682 | 22.3620 | 22.4891 |
 
 The 8-prompt calibration improves the C4 slice materially and is tied with the
 2-prompt allocation on WikiText2. The consensus allocation is more stable with
 respect to both probes: it selects 65 modules for 8-bit, overlaps 57 of the 60
 2-prompt high-bit modules, and overlaps 55 of the 61 8-prompt high-bit modules.
 It is the best WikiText2-16 point in this short smoke slice, while the direct
-8-prompt allocation is the best C4-32 point.
+8-prompt allocation is the best C4-32 point. On the larger 64-prompt slices,
+the 8-prompt allocation is the best measured point on both WikiText2 and C4,
+while consensus remains close and more stable by construction.
 
 Evidence files:
 
@@ -97,6 +101,7 @@ Evidence files:
 data_eval/eval_configs/qwen25_1p5b_group128_with_loss_sensitive.json
 data_eval/eval_configs/qwen25_1p5b_group128_with_loss_sensitive_limit8.json
 data_eval/eval_configs/qwen25_1p5b_group128_with_consensus.json
+data_eval/eval_configs/qwen25_1p5b_group128_compare_2p8p_consensus.json
 outputs/qwen25_1p5b_module_loss_sensitivity_limit2_group128.json
 outputs/qwen25_1p5b_module_loss_sensitivity_limit2_group128_report.md
 outputs/qwen25_1p5b_loss_sensitive_alloc_4to8_limit2_group128_summary.json
@@ -117,4 +122,7 @@ outputs/qwen25_1p5b_loss_sensitive_consensus_alloc_4to8_group128_report.md
 outputs/qwen25_1p5b_fake_quant_ppl_consensus_group128_wikitext2_16_summary.json
 outputs/qwen25_1p5b_fake_quant_ppl_consensus_group128_c4_en_validation_32_summary.json
 outputs/qwen25_1p5b_loss_sensitive_2p8p_consensus_ppl_table.md
+outputs/qwen25_1p5b_fake_quant_ppl_compare_2p8p_consensus_group128_wikitext2_64_summary.json
+outputs/qwen25_1p5b_fake_quant_ppl_compare_2p8p_consensus_group128_c4_en_validation_64_summary.json
+outputs/qwen25_1p5b_loss_sensitive_compare_2p8p_consensus_ppl64_table.md
 ```
