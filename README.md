@@ -349,6 +349,7 @@ uniform INT4                 PPL 27.74
 uniform INT3                 PPL 514.09
 loss-sensitive {4,8}, 2p     PPL 22.46
 loss-sensitive {4,8}, 8p     PPL 21.98
+consensus {4,8}, 2p+8p       PPL 22.08
 
 C4 English validation slice, 64 prompts:
 FP16                         PPL 23.95
@@ -356,6 +357,7 @@ uniform INT4                 PPL 36.51
 uniform INT3                 PPL 779.27
 loss-sensitive {4,8}, 2p     PPL 31.22
 loss-sensitive {4,8}, 8p     PPL 30.80
+consensus {4,8}, 2p+8p       PPL 30.80
 
 Qwen loss-sensitive allocation, 2-prompt probe:
 Linear modules           169
@@ -376,11 +378,22 @@ positive loss protected  59.01%
 8-bit set Jaccard        0.5135
 changed bit decisions    36 / 169
 8p PPL gain vs 2p        -0.48 on WikiText2-128, -0.42 on C4-64
+
+Consensus allocation, 2p+8p:
+Linear modules           169
+bit histogram            4-bit=109, 8-bit=60
+weighted avg bits        4.4997
+2p overlap               49 / 55 high-bit modules
+8p overlap               49 / 57 high-bit modules
+Jaccard vs 2p / 8p       0.7424 / 0.7206
 ```
 
 The moderate 2p/8p Jaccard is important: the allocation is useful but still
-calibration-sensitive. Any paper-facing version should report calibration
-stability, not only the best PPL.
+calibration-sensitive. The consensus allocation is a more stable paper-facing
+point: it gives up only `+0.11` PPL versus the 8-prompt allocation on
+WikiText2-128 and is nearly tied on C4-64, while substantially increasing
+overlap with both calibration probes. Any paper-facing version should report
+calibration stability, not only the best PPL.
 
 Evidence files:
 
@@ -389,6 +402,7 @@ train_python/eval_weight_quant_ppl.py
 train_python/measure_module_quant_sensitivity.py
 train_python/build_dataset_prompts.py
 train_python/build_loss_sensitive_knapsack_alloc.py
+train_python/build_consensus_allocation.py
 train_python/search_allocation_swaps.py
 data_eval/eval_configs/smollm2_group128_compare_allocations.json
 data_eval/text_prompts/wikitext2_validation_32.txt
@@ -423,19 +437,25 @@ outputs/smollm2_fake_quant_ppl_compare_allocations_with_output_proxy_group128_c4
 data_eval/eval_configs/qwen25_uniform_group128.json
 data_eval/eval_configs/qwen25_group128_with_loss_sensitive.json
 data_eval/eval_configs/qwen25_group128_with_loss_sensitive_limit8.json
+data_eval/eval_configs/qwen25_group128_with_consensus.json
 outputs/qwen25_0p5b_uniform_quant_baseline_report.md
 outputs/qwen25_0p5b_loss_sensitive_quant_report.md
 outputs/qwen25_0p5b_loss_sensitive_limit8_quant_report.md
+outputs/qwen25_0p5b_consensus_quant_report.md
 outputs/qwen25_0p5b_module_loss_sensitivity_limit2_group128.json
 outputs/qwen25_0p5b_module_loss_sensitivity_limit8_group128.json
 outputs/qwen25_0p5b_loss_sensitive_alloc_4to8_limit2_group128_summary.json
 outputs/qwen25_0p5b_loss_sensitive_alloc_4to8_limit8_group128_summary.json
+outputs/qwen25_0p5b_loss_sensitive_consensus_alloc_4to8_group128_summary.json
+outputs/qwen25_0p5b_loss_sensitive_consensus_alloc_4to8_group128_report.md
 outputs/qwen25_0p5b_fake_quant_ppl_uniform_group128_wikitext2_128_summary.json
 outputs/qwen25_0p5b_fake_quant_ppl_uniform_group128_c4_en_validation_64_summary.json
 outputs/qwen25_0p5b_fake_quant_ppl_loss_sensitive_group128_wikitext2_128_summary.json
 outputs/qwen25_0p5b_fake_quant_ppl_loss_sensitive_group128_c4_en_validation_64_summary.json
 outputs/qwen25_0p5b_fake_quant_ppl_loss_sensitive_limit8_group128_wikitext2_128_summary.json
 outputs/qwen25_0p5b_fake_quant_ppl_loss_sensitive_limit8_group128_c4_en_validation_64_summary.json
+outputs/qwen25_0p5b_fake_quant_ppl_consensus_group128_wikitext2_128_summary.json
+outputs/qwen25_0p5b_fake_quant_ppl_consensus_group128_c4_en_validation_64_summary.json
 train_python/compare_allocations.py
 outputs/qwen25_0p5b_loss_sensitive_2p_vs_8p_stability_summary.json
 outputs/qwen25_0p5b_loss_sensitive_2p_vs_8p_stability_report.md
