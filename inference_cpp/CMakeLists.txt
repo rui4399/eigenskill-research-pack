@@ -15,3 +15,7 @@ endif()
 add_executable(eigenskill_bench src/eigenskill_bench.cpp)
 add_executable(quant_policy_bypass src/quant_policy_bypass.cpp)
 add_executable(quant_kernel_bench src/quant_kernel_bench.cpp)
+
+if(NOT MSVC AND (CMAKE_SYSTEM_PROCESSOR MATCHES "x86_64|AMD64|amd64"))
+  target_compile_options(quant_kernel_bench PRIVATE -mavx2)
+endif()

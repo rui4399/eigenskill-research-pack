@@ -11,6 +11,13 @@
 #include <string>
 #include <vector>
 
+#if defined(__AVX2__) || (defined(_MSC_VER) && defined(__AVX2__))
+#include <immintrin.h>
+#define EIGENSKILL_HAS_AVX2 1
+#else
+#define EIGENSKILL_HAS_AVX2 0
+#endif
+
 #if defined(_MSC_VER)
 #define EIGENSKILL_RESTRICT __restrict
 #define EIGENSKILL_NOINLINE __declspec(noinline)
@@ -44,13 +51,19 @@ struct Result {
     int d = 0;
     int active_rows = 0;
     double dense_ms = 0.0;
+    double dense_avx2_ms = 0.0;
     double int4_ms = 0.0;
     double selected_ms = 0.0;
+    double selected_avx2_ms = 0.0;
     double scalar_ms = 0.0;
+    double dense_avx2_rel_l2 = 0.0;
     double int4_rel_l2 = 0.0;
     double selected_rel_l2 = 0.0;
+    double selected_avx2_rel_l2 = 0.0;
+    double dense_avx2_speedup = 0.0;
     double int4_speedup = 0.0;
     double selected_speedup = 0.0;
+    double selected_avx2_speedup = 0.0;
     double scalar_speedup = 0.0;
 };
 
@@ -139,6 +152,59 @@ EIGENSKILL_NOINLINE void dense_gemv(const float* EIGENSKILL_RESTRICT w,
     }
 }
 
+float dot_product_scalar(const float* EIGENSKILL_RESTRICT a,
+                         const float* EIGENSKILL_RESTRICT b,
+                         int n) {
+    float acc = 0.0f;
+    for (int i = 0; i < n; ++i) {
+        acc += a[i] * b[i];
+    }
+    return acc;
+}
+
+#if EIGENSKILL_HAS_AVX2
+float horizontal_sum_avx(__m256 value) {
+    __m128 low = _mm256_castps256_ps128(value);
+    __m128 high = _mm256_extractf128_ps(value, 1);
+    __m128 sum = _mm_add_ps(low, high);
+    sum = _mm_hadd_ps(sum, sum);
+    sum = _mm_hadd_ps(sum, sum);
+    return _mm_cvtss_f32(sum);
+}
+#endif
+
+EIGENSKILL_NOINLINE float dot_product_avx2(const float* EIGENSKILL_RESTRICT a,
+                                           const float* EIGENSKILL_RESTRICT b,
+                                           int n) {
+#if EIGENSKILL_HAS_AVX2
+    __m256 acc = _mm256_setzero_ps();
+    int i = 0;
+    for (; i + 8 <= n; i += 8) {
+        const __m256 va = _mm256_loadu_ps(a + i);
+        const __m256 vb = _mm256_loadu_ps(b + i);
+        acc = _mm256_add_ps(acc, _mm256_mul_ps(va, vb));
+    }
+    float sum = horizontal_sum_avx(acc);
+    for (; i < n; ++i) {
+        sum += a[i] * b[i];
+    }
+    return sum;
+#else
+    return dot_product_scalar(a, b, n);
+#endif
+}
+
+EIGENSKILL_NOINLINE void dense_gemv_avx2(const float* EIGENSKILL_RESTRICT w,
+                                         const float* EIGENSKILL_RESTRICT x,
+                                         float* EIGENSKILL_RESTRICT y,
+                                         int rows,
+                                         int cols) {
+    for (int row = 0; row < rows; ++row) {
+        const float* wr = w + static_cast<std::size_t>(row) * cols;
+        y[row] = dot_product_avx2(wr, x, cols);
+    }
+}
+
 EIGENSKILL_NOINLINE void selected_rows_gemv(const float* EIGENSKILL_RESTRICT w,
                                             const float* EIGENSKILL_RESTRICT x,
                                             const int* EIGENSKILL_RESTRICT rows,
@@ -153,6 +219,19 @@ EIGENSKILL_NOINLINE void selected_rows_gemv(const float* EIGENSKILL_RESTRICT w,
             acc += wr[col] * x[col];
         }
         y[out] = acc;
+    }
+}
+
+EIGENSKILL_NOINLINE void selected_rows_gemv_avx2(const float* EIGENSKILL_RESTRICT w,
+                                                 const float* EIGENSKILL_RESTRICT x,
+                                                 const int* EIGENSKILL_RESTRICT rows,
+                                                 float* EIGENSKILL_RESTRICT y,
+                                                 int active_rows,
+                                                 int cols) {
+    for (int out = 0; out < active_rows; ++out) {
+        const int row = rows[out];
+        const float* wr = w + static_cast<std::size_t>(row) * cols;
+        y[out] = dot_product_avx2(wr, x, cols);
     }
 }
 
@@ -266,14 +345,18 @@ Result benchmark_case(int d, int active_rows, const Options& options) {
     PackedInt4Matrix packed = pack_int4_per_row(w, d, d);
 
     std::vector<float> y_dense(d, 0.0f);
+    std::vector<float> y_dense_avx2(d, 0.0f);
     std::vector<float> y_int4(d, 0.0f);
     std::vector<float> y_selected(active_rows, 0.0f);
+    std::vector<float> y_selected_avx2(active_rows, 0.0f);
     std::vector<float> y_selected_ref(active_rows, 0.0f);
     std::vector<float> y_scalar(d, 0.0f);
 
     dense_gemv(w.data(), x.data(), y_dense.data(), d, d);
+    dense_gemv_avx2(w.data(), x.data(), y_dense_avx2.data(), d, d);
     int4_dequant_gemv(packed, x.data(), y_int4.data());
     selected_rows_gemv(w.data(), x.data(), rows.data(), y_selected.data(), active_rows, d);
+    selected_rows_gemv_avx2(w.data(), x.data(), rows.data(), y_selected_avx2.data(), active_rows, d);
     for (int i = 0; i < active_rows; ++i) {
         y_selected_ref[i] = y_dense[rows[i]];
     }
@@ -282,12 +365,19 @@ Result benchmark_case(int d, int active_rows, const Options& options) {
     Result result;
     result.d = d;
     result.active_rows = active_rows;
+    result.dense_avx2_rel_l2 = rel_l2_error(y_dense_avx2, y_dense);
     result.int4_rel_l2 = rel_l2_error(y_int4, y_dense);
     result.selected_rel_l2 = rel_l2_error(y_selected, y_selected_ref);
+    result.selected_avx2_rel_l2 = rel_l2_error(y_selected_avx2, y_selected_ref);
 
     result.dense_ms = time_ms(
         [&]() { dense_gemv(w.data(), x.data(), y_dense.data(), d, d); },
         y_dense,
+        options.warmup,
+        options.iters);
+    result.dense_avx2_ms = time_ms(
+        [&]() { dense_gemv_avx2(w.data(), x.data(), y_dense_avx2.data(), d, d); },
+        y_dense_avx2,
         options.warmup,
         options.iters);
     result.int4_ms = time_ms(
@@ -300,14 +390,21 @@ Result benchmark_case(int d, int active_rows, const Options& options) {
         y_selected,
         options.warmup,
         options.iters);
+    result.selected_avx2_ms = time_ms(
+        [&]() { selected_rows_gemv_avx2(w.data(), x.data(), rows.data(), y_selected_avx2.data(), active_rows, d); },
+        y_selected_avx2,
+        options.warmup,
+        options.iters);
     result.scalar_ms = time_ms(
         [&]() { scalar_skill_bypass(x.data(), y_scalar.data(), d, 0.875f); },
         y_scalar,
         options.warmup,
         options.iters);
 
+    result.dense_avx2_speedup = result.dense_ms / result.dense_avx2_ms;
     result.int4_speedup = result.dense_ms / result.int4_ms;
     result.selected_speedup = result.dense_ms / result.selected_ms;
+    result.selected_avx2_speedup = result.dense_ms / result.selected_avx2_ms;
     result.scalar_speedup = result.dense_ms / result.scalar_ms;
     return result;
 }
@@ -316,14 +413,20 @@ void print_header() {
     std::cout << std::setw(6) << "d"
               << std::setw(8) << "rows"
               << std::setw(12) << "dense_ms"
+              << std::setw(12) << "davx_ms"
               << std::setw(12) << "int4_ms"
               << std::setw(12) << "sel_ms"
+              << std::setw(12) << "selavx_ms"
               << std::setw(12) << "scalar_ms"
+              << std::setw(12) << "davx_x"
               << std::setw(12) << "int4_x"
               << std::setw(12) << "sel_x"
+              << std::setw(12) << "selavx_x"
               << std::setw(12) << "scalar_x"
+              << std::setw(13) << "davx_err"
               << std::setw(13) << "int4_err"
               << std::setw(13) << "sel_err"
+              << std::setw(13) << "selavx_err"
               << '\n';
 }
 
@@ -331,14 +434,20 @@ void print_result(const Result& r) {
     std::cout << std::setw(6) << r.d
               << std::setw(8) << r.active_rows
               << std::setw(12) << std::fixed << std::setprecision(6) << r.dense_ms
+              << std::setw(12) << std::fixed << std::setprecision(6) << r.dense_avx2_ms
               << std::setw(12) << std::fixed << std::setprecision(6) << r.int4_ms
               << std::setw(12) << std::fixed << std::setprecision(6) << r.selected_ms
+              << std::setw(12) << std::fixed << std::setprecision(6) << r.selected_avx2_ms
               << std::setw(12) << std::fixed << std::setprecision(6) << r.scalar_ms
+              << std::setw(12) << std::fixed << std::setprecision(2) << r.dense_avx2_speedup
               << std::setw(12) << std::fixed << std::setprecision(2) << r.int4_speedup
               << std::setw(12) << std::fixed << std::setprecision(2) << r.selected_speedup
+              << std::setw(12) << std::fixed << std::setprecision(2) << r.selected_avx2_speedup
               << std::setw(12) << std::fixed << std::setprecision(2) << r.scalar_speedup
+              << std::setw(13) << std::scientific << std::setprecision(3) << r.dense_avx2_rel_l2
               << std::setw(13) << std::scientific << std::setprecision(3) << r.int4_rel_l2
               << std::setw(13) << std::scientific << std::setprecision(3) << r.selected_rel_l2
+              << std::setw(13) << std::scientific << std::setprecision(3) << r.selected_avx2_rel_l2
               << '\n';
 }
 
@@ -348,7 +457,9 @@ int main(int argc, char** argv) {
     try {
         const eigenskill::Options options = eigenskill::parse_args(argc, argv);
         std::cout << "EigenSkill-Q C++ quant kernel benchmark\n";
-        std::cout << "paths: fp32 dense GEMV, packed int4 dequant GEMV, selected-row GEMV, scalar bypass\n";
+        std::cout << "paths: scalar fp32 GEMV, AVX2 fp32 GEMV when available, packed int4 dequant GEMV, selected-row GEMV, scalar bypass\n";
+        std::cout << "avx2=" << (EIGENSKILL_HAS_AVX2 ? "enabled" : "disabled")
+                  << "\n";
         std::cout << "iters=" << options.iters
                   << " warmup=" << options.warmup
                   << " seed=" << options.seed

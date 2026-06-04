@@ -144,9 +144,11 @@ The third artifact benchmarks four standalone kernel shapes that matter for the
 quantization-policy direction:
 
 ```text
-fp32 dense GEMV             full d x d floating-point matrix-vector multiply
+scalar fp32 dense GEMV      full d x d floating-point matrix-vector multiply
+AVX2 fp32 dense GEMV        vectorized FP32 dot path when AVX2 is available
 packed int4 dequant GEMV    row-scale INT4 weights unpacked during GEMV
 selected-row GEMV           only a policy-selected subset of output rows
+AVX2 selected-row GEMV      vectorized selected-row dot path when available
 scalar skill bypass         y = lambda x, the O(d) idealized eigen-skill path
 ```
 
@@ -177,13 +179,19 @@ Output columns:
 ```text
 d            hidden dimension / square matrix size
 rows         selected output rows for selected-row GEMV
-dense_ms     FP32 dense GEMV latency
+dense_ms     scalar FP32 dense GEMV latency
+davx_ms      AVX2 FP32 dense GEMV latency, or scalar fallback when disabled
 int4_ms      packed INT4 dequant GEMV latency
-sel_ms       selected-row GEMV latency
+sel_ms       scalar selected-row GEMV latency
+selavx_ms    AVX2 selected-row GEMV latency, or scalar fallback when disabled
 scalar_ms    y = lambda x latency
+davx_x       dense_ms / davx_ms
 int4_x       dense_ms / int4_ms
 sel_x        dense_ms / sel_ms
+selavx_x     dense_ms / selavx_ms
 scalar_x     dense_ms / scalar_ms
+davx_err     relative L2 error of AVX2 dense output versus scalar dense output
 int4_err     relative L2 error of INT4 output versus FP32 dense output
 sel_err      selected-row output error versus same rows from FP32 dense output
+selavx_err   selected-row AVX2 error versus same rows from FP32 dense output
 ```

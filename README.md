@@ -370,7 +370,17 @@ probe prompts            8
 bit histogram            4-bit=112, 8-bit=57
 weighted avg bits        4.4969
 positive loss protected  59.01%
+
+2p vs 8p allocation stability:
+8-bit module overlap     38 modules
+8-bit set Jaccard        0.5135
+changed bit decisions    36 / 169
+8p PPL gain vs 2p        -0.48 on WikiText2-128, -0.42 on C4-64
 ```
+
+The moderate 2p/8p Jaccard is important: the allocation is useful but still
+calibration-sensitive. Any paper-facing version should report calibration
+stability, not only the best PPL.
 
 Evidence files:
 
@@ -426,6 +436,9 @@ outputs/qwen25_0p5b_fake_quant_ppl_loss_sensitive_group128_wikitext2_128_summary
 outputs/qwen25_0p5b_fake_quant_ppl_loss_sensitive_group128_c4_en_validation_64_summary.json
 outputs/qwen25_0p5b_fake_quant_ppl_loss_sensitive_limit8_group128_wikitext2_128_summary.json
 outputs/qwen25_0p5b_fake_quant_ppl_loss_sensitive_limit8_group128_c4_en_validation_64_summary.json
+train_python/compare_allocations.py
+outputs/qwen25_0p5b_loss_sensitive_2p_vs_8p_stability_summary.json
+outputs/qwen25_0p5b_loss_sensitive_2p_vs_8p_stability_report.md
 ```
 
 ### 8-skill hybrid routing, v2
@@ -516,18 +529,19 @@ scalar skill bypass, y = lambda x
 Selected local Windows/MSVC result:
 
 ```text
-d=512,  rows=16:  dense=0.151746 ms, int4=0.229690 ms, selected=0.004738 ms
-d=1024, rows=16:  dense=0.651000 ms, int4=0.894527 ms, selected=0.010067 ms
-d=2048, rows=16:  dense=2.748290 ms, int4=3.712570 ms, selected=0.020900 ms
-d=2048, rows=256: dense=2.610602 ms, int4=4.688614 ms, selected=0.323324 ms
+d=512,  rows=16:  dense=0.159312 ms, dense_avx2=0.018234 ms, int4=0.225300 ms, selected_avx2=0.000536 ms
+d=1024, rows=16:  dense=0.632122 ms, dense_avx2=0.067346 ms, int4=0.958060 ms, selected_avx2=0.001083 ms
+d=2048, rows=16:  dense=2.591152 ms, dense_avx2=0.369847 ms, int4=3.986131 ms, selected_avx2=0.002425 ms
+d=2048, rows=256: dense=2.620207 ms, dense_avx2=0.342829 ms, int4=4.547568 ms, selected_avx2=0.044658 ms
 ```
 
 Interpretation:
 
 ```text
 packed INT4 faster than dense: 0/9 cases
-best selected-row speedup:     131.50x at d=2048, rows=16
-selected-row relative error:   0.0 against the corresponding dense rows
+best dense AVX2 speedup:       10.26x versus scalar dense
+best selected-row speedup:     1068.52x at d=2048, rows=16 with AVX2
+selected-row AVX2 max error:   1.511e-06 against the corresponding dense rows
 ```
 
 This is deliberately not framed as an INT4 speedup result. In this naive CPU

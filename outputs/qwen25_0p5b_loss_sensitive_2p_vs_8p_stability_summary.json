@@ -1,0 +1,280 @@
+{
+  "left_path": "outputs\\qwen25_0p5b_loss_sensitive_alloc_4to8_limit2_group128_summary.json",
+  "right_path": "outputs\\qwen25_0p5b_loss_sensitive_alloc_4to8_limit8_group128_summary.json",
+  "left_bit_hist": {
+    "4": 114,
+    "8": 55
+  },
+  "right_bit_hist": {
+    "4": 112,
+    "8": 57
+  },
+  "module_count": 169,
+  "left_high_count": 55,
+  "right_high_count": 57,
+  "overlap_count": 38,
+  "union_count": 74,
+  "jaccard": 0.5135135135135135,
+  "unchanged_count": 133,
+  "changed_count": 36,
+  "ppl": [
+    {
+      "name": "WikiText2-128",
+      "fp16": 17.42937240329266,
+      "uniform_int4": 27.74110016388246,
+      "left": 22.460500955515386,
+      "right": 21.976234496165553,
+      "right_minus_left": -0.4842664593498327
+    },
+    {
+      "name": "C4-64",
+      "fp16": 23.95392921525763,
+      "uniform_int4": 36.51280696017555,
+      "left": 31.215096737511754,
+      "right": 30.79699893810554,
+      "right_minus_left": -0.4180977994062154
+    }
+  ],
+  "changed_modules": [
+    {
+      "module": "model.layers.21.mlp.up_proj",
+      "from_bits": 4,
+      "to_bits": 8,
+      "param_count": 4358144,
+      "positive_delta_nll": 0.009726285934448242,
+      "sensitivity_rank": 54
+    },
+    {
+      "module": "model.layers.15.mlp.up_proj",
+      "from_bits": 4,
+      "to_bits": 8,
+      "param_count": 4358144,
+      "positive_delta_nll": 0.00922328233718872,
+      "sensitivity_rank": 56
+    },
+    {
+      "module": "model.layers.1.mlp.gate_proj",
+      "from_bits": 4,
+      "to_bits": 8,
+      "param_count": 4358144,
+      "positive_delta_nll": 0.008422374725341797,
+      "sensitivity_rank": 61
+    },
+    {
+      "module": "model.layers.8.mlp.up_proj",
+      "from_bits": 4,
+      "to_bits": 8,
+      "param_count": 4358144,
+      "positive_delta_nll": 0.00708770751953125,
+      "sensitivity_rank": 66
+    },
+    {
+      "module": "model.layers.16.mlp.up_proj",
+      "from_bits": 4,
+      "to_bits": 8,
+      "param_count": 4358144,
+      "positive_delta_nll": 0.0016328096389770508,
+      "sensitivity_rank": 93
+    },
+    {
+      "module": "model.layers.4.self_attn.q_proj",
+      "from_bits": 4,
+      "to_bits": 8,
+      "param_count": 803712,
+      "positive_delta_nll": 0.0012722611427307129,
+      "sensitivity_rank": 67
+    },
+    {
+      "module": "model.layers.3.self_attn.o_proj",
+      "from_bits": 4,
+      "to_bits": 8,
+      "param_count": 802816,
+      "positive_delta_nll": 0.0011548399925231934,
+      "sensitivity_rank": 71
+    },
+    {
+      "module": "model.layers.2.self_attn.q_proj",
+      "from_bits": 4,
+      "to_bits": 8,
+      "param_count": 803712,
+      "positive_delta_nll": 0.0005650520324707031,
+      "sensitivity_rank": 85
+    },
+    {
+      "module": "model.layers.23.self_attn.o_proj",
+      "from_bits": 4,
+      "to_bits": 8,
+      "param_count": 802816,
+      "positive_delta_nll": 0.000522613525390625,
+      "sensitivity_rank": 86
+    },
+    {
+      "module": "model.layers.12.self_attn.q_proj",
+      "from_bits": 4,
+      "to_bits": 8,
+      "param_count": 803712,
+      "positive_delta_nll": 0.00039833784103393555,
+      "sensitivity_rank": 88
+    },
+    {
+      "module": "model.layers.1.self_attn.q_proj",
+      "from_bits": 4,
+      "to_bits": 8,
+      "param_count": 803712,
+      "positive_delta_nll": 0.0,
+      "sensitivity_rank": 114
+    },
+    {
+      "module": "model.layers.12.self_attn.k_proj",
+      "from_bits": 4,
+      "to_bits": 8,
+      "param_count": 114816,
+      "positive_delta_nll": 0.0,
+      "sensitivity_rank": 142
+    },
+    {
+      "module": "model.layers.12.self_attn.v_proj",
+      "from_bits": 4,
+      "to_bits": 8,
+      "param_count": 114816,
+      "positive_delta_nll": 0.0,
+      "sensitivity_rank": 143
+    },
+    {
+      "module": "model.layers.20.self_attn.v_proj",
+      "from_bits": 4,
+      "to_bits": 8,
+      "param_count": 114816,
+      "positive_delta_nll": 0.0,
+      "sensitivity_rank": 166
+    },
+    {
+      "module": "model.layers.3.self_attn.k_proj",
+      "from_bits": 4,
+      "to_bits": 8,
+      "param_count": 114816,
+      "positive_delta_nll": 0.0,
+      "sensitivity_rank": 120
+    },
+    {
+      "module": "model.layers.4.self_attn.o_proj",
+      "from_bits": 4,
+      "to_bits": 8,
+      "param_count": 802816,
+      "positive_delta_nll": 0.0,
+      "sensitivity_rank": 122
+    },
+    {
+      "module": "model.layers.5.self_attn.k_proj",
+      "from_bits": 4,
+      "to_bits": 8,
+      "param_count": 114816,
+      "positive_delta_nll": 0.0,
+      "sensitivity_rank": 125
+    },
+    {
+      "module": "model.layers.5.self_attn.o_proj",
+      "from_bits": 4,
+      "to_bits": 8,
+      "param_count": 802816,
+      "positive_delta_nll": 0.0,
+      "sensitivity_rank": 126
+    },
+    {
+      "module": "model.layers.7.self_attn.k_proj",
+      "from_bits": 4,
+      "to_bits": 8,
+      "param_count": 114816,
+      "positive_delta_nll": 0.0,
+      "sensitivity_rank": 129
+    },
+    {
+      "module": "model.layers.2.mlp.up_proj",
+      "from_bits": 8,
+      "to_bits": 4,
+      "param_count": 4358144,
+      "positive_delta_nll": 0.01608753204345703,
+      "sensitivity_rank": 40
+    },
+    {
+      "module": "model.layers.3.mlp.up_proj",
+      "from_bits": 8,
+      "to_bits": 4,
+      "param_count": 4358144,
+      "positive_delta_nll": 0.015792012214660645,
+      "sensitivity_rank": 41
+    },
+    {
+      "module": "model.layers.7.mlp.up_proj",
+      "from_bits": 8,
+      "to_bits": 4,
+      "param_count": 4358144,
+      "positive_delta_nll": 0.015245556831359863,
+      "sensitivity_rank": 42
+    },
+    {
+      "module": "model.layers.4.mlp.down_proj",
+      "from_bits": 8,
+      "to_bits": 4,
+      "param_count": 4358144,
+      "positive_delta_nll": 0.012905657291412354,
+      "sensitivity_rank": 47
+    },
+    {
+      "module": "model.layers.15.mlp.down_proj",
+      "from_bits": 8,
+      "to_bits": 4,
+      "param_count": 4358144,
+      "positive_delta_nll": 0.011617541313171387,
+      "sensitivity_rank": 50
+    },
+    {
+      "module": "model.layers.0.self_attn.v_proj",
+      "from_bits": 8,
+      "to_bits": 4,
+      "param_count": 114816,
+      "positive_delta_nll": 0.0052193403244018555,
+      "sensitivity_rank": 5
+    },
+    {
+      "module": "model.layers.12.self_attn.o_proj",
+      "from_bits": 8,
+      "to_bits": 4,
+      "param_count": 802816,
+      "positive_delta_nll": 0.004501163959503174,
+      "sensitivity_rank": 32
+    },
+    {
+      "module": "model.layers.22.self_attn.q_proj",
+      "from_bits": 8,
+      "to_bits": 4,
+      "param_count": 803712,
+      "positive_delta_nll": 0.0034577250480651855,
+      "sensitivity_rank": 36
+    },
+    {
+      "module": "model.layers.23.self_attn.q_proj",
+      "from_bits": 8,
+      "to_bits": 4,
+      "param_count": 803712,
+      "positive_delta_nll": 0.002322852611541748,
+      "sensitivity_rank": 48
+    },
+    {
+      "module": "model.layers.6.self_attn.o_proj",
+      "from_bits": 8,
+      "to_bits": 4,
+      "param_count": 802816,
+      "positive_delta_nll": 0.0022391080856323242,
+      "sensitivity_rank": 49
+    },
+    {
+      "module": "model.layers.16.self_attn.q_proj",
+      "from_bits": 8,
+      "to_bits": 4,
+      "param_count": 803712,
+      "positive_delta_nll": 0.0020788908004760742,
+      "sensitivity_rank": 51
+    }
+  ]
+}
