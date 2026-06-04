@@ -44,6 +44,7 @@ inference_cpp/build-wsl/eigenskill_bench
 inference_cpp/build-wsl/quant_policy_bypass
 inference_cpp/build-wsl/quant_kernel_bench
 inference_cpp/build-wsl/quant_kernel_verify
+inference_cpp/build-wsl/quant_allocation_planner
 ```
 
 ## Run
@@ -246,3 +247,53 @@ ctest --test-dir inference_cpp/build-wsl --output-on-failure
 The verifier checks AVX2 dense GEMV, selected-row GEMV, selected-row AVX2 GEMV,
 INT4/INT3 finite output, and scalar bypass correctness against scalar
 references.
+
+## Quant Allocation Planner
+
+The fourth artifact moves the budgeted mixed-precision allocation step into
+C++. It consumes either a compact CSV fixture or the existing module-sensitivity
+JSON produced by `train_python/measure_module_quant_sensitivity.py`, then emits
+three evaluator-compatible allocation methods:
+
+```text
+loss_sensitive_budget    rank by positive_delta_nll / extra_bit_cost
+random_budget            shuffled budget fill with the same bit range
+category_budget          structural heuristic over attention/MLP categories
+```
+
+The JSON output contains `groups`, `allocations`, and `summaries`, so it can be
+passed directly to `train_python/eval_weight_quant_ppl.py` with
+`--allocation-method loss_sensitive_budget`, `random_budget`, or
+`category_budget`.
+
+Build and run with CMake/WSL:
+
+```bash
+cmake --build build/cpp-wsl -j
+./build/cpp-wsl/quant_allocation_planner \
+  --sensitivity-json outputs/qwen25_1p5b_module_loss_sensitivity_limit8_group128.json \
+  --budget-avg-bits 4.5 \
+  --emit json > outputs/qwen25_1p5b_cpp_allocation_planner_4p5_summary.json
+```
+
+Fixture smoke:
+
+```bash
+./build/cpp-wsl/quant_allocation_planner \
+  --csv inference_cpp/testdata/allocation_fixture.csv \
+  --budget-avg-bits 4.8 \
+  --emit json
+```
+
+Verified Qwen2.5-1.5B 16-prompt WikiText2 result from the C++ planner output:
+
+```text
+FP16                         PPL 10.76
+uniform INT4                 PPL 15.04
+C++ loss-sensitive {4,8}     PPL 13.14
+C++ random budget {4,8}      PPL 13.75
+C++ category budget {4,8}    PPL 14.28
+```
+
+GPU guard for that evaluator run reported peak `4678/8151 MiB` (`57.39%`),
+below the requested 85% limit.

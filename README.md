@@ -476,6 +476,14 @@ loss-sensitive {4,8}         PPL 13.14  avg bits 4.4953
 random budget-matched {4,8}  PPL 14.19  avg bits 4.4952
 category heuristic budget    PPL 14.44  avg bits 4.4709
 
+C++ planner output, Qwen2.5-1.5B-Instruct, WikiText2 16 prompts:
+
+FP16                         PPL 10.76
+uniform INT4                 PPL 15.04
+C++ loss-sensitive {4,8}     PPL 13.14  avg bits 4.4953
+C++ random budget {4,8}      PPL 13.75  avg bits 4.4993
+C++ category budget {4,8}    PPL 14.28  avg bits 4.4749
+
 Qwen2.5-1.5B-Instruct, WikiText2 64 prompts, group size 128:
 
 FP16                         PPL 12.29
@@ -483,13 +491,24 @@ uniform INT4                 PPL 16.41
 loss-sensitive {4,8}         PPL 14.99  avg bits 4.4953
 random budget-matched {4,8}  PPL 15.70  avg bits 4.4952
 category heuristic budget    PPL 15.72  avg bits 4.4709
+
+Qwen3-0.6B, WikiText2 16 prompts, group size 128:
+
+FP16                         PPL 27.82
+uniform INT4                 PPL 44.57
+uniform INT3                 PPL 1079.79
 ```
 
 This is still a small sanity slice, but it addresses a concrete reviewer
 question: the allocation is no longer compared only against uniform INT4. The
 budget-matched random baseline protects only `15.87%` of measured positive
 loss increase, while the loss-sensitive allocation protects `54.45%` at nearly
-the same average-bit budget.
+the same average-bit budget. The new C++ planner reads the measured
+module-sensitivity JSON directly and emits evaluator-compatible allocations;
+on the same Qwen2.5-1.5B 16-prompt slice its loss-sensitive budget allocation
+beats C++ random and category baselines under a similar average-bit budget.
+The Qwen3-0.6B run is only a newer-model uniform-quant smoke baseline; no
+Qwen3 loss-sensitive allocation is claimed yet.
 
 Evidence files:
 
@@ -504,6 +523,9 @@ train_python/build_consensus_allocation.py
 train_python/summarize_ppl_results.py
 train_python/summarize_sensitivity.py
 train_python/search_allocation_swaps.py
+inference_cpp/src/quant_allocation_planner.cpp
+inference_cpp/testdata/allocation_fixture.csv
+data_eval/eval_configs/qwen25_1p5b_cpp_planner_budget_compare.json
 data_eval/eval_configs/smollm2_group128_compare_allocations.json
 data_eval/text_prompts/wikitext2_validation_32.txt
 data_eval/text_prompts/wikitext2_validation_128.txt
@@ -516,6 +538,11 @@ outputs/qwen25_1p5b_baseline_budget_ppl_wikitext2_16_summary.json
 outputs/qwen25_1p5b_baseline_budget_ppl_wikitext2_64_summary.json
 outputs/qwen25_1p5b_baseline_eval_gpu_guard_retry.json
 outputs/qwen25_1p5b_baseline_eval_gpu_guard_wikitext2_64.json
+outputs/qwen25_1p5b_cpp_allocation_planner_4p5_summary.json
+outputs/qwen25_1p5b_cpp_planner_budget_ppl_wikitext2_16_summary.json
+outputs/qwen25_1p5b_cpp_planner_budget_gpu_guard_wikitext2_16.json
+outputs/qwen3_0p6b_uniform_fake_quant_ppl_wikitext2_16_summary.json
+outputs/qwen3_0p6b_uniform_gpu_guard_wikitext2_16.json
 outputs/smollm2_module_loss_sensitivity_limit4_group128.json
 outputs/smollm2_module_loss_sensitivity_limit4_group128_report.md
 outputs/smollm2_loss_sensitive_alloc_4to8_limit4_group128_summary.json
