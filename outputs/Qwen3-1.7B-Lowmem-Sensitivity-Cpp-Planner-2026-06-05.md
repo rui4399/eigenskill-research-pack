@@ -79,6 +79,7 @@ outputs/qwen3_1p7b_cpp_planner_budget_gpu_guard_wikitext2_16.json
 | C++ loss-sensitive budget | 24.7968 | 0.2680 | `{"4": 153, "8": 44}` |
 | C++ random budget | 25.3903 | 0.2917 | `{"4": 163, "8": 34}` |
 | C++ category budget | 23.8397 | 0.2287 | `{"4": 130, "8": 67}` |
+| C++ hybrid budget | 23.9797 | 0.2345 | `{"4": 133, "8": 64}` |
 
 GPU guard:
 
@@ -105,6 +106,7 @@ outputs/qwen3_1p7b_cpp_planner_budget_gpu_guard_wikitext2_64.json
 | C++ loss-sensitive budget | 27.6578 | 0.2447 | `{"4": 153, "8": 44}` |
 | C++ random budget | 28.3799 | 0.2704 | `{"4": 163, "8": 34}` |
 | C++ category budget | 27.4838 | 0.2384 | `{"4": 130, "8": 67}` |
+| C++ hybrid budget | 27.6761 | 0.2453 | `{"4": 133, "8": 64}` |
 
 GPU guard:
 
@@ -128,6 +130,10 @@ The allocation result is mixed:
   despite protecting less measured positive delta. This is a useful negative
   finding: the current two-prompt loss sensitivity score is not yet a
   universally dominant allocator.
+- The first C++ hybrid score, which blends loss sensitivity with structural
+  category prior, also fails to beat category on both slices. It is retained as
+  an ablation and a prompt for better allocator design, not as a headline
+  improvement.
 
 This remains fake weight quantization and short-slice PPL evidence. It is not a
 packed low-bit runtime, latency result, board-level result, or SOTA

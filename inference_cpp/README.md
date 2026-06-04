@@ -53,7 +53,10 @@ path. It consumes
 `outputs/qwen3_1p7b_cpp_allocation_planner_4p5_summary.json`; the resulting
 loss-sensitive budget improves over uniform INT4 and random budget on the
 16-prompt WikiText2 slice, while the category budget remains stronger for that
-specific slice.
+specific slice. The planner also includes an experimental `hybrid_budget`
+ordering that blends normalized loss-per-cost sensitivity with the structural
+category prior; current Qwen3-1.7B evidence keeps it as an ablation because it
+does not beat `category_budget`.
 
 ## Run
 

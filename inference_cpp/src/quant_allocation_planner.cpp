@@ -473,6 +473,46 @@ std::vector<int> category_order(const std::vector<Group>& groups) {
     return order;
 }
 
+std::vector<int> hybrid_order(const std::vector<Group>& groups, const Options& options) {
+    std::vector<double> sensitivity_scores(groups.size(), 0.0);
+    std::vector<double> category_scores(groups.size(), 0.0);
+    double max_sensitivity = 0.0;
+    double min_category = std::numeric_limits<double>::infinity();
+    double max_category = -std::numeric_limits<double>::infinity();
+
+    for (std::size_t idx = 0; idx < groups.size(); ++idx) {
+        const Group& group = groups[idx];
+        const double extra = group.cost * (options.high_bits - options.low_bits);
+        const double sensitivity = group.positive_delta_nll / std::max(extra, 1.0e-12);
+        const double category = category_score(group);
+        sensitivity_scores[idx] = sensitivity;
+        category_scores[idx] = category;
+        max_sensitivity = std::max(max_sensitivity, sensitivity);
+        min_category = std::min(min_category, category);
+        max_category = std::max(max_category, category);
+    }
+
+    const double category_range = std::max(max_category - min_category, 1.0e-12);
+    std::vector<int> order(groups.size());
+    std::iota(order.begin(), order.end(), 0);
+    std::sort(order.begin(), order.end(), [&](int lhs, int rhs) {
+        const std::size_t li = static_cast<std::size_t>(lhs);
+        const std::size_t ri = static_cast<std::size_t>(rhs);
+        const double lhs_sensitivity = sensitivity_scores[li] / std::max(max_sensitivity, 1.0e-12);
+        const double rhs_sensitivity = sensitivity_scores[ri] / std::max(max_sensitivity, 1.0e-12);
+        const double lhs_category = (category_scores[li] - min_category) / category_range;
+        const double rhs_category = (category_scores[ri] - min_category) / category_range;
+        const double lhs_score = 0.65 * lhs_sensitivity + 0.35 * lhs_category;
+        const double rhs_score = 0.65 * rhs_sensitivity + 0.35 * rhs_category;
+        if (lhs_score != rhs_score) return lhs_score > rhs_score;
+        if (groups[li].positive_delta_nll != groups[ri].positive_delta_nll) {
+            return groups[li].positive_delta_nll > groups[ri].positive_delta_nll;
+        }
+        return groups[li].module < groups[ri].module;
+    });
+    return order;
+}
+
 std::vector<int> random_order(std::size_t n, std::uint32_t seed) {
     std::vector<int> order(n);
     std::iota(order.begin(), order.end(), 0);
@@ -657,6 +697,11 @@ int main(int argc, char** argv) {
             groups,
             options,
             allocate_budgeted(groups, options, category_order(groups))));
+        summaries.push_back(summarize(
+            "hybrid_budget",
+            groups,
+            options,
+            allocate_budgeted(groups, options, hybrid_order(groups, options))));
 
         if (options.emit == "json") {
             print_json(groups, options, summaries);

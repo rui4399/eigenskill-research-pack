@@ -86,6 +86,12 @@ These claims are supported by committed data, scripts, or reports:
   and random on a 64-prompt WikiText2 check (`27.66` vs `31.19` and `28.38`),
   while category remains slightly stronger (`27.48`). This should be reported
   as a mixed result, not as allocator dominance.
+- The C++ planner includes an experimental `hybrid_budget` ordering that blends
+  normalized loss-per-cost sensitivity with the structural category prior. On
+  Qwen3-1.7B it improves over uniform INT4 and random but does not beat the
+  category baseline on either 16-prompt (`23.98` vs `23.84`) or 64-prompt
+  (`27.68` vs `27.48`) WikiText2 checks. Treat it as an ablation, not a new
+  best allocator.
 - The GPU guard script can enforce a max-memory ratio before and during CUDA
   runs. A Qwen2.5-1.5B 16-prompt comparison completed at 56.85% peak GPU
   memory after the fake-quant evaluator was changed to in-place group-wise
