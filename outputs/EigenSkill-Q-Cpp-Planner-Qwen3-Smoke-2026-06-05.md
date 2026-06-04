@@ -156,5 +156,52 @@ max utilization: 65%
 killed_by_guard: false
 ```
 
-Disk note: after caching Qwen3-1.7B, `/mnt/c` had about `22G` free. Avoid
+## Qwen3-1.7B Low-Memory Sensitivity Follow-Up
+
+The first Qwen3-1.7B sensitivity run was killed by the GPU guard near
+`192/197` modules:
+
+```text
+outputs/qwen3_1p7b_sensitivity_gpu_guard_limit2_group128.json
+peak: 7628 / 8151 MiB = 93.58%
+killed_by_guard: true
+```
+
+After adding CPU-side weight backup, row-chunk fake quantization, periodic
+checkpoints, and resume support, the same 2-prompt sensitivity probe completed:
+
+```text
+outputs/qwen3_1p7b_sensitivity_lowmem_gpu_guard_limit2_group128.json
+peak: 4520 / 8151 MiB = 55.45%
+killed_by_guard: false
+```
+
+C++ planner output:
+
+```text
+outputs/qwen3_1p7b_cpp_allocation_planner_4p5_summary.json
+```
+
+| method | avg bits | protected ratio |
+|---|---:|---:|
+| loss_sensitive_budget | 4.4973 | 0.6048 |
+| random_budget | 4.4973 | 0.2331 |
+| category_budget | 4.4827 | 0.4123 |
+
+PPL on Qwen3-1.7B, WikiText2 16 prompts:
+
+| method | PPL | delta NLL vs FP16 | bit hist |
+|---|---:|---:|---|
+| FP16 | 18.9664 | 0.0000 | `{"16": 197}` |
+| uniform INT4 | 27.4469 | 0.3696 | `{"4": 197}` |
+| C++ loss-sensitive | 24.7968 | 0.2680 | `{"4": 153, "8": 44}` |
+| C++ random budget | 25.3903 | 0.2917 | `{"4": 163, "8": 34}` |
+| C++ category budget | 23.8397 | 0.2287 | `{"4": 130, "8": 67}` |
+
+This is a mixed result. The loss-sensitive allocator improves over uniform
+INT4 and random budget, but the structural category budget is stronger on this
+1.7B 16-prompt slice. The current sensitivity score is therefore useful but
+not yet a dominant allocation rule.
+
+Disk note: after the current run, `/mnt/c` had about `36G` free. Avoid
 downloading larger model families on this disk without cleanup or relocation.

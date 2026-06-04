@@ -74,7 +74,16 @@ These claims are supported by committed data, scripts, or reports:
 - A Qwen3-1.7B uniform fake-quant smoke run also completed under the GPU guard:
   FP16 PPL `18.97`, uniform INT4 PPL `27.45`, and uniform INT3 PPL `312.57`
   on the 16-prompt WikiText2 slice. Peak GPU memory was `5525/8151 MiB`
-  (`67.78%`). No Qwen3-1.7B loss-sensitive allocation is claimed yet.
+  (`67.78%`).
+- Qwen3-1.7B per-module sensitivity originally exceeded the requested GPU
+  memory ceiling and was killed at `7628/8151 MiB` (`93.58%`). After adding
+  CPU weight backup, low-memory row-chunk fake quantization, checkpointing, and
+  resume support, the same 2-prompt sensitivity probe completed at
+  `4520/8151 MiB` (`55.45%`). The resulting C++ loss-sensitive allocation beats
+  uniform INT4 (`24.80` vs `27.45` PPL) and C++ random budget (`24.80` vs
+  `25.39`) on the 16-prompt WikiText2 slice, but the C++ category budget is
+  stronger on that slice (`23.84`). This should be reported as a mixed result,
+  not as allocator dominance.
 - The GPU guard script can enforce a max-memory ratio before and during CUDA
   runs. A Qwen2.5-1.5B 16-prompt comparison completed at 56.85% peak GPU
   memory after the fake-quant evaluator was changed to in-place group-wise

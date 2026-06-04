@@ -47,6 +47,14 @@ inference_cpp/build-wsl/quant_kernel_verify
 inference_cpp/build-wsl/quant_allocation_planner
 ```
 
+`quant_allocation_planner` is wired into the Qwen3-1.7B fake-quant evidence
+path. It consumes
+`outputs/qwen3_1p7b_module_loss_sensitivity_limit2_group128.json` and emits
+`outputs/qwen3_1p7b_cpp_allocation_planner_4p5_summary.json`; the resulting
+loss-sensitive budget improves over uniform INT4 and random budget on the
+16-prompt WikiText2 slice, while the category budget remains stronger for that
+specific slice.
+
 ## Run
 
 ```powershell

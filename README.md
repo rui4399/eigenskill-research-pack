@@ -514,6 +514,14 @@ Qwen3-1.7B, WikiText2 16 prompts, uniform smoke:
 FP16                         PPL 18.97
 uniform INT4                 PPL 27.45
 uniform INT3                 PPL 312.57
+
+Qwen3-1.7B, WikiText2 16 prompts, C++ planner after low-memory sensitivity:
+
+FP16                         PPL 18.97
+uniform INT4                 PPL 27.45
+C++ loss-sensitive {4,8}     PPL 24.80  avg bits 4.4973
+C++ random budget {4,8}      PPL 25.39  avg bits 4.4973
+C++ category budget {4,8}    PPL 23.84  avg bits 4.4827
 ```
 
 This is still a small sanity slice, but it addresses a concrete reviewer
@@ -526,7 +534,11 @@ on the same Qwen2.5-1.5B 16-prompt slice its loss-sensitive budget allocation
 beats C++ random and category baselines under a similar average-bit budget.
 On Qwen3-0.6B, a 4-prompt sensitivity calibration plus C++ planner allocation
 also beats uniform INT4, random budget, and category budget on the 16-prompt
-WikiText2 slice. This remains a short-slice fake-quant diagnostic, not a
+WikiText2 slice. On Qwen3-1.7B, the low-memory sensitivity probe completed at
+`4520/8151 MiB` (`55.45%`) after the earlier high-memory path was killed at
+`7628/8151 MiB` (`93.58%`). The 1.7B C++ loss-sensitive allocation beats
+uniform INT4 and random budget, but does not beat the category budget baseline
+on the 16-prompt slice. This remains a short-slice fake-quant diagnostic, not a
 production quantizer or SOTA claim.
 
 Evidence files:
@@ -573,6 +585,15 @@ outputs/qwen3_0p6b_cpp_planner_budget_ppl_wikitext2_64_summary.json
 outputs/qwen3_0p6b_cpp_planner_budget_gpu_guard_wikitext2_64.json
 outputs/qwen3_1p7b_uniform_fake_quant_ppl_wikitext2_16_summary.json
 outputs/qwen3_1p7b_uniform_gpu_guard_wikitext2_16.json
+outputs/qwen3_1p7b_sensitivity_gpu_guard_limit2_group128.json
+outputs/qwen3_1p7b_sensitivity_lowmem_gpu_guard_limit2_group128.json
+outputs/qwen3_1p7b_module_loss_sensitivity_limit2_group128.json
+outputs/qwen3_1p7b_module_loss_sensitivity_limit2_group128_report.md
+outputs/qwen3_1p7b_cpp_allocation_planner_4p5_summary.json
+data_eval/eval_configs/qwen3_1p7b_cpp_planner_budget_compare.json
+outputs/qwen3_1p7b_cpp_planner_budget_ppl_wikitext2_16_summary.json
+outputs/qwen3_1p7b_cpp_planner_budget_gpu_guard_wikitext2_16.json
+outputs/Qwen3-1.7B-Lowmem-Sensitivity-Cpp-Planner-2026-06-05.md
 outputs/smollm2_module_loss_sensitivity_limit4_group128.json
 outputs/smollm2_module_loss_sensitivity_limit4_group128_report.md
 outputs/smollm2_loss_sensitive_alloc_4to8_limit4_group128_summary.json

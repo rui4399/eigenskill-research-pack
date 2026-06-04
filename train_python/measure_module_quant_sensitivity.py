@@ -78,6 +78,48 @@ def quantize_weight(weight: torch.Tensor, bits: int, group_size: int = 0) -> tor
     return deq.to(dtype=weight.dtype, device=weight.device)
 
 
+def quantize_weight_inplace_lowmem(weight: torch.Tensor, bits: int, group_size: int = 0, row_chunk: int = 16) -> None:
+    """Fake-quantize a weight tensor in place without materializing the full FP32 copy on GPU."""
+    if bits >= 16:
+        return
+    qmax = (2 ** (bits - 1)) - 1
+    if qmax <= 0:
+        raise ValueError(f"unsupported bits: {bits}")
+    rows = weight.shape[0]
+    flat = weight.reshape(rows, -1)
+    row_chunk = max(int(row_chunk), 1)
+    with torch.no_grad():
+        for row_start in range(0, rows, row_chunk):
+            row_end = min(rows, row_start + row_chunk)
+            block = flat[row_start:row_end]
+            work = block.detach().float()
+            if group_size and group_size > 0 and group_size < work.shape[1]:
+                for col_start in range(0, work.shape[1], group_size):
+                    chunk = work[:, col_start : col_start + group_size]
+                    scale = chunk.abs().amax(dim=1, keepdim=True).clamp_min(1.0e-8) / qmax
+                    q = torch.round(chunk / scale).clamp(-qmax, qmax)
+                    chunk.copy_(q * scale)
+            else:
+                scale = work.abs().amax(dim=1, keepdim=True).clamp_min(1.0e-8) / qmax
+                q = torch.round(work / scale).clamp(-qmax, qmax)
+                work.copy_(q * scale)
+            block.copy_(work.to(dtype=weight.dtype))
+            del work
+
+
+def restore_weight_from_cpu(weight: torch.Tensor, original_cpu: torch.Tensor, row_chunk: int = 16) -> None:
+    rows = weight.shape[0]
+    flat_dst = weight.reshape(rows, -1)
+    flat_src = original_cpu.reshape(rows, -1)
+    row_chunk = max(int(row_chunk), 1)
+    with torch.no_grad():
+        for row_start in range(0, rows, row_chunk):
+            row_end = min(rows, row_start + row_chunk)
+            flat_dst[row_start:row_end].copy_(
+                flat_src[row_start:row_end].to(device=weight.device, dtype=weight.dtype, non_blocking=True)
+            )
+
+
 def tokenize_prompts(tokenizer, prompts: list[str], device: str, max_length: int) -> list[dict]:
     batches = []
     for prompt in prompts:
@@ -155,20 +197,44 @@ def measure_modules(
     group_size: int,
     progress_every: int,
     device: str,
+    row_chunk: int,
+    resume_records: list[dict] | None = None,
+    checkpoint_every: int = 0,
+    checkpoint_callback=None,
 ) -> tuple[dict, list[dict]]:
     baseline = eval_nll(model, batches)
     base_nll = baseline["mean_nll"]
     measured = []
+    resumed_by_module = {str(item.get("module")): item for item in (resume_records or []) if item.get("module")}
     start_time = time.time()
+    new_measurements = 0
 
     for idx, item in enumerate(modules, start=1):
+        resumed = resumed_by_module.get(item["module"])
+        if resumed is not None:
+            measured.append(dict(resumed))
+            if progress_every and (idx == 1 or idx % progress_every == 0 or idx == len(modules)):
+                print(
+                    json.dumps(
+                        {
+                            "progress": f"{idx}/{len(modules)}",
+                            "module": item["module"],
+                            "resumed": True,
+                            "measured": len(measured),
+                        },
+                        ensure_ascii=False,
+                    ),
+                    flush=True,
+                )
+            continue
+
         module = item["_module_ref"]
         with torch.no_grad():
-            original = module.weight.detach().clone()
-            module.weight.data.copy_(quantize_weight(module.weight.data, bits, group_size=group_size))
+            original = module.weight.detach().to(device="cpu", copy=True)
+            quantize_weight_inplace_lowmem(module.weight.data, bits, group_size=group_size, row_chunk=row_chunk)
         metrics = eval_nll(model, batches)
         with torch.no_grad():
-            module.weight.data.copy_(original)
+            restore_weight_from_cpu(module.weight.data, original, row_chunk=row_chunk)
         del original
         if device == "cuda":
             torch.cuda.empty_cache()
@@ -194,6 +260,7 @@ def measure_modules(
             }
         )
         measured.append(record)
+        new_measurements += 1
 
         if progress_every and (idx == 1 or idx % progress_every == 0 or idx == len(modules)):
             elapsed = time.time() - start_time
@@ -209,6 +276,10 @@ def measure_modules(
                 ),
                 flush=True,
             )
+        if checkpoint_callback and checkpoint_every and (
+            new_measurements % checkpoint_every == 0 or idx == len(modules)
+        ):
+            checkpoint_callback(baseline, measured, complete=(idx == len(modules)))
 
     return baseline, measured
 
@@ -294,6 +365,8 @@ def markdown_report(result: dict, top_k: int = 20) -> str:
         f"Max length: `{result['max_length']}`",
         f"Quantized bits during probing: `{result['probe_bits']}`",
         f"Group size: `{result['group_size']}`",
+        f"Status: `{'complete' if result.get('complete', True) else 'partial checkpoint'}`",
+        f"Measured modules: `{result.get('measured_modules', result.get('linear_modules', 0))} / {result.get('linear_modules', 0)}`",
         "",
         "## Baseline",
         "",
@@ -347,6 +420,73 @@ def markdown_report(result: dict, top_k: int = 20) -> str:
     return "\n".join(lines) + "\n"
 
 
+def build_result(
+    *,
+    args,
+    baseline: dict,
+    measured: list[dict],
+    module_count: int,
+    complete: bool,
+) -> dict:
+    groups = rank_groups(measured)
+    alloc_loss = loss_sensitive_4to8(groups, args.budget_avg_bits, args.base_bits, args.high_bits)
+    alloc_uniform = [args.base_bits] * len(groups)
+    summaries = [
+        summarize_allocation(f"uniform_int{args.base_bits}", groups, alloc_uniform, args.budget_avg_bits),
+        summarize_allocation("loss_sensitive_4to8", groups, alloc_loss, args.budget_avg_bits),
+    ]
+    return {
+        "date": time.strftime("%Y-%m-%d"),
+        "model": args.model,
+        "prompt_count": baseline.get("prompt_count", 0),
+        "max_length": args.max_length,
+        "device": args.device,
+        "dtype": args.dtype,
+        "probe_bits": args.probe_bits,
+        "group_size": args.group_size,
+        "base_bits": args.base_bits,
+        "high_bits": args.high_bits,
+        "budget_avg_bits": args.budget_avg_bits,
+        "lowmem_row_chunk": args.lowmem_row_chunk,
+        "complete": complete,
+        "linear_modules": module_count,
+        "measured_modules": len(groups),
+        "baseline": baseline,
+        "groups": groups,
+        "allocations": {
+            f"uniform_int{args.base_bits}": alloc_uniform,
+            "loss_sensitive_4to8": alloc_loss,
+        },
+        "summaries": summaries,
+    }
+
+
+def write_result_files(result: dict, out_json: str, out_md: str, out_allocation: str, *, write_allocation: bool) -> None:
+    out_json_path = Path(out_json)
+    out_json_path.parent.mkdir(parents=True, exist_ok=True)
+    out_json_path.write_text(json.dumps(result, ensure_ascii=False, indent=2), encoding="utf-8")
+    out_md_path = Path(out_md)
+    out_md_path.parent.mkdir(parents=True, exist_ok=True)
+    out_md_path.write_text(markdown_report(result), encoding="utf-8")
+    if write_allocation:
+        out_alloc_path = Path(out_allocation)
+        out_alloc_path.parent.mkdir(parents=True, exist_ok=True)
+        out_alloc_path.write_text(json.dumps(result, ensure_ascii=False, indent=2), encoding="utf-8")
+
+
+def load_resume_records(path: str) -> list[dict]:
+    if not path:
+        return []
+    resume_path = Path(path)
+    if not resume_path.exists():
+        return []
+    data = json.loads(resume_path.read_text(encoding="utf-8"))
+    groups = data.get("groups", [])
+    if not isinstance(groups, list):
+        raise ValueError(f"resume file has invalid groups: {resume_path}")
+    return [dict(item) for item in groups if isinstance(item, dict) and item.get("module")]
+
+
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--model", default="HuggingFaceTB/SmolLM2-360M-Instruct")
@@ -362,6 +502,9 @@ def main() -> None:
     parser.add_argument("--high-bits", type=int, default=8)
     parser.add_argument("--budget-avg-bits", type=float, default=4.5)
     parser.add_argument("--progress-every", type=int, default=12)
+    parser.add_argument("--checkpoint-every", type=int, default=12)
+    parser.add_argument("--resume-json", default="")
+    parser.add_argument("--lowmem-row-chunk", type=int, default=16)
     parser.add_argument("--out-json", default="outputs/smollm2_module_loss_sensitivity.json")
     parser.add_argument("--out-md", default="outputs/smollm2_module_loss_sensitivity_report.md")
     parser.add_argument("--out-allocation", default="outputs/smollm2_loss_sensitive_alloc_4to8_summary.json")
@@ -384,6 +527,36 @@ def main() -> None:
     prompts = load_prompts(args.prompts, args.limit_prompts)
     batches = tokenize_prompts(tokenizer, prompts, args.device, args.max_length)
     modules = collect_linear_modules(model, args.max_modules)
+    resume_records = load_resume_records(args.resume_json)
+
+    def checkpoint(baseline_metrics: dict, measured_records: list[dict], complete: bool) -> None:
+        result = build_result(
+            args=args,
+            baseline=baseline_metrics,
+            measured=measured_records,
+            module_count=len(modules),
+            complete=complete,
+        )
+        write_result_files(
+            result,
+            args.out_json,
+            args.out_md,
+            args.out_allocation,
+            write_allocation=complete,
+        )
+        print(
+            json.dumps(
+                {
+                    "checkpoint_json": args.out_json,
+                    "complete": complete,
+                    "measured_modules": result["measured_modules"],
+                    "linear_modules": result["linear_modules"],
+                },
+                ensure_ascii=False,
+            ),
+            flush=True,
+        )
+
     baseline, measured = measure_modules(
         model=model,
         batches=batches,
@@ -392,52 +565,20 @@ def main() -> None:
         group_size=args.group_size,
         progress_every=args.progress_every,
         device=args.device,
+        row_chunk=args.lowmem_row_chunk,
+        resume_records=resume_records,
+        checkpoint_every=args.checkpoint_every,
+        checkpoint_callback=checkpoint,
     )
-    groups = rank_groups(measured)
-    alloc_loss = loss_sensitive_4to8(groups, args.budget_avg_bits, args.base_bits, args.high_bits)
-    alloc_uniform = [args.base_bits] * len(groups)
-    summaries = [
-        summarize_allocation(f"uniform_int{args.base_bits}", groups, alloc_uniform, args.budget_avg_bits),
-        summarize_allocation("loss_sensitive_4to8", groups, alloc_loss, args.budget_avg_bits),
-    ]
-    result = {
-        "date": time.strftime("%Y-%m-%d"),
-        "model": args.model,
-        "prompt_count": len(batches),
-        "max_length": args.max_length,
-        "device": args.device,
-        "dtype": args.dtype,
-        "probe_bits": args.probe_bits,
-        "group_size": args.group_size,
-        "base_bits": args.base_bits,
-        "high_bits": args.high_bits,
-        "budget_avg_bits": args.budget_avg_bits,
-        "baseline": baseline,
-        "linear_modules": len(groups),
-        "groups": groups,
-        "allocations": {
-            f"uniform_int{args.base_bits}": alloc_uniform,
-            "loss_sensitive_4to8": alloc_loss,
-        },
-        "summaries": summaries,
-    }
-
-    out_json = Path(args.out_json)
-    out_json.parent.mkdir(parents=True, exist_ok=True)
-    out_json.write_text(json.dumps(result, ensure_ascii=False, indent=2), encoding="utf-8")
-    out_alloc = Path(args.out_allocation)
-    out_alloc.parent.mkdir(parents=True, exist_ok=True)
-    out_alloc.write_text(json.dumps(result, ensure_ascii=False, indent=2), encoding="utf-8")
-    out_md = Path(args.out_md)
-    out_md.parent.mkdir(parents=True, exist_ok=True)
-    out_md.write_text(markdown_report(result), encoding="utf-8")
+    result = build_result(args=args, baseline=baseline, measured=measured, module_count=len(modules), complete=True)
+    write_result_files(result, args.out_json, args.out_md, args.out_allocation, write_allocation=True)
     print(
         json.dumps(
             {
-                "out_json": str(out_json),
-                "out_md": str(out_md),
-                "out_allocation": str(out_alloc),
-                "summaries": summaries,
+                "out_json": args.out_json,
+                "out_md": args.out_md,
+                "out_allocation": args.out_allocation,
+                "summaries": result["summaries"],
             },
             ensure_ascii=False,
             indent=2,
