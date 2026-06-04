@@ -52,6 +52,46 @@ max utilization: 62%
 killed_by_guard: false
 ```
 
+## Qwen3-0.6B Loss-Sensitive Follow-Up
+
+Sensitivity calibration:
+
+```text
+outputs/qwen3_0p6b_module_loss_sensitivity_limit4_group128.json
+```
+
+C++ planner allocation:
+
+```text
+outputs/qwen3_0p6b_cpp_allocation_planner_4p5_summary.json
+```
+
+Protected positive NLL ratio:
+
+| method | avg bits | protected ratio |
+|---|---:|---:|
+| loss_sensitive_budget | 4.4997 | 0.5787 |
+| random_budget | 4.4997 | 0.2815 |
+| category_budget | 4.4997 | 0.3175 |
+
+PPL on Qwen3-0.6B, WikiText2 16 prompts:
+
+| method | PPL | delta NLL vs FP16 | bit hist |
+|---|---:|---:|---|
+| FP16 | 27.8160 | 0.0000 | `{"16": 197}` |
+| uniform INT4 | 44.5656 | 0.4714 | `{"4": 197}` |
+| C++ loss-sensitive | 34.8407 | 0.2252 | `{"4": 158, "8": 39}` |
+| C++ random budget | 39.1800 | 0.3426 | `{"4": 160, "8": 37}` |
+| C++ category budget | 37.5722 | 0.3007 | `{"4": 142, "8": 55}` |
+
+GPU guard:
+
+```text
+sensitivity peak: 4711 / 8151 MiB = 57.80%
+PPL eval peak: 2721 / 8151 MiB = 33.38%
+killed_by_guard: false
+```
+
 ## Qwen3-0.6B Uniform Smoke
 
 Command output:
@@ -78,5 +118,6 @@ killed_by_guard: false
 
 This is still fake weight quantization plus a C++ allocation artifact. It does
 not prove packed low-bit runtime speed, memory reduction, board-level latency,
-or Qwen3 loss-sensitive superiority. It does strengthen the repo by moving one
-core allocation step out of Python and by adding a newer small-model baseline.
+or SOTA quantization quality. It does strengthen the repo by moving one core
+allocation step out of Python and showing the same short-cycle signal on a
+newer Qwen3 small model.

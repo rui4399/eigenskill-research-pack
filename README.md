@@ -497,6 +497,9 @@ Qwen3-0.6B, WikiText2 16 prompts, group size 128:
 FP16                         PPL 27.82
 uniform INT4                 PPL 44.57
 uniform INT3                 PPL 1079.79
+C++ loss-sensitive {4,8}     PPL 34.84  avg bits 4.4997
+C++ random budget {4,8}      PPL 39.18  avg bits 4.4997
+C++ category budget {4,8}    PPL 37.57  avg bits 4.4997
 ```
 
 This is still a small sanity slice, but it addresses a concrete reviewer
@@ -507,8 +510,10 @@ the same average-bit budget. The new C++ planner reads the measured
 module-sensitivity JSON directly and emits evaluator-compatible allocations;
 on the same Qwen2.5-1.5B 16-prompt slice its loss-sensitive budget allocation
 beats C++ random and category baselines under a similar average-bit budget.
-The Qwen3-0.6B run is only a newer-model uniform-quant smoke baseline; no
-Qwen3 loss-sensitive allocation is claimed yet.
+On Qwen3-0.6B, a 4-prompt sensitivity calibration plus C++ planner allocation
+also beats uniform INT4, random budget, and category budget on the 16-prompt
+WikiText2 slice. This remains a short-slice fake-quant diagnostic, not a
+production quantizer or SOTA claim.
 
 Evidence files:
 
@@ -543,6 +548,13 @@ outputs/qwen25_1p5b_cpp_planner_budget_ppl_wikitext2_16_summary.json
 outputs/qwen25_1p5b_cpp_planner_budget_gpu_guard_wikitext2_16.json
 outputs/qwen3_0p6b_uniform_fake_quant_ppl_wikitext2_16_summary.json
 outputs/qwen3_0p6b_uniform_gpu_guard_wikitext2_16.json
+outputs/qwen3_0p6b_module_loss_sensitivity_limit4_group128.json
+outputs/qwen3_0p6b_module_loss_sensitivity_limit4_group128_report.md
+outputs/qwen3_0p6b_sensitivity_gpu_guard_limit4_group128.json
+outputs/qwen3_0p6b_cpp_allocation_planner_4p5_summary.json
+data_eval/eval_configs/qwen3_0p6b_cpp_planner_budget_compare.json
+outputs/qwen3_0p6b_cpp_planner_budget_ppl_wikitext2_16_summary.json
+outputs/qwen3_0p6b_cpp_planner_budget_gpu_guard_wikitext2_16.json
 outputs/smollm2_module_loss_sensitivity_limit4_group128.json
 outputs/smollm2_module_loss_sensitivity_limit4_group128_report.md
 outputs/smollm2_loss_sensitive_alloc_4to8_limit4_group128_summary.json

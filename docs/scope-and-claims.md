@@ -63,10 +63,12 @@ These claims are supported by committed data, scripts, or reports:
   budget allocations. On the Qwen2.5-1.5B 16-prompt WikiText2 slice, the C++
   loss-sensitive allocation reaches PPL `13.14`, versus `13.75` for C++ random,
   `14.28` for C++ category, and `15.04` for uniform INT4.
-- A newer-model Qwen3-0.6B uniform fake-quant smoke run completed under the GPU
-  guard: FP16 PPL `27.82`, uniform INT4 PPL `44.57`, and uniform INT3 PPL
-  `1079.79` on the same 16-prompt WikiText2 slice. This is a baseline sanity
-  check only, not a loss-sensitive Qwen3 result.
+- A newer-model Qwen3-0.6B fake-quant run completed under the GPU guard. On
+  the same 16-prompt WikiText2 slice, FP16 PPL is `27.82`, uniform INT4 is
+  `44.57`, C++ loss-sensitive budget allocation is `34.84`, C++ random budget
+  is `39.18`, and C++ category budget is `37.57`. The Qwen3 sensitivity
+  calibration used only 4 prompts, so it is a short-cycle signal rather than a
+  mature benchmark.
 - The GPU guard script can enforce a max-memory ratio before and during CUDA
   runs. A Qwen2.5-1.5B 16-prompt comparison completed at 56.85% peak GPU
   memory after the fake-quant evaluator was changed to in-place group-wise
