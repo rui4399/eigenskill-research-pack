@@ -233,6 +233,7 @@ Build and run the verifier with CMake/WSL:
 cmake -S inference_cpp -B inference_cpp/build-wsl -DCMAKE_BUILD_TYPE=Release
 cmake --build inference_cpp/build-wsl -j
 ./inference_cpp/build-wsl/quant_kernel_verify --dim 512 --active-rows 32
+ctest --test-dir inference_cpp/build-wsl --output-on-failure
 ```
 
 The verifier checks AVX2 dense GEMV, selected-row GEMV, selected-row AVX2 GEMV,

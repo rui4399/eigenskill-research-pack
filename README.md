@@ -713,6 +713,14 @@ cache or network access for:
 Qwen/Qwen2.5-0.5B-Instruct
 ```
 
+An attempted `Qwen/Qwen2.5-1.5B-Instruct` smoke run did not reach evaluation
+because the unauthenticated Hugging Face download stalled around a partial
+325 MB blob. This is recorded as a failed download attempt, not a model result:
+
+```text
+outputs/qwen25_1p5b_smoke_attempt_2026-06-04.md
+```
+
 Commands:
 
 ```bash

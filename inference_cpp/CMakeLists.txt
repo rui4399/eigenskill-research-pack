@@ -2,6 +2,8 @@ cmake_minimum_required(VERSION 3.16)
 
 project(eigenskill_cpp_artifacts LANGUAGES CXX)
 
+include(CTest)
+
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
@@ -20,6 +22,13 @@ add_executable(quant_policy_bypass src/quant_policy_bypass.cpp)
 add_executable(quant_kernel_bench src/quant_kernel_bench.cpp)
 add_executable(quant_kernel_verify src/quant_kernel_verify.cpp)
 target_link_libraries(quant_kernel_verify PRIVATE eigenskill_quant_kernels)
+
+if(BUILD_TESTING)
+  add_test(
+    NAME quant_kernel_verify_smoke
+    COMMAND quant_kernel_verify --dim 512 --active-rows 32
+  )
+endif()
 
 if(NOT MSVC AND (CMAKE_SYSTEM_PROCESSOR MATCHES "x86_64|AMD64|amd64"))
   target_compile_options(eigenskill_quant_kernels PRIVATE -mavx2)

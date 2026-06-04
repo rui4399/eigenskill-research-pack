@@ -29,6 +29,7 @@ Build integration:
 ```text
 CMake target: eigenskill_quant_kernels
 CMake verifier: quant_kernel_verify
+CMake test: quant_kernel_verify_smoke
 MSVC target: -Target quant-verify
 ```
 
@@ -61,6 +62,13 @@ selected AVX2 relative L2   4.7130e-07
 INT4 relative L2            1.3646e-01
 scalar bypass relative L2   0
 ok                          true
+```
+
+CTest:
+
+```text
+ctest --test-dir inference_cpp/build-wsl --output-on-failure
+quant_kernel_verify_smoke: passed
 ```
 
 ## Interpretation
