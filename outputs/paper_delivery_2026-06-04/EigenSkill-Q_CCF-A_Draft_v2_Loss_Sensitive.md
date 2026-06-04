@@ -373,6 +373,27 @@ the greedy allocation. The best candidate demotes
 to `24.0661` while keeping the same `4-bit=172, 8-bit=53` histogram. The gain is
 small, but it directly supports the interaction-aware formulation above.
 
+We also test a cheaper output-reconstruction proxy:
+
+```text
+E ||x(W - Q(W))^T||^2 / E ||xW^T||^2.
+```
+
+This proxy samples inputs to each Linear module and upgrades modules with the
+largest normalized local output perturbation. Under the same 4.5 average-bit
+budget it selects `4-bit=135, 8-bit=90`, protecting `54.50%` of the measured
+output proxy. However, global PPL is weaker than the measured-loss proxy:
+
+| dataset | output-sensitive PPL | loss-sensitive PPL | swap-search PPL |
+|---|---:|---:|---:|
+| WikiText2-128 | 25.21 | 24.14 | 24.07 |
+| C4-64 | 33.71 | 32.77 | 32.57 |
+
+This is a useful negative result. Even a direct local reconstruction objective
+can mis-rank modules for global language-model loss, supporting the need for
+loss-aware or interaction-aware allocation rather than purely local error
+minimization.
+
 C4 validation, 64 streamed prompts:
 
 | method | PPL | delta NLL vs FP16 | bit histogram |
@@ -443,11 +464,16 @@ train_python/measure_module_quant_sensitivity.py
 train_python/build_dataset_prompts.py
 train_python/eval_weight_quant_ppl.py
 train_python/search_allocation_swaps.py
+train_python/measure_module_output_sensitivity.py
 inference_cpp/src/quant_policy_bypass.cpp
 outputs/smollm2_module_loss_sensitivity_limit4_group128.json
+outputs/smollm2_module_output_sensitivity_limit4_group128.json
 outputs/smollm2_fake_quant_ppl_compare_allocations_swap_group128_wikitext2_128_summary.json
 outputs/smollm2_allocation_swap_search_group128_wikitext2_128_summary.json
 outputs/smollm2_fake_quant_ppl_compare_allocations_swap_group128_c4_en_validation_64_summary.json
+outputs/smollm2_fake_quant_ppl_compare_allocations_with_output_proxy_group128_wikitext2_128_summary.json
+outputs/smollm2_fake_quant_ppl_compare_allocations_with_output_proxy_group128_c4_en_validation_64_summary.json
+outputs/smollm2_output_sensitivity_proxy_report.md
 outputs/smollm2_fake_quant_ppl_c4_validation_64_report.md
 outputs/smollm2_fake_quant_ppl_report.md
 outputs/EigenSkill-Q-Loss-Sensitive-Allocation-Update-2026-06-04.md

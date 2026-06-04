@@ -154,6 +154,27 @@ C4 validation 64 prompts：
 仍优于 uniform INT4 和 activation-stat RD，swap-search 仍是当前最好的一组
 fake-quant allocation。
 
+我又补了一个更数学化的 proxy 对照：output reconstruction sensitivity。它对
+每个 Linear 模块采样输入 `x`，测量 group-wise INT4 后局部输出扰动：
+
+```text
+E ||x(W - Q(W))^T||^2 / E ||xW^T||^2
+```
+
+这个 proxy 计算很快，225 个模块约几十秒就能跑完；但结果是中性/负面的：
+
+```text
+output-sensitive allocation: 4-bit=135, 8-bit=90
+protected output proxy:      54.50%
+WikiText2-128 PPL:           25.21
+C4-64 PPL:                   33.71
+```
+
+它优于 uniform INT4，但弱于 measured loss sensitivity，也没有超过
+activation-stat RD。这对论文反而有价值：局部输出重构误差并不自动等价于
+全局 next-token loss，说明真正要做的是 loss-aware / interaction-aware
+allocation，而不是简单地把 local reconstruction error 当最终目标。
+
 ## 对论文主线的意义
 
 此前 activation-stat sensitivity proxy 在 group-wise quantization 下输给
@@ -176,7 +197,8 @@ loss perturbation、Fisher/Hessian proxy 或 activation reconstruction error
 2. naive activation proxy 会失败；
 3. measured loss sensitivity 能显著改善 `{4,8}` 混合精度分配；
 4. exact knapsack 与 swap-search 显示全局 PPL 中存在模块交互项；
-5. 后续用 Fisher/Hessian、GPTQ/AWQ/SmoothQuant/rotation baseline 补齐后，
+5. output reconstruction proxy 的负结果说明局部重构目标也可能错配全局 loss；
+6. 后续用 Fisher/Hessian、GPTQ/AWQ/SmoothQuant/rotation baseline 补齐后，
    才有国际会议/期刊投稿的可信度。
 
 ## 不能夸大的地方
@@ -209,6 +231,7 @@ data_eval/text_prompts/wikitext2_validation_32.txt
 data_eval/text_prompts/wikitext2_validation_128.txt
 train_python/build_loss_sensitive_knapsack_alloc.py
 train_python/search_allocation_swaps.py
+train_python/measure_module_output_sensitivity.py
 data_eval/text_prompts/c4_en_validation_64.txt
 outputs/smollm2_fake_quant_ppl_loss_sensitive_4to8_group128_wikitext2_32_summary.json
 outputs/smollm2_fake_quant_ppl_activation_rd_4to8_group128_wikitext2_32_summary.json
@@ -220,5 +243,10 @@ outputs/smollm2_loss_sensitive_swap_search_alloc_4to8_group128_summary.json
 outputs/smollm2_fake_quant_ppl_compare_allocations_swap_group128_wikitext2_128_summary.json
 outputs/smollm2_fake_quant_ppl_c4_validation_64_report.md
 outputs/smollm2_fake_quant_ppl_compare_allocations_swap_group128_c4_en_validation_64_summary.json
+outputs/smollm2_output_sensitivity_proxy_report.md
+outputs/smollm2_module_output_sensitivity_limit4_group128.json
+outputs/smollm2_output_sensitive_alloc_4to8_limit4_group128_summary.json
+outputs/smollm2_fake_quant_ppl_compare_allocations_with_output_proxy_group128_wikitext2_128_summary.json
+outputs/smollm2_fake_quant_ppl_compare_allocations_with_output_proxy_group128_c4_en_validation_64_summary.json
 outputs/smollm2_fake_quant_ppl_report.md
 ```

@@ -183,11 +183,42 @@ prompts。
 
 含义：C4 复现 WikiText2 排序，说明 positive trend 不是单一验证切片偶然现象。
 
+## 2026-06-04 追加：output reconstruction proxy 负结果
+
+新增 `measure_module_output_sensitivity.py`，对每个 Linear 模块采样输入 `x`，
+测量 group-wise INT4 后的局部输出扰动：
+
+```text
+E ||x(W - Q(W))^T||^2 / E ||xW^T||^2
+```
+
+结果：
+
+```text
+Linear modules:              225
+sample rows per module:      128
+output-sensitive allocation: 4-bit=135, 8-bit=90
+protected output proxy:      54.50%
+```
+
+PPL：
+
+| dataset | output-sensitive PPL | loss-sensitive PPL | swap-search PPL |
+|---|---:|---:|---:|
+| WikiText2-128 | 25.21 | 24.14 | 24.07 |
+| C4-64 | 33.71 | 32.77 | 32.57 |
+
+含义：output reconstruction proxy 优于 uniform INT4，但弱于 measured
+loss-sensitive，也没有超过 activation-stat RD。这个负结果很关键：局部输出重构
+误差不能直接替代全局 next-token loss，论文应强调 loss-aware 和
+interaction-aware allocation。
+
 新增证据：
 
 ```text
 train_python/search_allocation_swaps.py
 train_python/build_dataset_prompts.py
+train_python/measure_module_output_sensitivity.py
 data_eval/text_prompts/c4_en_validation_64.txt
 outputs/smollm2_allocation_swap_search_group128_wikitext2_128_summary.json
 outputs/smollm2_allocation_swap_search_group128_wikitext2_128_report.md
@@ -195,6 +226,11 @@ outputs/smollm2_loss_sensitive_swap_search_alloc_4to8_group128_summary.json
 outputs/smollm2_fake_quant_ppl_compare_allocations_swap_group128_wikitext2_128_summary.json
 outputs/smollm2_fake_quant_ppl_c4_validation_64_report.md
 outputs/smollm2_fake_quant_ppl_compare_allocations_swap_group128_c4_en_validation_64_summary.json
+outputs/smollm2_output_sensitivity_proxy_report.md
+outputs/smollm2_module_output_sensitivity_limit4_group128.json
+outputs/smollm2_output_sensitive_alloc_4to8_limit4_group128_summary.json
+outputs/smollm2_fake_quant_ppl_compare_allocations_with_output_proxy_group128_wikitext2_128_summary.json
+outputs/smollm2_fake_quant_ppl_compare_allocations_with_output_proxy_group128_c4_en_validation_64_summary.json
 ```
 
 ## 数学主线

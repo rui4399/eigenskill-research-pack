@@ -371,6 +371,49 @@ outputs/smollm2_fake_quant_ppl_c4_validation_64_report.md
 outputs/smollm2_fake_quant_ppl_compare_allocations_swap_group128_c4_en_validation_64_summary.json
 ```
 
+## Output-Reconstruction Proxy
+
+A cheaper module proxy was also tested. It samples the inputs to each Linear
+module and measures normalized output perturbation after group-wise INT4 fake
+quantization:
+
+```text
+E ||x(W - Q(W))^T||^2 / E ||xW^T||^2
+```
+
+The output-sensitive allocation uses the same 4.5 average-bit budget:
+
+```text
+Linear modules:              225
+sample rows per module:      128
+output-sensitive allocation: 4-bit=135, 8-bit=90
+protected output proxy:      54.50%
+```
+
+PPL comparison:
+
+| dataset | method | PPL | delta NLL vs FP16 | bit histogram |
+|---|---|---:|---:|---|
+| WikiText2-128 | output-sensitive 4/8 | 25.2084 | 0.3739 | 4:135, 8:90 |
+| C4-64 | output-sensitive 4/8 | 33.7088 | 0.3488 | 4:135, 8:90 |
+
+This proxy improves over uniform INT4, but it is weaker than measured
+one-module loss sensitivity and does not beat the earlier activation-stat RD
+allocation on either public-text slice. The negative result is important: local
+output reconstruction error is not automatically aligned with global next-token
+loss.
+
+Evidence files:
+
+```text
+train_python/measure_module_output_sensitivity.py
+outputs/smollm2_output_sensitivity_proxy_report.md
+outputs/smollm2_module_output_sensitivity_limit4_group128.json
+outputs/smollm2_output_sensitive_alloc_4to8_limit4_group128_summary.json
+outputs/smollm2_fake_quant_ppl_compare_allocations_with_output_proxy_group128_wikitext2_128_summary.json
+outputs/smollm2_fake_quant_ppl_compare_allocations_with_output_proxy_group128_c4_en_validation_64_summary.json
+```
+
 ## Negative Result From 2/3/4/8 Allocation
 
 The earlier 3.2 average-bit allocation over `{2,3,4,8}` was much worse than

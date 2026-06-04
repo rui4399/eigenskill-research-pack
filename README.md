@@ -316,6 +316,23 @@ loss-sensitive swap-search        32.57
 
 This reproduces the WikiText2 ordering on a second public-text source.
 
+An additional output-reconstruction sensitivity proxy was tested. It samples
+Linear-module inputs and ranks modules by normalized output perturbation
+`E||x(W-Q(W))^T||^2 / E||xW^T||^2`. It is cheaper than full one-module PPL
+probing, but it underperforms the measured loss proxy:
+
+```text
+output-sensitive {4,8} allocation:
+bit histogram: 4-bit=135, 8-bit=90
+protected output proxy: 54.50%
+
+WikiText2-128 PPL: 25.21
+C4-64 PPL:         33.71
+```
+
+This is useful negative evidence: local output reconstruction error is not
+automatically aligned with global next-token loss.
+
 Evidence files:
 
 ```text
@@ -348,6 +365,12 @@ outputs/smollm2_fake_quant_ppl_compare_allocations_swap_group128_wikitext2_128_s
 data_eval/text_prompts/c4_en_validation_64.txt
 outputs/smollm2_fake_quant_ppl_c4_validation_64_report.md
 outputs/smollm2_fake_quant_ppl_compare_allocations_swap_group128_c4_en_validation_64_summary.json
+train_python/measure_module_output_sensitivity.py
+outputs/smollm2_output_sensitivity_proxy_report.md
+outputs/smollm2_module_output_sensitivity_limit4_group128.json
+outputs/smollm2_output_sensitive_alloc_4to8_limit4_group128_summary.json
+outputs/smollm2_fake_quant_ppl_compare_allocations_with_output_proxy_group128_wikitext2_128_summary.json
+outputs/smollm2_fake_quant_ppl_compare_allocations_with_output_proxy_group128_c4_en_validation_64_summary.json
 ```
 
 ### 8-skill hybrid routing, v2
