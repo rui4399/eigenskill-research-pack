@@ -157,6 +157,67 @@ The WikiText2 margin is clear on this slice. The C4 margin is only `0.0084`
 PPL versus the best random seed, so it should be described as weak support
 rather than a strong cross-dataset win.
 
+## WikiText2+C4 Consensus Check
+
+The weak C4 random8 margin above motivated a second calibration split. A new
+2-prompt C4 sensitivity probe was run with the same model, group size, and
+4.5 average-bit budget:
+
+```text
+C4 sensitivity probe:
+linear modules measured       113 / 113
+bit histogram                 4-bit=93, 8-bit=20
+positive loss protected       58.79%
+peak memory                   4253/8151 MiB = 52.18%
+```
+
+A WikiText2+C4 consensus allocation then prioritizes modules selected by both
+splits and fills the remaining budget by average loss-per-cost score:
+
+```text
+consensus bit histogram       4-bit=87, 8-bit=26
+weighted avg bits             4.4984
+budget used                   0.9996
+left/right high-bit overlap   6 modules, Jaccard 0.1622
+left/consensus Jaccard        0.5806
+right/consensus Jaccard       0.4375
+```
+
+The downstream PPL result is substantially stronger than the single-split C4
+check:
+
+```text
+WikiText2-64:
+FP16                         PPL 18.8573
+uniform INT4                 PPL 22.4888
+wikitext loss-sensitive      PPL 21.1191
+c4 loss-sensitive            PPL 21.4083
+wikitext+c4 consensus        PPL 21.0349
+random8 min/mean/max         PPL 21.4637 / 21.6140 / 21.7550
+consensus vs best random     +0.4288 PPL
+
+C4-64:
+FP16                         PPL 32.2736
+uniform INT4                 PPL 36.8334
+wikitext loss-sensitive      PPL 35.8428
+c4 loss-sensitive            PPL 35.7449
+wikitext+c4 consensus        PPL 35.4726
+random8 min/mean/max         PPL 35.8512 / 36.0334 / 36.3837
+consensus vs best random     +0.3785 PPL
+```
+
+The PPL checks stayed below the requested 85% GPU-memory ceiling:
+
+```text
+WikiText2-64 peak memory      4491/8151 MiB = 55.10%
+C4-64 peak memory            4492/8151 MiB = 55.11%
+```
+
+This turns OLMo2 from weak cross-dataset support into a second-model
+replication of the Qwen3-1.7B consensus result. It should still be framed as a
+short-slice fake-quant diagnostic, not as a packed runtime or a production
+mixed-precision quantizer.
+
 ## Interpretation
 
 This is stronger than the earlier OLMo2 uniform smoke because it exercises the
@@ -197,4 +258,20 @@ outputs/olmo2_0425_1b_cpp_random8_wikitext2_64_summary.md
 outputs/olmo2_0425_1b_cpp_random8_wikitext2_64_summary.csv
 outputs/olmo2_0425_1b_cpp_random8_c4_64_summary.md
 outputs/olmo2_0425_1b_cpp_random8_c4_64_summary.csv
+outputs/olmo2_0425_1b_module_loss_sensitivity_c4_limit2_group128.json
+outputs/olmo2_0425_1b_module_loss_sensitivity_c4_limit2_group128_report.md
+outputs/olmo2_0425_1b_sensitivity_lowmem_gpu_guard_c4_limit2_group128.json
+outputs/olmo2_0425_1b_loss_sensitive_alloc_4to8_c4_limit2_group128_summary.json
+outputs/olmo2_0425_1b_loss_sensitive_wikitext_c4_consensus_alloc_4to8_group128_summary.json
+outputs/olmo2_0425_1b_loss_sensitive_wikitext_c4_consensus_alloc_4to8_group128_report.md
+data_eval/eval_configs/olmo2_0425_1b_wikitext_c4_consensus_compare.json
+outputs/olmo2_0425_1b_wikitext_c4_consensus_ppl_wikitext2_64_summary.json
+outputs/olmo2_0425_1b_wikitext_c4_consensus_ppl_c4_64_summary.json
+outputs/olmo2_0425_1b_wikitext_c4_consensus_gpu_guard_wikitext2_64.json
+outputs/olmo2_0425_1b_wikitext_c4_consensus_gpu_guard_c4_64.json
+outputs/olmo2_0425_1b_wikitext_c4_consensus_evidence_matrix.md
+outputs/olmo2_0425_1b_wikitext_c4_consensus_evidence_matrix.csv
+outputs/olmo2_0425_1b_wikitext_c4_consensus_audit.md
+outputs/olmo2_0425_1b_wikitext_c4_consensus_audit.csv
+inference_cpp/src/quant_consensus_audit.cpp
 ```

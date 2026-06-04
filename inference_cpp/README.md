@@ -47,6 +47,7 @@ inference_cpp/build-wsl/quant_kernel_verify
 inference_cpp/build-wsl/quant_allocation_planner
 inference_cpp/build-wsl/quant_result_summarizer
 inference_cpp/build-wsl/quant_evidence_matrix
+inference_cpp/build-wsl/quant_consensus_audit
 ```
 
 `quant_allocation_planner` is wired into the Qwen3-1.7B fake-quant evidence
@@ -112,6 +113,21 @@ versus the random mean:
   --target cpp_loss_sensitive_budget \
   --emit markdown \
   > outputs/qwen3_1p7b_cpp_random16_evidence_matrix.md
+```
+
+`quant_consensus_audit` reads the left/right calibration allocations and a
+consensus allocation, then reports high-bit overlap, Jaccard similarity,
+weighted average bits, budget use, and bit histograms. It audits allocation
+stability only; downstream model quality still comes from the PPL evaluator.
+
+```bash
+./inference_cpp/build-wsl/quant_consensus_audit \
+  --left outputs/olmo2_0425_1b_loss_sensitive_alloc_4to8_limit2_group128_summary.json \
+  --right outputs/olmo2_0425_1b_loss_sensitive_alloc_4to8_c4_limit2_group128_summary.json \
+  --consensus outputs/olmo2_0425_1b_loss_sensitive_wikitext_c4_consensus_alloc_4to8_group128_summary.json \
+  --label OLMo2-0425-1B-WikiText2-C4 \
+  --emit markdown \
+  > outputs/olmo2_0425_1b_wikitext_c4_consensus_audit.md
 ```
 
 ## Run

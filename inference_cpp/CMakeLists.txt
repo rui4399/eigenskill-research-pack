@@ -24,6 +24,7 @@ add_executable(quant_kernel_verify src/quant_kernel_verify.cpp)
 add_executable(quant_allocation_planner src/quant_allocation_planner.cpp)
 add_executable(quant_result_summarizer src/quant_result_summarizer.cpp)
 add_executable(quant_evidence_matrix src/quant_evidence_matrix.cpp)
+add_executable(quant_consensus_audit src/quant_consensus_audit.cpp)
 target_link_libraries(quant_kernel_bench PRIVATE eigenskill_quant_kernels)
 target_link_libraries(quant_kernel_verify PRIVATE eigenskill_quant_kernels)
 
@@ -43,6 +44,15 @@ if(BUILD_TESTING)
   add_test(
     NAME quant_evidence_matrix_smoke
     COMMAND quant_evidence_matrix --input ${CMAKE_CURRENT_SOURCE_DIR}/testdata/ppl_summary_fixture.json --dataset fixture --emit markdown
+  )
+  add_test(
+    NAME quant_consensus_audit_smoke
+    COMMAND quant_consensus_audit
+      --left ${CMAKE_CURRENT_SOURCE_DIR}/testdata/allocation_left_fixture.json
+      --right ${CMAKE_CURRENT_SOURCE_DIR}/testdata/allocation_right_fixture.json
+      --consensus ${CMAKE_CURRENT_SOURCE_DIR}/testdata/allocation_consensus_fixture.json
+      --label fixture
+      --emit csv
   )
 endif()
 

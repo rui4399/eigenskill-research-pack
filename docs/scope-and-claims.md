@@ -71,6 +71,11 @@ These claims are supported by committed data, scripts, or reports:
   JSON files into a cross-dataset Markdown/CSV table with target-vs-uniform,
   target-vs-best-random, and target-vs-random-mean margins. It is a reporting
   tool, not a quantization algorithm.
+- A standalone C++ consensus-allocation audit now reads the left/right
+  calibration allocations plus the consensus allocation and reports high-bit
+  overlap, Jaccard similarity, weighted average bits, budget use, and bit
+  histograms. It is an allocation-stability audit, not a model-quality
+  evaluator; downstream quality still comes from PPL checks.
 - A newer-model Qwen3-0.6B fake-quant run completed under the GPU guard. On
   the same 16-prompt WikiText2 slice, FP16 PPL is `27.82`, uniform INT4 is
   `44.57`, C++ loss-sensitive budget allocation is `34.84`, C++ random budget
@@ -130,14 +135,18 @@ These claims are supported by committed data, scripts, or reports:
   16-prompt and 64-prompt WikiText2 checks. The best 16-prompt tested blend is
   `blend_sensitivity_85` (`18.76` PPL), while the 64-prompt check is slightly
   better with `loss_sensitive_budget` (`21.12` PPL) than `blend_sensitivity_85`
-  (`21.13` PPL). A C4-64 check with the same allocation improves over uniform
-  INT4 (`35.84` vs `36.83`) and category (`35.84` vs `36.05`), but is nearly
-  tied with one random budget (`35.84` vs `35.85`). The C++ planner now
-  supports `--random-repeats`; an 8-seed random check leaves loss-sensitive
-  ahead of the best random seed on WikiText2-64 (`21.12` vs `21.46`) and C4-64
-  (`35.84` vs `35.85`), but the C4 margin is tiny. Treat this as a second
-  model-family short-slice allocator signal with weak cross-dataset support,
-  not as a production quantizer or broad benchmark.
+  (`21.13` PPL). The C++ planner also supports `--random-repeats`; the original
+  single-split loss-sensitive allocation is clearly ahead of random8 on
+  WikiText2-64 (`21.12` vs best random `21.46`) but only barely ahead on C4-64
+  (`35.84` vs `35.85`). A new OLMo2 WikiText2+C4 two-split consensus allocation
+  fixes that weak C4 margin: it reaches `21.0349` PPL on WikiText2-64 and
+  `35.4726` PPL on C4-64, beating the listed best random seeds on both slices
+  (`21.4637` and `35.8512`, respectively). The C4 sensitivity probe completed
+  at `4253/8151 MiB` (`52.18%`), and the consensus PPL checks peaked at about
+  `4492/8151 MiB` (`55.11%`). Treat this as second-model support for the
+  narrow claim that cross-dataset calibration consensus improves this
+  short-slice fake-quant diagnostic, not as a production quantizer or broad
+  benchmark.
 - A `google/gemma-3-1b-it` candidate was attempted but blocked by gated
   Hugging Face access in this environment. Report it only as an access
   blocker, not as a failed quantization result or quality datapoint.

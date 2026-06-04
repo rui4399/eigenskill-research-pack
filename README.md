@@ -15,7 +15,7 @@ core is narrower:
    `allenai/OLMo-2-0425-1B-Instruct` short slices;
 4. standalone C++ artifacts for low-rank GEMV, quantization-policy bypass,
    quant-kernel microbenchmarks, a reusable quant-kernel API, C++ allocation
-   planning, and C++ evidence summarization.
+   planning, C++ evidence summarization, and C++ consensus-allocation audit.
 
 The practical publication direction is therefore:
 
@@ -58,6 +58,53 @@ are not completed results in this repository.
 See `docs/scope-and-claims.md` for the allowed and disallowed external claims.
 
 ## Current Verified Evidence
+
+### Cross-dataset consensus fake-quant diagnostic
+
+The strongest current quantization-track result is no longer a single-split
+allocation. Two model families now have a WikiText2+C4 calibration-consensus
+allocation evaluated against uniform INT4, structural category baselines, and
+budget-matched random repeats on 64-prompt WikiText2/C4 slices.
+
+This is still a short-slice PyTorch fake-quant diagnostic, not a packed
+runtime, hardware result, or SOTA quantizer comparison.
+
+```text
+Qwen3-1.7B, group size 128, average 4.5 bits:
+WikiText2-64  FP16 21.6552  uniform INT4 31.1885  consensus 26.3260
+              random min/mean/max 27.6685 / 27.9124 / 28.1563
+              consensus margin vs best random +1.3425 PPL
+C4-64         FP16 25.5510  uniform INT4 30.7410  consensus 28.3303
+              random min/mean/max 28.4562 / 28.7118 / 28.9674
+              consensus margin vs best random +0.1259 PPL
+
+OLMo2-0425-1B-Instruct, group size 128, average 4.5 bits:
+WikiText2-64  FP16 18.8573  uniform INT4 22.4888  consensus 21.0349
+              random min/mean/max 21.4637 / 21.6140 / 21.7550
+              consensus margin vs best random +0.4288 PPL
+C4-64         FP16 32.2736  uniform INT4 36.8334  consensus 35.4726
+              random min/mean/max 35.8512 / 36.0334 / 36.3837
+              consensus margin vs best random +0.3785 PPL
+```
+
+The consensus path is intentionally conservative: build one allocation from a
+WikiText2 sensitivity split, one from a C4 sensitivity split, then prioritize
+overlap and average loss-per-cost under the same bit budget. It addresses the
+earlier Qwen3 failure mode where a one-split loss-sensitive allocation beat
+random on WikiText2 but lost to the best random seed on C4.
+
+Evidence files:
+
+```text
+data_eval/eval_configs/qwen3_1p7b_wikitext_c4_consensus_compare.json
+outputs/qwen3_1p7b_wikitext_c4_consensus_evidence_matrix.md
+outputs/qwen3_1p7b_wikitext_c4_consensus_audit.md
+data_eval/eval_configs/olmo2_0425_1b_wikitext_c4_consensus_compare.json
+outputs/olmo2_0425_1b_wikitext_c4_consensus_evidence_matrix.md
+outputs/olmo2_0425_1b_wikitext_c4_consensus_audit.md
+inference_cpp/src/quant_evidence_matrix.cpp
+inference_cpp/src/quant_consensus_audit.cpp
+```
 
 ### Quantization-policy bypass, v1
 
