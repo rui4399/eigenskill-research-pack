@@ -141,21 +141,22 @@ to the fields that determine the downstream quantization-policy decision.
 
 ## Quant Kernel Microbenchmark
 
-The third artifact benchmarks four standalone kernel shapes that matter for the
+The third artifact benchmarks standalone kernel shapes that matter for the
 quantization-policy direction:
 
 ```text
 scalar fp32 dense GEMV      full d x d floating-point matrix-vector multiply
 AVX2 fp32 dense GEMV        vectorized FP32 dot path when AVX2 is available
 packed int4 dequant GEMV    row-scale INT4 weights unpacked during GEMV
+packed int3 dequant GEMV    row-scale INT3 weights unpacked during GEMV
 selected-row GEMV           only a policy-selected subset of output rows
 AVX2 selected-row GEMV      vectorized selected-row dot path when available
 scalar skill bypass         y = lambda x, the O(d) idealized eigen-skill path
 ```
 
 This is still a microbenchmark, not an integrated LLM runtime. It does verify
-the C++ implementation surface for packed INT4 weights and dynamic row subsets,
-which the earlier low-rank benchmark did not cover.
+the C++ implementation surface for packed low-bit weights and dynamic row
+subsets, which the earlier low-rank benchmark did not cover.
 
 ### Build
 
@@ -183,16 +184,19 @@ rows         selected output rows for selected-row GEMV
 dense_ms     scalar FP32 dense GEMV latency
 davx_ms      AVX2 FP32 dense GEMV latency, or scalar fallback when disabled
 int4_ms      packed INT4 dequant GEMV latency
+int3_ms      packed INT3 dequant GEMV latency
 sel_ms       scalar selected-row GEMV latency
 selavx_ms    AVX2 selected-row GEMV latency, or scalar fallback when disabled
 scalar_ms    y = lambda x latency
 davx_x       dense_ms / davx_ms
 int4_x       dense_ms / int4_ms
+int3_x       dense_ms / int3_ms
 sel_x        dense_ms / sel_ms
 selavx_x     dense_ms / selavx_ms
 scalar_x     dense_ms / scalar_ms
 davx_err     relative L2 error of AVX2 dense output versus scalar dense output
 int4_err     relative L2 error of INT4 output versus FP32 dense output
+int3_err     relative L2 error of INT3 output versus FP32 dense output
 sel_err      selected-row output error versus same rows from FP32 dense output
 selavx_err   selected-row AVX2 error versus same rows from FP32 dense output
 ```
@@ -214,6 +218,9 @@ dense_gemv
 dense_gemv_avx2
 selected_rows_gemv
 selected_rows_gemv_avx2
+pack_lowbit_per_row
+lowbit_dequant_gemv
+unpack_signed_bits
 pack_int4_per_row
 int4_dequant_gemv
 scalar_skill_bypass
@@ -237,4 +244,5 @@ ctest --test-dir inference_cpp/build-wsl --output-on-failure
 ```
 
 The verifier checks AVX2 dense GEMV, selected-row GEMV, selected-row AVX2 GEMV,
-INT4 finite output, and scalar bypass correctness against scalar references.
+INT4/INT3 finite output, and scalar bypass correctness against scalar
+references.

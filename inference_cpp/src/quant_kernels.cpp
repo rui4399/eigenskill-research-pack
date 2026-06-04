@@ -161,38 +161,108 @@ std::int8_t unpack_signed_nibble(std::uint8_t byte, bool high) {
     return static_cast<std::int8_t>(signed_value);
 }
 
-PackedInt4Matrix pack_int4_per_row(const float* w, int rows, int cols) {
-    if (!w || rows <= 0 || cols <= 0) {
-        throw std::invalid_argument("invalid INT4 pack input");
+void write_bits(std::vector<std::uint8_t>& bytes, std::size_t bit_offset, int bits, std::uint8_t value) {
+    for (int bit = 0; bit < bits; ++bit) {
+        const bool one = ((value >> bit) & 1u) != 0;
+        const std::size_t absolute = bit_offset + static_cast<std::size_t>(bit);
+        const std::size_t byte_index = absolute / 8;
+        const std::uint8_t mask = static_cast<std::uint8_t>(1u << (absolute % 8));
+        if (one) {
+            bytes[byte_index] = static_cast<std::uint8_t>(bytes[byte_index] | mask);
+        } else {
+            bytes[byte_index] = static_cast<std::uint8_t>(bytes[byte_index] & ~mask);
+        }
     }
-    PackedInt4Matrix packed;
+}
+
+std::int8_t unpack_signed_bits(const std::uint8_t* bytes, std::size_t bit_offset, int bits) {
+    if (!bytes || bits <= 0 || bits > 7) {
+        throw std::invalid_argument("invalid signed bit unpack input");
+    }
+    std::uint8_t encoded = 0;
+    for (int bit = 0; bit < bits; ++bit) {
+        const std::size_t absolute = bit_offset + static_cast<std::size_t>(bit);
+        const std::uint8_t byte = bytes[absolute / 8];
+        const std::uint8_t one = static_cast<std::uint8_t>((byte >> (absolute % 8)) & 1u);
+        encoded = static_cast<std::uint8_t>(encoded | (one << bit));
+    }
+    const int sign = 1 << (bits - 1);
+    const int full = 1 << bits;
+    const int signed_value = (encoded & sign) ? static_cast<int>(encoded) - full : static_cast<int>(encoded);
+    return static_cast<std::int8_t>(signed_value);
+}
+
+PackedLowBitMatrix pack_lowbit_per_row(const float* w, int rows, int cols, int bits) {
+    if (!w || rows <= 0 || cols <= 0) {
+        throw std::invalid_argument("invalid low-bit pack input");
+    }
+    if (bits < 2 || bits > 7) {
+        throw std::invalid_argument("low-bit pack supports 2..7 bits");
+    }
+    PackedLowBitMatrix packed;
     packed.rows = rows;
     packed.cols = cols;
-    packed.bytes.assign((static_cast<std::size_t>(rows) * cols + 1) / 2, 0);
+    packed.bits = bits;
+    const std::size_t values = static_cast<std::size_t>(rows) * cols;
+    packed.bytes.assign((values * static_cast<std::size_t>(bits) + 7) / 8, 0);
     packed.row_scales.assign(rows, 1.0f);
+    const int qmax = (1 << (bits - 1)) - 1;
 
     for (int row = 0; row < rows; ++row) {
         float max_abs = 0.0f;
         for (int col = 0; col < cols; ++col) {
             max_abs = std::max(max_abs, std::fabs(w[static_cast<std::size_t>(row) * cols + col]));
         }
-        const float scale = std::max(max_abs / 7.0f, 1.0e-8f);
+        const float scale = std::max(max_abs / static_cast<float>(qmax), 1.0e-8f);
         packed.row_scales[row] = scale;
         for (int col = 0; col < cols; ++col) {
             const float value = w[static_cast<std::size_t>(row) * cols + col] / scale;
             int q = static_cast<int>(std::nearbyint(value));
-            q = std::max(-7, std::min(7, q));
-            const std::uint8_t encoded = static_cast<std::uint8_t>(q < 0 ? q + 16 : q);
+            q = std::max(-qmax, std::min(qmax, q));
+            const int full = 1 << bits;
+            const std::uint8_t encoded = static_cast<std::uint8_t>(q < 0 ? q + full : q);
             const std::size_t linear = static_cast<std::size_t>(row) * cols + col;
-            const std::size_t byte_index = linear / 2;
-            if ((linear & 1u) == 0) {
-                packed.bytes[byte_index] = static_cast<std::uint8_t>((packed.bytes[byte_index] & 0xf0u) | encoded);
-            } else {
-                packed.bytes[byte_index] = static_cast<std::uint8_t>((packed.bytes[byte_index] & 0x0fu) | (encoded << 4));
-            }
+            write_bits(packed.bytes, linear * static_cast<std::size_t>(bits), bits, encoded);
         }
     }
     return packed;
+}
+
+PackedInt4Matrix pack_int4_per_row(const float* w, int rows, int cols) {
+    PackedLowBitMatrix low = pack_lowbit_per_row(w, rows, cols, 4);
+    PackedInt4Matrix packed;
+    packed.rows = low.rows;
+    packed.cols = low.cols;
+    packed.bytes = std::move(low.bytes);
+    packed.row_scales = std::move(low.row_scales);
+    return packed;
+}
+
+EIGENSKILL_NOINLINE void lowbit_dequant_gemv(const PackedLowBitMatrix& packed,
+                                             const float* EIGENSKILL_RESTRICT x,
+                                             float* EIGENSKILL_RESTRICT y) {
+    if (packed.rows <= 0 || packed.cols <= 0 || packed.bits < 2 || packed.bits > 7 || !x || !y) {
+        throw std::invalid_argument("invalid low-bit GEMV input");
+    }
+    const std::size_t values = static_cast<std::size_t>(packed.rows) * packed.cols;
+    const std::size_t expected_bytes = (values * static_cast<std::size_t>(packed.bits) + 7) / 8;
+    if (packed.bytes.size() != expected_bytes || packed.row_scales.size() != static_cast<std::size_t>(packed.rows)) {
+        throw std::invalid_argument("inconsistent packed low-bit matrix");
+    }
+    for (int row = 0; row < packed.rows; ++row) {
+        float acc = 0.0f;
+        const float scale = packed.row_scales[row];
+        const std::size_t base = static_cast<std::size_t>(row) * packed.cols;
+        for (int col = 0; col < packed.cols; ++col) {
+            const std::size_t linear = base + col;
+            const std::int8_t q = unpack_signed_bits(
+                packed.bytes.data(),
+                linear * static_cast<std::size_t>(packed.bits),
+                packed.bits);
+            acc += static_cast<float>(q) * scale * x[col];
+        }
+        y[row] = acc;
+    }
 }
 
 EIGENSKILL_NOINLINE void int4_dequant_gemv(const PackedInt4Matrix& packed,
@@ -201,22 +271,13 @@ EIGENSKILL_NOINLINE void int4_dequant_gemv(const PackedInt4Matrix& packed,
     if (packed.rows <= 0 || packed.cols <= 0 || !x || !y) {
         throw std::invalid_argument("invalid INT4 GEMV input");
     }
-    const std::size_t expected_bytes = (static_cast<std::size_t>(packed.rows) * packed.cols + 1) / 2;
-    if (packed.bytes.size() != expected_bytes || packed.row_scales.size() != static_cast<std::size_t>(packed.rows)) {
-        throw std::invalid_argument("inconsistent packed INT4 matrix");
-    }
-    for (int row = 0; row < packed.rows; ++row) {
-        float acc = 0.0f;
-        const float scale = packed.row_scales[row];
-        const std::size_t base = static_cast<std::size_t>(row) * packed.cols;
-        for (int col = 0; col < packed.cols; ++col) {
-            const std::size_t linear = base + col;
-            const std::uint8_t byte = packed.bytes[linear / 2];
-            const std::int8_t q = unpack_signed_nibble(byte, (linear & 1u) != 0);
-            acc += static_cast<float>(q) * scale * x[col];
-        }
-        y[row] = acc;
-    }
+    PackedLowBitMatrix low;
+    low.rows = packed.rows;
+    low.cols = packed.cols;
+    low.bits = 4;
+    low.bytes = packed.bytes;
+    low.row_scales = packed.row_scales;
+    lowbit_dequant_gemv(low, x, y);
 }
 
 double rel_l2_error(const float* lhs, const float* rhs, int n) {

@@ -1,6 +1,7 @@
+#include "eigenskill/quant_kernels.hpp"
+
 #include <algorithm>
 #include <chrono>
-#include <cmath>
 #include <cstdint>
 #include <iomanip>
 #include <iostream>
@@ -11,22 +12,7 @@
 #include <string>
 #include <vector>
 
-#if defined(__AVX2__) || (defined(_MSC_VER) && defined(__AVX2__))
-#include <immintrin.h>
-#define EIGENSKILL_HAS_AVX2 1
-#else
-#define EIGENSKILL_HAS_AVX2 0
-#endif
-
-#if defined(_MSC_VER)
-#define EIGENSKILL_RESTRICT __restrict
-#define EIGENSKILL_NOINLINE __declspec(noinline)
-#else
-#define EIGENSKILL_RESTRICT __restrict__
-#define EIGENSKILL_NOINLINE __attribute__((noinline))
-#endif
-
-namespace eigenskill {
+namespace {
 
 using Clock = std::chrono::steady_clock;
 
@@ -40,31 +26,21 @@ struct Options {
     std::uint32_t seed = 20260604;
 };
 
-struct PackedInt4Matrix {
-    int rows = 0;
-    int cols = 0;
-    std::vector<std::uint8_t> bytes;
-    std::vector<float> row_scales;
-};
-
 struct Result {
     int d = 0;
     int active_rows = 0;
     double dense_ms = 0.0;
     double dense_avx2_ms = 0.0;
     double int4_ms = 0.0;
+    double int3_ms = 0.0;
     double selected_ms = 0.0;
     double selected_avx2_ms = 0.0;
     double scalar_ms = 0.0;
     double dense_avx2_rel_l2 = 0.0;
     double int4_rel_l2 = 0.0;
+    double int3_rel_l2 = 0.0;
     double selected_rel_l2 = 0.0;
     double selected_avx2_rel_l2 = 0.0;
-    double dense_avx2_speedup = 0.0;
-    double int4_speedup = 0.0;
-    double selected_speedup = 0.0;
-    double selected_avx2_speedup = 0.0;
-    double scalar_speedup = 0.0;
 };
 
 std::vector<int> parse_list(const std::string& text) {
@@ -72,7 +48,9 @@ std::vector<int> parse_list(const std::string& text) {
     std::stringstream ss(text);
     std::string item;
     while (std::getline(ss, item, ',')) {
-        if (!item.empty()) values.push_back(std::stoi(item));
+        if (!item.empty()) {
+            values.push_back(std::stoi(item));
+        }
     }
     if (values.empty()) {
         throw std::runtime_error("empty integer list: " + text);
@@ -117,7 +95,7 @@ Options parse_args(int argc, char** argv) {
     return options;
 }
 
-std::vector<float> random_vector(std::size_t n, std::mt19937& rng, float scale = 1.0f) {
+std::vector<float> random_vector(std::size_t n, std::mt19937& rng, float scale) {
     std::normal_distribution<float> dist(0.0f, scale);
     std::vector<float> values(n);
     for (float& value : values) {
@@ -129,188 +107,14 @@ std::vector<float> random_vector(std::size_t n, std::mt19937& rng, float scale =
 std::vector<int> make_active_rows(int d, int active_rows) {
     active_rows = std::min(active_rows, d);
     std::vector<int> rows(static_cast<std::size_t>(active_rows));
-    if (active_rows <= 0) return rows;
+    if (active_rows <= 0) {
+        return rows;
+    }
     const double step = static_cast<double>(d) / static_cast<double>(active_rows);
     for (int i = 0; i < active_rows; ++i) {
         rows[static_cast<std::size_t>(i)] = std::min(d - 1, static_cast<int>(i * step));
     }
     return rows;
-}
-
-EIGENSKILL_NOINLINE void dense_gemv(const float* EIGENSKILL_RESTRICT w,
-                                    const float* EIGENSKILL_RESTRICT x,
-                                    float* EIGENSKILL_RESTRICT y,
-                                    int rows,
-                                    int cols) {
-    for (int row = 0; row < rows; ++row) {
-        const float* wr = w + static_cast<std::size_t>(row) * cols;
-        float acc = 0.0f;
-        for (int col = 0; col < cols; ++col) {
-            acc += wr[col] * x[col];
-        }
-        y[row] = acc;
-    }
-}
-
-float dot_product_scalar(const float* EIGENSKILL_RESTRICT a,
-                         const float* EIGENSKILL_RESTRICT b,
-                         int n) {
-    float acc = 0.0f;
-    for (int i = 0; i < n; ++i) {
-        acc += a[i] * b[i];
-    }
-    return acc;
-}
-
-#if EIGENSKILL_HAS_AVX2
-float horizontal_sum_avx(__m256 value) {
-    __m128 low = _mm256_castps256_ps128(value);
-    __m128 high = _mm256_extractf128_ps(value, 1);
-    __m128 sum = _mm_add_ps(low, high);
-    sum = _mm_hadd_ps(sum, sum);
-    sum = _mm_hadd_ps(sum, sum);
-    return _mm_cvtss_f32(sum);
-}
-#endif
-
-EIGENSKILL_NOINLINE float dot_product_avx2(const float* EIGENSKILL_RESTRICT a,
-                                           const float* EIGENSKILL_RESTRICT b,
-                                           int n) {
-#if EIGENSKILL_HAS_AVX2
-    __m256 acc = _mm256_setzero_ps();
-    int i = 0;
-    for (; i + 8 <= n; i += 8) {
-        const __m256 va = _mm256_loadu_ps(a + i);
-        const __m256 vb = _mm256_loadu_ps(b + i);
-        acc = _mm256_add_ps(acc, _mm256_mul_ps(va, vb));
-    }
-    float sum = horizontal_sum_avx(acc);
-    for (; i < n; ++i) {
-        sum += a[i] * b[i];
-    }
-    return sum;
-#else
-    return dot_product_scalar(a, b, n);
-#endif
-}
-
-EIGENSKILL_NOINLINE void dense_gemv_avx2(const float* EIGENSKILL_RESTRICT w,
-                                         const float* EIGENSKILL_RESTRICT x,
-                                         float* EIGENSKILL_RESTRICT y,
-                                         int rows,
-                                         int cols) {
-    for (int row = 0; row < rows; ++row) {
-        const float* wr = w + static_cast<std::size_t>(row) * cols;
-        y[row] = dot_product_avx2(wr, x, cols);
-    }
-}
-
-EIGENSKILL_NOINLINE void selected_rows_gemv(const float* EIGENSKILL_RESTRICT w,
-                                            const float* EIGENSKILL_RESTRICT x,
-                                            const int* EIGENSKILL_RESTRICT rows,
-                                            float* EIGENSKILL_RESTRICT y,
-                                            int active_rows,
-                                            int cols) {
-    for (int out = 0; out < active_rows; ++out) {
-        const int row = rows[out];
-        const float* wr = w + static_cast<std::size_t>(row) * cols;
-        float acc = 0.0f;
-        for (int col = 0; col < cols; ++col) {
-            acc += wr[col] * x[col];
-        }
-        y[out] = acc;
-    }
-}
-
-EIGENSKILL_NOINLINE void selected_rows_gemv_avx2(const float* EIGENSKILL_RESTRICT w,
-                                                 const float* EIGENSKILL_RESTRICT x,
-                                                 const int* EIGENSKILL_RESTRICT rows,
-                                                 float* EIGENSKILL_RESTRICT y,
-                                                 int active_rows,
-                                                 int cols) {
-    for (int out = 0; out < active_rows; ++out) {
-        const int row = rows[out];
-        const float* wr = w + static_cast<std::size_t>(row) * cols;
-        y[out] = dot_product_avx2(wr, x, cols);
-    }
-}
-
-EIGENSKILL_NOINLINE void scalar_skill_bypass(const float* EIGENSKILL_RESTRICT x,
-                                             float* EIGENSKILL_RESTRICT y,
-                                             int d,
-                                             float lambda) {
-    for (int i = 0; i < d; ++i) {
-        y[i] = lambda * x[i];
-    }
-}
-
-std::int8_t unpack_signed_nibble(std::uint8_t byte, bool high) {
-    std::uint8_t nibble = high ? static_cast<std::uint8_t>(byte >> 4) : static_cast<std::uint8_t>(byte & 0x0f);
-    const int signed_value = nibble >= 8 ? static_cast<int>(nibble) - 16 : static_cast<int>(nibble);
-    return static_cast<std::int8_t>(signed_value);
-}
-
-PackedInt4Matrix pack_int4_per_row(const std::vector<float>& w, int rows, int cols) {
-    PackedInt4Matrix packed;
-    packed.rows = rows;
-    packed.cols = cols;
-    packed.bytes.assign((static_cast<std::size_t>(rows) * cols + 1) / 2, 0);
-    packed.row_scales.assign(rows, 1.0f);
-
-    for (int row = 0; row < rows; ++row) {
-        float max_abs = 0.0f;
-        for (int col = 0; col < cols; ++col) {
-            max_abs = std::max(max_abs, std::fabs(w[static_cast<std::size_t>(row) * cols + col]));
-        }
-        const float scale = std::max(max_abs / 7.0f, 1.0e-8f);
-        packed.row_scales[row] = scale;
-
-        for (int col = 0; col < cols; ++col) {
-            const float value = w[static_cast<std::size_t>(row) * cols + col] / scale;
-            int q = static_cast<int>(std::nearbyint(value));
-            q = std::max(-7, std::min(7, q));
-            const std::uint8_t encoded = static_cast<std::uint8_t>(q < 0 ? q + 16 : q);
-            const std::size_t linear = static_cast<std::size_t>(row) * cols + col;
-            const std::size_t byte_index = linear / 2;
-            if ((linear & 1u) == 0) {
-                packed.bytes[byte_index] = static_cast<std::uint8_t>((packed.bytes[byte_index] & 0xf0u) | encoded);
-            } else {
-                packed.bytes[byte_index] = static_cast<std::uint8_t>((packed.bytes[byte_index] & 0x0fu) | (encoded << 4));
-            }
-        }
-    }
-    return packed;
-}
-
-EIGENSKILL_NOINLINE void int4_dequant_gemv(const PackedInt4Matrix& packed,
-                                           const float* EIGENSKILL_RESTRICT x,
-                                           float* EIGENSKILL_RESTRICT y) {
-    const int rows = packed.rows;
-    const int cols = packed.cols;
-    for (int row = 0; row < rows; ++row) {
-        float acc = 0.0f;
-        const float scale = packed.row_scales[row];
-        const std::size_t base = static_cast<std::size_t>(row) * cols;
-        for (int col = 0; col < cols; ++col) {
-            const std::size_t linear = base + col;
-            const std::uint8_t byte = packed.bytes[linear / 2];
-            const std::int8_t q = unpack_signed_nibble(byte, (linear & 1u) != 0);
-            acc += static_cast<float>(q) * scale * x[col];
-        }
-        y[row] = acc;
-    }
-}
-
-double rel_l2_error(const std::vector<float>& lhs, const std::vector<float>& rhs) {
-    double err2 = 0.0;
-    double ref2 = 0.0;
-    const std::size_t n = std::min(lhs.size(), rhs.size());
-    for (std::size_t i = 0; i < n; ++i) {
-        const double diff = static_cast<double>(lhs[i]) - rhs[i];
-        err2 += diff * diff;
-        ref2 += static_cast<double>(rhs[i]) * rhs[i];
-    }
-    return std::sqrt(err2 / std::max(ref2, 1.0e-30));
 }
 
 template <typename Fn>
@@ -340,72 +144,48 @@ Result benchmark_case(int d, int active_rows, const Options& options) {
 
     std::mt19937 rng(options.seed + static_cast<std::uint32_t>(d * 131 + active_rows * 17));
     std::vector<float> w = random_vector(static_cast<std::size_t>(d) * d, rng, 0.04f);
-    std::vector<float> x = random_vector(d, rng, 1.0f);
+    std::vector<float> x = random_vector(static_cast<std::size_t>(d), rng, 1.0f);
     std::vector<int> rows = make_active_rows(d, active_rows);
-    PackedInt4Matrix packed = pack_int4_per_row(w, d, d);
+    eigenskill::MatrixView matrix{w.data(), d, d};
+    eigenskill::PackedInt4Matrix packed_int4 = eigenskill::pack_int4_per_row(w.data(), d, d);
+    eigenskill::PackedLowBitMatrix packed_int3 = eigenskill::pack_lowbit_per_row(w.data(), d, d, 3);
 
-    std::vector<float> y_dense(d, 0.0f);
-    std::vector<float> y_dense_avx2(d, 0.0f);
-    std::vector<float> y_int4(d, 0.0f);
-    std::vector<float> y_selected(active_rows, 0.0f);
-    std::vector<float> y_selected_avx2(active_rows, 0.0f);
-    std::vector<float> y_selected_ref(active_rows, 0.0f);
-    std::vector<float> y_scalar(d, 0.0f);
+    std::vector<float> y_dense(static_cast<std::size_t>(d), 0.0f);
+    std::vector<float> y_dense_avx2(static_cast<std::size_t>(d), 0.0f);
+    std::vector<float> y_int4(static_cast<std::size_t>(d), 0.0f);
+    std::vector<float> y_int3(static_cast<std::size_t>(d), 0.0f);
+    std::vector<float> y_selected(static_cast<std::size_t>(active_rows), 0.0f);
+    std::vector<float> y_selected_avx2(static_cast<std::size_t>(active_rows), 0.0f);
+    std::vector<float> y_selected_ref(static_cast<std::size_t>(active_rows), 0.0f);
+    std::vector<float> y_scalar(static_cast<std::size_t>(d), 0.0f);
 
-    dense_gemv(w.data(), x.data(), y_dense.data(), d, d);
-    dense_gemv_avx2(w.data(), x.data(), y_dense_avx2.data(), d, d);
-    int4_dequant_gemv(packed, x.data(), y_int4.data());
-    selected_rows_gemv(w.data(), x.data(), rows.data(), y_selected.data(), active_rows, d);
-    selected_rows_gemv_avx2(w.data(), x.data(), rows.data(), y_selected_avx2.data(), active_rows, d);
+    eigenskill::dense_gemv(matrix, x.data(), y_dense.data());
+    eigenskill::dense_gemv_avx2(matrix, x.data(), y_dense_avx2.data());
+    eigenskill::int4_dequant_gemv(packed_int4, x.data(), y_int4.data());
+    eigenskill::lowbit_dequant_gemv(packed_int3, x.data(), y_int3.data());
+    eigenskill::selected_rows_gemv(matrix, x.data(), rows.data(), active_rows, y_selected.data());
+    eigenskill::selected_rows_gemv_avx2(matrix, x.data(), rows.data(), active_rows, y_selected_avx2.data());
     for (int i = 0; i < active_rows; ++i) {
-        y_selected_ref[i] = y_dense[rows[i]];
+        y_selected_ref[static_cast<std::size_t>(i)] = y_dense[static_cast<std::size_t>(rows[static_cast<std::size_t>(i)])];
     }
-    scalar_skill_bypass(x.data(), y_scalar.data(), d, 0.875f);
+    eigenskill::scalar_skill_bypass(x.data(), y_scalar.data(), d, 0.875f);
 
     Result result;
     result.d = d;
     result.active_rows = active_rows;
-    result.dense_avx2_rel_l2 = rel_l2_error(y_dense_avx2, y_dense);
-    result.int4_rel_l2 = rel_l2_error(y_int4, y_dense);
-    result.selected_rel_l2 = rel_l2_error(y_selected, y_selected_ref);
-    result.selected_avx2_rel_l2 = rel_l2_error(y_selected_avx2, y_selected_ref);
+    result.dense_avx2_rel_l2 = eigenskill::rel_l2_error(y_dense_avx2.data(), y_dense.data(), d);
+    result.int4_rel_l2 = eigenskill::rel_l2_error(y_int4.data(), y_dense.data(), d);
+    result.int3_rel_l2 = eigenskill::rel_l2_error(y_int3.data(), y_dense.data(), d);
+    result.selected_rel_l2 = eigenskill::rel_l2_error(y_selected.data(), y_selected_ref.data(), active_rows);
+    result.selected_avx2_rel_l2 = eigenskill::rel_l2_error(y_selected_avx2.data(), y_selected_ref.data(), active_rows);
 
-    result.dense_ms = time_ms(
-        [&]() { dense_gemv(w.data(), x.data(), y_dense.data(), d, d); },
-        y_dense,
-        options.warmup,
-        options.iters);
-    result.dense_avx2_ms = time_ms(
-        [&]() { dense_gemv_avx2(w.data(), x.data(), y_dense_avx2.data(), d, d); },
-        y_dense_avx2,
-        options.warmup,
-        options.iters);
-    result.int4_ms = time_ms(
-        [&]() { int4_dequant_gemv(packed, x.data(), y_int4.data()); },
-        y_int4,
-        options.warmup,
-        options.iters);
-    result.selected_ms = time_ms(
-        [&]() { selected_rows_gemv(w.data(), x.data(), rows.data(), y_selected.data(), active_rows, d); },
-        y_selected,
-        options.warmup,
-        options.iters);
-    result.selected_avx2_ms = time_ms(
-        [&]() { selected_rows_gemv_avx2(w.data(), x.data(), rows.data(), y_selected_avx2.data(), active_rows, d); },
-        y_selected_avx2,
-        options.warmup,
-        options.iters);
-    result.scalar_ms = time_ms(
-        [&]() { scalar_skill_bypass(x.data(), y_scalar.data(), d, 0.875f); },
-        y_scalar,
-        options.warmup,
-        options.iters);
-
-    result.dense_avx2_speedup = result.dense_ms / result.dense_avx2_ms;
-    result.int4_speedup = result.dense_ms / result.int4_ms;
-    result.selected_speedup = result.dense_ms / result.selected_ms;
-    result.selected_avx2_speedup = result.dense_ms / result.selected_avx2_ms;
-    result.scalar_speedup = result.dense_ms / result.scalar_ms;
+    result.dense_ms = time_ms([&]() { eigenskill::dense_gemv(matrix, x.data(), y_dense.data()); }, y_dense, options.warmup, options.iters);
+    result.dense_avx2_ms = time_ms([&]() { eigenskill::dense_gemv_avx2(matrix, x.data(), y_dense_avx2.data()); }, y_dense_avx2, options.warmup, options.iters);
+    result.int4_ms = time_ms([&]() { eigenskill::int4_dequant_gemv(packed_int4, x.data(), y_int4.data()); }, y_int4, options.warmup, options.iters);
+    result.int3_ms = time_ms([&]() { eigenskill::lowbit_dequant_gemv(packed_int3, x.data(), y_int3.data()); }, y_int3, options.warmup, options.iters);
+    result.selected_ms = time_ms([&]() { eigenskill::selected_rows_gemv(matrix, x.data(), rows.data(), active_rows, y_selected.data()); }, y_selected, options.warmup, options.iters);
+    result.selected_avx2_ms = time_ms([&]() { eigenskill::selected_rows_gemv_avx2(matrix, x.data(), rows.data(), active_rows, y_selected_avx2.data()); }, y_selected_avx2, options.warmup, options.iters);
+    result.scalar_ms = time_ms([&]() { eigenskill::scalar_skill_bypass(x.data(), y_scalar.data(), d, 0.875f); }, y_scalar, options.warmup, options.iters);
     return result;
 }
 
@@ -415,16 +195,19 @@ void print_header() {
               << std::setw(12) << "dense_ms"
               << std::setw(12) << "davx_ms"
               << std::setw(12) << "int4_ms"
+              << std::setw(12) << "int3_ms"
               << std::setw(12) << "sel_ms"
               << std::setw(12) << "selavx_ms"
               << std::setw(12) << "scalar_ms"
               << std::setw(12) << "davx_x"
               << std::setw(12) << "int4_x"
+              << std::setw(12) << "int3_x"
               << std::setw(12) << "sel_x"
               << std::setw(12) << "selavx_x"
               << std::setw(12) << "scalar_x"
               << std::setw(13) << "davx_err"
               << std::setw(13) << "int4_err"
+              << std::setw(13) << "int3_err"
               << std::setw(13) << "sel_err"
               << std::setw(13) << "selavx_err"
               << '\n';
@@ -436,41 +219,41 @@ void print_result(const Result& r) {
               << std::setw(12) << std::fixed << std::setprecision(6) << r.dense_ms
               << std::setw(12) << std::fixed << std::setprecision(6) << r.dense_avx2_ms
               << std::setw(12) << std::fixed << std::setprecision(6) << r.int4_ms
+              << std::setw(12) << std::fixed << std::setprecision(6) << r.int3_ms
               << std::setw(12) << std::fixed << std::setprecision(6) << r.selected_ms
               << std::setw(12) << std::fixed << std::setprecision(6) << r.selected_avx2_ms
               << std::setw(12) << std::fixed << std::setprecision(6) << r.scalar_ms
-              << std::setw(12) << std::fixed << std::setprecision(2) << r.dense_avx2_speedup
-              << std::setw(12) << std::fixed << std::setprecision(2) << r.int4_speedup
-              << std::setw(12) << std::fixed << std::setprecision(2) << r.selected_speedup
-              << std::setw(12) << std::fixed << std::setprecision(2) << r.selected_avx2_speedup
-              << std::setw(12) << std::fixed << std::setprecision(2) << r.scalar_speedup
+              << std::setw(12) << std::fixed << std::setprecision(2) << r.dense_ms / r.dense_avx2_ms
+              << std::setw(12) << std::fixed << std::setprecision(2) << r.dense_ms / r.int4_ms
+              << std::setw(12) << std::fixed << std::setprecision(2) << r.dense_ms / r.int3_ms
+              << std::setw(12) << std::fixed << std::setprecision(2) << r.dense_ms / r.selected_ms
+              << std::setw(12) << std::fixed << std::setprecision(2) << r.dense_ms / r.selected_avx2_ms
+              << std::setw(12) << std::fixed << std::setprecision(2) << r.dense_ms / r.scalar_ms
               << std::setw(13) << std::scientific << std::setprecision(3) << r.dense_avx2_rel_l2
               << std::setw(13) << std::scientific << std::setprecision(3) << r.int4_rel_l2
+              << std::setw(13) << std::scientific << std::setprecision(3) << r.int3_rel_l2
               << std::setw(13) << std::scientific << std::setprecision(3) << r.selected_rel_l2
               << std::setw(13) << std::scientific << std::setprecision(3) << r.selected_avx2_rel_l2
               << '\n';
 }
 
-}  // namespace eigenskill
+}  // namespace
 
 int main(int argc, char** argv) {
     try {
-        const eigenskill::Options options = eigenskill::parse_args(argc, argv);
+        const Options options = parse_args(argc, argv);
         std::cout << "EigenSkill-Q C++ quant kernel benchmark\n";
-        std::cout << "paths: scalar fp32 GEMV, AVX2 fp32 GEMV when available, packed int4 dequant GEMV, selected-row GEMV, scalar bypass\n";
-        std::cout << "avx2=" << (EIGENSKILL_HAS_AVX2 ? "enabled" : "disabled")
-                  << "\n";
-        std::cout << "iters=" << options.iters
-                  << " warmup=" << options.warmup
-                  << " seed=" << options.seed
-                  << "\n\n";
+        std::cout << "paths: fp32 GEMV, AVX2 fp32 GEMV when available, packed INT4/INT3 dequant GEMV, selected-row GEMV, scalar bypass\n";
+        std::cout << "avx2=" << (eigenskill::has_avx2() ? "enabled" : "disabled") << "\n";
+        std::cout << "iters=" << options.iters << " warmup=" << options.warmup << " seed=" << options.seed << "\n\n";
 
-        eigenskill::print_header();
+        print_header();
         for (int d : options.dims) {
             for (int rows : options.active_rows) {
-                if (rows > d) continue;
-                const eigenskill::Result result = eigenskill::benchmark_case(d, rows, options);
-                eigenskill::print_result(result);
+                if (rows > d) {
+                    continue;
+                }
+                print_result(benchmark_case(d, rows, options));
             }
         }
         return 0;

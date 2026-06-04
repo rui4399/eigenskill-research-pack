@@ -21,6 +21,7 @@ add_executable(eigenskill_bench src/eigenskill_bench.cpp)
 add_executable(quant_policy_bypass src/quant_policy_bypass.cpp)
 add_executable(quant_kernel_bench src/quant_kernel_bench.cpp)
 add_executable(quant_kernel_verify src/quant_kernel_verify.cpp)
+target_link_libraries(quant_kernel_bench PRIVATE eigenskill_quant_kernels)
 target_link_libraries(quant_kernel_verify PRIVATE eigenskill_quant_kernels)
 
 if(BUILD_TESTING)

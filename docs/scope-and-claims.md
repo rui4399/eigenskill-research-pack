@@ -43,6 +43,10 @@ These claims are supported by committed data, scripts, or reports:
   has severe train/eval overlap.
 - The C++ benchmark demonstrates a synthetic low-rank arithmetic best case
   where `W = U A U^T`.
+- The C++ quant-kernel API exposes FP32 dense GEMV, AVX2 dense GEMV,
+  selected-row GEMV, scalar bypass, and row-scaled signed low-bit
+  pack/dequant GEMV for INT3/INT4-style storage. Current low-bit CPU kernels
+  are correctness/structure baselines, not speedup evidence.
 - The fake weight-quantization scaffold has short-slice PPL evidence for
   SmolLM2-360M, Qwen2.5-0.5B, and a local Qwen2.5-1.5B checkpoint. These are
   quality diagnostics for allocation policies, not packed-runtime claims.

@@ -85,10 +85,12 @@ int main(int argc, char** argv) {
 
         eigenskill::MatrixView matrix{w.data(), options.dim, options.dim};
         eigenskill::PackedInt4Matrix int4 = eigenskill::pack_int4_per_row(w.data(), options.dim, options.dim);
+        eigenskill::PackedLowBitMatrix int3 = eigenskill::pack_lowbit_per_row(w.data(), options.dim, options.dim, 3);
 
         std::vector<float> dense(options.dim, 0.0f);
         std::vector<float> dense_avx2(options.dim, 0.0f);
         std::vector<float> int4_out(options.dim, 0.0f);
+        std::vector<float> int3_out(options.dim, 0.0f);
         std::vector<float> selected(options.active_rows, 0.0f);
         std::vector<float> selected_avx2(options.active_rows, 0.0f);
         std::vector<float> selected_ref(options.active_rows, 0.0f);
@@ -98,6 +100,7 @@ int main(int argc, char** argv) {
         eigenskill::dense_gemv(matrix, x.data(), dense.data());
         eigenskill::dense_gemv_avx2(matrix, x.data(), dense_avx2.data());
         eigenskill::int4_dequant_gemv(int4, x.data(), int4_out.data());
+        eigenskill::lowbit_dequant_gemv(int3, x.data(), int3_out.data());
         eigenskill::selected_rows_gemv(matrix, x.data(), rows.data(), options.active_rows, selected.data());
         eigenskill::selected_rows_gemv_avx2(matrix, x.data(), rows.data(), options.active_rows, selected_avx2.data());
         eigenskill::scalar_skill_bypass(x.data(), bypass.data(), options.dim, 0.875f);
@@ -112,14 +115,16 @@ int main(int argc, char** argv) {
         const double selected_err = eigenskill::rel_l2_error(selected.data(), selected_ref.data(), options.active_rows);
         const double selected_avx2_err = eigenskill::rel_l2_error(selected_avx2.data(), selected_ref.data(), options.active_rows);
         const double int4_err = eigenskill::rel_l2_error(int4_out.data(), dense.data(), options.dim);
+        const double int3_err = eigenskill::rel_l2_error(int3_out.data(), dense.data(), options.dim);
         const double bypass_err = eigenskill::rel_l2_error(bypass.data(), bypass_ref.data(), options.dim);
 
         const bool dense_avx2_ok = dense_avx2_err <= options.tolerance;
         const bool selected_ok = selected_err <= options.tolerance;
         const bool selected_avx2_ok = selected_avx2_err <= options.tolerance;
         const bool int4_ok = std::isfinite(int4_err);
+        const bool int3_ok = std::isfinite(int3_err);
         const bool bypass_ok = bypass_err <= options.tolerance;
-        const bool ok = dense_avx2_ok && selected_ok && selected_avx2_ok && int4_ok && bypass_ok;
+        const bool ok = dense_avx2_ok && selected_ok && selected_avx2_ok && int4_ok && int3_ok && bypass_ok;
 
         std::cout << std::scientific << std::setprecision(9);
         std::cout << "{\n";
@@ -135,6 +140,7 @@ int main(int argc, char** argv) {
         std::cout << "    \"selected_rel_l2\": " << selected_err << ",\n";
         std::cout << "    \"selected_avx2_rel_l2\": " << selected_avx2_err << ",\n";
         std::cout << "    \"int4_rel_l2\": " << int4_err << ",\n";
+        std::cout << "    \"int3_rel_l2\": " << int3_err << ",\n";
         std::cout << "    \"bypass_rel_l2\": " << bypass_err << "\n";
         std::cout << "  },\n";
         std::cout << "  \"checks\": {\n";
@@ -149,6 +155,9 @@ int main(int argc, char** argv) {
         std::cout << ",\n";
         std::cout << "    \"int4_finite\": ";
         print_bool(std::cout, int4_ok);
+        std::cout << ",\n";
+        std::cout << "    \"int3_finite\": ";
+        print_bool(std::cout, int3_ok);
         std::cout << ",\n";
         std::cout << "    \"bypass\": ";
         print_bool(std::cout, bypass_ok);

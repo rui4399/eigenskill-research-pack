@@ -622,12 +622,16 @@ outputs/eigenskill_cpp_benchmark.txt
 
 ### C++ quant-kernel microbenchmark
 
-The newest C++ artifact benchmarks four standalone kernel shapes:
+The newest C++ artifact benchmarks standalone kernel shapes through the reusable
+`eigenskill_quant_kernels` API:
 
 ```text
 fp32 dense GEMV
+AVX2 fp32 dense GEMV when available
 packed INT4 dequant GEMV with per-row scales
+packed INT3 dequant GEMV with per-row scales
 policy-selected output-row GEMV
+AVX2 policy-selected output-row GEMV when available
 scalar skill bypass, y = lambda x
 ```
 
@@ -655,6 +659,14 @@ positive systems signal is policy-selected row computation; the low-bit kernel
 needs AVX2/NEON/native low-bit dot-product work before it can support a speed
 claim.
 
+The reusable API now includes a generic signed low-bit bitstream path for
+2-to-7-bit row-scaled weights. The INT4 compatibility wrapper is implemented
+on top of that path, and `quant_kernel_verify` checks both INT4 and INT3 finite
+outputs. A WSL/g++ 11.4 smoke build on 2026-06-04 passed CTest and benchmarked
+INT3/INT4, confirming correctness and exposing the expected negative systems
+result: scalar bit-unpack low-bit GEMV is slower than AVX2 FP32 GEMV until a
+vectorized low-bit dot path is added.
+
 Evidence files:
 
 ```text
@@ -675,10 +687,11 @@ outputs/EigenSkill-Q-Cpp-Quant-Kernel-Benchmark-Report.md
 WSL/CMake smoke verification also builds all three C++ artifacts with g++ 11.4:
 
 ```bash
-cmake -S inference_cpp -B inference_cpp/build-wsl -DCMAKE_BUILD_TYPE=Release
-cmake --build inference_cpp/build-wsl -j
-./inference_cpp/build-wsl/quant_kernel_bench --dims 256 --active-rows 16,64 --iters 50
-./inference_cpp/build-wsl/quant_policy_bypass --data data_eval/eigenskill_quant_v1/eval.jsonl --limit 20
+cmake -S inference_cpp -B build/cpp-wsl -DCMAKE_BUILD_TYPE=Release
+cmake --build build/cpp-wsl -j2
+ctest --test-dir build/cpp-wsl --output-on-failure
+./build/cpp-wsl/quant_kernel_bench --dims 256,512 --active-rows 16,64 --iters 20 --warmup 5
+./build/cpp-wsl/quant_policy_bypass --data data_eval/eigenskill_quant_v1/eval.jsonl --limit 20
 ```
 
 ## Repository Layout

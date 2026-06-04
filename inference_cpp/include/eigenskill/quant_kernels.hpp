@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cstdint>
+#include <cstddef>
 #include <vector>
 
 namespace eigenskill {
@@ -14,6 +15,14 @@ struct MatrixView {
 struct PackedInt4Matrix {
     int rows = 0;
     int cols = 0;
+    std::vector<std::uint8_t> bytes;
+    std::vector<float> row_scales;
+};
+
+struct PackedLowBitMatrix {
+    int rows = 0;
+    int cols = 0;
+    int bits = 0;
     std::vector<std::uint8_t> bytes;
     std::vector<float> row_scales;
 };
@@ -34,6 +43,10 @@ void scalar_skill_bypass(const float* x, float* y, int n, float lambda);
 PackedInt4Matrix pack_int4_per_row(const float* w, int rows, int cols);
 std::int8_t unpack_signed_nibble(std::uint8_t byte, bool high);
 void int4_dequant_gemv(const PackedInt4Matrix& packed, const float* x, float* y);
+
+PackedLowBitMatrix pack_lowbit_per_row(const float* w, int rows, int cols, int bits);
+std::int8_t unpack_signed_bits(const std::uint8_t* bytes, std::size_t bit_offset, int bits);
+void lowbit_dequant_gemv(const PackedLowBitMatrix& packed, const float* x, float* y);
 
 double rel_l2_error(const float* lhs, const float* rhs, int n);
 
