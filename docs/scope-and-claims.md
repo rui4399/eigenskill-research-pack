@@ -82,8 +82,10 @@ These claims are supported by committed data, scripts, or reports:
   `4520/8151 MiB` (`55.45%`). The resulting C++ loss-sensitive allocation beats
   uniform INT4 (`24.80` vs `27.45` PPL) and C++ random budget (`24.80` vs
   `25.39`) on the 16-prompt WikiText2 slice, but the C++ category budget is
-  stronger on that slice (`23.84`). This should be reported as a mixed result,
-  not as allocator dominance.
+  stronger on that slice (`23.84`). The same allocation also beats uniform INT4
+  and random on a 64-prompt WikiText2 check (`27.66` vs `31.19` and `28.38`),
+  while category remains slightly stronger (`27.48`). This should be reported
+  as a mixed result, not as allocator dominance.
 - The GPU guard script can enforce a max-memory ratio before and during CUDA
   runs. A Qwen2.5-1.5B 16-prompt comparison completed at 56.85% peak GPU
   memory after the fake-quant evaluator was changed to in-place group-wise

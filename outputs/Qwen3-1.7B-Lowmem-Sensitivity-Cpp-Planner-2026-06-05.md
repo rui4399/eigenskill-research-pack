@@ -88,6 +88,32 @@ max utilization: 55%
 killed_by_guard: false
 ```
 
+## 64-Prompt External Check
+
+The same 2-prompt calibration allocation was evaluated on a larger WikiText2
+slice without recalibration:
+
+```text
+outputs/qwen3_1p7b_cpp_planner_budget_ppl_wikitext2_64_summary.json
+outputs/qwen3_1p7b_cpp_planner_budget_gpu_guard_wikitext2_64.json
+```
+
+| method | PPL | delta NLL vs FP16 | bit hist |
+|---|---:|---:|---|
+| FP16 | 21.6552 | 0.0000 | `{"16": 197}` |
+| uniform INT4 | 31.1885 | 0.3648 | `{"4": 197}` |
+| C++ loss-sensitive budget | 27.6578 | 0.2447 | `{"4": 153, "8": 44}` |
+| C++ random budget | 28.3799 | 0.2704 | `{"4": 163, "8": 34}` |
+| C++ category budget | 27.4838 | 0.2384 | `{"4": 130, "8": 67}` |
+
+GPU guard:
+
+```text
+peak: 4908 / 8151 MiB = 60.21%
+max utilization: 66%
+killed_by_guard: false
+```
+
 ## Interpretation
 
 The low-memory implementation is the main engineering improvement: it turns a
@@ -97,11 +123,11 @@ requested 85% GPU memory ceiling.
 The allocation result is mixed:
 
 - C++ loss-sensitive allocation improves over uniform INT4 and random budget
-  on this 1.7B/16-prompt slice.
-- C++ category budget is better than loss-sensitive on this slice despite
-  protecting less measured positive delta. This is a useful negative finding:
-  the current two-prompt loss sensitivity score is not yet a universally
-  dominant allocator.
+  on both the 16-prompt and 64-prompt WikiText2 slices.
+- C++ category budget is slightly better than loss-sensitive on both slices
+  despite protecting less measured positive delta. This is a useful negative
+  finding: the current two-prompt loss sensitivity score is not yet a
+  universally dominant allocator.
 
 This remains fake weight quantization and short-slice PPL evidence. It is not a
 packed low-bit runtime, latency result, board-level result, or SOTA

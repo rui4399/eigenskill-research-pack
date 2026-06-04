@@ -198,10 +198,22 @@ PPL on Qwen3-1.7B, WikiText2 16 prompts:
 | C++ random budget | 25.3903 | 0.2917 | `{"4": 163, "8": 34}` |
 | C++ category budget | 23.8397 | 0.2287 | `{"4": 130, "8": 67}` |
 
+External check on WikiText2 64 prompts using the same 2-prompt calibration
+allocation:
+
+| method | PPL | delta NLL vs FP16 | bit hist |
+|---|---:|---:|---|
+| FP16 | 21.6552 | 0.0000 | `{"16": 197}` |
+| uniform INT4 | 31.1885 | 0.3648 | `{"4": 197}` |
+| C++ loss-sensitive | 27.6578 | 0.2447 | `{"4": 153, "8": 44}` |
+| C++ random budget | 28.3799 | 0.2704 | `{"4": 163, "8": 34}` |
+| C++ category budget | 27.4838 | 0.2384 | `{"4": 130, "8": 67}` |
+
 This is a mixed result. The loss-sensitive allocator improves over uniform
 INT4 and random budget, but the structural category budget is stronger on this
-1.7B 16-prompt slice. The current sensitivity score is therefore useful but
-not yet a dominant allocation rule.
+1.7B 16-prompt slice and remains slightly stronger on the 64-prompt external
+check. The current sensitivity score is therefore useful but not yet a dominant
+allocation rule.
 
 Disk note: after the current run, `/mnt/c` had about `36G` free. Avoid
 downloading larger model families on this disk without cleanup or relocation.
