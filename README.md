@@ -642,7 +642,9 @@ train_python/summarize_ppl_results.py
 train_python/summarize_sensitivity.py
 train_python/search_allocation_swaps.py
 inference_cpp/src/quant_allocation_planner.cpp
+inference_cpp/src/quant_result_summarizer.cpp
 inference_cpp/testdata/allocation_fixture.csv
+inference_cpp/testdata/ppl_summary_fixture.json
 data_eval/eval_configs/qwen25_1p5b_cpp_planner_budget_compare.json
 data_eval/eval_configs/smollm2_group128_compare_allocations.json
 data_eval/text_prompts/wikitext2_validation_32.txt
@@ -719,6 +721,10 @@ outputs/olmo2_0425_1b_cpp_random8_ppl_wikitext2_64_summary.json
 outputs/olmo2_0425_1b_cpp_random8_gpu_guard_wikitext2_64.json
 outputs/olmo2_0425_1b_cpp_random8_ppl_c4_64_summary.json
 outputs/olmo2_0425_1b_cpp_random8_gpu_guard_c4_64.json
+outputs/olmo2_0425_1b_cpp_random8_wikitext2_64_summary.md
+outputs/olmo2_0425_1b_cpp_random8_wikitext2_64_summary.csv
+outputs/olmo2_0425_1b_cpp_random8_c4_64_summary.md
+outputs/olmo2_0425_1b_cpp_random8_c4_64_summary.csv
 outputs/OLMo2-0425-1B-Cpp-Planner-2026-06-05.md
 outputs/smollm2_module_loss_sensitivity_limit4_group128.json
 outputs/smollm2_module_loss_sensitivity_limit4_group128_report.md

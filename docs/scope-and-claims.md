@@ -63,6 +63,10 @@ These claims are supported by committed data, scripts, or reports:
   budget allocations. On the Qwen2.5-1.5B 16-prompt WikiText2 slice, the C++
   loss-sensitive allocation reaches PPL `13.14`, versus `13.75` for C++ random,
   `14.28` for C++ category, and `15.04` for uniform INT4.
+- A standalone C++ result summarizer now reads evaluator PPL JSON and emits
+  Markdown/CSV rankings with random-budget min/mean/max and target-vs-random
+  margins. This reduces Python glue in the evidence-reporting path; model
+  loading and fake-quant evaluation are still Python/PyTorch.
 - A newer-model Qwen3-0.6B fake-quant run completed under the GPU guard. On
   the same 16-prompt WikiText2 slice, FP16 PPL is `27.82`, uniform INT4 is
   `44.57`, C++ loss-sensitive budget allocation is `34.84`, C++ random budget

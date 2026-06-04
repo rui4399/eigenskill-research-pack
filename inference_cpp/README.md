@@ -45,6 +45,7 @@ inference_cpp/build-wsl/quant_policy_bypass
 inference_cpp/build-wsl/quant_kernel_bench
 inference_cpp/build-wsl/quant_kernel_verify
 inference_cpp/build-wsl/quant_allocation_planner
+inference_cpp/build-wsl/quant_result_summarizer
 ```
 
 `quant_allocation_planner` is wired into the Qwen3-1.7B fake-quant evidence
@@ -80,6 +81,20 @@ Example:
   --random-repeats 8 \
   --emit json \
   > outputs/olmo2_0425_1b_cpp_allocation_planner_random8_4p5_summary.json
+```
+
+`quant_result_summarizer` reads evaluator PPL summary JSON and emits a compact
+Markdown or CSV ranking, including random-budget min/mean/max and the target
+allocation margin versus the best random seed. This keeps the evidence-table
+generation path available in C++:
+
+```bash
+./inference_cpp/build-wsl/quant_result_summarizer \
+  --input outputs/olmo2_0425_1b_cpp_random8_ppl_wikitext2_64_summary.json \
+  --dataset olmo2-wikitext2-64 \
+  --target cpp_loss_sensitive_budget \
+  --emit markdown \
+  > outputs/olmo2_0425_1b_cpp_random8_wikitext2_64_summary.md
 ```
 
 ## Run
