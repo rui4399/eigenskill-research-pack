@@ -721,6 +721,25 @@ because the unauthenticated Hugging Face download stalled around a partial
 outputs/qwen25_1p5b_smoke_attempt_2026-06-04.md
 ```
 
+The repository now includes a cache-audited predownload helper:
+
+```bash
+python3 train_python/predownload_hf_model.py \
+  --model Qwen/Qwen2.5-1.5B-Instruct \
+  --out-json outputs/qwen25_1p5b_predownload_summary.json \
+  --out-md outputs/qwen25_1p5b_predownload_report.md
+```
+
+It reports `.incomplete` cache blobs as `incomplete_cache`, even if
+`snapshot_download` returns a local snapshot path. Current evidence shows
+`Qwen2.5-0.5B-Instruct` is complete locally, while
+`Qwen2.5-1.5B-Instruct` is still blocked by incomplete download:
+
+```text
+outputs/qwen25_0p5b_cache_audit_report.md
+outputs/qwen25_1p5b_download_blocker_report.md
+```
+
 Commands:
 
 ```bash
