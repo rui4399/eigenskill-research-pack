@@ -523,6 +523,7 @@ C++ loss-sensitive {4,8}     PPL 24.80  avg bits 4.4973
 C++ random budget {4,8}      PPL 25.39  avg bits 4.4973
 C++ category budget {4,8}    PPL 23.84  avg bits 4.4827
 C++ hybrid budget {4,8}      PPL 23.98  avg bits 4.4925
+C++ blend sweep best {4,8}   PPL 23.52  avg bits 4.4827
 
 Qwen3-1.7B, WikiText2 64 prompts, same 2-prompt calibration allocation:
 
@@ -532,6 +533,7 @@ C++ loss-sensitive {4,8}     PPL 27.66  avg bits 4.4973
 C++ random budget {4,8}      PPL 28.38  avg bits 4.4973
 C++ category budget {4,8}    PPL 27.48  avg bits 4.4827
 C++ hybrid budget {4,8}      PPL 27.68  avg bits 4.4925
+C++ blend sweep best {4,8}   PPL 27.48  avg bits 4.4827
 ```
 
 This is still a small sanity slice, but it addresses a concrete reviewer
@@ -553,8 +555,14 @@ check using the same 2-prompt allocation, where category is still slightly
 better than loss-sensitive. A first C++ hybrid score that blends normalized
 loss sensitivity with the structural category prior improves over uniform and
 random but still does not beat category on Qwen3-1.7B; it is kept as an
-ablation, not a new best result. This remains a short-slice fake-quant
-diagnostic, not a production quantizer or SOTA claim.
+ablation, not a new best result. A C++ blend sweep over sensitivity/category
+weights does find a slightly stronger low-sensitivity blend: on Qwen3-1.7B it
+improves the 16-prompt slice from category `23.84` to `23.52` PPL and the
+64-prompt check from `27.4838` to `27.4756` PPL at the same average-bit budget.
+This is the current best in-repo Qwen3-1.7B fake-quant allocation, but the
+64-prompt gain is small and still needs broader datasets/models before any
+external best-in-field claim. This remains a short-slice fake-quant diagnostic,
+not a production quantizer or SOTA claim.
 
 Evidence files:
 
@@ -616,6 +624,13 @@ outputs/qwen3_1p7b_cpp_hybrid_budget_ppl_wikitext2_16_summary.json
 outputs/qwen3_1p7b_cpp_hybrid_budget_gpu_guard_wikitext2_16.json
 outputs/qwen3_1p7b_cpp_hybrid_budget_ppl_wikitext2_64_summary.json
 outputs/qwen3_1p7b_cpp_hybrid_budget_gpu_guard_wikitext2_64.json
+outputs/qwen3_1p7b_cpp_allocation_planner_blend_sweep_4p5_summary.json
+data_eval/eval_configs/qwen3_1p7b_cpp_blend_sweep_candidates.json
+data_eval/eval_configs/qwen3_1p7b_cpp_blend_winners.json
+outputs/qwen3_1p7b_cpp_blend_sweep_ppl_wikitext2_16_summary.json
+outputs/qwen3_1p7b_cpp_blend_sweep_gpu_guard_wikitext2_16.json
+outputs/qwen3_1p7b_cpp_blend_winners_ppl_wikitext2_64_summary.json
+outputs/qwen3_1p7b_cpp_blend_winners_gpu_guard_wikitext2_64.json
 outputs/Qwen3-1.7B-Lowmem-Sensitivity-Cpp-Planner-2026-06-05.md
 outputs/smollm2_module_loss_sensitivity_limit4_group128.json
 outputs/smollm2_module_loss_sensitivity_limit4_group128_report.md

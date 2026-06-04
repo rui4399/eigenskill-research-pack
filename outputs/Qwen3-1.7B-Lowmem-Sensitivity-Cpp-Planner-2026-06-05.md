@@ -80,6 +80,7 @@ outputs/qwen3_1p7b_cpp_planner_budget_gpu_guard_wikitext2_16.json
 | C++ random budget | 25.3903 | 0.2917 | `{"4": 163, "8": 34}` |
 | C++ category budget | 23.8397 | 0.2287 | `{"4": 130, "8": 67}` |
 | C++ hybrid budget | 23.9797 | 0.2345 | `{"4": 133, "8": 64}` |
+| C++ blend sweep best | 23.5233 | 0.2153 | `{"4": 130, "8": 67}` |
 
 GPU guard:
 
@@ -107,6 +108,7 @@ outputs/qwen3_1p7b_cpp_planner_budget_gpu_guard_wikitext2_64.json
 | C++ random budget | 28.3799 | 0.2704 | `{"4": 163, "8": 34}` |
 | C++ category budget | 27.4838 | 0.2384 | `{"4": 130, "8": 67}` |
 | C++ hybrid budget | 27.6761 | 0.2453 | `{"4": 133, "8": 64}` |
+| C++ blend sweep best | 27.4756 | 0.2381 | `{"4": 130, "8": 67}` |
 
 GPU guard:
 
@@ -134,6 +136,12 @@ The allocation result is mixed:
   category prior, also fails to beat category on both slices. It is retained as
   an ablation and a prompt for better allocator design, not as a headline
   improvement.
+- A small C++ blend sweep over sensitivity/category weights finds a better
+  low-sensitivity blend. `blend_sensitivity_05` and `blend_sensitivity_45`
+  share the same bit histogram as category but change the selected modules:
+  16-prompt PPL improves from `23.8397` to `23.5233`, and 64-prompt PPL
+  improves from `27.4838` to `27.4756`. The 64-prompt gain is small, but this
+  is the current best in-repo Qwen3-1.7B fake-quant allocation.
 
 This remains fake weight quantization and short-slice PPL evidence. It is not a
 packed low-bit runtime, latency result, board-level result, or SOTA

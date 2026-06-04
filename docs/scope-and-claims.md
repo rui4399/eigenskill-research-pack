@@ -92,6 +92,14 @@ These claims are supported by committed data, scripts, or reports:
   category baseline on either 16-prompt (`23.98` vs `23.84`) or 64-prompt
   (`27.68` vs `27.48`) WikiText2 checks. Treat it as an ablation, not a new
   best allocator.
+- The C++ planner now also emits a small sensitivity/category blend sweep.
+  On Qwen3-1.7B, the low-sensitivity blend candidates
+  `blend_sensitivity_05` and `blend_sensitivity_45` improve over
+  `category_budget` on both the 16-prompt (`23.52` vs `23.84` PPL) and
+  64-prompt (`27.4756` vs `27.4838` PPL) WikiText2 checks at the same
+  average-bit budget. This is the current best in-repository Qwen3-1.7B
+  fake-quant allocation, but the 64-prompt gain is small and should not be
+  advertised as field-leading without broader baselines.
 - The GPU guard script can enforce a max-memory ratio before and during CUDA
   runs. A Qwen2.5-1.5B 16-prompt comparison completed at 56.85% peak GPU
   memory after the fake-quant evaluator was changed to in-place group-wise

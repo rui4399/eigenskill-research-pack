@@ -198,6 +198,7 @@ PPL on Qwen3-1.7B, WikiText2 16 prompts:
 | C++ random budget | 25.3903 | 0.2917 | `{"4": 163, "8": 34}` |
 | C++ category budget | 23.8397 | 0.2287 | `{"4": 130, "8": 67}` |
 | C++ hybrid budget | 23.9797 | 0.2345 | `{"4": 133, "8": 64}` |
+| C++ blend sweep best | 23.5233 | 0.2153 | `{"4": 130, "8": 67}` |
 
 External check on WikiText2 64 prompts using the same 2-prompt calibration
 allocation:
@@ -210,6 +211,7 @@ allocation:
 | C++ random budget | 28.3799 | 0.2704 | `{"4": 163, "8": 34}` |
 | C++ category budget | 27.4838 | 0.2384 | `{"4": 130, "8": 67}` |
 | C++ hybrid budget | 27.6761 | 0.2453 | `{"4": 133, "8": 64}` |
+| C++ blend sweep best | 27.4756 | 0.2381 | `{"4": 130, "8": 67}` |
 
 This is a mixed result. The loss-sensitive allocator improves over uniform
 INT4 and random budget, but the structural category budget is stronger on this
@@ -221,6 +223,12 @@ An initial C++ hybrid ordering that blends normalized loss sensitivity with the
 category prior was tested in the same evaluator. It improves over uniform INT4
 and random, but it still does not beat category on either slice, so it should be
 treated as an ablation rather than an improved allocator.
+
+The follow-up C++ blend sweep is stronger: low-sensitivity blends
+`blend_sensitivity_05` and `blend_sensitivity_45` improve over category on the
+16-prompt slice and remain slightly better on the 64-prompt check. The result
+is encouraging but narrow; report it as the current in-repo best allocation,
+not as a field-leading quantizer.
 
 Disk note: after the current run, `/mnt/c` had about `36G` free. Avoid
 downloading larger model families on this disk without cleanup or relocation.

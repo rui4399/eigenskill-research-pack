@@ -58,6 +58,12 @@ ordering that blends normalized loss-per-cost sensitivity with the structural
 category prior; current Qwen3-1.7B evidence keeps it as an ablation because it
 does not beat `category_budget`.
 
+The same planner now emits a small `blend_sensitivity_XX` sweep. On the
+Qwen3-1.7B WikiText2 slices, `blend_sensitivity_05` and
+`blend_sensitivity_45` are the current best in-repo allocations: they improve
+over `category_budget` on the 16-prompt slice and remain slightly better on
+the 64-prompt check at the same average-bit budget.
+
 ## Run
 
 ```powershell

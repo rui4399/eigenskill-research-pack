@@ -1,5 +1,6 @@
 #include <algorithm>
 #include <cctype>
+#include <cmath>
 #include <cstdint>
 #include <fstream>
 #include <iomanip>
@@ -473,7 +474,14 @@ std::vector<int> category_order(const std::vector<Group>& groups) {
     return order;
 }
 
-std::vector<int> hybrid_order(const std::vector<Group>& groups, const Options& options) {
+std::string blend_name(double sensitivity_weight) {
+    const int pct = static_cast<int>(std::round(sensitivity_weight * 100.0));
+    std::ostringstream name;
+    name << "blend_sensitivity_" << std::setw(2) << std::setfill('0') << pct;
+    return name.str();
+}
+
+std::vector<int> hybrid_order(const std::vector<Group>& groups, const Options& options, double sensitivity_weight) {
     std::vector<double> sensitivity_scores(groups.size(), 0.0);
     std::vector<double> category_scores(groups.size(), 0.0);
     double max_sensitivity = 0.0;
@@ -502,8 +510,9 @@ std::vector<int> hybrid_order(const std::vector<Group>& groups, const Options& o
         const double rhs_sensitivity = sensitivity_scores[ri] / std::max(max_sensitivity, 1.0e-12);
         const double lhs_category = (category_scores[li] - min_category) / category_range;
         const double rhs_category = (category_scores[ri] - min_category) / category_range;
-        const double lhs_score = 0.65 * lhs_sensitivity + 0.35 * lhs_category;
-        const double rhs_score = 0.65 * rhs_sensitivity + 0.35 * rhs_category;
+        const double category_weight = 1.0 - sensitivity_weight;
+        const double lhs_score = sensitivity_weight * lhs_sensitivity + category_weight * lhs_category;
+        const double rhs_score = sensitivity_weight * rhs_sensitivity + category_weight * rhs_category;
         if (lhs_score != rhs_score) return lhs_score > rhs_score;
         if (groups[li].positive_delta_nll != groups[ri].positive_delta_nll) {
             return groups[li].positive_delta_nll > groups[ri].positive_delta_nll;
@@ -701,7 +710,14 @@ int main(int argc, char** argv) {
             "hybrid_budget",
             groups,
             options,
-            allocate_budgeted(groups, options, hybrid_order(groups, options))));
+            allocate_budgeted(groups, options, hybrid_order(groups, options, 0.65))));
+        for (double weight : {0.05, 0.15, 0.25, 0.35, 0.45, 0.55, 0.65, 0.75, 0.85, 0.95}) {
+            summaries.push_back(summarize(
+                blend_name(weight),
+                groups,
+                options,
+                allocate_budgeted(groups, options, hybrid_order(groups, options, weight))));
+        }
 
         if (options.emit == "json") {
             print_json(groups, options, summaries);
