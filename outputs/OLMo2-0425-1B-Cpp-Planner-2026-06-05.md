@@ -98,6 +98,33 @@ peak memory: 4430/8151 MiB = 54.35%
 peak utilization: 82%
 ```
 
+## C4 64-Prompt Check
+
+The same winner/control config was also evaluated on the committed C4 English
+validation slice:
+
+```text
+FP16                         PPL 32.2736
+uniform INT4                 PPL 36.8334
+C++ category budget {4,8}    PPL 36.0493
+C++ random budget {4,8}      PPL 35.8512
+C++ blend_sensitivity_85     PPL 35.8817
+C++ loss-sensitive {4,8}     PPL 35.8428
+```
+
+This is useful but not decisive cross-dataset evidence. The loss-sensitive
+budget still improves over uniform INT4 and category, but it is nearly tied
+with the single random seed (`35.8428` vs `35.8512` PPL). Report this as weak
+cross-dataset support and add more random seeds/calibration splits before
+making a stronger stability claim.
+
+GPU guard:
+
+```text
+peak memory: 4438/8151 MiB = 54.45%
+peak utilization: 78%
+```
+
 ## Interpretation
 
 This is stronger than the earlier OLMo2 uniform smoke because it exercises the
@@ -126,4 +153,6 @@ outputs/olmo2_0425_1b_cpp_blend_sweep_ppl_wikitext2_16_summary.json
 outputs/olmo2_0425_1b_cpp_blend_sweep_gpu_guard_wikitext2_16.json
 outputs/olmo2_0425_1b_cpp_blend_winners_ppl_wikitext2_64_summary.json
 outputs/olmo2_0425_1b_cpp_blend_winners_gpu_guard_wikitext2_64.json
+outputs/olmo2_0425_1b_cpp_blend_winners_ppl_c4_64_summary.json
+outputs/olmo2_0425_1b_cpp_blend_winners_gpu_guard_c4_64.json
 ```

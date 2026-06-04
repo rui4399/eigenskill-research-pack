@@ -109,8 +109,11 @@ These claims are supported by committed data, scripts, or reports:
   16-prompt and 64-prompt WikiText2 checks. The best 16-prompt tested blend is
   `blend_sensitivity_85` (`18.76` PPL), while the 64-prompt check is slightly
   better with `loss_sensitive_budget` (`21.12` PPL) than `blend_sensitivity_85`
-  (`21.13` PPL). Treat this as a second model-family short-slice allocator
-  signal, not as a production quantizer or broad benchmark.
+  (`21.13` PPL). A C4-64 check with the same allocation improves over uniform
+  INT4 (`35.84` vs `36.83`) and category (`35.84` vs `36.05`), but is nearly
+  tied with random budget (`35.84` vs `35.85`). Treat this as a second
+  model-family short-slice allocator signal with weak cross-dataset support,
+  not as a production quantizer or broad benchmark.
 - A `google/gemma-3-1b-it` candidate was attempted but blocked by gated
   Hugging Face access in this environment. Report it only as an access
   blocker, not as a failed quantization result or quality datapoint.
