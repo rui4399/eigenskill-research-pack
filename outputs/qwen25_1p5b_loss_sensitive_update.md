@@ -44,11 +44,24 @@ WikiText2 validation slice, 16 prompts:
 Compared with uniform INT4, the 2-prompt loss-sensitive allocation reduces PPL
 from `15.8383` to `13.7652` on the same 16-prompt slice.
 
+C4 English validation slice, 32 prompts:
+
+| config | PPL | delta NLL vs FP16 | ratio vs FP16 | bit hist |
+|---|---:|---:|---:|---|
+| FP16 | 17.8832 | 0.000000 | 1.0000 | `{"16": 197}` |
+| uniform INT4 | 23.5711 | 0.276159 | 1.3181 | `{"4": 197}` |
+| uniform INT3 | 289.1918 | 2.783229 | 16.1700 | `{"3": 197}` |
+| loss-sensitive `{4,8}`, 2p | 22.8859 | 0.246660 | 1.2797 | `{"4": 137, "8": 60}` |
+
+The same allocation also improves the C4 smoke slice, but the gain is smaller:
+PPL drops from `23.5711` to `22.8859`.
+
 ## Scope
 
 This is still fake weight quantization, not a packed low-bit runtime. It is a
 stronger-model quality diagnostic that shows the measured allocation signal is
-useful on Qwen2.5-1.5B under a small calibration budget.
+useful on Qwen2.5-1.5B under a small calibration budget across two short text
+slices.
 
 Evidence files:
 
@@ -58,5 +71,7 @@ outputs/qwen25_1p5b_module_loss_sensitivity_limit2_group128.json
 outputs/qwen25_1p5b_module_loss_sensitivity_limit2_group128_report.md
 outputs/qwen25_1p5b_loss_sensitive_alloc_4to8_limit2_group128_summary.json
 outputs/qwen25_1p5b_fake_quant_ppl_loss_sensitive_group128_wikitext2_16_summary.json
+outputs/qwen25_1p5b_fake_quant_ppl_loss_sensitive_group128_c4_en_validation_32_summary.json
 outputs/qwen25_1p5b_loss_sensitive_ppl_table.md
+outputs/qwen25_1p5b_loss_sensitive_two_dataset_ppl_table.md
 ```

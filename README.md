@@ -409,6 +409,12 @@ uniform INT4                 PPL 15.84
 uniform INT3                 PPL 381.73
 loss-sensitive {4,8}, 2p     PPL 13.77
 
+C4 English validation slice, 32 prompts:
+FP16                         PPL 17.88
+uniform INT4                 PPL 23.57
+uniform INT3                 PPL 289.19
+loss-sensitive {4,8}, 2p     PPL 22.89
+
 Local model path             C:\Users\18042\models\Qwen2.5-1.5B-Instruct
 model.safetensors bytes      3,087,467,144
 model.safetensors sha256     DD924A11B4C220F385B51FFA522DAEA7C9F3D850E31B162BB5661DF483C6D3EE
@@ -483,7 +489,9 @@ outputs/qwen25_1p5b_loss_sensitive_update.md
 outputs/qwen25_1p5b_module_loss_sensitivity_limit2_group128.json
 outputs/qwen25_1p5b_loss_sensitive_alloc_4to8_limit2_group128_summary.json
 outputs/qwen25_1p5b_fake_quant_ppl_loss_sensitive_group128_wikitext2_16_summary.json
+outputs/qwen25_1p5b_fake_quant_ppl_loss_sensitive_group128_c4_en_validation_32_summary.json
 outputs/qwen25_1p5b_loss_sensitive_ppl_table.md
+outputs/qwen25_1p5b_loss_sensitive_two_dataset_ppl_table.md
 outputs/qwen25_0p5b_loss_sensitive_consensus_alloc_4to8_group128_report.md
 outputs/qwen25_0p5b_fake_quant_ppl_uniform_group128_wikitext2_128_summary.json
 outputs/qwen25_0p5b_fake_quant_ppl_uniform_group128_c4_en_validation_64_summary.json
