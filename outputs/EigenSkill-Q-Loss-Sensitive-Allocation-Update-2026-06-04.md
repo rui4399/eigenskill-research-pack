@@ -134,6 +134,26 @@ sensitivity 是好的局部特征，但真实目标需要 interaction-aware poli
 improvement。后续可以自然扩展到 pairwise interaction、learned reward model
 和 constrained contextual bandit。
 
+我还补了第二个公开文本源：C4 English validation 的 64 条 streamed prompt。
+这次没有下载完整 C4，而是给 `build_dataset_prompts.py` 加了 `--streaming`
+参数，只扫描前 66 行就构建出 64 条 prompt。
+
+C4 validation 64 prompts：
+
+| method | PPL | delta NLL vs FP16 | bit histogram |
+|---|---:|---:|---|
+| FP16 | 23.78 | 0.0000 | 16:225 |
+| uniform INT4 | 36.94 | 0.4403 | 4:225 |
+| uniform INT3 | 2990.80 | 4.8344 | 3:225 |
+| activation-stat RD 4/8 | 33.69 | 0.3484 | 4:172, 8:53 |
+| loss-sensitive 4/8 | 32.77 | 0.3205 | 4:172, 8:53 |
+| loss-sensitive exact knapsack 4/8 | 32.87 | 0.3235 | 4:175, 8:50 |
+| loss-sensitive swap-search 4/8 | 32.57 | 0.3146 | 4:172, 8:53 |
+
+这说明 WikiText2 上的趋势不是孤例：在 C4 上，measured loss sensitivity
+仍优于 uniform INT4 和 activation-stat RD，swap-search 仍是当前最好的一组
+fake-quant allocation。
+
 ## 对论文主线的意义
 
 此前 activation-stat sensitivity proxy 在 group-wise quantization 下输给
@@ -189,6 +209,7 @@ data_eval/text_prompts/wikitext2_validation_32.txt
 data_eval/text_prompts/wikitext2_validation_128.txt
 train_python/build_loss_sensitive_knapsack_alloc.py
 train_python/search_allocation_swaps.py
+data_eval/text_prompts/c4_en_validation_64.txt
 outputs/smollm2_fake_quant_ppl_loss_sensitive_4to8_group128_wikitext2_32_summary.json
 outputs/smollm2_fake_quant_ppl_activation_rd_4to8_group128_wikitext2_32_summary.json
 outputs/smollm2_fake_quant_ppl_compare_allocations_group128_wikitext2_128_summary.json
@@ -197,5 +218,7 @@ outputs/smollm2_allocation_swap_search_group128_wikitext2_128_summary.json
 outputs/smollm2_allocation_swap_search_group128_wikitext2_128_report.md
 outputs/smollm2_loss_sensitive_swap_search_alloc_4to8_group128_summary.json
 outputs/smollm2_fake_quant_ppl_compare_allocations_swap_group128_wikitext2_128_summary.json
+outputs/smollm2_fake_quant_ppl_c4_validation_64_report.md
+outputs/smollm2_fake_quant_ppl_compare_allocations_swap_group128_c4_en_validation_64_summary.json
 outputs/smollm2_fake_quant_ppl_report.md
 ```

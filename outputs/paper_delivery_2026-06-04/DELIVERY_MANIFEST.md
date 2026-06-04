@@ -30,10 +30,13 @@ notion_ready/EigenSkill-Q_Notion_Page.pdf
 ../eigenskill_quant_v1_eval_hybrid_policy_summary.json
 ../eigenskill_quant_v1_test_hybrid_policy_summary.json
 ../smollm2_fake_quant_ppl_report.md
+../smollm2_fake_quant_ppl_c4_validation_64_report.md
 ../smollm2_allocation_swap_search_group128_wikitext2_128_report.md
 ../smollm2_allocation_swap_search_group128_wikitext2_128_summary.json
 ../smollm2_fake_quant_ppl_compare_allocations_swap_group128_wikitext2_128_summary.json
+../smollm2_fake_quant_ppl_compare_allocations_swap_group128_c4_en_validation_64_summary.json
 ../../data_eval/eigenskill_quant_v1/audit.json
+../../data_eval/text_prompts/c4_en_validation_64.txt
 ```
 
 ## Current Verified Metrics
@@ -63,6 +66,17 @@ activation-stat RD 4/8            PPL 24.5117
 loss-sensitive greedy 4/8         PPL 24.1374
 loss-sensitive exact knapsack 4/8 PPL 24.3565
 loss-sensitive swap-search 4/8    PPL 24.0661
+```
+
+SmolLM2-360M group-wise fake-quant, C4 English validation 64 streamed prompts:
+
+```text
+FP16                              PPL 23.7821
+uniform INT4                      PPL 36.9390
+activation-stat RD 4/8            PPL 33.6940
+loss-sensitive greedy 4/8         PPL 32.7675
+loss-sensitive exact knapsack 4/8 PPL 32.8657
+loss-sensitive swap-search 4/8    PPL 32.5731
 ```
 
 ## Claim Boundary

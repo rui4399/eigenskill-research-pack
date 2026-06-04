@@ -35,7 +35,9 @@ PPL improves from `272.18` under uniform INT4 to `212.69` under loss-sensitive
 from `30.26` to `25.92` on 32 prompts and from `27.82` to `24.14` on 128 prompts,
 slightly outperforming the activation-statistic RD allocation in both cases.
 An additional one-step interaction-aware swap search further improves
-WikiText2-128 PPL from `24.14` to `24.07`. These results do not claim production
+WikiText2-128 PPL from `24.14` to `24.07`. On a streamed C4 validation slice,
+the same ordering holds, with PPL improving from uniform INT4 `36.94` to
+loss-sensitive `32.77` and swap-search `32.57`. These results do not claim production
 quantization superiority; they establish a measurable direction for learning-
 and optimization-guided policy control.
 
@@ -371,6 +373,21 @@ the greedy allocation. The best candidate demotes
 to `24.0661` while keeping the same `4-bit=172, 8-bit=53` histogram. The gain is
 small, but it directly supports the interaction-aware formulation above.
 
+C4 validation, 64 streamed prompts:
+
+| method | PPL | delta NLL vs FP16 | bit histogram |
+|---|---:|---:|---|
+| FP16 | 23.78 | 0.0000 | 16:225 |
+| uniform INT4 | 36.94 | 0.4403 | 4:225 |
+| uniform INT3 | 2990.80 | 4.8344 | 3:225 |
+| activation-stat RD 4/8 | 33.69 | 0.3484 | 4:172, 8:53 |
+| loss-sensitive 4/8 | 32.77 | 0.3205 | 4:172, 8:53 |
+| loss-sensitive exact knapsack 4/8 | 32.87 | 0.3235 | 4:175, 8:50 |
+| loss-sensitive swap-search 4/8 | 32.57 | 0.3146 | 4:172, 8:53 |
+
+This second public-text source reproduces the WikiText2 ordering and reduces the
+risk that the positive trend is an artifact of one validation slice.
+
 ## 7. Limitations
 
 This draft is not yet a CCF-A submission. The current limitations are explicit:
@@ -379,6 +396,7 @@ This draft is not yet a CCF-A submission. The current limitations are explicit:
 - memory and latency reductions are not proven;
 - no GPTQ/AWQ/SmoothQuant/QuaRot/SpinQuant baselines are included yet;
 - WikiText2 slices are still small;
+- C4 validation is currently only a 64-prompt streamed slice;
 - the learned contextual bandit/RL component is formulated but not trained;
 - the interaction-aware policy improvement is only a bounded one-step search;
 - edge-board and NPU measurements remain future work;
@@ -386,7 +404,7 @@ This draft is not yet a CCF-A submission. The current limitations are explicit:
 
 ## 8. Next Experiments Required For A Serious Submission
 
-1. Evaluate on WikiText2/C4 with standard token-level PPL protocol.
+1. Evaluate on larger WikiText2/C4 slices with standard token-level PPL protocol.
 2. Add RTN, GPTQ, AWQ, SmoothQuant, QuaRot/SpinQuant baselines.
 3. Compare sensitivity estimators:
    - one-module measured loss delta;
@@ -429,6 +447,8 @@ inference_cpp/src/quant_policy_bypass.cpp
 outputs/smollm2_module_loss_sensitivity_limit4_group128.json
 outputs/smollm2_fake_quant_ppl_compare_allocations_swap_group128_wikitext2_128_summary.json
 outputs/smollm2_allocation_swap_search_group128_wikitext2_128_summary.json
+outputs/smollm2_fake_quant_ppl_compare_allocations_swap_group128_c4_en_validation_64_summary.json
+outputs/smollm2_fake_quant_ppl_c4_validation_64_report.md
 outputs/smollm2_fake_quant_ppl_report.md
 outputs/EigenSkill-Q-Loss-Sensitive-Allocation-Update-2026-06-04.md
 ```

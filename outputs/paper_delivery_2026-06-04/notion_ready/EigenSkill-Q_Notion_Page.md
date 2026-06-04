@@ -165,14 +165,36 @@ knapsack 和 swap-search 一起说明全局 PPL 中存在模块交互项，后�
 interaction-aware allocation、pairwise surrogate、learned reward model 和
 constrained contextual bandit/RL。
 
+## 2026-06-04 追加：C4 validation 小切片
+
+新增 `build_dataset_prompts.py --streaming`，避免 C4 validation 全量下载 1024
+个 shard。当前只用 streaming 扫描 66 行，构建 64 条 C4 English validation
+prompts。
+
+| method | PPL | delta NLL vs FP16 | bit histogram |
+|---|---:|---:|---|
+| FP16 | 23.78 | 0.0000 | 16:225 |
+| uniform INT4 | 36.94 | 0.4403 | 4:225 |
+| uniform INT3 | 2990.80 | 4.8344 | 3:225 |
+| activation-stat RD 4/8 | 33.69 | 0.3484 | 4:172, 8:53 |
+| loss-sensitive greedy 4/8 | 32.77 | 0.3205 | 4:172, 8:53 |
+| loss-sensitive exact knapsack 4/8 | 32.87 | 0.3235 | 4:175, 8:50 |
+| loss-sensitive swap-search 4/8 | 32.57 | 0.3146 | 4:172, 8:53 |
+
+含义：C4 复现 WikiText2 排序，说明 positive trend 不是单一验证切片偶然现象。
+
 新增证据：
 
 ```text
 train_python/search_allocation_swaps.py
+train_python/build_dataset_prompts.py
+data_eval/text_prompts/c4_en_validation_64.txt
 outputs/smollm2_allocation_swap_search_group128_wikitext2_128_summary.json
 outputs/smollm2_allocation_swap_search_group128_wikitext2_128_report.md
 outputs/smollm2_loss_sensitive_swap_search_alloc_4to8_group128_summary.json
 outputs/smollm2_fake_quant_ppl_compare_allocations_swap_group128_wikitext2_128_summary.json
+outputs/smollm2_fake_quant_ppl_c4_validation_64_report.md
+outputs/smollm2_fake_quant_ppl_compare_allocations_swap_group128_c4_en_validation_64_summary.json
 ```
 
 ## 数学主线

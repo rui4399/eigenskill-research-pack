@@ -300,6 +300,22 @@ evaluated swaps:        8
 The gain is modest, but it is the cleanest current evidence that interaction
 terms can be optimized beyond the additive one-module sensitivity objective.
 
+The same allocation set was then evaluated on a streamed C4 English validation
+slice with 64 prompts:
+
+```text
+C4 validation slice, 64 prompts:
+FP16                              23.78
+uniform INT4                      36.94
+uniform INT3                    2990.80
+activation-stat RD {4,8}          33.69
+loss-sensitive {4,8}              32.77
+loss-sensitive exact knapsack     32.87
+loss-sensitive swap-search        32.57
+```
+
+This reproduces the WikiText2 ordering on a second public-text source.
+
 Evidence files:
 
 ```text
@@ -329,6 +345,9 @@ outputs/smollm2_allocation_swap_search_group128_wikitext2_128_summary.json
 outputs/smollm2_allocation_swap_search_group128_wikitext2_128_report.md
 outputs/smollm2_loss_sensitive_swap_search_alloc_4to8_group128_summary.json
 outputs/smollm2_fake_quant_ppl_compare_allocations_swap_group128_wikitext2_128_summary.json
+data_eval/text_prompts/c4_en_validation_64.txt
+outputs/smollm2_fake_quant_ppl_c4_validation_64_report.md
+outputs/smollm2_fake_quant_ppl_compare_allocations_swap_group128_c4_en_validation_64_summary.json
 ```
 
 ### 8-skill hybrid routing, v2

@@ -36,12 +36,13 @@ def main() -> None:
     parser.add_argument("--min-chars", type=int, default=160)
     parser.add_argument("--max-chars", type=int, default=900)
     parser.add_argument("--out", default="data_eval/text_prompts/wikitext2_validation_32.txt")
+    parser.add_argument("--streaming", action="store_true", help="stream dataset rows instead of downloading all shards")
     args = parser.parse_args()
 
     if load_dataset is None:
         raise SystemExit("This script requires the datasets package. Run it in the WSL Python environment.")
 
-    dataset = load_dataset(args.dataset, args.name, split=args.split)
+    dataset = load_dataset(args.dataset, args.name, split=args.split, streaming=args.streaming)
     prompts = []
     scanned = 0
     for row in dataset:
@@ -67,6 +68,7 @@ def main() -> None:
                 "prompts": len(prompts),
                 "min_chars": args.min_chars,
                 "max_chars": args.max_chars,
+                "streaming": args.streaming,
                 "out": str(out),
             },
             ensure_ascii=False,

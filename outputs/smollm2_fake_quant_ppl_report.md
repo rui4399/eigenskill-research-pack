@@ -329,6 +329,48 @@ outputs/smollm2_loss_sensitive_swap_search_alloc_4to8_group128_summary.json
 outputs/smollm2_fake_quant_ppl_compare_allocations_swap_group128_wikitext2_128_summary.json
 ```
 
+## C4 Validation Slice
+
+To add a second public-text source, a 64-prompt C4 English validation slice was
+created with dataset streaming:
+
+```bash
+python3 train_python/build_dataset_prompts.py \
+  --dataset allenai/c4 \
+  --name en \
+  --split validation \
+  --text-field text \
+  --limit 64 \
+  --min-chars 160 \
+  --max-chars 900 \
+  --streaming \
+  --out data_eval/text_prompts/c4_en_validation_64.txt
+```
+
+The same unified allocation config gives:
+
+| method | prompt count | PPL | delta NLL vs FP16 | bit histogram |
+|---|---:|---:|---:|---|
+| FP16 | 64 | 23.7821 | 0.0000 | 16:225 |
+| uniform INT4 | 64 | 36.9390 | 0.4403 | 4:225 |
+| uniform INT3 | 64 | 2990.7973 | 4.8344 | 3:225 |
+| activation-stat RD 4/8 | 64 | 33.6940 | 0.3484 | 4:172, 8:53 |
+| loss-sensitive greedy 4/8 | 64 | 32.7675 | 0.3205 | 4:172, 8:53 |
+| loss-sensitive exact knapsack 4/8 | 64 | 32.8657 | 0.3235 | 4:175, 8:50 |
+| loss-sensitive swap-search 4/8 | 64 | 32.5731 | 0.3146 | 4:172, 8:53 |
+
+This reproduces the WikiText2 trend on C4: measured loss sensitivity improves
+over uniform INT4 and activation-stat RD, while the one-step swap-search gives
+the best PPL among the tested fake-quant allocations.
+
+Evidence files:
+
+```text
+data_eval/text_prompts/c4_en_validation_64.txt
+outputs/smollm2_fake_quant_ppl_c4_validation_64_report.md
+outputs/smollm2_fake_quant_ppl_compare_allocations_swap_group128_c4_en_validation_64_summary.json
+```
+
 ## Negative Result From 2/3/4/8 Allocation
 
 The earlier 3.2 average-bit allocation over `{2,3,4,8}` was much worse than
@@ -344,8 +386,8 @@ Treat 2/3-bit as a later experiment requiring stronger compensation.
 
 The next meaningful benchmark is:
 
-1. Expand the measured loss-sensitive allocation to C4 and larger WikiText2
-   slices beyond the current 128-prompt check.
+1. Expand the measured loss-sensitive allocation beyond the current WikiText2-128
+   and C4-64 slices.
 2. Compare against Fisher/Hessian proxies and activation reconstruction error.
 3. Add calibration-aware scaling or GPTQ/AWQ/SmoothQuant/rotation baselines.
 4. Repeat across calibration prompt sets and report variance.
