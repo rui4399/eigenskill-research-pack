@@ -81,6 +81,10 @@ These claims are supported by committed data, scripts, or reports:
   correlations, Kendall tau-a, and top-k score overlap. It mirrors the Python
   stability diagnostic and reduces the amount of Python-only evidence in the
   calibration-noise story.
+- A standalone C++ budget-curve summarizer now reads fake-quant PPL summary
+  JSON files and regenerates the consensus budget-curve Markdown, CSV, JSON,
+  and SVG outputs. It removes the NumPy/matplotlib dependency from this
+  reporting path; model loading and fake-quant evaluation remain Python/PyTorch.
 - A newer-model Qwen3-0.6B fake-quant run completed under the GPU guard. On
   the same 16-prompt WikiText2 slice, FP16 PPL is `27.82`, uniform INT4 is
   `44.57`, C++ loss-sensitive budget allocation is `34.84`, C++ random budget

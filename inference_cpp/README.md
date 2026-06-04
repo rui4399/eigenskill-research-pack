@@ -49,6 +49,7 @@ inference_cpp/build-wsl/quant_result_summarizer
 inference_cpp/build-wsl/quant_evidence_matrix
 inference_cpp/build-wsl/quant_consensus_audit
 inference_cpp/build-wsl/quant_sensitivity_stability
+inference_cpp/build-wsl/quant_budget_curve_summary
 ```
 
 `quant_allocation_planner` is wired into the Qwen3-1.7B fake-quant evidence
@@ -145,6 +146,21 @@ statistics, and top-k score overlap. It is the C++ counterpart to
   --top-k 10,20,40 \
   --emit markdown \
   > outputs/qwen3_1p7b_wikitext_c4_sensitivity_stability_cpp.md
+```
+
+`quant_budget_curve_summary` reads evaluator PPL summary JSON files and
+regenerates the consensus budget-curve Markdown, CSV, JSON, and dependency-free
+SVG figure. It is the C++ counterpart to `train_python/summarize_budget_curve.py`
+and `train_python/plot_budget_curve_svg.py`:
+
+```bash
+./inference_cpp/build-wsl/quant_budget_curve_summary \
+  --input Qwen3-1.7B-WikiText2-64=outputs/qwen3_1p7b_consensus_budget_curve_ppl_wikitext2_64_summary.json \
+  --input Qwen3-1.7B-WikiText2-128=outputs/qwen3_1p7b_consensus_budget_curve_ppl_wikitext2_128_summary.json \
+  --input Qwen3-1.7B-C4-64=outputs/qwen3_1p7b_consensus_budget_curve_ppl_c4_64_summary.json \
+  --input OLMo2-1B-WikiText2-64=outputs/olmo2_0425_1b_consensus_budget_curve_ppl_wikitext2_64_summary.json \
+  --input OLMo2-1B-WikiText2-128=outputs/olmo2_0425_1b_consensus_budget_curve_ppl_wikitext2_128_summary.json \
+  --input OLMo2-1B-C4-64=outputs/olmo2_0425_1b_consensus_budget_curve_ppl_c4_64_summary.json
 ```
 
 ## Run

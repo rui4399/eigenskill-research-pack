@@ -26,6 +26,7 @@ add_executable(quant_result_summarizer src/quant_result_summarizer.cpp)
 add_executable(quant_evidence_matrix src/quant_evidence_matrix.cpp)
 add_executable(quant_consensus_audit src/quant_consensus_audit.cpp)
 add_executable(quant_sensitivity_stability src/quant_sensitivity_stability.cpp)
+add_executable(quant_budget_curve_summary src/quant_budget_curve_summary.cpp)
 target_link_libraries(quant_kernel_bench PRIVATE eigenskill_quant_kernels)
 target_link_libraries(quant_kernel_verify PRIVATE eigenskill_quant_kernels)
 
@@ -64,6 +65,13 @@ if(BUILD_TESTING)
       --right-name fixture_right
       --top-k 1,2,3
       --emit csv
+  )
+  add_test(
+    NAME quant_budget_curve_summary_smoke
+    COMMAND quant_budget_curve_summary
+      --input fixture=${CMAKE_CURRENT_SOURCE_DIR}/testdata/ppl_summary_fixture.json
+      --emit csv
+      --no-write
   )
 endif()
 

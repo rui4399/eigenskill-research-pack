@@ -64,15 +64,18 @@ No run was killed by the guard.
 
 ## C++ Evidence
 
-This update also adds a standalone C++ split-stability audit:
+This update also adds standalone C++ evidence/reporting tools:
 
 ```text
 inference_cpp/src/quant_sensitivity_stability.cpp
+inference_cpp/src/quant_budget_curve_summary.cpp
 ```
 
-It computes positive-set Jaccard, sign agreement, Pearson/Spearman/Kendall
-rank statistics, and top-k overlap directly from the sensitivity JSON files.
-The C++ build now has six CTest smoke tests, all passing.
+The first computes positive-set Jaccard, sign agreement,
+Pearson/Spearman/Kendall rank statistics, and top-k overlap directly from the
+sensitivity JSON files. The second regenerates the budget-curve Markdown, CSV,
+JSON, and SVG outputs from evaluator PPL summary JSON without NumPy or
+matplotlib. The C++ build now has seven CTest smoke tests, all passing.
 
 ## Interpretation
 
@@ -104,4 +107,5 @@ outputs/olmo2_0425_1b_consensus_budget_curve_ppl_wikitext2_128_summary.json
 outputs/olmo2_0425_1b_consensus_budget_curve_ppl_c4_64_summary.json
 outputs/qwen3_1p7b_wikitext_c4_sensitivity_stability_cpp.md
 outputs/olmo2_0425_1b_wikitext_c4_sensitivity_stability_cpp.md
+inference_cpp/src/quant_budget_curve_summary.cpp
 ```
