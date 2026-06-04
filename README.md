@@ -407,16 +407,20 @@ WikiText2 validation slice, 16 prompts:
 FP16                         PPL 11.28
 uniform INT4                 PPL 15.84
 uniform INT3                 PPL 381.73
+loss-sensitive {4,8}, 2p     PPL 13.77
 
 Local model path             C:\Users\18042\models\Qwen2.5-1.5B-Instruct
 model.safetensors bytes      3,087,467,144
 model.safetensors sha256     DD924A11B4C220F385B51FFA522DAEA7C9F3D850E31B162BB5661DF483C6D3EE
 Linear modules touched       197
+loss-sensitive bit histogram 4-bit=137, 8-bit=60
+loss-sensitive avg bits      4.4993
 ```
 
 This result only validates that the fake-quant evaluator runs on a stronger
-1.5B model and that uniform INT4 remains usable on the short PPL slice. It is
-not a packed INT4 runtime, latency, memory, or energy claim.
+1.5B model and that measured loss-sensitive allocation improves over uniform
+INT4 on the short PPL slice. It is not a packed INT4 runtime, latency, memory,
+or energy claim.
 
 Evidence files:
 
@@ -474,6 +478,12 @@ outputs/qwen25_0p5b_loss_sensitive_consensus_alloc_4to8_group128_summary.json
 outputs/qwen25_1p5b_uniform_smoke_report.md
 outputs/qwen25_1p5b_fake_quant_ppl_uniform_group128_wikitext2_16_summary.json
 outputs/qwen25_1p5b_uniform_smoke_ppl_table.md
+data_eval/eval_configs/qwen25_1p5b_group128_with_loss_sensitive.json
+outputs/qwen25_1p5b_loss_sensitive_update.md
+outputs/qwen25_1p5b_module_loss_sensitivity_limit2_group128.json
+outputs/qwen25_1p5b_loss_sensitive_alloc_4to8_limit2_group128_summary.json
+outputs/qwen25_1p5b_fake_quant_ppl_loss_sensitive_group128_wikitext2_16_summary.json
+outputs/qwen25_1p5b_loss_sensitive_ppl_table.md
 outputs/qwen25_0p5b_loss_sensitive_consensus_alloc_4to8_group128_report.md
 outputs/qwen25_0p5b_fake_quant_ppl_uniform_group128_wikitext2_128_summary.json
 outputs/qwen25_0p5b_fake_quant_ppl_uniform_group128_c4_en_validation_64_summary.json
