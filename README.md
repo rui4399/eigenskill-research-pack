@@ -428,6 +428,14 @@ This result only validates that the fake-quant evaluator runs on a stronger
 INT4 on the short PPL slice. It is not a packed INT4 runtime, latency, memory,
 or energy claim.
 
+The compact sensitivity summary separates absolute loss increase from
+cost-normalized loss increase. Under the 4.5 average-bit budget, the allocation
+protects 60.20% of measured positive loss increase with 60 upgraded modules,
+but ranks modules by loss increase per parameter-cost. This is why small
+attention `k_proj`/`v_proj` matrices dominate the selected 8-bit set, while the
+large `lm_head` has the largest absolute loss increase but is not selected by
+the cost-normalized objective.
+
 Evidence files:
 
 ```text
@@ -437,6 +445,7 @@ train_python/build_dataset_prompts.py
 train_python/build_loss_sensitive_knapsack_alloc.py
 train_python/build_consensus_allocation.py
 train_python/summarize_ppl_results.py
+train_python/summarize_sensitivity.py
 train_python/search_allocation_swaps.py
 data_eval/eval_configs/smollm2_group128_compare_allocations.json
 data_eval/text_prompts/wikitext2_validation_32.txt
@@ -492,6 +501,7 @@ outputs/qwen25_1p5b_fake_quant_ppl_loss_sensitive_group128_wikitext2_16_summary.
 outputs/qwen25_1p5b_fake_quant_ppl_loss_sensitive_group128_c4_en_validation_32_summary.json
 outputs/qwen25_1p5b_loss_sensitive_ppl_table.md
 outputs/qwen25_1p5b_loss_sensitive_two_dataset_ppl_table.md
+outputs/qwen25_1p5b_sensitivity_compact_summary.md
 outputs/qwen25_0p5b_loss_sensitive_consensus_alloc_4to8_group128_report.md
 outputs/qwen25_0p5b_fake_quant_ppl_uniform_group128_wikitext2_128_summary.json
 outputs/qwen25_0p5b_fake_quant_ppl_uniform_group128_c4_en_validation_64_summary.json
