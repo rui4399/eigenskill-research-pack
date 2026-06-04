@@ -94,6 +94,40 @@ C4-64 PPL:         33.7088
 interpretation: improves over uniform INT4 but underperforms measured-loss allocation
 ```
 
+Qwen2.5-1.5B group-wise fake-quant, 64/128 prompt slices:
+
+```text
+WikiText2-64:
+FP16                         PPL 12.8516
+uniform INT4                 PPL 17.2441
+loss-sensitive 2p 4/8        PPL 16.1788
+loss-sensitive 8p 4/8        PPL 15.7520
+consensus 4/8                PPL 15.7966
+
+C4-64:
+FP16                         PPL 18.1669
+uniform INT4                 PPL 23.9949
+loss-sensitive 2p 4/8        PPL 23.2682
+loss-sensitive 8p 4/8        PPL 22.3620
+consensus 4/8                PPL 22.4891
+
+WikiText2-128:
+FP16                         PPL 13.1290
+uniform INT4                 PPL 17.4996
+loss-sensitive 2p 4/8        PPL 16.6503
+loss-sensitive 8p 4/8        PPL 16.0781
+consensus 4/8                PPL 16.1356
+```
+
+C++ low-bit kernel API:
+
+```text
+PackedLowBitMatrix supports signed row-scaled 2..7-bit storage.
+INT3 and INT4 finite-output checks pass in quant_kernel_verify.
+WSL/CMake/g++ 11.4 build and CTest pass.
+Naive scalar bit-unpack is slower than AVX2 FP32 GEMV; no low-bit speed claim.
+```
+
 ## Claim Boundary
 
 This package is a short-cycle research draft and stage report. It is not yet a

@@ -233,6 +233,121 @@ outputs/smollm2_fake_quant_ppl_compare_allocations_with_output_proxy_group128_wi
 outputs/smollm2_fake_quant_ppl_compare_allocations_with_output_proxy_group128_c4_en_validation_64_summary.json
 ```
 
+## 2026-06-04 深夜增补：Qwen2.5-1.5B 与 C++ low-bit kernel
+
+本轮把实验从 SmolLM2-360M 推进到本地缓存的
+`Qwen2.5-1.5B-Instruct`。模型权重不进入仓库，只记录路径、哈希和评估输出。
+
+```text
+local model path:        C:\Users\18042\models\Qwen2.5-1.5B-Instruct
+WSL model path:          /mnt/c/Users/18042/models/Qwen2.5-1.5B-Instruct
+model.safetensors bytes: 3,087,467,144
+sha256:                  DD924A11B4C220F385B51FFA522DAEA7C9F3D850E31B162BB5661DF483C6D3EE
+Linear modules:          197
+group size:              128
+```
+
+### 1. 2p / 8p / consensus 分配
+
+使用 measured per-module loss sensitivity 构造 `{4,8}` 混合精度分配：
+
+| allocation | 4-bit | 8-bit | avg bits | protected positive delta |
+|---|---:|---:|---:|---:|
+| 2-prompt loss-sensitive | 137 | 60 | 4.4993 | 60.20% |
+| 8-prompt loss-sensitive | 136 | 61 | 4.4953 | 54.45% |
+| 2p/8p consensus | 132 | 65 | 4.4993 | 53.81% |
+
+2p 与 8p 的 8-bit 模块 Jaccard 为 `0.6351`。这说明分配不是完全稳定，但也不是随机漂移；更长校准会改变 27/197 个 bit decision。
+
+### 2. Qwen2.5-1.5B fake-quant PPL
+
+64-prompt 双数据集结果：
+
+| dataset | FP16 | uniform INT4 | uniform INT3 | 2p loss-sensitive | 8p loss-sensitive | consensus |
+|---|---:|---:|---:|---:|---:|---:|
+| WikiText2-64 | 12.8516 | 17.2441 | 273.9454 | 16.1788 | 15.7520 | 15.7966 |
+| C4-64 | 18.1669 | 23.9949 | 293.8201 | 23.2682 | 22.3620 | 22.4891 |
+
+更长 WikiText2-128 结果：
+
+| dataset | FP16 | uniform INT4 | uniform INT3 | 2p loss-sensitive | 8p loss-sensitive | consensus |
+|---|---:|---:|---:|---:|---:|---:|
+| WikiText2-128 | 13.1290 | 17.4996 | 232.6215 | 16.6503 | 16.0781 | 16.1356 |
+
+结论：在 Qwen2.5-1.5B 上，8-prompt loss-sensitive allocation 在 WikiText2-64、C4-64 和 WikiText2-128 上都优于 uniform INT4，也优于 2-prompt allocation。Consensus 更稳定，但在当前切片中略逊于直接 8p 分配。
+
+限制：这仍是 fake weight quantization quality diagnostic，不是 packed INT4/INT3 runtime，也不代表显存、延迟或能耗收益。
+
+### 3. C++ low-bit kernel 更新
+
+C++ 侧新增通用 row-scaled signed low-bit API：
+
+```text
+PackedLowBitMatrix
+pack_lowbit_per_row(bits=2..7)
+unpack_signed_bits
+lowbit_dequant_gemv
+```
+
+旧的 `PackedInt4Matrix / pack_int4_per_row / int4_dequant_gemv` 保持兼容，并基于通用 low-bit 路径实现。`quant_kernel_verify` 现在同时检查 INT4 和 INT3 输出有限、AVX2 dense GEMV、selected-row GEMV、scalar bypass。
+
+WSL/g++ 11.4 验证：
+
+```text
+cmake --build build/cpp-wsl -j2: passed
+ctest --test-dir build/cpp-wsl: passed
+quant_kernel_verify --dim 256 --active-rows 16: ok=true
+```
+
+benchmark smoke：
+
+```text
+d=256 rows=16
+dense_ms=0.033150
+davx_ms=0.003075
+int4_ms=0.197147
+int3_ms=0.167296
+selected_avx2_ms=0.000231
+scalar_ms=0.000019
+```
+
+解释：当前 scalar bit-unpack INT3/INT4 GEMV 慢于 AVX2 FP32 dense GEMV。这是有价值的负结果：低比特存储格式本身不等于速度收益，后续需要 vectorized unpack、low-bit dot product、NEON/AVX2 专门路径或直接接入成熟 runtime。
+
+### 4. GPU 资源边界
+
+本机 GPU：NVIDIA GeForce RTX 5070 Laptop GPU，约 8.15 GiB 显存。
+
+Qwen2.5-1.5B 的 WikiText2-128 `--reuse-model` 评估过程中曾短时达到：
+
+```text
+memory used: 7296 MiB / 8151 MiB
+```
+
+这约等于 89.5%，超过预设的 85% 上限。因此后续不宜继续扩大 1.5B 单进程多配置评估；更大切片应拆分 config、降低并行驻留、或改用更省显存的评估路径。
+
+### 5. 最新 GitHub 提交
+
+```text
+13d9df8 Add Qwen2.5 1.5B WikiText2-128 evidence
+8ab5f83 Add Qwen2.5 1.5B 64-prompt PPL evidence
+9401a21 Add generic low-bit C++ quant kernels
+126ddd6 Add Qwen2.5 1.5B calibration stability evidence
+```
+
+主要新增证据：
+
+```text
+data_eval/eval_configs/qwen25_1p5b_group128_compare_2p8p_consensus.json
+outputs/qwen25_1p5b_loss_sensitive_compare_2p8p_consensus_ppl64_table.md
+outputs/qwen25_1p5b_loss_sensitive_compare_2p8p_consensus_wikitext2_128_table.md
+outputs/qwen25_1p5b_loss_sensitive_2p_vs_8p_stability_report.md
+outputs/qwen25_1p5b_sensitivity_limit8_compact_summary.md
+inference_cpp/include/eigenskill/quant_kernels.hpp
+inference_cpp/src/quant_kernels.cpp
+inference_cpp/src/quant_kernel_bench.cpp
+inference_cpp/src/quant_kernel_verify.cpp
+```
+
 ## 数学主线
 
 把量化策略写成约束优化：
