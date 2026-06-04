@@ -25,6 +25,7 @@ add_executable(quant_allocation_planner src/quant_allocation_planner.cpp)
 add_executable(quant_result_summarizer src/quant_result_summarizer.cpp)
 add_executable(quant_evidence_matrix src/quant_evidence_matrix.cpp)
 add_executable(quant_consensus_audit src/quant_consensus_audit.cpp)
+add_executable(quant_sensitivity_stability src/quant_sensitivity_stability.cpp)
 target_link_libraries(quant_kernel_bench PRIVATE eigenskill_quant_kernels)
 target_link_libraries(quant_kernel_verify PRIVATE eigenskill_quant_kernels)
 
@@ -52,6 +53,16 @@ if(BUILD_TESTING)
       --right ${CMAKE_CURRENT_SOURCE_DIR}/testdata/allocation_right_fixture.json
       --consensus ${CMAKE_CURRENT_SOURCE_DIR}/testdata/allocation_consensus_fixture.json
       --label fixture
+      --emit csv
+  )
+  add_test(
+    NAME quant_sensitivity_stability_smoke
+    COMMAND quant_sensitivity_stability
+      --left ${CMAKE_CURRENT_SOURCE_DIR}/testdata/sensitivity_left_fixture.json
+      --right ${CMAKE_CURRENT_SOURCE_DIR}/testdata/sensitivity_right_fixture.json
+      --left-name fixture_left
+      --right-name fixture_right
+      --top-k 1,2,3
       --emit csv
   )
 endif()

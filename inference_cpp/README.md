@@ -48,6 +48,7 @@ inference_cpp/build-wsl/quant_allocation_planner
 inference_cpp/build-wsl/quant_result_summarizer
 inference_cpp/build-wsl/quant_evidence_matrix
 inference_cpp/build-wsl/quant_consensus_audit
+inference_cpp/build-wsl/quant_sensitivity_stability
 ```
 
 `quant_allocation_planner` is wired into the Qwen3-1.7B fake-quant evidence
@@ -128,6 +129,22 @@ stability only; downstream model quality still comes from the PPL evaluator.
   --label OLMo2-0425-1B-WikiText2-C4 \
   --emit markdown \
   > outputs/olmo2_0425_1b_wikitext_c4_consensus_audit.md
+```
+
+`quant_sensitivity_stability` reads two module-sensitivity JSON files and
+reports positive-set Jaccard, signed-delta agreement, Pearson/Spearman/Kendall
+statistics, and top-k score overlap. It is the C++ counterpart to
+`train_python/compare_sensitivity_splits.py`:
+
+```bash
+./inference_cpp/build-wsl/quant_sensitivity_stability \
+  --left outputs/qwen3_1p7b_module_loss_sensitivity_limit2_group128.json \
+  --right outputs/qwen3_1p7b_module_loss_sensitivity_c4_limit2_group128.json \
+  --left-name WikiText2 \
+  --right-name C4 \
+  --top-k 10,20,40 \
+  --emit markdown \
+  > outputs/qwen3_1p7b_wikitext_c4_sensitivity_stability_cpp.md
 ```
 
 ## Run

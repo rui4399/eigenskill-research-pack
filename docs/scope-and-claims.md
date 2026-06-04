@@ -76,6 +76,11 @@ These claims are supported by committed data, scripts, or reports:
   overlap, Jaccard similarity, weighted average bits, budget use, and bit
   histograms. It is an allocation-stability audit, not a model-quality
   evaluator; downstream quality still comes from PPL checks.
+- A standalone C++ split-stability audit now reads two sensitivity JSON files
+  and reports positive-set Jaccard, signed-delta agreement, Pearson/Spearman
+  correlations, Kendall tau-a, and top-k score overlap. It mirrors the Python
+  stability diagnostic and reduces the amount of Python-only evidence in the
+  calibration-noise story.
 - A newer-model Qwen3-0.6B fake-quant run completed under the GPU guard. On
   the same 16-prompt WikiText2 slice, FP16 PPL is `27.82`, uniform INT4 is
   `44.57`, C++ loss-sensitive budget allocation is `34.84`, C++ random budget
@@ -134,6 +139,16 @@ These claims are supported by committed data, scripts, or reports:
   `0.1429`; OLMo2 has score/cost Spearman `0.1845` and top-20 score-set
   Jaccard `0.1111`. These low correlations justify reporting consensus
   robustness, not single-split allocator dominance.
+- A budget-curve diagnostic for the same consensus allocator now evaluates
+  4.25, 4.50, and 4.75 average-bit budgets on both Qwen3-1.7B and
+  OLMo2-0425-1B-Instruct. PPL improves monotonically as more 8-bit budget is
+  released on Qwen3 WikiText2-64 (`28.0753 -> 27.3180 -> 26.6163`), Qwen3
+  C4-64 (`30.4752 -> 29.9230 -> 29.2500`), OLMo2 WikiText2-64
+  (`23.2779 -> 22.5113 -> 22.1464`), and OLMo2 C4-64
+  (`37.9817 -> 37.2835 -> 37.1610`). GPU-guarded runs stayed below the
+  requested 85% memory ceiling, peaking at `5065/8151 MiB` for Qwen3 and
+  `4369/8151 MiB` for OLMo2. This supports a budget-quality curve claim for
+  the fake-quant diagnostic, not a packed-runtime or hardware claim.
 - A non-Qwen `allenai/OLMo-2-0425-1B-Instruct` fake-quant run completed under
   the GPU guard. On the 16-prompt WikiText2 slice, FP16 PPL is `17.12`,
   uniform INT4 PPL is `20.70`, and uniform INT3 PPL is `58.84`. A 2-prompt

@@ -15,7 +15,8 @@ core is narrower:
    `allenai/OLMo-2-0425-1B-Instruct` short slices;
 4. standalone C++ artifacts for low-rank GEMV, quantization-policy bypass,
    quant-kernel microbenchmarks, a reusable quant-kernel API, C++ allocation
-   planning, C++ evidence summarization, and C++ consensus-allocation audit.
+   planning, C++ evidence summarization, C++ consensus-allocation audit, and
+   C++ split-stability audit.
 
 The practical publication direction is therefore:
 
@@ -101,20 +102,42 @@ Qwen3-1.7B: score/cost Spearman 0.0734, positive-set Jaccard 0.4512
 OLMo2-1B:   score/cost Spearman 0.1845, positive-set Jaccard 0.4512
 ```
 
+The consensus allocator now has a budget-curve check at 4.25, 4.50, and 4.75
+average bits. On both model families and both datasets, releasing more 8-bit
+budget monotonically reduces short-slice fake-quant PPL:
+
+```text
+Qwen3-1.7B, WikiText2-64: 28.0753 -> 27.3180 -> 26.6163
+Qwen3-1.7B, C4-64:        30.4752 -> 29.9230 -> 29.2500
+OLMo2-1B, WikiText2-64:   23.2779 -> 22.5113 -> 22.1464
+OLMo2-1B, C4-64:          37.9817 -> 37.2835 -> 37.1610
+```
+
+The guarded runs stayed below the requested 85% GPU-memory ceiling:
+Qwen3 peaked at `5065/8151 MiB` (`62.14%`) and OLMo2 peaked at
+`4369/8151 MiB` (`53.60%`).
+
 Evidence files:
 
 ```text
 data_eval/eval_configs/qwen3_1p7b_wikitext_c4_consensus_random16_compare.json
+data_eval/eval_configs/qwen3_1p7b_consensus_budget_curve.json
 outputs/qwen3_1p7b_wikitext_c4_consensus_random16_evidence_matrix.md
 outputs/qwen3_1p7b_wikitext_c4_consensus_audit.md
 outputs/qwen3_1p7b_wikitext_c4_sensitivity_stability_report.md
+outputs/qwen3_1p7b_wikitext_c4_sensitivity_stability_cpp.md
 data_eval/eval_configs/olmo2_0425_1b_wikitext_c4_consensus_compare.json
+data_eval/eval_configs/olmo2_0425_1b_consensus_budget_curve.json
 outputs/olmo2_0425_1b_wikitext_c4_consensus_evidence_matrix.md
 outputs/olmo2_0425_1b_wikitext_c4_consensus_audit.md
 outputs/olmo2_0425_1b_wikitext_c4_sensitivity_stability_report.md
+outputs/olmo2_0425_1b_wikitext_c4_sensitivity_stability_cpp.md
+outputs/consensus_budget_curve_report.md
 inference_cpp/src/quant_evidence_matrix.cpp
 inference_cpp/src/quant_consensus_audit.cpp
+inference_cpp/src/quant_sensitivity_stability.cpp
 train_python/compare_sensitivity_splits.py
+train_python/summarize_budget_curve.py
 ```
 
 ### Quantization-policy bypass, v1
@@ -1139,6 +1162,8 @@ inference_cpp/src/quant_policy_bypass.cpp
                               C++ deterministic quantization-policy evaluator
 inference_cpp/src/quant_kernel_bench.cpp
                               C++ quant-kernel and selected-row microbenchmark
+inference_cpp/src/quant_sensitivity_stability.cpp
+                              C++ calibration split-stability audit
 data_eval/eigenskill_v2/      older 8-skill PoC split with severe overlap
 data_eval/eigenskill_quant_v1/cleaner quantization-policy split
 data_eval/eval_configs/       fake-quant evaluation configs
