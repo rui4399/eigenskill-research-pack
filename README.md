@@ -269,6 +269,7 @@ uniform INT3                1154.44
 activation-stat RD {4,8}      24.51
 loss-sensitive {4,8}          24.14
 loss-sensitive exact knapsack 24.36
+loss-sensitive swap-search    24.07
 ```
 
 This is the first positive real-model signal for the quantization track: the
@@ -285,6 +286,20 @@ knapsack, Fisher/Hessian proxies, and learned policy/RL allocation. It is still
 fake quantization and does not prove compressed runtime memory, latency, or
 board-level energy savings.
 
+A bounded one-step interaction-aware policy-improvement search then evaluates
+candidate module swaps with global WikiText2-128 PPL feedback. The best tested
+swap demotes `model.layers.17.self_attn.v_proj` from 8-bit to 4-bit and promotes
+`model.layers.24.self_attn.v_proj` from 4-bit to 8-bit:
+
+```text
+base loss-sensitive PPL: 24.1374
+best swap-search PPL:   24.0661
+evaluated swaps:        8
+```
+
+The gain is modest, but it is the cleanest current evidence that interaction
+terms can be optimized beyond the additive one-module sensitivity objective.
+
 Evidence files:
 
 ```text
@@ -292,6 +307,7 @@ train_python/eval_weight_quant_ppl.py
 train_python/measure_module_quant_sensitivity.py
 train_python/build_dataset_prompts.py
 train_python/build_loss_sensitive_knapsack_alloc.py
+train_python/search_allocation_swaps.py
 data_eval/eval_configs/smollm2_group128_compare_allocations.json
 data_eval/text_prompts/wikitext2_validation_32.txt
 data_eval/text_prompts/wikitext2_validation_128.txt
@@ -309,6 +325,10 @@ outputs/smollm2_fake_quant_ppl_compare_allocations_group128_wikitext2_128_summar
 outputs/smollm2_loss_sensitive_exact_knapsack_alloc_4to8_limit4_group128_summary.json
 outputs/smollm2_loss_sensitive_exact_knapsack_alloc_4to8_limit4_group128_report.md
 outputs/smollm2_fake_quant_ppl_compare_allocations_exact_group128_wikitext2_128_summary.json
+outputs/smollm2_allocation_swap_search_group128_wikitext2_128_summary.json
+outputs/smollm2_allocation_swap_search_group128_wikitext2_128_report.md
+outputs/smollm2_loss_sensitive_swap_search_alloc_4to8_group128_summary.json
+outputs/smollm2_fake_quant_ppl_compare_allocations_swap_group128_wikitext2_128_summary.json
 ```
 
 ### 8-skill hybrid routing, v2
@@ -505,7 +525,8 @@ outputs/paper_delivery_2026-06-04/EigenSkill-Q_CCF-A_Draft_v2_Loss_Sensitive.md
 ```
 
 It reframes the project around loss-sensitive constrained mixed-precision
-allocation, deterministic policy kernels, and a contextual-bandit/RL extension.
+allocation, deterministic policy kernels, interaction-aware policy improvement,
+and a contextual-bandit/RL extension.
 
 ## Next Work
 
@@ -515,11 +536,13 @@ allocation, deterministic policy kernels, and a contextual-bandit/RL extension.
    AWQ, SmoothQuant, QuaRot, and SpinQuant-style rotations where applicable.
 3. Compare measured loss sensitivity against Fisher/Hessian proxies and
    activation reconstruction error after fake quantization.
-4. Move the deterministic quantization policy kernels from Python into C++ and
+4. Expand interaction-aware allocation beyond one-step swaps into pairwise
+   features, learned reward models, and constrained bandit/RL policies.
+5. Move the deterministic quantization policy kernels from Python into C++ and
    measure overhead against a real model runtime.
-5. Replace the overlapping v2 skill split with a no-leak split and rerun the
+6. Replace the overlapping v2 skill split with a no-leak split and rerun the
    routing/bypass evaluation.
-6. Run board-level latency and energy measurements on an ARM board before using
+7. Run board-level latency and energy measurements on an ARM board before using
    "edge" as an empirical claim.
-7. Keep spectral/eigen-routing as a separate theory track until a toy nonlinear
+8. Keep spectral/eigen-routing as a separate theory track until a toy nonlinear
    proof and trained-layer experiment exist.

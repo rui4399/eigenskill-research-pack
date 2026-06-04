@@ -216,6 +216,8 @@ containing both allocation methods:
 | uniform INT3 | 128 | 1154.4350 | 4.1981 | 3:225 |
 | activation-stat RD 4/8 | 128 | 24.5117 | 0.3459 | 4:172, 8:53 |
 | loss-sensitive 4/8 | 128 | 24.1374 | 0.3305 | 4:172, 8:53 |
+| loss-sensitive exact knapsack 4/8 | 128 | 24.3565 | 0.3396 | 4:175, 8:50 |
+| loss-sensitive swap-search 4/8 | 128 | 24.0661 | 0.3276 | 4:172, 8:53 |
 
 The 128-prompt slice keeps the same ordering:
 
@@ -230,6 +232,7 @@ Evidence files:
 ```text
 data_eval/text_prompts/wikitext2_validation_128.txt
 outputs/smollm2_fake_quant_ppl_compare_allocations_group128_wikitext2_128_summary.json
+outputs/smollm2_fake_quant_ppl_compare_allocations_swap_group128_wikitext2_128_summary.json
 ```
 
 ## Exact Knapsack Check
@@ -278,6 +281,54 @@ outputs/smollm2_loss_sensitive_exact_knapsack_alloc_4to8_limit4_group128_report.
 outputs/smollm2_fake_quant_ppl_compare_allocations_exact_group128_wikitext2_128_summary.json
 ```
 
+## Interaction-Aware Swap Search
+
+To move beyond the additive one-module proxy, a bounded one-step policy
+improvement pass evaluates candidate 4/8-bit swaps with global WikiText2-128 PPL
+feedback. Candidate generation starts from the greedy loss-sensitive allocation,
+tries demoting a currently 8-bit low-sensitivity module and promoting a
+currently 4-bit higher-sensitivity module, and keeps the best global PPL.
+
+Search summary:
+
+```text
+base allocation:          loss-sensitive 4/8
+prompt count:             128
+evaluated swaps:          8
+base PPL:                 24.1374
+best PPL:                 24.0661
+best demotion:            model.layers.17.self_attn.v_proj
+best promotion:           model.layers.24.self_attn.v_proj
+```
+
+Unified 128-prompt comparison after adding the swap-search allocation:
+
+| method | prompt count | PPL | delta NLL vs FP16 | bit histogram |
+|---|---:|---:|---:|---|
+| FP16 | 128 | 17.3436 | 0.0000 | 16:225 |
+| uniform INT4 | 128 | 27.8236 | 0.4727 | 4:225 |
+| uniform INT3 | 128 | 1154.4350 | 4.1981 | 3:225 |
+| activation-stat RD 4/8 | 128 | 24.5117 | 0.3459 | 4:172, 8:53 |
+| loss-sensitive greedy 4/8 | 128 | 24.1374 | 0.3305 | 4:172, 8:53 |
+| loss-sensitive exact knapsack 4/8 | 128 | 24.3565 | 0.3396 | 4:175, 8:50 |
+| loss-sensitive swap-search 4/8 | 128 | 24.0661 | 0.3276 | 4:172, 8:53 |
+
+The improvement is small, but it strengthens the central research argument:
+global allocation quality contains interaction terms that are not captured by a
+pure additive local sensitivity objective. This justifies pairwise features,
+learned reward models, and constrained contextual bandit/RL allocation as the
+next mathematical step.
+
+Evidence files:
+
+```text
+train_python/search_allocation_swaps.py
+outputs/smollm2_allocation_swap_search_group128_wikitext2_128_summary.json
+outputs/smollm2_allocation_swap_search_group128_wikitext2_128_report.md
+outputs/smollm2_loss_sensitive_swap_search_alloc_4to8_group128_summary.json
+outputs/smollm2_fake_quant_ppl_compare_allocations_swap_group128_wikitext2_128_summary.json
+```
+
 ## Negative Result From 2/3/4/8 Allocation
 
 The earlier 3.2 average-bit allocation over `{2,3,4,8}` was much worse than
@@ -298,5 +349,7 @@ The next meaningful benchmark is:
 2. Compare against Fisher/Hessian proxies and activation reconstruction error.
 3. Add calibration-aware scaling or GPTQ/AWQ/SmoothQuant/rotation baselines.
 4. Repeat across calibration prompt sets and report variance.
-5. Report memory/latency only after weights are actually stored in compressed
+5. Replace one-step swap search with pairwise/learned interaction-aware
+   allocation policies.
+6. Report memory/latency only after weights are actually stored in compressed
    form or run through a quantized runtime.

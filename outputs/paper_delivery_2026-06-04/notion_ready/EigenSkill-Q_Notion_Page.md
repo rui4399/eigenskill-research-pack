@@ -130,6 +130,51 @@ outputs/smollm2_fake_quant_ppl_compare_allocations_group128_wikitext2_128_summar
 outputs/smollm2_fake_quant_ppl_compare_allocations_exact_group128_wikitext2_128_summary.json
 ```
 
+## 2026-06-04 追加：interaction-aware swap-search
+
+在 greedy loss-sensitive allocation 之后，新增了一个 bounded one-step
+policy-improvement 搜索。它生成少量预算不变的 4/8-bit swap 候选，并用全局
+WikiText2-128 PPL 反馈选择最优交换。
+
+结果：
+
+```text
+base allocation: loss-sensitive 4/8
+evaluated swaps: 8
+base PPL:        24.1374
+best PPL:        24.0661
+demote:          model.layers.17.self_attn.v_proj
+promote:         model.layers.24.self_attn.v_proj
+bit histogram:   4-bit=172, 8-bit=53
+```
+
+统一 WikiText2-128 表：
+
+| method | PPL | delta NLL vs FP16 | bit histogram |
+|---|---:|---:|---|
+| FP16 | 17.34 | 0.0000 | 16:225 |
+| uniform INT4 | 27.82 | 0.4727 | 4:225 |
+| uniform INT3 | 1154.44 | 4.1981 | 3:225 |
+| activation-stat RD 4/8 | 24.51 | 0.3459 | 4:172, 8:53 |
+| loss-sensitive greedy 4/8 | 24.14 | 0.3305 | 4:172, 8:53 |
+| loss-sensitive exact knapsack 4/8 | 24.36 | 0.3396 | 4:175, 8:50 |
+| loss-sensitive swap-search 4/8 | 24.07 | 0.3276 | 4:172, 8:53 |
+
+含义：局部 one-module sensitivity 是有效特征，但不是完整目标。exact
+knapsack 和 swap-search 一起说明全局 PPL 中存在模块交互项，后续主线应转向
+interaction-aware allocation、pairwise surrogate、learned reward model 和
+constrained contextual bandit/RL。
+
+新增证据：
+
+```text
+train_python/search_allocation_swaps.py
+outputs/smollm2_allocation_swap_search_group128_wikitext2_128_summary.json
+outputs/smollm2_allocation_swap_search_group128_wikitext2_128_report.md
+outputs/smollm2_loss_sensitive_swap_search_alloc_4to8_group128_summary.json
+outputs/smollm2_fake_quant_ppl_compare_allocations_swap_group128_wikitext2_128_summary.json
+```
+
 ## 数学主线
 
 把量化策略写成约束优化：
@@ -173,7 +218,8 @@ TNNLS 在 CCF AI 官方页列为 B，不建议作为“CCF-A”主推，除非�
 1. 真实模型：Qwen2.5-0.5B/1.5B、Llama-3.2-1B/3B、SmolLM2-1.7B。
 2. 真实量化：RTN、GPTQ、AWQ、SmoothQuant、QuaRot/SpinQuant。
 3. 策略实验：heuristic、deterministic C++、learned bandit/RL。
-4. 指标：PPL、task accuracy、memory、latency、policy overhead、router failure。
+4. 交互建模：one-step swap、beam search、pairwise surrogate、learned reward。
+5. 指标：PPL、task accuracy、memory、latency、policy overhead、router failure。
 
 ## 参考链接
 

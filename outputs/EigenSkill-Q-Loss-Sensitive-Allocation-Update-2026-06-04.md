@@ -105,6 +105,7 @@ PPL       26.13 -> 25.92 vs activation-stat RD
 | activation-stat RD 4/8 | 24.51 | 0.3459 | 4:172, 8:53 |
 | loss-sensitive 4/8 | 24.14 | 0.3305 | 4:172, 8:53 |
 | loss-sensitive exact knapsack 4/8 | 24.36 | 0.3396 | 4:175, 8:50 |
+| loss-sensitive swap-search 4/8 | 24.07 | 0.3276 | 4:172, 8:53 |
 
 这比 32 prompt 更稳，说明新分配在公开文本切片上也持续优于 uniform INT4，
 并且略优于旧 activation-stat RD 分配。
@@ -115,6 +116,23 @@ sensitivity 目标上保护了更多局部正向 loss（57.87% vs 贪心 57.83%�
 它说明模块之间存在交互项，论文里不能只讲“精确优化局部目标必然更好”，
 而应把它上升为更严肃的 ML/RL 问题：学习或估计包含交互的 allocation
 reward。
+
+我随后补了一个 bounded one-step swap-search。它不重新训练模型，而是在
+greedy loss-sensitive allocation 上生成少量“降一个 8-bit、升一个 4-bit”的
+候选交换，并用全局 WikiText2-128 PPL 反馈选择最优候选：
+
+```text
+evaluated swaps: 8
+base PPL:        24.1374
+best PPL:        24.0661
+demote:          model.layers.17.self_attn.v_proj
+promote:         model.layers.24.self_attn.v_proj
+```
+
+这个提升幅度不大，但它是目前最有价值的方向性证据之一：单模块 loss
+sensitivity 是好的局部特征，但真实目标需要 interaction-aware policy
+improvement。后续可以自然扩展到 pairwise interaction、learned reward model
+和 constrained contextual bandit。
 
 ## 对论文主线的意义
 
@@ -137,7 +155,8 @@ loss perturbation、Fisher/Hessian proxy 或 activation reconstruction error
 1. deterministic C++ policy kernel 能保证策略执行可验证；
 2. naive activation proxy 会失败；
 3. measured loss sensitivity 能显著改善 `{4,8}` 混合精度分配；
-4. 后续用 Fisher/Hessian、GPTQ/AWQ/SmoothQuant/rotation baseline 补齐后，
+4. exact knapsack 与 swap-search 显示全局 PPL 中存在模块交互项；
+5. 后续用 Fisher/Hessian、GPTQ/AWQ/SmoothQuant/rotation baseline 补齐后，
    才有国际会议/期刊投稿的可信度。
 
 ## 不能夸大的地方
@@ -169,9 +188,14 @@ outputs/smollm2_fake_quant_ppl_loss_sensitive_4to8_group128_limit8_summary.json
 data_eval/text_prompts/wikitext2_validation_32.txt
 data_eval/text_prompts/wikitext2_validation_128.txt
 train_python/build_loss_sensitive_knapsack_alloc.py
+train_python/search_allocation_swaps.py
 outputs/smollm2_fake_quant_ppl_loss_sensitive_4to8_group128_wikitext2_32_summary.json
 outputs/smollm2_fake_quant_ppl_activation_rd_4to8_group128_wikitext2_32_summary.json
 outputs/smollm2_fake_quant_ppl_compare_allocations_group128_wikitext2_128_summary.json
 outputs/smollm2_fake_quant_ppl_compare_allocations_exact_group128_wikitext2_128_summary.json
+outputs/smollm2_allocation_swap_search_group128_wikitext2_128_summary.json
+outputs/smollm2_allocation_swap_search_group128_wikitext2_128_report.md
+outputs/smollm2_loss_sensitive_swap_search_alloc_4to8_group128_summary.json
+outputs/smollm2_fake_quant_ppl_compare_allocations_swap_group128_wikitext2_128_summary.json
 outputs/smollm2_fake_quant_ppl_report.md
 ```

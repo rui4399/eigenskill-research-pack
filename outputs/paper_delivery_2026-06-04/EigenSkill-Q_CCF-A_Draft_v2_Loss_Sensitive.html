@@ -211,7 +211,9 @@ loss-sensitive 4/8 allocation. On WikiText2 validation slices, the same
 allocation improves PPL from <code>30.26</code> to <code>25.92</code> on
 32 prompts and from <code>27.82</code> to <code>24.14</code> on 128
 prompts, slightly outperforming the activation-statistic RD allocation
-in both cases. These results do not claim production quantization
+in both cases. An additional one-step interaction-aware swap search
+further improves WikiText2-128 PPL from <code>24.14</code> to
+<code>24.07</code>. These results do not claim production quantization
 superiority; they establish a measurable direction for learning- and
 optimization-guided policy control.</p>
 <h2 id="1-introduction">1. Introduction</h2>
@@ -260,6 +262,19 @@ subject to  sum_i M_i(a_i) &lt;= B_mem
 reconstruction error, output KL, or a Fisher/Hessian-weighted proxy.
 <code>C_i</code>, <code>M_i</code>, and <code>T_i</code> capture
 algorithmic and hardware costs.</p>
+<p>For interaction-aware allocation, the global quality objective can be
+decomposed as:</p>
+<pre class="text"><code>L(pi) - L(pi_0)
+  = sum_i g_i(b_i)
+    + sum_{i&lt;j} h_ij(b_i, b_j)
+    + R_high(pi),</code></pre>
+<p>where <code>g_i</code> is the local one-module perturbation term,
+<code>h_ij</code> captures pairwise module interaction, and
+<code>R_high</code> contains higher-order effects. The current
+loss-sensitive allocator estimates only <code>g_i</code>; the
+swap-search experiment is a minimal global-feedback correction that
+tests whether interaction terms can be exploited under the same bit
+budget.</p>
 <h2 id="3-loss-sensitive-module-scoring">3. Loss-Sensitive Module
 Scoring</h2>
 <p>The activation-statistic proxy used in the first scaffold estimates
@@ -306,6 +321,20 @@ of <code>sum_i s_i</code> can therefore be suboptimal for the global PPL
 objective when interaction terms are non-negligible. This motivates
 interaction-aware features, Fisher/Hessian approximations, and learned
 allocation policies.</p>
+<h3 id="one-step-policy-improvement">One-Step Policy Improvement</h3>
+<p>Given a base allocation <code>pi</code>, define a neighborhood
+<code>N(pi)</code> containing budget-preserving swaps that demote one
+currently high-precision module and promote one currently low-precision
+module:</p>
+<pre class="text"><code>N(pi) = { pi - e_u(8-&gt;4) + e_v(4-&gt;8) }.</code></pre>
+<p>The one-step policy-improvement operator is:</p>
+<pre class="text"><code>pi&#39; = argmin_{q in N(pi) union {pi}} L(q; D_val).</code></pre>
+<p>This operator is expensive if the neighborhood is exhaustive, so the
+current implementation evaluates a bounded candidate pool ranked by
+local sensitivity. It is best viewed as a small global-feedback probe,
+not as a final optimizer. Its value is diagnostic: if a single swap
+improves global PPL, then the local additive proxy is incomplete and a
+learned interaction-aware allocator is mathematically justified.</p>
 <h2 id="4-learning-and-reinforcement-learning-view">4. Learning And
 Reinforcement Learning View</h2>
 <p>The offline allocation can be treated as supervised policy
@@ -530,6 +559,12 @@ positive loss protected:    57.83%</code></pre>
 <td style="text-align: right;">0.3396</td>
 <td>4:175, 8:50</td>
 </tr>
+<tr>
+<td>loss-sensitive swap-search 4/8</td>
+<td style="text-align: right;">24.07</td>
+<td style="text-align: right;">0.3276</td>
+<td>4:172, 8:53</td>
+</tr>
 </tbody>
 </table>
 <p>The important result is not that this fake-quant scaffold beats
@@ -544,6 +579,13 @@ WikiText2-128 PPL is slightly worse (<code>24.36</code> versus
 objective is a useful proxy but not the final objective. A stronger
 CCF-A version should model module interactions explicitly or learn the
 allocation reward from calibration tasks.</p>
+<p>The bounded swap-search check then evaluates 8 global-feedback
+candidates around the greedy allocation. The best candidate demotes
+<code>model.layers.17.self_attn.v_proj</code> and promotes
+<code>model.layers.24.self_attn.v_proj</code>, improving WikiText2-128
+PPL from <code>24.1374</code> to <code>24.0661</code> while keeping the
+same <code>4-bit=172, 8-bit=53</code> histogram. The gain is small, but
+it directly supports the interaction-aware formulation above.</p>
 <h2 id="7-limitations">7. Limitations</h2>
 <p>This draft is not yet a CCF-A submission. The current limitations are
 explicit:</p>
@@ -555,6 +597,8 @@ yet;</li>
 <li>WikiText2 slices are still small;</li>
 <li>the learned contextual bandit/RL component is formulated but not
 trained;</li>
+<li>the interaction-aware policy improvement is only a bounded one-step
+search;</li>
 <li>edge-board and NPU measurements remain future work;</li>
 <li>spectral/eigen-routing and swarm/acoustic concepts are out of
 scope.</li>
@@ -577,6 +621,8 @@ protocol.</li>
 policies.</li>
 <li>Add interaction-aware allocation features and compare local
 additive, pairwise, and learned reward models.</li>
+<li>Expand the current one-step swap search into beam search, pairwise
+surrogate fitting, and policy-gradient or bandit-style allocation.</li>
 <li>Train a constrained contextual bandit using calibration tasks and
 hardware budgets.</li>
 <li>Report compressed runtime memory and latency only after implementing
@@ -600,9 +646,11 @@ experiments, and baselines are substantially expanded.</li>
 <pre class="text"><code>train_python/measure_module_quant_sensitivity.py
 train_python/build_dataset_prompts.py
 train_python/eval_weight_quant_ppl.py
+train_python/search_allocation_swaps.py
 inference_cpp/src/quant_policy_bypass.cpp
 outputs/smollm2_module_loss_sensitivity_limit4_group128.json
-outputs/smollm2_fake_quant_ppl_compare_allocations_group128_wikitext2_128_summary.json
+outputs/smollm2_fake_quant_ppl_compare_allocations_swap_group128_wikitext2_128_summary.json
+outputs/smollm2_allocation_swap_search_group128_wikitext2_128_summary.json
 outputs/smollm2_fake_quant_ppl_report.md
 outputs/EigenSkill-Q-Loss-Sensitive-Allocation-Update-2026-06-04.md</code></pre>
 </body>
