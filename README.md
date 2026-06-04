@@ -540,6 +540,25 @@ OLMo-2-0425-1B-Instruct, WikiText2 16 prompts, uniform smoke:
 FP16                         PPL 17.12
 uniform INT4                 PPL 20.70
 uniform INT3                 PPL 58.84
+
+OLMo-2-0425-1B-Instruct, WikiText2 16 prompts, C++ planner after 2-prompt sensitivity:
+
+FP16                         PPL 17.12
+uniform INT4                 PPL 20.70
+uniform INT3                 PPL 58.84
+C++ category budget {4,8}    PPL 19.39  avg bits 4.4984
+C++ random budget {4,8}      PPL 19.71  avg bits 4.4984
+C++ loss-sensitive {4,8}     PPL 18.89  avg bits 4.4984
+C++ blend sweep best {4,8}   PPL 18.76  avg bits 4.4984
+
+OLMo-2-0425-1B-Instruct, WikiText2 64 prompts, same 2-prompt calibration allocation:
+
+FP16                         PPL 18.86
+uniform INT4                 PPL 22.49
+C++ category budget {4,8}    PPL 21.63  avg bits 4.4984
+C++ random budget {4,8}      PPL 21.64  avg bits 4.4984
+C++ blend_sensitivity_85     PPL 21.13  avg bits 4.4984
+C++ loss-sensitive {4,8}     PPL 21.12  avg bits 4.4984
 ```
 
 This is still a small sanity slice, but it addresses a concrete reviewer
@@ -569,12 +588,19 @@ This is the current best in-repo Qwen3-1.7B fake-quant allocation, but the
 64-prompt gain is small and still needs broader datasets/models before any
 external best-in-field claim. This remains a short-slice fake-quant diagnostic,
 not a production quantizer or SOTA claim. The OLMo2 run adds a non-Qwen,
-2025-era 1B model smoke check: uniform INT4 has a moderate short-slice PPL
-increase (`17.12` to `20.70`), while uniform INT3 is much more destructive
-(`58.84`). It used 113 Linear modules and peaked at `4004/8151 MiB`
-(`49.12%`) under the GPU guard. A Gemma-3-1B candidate was also attempted, but
-the Hugging Face repository was gated in this environment, so it is recorded
-only as an access blocker, not a model result.
+2025-era 1B model check: uniform INT4 has a moderate short-slice PPL increase
+(`17.12` to `20.70`), while uniform INT3 is much more destructive (`58.84`).
+The 2-prompt low-memory sensitivity probe completed over all 113 Linear
+modules at `4175/8151 MiB` (`51.22%`) and the C++ planner used that JSON
+directly. On the 16-prompt slice, the best tested blend candidate improved
+uniform INT4 from `20.70` to `18.76` PPL. On the 64-prompt check, the
+loss-sensitive budget was slightly stronger than the blend candidate (`21.12`
+vs `21.13`) and improved over uniform INT4, random budget, and category
+budget. This gives a second model-family positive allocator signal, but it is
+still a short-slice fake-quant diagnostic, not a production quantizer. A
+Gemma-3-1B candidate was also attempted, but the Hugging Face repository was
+gated in this environment, so it is recorded only as an access blocker, not a
+model result.
 
 Evidence files:
 
@@ -648,6 +674,18 @@ outputs/olmo2_0425_1b_instruct_uniform_fake_quant_ppl_wikitext2_16_summary.json
 outputs/olmo2_0425_1b_instruct_uniform_gpu_guard_wikitext2_16.json
 outputs/gemma3_1b_uniform_gpu_guard_wikitext2_16.json
 outputs/OLMo2-0425-1B-Uniform-Smoke-2026-06-05.md
+outputs/olmo2_0425_1b_sensitivity_lowmem_gpu_guard_limit2_group128.json
+outputs/olmo2_0425_1b_module_loss_sensitivity_limit2_group128.json
+outputs/olmo2_0425_1b_module_loss_sensitivity_limit2_group128_report.md
+outputs/olmo2_0425_1b_loss_sensitive_alloc_4to8_limit2_group128_summary.json
+outputs/olmo2_0425_1b_cpp_allocation_planner_blend_sweep_4p5_summary.json
+data_eval/eval_configs/olmo2_0425_1b_cpp_blend_sweep_candidates.json
+data_eval/eval_configs/olmo2_0425_1b_cpp_blend_winners.json
+outputs/olmo2_0425_1b_cpp_blend_sweep_ppl_wikitext2_16_summary.json
+outputs/olmo2_0425_1b_cpp_blend_sweep_gpu_guard_wikitext2_16.json
+outputs/olmo2_0425_1b_cpp_blend_winners_ppl_wikitext2_64_summary.json
+outputs/olmo2_0425_1b_cpp_blend_winners_gpu_guard_wikitext2_64.json
+outputs/OLMo2-0425-1B-Cpp-Planner-2026-06-05.md
 outputs/smollm2_module_loss_sensitivity_limit4_group128.json
 outputs/smollm2_module_loss_sensitivity_limit4_group128_report.md
 outputs/smollm2_loss_sensitive_alloc_4to8_limit4_group128_summary.json

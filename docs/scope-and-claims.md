@@ -100,12 +100,17 @@ These claims are supported by committed data, scripts, or reports:
   average-bit budget. This is the current best in-repository Qwen3-1.7B
   fake-quant allocation, but the 64-prompt gain is small and should not be
   advertised as field-leading without broader baselines.
-- A non-Qwen `allenai/OLMo-2-0425-1B-Instruct` uniform fake-quant smoke run
-  completed under the GPU guard. On the 16-prompt WikiText2 slice, FP16 PPL is
-  `17.12`, uniform INT4 PPL is `20.70`, and uniform INT3 PPL is `58.84`.
-  The run touched 113 Linear modules and peaked at `4004/8151 MiB` (`49.12%`).
-  This is model-family breadth evidence for the fake-quant diagnostic harness,
-  not an allocator result yet.
+- A non-Qwen `allenai/OLMo-2-0425-1B-Instruct` fake-quant run completed under
+  the GPU guard. On the 16-prompt WikiText2 slice, FP16 PPL is `17.12`,
+  uniform INT4 PPL is `20.70`, and uniform INT3 PPL is `58.84`. A 2-prompt
+  low-memory sensitivity probe over all 113 Linear modules completed at
+  `4175/8151 MiB` (`51.22%`). The resulting C++ planner allocations improved
+  over uniform INT4, C++ random budget, and C++ category budget on both the
+  16-prompt and 64-prompt WikiText2 checks. The best 16-prompt tested blend is
+  `blend_sensitivity_85` (`18.76` PPL), while the 64-prompt check is slightly
+  better with `loss_sensitive_budget` (`21.12` PPL) than `blend_sensitivity_85`
+  (`21.13` PPL). Treat this as a second model-family short-slice allocator
+  signal, not as a production quantizer or broad benchmark.
 - A `google/gemma-3-1b-it` candidate was attempted but blocked by gated
   Hugging Face access in this environment. Report it only as an access
   blocker, not as a failed quantization result or quality datapoint.

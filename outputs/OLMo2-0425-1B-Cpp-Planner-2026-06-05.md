@@ -1,0 +1,129 @@
+# OLMo2 1B C++ Planner Evidence
+
+Date: 2026-06-05
+
+This note records the first non-Qwen mixed-precision allocator check for the
+C++ planner path. It uses `allenai/OLMo-2-0425-1B-Instruct`, which gives the
+repository a second model family beyond Qwen for the fake-quant diagnostic
+harness.
+
+This is still a short-slice fake-quant experiment. It is not a compressed
+runtime, not a hardware latency result, and not a claim of superiority over
+GPTQ, AWQ, SmoothQuant, QuaRot, or other production quantizers.
+
+## Sensitivity Probe
+
+```text
+model: allenai/OLMo-2-0425-1B-Instruct
+calibration prompts: 2
+max length: 160
+linear modules measured: 113 / 113
+probe bits: 4
+group size: 128
+budget: 4.5 average bits
+```
+
+The low-memory probe completed under the GPU guard:
+
+```text
+return code: 0
+killed by guard: false
+peak memory: 4175/8151 MiB = 51.22%
+peak utilization: 41%
+```
+
+The generated loss-sensitive allocation promotes 23 of 113 Linear modules to
+8-bit and protects `48.37%` of the measured positive calibration loss delta at
+`4.4984` average bits.
+
+The C++ planner reads the same sensitivity JSON directly and emits these
+representative allocations:
+
+```text
+loss_sensitive_budget   avg bits 4.4984  bit hist {4: 90, 8: 23}  protected 0.4837
+random_budget           avg bits 4.4984  bit hist {4: 96, 8: 17}  protected 0.2034
+category_budget         avg bits 4.4984  bit hist {4: 75, 8: 38}  protected 0.3268
+blend_sensitivity_85    avg bits 4.4984  bit hist {4: 87, 8: 26}  protected 0.4764
+blend_sensitivity_95    avg bits 4.4984  bit hist {4: 90, 8: 23}  protected 0.4833
+```
+
+## WikiText2 16-Prompt Check
+
+```text
+FP16                         PPL 17.1191
+uniform INT4                 PPL 20.6993
+uniform INT3                 PPL 58.8374
+C++ category budget {4,8}    PPL 19.3858
+C++ random budget {4,8}      PPL 19.7123
+C++ loss-sensitive {4,8}     PPL 18.8901
+C++ blend_sensitivity_85     PPL 18.7611
+```
+
+On this 16-prompt slice, `blend_sensitivity_85` is the best tested candidate.
+It improves over uniform INT4, random budget, category budget, and the pure
+loss-sensitive budget at the same average-bit budget.
+
+GPU guard:
+
+```text
+peak memory: 4430/8151 MiB = 54.35%
+peak utilization: 61%
+```
+
+## WikiText2 64-Prompt Check
+
+```text
+FP16                         PPL 18.8573
+uniform INT4                 PPL 22.4888
+C++ category budget {4,8}    PPL 21.6281
+C++ random budget {4,8}      PPL 21.6367
+C++ blend_sensitivity_85     PPL 21.1331
+C++ loss-sensitive {4,8}     PPL 21.1191
+```
+
+On the larger 64-prompt check, the pure loss-sensitive budget is slightly
+stronger than `blend_sensitivity_85` (`21.1191` vs `21.1331`). The gap is
+small, so report the stable finding as:
+
+```text
+OLMo2 planner allocations beat uniform INT4, random budget, and category
+budget on the checked WikiText2 slices; the exact best candidate differs
+slightly between the 16-prompt and 64-prompt checks.
+```
+
+GPU guard:
+
+```text
+peak memory: 4430/8151 MiB = 54.35%
+peak utilization: 82%
+```
+
+## Interpretation
+
+This is stronger than the earlier OLMo2 uniform smoke because it exercises the
+full C++ allocation planner path:
+
+```text
+low-memory measured sensitivity JSON
+-> C++ budget/category/random/blend allocator
+-> evaluator-compatible allocation summary
+-> fake-quant PPL checks
+```
+
+It also helps address the "single model family" criticism: Qwen3-1.7B remains
+the current larger-model result, while OLMo2-1B provides non-Qwen breadth.
+
+## Evidence Files
+
+```text
+outputs/olmo2_0425_1b_module_loss_sensitivity_limit2_group128.json
+outputs/olmo2_0425_1b_module_loss_sensitivity_limit2_group128_report.md
+outputs/olmo2_0425_1b_sensitivity_lowmem_gpu_guard_limit2_group128.json
+outputs/olmo2_0425_1b_cpp_allocation_planner_blend_sweep_4p5_summary.json
+data_eval/eval_configs/olmo2_0425_1b_cpp_blend_sweep_candidates.json
+data_eval/eval_configs/olmo2_0425_1b_cpp_blend_winners.json
+outputs/olmo2_0425_1b_cpp_blend_sweep_ppl_wikitext2_16_summary.json
+outputs/olmo2_0425_1b_cpp_blend_sweep_gpu_guard_wikitext2_16.json
+outputs/olmo2_0425_1b_cpp_blend_winners_ppl_wikitext2_64_summary.json
+outputs/olmo2_0425_1b_cpp_blend_winners_gpu_guard_wikitext2_64.json
+```
