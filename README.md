@@ -464,8 +464,8 @@ The evaluator now uses in-place group-wise fake quantization to avoid full
 matrix-sized temporary dequant tensors. A guarded 1.5B baseline comparison
 stayed under the requested GPU limit: peak `4634/8151 MiB` (`56.85%`) and max
 GPU utilization `62%` according to `train_python/run_with_gpu_guard.py`. On a
-16-prompt WikiText2 sanity slice, loss-sensitive allocation also beats
-budgeted random and budgeted structural heuristics:
+16-prompt and 64-prompt WikiText2 sanity slices, loss-sensitive allocation also
+beats budgeted random and budgeted structural heuristics:
 
 ```text
 Qwen2.5-1.5B-Instruct, WikiText2 16 prompts, group size 128:
@@ -475,6 +475,14 @@ uniform INT4                 PPL 15.04
 loss-sensitive {4,8}         PPL 13.14  avg bits 4.4953
 random budget-matched {4,8}  PPL 14.19  avg bits 4.4952
 category heuristic budget    PPL 14.44  avg bits 4.4709
+
+Qwen2.5-1.5B-Instruct, WikiText2 64 prompts, group size 128:
+
+FP16                         PPL 12.29
+uniform INT4                 PPL 16.41
+loss-sensitive {4,8}         PPL 14.99  avg bits 4.4953
+random budget-matched {4,8}  PPL 15.70  avg bits 4.4952
+category heuristic budget    PPL 15.72  avg bits 4.4709
 ```
 
 This is still a small sanity slice, but it addresses a concrete reviewer
@@ -505,7 +513,9 @@ outputs/smollm2_fake_quant_ppl_4to8_group128_limit8_summary.json
 outputs/smollm2_fake_quant_ppl_4to8_group64_limit8_summary.json
 outputs/qwen25_1p5b_baseline_allocations_4to8_limit8_group128_summary.json
 outputs/qwen25_1p5b_baseline_budget_ppl_wikitext2_16_summary.json
+outputs/qwen25_1p5b_baseline_budget_ppl_wikitext2_64_summary.json
 outputs/qwen25_1p5b_baseline_eval_gpu_guard_retry.json
+outputs/qwen25_1p5b_baseline_eval_gpu_guard_wikitext2_64.json
 outputs/smollm2_module_loss_sensitivity_limit4_group128.json
 outputs/smollm2_module_loss_sensitivity_limit4_group128_report.md
 outputs/smollm2_loss_sensitive_alloc_4to8_limit4_group128_summary.json

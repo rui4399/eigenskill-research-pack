@@ -370,7 +370,17 @@ guard killed: false
 | random budget-matched {4,8} | 14.18543 | 0.27610 | 4.4952 |
 | category heuristic budget | 14.43989 | 0.29388 | 4.4709 |
 
-解释：loss-sensitive 在这个小切片上不只优于 uniform INT4，也优于预算匹配的 random/heuristic mixed precision baseline。限制：这是 16-prompt sanity slice，不能替代完整基准。
+64-prompt WikiText2 budget baseline：
+
+| method | PPL | mean NLL delta vs FP16 | avg bits |
+|---|---:|---:|---:|
+| FP16 | 12.28746 | 0.00000 | 16.0000 |
+| uniform INT4 | 16.41184 | 0.28942 | 4.0000 |
+| loss-sensitive {4,8} | 14.98599 | 0.19854 | 4.4953 |
+| random budget-matched {4,8} | 15.69645 | 0.24486 | 4.4952 |
+| category heuristic budget | 15.72164 | 0.24646 | 4.4709 |
+
+解释：loss-sensitive 在这两个短切片上不只优于 uniform INT4，也优于预算匹配的 random/heuristic mixed precision baseline。限制：这仍是 sanity slice，不能替代完整基准。
 
 ### 5. 最新 GitHub 提交
 
