@@ -67,8 +67,10 @@ These claims are supported by committed data, scripts, or reports:
   the same 16-prompt WikiText2 slice, FP16 PPL is `27.82`, uniform INT4 is
   `44.57`, C++ loss-sensitive budget allocation is `34.84`, C++ random budget
   is `39.18`, and C++ category budget is `37.57`. The Qwen3 sensitivity
-  calibration used only 4 prompts, so it is a short-cycle signal rather than a
-  mature benchmark.
+  calibration used only 4 prompts; the same allocation also holds its ordering
+  on a 64-prompt WikiText2 slice: loss-sensitive `37.10`, random `41.63`,
+  category `40.14`, and uniform INT4 `47.31`. This is still a short-cycle
+  signal rather than a mature benchmark.
 - The GPU guard script can enforce a max-memory ratio before and during CUDA
   runs. A Qwen2.5-1.5B 16-prompt comparison completed at 56.85% peak GPU
   memory after the fake-quant evaluator was changed to in-place group-wise

@@ -84,11 +84,23 @@ PPL on Qwen3-0.6B, WikiText2 16 prompts:
 | C++ random budget | 39.1800 | 0.3426 | `{"4": 160, "8": 37}` |
 | C++ category budget | 37.5722 | 0.3007 | `{"4": 142, "8": 55}` |
 
+External check on WikiText2 64 prompts using the same 4-prompt calibration
+allocation:
+
+| method | PPL | delta NLL vs FP16 | bit hist |
+|---|---:|---:|---|
+| FP16 | 29.4918 | 0.0000 | `{"16": 197}` |
+| uniform INT4 | 47.3150 | 0.4727 | `{"4": 197}` |
+| C++ loss-sensitive | 37.1018 | 0.2296 | `{"4": 158, "8": 39}` |
+| C++ random budget | 41.6263 | 0.3446 | `{"4": 160, "8": 37}` |
+| C++ category budget | 40.1396 | 0.3083 | `{"4": 142, "8": 55}` |
+
 GPU guard:
 
 ```text
 sensitivity peak: 4711 / 8151 MiB = 57.80%
-PPL eval peak: 2721 / 8151 MiB = 33.38%
+16-prompt PPL eval peak: 2721 / 8151 MiB = 33.38%
+64-prompt PPL eval peak: 2732 / 8151 MiB = 33.52%
 killed_by_guard: false
 ```
 
