@@ -1,0 +1,71 @@
+{
+  "command": [
+    "python3",
+    "train_python/eval_weight_quant_ppl.py",
+    "--model",
+    "HuggingFaceTB/SmolLM2-1.7B-Instruct",
+    "--prompts",
+    "data_eval/text_prompts/wikitext2_validation_32.txt",
+    "--limit-prompts",
+    "16",
+    "--max-length",
+    "128",
+    "--device",
+    "cuda",
+    "--dtype",
+    "float16",
+    "--group-size",
+    "128",
+    "--reuse-model",
+    "--out",
+    "outputs/smollm2_1p7b_uniform_ppl_wikitext2_16_summary.json"
+  ],
+  "returncode": 1,
+  "killed_by_guard": false,
+  "max_memory_used_mib": 961,
+  "memory_total_mib": 8151,
+  "max_memory_used_ratio": 0.11789964421543368,
+  "max_utilization_gpu_pct": 1,
+  "start_state": {
+    "utilization_gpu_pct": 1,
+    "memory_used_mib": 961,
+    "memory_total_mib": 8151,
+    "memory_used_ratio": 0.11789964421543368
+  },
+  "end_state": {
+    "utilization_gpu_pct": 1,
+    "memory_used_mib": 961,
+    "memory_total_mib": 8151,
+    "memory_used_ratio": 0.11789964421543368
+  },
+  "samples": [
+    {
+      "utilization_gpu_pct": 1,
+      "memory_used_mib": 961,
+      "memory_total_mib": 8151,
+      "memory_used_ratio": 0.11789964421543368,
+      "t_seconds": 1780615186.6556447
+    },
+    {
+      "utilization_gpu_pct": 1,
+      "memory_used_mib": 961,
+      "memory_total_mib": 8151,
+      "memory_used_ratio": 0.11789964421543368,
+      "t_seconds": 1780615188.7370565
+    },
+    {
+      "utilization_gpu_pct": 1,
+      "memory_used_mib": 961,
+      "memory_total_mib": 8151,
+      "memory_used_ratio": 0.11789964421543368,
+      "t_seconds": 1780615190.8125522
+    },
+    {
+      "utilization_gpu_pct": 1,
+      "memory_used_mib": 961,
+      "memory_total_mib": 8151,
+      "memory_used_ratio": 0.11789964421543368,
+      "t_seconds": 1780615192.8675492
+    }
+  ]
+}

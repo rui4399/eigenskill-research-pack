@@ -89,9 +89,11 @@ These claims are supported by committed data, scripts, or reports:
   the same 16-prompt WikiText2 slice, FP16 PPL is `27.82`, uniform INT4 is
   `44.57`, C++ loss-sensitive budget allocation is `34.84`, C++ random budget
   is `39.18`, and C++ category budget is `37.57`. The Qwen3 sensitivity
-  calibration used only 4 prompts; the same allocation also holds its ordering
-  on a 64-prompt WikiText2 slice: loss-sensitive `37.10`, random `41.63`,
-  category `40.14`, and uniform INT4 `47.31`. This is still a short-cycle
+  calibration used only 4 prompts; a random16 stress check on a 64-prompt
+  WikiText2 slice gives FP16 `31.18`, uniform INT4 `49.79`, loss-sensitive
+  `39.01`, category `42.19`, and random min/mean/max
+  `41.91 / 44.06 / 46.40`. The target is ahead of the best listed random seed
+  by `2.90` PPL and the random mean by `5.05` PPL. This is still a short-cycle
   signal rather than a mature benchmark.
 - A Qwen3-1.7B uniform fake-quant smoke run also completed under the GPU guard:
   FP16 PPL `18.97`, uniform INT4 PPL `27.45`, and uniform INT3 PPL `312.57`
