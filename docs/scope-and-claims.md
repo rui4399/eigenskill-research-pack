@@ -124,6 +124,10 @@ These claims are supported by committed data, scripts, or reports:
 - A `google/gemma-3-1b-it` candidate was attempted but blocked by gated
   Hugging Face access in this environment. Report it only as an access
   blocker, not as a failed quantization result or quality datapoint.
+- A `meta-llama/Llama-3.2-1B-Instruct` candidate was attempted and also blocked
+  by gated Hugging Face access in this environment. The guard log peaked at
+  `871/8151 MiB` (`10.69%`) because the model did not load. Report it only as
+  an access blocker, not as a quality datapoint.
 - The GPU guard script can enforce a max-memory ratio before and during CUDA
   runs. A Qwen2.5-1.5B 16-prompt comparison completed at 56.85% peak GPU
   memory after the fake-quant evaluator was changed to in-place group-wise

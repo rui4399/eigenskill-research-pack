@@ -726,6 +726,8 @@ outputs/olmo2_0425_1b_cpp_random8_wikitext2_64_summary.csv
 outputs/olmo2_0425_1b_cpp_random8_c4_64_summary.md
 outputs/olmo2_0425_1b_cpp_random8_c4_64_summary.csv
 outputs/OLMo2-0425-1B-Cpp-Planner-2026-06-05.md
+docs/small-model-candidates-2026-06-05.md
+outputs/llama32_1b_uniform_gpu_guard_wikitext2_16.json
 outputs/smollm2_module_loss_sensitivity_limit4_group128.json
 outputs/smollm2_module_loss_sensitivity_limit4_group128_report.md
 outputs/smollm2_loss_sensitive_alloc_4to8_limit4_group128_summary.json
