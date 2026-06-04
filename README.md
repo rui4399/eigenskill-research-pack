@@ -9,8 +9,9 @@ core is narrower:
 1. synthetic skill datasets for routing and quantization-policy decisions;
 2. deterministic bypass evaluators for low-entropy skills, including a C++
    quantization-policy evaluator;
-3. fake-quant PPL baselines on `HuggingFaceTB/SmolLM2-360M-Instruct` and
-   `Qwen/Qwen2.5-0.5B-Instruct`;
+3. fake-quant PPL baselines on `HuggingFaceTB/SmolLM2-360M-Instruct`,
+   `Qwen/Qwen2.5-0.5B-Instruct`, and a local
+   `Qwen/Qwen2.5-1.5B-Instruct` smoke run;
 4. standalone C++ artifacts for low-rank GEMV, quantization-policy bypass,
    quant-kernel microbenchmarks, and a reusable quant-kernel API.
 
@@ -395,6 +396,28 @@ WikiText2-128 and is nearly tied on C4-64, while substantially increasing
 overlap with both calibration probes. Any paper-facing version should report
 calibration stability, not only the best PPL.
 
+The stronger-model smoke baseline now also includes a locally downloaded
+`Qwen/Qwen2.5-1.5B-Instruct` checkpoint. This is a small 16-prompt WikiText2
+slice, not a full benchmark:
+
+```text
+Qwen2.5-1.5B-Instruct, group size 128:
+
+WikiText2 validation slice, 16 prompts:
+FP16                         PPL 11.28
+uniform INT4                 PPL 15.84
+uniform INT3                 PPL 381.73
+
+Local model path             C:\Users\18042\models\Qwen2.5-1.5B-Instruct
+model.safetensors bytes      3,087,467,144
+model.safetensors sha256     DD924A11B4C220F385B51FFA522DAEA7C9F3D850E31B162BB5661DF483C6D3EE
+Linear modules touched       197
+```
+
+This result only validates that the fake-quant evaluator runs on a stronger
+1.5B model and that uniform INT4 remains usable on the short PPL slice. It is
+not a packed INT4 runtime, latency, memory, or energy claim.
+
 Evidence files:
 
 ```text
@@ -448,6 +471,9 @@ outputs/qwen25_0p5b_module_loss_sensitivity_limit8_group128.json
 outputs/qwen25_0p5b_loss_sensitive_alloc_4to8_limit2_group128_summary.json
 outputs/qwen25_0p5b_loss_sensitive_alloc_4to8_limit8_group128_summary.json
 outputs/qwen25_0p5b_loss_sensitive_consensus_alloc_4to8_group128_summary.json
+outputs/qwen25_1p5b_uniform_smoke_report.md
+outputs/qwen25_1p5b_fake_quant_ppl_uniform_group128_wikitext2_16_summary.json
+outputs/qwen25_1p5b_uniform_smoke_ppl_table.md
 outputs/qwen25_0p5b_loss_sensitive_consensus_alloc_4to8_group128_report.md
 outputs/qwen25_0p5b_fake_quant_ppl_uniform_group128_wikitext2_128_summary.json
 outputs/qwen25_0p5b_fake_quant_ppl_uniform_group128_c4_en_validation_64_summary.json
@@ -711,21 +737,22 @@ More detail is in `inference_cpp/README.md`.
 ## Reproduce Qwen2.5 Uniform Fake-Quant Baseline
 
 This requires the WSL GPU Python environment and a complete local Hugging Face
-cache or network access for:
+cache, network access, or a direct local download for:
 
 ```text
 Qwen/Qwen2.5-0.5B-Instruct
+Qwen/Qwen2.5-1.5B-Instruct
 ```
 
-An attempted `Qwen/Qwen2.5-1.5B-Instruct` smoke run did not reach evaluation
-because the unauthenticated Hugging Face download stalled around a partial
-325 MB blob. This is recorded as a failed download attempt, not a model result:
+The first `Qwen/Qwen2.5-1.5B-Instruct` attempt did not reach evaluation because
+the unauthenticated Hugging Face cache download stalled around a partial 325 MB
+blob. That failed attempt is retained as blocker evidence:
 
 ```text
 outputs/qwen25_1p5b_smoke_attempt_2026-06-04.md
 ```
 
-The repository now includes a cache-audited predownload helper:
+The repository includes a cache-audited predownload helper:
 
 ```bash
 python3 train_python/predownload_hf_model.py \
@@ -735,9 +762,23 @@ python3 train_python/predownload_hf_model.py \
 ```
 
 It reports `.incomplete` cache blobs as `incomplete_cache`, even if
-`snapshot_download` returns a local snapshot path. Current evidence shows
-`Qwen2.5-0.5B-Instruct` is complete locally, while
-`Qwen2.5-1.5B-Instruct` is still blocked by incomplete download:
+`snapshot_download` returns a local snapshot path. When the cache path is
+unreliable, the direct resumable downloader can fetch the 1.5B model into the
+repo-external model directory:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\tools\download_qwen25_1p5b.ps1
+```
+
+The direct download used for the current smoke evidence produced:
+
+```text
+C:\Users\18042\models\Qwen2.5-1.5B-Instruct\model.safetensors
+bytes: 3,087,467,144
+sha256: DD924A11B4C220F385B51FFA522DAEA7C9F3D850E31B162BB5661DF483C6D3EE
+```
+
+Older cache-audit evidence:
 
 ```text
 outputs/qwen25_0p5b_cache_audit_report.md
@@ -764,6 +805,17 @@ python3 train_python/eval_weight_quant_ppl.py \
   --group-size 128 \
   --config-json data_eval/eval_configs/qwen25_uniform_group128.json \
   --out outputs/qwen25_0p5b_fake_quant_ppl_uniform_group128_c4_en_validation_64_summary.json
+
+HF_HUB_OFFLINE=1 TRANSFORMERS_OFFLINE=1 \
+PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True \
+python3 train_python/eval_weight_quant_ppl.py \
+  --model /mnt/c/Users/18042/models/Qwen2.5-1.5B-Instruct \
+  --prompts data_eval/text_prompts/wikitext2_validation_128.txt \
+  --limit-prompts 16 \
+  --max-length 128 \
+  --group-size 128 \
+  --config-json data_eval/eval_configs/qwen25_uniform_group128.json \
+  --out outputs/qwen25_1p5b_fake_quant_ppl_uniform_group128_wikitext2_16_summary.json
 ```
 
 For multi-config evaluation, `--reuse-model` can avoid reloading the same model
