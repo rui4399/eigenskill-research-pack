@@ -1,4 +1,4 @@
-# SmolLM2 Module Loss Sensitivity Report
+# Module Loss Sensitivity Report
 
 Date: `2026-06-04`
 Model: `/mnt/c/Users/18042/models/Qwen2.5-1.5B-Instruct`

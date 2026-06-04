@@ -11,9 +11,23 @@ def load_allocation(path: str, method: str) -> tuple[list[dict], list[int], dict
     return data["groups"], [int(x) for x in data["allocations"][method]], data
 
 
-def load_ppl(path: str) -> dict[str, float]:
+def load_ppl(path: str) -> dict:
     data = json.loads(Path(path).read_text(encoding="utf-8"))
-    return {item["name"]: float(item["metrics"]["ppl"]) for item in data["results"]}
+    return {
+        "prompt_count": int(data.get("prompt_count", 0)),
+        "results": {item["name"]: float(item["metrics"]["ppl"]) for item in data["results"]},
+    }
+
+
+def allocation_ppl(data: dict, preferred_names: list[str]) -> float:
+    results = data["results"]
+    for name in preferred_names:
+        if name in results:
+            return results[name]
+    matches = [name for name in results if name.startswith("loss_sensitive")]
+    if len(matches) == 1:
+        return results[matches[0]]
+    raise KeyError(f"could not identify allocation PPL result from names: {sorted(results)}")
 
 
 def bit_hist(bits: list[int]) -> dict[str, int]:
@@ -139,11 +153,11 @@ def main() -> None:
         right_w = load_ppl(args.right_wikitext_ppl)
         ppl_rows.append(
             {
-                "name": "WikiText2-128",
-                "fp16": right_w["fp16"],
-                "uniform_int4": right_w["uniform_int4"],
-                "left": left_w.get("loss_sensitive_4to8", left_w.get("loss_sensitive_4to8_limit8")),
-                "right": right_w.get("loss_sensitive_4to8_limit8", right_w.get("loss_sensitive_4to8")),
+                "name": f"WikiText2-{right_w['prompt_count'] or left_w['prompt_count']}",
+                "fp16": right_w["results"]["fp16"],
+                "uniform_int4": right_w["results"]["uniform_int4"],
+                "left": allocation_ppl(left_w, ["loss_sensitive_4to8_2p", "loss_sensitive_4to8"]),
+                "right": allocation_ppl(right_w, ["loss_sensitive_4to8_limit8", "loss_sensitive_4to8_8p"]),
             }
         )
     if args.left_c4_ppl and args.right_c4_ppl:
@@ -151,11 +165,11 @@ def main() -> None:
         right_c = load_ppl(args.right_c4_ppl)
         ppl_rows.append(
             {
-                "name": "C4-64",
-                "fp16": right_c["fp16"],
-                "uniform_int4": right_c["uniform_int4"],
-                "left": left_c.get("loss_sensitive_4to8", left_c.get("loss_sensitive_4to8_limit8")),
-                "right": right_c.get("loss_sensitive_4to8_limit8", right_c.get("loss_sensitive_4to8")),
+                "name": f"C4-{right_c['prompt_count'] or left_c['prompt_count']}",
+                "fp16": right_c["results"]["fp16"],
+                "uniform_int4": right_c["results"]["uniform_int4"],
+                "left": allocation_ppl(left_c, ["loss_sensitive_4to8_2p", "loss_sensitive_4to8"]),
+                "right": allocation_ppl(right_c, ["loss_sensitive_4to8_limit8", "loss_sensitive_4to8_8p"]),
             }
         )
     for row in ppl_rows:

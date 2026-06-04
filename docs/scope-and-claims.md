@@ -43,6 +43,13 @@ These claims are supported by committed data, scripts, or reports:
   has severe train/eval overlap.
 - The C++ benchmark demonstrates a synthetic low-rank arithmetic best case
   where `W = U A U^T`.
+- The fake weight-quantization scaffold has short-slice PPL evidence for
+  SmolLM2-360M, Qwen2.5-0.5B, and a local Qwen2.5-1.5B checkpoint. These are
+  quality diagnostics for allocation policies, not packed-runtime claims.
+- Measured per-module loss sensitivity can improve short-slice fake-quant PPL
+  over uniform INT4 in the committed SmolLM2 and Qwen smoke runs. The
+  Qwen2.5-1.5B evidence includes 2-prompt, 8-prompt, and consensus
+  allocations on WikiText2/C4 slices.
 
 ## Claims Not Supported Yet
 

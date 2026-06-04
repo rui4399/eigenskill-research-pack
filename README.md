@@ -398,7 +398,7 @@ calibration stability, not only the best PPL.
 
 The stronger-model smoke baseline now also includes a locally downloaded
 `Qwen/Qwen2.5-1.5B-Instruct` checkpoint. This is a small 16-prompt WikiText2
-slice, not a full benchmark:
+and 32-prompt C4 slice, not a full benchmark:
 
 ```text
 Qwen2.5-1.5B-Instruct, group size 128:
@@ -408,19 +408,25 @@ FP16                         PPL 11.28
 uniform INT4                 PPL 15.84
 uniform INT3                 PPL 381.73
 loss-sensitive {4,8}, 2p     PPL 13.77
+loss-sensitive {4,8}, 8p     PPL 13.76
+loss-sensitive consensus     PPL 13.71
 
 C4 English validation slice, 32 prompts:
 FP16                         PPL 17.88
 uniform INT4                 PPL 23.57
 uniform INT3                 PPL 289.19
 loss-sensitive {4,8}, 2p     PPL 22.89
+loss-sensitive {4,8}, 8p     PPL 21.96
+loss-sensitive consensus     PPL 22.15
 
 Local model path             C:\Users\18042\models\Qwen2.5-1.5B-Instruct
 model.safetensors bytes      3,087,467,144
 model.safetensors sha256     DD924A11B4C220F385B51FFA522DAEA7C9F3D850E31B162BB5661DF483C6D3EE
 Linear modules touched       197
-loss-sensitive bit histogram 4-bit=137, 8-bit=60
-loss-sensitive avg bits      4.4993
+2p bit histogram             4-bit=137, 8-bit=60, avg bits=4.4993
+8p bit histogram             4-bit=136, 8-bit=61, avg bits=4.4953
+consensus bit histogram      4-bit=132, 8-bit=65, avg bits=4.4993
+2p/8p 8-bit Jaccard          0.6351
 ```
 
 This result only validates that the fake-quant evaluator runs on a stronger
@@ -435,6 +441,13 @@ but ranks modules by loss increase per parameter-cost. This is why small
 attention `k_proj`/`v_proj` matrices dominate the selected 8-bit set, while the
 large `lm_head` has the largest absolute loss increase but is not selected by
 the cost-normalized objective.
+
+The 8-prompt calibration is a stronger signal than the first 2-prompt probe.
+It is nearly tied with the 2-prompt allocation on WikiText2-16, improves C4-32
+from `22.89` to `21.96`, and changes 27 of 197 bit decisions. The consensus
+allocation prioritizes modules selected by both probes, then fills the remaining
+budget by average loss-per-cost score. In this slice it is best on WikiText2-16
+and remains substantially better than uniform INT4 on C4-32.
 
 Evidence files:
 
@@ -494,6 +507,8 @@ outputs/qwen25_1p5b_uniform_smoke_report.md
 outputs/qwen25_1p5b_fake_quant_ppl_uniform_group128_wikitext2_16_summary.json
 outputs/qwen25_1p5b_uniform_smoke_ppl_table.md
 data_eval/eval_configs/qwen25_1p5b_group128_with_loss_sensitive.json
+data_eval/eval_configs/qwen25_1p5b_group128_with_loss_sensitive_limit8.json
+data_eval/eval_configs/qwen25_1p5b_group128_with_consensus.json
 outputs/qwen25_1p5b_loss_sensitive_update.md
 outputs/qwen25_1p5b_module_loss_sensitivity_limit2_group128.json
 outputs/qwen25_1p5b_loss_sensitive_alloc_4to8_limit2_group128_summary.json
@@ -502,6 +517,18 @@ outputs/qwen25_1p5b_fake_quant_ppl_loss_sensitive_group128_c4_en_validation_32_s
 outputs/qwen25_1p5b_loss_sensitive_ppl_table.md
 outputs/qwen25_1p5b_loss_sensitive_two_dataset_ppl_table.md
 outputs/qwen25_1p5b_sensitivity_compact_summary.md
+outputs/qwen25_1p5b_module_loss_sensitivity_limit8_group128.json
+outputs/qwen25_1p5b_module_loss_sensitivity_limit8_group128_report.md
+outputs/qwen25_1p5b_loss_sensitive_alloc_4to8_limit8_group128_summary.json
+outputs/qwen25_1p5b_fake_quant_ppl_loss_sensitive_limit8_group128_wikitext2_16_summary.json
+outputs/qwen25_1p5b_fake_quant_ppl_loss_sensitive_limit8_group128_c4_en_validation_32_summary.json
+outputs/qwen25_1p5b_sensitivity_limit8_compact_summary.md
+outputs/qwen25_1p5b_loss_sensitive_2p_vs_8p_stability_report.md
+outputs/qwen25_1p5b_loss_sensitive_consensus_alloc_4to8_group128_summary.json
+outputs/qwen25_1p5b_loss_sensitive_consensus_alloc_4to8_group128_report.md
+outputs/qwen25_1p5b_fake_quant_ppl_consensus_group128_wikitext2_16_summary.json
+outputs/qwen25_1p5b_fake_quant_ppl_consensus_group128_c4_en_validation_32_summary.json
+outputs/qwen25_1p5b_loss_sensitive_2p8p_consensus_ppl_table.md
 outputs/qwen25_0p5b_loss_sensitive_consensus_alloc_4to8_group128_report.md
 outputs/qwen25_0p5b_fake_quant_ppl_uniform_group128_wikitext2_128_summary.json
 outputs/qwen25_0p5b_fake_quant_ppl_uniform_group128_c4_en_validation_64_summary.json

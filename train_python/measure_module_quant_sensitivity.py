@@ -286,7 +286,7 @@ def rank_groups(groups: list[dict]) -> list[dict]:
 def markdown_report(result: dict, top_k: int = 20) -> str:
     baseline = result["baseline"]
     lines = [
-        "# SmolLM2 Module Loss Sensitivity Report",
+        "# Module Loss Sensitivity Report",
         "",
         f"Date: `{result['date']}`",
         f"Model: `{result['model']}`",

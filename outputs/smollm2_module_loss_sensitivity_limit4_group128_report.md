@@ -1,4 +1,4 @@
-# SmolLM2 Module Loss Sensitivity Report
+# Module Loss Sensitivity Report
 
 Date: `2026-06-04`
 Model: `HuggingFaceTB/SmolLM2-360M-Instruct`
