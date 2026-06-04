@@ -146,6 +146,75 @@ WikiText2-64 peak: 5606 / 8151 MiB = 68.78%, killed_by_guard=false
 C4-64 peak:        5603 / 8151 MiB = 68.74%, killed_by_guard=false
 ```
 
+## WikiText2+C4 Consensus Allocation
+
+To test whether the C4 random16 failure was a single-split calibration issue,
+a second low-memory sensitivity probe was run on two C4 calibration prompts:
+
+```text
+outputs/qwen3_1p7b_module_loss_sensitivity_c4_limit2_group128.json
+outputs/qwen3_1p7b_module_loss_sensitivity_c4_limit2_group128_report.md
+outputs/qwen3_1p7b_sensitivity_lowmem_gpu_guard_c4_limit2_group128.json
+outputs/qwen3_1p7b_loss_sensitive_alloc_4to8_c4_limit2_group128_summary.json
+```
+
+C4 sensitivity guard:
+
+```text
+peak: 4594 / 8151 MiB = 56.36%
+max utilization: 41%
+killed_by_guard: false
+```
+
+C4-only sensitivity allocation:
+
+| method | avg bits | bit hist | protected positive delta |
+|---|---:|---|---:|
+| uniform INT4 | 4.0000 | `{"4": 197}` | 0.0000 |
+| C4 loss-sensitive {4,8} | 4.4973 | `{"4": 157, "8": 40}` | 0.5099 |
+
+The WikiText2 and C4 sensitivity allocations were then merged with the existing
+stability-oriented consensus builder:
+
+```text
+outputs/qwen3_1p7b_loss_sensitive_wikitext_c4_consensus_alloc_4to8_group128_summary.json
+outputs/qwen3_1p7b_loss_sensitive_wikitext_c4_consensus_alloc_4to8_group128_report.md
+data_eval/eval_configs/qwen3_1p7b_wikitext_c4_consensus_compare.json
+```
+
+Consensus allocation summary:
+
+| metric | value |
+|---|---:|
+| avg bits | 4.4973 |
+| bit histogram | `{"4": 147, "8": 50}` |
+| WikiText 8-bit overlap | 36 / 44 |
+| C4 8-bit overlap | 23 / 40 |
+| WikiText Jaccard | 0.6207 |
+| C4 Jaccard | 0.3433 |
+
+The consensus allocation was evaluated on both 64-prompt slices:
+
+```text
+outputs/qwen3_1p7b_wikitext_c4_consensus_ppl_wikitext2_64_summary.json
+outputs/qwen3_1p7b_wikitext_c4_consensus_gpu_guard_wikitext2_64.json
+outputs/qwen3_1p7b_wikitext_c4_consensus_ppl_c4_64_summary.json
+outputs/qwen3_1p7b_wikitext_c4_consensus_gpu_guard_c4_64.json
+outputs/qwen3_1p7b_wikitext_c4_consensus_evidence_matrix.md
+```
+
+| dataset | FP16 | uniform INT4 | consensus | category | best listed random | target vs uniform | target vs best random |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| WikiText2-64 | 21.6552 | 31.1885 | 26.3260 | 27.4838 | 27.6685 | 4.8626 | 1.3425 |
+| C4-64 | 25.5510 | 30.7410 | 28.3303 | 29.2760 | 28.4562 | 2.4107 | 0.1259 |
+
+Consensus evaluation guards:
+
+```text
+WikiText2-64 peak: 5612 / 8151 MiB = 68.85%, killed_by_guard=false
+C4-64 peak:        5618 / 8151 MiB = 68.92%, killed_by_guard=false
+```
+
 ## Interpretation
 
 The low-memory implementation is the main engineering improvement: it turns a
@@ -177,6 +246,12 @@ The allocation result is mixed:
   calibration/proxy overfitting, not a failure of the whole direction. The next
   allocator needs a stronger objective than two-prompt one-module loss
   sensitivity alone.
+- The two-split consensus allocation is the stronger follow-up: it uses
+  independent WikiText2 and C4 sensitivity probes and beats the listed best
+  random seeds on both 64-prompt slices. This suggests the near-term math
+  direction should prioritize cross-distribution stability, robust ranking,
+  and consensus/ensemble objectives before chasing more complicated hardware
+  claims.
 
 This remains fake weight quantization and short-slice PPL evidence. It is not a
 packed low-bit runtime, latency result, board-level result, or SOTA

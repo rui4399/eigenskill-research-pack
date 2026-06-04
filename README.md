@@ -556,6 +556,24 @@ random16 min/mean/max        PPL 28.4562 / 29.4357 / 30.0408
 target vs best random        -0.7467 PPL
 target vs random mean        +0.2327 PPL
 
+Qwen3-1.7B, WikiText2+C4 two-split consensus allocation:
+
+WikiText2-64:
+consensus                    PPL 26.3260
+WikiText-only sensitivity    PPL 27.6578
+C4-only sensitivity          PPL 26.6878
+category                     PPL 27.4838
+best listed random           PPL 27.6685
+target vs best random        +1.3425 PPL
+
+C4-64:
+consensus                    PPL 28.3303
+WikiText-only sensitivity    PPL 29.2030
+C4-only sensitivity          PPL 28.3505
+category                     PPL 29.2760
+best listed random           PPL 28.4562
+target vs best random        +0.1259 PPL
+
 OLMo-2-0425-1B-Instruct, WikiText2 16 prompts, uniform smoke:
 
 FP16                         PPL 17.12
@@ -630,10 +648,15 @@ loss-sensitive beats the random mean on both WikiText2-64 and C4-64, barely
 beats the best random seed on WikiText2-64, and loses to the best random seed
 on C4-64. This is useful negative evidence for calibration/proxy overfitting:
 the current two-prompt sensitivity score is a signal, not a robust allocator.
-This remains a short-slice fake-quant diagnostic, not a production quantizer or
-SOTA claim. The OLMo2 run adds a non-Qwen, 2025-era 1B model check: uniform
-INT4 has a moderate short-slice PPL increase (`17.12` to `20.70`), while
-uniform INT3 is much more destructive (`58.84`).
+The follow-up WikiText2+C4 consensus allocation is the first stronger result:
+using two calibration distributions improves WikiText2-64 to `26.3260` PPL and
+C4-64 to `28.3303` PPL, beating the listed best random seeds on both slices.
+This supports the next mathematical direction: multi-split robustness and
+cross-distribution consensus matter more than a single calibration loss proxy.
+It still remains a short-slice fake-quant diagnostic, not a production
+quantizer or SOTA claim. The OLMo2 run adds a non-Qwen, 2025-era 1B model
+check: uniform INT4 has a moderate short-slice PPL increase (`17.12` to
+`20.70`), while uniform INT3 is much more destructive (`58.84`).
 The 2-prompt low-memory sensitivity probe completed over all 113 Linear
 modules at `4175/8151 MiB` (`51.22%`) and the C++ planner used that JSON
 directly. On the 16-prompt slice, the best tested blend candidate improved
@@ -737,6 +760,21 @@ outputs/qwen3_1p7b_cpp_random16_c4_64_summary.md
 outputs/qwen3_1p7b_cpp_random16_c4_64_summary.csv
 outputs/qwen3_1p7b_cpp_random16_evidence_matrix.md
 outputs/qwen3_1p7b_cpp_random16_evidence_matrix.csv
+outputs/qwen3_1p7b_module_loss_sensitivity_c4_limit2_group128.json
+outputs/qwen3_1p7b_module_loss_sensitivity_c4_limit2_group128_report.md
+outputs/qwen3_1p7b_sensitivity_lowmem_gpu_guard_c4_limit2_group128.json
+outputs/qwen3_1p7b_loss_sensitive_alloc_4to8_c4_limit2_group128_summary.json
+outputs/qwen3_1p7b_loss_sensitive_wikitext_c4_consensus_alloc_4to8_group128_summary.json
+outputs/qwen3_1p7b_loss_sensitive_wikitext_c4_consensus_alloc_4to8_group128_report.md
+data_eval/eval_configs/qwen3_1p7b_wikitext_c4_consensus_compare.json
+outputs/qwen3_1p7b_wikitext_c4_consensus_ppl_wikitext2_64_summary.json
+outputs/qwen3_1p7b_wikitext_c4_consensus_gpu_guard_wikitext2_64.json
+outputs/qwen3_1p7b_wikitext_c4_consensus_ppl_c4_64_summary.json
+outputs/qwen3_1p7b_wikitext_c4_consensus_gpu_guard_c4_64.json
+outputs/qwen3_1p7b_wikitext_c4_consensus_wikitext2_64_summary.md
+outputs/qwen3_1p7b_wikitext_c4_consensus_c4_64_summary.md
+outputs/qwen3_1p7b_wikitext_c4_consensus_evidence_matrix.md
+outputs/qwen3_1p7b_wikitext_c4_consensus_evidence_matrix.csv
 outputs/Qwen3-1.7B-Lowmem-Sensitivity-Cpp-Planner-2026-06-05.md
 outputs/olmo2_0425_1b_instruct_uniform_fake_quant_ppl_wikitext2_16_summary.json
 outputs/olmo2_0425_1b_instruct_uniform_gpu_guard_wikitext2_16.json

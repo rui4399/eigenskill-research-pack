@@ -113,6 +113,14 @@ These claims are supported by committed data, scripts, or reports:
   random mean on both datasets. Treat this as evidence that the current
   two-prompt sensitivity proxy is informative but not robust; do not advertise
   it as field-leading or as an allocator-dominance result.
+- A Qwen3-1.7B two-split consensus allocation, built from one WikiText2
+  2-prompt sensitivity split and one C4 2-prompt sensitivity split, improves
+  the same 64-prompt checks. It reaches `26.3260` PPL on WikiText2-64 and
+  `28.3303` PPL on C4-64, beating the listed best random seeds on both slices
+  (`27.6685` and `28.4562`, respectively). This supports a narrower claim:
+  cross-distribution calibration consensus improves the current fake-quant
+  diagnostic on Qwen3-1.7B. It is still not a production quantizer, packed
+  runtime, or broad benchmark.
 - A non-Qwen `allenai/OLMo-2-0425-1B-Instruct` fake-quant run completed under
   the GPU guard. On the 16-prompt WikiText2 slice, FP16 PPL is `17.12`,
   uniform INT4 PPL is `20.70`, and uniform INT3 PPL is `58.84`. A 2-prompt
