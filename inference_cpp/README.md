@@ -46,6 +46,7 @@ inference_cpp/build-wsl/quant_kernel_bench
 inference_cpp/build-wsl/quant_kernel_verify
 inference_cpp/build-wsl/quant_allocation_planner
 inference_cpp/build-wsl/quant_result_summarizer
+inference_cpp/build-wsl/quant_evidence_matrix
 ```
 
 `quant_allocation_planner` is wired into the Qwen3-1.7B fake-quant evidence
@@ -95,6 +96,22 @@ generation path available in C++:
   --target cpp_loss_sensitive_budget \
   --emit markdown \
   > outputs/olmo2_0425_1b_cpp_random8_wikitext2_64_summary.md
+```
+
+`quant_evidence_matrix` merges multiple evaluator PPL summary JSON files into
+a cross-dataset Markdown or CSV matrix. It reports target improvement versus
+uniform INT4, target margin versus the best random seed, and target margin
+versus the random mean:
+
+```bash
+./inference_cpp/build-wsl/quant_evidence_matrix \
+  --input outputs/qwen3_1p7b_cpp_random16_ppl_wikitext2_64_summary.json \
+  --dataset Qwen3-1.7B-WikiText2-64 \
+  --input outputs/qwen3_1p7b_cpp_random16_ppl_c4_64_summary.json \
+  --dataset Qwen3-1.7B-C4-64 \
+  --target cpp_loss_sensitive_budget \
+  --emit markdown \
+  > outputs/qwen3_1p7b_cpp_random16_evidence_matrix.md
 ```
 
 ## Run

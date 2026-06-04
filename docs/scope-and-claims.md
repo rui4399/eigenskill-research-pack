@@ -67,6 +67,10 @@ These claims are supported by committed data, scripts, or reports:
   Markdown/CSV rankings with random-budget min/mean/max and target-vs-random
   margins. This reduces Python glue in the evidence-reporting path; model
   loading and fake-quant evaluation are still Python/PyTorch.
+- A standalone C++ evidence-matrix summarizer now merges multiple evaluator PPL
+  JSON files into a cross-dataset Markdown/CSV table with target-vs-uniform,
+  target-vs-best-random, and target-vs-random-mean margins. It is a reporting
+  tool, not a quantization algorithm.
 - A newer-model Qwen3-0.6B fake-quant run completed under the GPU guard. On
   the same 16-prompt WikiText2 slice, FP16 PPL is `27.82`, uniform INT4 is
   `44.57`, C++ loss-sensitive budget allocation is `34.84`, C++ random budget
@@ -102,8 +106,13 @@ These claims are supported by committed data, scripts, or reports:
   `category_budget` on both the 16-prompt (`23.52` vs `23.84` PPL) and
   64-prompt (`27.4756` vs `27.4838` PPL) WikiText2 checks at the same
   average-bit budget. This is the current best in-repository Qwen3-1.7B
-  fake-quant allocation, but the 64-prompt gain is small and should not be
-  advertised as field-leading without broader baselines.
+  WikiText2 fake-quant allocation, but the 64-prompt gain is small. A
+  random16 stress check shows the loss-sensitive allocation barely ahead of
+  the best random seed on WikiText2-64 (`27.6578` vs `27.6685`) and behind the
+  best random seed on C4-64 (`29.2030` vs `28.4562`), while still ahead of the
+  random mean on both datasets. Treat this as evidence that the current
+  two-prompt sensitivity proxy is informative but not robust; do not advertise
+  it as field-leading or as an allocator-dominance result.
 - A non-Qwen `allenai/OLMo-2-0425-1B-Instruct` fake-quant run completed under
   the GPU guard. On the 16-prompt WikiText2 slice, FP16 PPL is `17.12`,
   uniform INT4 PPL is `20.70`, and uniform INT3 PPL is `58.84`. A 2-prompt

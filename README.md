@@ -10,10 +10,12 @@ core is narrower:
 2. deterministic bypass evaluators for low-entropy skills, including a C++
    quantization-policy evaluator;
 3. fake-quant PPL baselines on `HuggingFaceTB/SmolLM2-360M-Instruct`,
-   `Qwen/Qwen2.5-0.5B-Instruct`, and a local
-   `Qwen/Qwen2.5-1.5B-Instruct` smoke run;
+   `Qwen/Qwen2.5-0.5B-Instruct`, `Qwen/Qwen2.5-1.5B-Instruct`,
+   `Qwen/Qwen3-0.6B`, `Qwen/Qwen3-1.7B`, and
+   `allenai/OLMo-2-0425-1B-Instruct` short slices;
 4. standalone C++ artifacts for low-rank GEMV, quantization-policy bypass,
-   quant-kernel microbenchmarks, and a reusable quant-kernel API.
+   quant-kernel microbenchmarks, a reusable quant-kernel API, C++ allocation
+   planning, and C++ evidence summarization.
 
 The practical publication direction is therefore:
 
@@ -37,6 +39,9 @@ are not completed results in this repository.
 - C++ microbenchmarks for the arithmetic gap between dense GEMV, selected-row
   GEMV, synthetic low-rank paths, packed INT4 dequantization, and scalar
   bypass.
+- C++ allocation/reporting utilities that consume measured sensitivity and PPL
+  JSON to produce budgeted mixed-precision allocations, random-repeat
+  baselines, and cross-dataset evidence matrices.
 
 ## What This Is Not
 
@@ -535,6 +540,22 @@ C++ category budget {4,8}    PPL 27.48  avg bits 4.4827
 C++ hybrid budget {4,8}      PPL 27.68  avg bits 4.4925
 C++ blend sweep best {4,8}   PPL 27.48  avg bits 4.4827
 
+Qwen3-1.7B, random16 stress check, same 2-prompt calibration budget:
+
+WikiText2-64:
+loss-sensitive               PPL 27.6578
+category                     PPL 27.4838
+random16 min/mean/max        PPL 27.6685 / 28.2905 / 29.9682
+target vs best random        +0.0107 PPL
+target vs random mean        +0.6327 PPL
+
+C4-64:
+loss-sensitive               PPL 29.2030
+category                     PPL 29.2760
+random16 min/mean/max        PPL 28.4562 / 29.4357 / 30.0408
+target vs best random        -0.7467 PPL
+target vs random mean        +0.2327 PPL
+
 OLMo-2-0425-1B-Instruct, WikiText2 16 prompts, uniform smoke:
 
 FP16                         PPL 17.12
@@ -603,12 +624,16 @@ ablation, not a new best result. A C++ blend sweep over sensitivity/category
 weights does find a slightly stronger low-sensitivity blend: on Qwen3-1.7B it
 improves the 16-prompt slice from category `23.84` to `23.52` PPL and the
 64-prompt check from `27.4838` to `27.4756` PPL at the same average-bit budget.
-This is the current best in-repo Qwen3-1.7B fake-quant allocation, but the
-64-prompt gain is small and still needs broader datasets/models before any
-external best-in-field claim. This remains a short-slice fake-quant diagnostic,
-not a production quantizer or SOTA claim. The OLMo2 run adds a non-Qwen,
-2025-era 1B model check: uniform INT4 has a moderate short-slice PPL increase
-(`17.12` to `20.70`), while uniform INT3 is much more destructive (`58.84`).
+This is the current best in-repo Qwen3-1.7B WikiText2 fake-quant allocation,
+but the 64-prompt gain is small. The follow-up random16 stress check is mixed:
+loss-sensitive beats the random mean on both WikiText2-64 and C4-64, barely
+beats the best random seed on WikiText2-64, and loses to the best random seed
+on C4-64. This is useful negative evidence for calibration/proxy overfitting:
+the current two-prompt sensitivity score is a signal, not a robust allocator.
+This remains a short-slice fake-quant diagnostic, not a production quantizer or
+SOTA claim. The OLMo2 run adds a non-Qwen, 2025-era 1B model check: uniform
+INT4 has a moderate short-slice PPL increase (`17.12` to `20.70`), while
+uniform INT3 is much more destructive (`58.84`).
 The 2-prompt low-memory sensitivity probe completed over all 113 Linear
 modules at `4175/8151 MiB` (`51.22%`) and the C++ planner used that JSON
 directly. On the 16-prompt slice, the best tested blend candidate improved
@@ -643,6 +668,7 @@ train_python/summarize_sensitivity.py
 train_python/search_allocation_swaps.py
 inference_cpp/src/quant_allocation_planner.cpp
 inference_cpp/src/quant_result_summarizer.cpp
+inference_cpp/src/quant_evidence_matrix.cpp
 inference_cpp/testdata/allocation_fixture.csv
 inference_cpp/testdata/ppl_summary_fixture.json
 data_eval/eval_configs/qwen25_1p5b_cpp_planner_budget_compare.json
@@ -697,6 +723,20 @@ outputs/qwen3_1p7b_cpp_blend_sweep_ppl_wikitext2_16_summary.json
 outputs/qwen3_1p7b_cpp_blend_sweep_gpu_guard_wikitext2_16.json
 outputs/qwen3_1p7b_cpp_blend_winners_ppl_wikitext2_64_summary.json
 outputs/qwen3_1p7b_cpp_blend_winners_gpu_guard_wikitext2_64.json
+outputs/qwen3_1p7b_cpp_blend_winners_ppl_c4_64_summary.json
+outputs/qwen3_1p7b_cpp_blend_winners_gpu_guard_c4_64.json
+outputs/qwen3_1p7b_cpp_allocation_planner_random16_4p5_summary.json
+data_eval/eval_configs/qwen3_1p7b_cpp_random16_compare.json
+outputs/qwen3_1p7b_cpp_random16_ppl_wikitext2_64_summary.json
+outputs/qwen3_1p7b_cpp_random16_gpu_guard_wikitext2_64.json
+outputs/qwen3_1p7b_cpp_random16_ppl_c4_64_summary.json
+outputs/qwen3_1p7b_cpp_random16_gpu_guard_c4_64.json
+outputs/qwen3_1p7b_cpp_random16_wikitext2_64_summary.md
+outputs/qwen3_1p7b_cpp_random16_wikitext2_64_summary.csv
+outputs/qwen3_1p7b_cpp_random16_c4_64_summary.md
+outputs/qwen3_1p7b_cpp_random16_c4_64_summary.csv
+outputs/qwen3_1p7b_cpp_random16_evidence_matrix.md
+outputs/qwen3_1p7b_cpp_random16_evidence_matrix.csv
 outputs/Qwen3-1.7B-Lowmem-Sensitivity-Cpp-Planner-2026-06-05.md
 outputs/olmo2_0425_1b_instruct_uniform_fake_quant_ppl_wikitext2_16_summary.json
 outputs/olmo2_0425_1b_instruct_uniform_gpu_guard_wikitext2_16.json
