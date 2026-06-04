@@ -11,6 +11,22 @@ models/eigenskill-smollm2-360m-merged-v2-fp16
 models/eigenskill-smollm2-360m-int8-v2-dynamic
 ```
 
+Additional public base model used for fake-quant baseline evaluation:
+
+```text
+Qwen/Qwen2.5-0.5B-Instruct
+```
+
+This is downloaded through the Hugging Face cache and is not committed to the
+repository. The committed evidence is the evaluation configuration and JSON
+summaries:
+
+```text
+data_eval/eval_configs/qwen25_uniform_group128.json
+outputs/qwen25_0p5b_fake_quant_ppl_uniform_group128_wikitext2_128_summary.json
+outputs/qwen25_0p5b_fake_quant_ppl_uniform_group128_c4_en_validation_64_summary.json
+```
+
 Expected local sizes:
 
 ```text

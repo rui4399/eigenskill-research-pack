@@ -9,10 +9,10 @@ core is narrower:
 1. synthetic skill datasets for routing and quantization-policy decisions;
 2. deterministic bypass evaluators for low-entropy skills, including a C++
    quantization-policy evaluator;
-3. a small LoRA/adapter training pipeline around
-   `HuggingFaceTB/SmolLM2-360M-Instruct`;
-4. a C++ low-rank GEMV microbenchmark that measures an isolated best-case
-   kernel, not an integrated model runtime.
+3. fake-quant PPL baselines on `HuggingFaceTB/SmolLM2-360M-Instruct` and
+   `Qwen/Qwen2.5-0.5B-Instruct`;
+4. standalone C++ artifacts for low-rank GEMV, quantization-policy bypass, and
+   quant-kernel microbenchmarks.
 
 The practical publication direction is therefore:
 
@@ -33,8 +33,9 @@ are not completed results in this repository.
 - A lightweight place to collect negative evidence: short LoRA runs do not
   reliably learn numeric quantization policies, which motivates deterministic
   policy kernels.
-- A C++ microbenchmark for the arithmetic gap between dense GEMV and a
-  synthetic low-rank path.
+- C++ microbenchmarks for the arithmetic gap between dense GEMV, selected-row
+  GEMV, synthetic low-rank paths, packed INT4 dequantization, and scalar
+  bypass.
 
 ## What This Is Not
 
@@ -60,7 +61,7 @@ Committed dataset:
 data_eval/eigenskill_quant_v1/
 ```
 
-Skills:
+Quantization-policy skills:
 
 ```text
 outlier_detect
@@ -333,6 +334,24 @@ C4-64 PPL:         33.71
 This is useful negative evidence: local output reconstruction error is not
 automatically aligned with global next-token loss.
 
+The fake-quant scaffold was also run on `Qwen/Qwen2.5-0.5B-Instruct` with a
+uniform-only configuration. No Qwen mixed-precision allocation is claimed here;
+the purpose is to show that the evaluator is not limited to SmolLM2.
+
+```text
+Qwen2.5-0.5B-Instruct, group size 128:
+
+WikiText2 validation slice, 128 prompts:
+FP16          PPL 17.43
+uniform INT4  PPL 27.74
+uniform INT3  PPL 514.09
+
+C4 English validation slice, 64 prompts:
+FP16          PPL 23.95
+uniform INT4  PPL 36.51
+uniform INT3  PPL 779.27
+```
+
 Evidence files:
 
 ```text
@@ -371,17 +390,17 @@ outputs/smollm2_module_output_sensitivity_limit4_group128.json
 outputs/smollm2_output_sensitive_alloc_4to8_limit4_group128_summary.json
 outputs/smollm2_fake_quant_ppl_compare_allocations_with_output_proxy_group128_wikitext2_128_summary.json
 outputs/smollm2_fake_quant_ppl_compare_allocations_with_output_proxy_group128_c4_en_validation_64_summary.json
+data_eval/eval_configs/qwen25_uniform_group128.json
+outputs/qwen25_0p5b_uniform_quant_baseline_report.md
+outputs/qwen25_0p5b_fake_quant_ppl_uniform_group128_wikitext2_128_summary.json
+outputs/qwen25_0p5b_fake_quant_ppl_uniform_group128_c4_en_validation_64_summary.json
 ```
 
 ### 8-skill hybrid routing, v2
 
-Base model:
+Base model: `HuggingFaceTB/SmolLM2-360M-Instruct`
 
-```text
-HuggingFaceTB/SmolLM2-360M-Instruct
-```
-
-Skills:
+PoC skills:
 
 ```text
 intent_routing
@@ -451,15 +470,74 @@ Evidence file:
 outputs/eigenskill_cpp_benchmark.txt
 ```
 
+### C++ quant-kernel microbenchmark
+
+The newest C++ artifact benchmarks four standalone kernel shapes:
+
+```text
+fp32 dense GEMV
+packed INT4 dequant GEMV with per-row scales
+policy-selected output-row GEMV
+scalar skill bypass, y = lambda x
+```
+
+Selected local Windows/MSVC result:
+
+```text
+d=512,  rows=16:  dense=0.151746 ms, int4=0.229690 ms, selected=0.004738 ms
+d=1024, rows=16:  dense=0.651000 ms, int4=0.894527 ms, selected=0.010067 ms
+d=2048, rows=16:  dense=2.748290 ms, int4=3.712570 ms, selected=0.020900 ms
+d=2048, rows=256: dense=2.610602 ms, int4=4.688614 ms, selected=0.323324 ms
+```
+
+Interpretation:
+
+```text
+packed INT4 faster than dense: 0/9 cases
+best selected-row speedup:     131.50x at d=2048, rows=16
+selected-row relative error:   0.0 against the corresponding dense rows
+```
+
+This is deliberately not framed as an INT4 speedup result. In this naive CPU
+implementation, nibble unpacking and scalar dequantization dominate. The
+positive systems signal is policy-selected row computation; the low-bit kernel
+needs AVX2/NEON/native low-bit dot-product work before it can support a speed
+claim.
+
+Evidence files:
+
+```text
+inference_cpp/src/quant_kernel_bench.cpp
+inference_cpp/CMakeLists.txt
+train_python/parse_quant_kernel_bench.py
+outputs/eigenskill_quant_kernel_benchmark.txt
+outputs/eigenskill_quant_kernel_benchmark_summary.json
+outputs/EigenSkill-Q-Cpp-Quant-Kernel-Benchmark-Report.md
+```
+
+WSL/CMake smoke verification also builds all three C++ artifacts with g++ 11.4:
+
+```bash
+cmake -S inference_cpp -B inference_cpp/build-wsl -DCMAKE_BUILD_TYPE=Release
+cmake --build inference_cpp/build-wsl -j
+./inference_cpp/build-wsl/quant_kernel_bench --dims 256 --active-rows 16,64 --iters 50
+./inference_cpp/build-wsl/quant_policy_bypass --data data_eval/eigenskill_quant_v1/eval.jsonl --limit 20
+```
+
 ## Repository Layout
 
 ```text
 train_python/                 data generation, LoRA training, eval, bypass scripts
-inference_cpp/                C++ low-rank GEMV microbenchmark
+inference_cpp/                standalone C++ artifacts and MSVC build script
+inference_cpp/src/eigenskill_bench.cpp
+                              C++ low-rank GEMV microbenchmark
 inference_cpp/src/quant_policy_bypass.cpp
                               C++ deterministic quantization-policy evaluator
+inference_cpp/src/quant_kernel_bench.cpp
+                              C++ quant-kernel and selected-row microbenchmark
 data_eval/eigenskill_v2/      older 8-skill PoC split with severe overlap
 data_eval/eigenskill_quant_v1/cleaner quantization-policy split
+data_eval/eval_configs/       fake-quant evaluation configs
 outputs/                      selected summaries, reports, and benchmark outputs
 docs/                         scope notes, Obsidian notes, NotebookLM source package
 research_pack_2026-06-03/     historical mentor/paper drafts; not current claims
@@ -535,19 +613,55 @@ python train_python/verify_v2_package.py
 
 ## C++ Microbenchmark
 
-Build on Windows:
+Build and run the low-rank GEMV benchmark on Windows/MSVC:
 
 ```powershell
 powershell -ExecutionPolicy Bypass -File .\inference_cpp\build-msvc.ps1
-```
-
-Run:
-
-```powershell
 .\inference_cpp\build\eigenskill_bench.exe --dims 1024,2048 --ks 4,8,16 --iters 300
 ```
 
+Build and run the quant-kernel benchmark:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\inference_cpp\build-msvc.ps1 -Target quant-kernel
+.\inference_cpp\build\quant_kernel_bench.exe --dims 512,1024,2048 --active-rows 16,64,256 --iters 200
+python .\train_python\parse_quant_kernel_bench.py `
+  --input outputs\eigenskill_quant_kernel_benchmark.txt `
+  --out outputs\eigenskill_quant_kernel_benchmark_summary.json
+```
+
 More detail is in `inference_cpp/README.md`.
+
+## Reproduce Qwen2.5 Uniform Fake-Quant Baseline
+
+This requires the WSL GPU Python environment and a complete local Hugging Face
+cache or network access for:
+
+```text
+Qwen/Qwen2.5-0.5B-Instruct
+```
+
+Commands:
+
+```bash
+python3 train_python/eval_weight_quant_ppl.py \
+  --model Qwen/Qwen2.5-0.5B-Instruct \
+  --prompts data_eval/text_prompts/wikitext2_validation_128.txt \
+  --limit-prompts 128 \
+  --max-length 160 \
+  --group-size 128 \
+  --config-json data_eval/eval_configs/qwen25_uniform_group128.json \
+  --out outputs/qwen25_0p5b_fake_quant_ppl_uniform_group128_wikitext2_128_summary.json
+
+python3 train_python/eval_weight_quant_ppl.py \
+  --model Qwen/Qwen2.5-0.5B-Instruct \
+  --prompts data_eval/text_prompts/c4_en_validation_64.txt \
+  --limit-prompts 64 \
+  --max-length 160 \
+  --group-size 128 \
+  --config-json data_eval/eval_configs/qwen25_uniform_group128.json \
+  --out outputs/qwen25_0p5b_fake_quant_ppl_uniform_group128_c4_en_validation_64_summary.json
+```
 
 ## Research Pack Status
 

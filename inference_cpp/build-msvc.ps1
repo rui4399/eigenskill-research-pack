@@ -1,6 +1,6 @@
 param(
   [string]$Configuration = "Release",
-  [ValidateSet("bench", "quant-policy")]
+  [ValidateSet("bench", "quant-policy", "quant-kernel")]
   [string]$Target = "bench",
   [switch]$NoAvx2
 )
@@ -12,6 +12,9 @@ $BuildDir = Join-Path $PSScriptRoot "build"
 if ($Target -eq "quant-policy") {
   $Source = Join-Path $PSScriptRoot "src\quant_policy_bypass.cpp"
   $Exe = Join-Path $BuildDir "quant_policy_bypass.exe"
+} elseif ($Target -eq "quant-kernel") {
+  $Source = Join-Path $PSScriptRoot "src\quant_kernel_bench.cpp"
+  $Exe = Join-Path $BuildDir "quant_kernel_bench.exe"
 } else {
   $Source = Join-Path $PSScriptRoot "src\eigenskill_bench.cpp"
   $Exe = Join-Path $BuildDir "eigenskill_bench.exe"

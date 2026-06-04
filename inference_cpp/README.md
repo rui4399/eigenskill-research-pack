@@ -28,6 +28,23 @@ environment, and writes the executable to:
 inference_cpp\build\eigenskill_bench.exe
 ```
 
+## Build With CMake
+
+The same three C++ artifacts can also be built with CMake on Linux/WSL:
+
+```bash
+cmake -S inference_cpp -B inference_cpp/build-wsl -DCMAKE_BUILD_TYPE=Release
+cmake --build inference_cpp/build-wsl -j
+```
+
+Executables:
+
+```text
+inference_cpp/build-wsl/eigenskill_bench
+inference_cpp/build-wsl/quant_policy_bypass
+inference_cpp/build-wsl/quant_kernel_bench
+```
+
 ## Run
 
 ```powershell
@@ -120,3 +137,53 @@ test: n=400, policy_fields_exact=1.0, decision_exact=1.0, parse_error=0.0
 The Python evaluator remains the stricter full JSON baseline because it checks
 auxiliary numeric fields such as `risk` and `score`. The C++ evaluator is scoped
 to the fields that determine the downstream quantization-policy decision.
+
+## Quant Kernel Microbenchmark
+
+The third artifact benchmarks four standalone kernel shapes that matter for the
+quantization-policy direction:
+
+```text
+fp32 dense GEMV             full d x d floating-point matrix-vector multiply
+packed int4 dequant GEMV    row-scale INT4 weights unpacked during GEMV
+selected-row GEMV           only a policy-selected subset of output rows
+scalar skill bypass         y = lambda x, the O(d) idealized eigen-skill path
+```
+
+This is still a microbenchmark, not an integrated LLM runtime. It does verify
+the C++ implementation surface for packed INT4 weights and dynamic row subsets,
+which the earlier low-rank benchmark did not cover.
+
+### Build
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\inference_cpp\build-msvc.ps1 -Target quant-kernel
+```
+
+Output:
+
+```text
+inference_cpp\build\quant_kernel_bench.exe
+```
+
+### Run
+
+```powershell
+.\inference_cpp\build\quant_kernel_bench.exe --dims 512,1024,2048 --active-rows 16,64,256 --iters 200
+```
+
+Output columns:
+
+```text
+d            hidden dimension / square matrix size
+rows         selected output rows for selected-row GEMV
+dense_ms     FP32 dense GEMV latency
+int4_ms      packed INT4 dequant GEMV latency
+sel_ms       selected-row GEMV latency
+scalar_ms    y = lambda x latency
+int4_x       dense_ms / int4_ms
+sel_x        dense_ms / sel_ms
+scalar_x     dense_ms / scalar_ms
+int4_err     relative L2 error of INT4 output versus FP32 dense output
+sel_err      selected-row output error versus same rows from FP32 dense output
+```
