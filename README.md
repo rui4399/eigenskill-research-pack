@@ -508,6 +508,12 @@ uniform INT4                 PPL 47.31
 C++ loss-sensitive {4,8}     PPL 37.10  avg bits 4.4997
 C++ random budget {4,8}      PPL 41.63  avg bits 4.4997
 C++ category budget {4,8}    PPL 40.14  avg bits 4.4997
+
+Qwen3-1.7B, WikiText2 16 prompts, uniform smoke:
+
+FP16                         PPL 18.97
+uniform INT4                 PPL 27.45
+uniform INT3                 PPL 312.57
 ```
 
 This is still a small sanity slice, but it addresses a concrete reviewer
@@ -565,6 +571,8 @@ outputs/qwen3_0p6b_cpp_planner_budget_ppl_wikitext2_16_summary.json
 outputs/qwen3_0p6b_cpp_planner_budget_gpu_guard_wikitext2_16.json
 outputs/qwen3_0p6b_cpp_planner_budget_ppl_wikitext2_64_summary.json
 outputs/qwen3_0p6b_cpp_planner_budget_gpu_guard_wikitext2_64.json
+outputs/qwen3_1p7b_uniform_fake_quant_ppl_wikitext2_16_summary.json
+outputs/qwen3_1p7b_uniform_gpu_guard_wikitext2_16.json
 outputs/smollm2_module_loss_sensitivity_limit4_group128.json
 outputs/smollm2_module_loss_sensitivity_limit4_group128_report.md
 outputs/smollm2_loss_sensitive_alloc_4to8_limit4_group128_summary.json

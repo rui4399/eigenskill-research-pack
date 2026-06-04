@@ -133,3 +133,28 @@ not prove packed low-bit runtime speed, memory reduction, board-level latency,
 or SOTA quantization quality. It does strengthen the repo by moving one core
 allocation step out of Python and showing the same short-cycle signal on a
 newer Qwen3 small model.
+
+## Qwen3-1.7B Uniform Smoke
+
+Uniform fake-quant baseline:
+
+```text
+outputs/qwen3_1p7b_uniform_fake_quant_ppl_wikitext2_16_summary.json
+```
+
+| method | PPL | delta NLL vs FP16 | bit hist |
+|---|---:|---:|---|
+| FP16 | 18.9664 | 0.0000 | `{"16": 197}` |
+| uniform INT4 | 27.4469 | 0.3696 | `{"4": 197}` |
+| uniform INT3 | 312.5675 | 2.8022 | `{"3": 197}` |
+
+GPU guard:
+
+```text
+peak: 5525 / 8151 MiB = 67.78%
+max utilization: 65%
+killed_by_guard: false
+```
+
+Disk note: after caching Qwen3-1.7B, `/mnt/c` had about `22G` free. Avoid
+downloading larger model families on this disk without cleanup or relocation.
