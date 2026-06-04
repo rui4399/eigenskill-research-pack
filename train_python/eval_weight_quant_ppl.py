@@ -121,6 +121,25 @@ def apply_fake_quant(model: torch.nn.Module, mode: str, module_bits: dict[str, i
     return {"linear_modules_touched": touched, "bit_hist": bit_hist, "group_size": group_size}
 
 
+def capture_linear_weights(model: torch.nn.Module) -> dict[str, torch.Tensor]:
+    weights = {}
+    for name, module in model.named_modules():
+        if isinstance(module, torch.nn.Linear):
+            weights[name] = module.weight.detach().cpu().clone()
+    return weights
+
+
+def restore_linear_weights(model: torch.nn.Module, weights: dict[str, torch.Tensor]) -> None:
+    with torch.no_grad():
+        for name, module in model.named_modules():
+            if not isinstance(module, torch.nn.Linear):
+                continue
+            original = weights.get(name)
+            if original is None:
+                continue
+            module.weight.data.copy_(original.to(device=module.weight.device, dtype=module.weight.dtype))
+
+
 def eval_ppl(model: torch.nn.Module, tokenizer, prompts: list[str], device: str, max_length: int) -> dict:
     total_nll = 0.0
     total_tokens = 0
@@ -179,6 +198,36 @@ def run_config(args, tokenizer, config: dict, prompts: list[str]) -> dict:
     return result
 
 
+def run_config_reuse(
+    args,
+    model: torch.nn.Module,
+    base_linear_weights: dict[str, torch.Tensor],
+    config: dict,
+    prompts: list[str],
+) -> dict:
+    restore_linear_weights(model, base_linear_weights)
+    module_bits = None
+    allocation_meta = None
+    if config["mode"] == "allocation":
+        module_bits, allocation_meta = load_allocation(config["allocation"], config["method"])
+    quant_meta = apply_fake_quant(model, config["mode"], module_bits, group_size=args.group_size)
+    metrics = eval_ppl(model, args._tokenizer, prompts, args.device, args.max_length)
+    result = {
+        "name": config["name"],
+        "mode": config["mode"],
+        "allocation": config.get("allocation", ""),
+        "method": config.get("method", ""),
+        "quant_meta": quant_meta,
+        "metrics": metrics,
+    }
+    if allocation_meta:
+        result["allocation_summary"] = next(
+            (item for item in allocation_meta["summaries"] if item["name"] == config["method"]),
+            None,
+        )
+    return result
+
+
 def parse_configs(args) -> list[dict]:
     configs = [
         {"name": "fp16", "mode": "fp16"},
@@ -211,6 +260,11 @@ def main() -> None:
     parser.add_argument("--allocation-method", default="rate_distortion")
     parser.add_argument("--group-size", type=int, default=0, help="0 means one scale per output row")
     parser.add_argument("--config-json", default="")
+    parser.add_argument(
+        "--reuse-model",
+        action="store_true",
+        help="Load the model once and restore cached Linear weights between configs.",
+    )
     parser.add_argument("--out", default="outputs/smollm2_fake_quant_ppl_summary.json")
     args = parser.parse_args()
 
@@ -225,7 +279,22 @@ def main() -> None:
         tokenizer.pad_token = tokenizer.eos_token
     prompts = load_prompts(args.prompts, args.limit_prompts)
     configs = parse_configs(args)
-    results = [run_config(args, tokenizer, config, prompts) for config in configs]
+    if args.reuse_model:
+        dtype = {"float16": torch.float16, "bfloat16": torch.bfloat16, "float32": torch.float32}[args.dtype]
+        model = AutoModelForCausalLM.from_pretrained(args.model, torch_dtype=dtype)
+        model.eval()
+        model.to(args.device)
+        args._tokenizer = tokenizer
+        base_linear_weights = capture_linear_weights(model)
+        results = [run_config_reuse(args, model, base_linear_weights, config, prompts) for config in configs]
+        del model
+        del base_linear_weights
+        del args._tokenizer
+        if args.device == "cuda":
+            torch.cuda.empty_cache()
+        gc.collect()
+    else:
+        results = [run_config(args, tokenizer, config, prompts) for config in configs]
     baseline = next((x for x in results if x["name"] == "fp16"), None)
     if baseline:
         base_nll = baseline["metrics"]["mean_nll"]

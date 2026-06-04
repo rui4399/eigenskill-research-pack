@@ -695,6 +695,23 @@ python3 train_python/eval_weight_quant_ppl.py \
   --out outputs/qwen25_0p5b_fake_quant_ppl_uniform_group128_c4_en_validation_64_summary.json
 ```
 
+For multi-config evaluation, `--reuse-model` can avoid reloading the same model
+once per config. A Qwen 8-prompt smoke check matched the old reload-per-config
+outputs exactly on mean NLL for FP16, uniform INT4, uniform INT3, and the
+loss-sensitive limit8 allocation:
+
+```bash
+python3 train_python/eval_weight_quant_ppl.py \
+  --model Qwen/Qwen2.5-0.5B-Instruct \
+  --prompts data_eval/text_prompts/wikitext2_validation_128.txt \
+  --limit-prompts 8 \
+  --max-length 128 \
+  --group-size 128 \
+  --config-json data_eval/eval_configs/qwen25_group128_with_loss_sensitive_limit8.json \
+  --reuse-model \
+  --out outputs/qwen25_0p5b_reuse_model_smoke_limit8_wikitext2_8_summary.json
+```
+
 ## Research Pack Status
 
 `research_pack_2026-06-03/` contains early mentor-facing and paper-facing
