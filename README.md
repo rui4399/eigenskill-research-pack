@@ -11,8 +11,8 @@ core is narrower:
    quantization-policy evaluator;
 3. fake-quant PPL baselines on `HuggingFaceTB/SmolLM2-360M-Instruct` and
    `Qwen/Qwen2.5-0.5B-Instruct`;
-4. standalone C++ artifacts for low-rank GEMV, quantization-policy bypass, and
-   quant-kernel microbenchmarks.
+4. standalone C++ artifacts for low-rank GEMV, quantization-policy bypass,
+   quant-kernel microbenchmarks, and a reusable quant-kernel API.
 
 The practical publication direction is therefore:
 
@@ -573,9 +573,15 @@ claim.
 Evidence files:
 
 ```text
+inference_cpp/include/eigenskill/quant_kernels.hpp
+inference_cpp/src/quant_kernels.cpp
+inference_cpp/src/quant_kernel_verify.cpp
 inference_cpp/src/quant_kernel_bench.cpp
 inference_cpp/CMakeLists.txt
+inference_cpp/build-msvc.ps1
 train_python/parse_quant_kernel_bench.py
+outputs/eigenskill_quant_kernel_verify_msvc.json
+outputs/EigenSkill-Q-Cpp-Quant-Kernel-API-Report.md
 outputs/eigenskill_quant_kernel_benchmark.txt
 outputs/eigenskill_quant_kernel_benchmark_summary.json
 outputs/EigenSkill-Q-Cpp-Quant-Kernel-Benchmark-Report.md

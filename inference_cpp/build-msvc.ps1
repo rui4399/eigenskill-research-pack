@@ -1,6 +1,6 @@
 param(
   [string]$Configuration = "Release",
-  [ValidateSet("bench", "quant-policy", "quant-kernel")]
+  [ValidateSet("bench", "quant-policy", "quant-kernel", "quant-verify")]
   [string]$Target = "bench",
   [switch]$NoAvx2
 )
@@ -15,6 +15,10 @@ if ($Target -eq "quant-policy") {
 } elseif ($Target -eq "quant-kernel") {
   $Source = Join-Path $PSScriptRoot "src\quant_kernel_bench.cpp"
   $Exe = Join-Path $BuildDir "quant_kernel_bench.exe"
+} elseif ($Target -eq "quant-verify") {
+  $Source = Join-Path $PSScriptRoot "src\quant_kernel_verify.cpp"
+  $KernelSource = Join-Path $PSScriptRoot "src\quant_kernels.cpp"
+  $Exe = Join-Path $BuildDir "quant_kernel_verify.exe"
 } else {
   $Source = Join-Path $PSScriptRoot "src\eigenskill_bench.cpp"
   $Exe = Join-Path $BuildDir "eigenskill_bench.exe"
@@ -39,9 +43,14 @@ if (-not (Test-Path -LiteralPath $VcVars)) {
 
 $ArchFlag = if ($NoAvx2) { "" } else { "/arch:AVX2" }
 $Defines = "/DNOMINMAX /D_CRT_SECURE_NO_WARNINGS"
-$CompilerFlags = "/nologo /std:c++17 /O2 /EHsc $ArchFlag $Defines"
+$IncludeFlags = "/I`"$PSScriptRoot\include`""
+$CompilerFlags = "/nologo /std:c++17 /O2 /EHsc $ArchFlag $Defines $IncludeFlags"
 
-$Command = "`"$VcVars`" && cl $CompilerFlags /Fe:`"$Exe`" `"$Source`""
+if ($Target -eq "quant-verify") {
+  $Command = "`"$VcVars`" && cl $CompilerFlags /Fe:`"$Exe`" `"$Source`" `"$KernelSource`""
+} else {
+  $Command = "`"$VcVars`" && cl $CompilerFlags /Fe:`"$Exe`" `"$Source`""
+}
 cmd.exe /c $Command
 
 if (-not (Test-Path -LiteralPath $Exe)) {

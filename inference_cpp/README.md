@@ -43,6 +43,7 @@ Executables:
 inference_cpp/build-wsl/eigenskill_bench
 inference_cpp/build-wsl/quant_policy_bypass
 inference_cpp/build-wsl/quant_kernel_bench
+inference_cpp/build-wsl/quant_kernel_verify
 ```
 
 ## Run
@@ -195,3 +196,44 @@ int4_err     relative L2 error of INT4 output versus FP32 dense output
 sel_err      selected-row output error versus same rows from FP32 dense output
 selavx_err   selected-row AVX2 error versus same rows from FP32 dense output
 ```
+
+## Reusable Quant Kernel API
+
+The quant-kernel implementation is also exposed as a small C++ API, not only a
+benchmark executable:
+
+```text
+inference_cpp/include/eigenskill/quant_kernels.hpp
+inference_cpp/src/quant_kernels.cpp
+```
+
+Covered functions:
+
+```text
+dense_gemv
+dense_gemv_avx2
+selected_rows_gemv
+selected_rows_gemv_avx2
+pack_int4_per_row
+int4_dequant_gemv
+scalar_skill_bypass
+rel_l2_error
+```
+
+Build and run the verifier on Windows/MSVC:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\inference_cpp\build-msvc.ps1 -Target quant-verify
+.\inference_cpp\build\quant_kernel_verify.exe --dim 512 --active-rows 32
+```
+
+Build and run the verifier with CMake/WSL:
+
+```bash
+cmake -S inference_cpp -B inference_cpp/build-wsl -DCMAKE_BUILD_TYPE=Release
+cmake --build inference_cpp/build-wsl -j
+./inference_cpp/build-wsl/quant_kernel_verify --dim 512 --active-rows 32
+```
+
+The verifier checks AVX2 dense GEMV, selected-row GEMV, selected-row AVX2 GEMV,
+INT4 finite output, and scalar bypass correctness against scalar references.
