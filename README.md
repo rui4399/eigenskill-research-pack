@@ -334,22 +334,32 @@ C4-64 PPL:         33.71
 This is useful negative evidence: local output reconstruction error is not
 automatically aligned with global next-token loss.
 
-The fake-quant scaffold was also run on `Qwen/Qwen2.5-0.5B-Instruct` with a
-uniform-only configuration. No Qwen mixed-precision allocation is claimed here;
-the purpose is to show that the evaluator is not limited to SmolLM2.
+The fake-quant scaffold was also run on `Qwen/Qwen2.5-0.5B-Instruct`. First,
+a uniform-only configuration verifies that the evaluator is not limited to
+SmolLM2. Then a Qwen-specific measured loss-sensitivity probe produces a
+{4,8}-bit allocation.
 
 ```text
 Qwen2.5-0.5B-Instruct, group size 128:
 
 WikiText2 validation slice, 128 prompts:
-FP16          PPL 17.43
-uniform INT4  PPL 27.74
-uniform INT3  PPL 514.09
+FP16                  PPL 17.43
+uniform INT4          PPL 27.74
+uniform INT3          PPL 514.09
+loss-sensitive {4,8}  PPL 22.46
 
 C4 English validation slice, 64 prompts:
-FP16          PPL 23.95
-uniform INT4  PPL 36.51
-uniform INT3  PPL 779.27
+FP16                  PPL 23.95
+uniform INT4          PPL 36.51
+uniform INT3          PPL 779.27
+loss-sensitive {4,8}  PPL 31.22
+
+Qwen loss-sensitive allocation:
+Linear modules           169
+probe prompts            2
+bit histogram            4-bit=114, 8-bit=55
+weighted avg bits        4.4951
+positive loss protected  63.36%
 ```
 
 Evidence files:
@@ -391,9 +401,15 @@ outputs/smollm2_output_sensitive_alloc_4to8_limit4_group128_summary.json
 outputs/smollm2_fake_quant_ppl_compare_allocations_with_output_proxy_group128_wikitext2_128_summary.json
 outputs/smollm2_fake_quant_ppl_compare_allocations_with_output_proxy_group128_c4_en_validation_64_summary.json
 data_eval/eval_configs/qwen25_uniform_group128.json
+data_eval/eval_configs/qwen25_group128_with_loss_sensitive.json
 outputs/qwen25_0p5b_uniform_quant_baseline_report.md
+outputs/qwen25_0p5b_loss_sensitive_quant_report.md
+outputs/qwen25_0p5b_module_loss_sensitivity_limit2_group128.json
+outputs/qwen25_0p5b_loss_sensitive_alloc_4to8_limit2_group128_summary.json
 outputs/qwen25_0p5b_fake_quant_ppl_uniform_group128_wikitext2_128_summary.json
 outputs/qwen25_0p5b_fake_quant_ppl_uniform_group128_c4_en_validation_64_summary.json
+outputs/qwen25_0p5b_fake_quant_ppl_loss_sensitive_group128_wikitext2_128_summary.json
+outputs/qwen25_0p5b_fake_quant_ppl_loss_sensitive_group128_c4_en_validation_64_summary.json
 ```
 
 ### 8-skill hybrid routing, v2
