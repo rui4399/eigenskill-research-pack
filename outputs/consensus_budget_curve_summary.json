@@ -61,6 +61,66 @@
       "bit_hist": "{\"4\": 130, \"8\": 67}"
     },
     {
+      "dataset": "Qwen3-1.7B-WikiText2-128",
+      "model": "Qwen/Qwen3-1.7B",
+      "prompt_count": 128,
+      "config": "fp16",
+      "avg_bits": 16.0,
+      "ppl": 23.029865244307697,
+      "delta_nll_vs_fp16": 0.0,
+      "ppl_improvement_vs_uniform": 8.403338766174812,
+      "uniform_gap_closed_ratio": 1.0,
+      "bit_hist": "{\"16\": 197}"
+    },
+    {
+      "dataset": "Qwen3-1.7B-WikiText2-128",
+      "model": "Qwen/Qwen3-1.7B",
+      "prompt_count": 128,
+      "config": "uniform_int4",
+      "avg_bits": 4.0,
+      "ppl": 31.43320401048251,
+      "delta_nll_vs_fp16": 0.3110729242637449,
+      "ppl_improvement_vs_uniform": 0.0,
+      "uniform_gap_closed_ratio": 0.0,
+      "bit_hist": "{\"4\": 197}"
+    },
+    {
+      "dataset": "Qwen3-1.7B-WikiText2-128",
+      "model": "Qwen/Qwen3-1.7B",
+      "prompt_count": 128,
+      "config": "consensus_budget_4p25",
+      "avg_bits": 4.2486667682462285,
+      "ppl": 27.72787562419617,
+      "delta_nll_vs_fp16": 0.1856463848916401,
+      "ppl_improvement_vs_uniform": 3.7053283862863395,
+      "uniform_gap_closed_ratio": 0.4409352626840486,
+      "bit_hist": "{\"4\": 165, \"8\": 32}"
+    },
+    {
+      "dataset": "Qwen3-1.7B-WikiText2-128",
+      "model": "Qwen/Qwen3-1.7B",
+      "prompt_count": 128,
+      "config": "consensus_budget_4p50",
+      "avg_bits": 4.497333536492458,
+      "ppl": 27.405374235446526,
+      "delta_nll_vs_fp16": 0.17394727163641788,
+      "ppl_improvement_vs_uniform": 4.027829775035983,
+      "uniform_gap_closed_ratio": 0.4793130310596112,
+      "bit_hist": "{\"4\": 147, \"8\": 50}"
+    },
+    {
+      "dataset": "Qwen3-1.7B-WikiText2-128",
+      "model": "Qwen/Qwen3-1.7B",
+      "prompt_count": 128,
+      "config": "consensus_budget_4p75",
+      "avg_bits": 4.746000304738686,
+      "ppl": 26.566528964839,
+      "delta_nll_vs_fp16": 0.14286025135440417,
+      "ppl_improvement_vs_uniform": 4.8666750456435075,
+      "uniform_gap_closed_ratio": 0.5791358864684698,
+      "bit_hist": "{\"4\": 130, \"8\": 67}"
+    },
+    {
       "dataset": "Qwen3-1.7B-C4-64",
       "model": "Qwen/Qwen3-1.7B",
       "prompt_count": 64,
@@ -178,6 +238,66 @@
       "delta_nll_vs_fp16": 0.09404863267295083,
       "ppl_improvement_vs_uniform": 1.984632528491879,
       "uniform_gap_closed_ratio": 0.4995890494882915,
+      "bit_hist": "{\"4\": 80, \"8\": 33}"
+    },
+    {
+      "dataset": "OLMo2-1B-WikiText2-128",
+      "model": "allenai/OLMo-2-0425-1B-Instruct",
+      "prompt_count": 128,
+      "config": "fp16",
+      "avg_bits": 16.0,
+      "ppl": 22.223406412608455,
+      "delta_nll_vs_fp16": 0.0,
+      "ppl_improvement_vs_uniform": 4.616095359097191,
+      "uniform_gap_closed_ratio": 1.0,
+      "bit_hist": "{\"16\": 113}"
+    },
+    {
+      "dataset": "OLMo2-1B-WikiText2-128",
+      "model": "allenai/OLMo-2-0425-1B-Instruct",
+      "prompt_count": 128,
+      "config": "uniform_int4",
+      "avg_bits": 4.0,
+      "ppl": 26.839501771705645,
+      "delta_nll_vs_fp16": 0.18872867266960158,
+      "ppl_improvement_vs_uniform": 0.0,
+      "uniform_gap_closed_ratio": 0.0,
+      "bit_hist": "{\"4\": 113}"
+    },
+    {
+      "dataset": "OLMo2-1B-WikiText2-128",
+      "model": "allenai/OLMo-2-0425-1B-Instruct",
+      "prompt_count": 128,
+      "config": "consensus_budget_4p25",
+      "avg_bits": 4.249180327868852,
+      "ppl": 25.77735291041147,
+      "delta_nll_vs_fp16": 0.1483502359111566,
+      "ppl_improvement_vs_uniform": 1.062148861294176,
+      "uniform_gap_closed_ratio": 0.23009681964237186,
+      "bit_hist": "{\"4\": 97, \"8\": 16}"
+    },
+    {
+      "dataset": "OLMo2-1B-WikiText2-128",
+      "model": "allenai/OLMo-2-0425-1B-Instruct",
+      "prompt_count": 128,
+      "config": "consensus_budget_4p50",
+      "avg_bits": 4.498360655737705,
+      "ppl": 25.043455995231163,
+      "delta_nll_vs_fp16": 0.11946647932762255,
+      "ppl_improvement_vs_uniform": 1.7960457764744824,
+      "uniform_gap_closed_ratio": 0.38908333488711777,
+      "bit_hist": "{\"4\": 87, \"8\": 26}"
+    },
+    {
+      "dataset": "OLMo2-1B-WikiText2-128",
+      "model": "allenai/OLMo-2-0425-1B-Instruct",
+      "prompt_count": 128,
+      "config": "consensus_budget_4p75",
+      "avg_bits": 4.747540983606557,
+      "ppl": 24.699272983216346,
+      "delta_nll_vs_fp16": 0.10562773296345318,
+      "ppl_improvement_vs_uniform": 2.140228788489299,
+      "uniform_gap_closed_ratio": 0.46364483876431056,
       "bit_hist": "{\"4\": 80, \"8\": 33}"
     },
     {

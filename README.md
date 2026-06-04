@@ -108,14 +108,16 @@ budget monotonically reduces short-slice fake-quant PPL:
 
 ```text
 Qwen3-1.7B, WikiText2-64: 28.0753 -> 27.3180 -> 26.6163
+Qwen3-1.7B, WikiText2-128: 27.7279 -> 27.4054 -> 26.5665
 Qwen3-1.7B, C4-64:        30.4752 -> 29.9230 -> 29.2500
 OLMo2-1B, WikiText2-64:   23.2779 -> 22.5113 -> 22.1464
+OLMo2-1B, WikiText2-128:  25.7774 -> 25.0435 -> 24.6993
 OLMo2-1B, C4-64:          37.9817 -> 37.2835 -> 37.1610
 ```
 
 The guarded runs stayed below the requested 85% GPU-memory ceiling:
-Qwen3 peaked at `5065/8151 MiB` (`62.14%`) and OLMo2 peaked at
-`4369/8151 MiB` (`53.60%`).
+Qwen3 peaked at `5071/8151 MiB` (`62.21%`) and OLMo2 peaked at
+`4376/8151 MiB` (`53.69%`).
 
 Evidence files:
 

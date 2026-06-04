@@ -38,8 +38,10 @@ All model runs used the GPU guard with `--max-memory-ratio 0.85`.
 | dataset | model | 4.25-bit PPL | 4.50-bit PPL | 4.75-bit PPL | uniform INT4 PPL |
 |---|---|---:|---:|---:|---:|
 | WikiText2-64 | Qwen3-1.7B | 28.0753 | 27.3180 | 26.6163 | 31.8353 |
+| WikiText2-128 | Qwen3-1.7B | 27.7279 | 27.4054 | 26.5665 | 31.4332 |
 | C4-64 | Qwen3-1.7B | 30.4752 | 29.9230 | 29.2500 | 32.4338 |
 | WikiText2-64 | OLMo2-1B | 23.2779 | 22.5113 | 22.1464 | 24.1311 |
+| WikiText2-128 | OLMo2-1B | 25.7774 | 25.0435 | 24.6993 | 26.8395 |
 | C4-64 | OLMo2-1B | 37.9817 | 37.2835 | 37.1610 | 38.8025 |
 
 The curve is monotonic across both model families and both datasets: giving the
@@ -50,8 +52,10 @@ allocator more 8-bit budget consistently reduces fake-quant PPL.
 | run | peak VRAM | peak ratio | guard |
 |---|---:|---:|---:|
 | Qwen3-1.7B WikiText2-64 | 5057 / 8151 MiB | 0.6204 | 0.85 |
+| Qwen3-1.7B WikiText2-128 | 5071 / 8151 MiB | 0.6221 | 0.85 |
 | Qwen3-1.7B C4-64 | 5065 / 8151 MiB | 0.6214 | 0.85 |
 | OLMo2-1B WikiText2-64 | 4369 / 8151 MiB | 0.5360 | 0.85 |
+| OLMo2-1B WikiText2-128 | 4376 / 8151 MiB | 0.5369 | 0.85 |
 | OLMo2-1B C4-64 | 4369 / 8151 MiB | 0.5360 | 0.85 |
 
 No run was killed by the guard.
@@ -90,8 +94,10 @@ outputs/consensus_budget_curve_summary.csv
 data_eval/eval_configs/qwen3_1p7b_consensus_budget_curve.json
 data_eval/eval_configs/olmo2_0425_1b_consensus_budget_curve.json
 outputs/qwen3_1p7b_consensus_budget_curve_ppl_wikitext2_64_summary.json
+outputs/qwen3_1p7b_consensus_budget_curve_ppl_wikitext2_128_summary.json
 outputs/qwen3_1p7b_consensus_budget_curve_ppl_c4_64_summary.json
 outputs/olmo2_0425_1b_consensus_budget_curve_ppl_wikitext2_64_summary.json
+outputs/olmo2_0425_1b_consensus_budget_curve_ppl_wikitext2_128_summary.json
 outputs/olmo2_0425_1b_consensus_budget_curve_ppl_c4_64_summary.json
 outputs/qwen3_1p7b_wikitext_c4_sensitivity_stability_cpp.md
 outputs/olmo2_0425_1b_wikitext_c4_sensitivity_stability_cpp.md

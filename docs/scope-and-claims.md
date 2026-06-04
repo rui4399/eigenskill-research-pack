@@ -142,12 +142,14 @@ These claims are supported by committed data, scripts, or reports:
 - A budget-curve diagnostic for the same consensus allocator now evaluates
   4.25, 4.50, and 4.75 average-bit budgets on both Qwen3-1.7B and
   OLMo2-0425-1B-Instruct. PPL improves monotonically as more 8-bit budget is
-  released on Qwen3 WikiText2-64 (`28.0753 -> 27.3180 -> 26.6163`), Qwen3
-  C4-64 (`30.4752 -> 29.9230 -> 29.2500`), OLMo2 WikiText2-64
-  (`23.2779 -> 22.5113 -> 22.1464`), and OLMo2 C4-64
+  released on Qwen3 WikiText2-64 (`28.0753 -> 27.3180 -> 26.6163`),
+  Qwen3 WikiText2-128 (`27.7279 -> 27.4054 -> 26.5665`), Qwen3 C4-64
+  (`30.4752 -> 29.9230 -> 29.2500`), OLMo2 WikiText2-64
+  (`23.2779 -> 22.5113 -> 22.1464`), OLMo2 WikiText2-128
+  (`25.7774 -> 25.0435 -> 24.6993`), and OLMo2 C4-64
   (`37.9817 -> 37.2835 -> 37.1610`). GPU-guarded runs stayed below the
-  requested 85% memory ceiling, peaking at `5065/8151 MiB` for Qwen3 and
-  `4369/8151 MiB` for OLMo2. This supports a budget-quality curve claim for
+  requested 85% memory ceiling, peaking at `5071/8151 MiB` for Qwen3 and
+  `4376/8151 MiB` for OLMo2. This supports a budget-quality curve claim for
   the fake-quant diagnostic, not a packed-runtime or hardware claim.
 - A non-Qwen `allenai/OLMo-2-0425-1B-Instruct` fake-quant run completed under
   the GPU guard. On the 16-prompt WikiText2 slice, FP16 PPL is `17.12`,
