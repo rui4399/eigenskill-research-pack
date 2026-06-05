@@ -37,6 +37,16 @@ struct TopOverlap {
     int overlap = 0;
     int uni = 0;
     double jaccard = 0.0;
+    double instability = 0.0;
+};
+
+struct InstabilitySummary {
+    double positive_set_instability = 0.0;
+    double sign_instability = 0.0;
+    double score_rank_instability = 0.0;
+    double mean_topk_jaccard = 0.0;
+    double topk_instability = 0.0;
+    double csi = 0.0;
 };
 
 std::string read_text_file(const std::string& path) {
@@ -321,9 +331,51 @@ std::vector<TopOverlap> top_overlap_rows(const std::vector<Group>& groups, const
         row.overlap = intersection_size(left_top, right_top);
         row.uni = union_size(left_top, right_top);
         row.jaccard = static_cast<double>(row.overlap) / static_cast<double>(std::max(row.uni, 1));
+        row.instability = 1.0 - row.jaccard;
         rows.push_back(row);
     }
     return rows;
+}
+
+double clamp_unit(double value) {
+    if (!std::isfinite(value)) return std::numeric_limits<double>::quiet_NaN();
+    return std::max(0.0, std::min(1.0, value));
+}
+
+double corr_instability(double corr) {
+    if (!std::isfinite(corr)) return std::numeric_limits<double>::quiet_NaN();
+    return clamp_unit(1.0 - ((corr + 1.0) * 0.5));
+}
+
+InstabilitySummary summarize_instability(double positive_jaccard, double sign_agreement_ratio,
+                                         double score_spearman, const std::vector<TopOverlap>& top_rows) {
+    InstabilitySummary out;
+    out.positive_set_instability = clamp_unit(1.0 - positive_jaccard);
+    out.sign_instability = clamp_unit(1.0 - sign_agreement_ratio);
+    out.score_rank_instability = corr_instability(score_spearman);
+    double topk_sum = 0.0;
+    int topk_count = 0;
+    for (const TopOverlap& row : top_rows) {
+        if (std::isfinite(row.jaccard)) {
+            topk_sum += row.jaccard;
+            ++topk_count;
+        }
+    }
+    out.mean_topk_jaccard = topk_count > 0 ? topk_sum / static_cast<double>(topk_count)
+                                           : std::numeric_limits<double>::quiet_NaN();
+    out.topk_instability = clamp_unit(1.0 - out.mean_topk_jaccard);
+
+    double sum = 0.0;
+    int count = 0;
+    for (double value : {out.positive_set_instability, out.sign_instability, out.score_rank_instability,
+                         out.topk_instability}) {
+        if (std::isfinite(value)) {
+            sum += value;
+            ++count;
+        }
+    }
+    out.csi = count > 0 ? sum / static_cast<double>(count) : std::numeric_limits<double>::quiet_NaN();
+    return out;
 }
 
 std::string format_double(double value) {
@@ -338,6 +390,41 @@ std::string csv_double(double value) {
     std::ostringstream out;
     out << std::fixed << std::setprecision(6) << value;
     return out.str();
+}
+
+std::string json_double(double value) {
+    if (!std::isfinite(value)) return "null";
+    std::ostringstream out;
+    out << std::fixed << std::setprecision(6) << value;
+    return out.str();
+}
+
+std::string json_escape(const std::string& value) {
+    std::string out;
+    out.reserve(value.size() + 8);
+    for (const char ch : value) {
+        switch (ch) {
+            case '\\':
+                out += "\\\\";
+                break;
+            case '"':
+                out += "\\\"";
+                break;
+            case '\n':
+                out += "\\n";
+                break;
+            case '\r':
+                out += "\\r";
+                break;
+            case '\t':
+                out += "\\t";
+                break;
+            default:
+                out.push_back(ch);
+                break;
+        }
+    }
+    return out;
 }
 
 std::vector<int> parse_top_ks(const std::string& text) {
@@ -393,7 +480,7 @@ Options parse_args(int argc, char** argv) {
             std::cout << "Usage: quant_sensitivity_stability --left left.json --right right.json\n"
                          "                                  [--left-name WikiText2] [--right-name C4]\n"
                          "                                  [--top-k 10,20,40] [--epsilon 1e-12]\n"
-                         "                                  [--emit markdown|csv]\n";
+                         "                                  [--emit markdown|csv|json]\n";
             std::exit(0);
         } else {
             throw std::runtime_error("unknown argument: " + arg);
@@ -402,8 +489,8 @@ Options parse_args(int argc, char** argv) {
     if (options.left_json.empty() || options.right_json.empty()) {
         throw std::runtime_error("--left and --right are required");
     }
-    if (options.emit != "markdown" && options.emit != "csv") {
-        throw std::runtime_error("--emit must be markdown or csv");
+    if (options.emit != "markdown" && options.emit != "csv" && options.emit != "json") {
+        throw std::runtime_error("--emit must be markdown, csv, or json");
     }
     if (options.epsilon < 0.0) {
         throw std::runtime_error("--epsilon must be non-negative");
@@ -459,23 +546,74 @@ void run(const Options& options) {
     const double score_spearman = spearman(left_score, right_score);
     const double score_kendall = kendall_tau_a(left_score, right_score);
     const std::vector<TopOverlap> top_rows = top_overlap_rows(left, left_score, right_score, options.top_ks);
+    const InstabilitySummary instability =
+        summarize_instability(positive_jaccard, sign_agreement_ratio, score_spearman, top_rows);
 
     if (options.emit == "csv") {
         std::cout << "left_name,right_name,shared_modules,left_positive,right_positive,both_positive,"
                      "either_positive,positive_jaccard,sign_agreement,positive_pearson,positive_spearman,"
-                     "score_pearson,score_spearman,score_kendall_tau_a\n";
+                     "score_pearson,score_spearman,score_kendall_tau_a,positive_set_instability,"
+                     "sign_instability,score_rank_instability,mean_topk_jaccard,topk_instability,csi\n";
         std::cout << options.left_name << "," << options.right_name << "," << left.size() << ","
                   << left_positive_set.size() << "," << right_positive_set.size() << "," << both_positive << ","
                   << either_positive << "," << csv_double(positive_jaccard) << "," << csv_double(sign_agreement_ratio)
                   << "," << csv_double(positive_pearson) << "," << csv_double(positive_spearman) << ","
                   << csv_double(score_pearson) << "," << csv_double(score_spearman) << "," << csv_double(score_kendall)
+                  << "," << csv_double(instability.positive_set_instability)
+                  << "," << csv_double(instability.sign_instability)
+                  << "," << csv_double(instability.score_rank_instability)
+                  << "," << csv_double(instability.mean_topk_jaccard)
+                  << "," << csv_double(instability.topk_instability)
+                  << "," << csv_double(instability.csi)
                   << "\n";
         return;
     }
 
-    std::cout << "# Quant Sensitivity Split Stability\n\n";
+    if (options.emit == "json") {
+        std::cout << "{\n";
+        std::cout << "  \"left_name\": \"" << json_escape(options.left_name) << "\",\n";
+        std::cout << "  \"right_name\": \"" << json_escape(options.right_name) << "\",\n";
+        std::cout << "  \"left_json\": \"" << json_escape(options.left_json) << "\",\n";
+        std::cout << "  \"right_json\": \"" << json_escape(options.right_json) << "\",\n";
+        std::cout << "  \"shared_modules\": " << left.size() << ",\n";
+        std::cout << "  \"left_positive_modules\": " << left_positive_set.size() << ",\n";
+        std::cout << "  \"right_positive_modules\": " << right_positive_set.size() << ",\n";
+        std::cout << "  \"both_positive_modules\": " << both_positive << ",\n";
+        std::cout << "  \"either_positive_modules\": " << either_positive << ",\n";
+        std::cout << "  \"positive_jaccard\": " << json_double(positive_jaccard) << ",\n";
+        std::cout << "  \"sign_agreement\": " << json_double(sign_agreement_ratio) << ",\n";
+        std::cout << "  \"positive_pearson\": " << json_double(positive_pearson) << ",\n";
+        std::cout << "  \"positive_spearman\": " << json_double(positive_spearman) << ",\n";
+        std::cout << "  \"score_pearson\": " << json_double(score_pearson) << ",\n";
+        std::cout << "  \"score_spearman\": " << json_double(score_spearman) << ",\n";
+        std::cout << "  \"score_kendall_tau_a\": " << json_double(score_kendall) << ",\n";
+        std::cout << "  \"calibration_split_instability\": {\n";
+        std::cout << "    \"positive_set_instability\": " << json_double(instability.positive_set_instability) << ",\n";
+        std::cout << "    \"sign_instability\": " << json_double(instability.sign_instability) << ",\n";
+        std::cout << "    \"score_rank_instability\": " << json_double(instability.score_rank_instability) << ",\n";
+        std::cout << "    \"mean_topk_jaccard\": " << json_double(instability.mean_topk_jaccard) << ",\n";
+        std::cout << "    \"topk_instability\": " << json_double(instability.topk_instability) << ",\n";
+        std::cout << "    \"csi\": " << json_double(instability.csi) << "\n";
+        std::cout << "  },\n";
+        std::cout << "  \"topk_overlap\": [\n";
+        for (std::size_t i = 0; i < top_rows.size(); ++i) {
+            const TopOverlap& row = top_rows[i];
+            std::cout << "    {\"k\": " << row.k << ", \"left_count\": " << row.left_count
+                      << ", \"right_count\": " << row.right_count << ", \"overlap\": " << row.overlap
+                      << ", \"union\": " << row.uni << ", \"jaccard\": " << json_double(row.jaccard)
+                      << ", \"instability\": " << json_double(row.instability) << "}";
+            std::cout << (i + 1 == top_rows.size() ? "\n" : ",\n");
+        }
+        std::cout << "  ]\n";
+        std::cout << "}\n";
+        return;
+    }
+
+    std::cout << "# Calibration Split Instability Report\n\n";
     std::cout << "Left: `" << options.left_json << "` (`" << options.left_name << "`)\n";
     std::cout << "Right: `" << options.right_json << "` (`" << options.right_name << "`)\n\n";
+    std::cout << "CSI is the mean of positive-set instability, sign instability, score-rank instability, "
+                 "and top-k instability. Higher means the calibration split is less reliable for bit allocation.\n\n";
     std::cout << "## Summary\n\n";
     std::cout << "| metric | value |\n";
     std::cout << "|---|---:|\n";
@@ -491,15 +629,26 @@ void run(const Options& options) {
     std::cout << "| score/cost Pearson | " << format_double(score_pearson) << " |\n";
     std::cout << "| score/cost Spearman | " << format_double(score_spearman) << " |\n";
     std::cout << "| score/cost Kendall tau-a | " << format_double(score_kendall) << " |\n\n";
+    std::cout << "## Calibration Split Instability\n\n";
+    std::cout << "| metric | value |\n";
+    std::cout << "|---|---:|\n";
+    std::cout << "| positive-set instability | " << format_double(instability.positive_set_instability) << " |\n";
+    std::cout << "| signed-delta sign instability | " << format_double(instability.sign_instability) << " |\n";
+    std::cout << "| score-rank instability | " << format_double(instability.score_rank_instability) << " |\n";
+    std::cout << "| mean top-k Jaccard | " << format_double(instability.mean_topk_jaccard) << " |\n";
+    std::cout << "| top-k instability | " << format_double(instability.topk_instability) << " |\n";
+    std::cout << "| CSI | " << format_double(instability.csi) << " |\n\n";
     std::cout << "## Top-K Score Overlap\n\n";
-    std::cout << "| k | left top-k | right top-k | overlap | union | Jaccard |\n";
-    std::cout << "|---:|---:|---:|---:|---:|---:|\n";
+    std::cout << "| k | left top-k | right top-k | overlap | union | Jaccard | instability |\n";
+    std::cout << "|---:|---:|---:|---:|---:|---:|---:|\n";
     for (const TopOverlap& row : top_rows) {
         std::cout << "| " << row.k << " | " << row.left_count << " | " << row.right_count << " | "
-                  << row.overlap << " | " << row.uni << " | " << format_double(row.jaccard) << " |\n";
+                  << row.overlap << " | " << row.uni << " | " << format_double(row.jaccard) << " | "
+                  << format_double(row.instability) << " |\n";
     }
-    std::cout << "\nThis C++ audit mirrors the Python split-stability diagnostic. It supports the claim that "
-                 "single-split loss sensitivity is noisy and should be paired with downstream PPL evidence.\n";
+    std::cout << "\nThis C++ audit treats calibration split instability as the primary diagnostic target, not as "
+                 "a side note. Random baselines remain sanity checks; the paper claim should be about robustness "
+                 "under calibration-source shift.\n";
 }
 
 }  // namespace

@@ -27,6 +27,7 @@ add_executable(quant_evidence_matrix src/quant_evidence_matrix.cpp)
 add_executable(quant_random_baseline_audit src/quant_random_baseline_audit.cpp)
 add_executable(quant_ppl_summary_merge src/quant_ppl_summary_merge.cpp)
 add_executable(quant_seed_coverage_check src/quant_seed_coverage_check.cpp)
+add_executable(quant_chunked_eval_plan src/quant_chunked_eval_plan.cpp)
 add_executable(quant_consensus_audit src/quant_consensus_audit.cpp)
 add_executable(quant_sensitivity_stability src/quant_sensitivity_stability.cpp)
 add_executable(quant_budget_curve_summary src/quant_budget_curve_summary.cpp)
@@ -114,6 +115,14 @@ if(BUILD_TESTING)
     PROPERTIES WILL_FAIL TRUE
   )
   add_test(
+    NAME quant_chunked_eval_plan_bash_smoke
+    COMMAND quant_chunked_eval_plan --emit bash
+  )
+  add_test(
+    NAME quant_chunked_eval_plan_markdown_smoke
+    COMMAND quant_chunked_eval_plan --emit markdown
+  )
+  add_test(
     NAME quant_consensus_audit_smoke
     COMMAND quant_consensus_audit
       --left ${CMAKE_CURRENT_SOURCE_DIR}/testdata/allocation_left_fixture.json
@@ -131,6 +140,16 @@ if(BUILD_TESTING)
       --right-name fixture_right
       --top-k 1,2,3
       --emit csv
+  )
+  add_test(
+    NAME quant_sensitivity_stability_json_smoke
+    COMMAND quant_sensitivity_stability
+      --left ${CMAKE_CURRENT_SOURCE_DIR}/testdata/sensitivity_left_fixture.json
+      --right ${CMAKE_CURRENT_SOURCE_DIR}/testdata/sensitivity_right_fixture.json
+      --left-name fixture_left
+      --right-name fixture_right
+      --top-k 1,2,3
+      --emit json
   )
   add_test(
     NAME quant_budget_curve_summary_smoke

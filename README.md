@@ -3,8 +3,8 @@
 EigenSkill is the working codename for a small research pack on hybrid skill
 routing for resource-constrained LLM inference.
 
-The current repository is not a finished edge inference engine. Its verified
-core is narrower:
+The current repository is not a finished edge inference engine or a new
+production quantizer. Its verified core is narrower:
 
 1. synthetic skill datasets for routing and quantization-policy decisions;
 2. deterministic bypass evaluators for low-entropy skills, including a C++
@@ -16,16 +16,23 @@ core is narrower:
 4. standalone C++ artifacts for low-rank GEMV, quantization-policy bypass,
    quant-kernel microbenchmarks, a reusable quant-kernel API, C++ allocation
    planning, C++ consensus allocation building, C++ evidence summarization,
-   C++ consensus-allocation audit, C++ split-stability audit, C++
-   budget-curve report/figure generation, C++ random-seed baseline auditing,
-   C++ swap-search summarization, C++ PPL-summary merging for chunked
-   evaluation, and GPU guard-log summarization.
+   C++ consensus-allocation audit, C++ Calibration Split Instability (CSI)
+   audit, C++ budget-curve report/figure generation, C++ random-seed baseline
+   auditing, C++ swap-search summarization, C++ PPL-summary merging for chunked
+   evaluation, guarded low-memory evaluation-plan generation, and GPU guard-log
+   summarization.
 
 The practical publication direction is therefore:
 
 ```text
-semantic skill routing + deterministic quantization-policy bypass
+calibration split instability + conservative consensus allocation diagnostics
 ```
+
+The quantization-facing paper framing has been narrowed accordingly. This repo
+should not claim "we introduce a new quantizer." The stronger claim is that
+small calibration splits can produce unstable module-sensitivity rankings, and
+that this instability should be measured before trusting mixed-precision bit
+allocation. See `docs/calibration_split_instability_position_2026_06_05.md`.
 
 Spectral/eigen-routing, physical swarm assembly, acoustic communication, and
 real board-level energy claims are retained only as future research notes. They
@@ -942,25 +949,44 @@ target vs best random        +0.1259 PPL
 
 Qwen3-1.7B, C4-128 guard-filling row and chunked random16 path:
 
-C4-128 random4:
+C4-128 random16:
 FP16                         PPL 29.4065
 uniform INT4                 PPL 35.7923
 consensus                    PPL 32.8806
 category                     PPL 34.1947
-random4 min/mean/max         PPL 33.2734 / 34.5656 / 35.1416
-target vs best random4       +0.3928 PPL
-target vs random4 mean       +1.6849 PPL
-GPU peak                     6884/8151 MiB = 84.46%
+random16 min/mean/max        PPL 33.1374 / 34.3623 / 35.1416
+target vs best random16      +0.2568 PPL
+target vs random16 mean      +1.4817 PPL
+random-seed audit            16 wins / 0 losses / 0 ties
+GPU peaks                    batch0 84.46%, batch1 67.94%, batch2 68.04%, batch3 67.94%
 
 Full C4-128 random16 runs exceeded the requested 85% VRAM guard when attempted
-as one process, with killed peaks around 86.3%. The repo now includes a C++
-`quant_ppl_summary_merge` tool plus three remaining four-seed batch configs so
-the C4-128 random16 audit can be completed as guarded chunks and merged into a
+as one process, and the first four-seed `--reuse-model` chunk was killed at
+`6936/8151 MiB = 85.09%`. The committed low-memory chunked plan removes
+`--reuse-model`, reloads per config, and completes the remaining random16 audit
+at about 68% peak VRAM. The repo includes a C++ `quant_ppl_summary_merge` tool
+plus four-seed batch configs so the C4-128 random16 audit can be merged into a
 single summary consumed by the existing C++ evidence matrix and random audit.
 The companion `quant_seed_coverage_check` tool verifies that the chunked config
 set covers seeds 20260604-20260619 exactly once and includes the required
 baseline names before GPU time is spent.
+`quant_chunked_eval_plan` now emits the guarded batch shell plan directly, and
+the generated script is committed as
+`tools/run_qwen3_1p7b_c4_128_random16_chunked.sh`.
 See `docs/qwen3_1p7b_c4_128_random16_chunked_runbook.md`.
+
+The random16 row is a guardrail sanity check, not the main paper contribution.
+The more defensible research claim is Calibration Split Instability: small
+calibration probes can disagree sharply on module sensitivity. The new C++ CSI
+report for OLMo2 WikiText2 vs C4 gives `CSI=0.5477`, score-rank instability
+`0.4078`, and top-k instability `0.8360`; see
+`outputs/olmo2_0425_1b_wikitext_c4_calibration_split_instability_cpp.md`.
+
+The next model wave is tracked in
+`docs/recent_small_model_candidates_2026_06_05.md` and the machine-readable
+candidate list at `data_eval/model_candidates/recent_small_models_2026_06_05.json`.
+The near-term non-Qwen targets are `ibm-granite/granite-3.3-2b-instruct` and
+`HuggingFaceTB/SmolLM3-3B`; larger 3.8B-4B models are stress candidates only.
 
 OLMo-2-0425-1B-Instruct, WikiText2 16 prompts, uniform smoke:
 
