@@ -17,8 +17,8 @@ core is narrower:
    quant-kernel microbenchmarks, a reusable quant-kernel API, C++ allocation
    planning, C++ consensus allocation building, C++ evidence summarization,
    C++ consensus-allocation audit, C++ split-stability audit, C++
-   budget-curve report/figure generation, C++ swap-search summarization, and
-   GPU guard-log summarization.
+   budget-curve report/figure generation, C++ random-seed baseline auditing,
+   C++ swap-search summarization, and GPU guard-log summarization.
 
 The practical publication direction is therefore:
 
@@ -44,7 +44,8 @@ are not completed results in this repository.
   bypass.
 - C++ allocation/reporting utilities that consume measured sensitivity and PPL
   JSON to produce budgeted mixed-precision allocations, random-repeat
-  baselines, cross-dataset evidence matrices, and bounded swap-search reports.
+  baselines, cross-dataset evidence matrices, random-seed win-rate audits, and
+  bounded swap-search reports.
 
 ## What This Is Not
 
@@ -198,6 +199,36 @@ Qwen3-0.6B, C4-64:
 FP16 36.1380  uniform INT4 52.9352  loss-sensitive {4,8} 47.5872
 target margin vs uniform INT4 +5.3480 PPL
 ```
+
+The same Qwen3-0.6B allocation was then evaluated against the C++ planner's
+category baseline, aggregate random budget, and 15 explicit random-seed
+budgets under the same low-memory 4.5 average-bit constraint:
+
+```text
+Qwen3-0.6B, C++ random-seed audit, group size 128, average 4.5 bits:
+WikiText2-64 len96:
+  loss-sensitive target PPL       49.5352
+  category PPL                    50.4746
+  random_seed min/mean/max PPL    48.5030 / 50.4787 / 52.6347
+  wins/losses/ties vs random_seed 12 / 3 / 0
+  margin vs random_seed mean      +0.9435 PPL
+  margin vs best random_seed      -1.0322 PPL
+C4-64:
+  loss-sensitive target PPL       47.5872
+  category PPL                    48.6222
+  random_seed min/mean/max PPL    48.3840 / 49.4427 / 50.7971
+  wins/losses/ties vs random_seed 15 / 0 / 0
+  margin vs random_seed mean      +1.8556 PPL
+  margin vs best random_seed      +0.7969 PPL
+GPU guard peaks:
+  WikiText2-64 len96              4260/8151 MiB = 52.26%
+  C4-64                           4270/8151 MiB = 52.39%
+```
+
+This is stronger evidence than a uniform INT4-only comparison, but still not a
+SOTA claim. The negative WikiText2 best-seed row is kept deliberately: it shows
+that a single 4-prompt loss probe is useful on average but not robust enough to
+dominate every random allocation on every slice.
 
 A 64-prompt WikiText2 rerun with `max_length=128` was intentionally not
 accepted as evidence because the GPU guard killed it at `6933/8151 MiB`
@@ -1378,6 +1409,19 @@ ctest --test-dir build/cpp-wsl --output-on-failure
 ./build/cpp-wsl/quant_policy_bypass --data data_eval/eigenskill_quant_v1/eval.jsonl --limit 20
 ```
 
+The current low-memory Qwen3-0.6B random-baseline audit can be regenerated
+from the committed PPL summaries without model weights:
+
+```bash
+./build/cpp-wsl/quant_random_baseline_audit \
+  --input outputs/qwen3_0p6b_lowmem_cpp_random16_ppl_wikitext2_64_len96_summary.json \
+  --dataset wikitext2_64_len96 \
+  --input outputs/qwen3_0p6b_lowmem_cpp_random16_ppl_c4_64_summary.json \
+  --dataset c4_64 \
+  --target cpp_loss_sensitive_budget \
+  --emit markdown
+```
+
 ## Repository Layout
 
 ```text
@@ -1391,6 +1435,8 @@ inference_cpp/src/quant_kernel_bench.cpp
                               C++ quant-kernel and selected-row microbenchmark
 inference_cpp/src/quant_sensitivity_stability.cpp
                               C++ calibration split-stability audit
+inference_cpp/src/quant_random_baseline_audit.cpp
+                              C++ random-seed win-rate/best-seed audit
 data_eval/eigenskill_v2/      older 8-skill PoC split with severe overlap
 data_eval/eigenskill_quant_v1/cleaner quantization-policy split
 data_eval/eval_configs/       fake-quant evaluation configs
