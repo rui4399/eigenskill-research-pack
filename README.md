@@ -18,7 +18,8 @@ core is narrower:
    planning, C++ consensus allocation building, C++ evidence summarization,
    C++ consensus-allocation audit, C++ split-stability audit, C++
    budget-curve report/figure generation, C++ random-seed baseline auditing,
-   C++ swap-search summarization, and GPU guard-log summarization.
+   C++ swap-search summarization, C++ PPL-summary merging for chunked
+   evaluation, and GPU guard-log summarization.
 
 The practical publication direction is therefore:
 
@@ -938,6 +939,25 @@ C4-only sensitivity          PPL 28.3505
 category                     PPL 29.2760
 best listed random           PPL 28.4562
 target vs best random        +0.1259 PPL
+
+Qwen3-1.7B, C4-128 guard-filling row and chunked random16 path:
+
+C4-128 random4:
+FP16                         PPL 29.4065
+uniform INT4                 PPL 35.7923
+consensus                    PPL 32.8806
+category                     PPL 34.1947
+random4 min/mean/max         PPL 33.2734 / 34.5656 / 35.1416
+target vs best random4       +0.3928 PPL
+target vs random4 mean       +1.6849 PPL
+GPU peak                     6884/8151 MiB = 84.46%
+
+Full C4-128 random16 runs exceeded the requested 85% VRAM guard when attempted
+as one process, with killed peaks around 86.3%. The repo now includes a C++
+`quant_ppl_summary_merge` tool plus three remaining four-seed batch configs so
+the C4-128 random16 audit can be completed as guarded chunks and merged into a
+single summary consumed by the existing C++ evidence matrix and random audit.
+See `docs/qwen3_1p7b_c4_128_random16_chunked_runbook.md`.
 
 OLMo-2-0425-1B-Instruct, WikiText2 16 prompts, uniform smoke:
 
