@@ -11,10 +11,10 @@ Repository:
 https://github.com/rui4399/eigenskill-research-pack
 ```
 
-Latest pushed commit before this closeout block:
+Latest pushed commit:
 
 ```text
-ae49a09 Add SmolLM2 random16 audit
+125b19f Add active baseline runtime probe
 ```
 
 Commits pushed in this run:
@@ -34,6 +34,16 @@ a8a25c9 Add Qwen3 multi-slice evidence matrix
 2e6a3e1 Add SmolLM2 1.7B retry smoke evidence
 66a7bc1 Add SmolLM2 1.7B loss-sensitive loop
 ae49a09 Add SmolLM2 random16 audit
+ca5b163 Add SmolLM2 full-module random16 evidence
+bfd34d5 Extend SmolLM2 full-module audit to WikiText2 64
+1feab0f Add SmolLM2 C4 overfitting audit
+c3f7be1 Add SmolLM2 multi-slice evidence matrix
+756aa23 Extend SmolLM2 full-module audit to WikiText2 128
+a8a9960 Document SmolLM2 full audit reproduction
+e4544d4 Add Notion-ready SmolLM2 audit update
+7e80a9a Add C++ GPU guard summary utility
+2d4df43 Add extended cross-model quant evidence matrix
+125b19f Add active baseline runtime probe
 ```
 
 ## C++ Work

@@ -40,7 +40,7 @@ This still must be described conservatively:
 Latest pushed commit:
 
 ```text
-a8a9960 Document SmolLM2 full audit reproduction
+125b19f Add active baseline runtime probe
 ```
 
 Relevant pushed commits:
@@ -52,6 +52,10 @@ bfd34d5 Extend SmolLM2 full-module audit to WikiText2 64
 c3f7be1 Add SmolLM2 multi-slice evidence matrix
 756aa23 Extend SmolLM2 full-module audit to WikiText2 128
 a8a9960 Document SmolLM2 full audit reproduction
+e4544d4 Add Notion-ready SmolLM2 audit update
+7e80a9a Add C++ GPU guard summary utility
+2d4df43 Add extended cross-model quant evidence matrix
+125b19f Add active baseline runtime probe
 ```
 
 Repository:
@@ -65,14 +69,16 @@ https://github.com/rui4399/eigenskill-research-pack
 ```text
 outputs/smollm2_1p7b_full_random16_result.md
 outputs/smollm2_1p7b_full_random16_multi_slice_evidence_matrix.md
+outputs/smollm2_1p7b_full_gpu_guard_summary.md
+outputs/cross_model_quant_evidence_matrix_extended_auto.md
+outputs/baseline_runtime_import_probe_2026_06_05.md
 train_python/README.md
 ```
 
 ## Verification
 
 ```text
-CTest: 10/10 passed
+CTest: 11/11 passed
 Weight leak scan: no untracked .safetensors/.bin/.pt/.pth/.gguf/.onnx files
 GPU memory peaks: 61.67% to 69.67%, below the requested 85% ceiling
 ```
-
