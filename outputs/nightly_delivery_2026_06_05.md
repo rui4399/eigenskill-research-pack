@@ -207,6 +207,25 @@ max GPU memory:   5109 / 8151 MiB = 62.68%
 This only proves the model is now runnable in the PyTorch fake-quant path.
 It is not yet a consensus-vs-random16 allocation result.
 
+Follow-up closed-loop result:
+
+```text
+outputs/smollm2_1p7b_retry_loss_sensitive_result.md
+outputs/smollm2_1p7b_retry_loss_sensitive_ppl_wikitext2_16_summary.json
+```
+
+Key numbers:
+
+```text
+FP16 PPL:                  12.6903
+uniform INT4 PPL:          18.1431
+loss_sensitive_limit8 PPL: 12.8844
+loss-sensitive vs uniform: +5.2587 PPL
+```
+
+This is a small 32-module / 16-prompt result, but it is a real closed loop:
+sensitivity measurement -> allocation -> PPL evaluation.
+
 ## GPU Guard
 
 All GPU runs used:
