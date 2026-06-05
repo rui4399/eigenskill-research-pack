@@ -183,6 +183,30 @@ C4-64         target vs best random16: +0.1259 PPL
 WikiText2-128 target vs best random16: +0.9811 PPL
 ```
 
+## SmolLM2-1.7B Retry
+
+The earlier SmolLM2-1.7B load failure was traced to incomplete model cache.
+After retrying the download, the PyTorch `model.safetensors` path is usable,
+though ONNX-side cache blobs remain incomplete:
+
+```text
+outputs/smollm2_1p7b_retry_smoke_result.md
+outputs/smollm2_1p7b_predownload_retry_report.md
+outputs/smollm2_1p7b_uniform_ppl_wikitext2_16_retry_summary.json
+```
+
+Smoke result:
+
+```text
+FP16 PPL:         12.6903
+uniform INT4 PPL: 18.1431
+uniform INT3 PPL: 197.0120
+max GPU memory:   5109 / 8151 MiB = 62.68%
+```
+
+This only proves the model is now runnable in the PyTorch fake-quant path.
+It is not yet a consensus-vs-random16 allocation result.
+
 ## GPU Guard
 
 All GPU runs used:
