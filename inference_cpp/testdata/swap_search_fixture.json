@@ -1,0 +1,36 @@
+{
+  "model": "fixture-model",
+  "prompt_count": 2,
+  "max_length": 64,
+  "group_size": 128,
+  "reuse_model": true,
+  "base_metrics": {
+    "tokens": 16,
+    "mean_nll": 2.100000,
+    "ppl": 8.166170
+  },
+  "trials": [
+    {
+      "swap": {
+        "out_module": "layer.1.up",
+        "in_module": "layer.0.down"
+      },
+      "metrics": {
+        "tokens": 16,
+        "mean_nll": 2.050000,
+        "ppl": 7.767902
+      }
+    }
+  ],
+  "best": {
+    "metrics": {
+      "tokens": 16,
+      "mean_nll": 2.050000,
+      "ppl": 7.767902
+    },
+    "swap": {
+      "out_module": "layer.1.up",
+      "in_module": "layer.0.down"
+    }
+  }
+}

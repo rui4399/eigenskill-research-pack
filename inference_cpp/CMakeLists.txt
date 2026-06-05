@@ -30,6 +30,7 @@ add_executable(quant_budget_curve_summary src/quant_budget_curve_summary.cpp)
 add_executable(quant_consensus_builder src/quant_consensus_builder.cpp)
 add_executable(baseline_install_probe src/baseline_install_probe.cpp)
 add_executable(gpu_guard_summary src/gpu_guard_summary.cpp)
+add_executable(quant_swap_search_summary src/quant_swap_search_summary.cpp)
 target_link_libraries(quant_kernel_bench PRIVATE eigenskill_quant_kernels)
 target_link_libraries(quant_kernel_verify PRIVATE eigenskill_quant_kernels)
 
@@ -100,6 +101,14 @@ if(BUILD_TESTING)
     NAME gpu_guard_summary_smoke
     COMMAND gpu_guard_summary
       --input fixture=${CMAKE_CURRENT_SOURCE_DIR}/testdata/gpu_guard_fixture.json
+      --emit json
+  )
+  add_test(
+    NAME quant_swap_search_summary_smoke
+    COMMAND quant_swap_search_summary
+      --summary ${CMAKE_CURRENT_SOURCE_DIR}/testdata/swap_search_fixture.json
+      --guard ${CMAKE_CURRENT_SOURCE_DIR}/testdata/gpu_guard_fixture.json
+      --label fixture
       --emit json
   )
 endif()

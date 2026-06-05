@@ -208,6 +208,48 @@ WikiText2-128 loss_sensitive_full PPL 15.3641 vs best random16 16.2050
 C4-64        loss_sensitive_full PPL 21.4269 vs best random16 22.5529
 ```
 
+The bounded interaction-aware swap search checks whether one-out/one-in module
+swaps can improve the full-module allocation using global PPL feedback. The
+script reuses one loaded model and restores CPU-captured Linear weights between
+trials to stay under the GPU guard.
+
+```bash
+python3 train_python/run_with_gpu_guard.py \
+  --max-memory-ratio 0.85 \
+  --out outputs/smollm2_1p7b_full_swap_search_c4_64_guard.json \
+  -- \
+  python3 train_python/search_allocation_swaps.py \
+    --model HuggingFaceTB/SmolLM2-1.7B-Instruct \
+    --prompts data_eval/text_prompts/c4_en_validation_64.txt \
+    --limit-prompts 64 \
+    --max-length 128 \
+    --device cuda \
+    --dtype float16 \
+    --group-size 128 \
+    --base-allocation outputs/smollm2_1p7b_loss_sensitive_alloc_full_4to8_limit8_group128_summary.json \
+    --base-method loss_sensitive_4to8 \
+    --max-swaps 4 \
+    --out-pool 8 \
+    --in-pool 12 \
+    --out-json outputs/smollm2_1p7b_full_swap_search_c4_64_summary.json \
+    --out-md outputs/smollm2_1p7b_full_swap_search_c4_64_report.md \
+    --out-allocation outputs/smollm2_1p7b_loss_sensitive_full_swap_search_c4_64_4to8_group128_summary.json
+
+./build/cpp-wsl/quant_swap_search_summary \
+  --summary outputs/smollm2_1p7b_full_swap_search_c4_64_summary.json \
+  --guard outputs/smollm2_1p7b_full_swap_search_c4_64_guard.json \
+  --label smollm2_1p7b_c4_64 \
+  --emit markdown \
+  > outputs/smollm2_1p7b_full_swap_search_c4_64_cpp_summary.md
+```
+
+Expected headline from the committed run:
+
+```text
+WikiText2-32: base 15.1207 PPL, best 15.1207 PPL, 4 swaps, 84.87% GPU memory
+C4-64:        base 21.4269 PPL, best 21.4269 PPL, 4 swaps, 76.81% GPU memory
+```
+
 Scope reminder: these are PyTorch fake-quant diagnostics, not packed runtime
 or board-level latency measurements.
 

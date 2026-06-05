@@ -1,0 +1,90 @@
+{
+  "model": "HuggingFaceTB/SmolLM2-1.7B-Instruct",
+  "prompts": "data_eval/text_prompts/wikitext2_validation_128.txt",
+  "prompt_count": 32,
+  "max_length": 128,
+  "group_size": 128,
+  "reuse_model": true,
+  "base_allocation": "outputs/smollm2_1p7b_loss_sensitive_alloc_full_4to8_limit8_group128_summary.json",
+  "base_method": "loss_sensitive_4to8",
+  "base_metrics": {
+    "tokens": 3383,
+    "mean_nll": 2.716064603625407,
+    "ppl": 15.120699057214768
+  },
+  "trials": [
+    {
+      "swap": {
+        "out_index": 159,
+        "in_index": 4,
+        "out_module": "model.layers.22.mlp.up_proj",
+        "in_module": "model.layers.0.mlp.gate_proj",
+        "out_delta": 0.018870860189199146,
+        "in_delta": 0.0136344128847119
+      },
+      "metrics": {
+        "tokens": 3383,
+        "mean_nll": 2.7325321985637157,
+        "ppl": 15.371762133377503
+      }
+    },
+    {
+      "swap": {
+        "out_index": 166,
+        "in_index": 4,
+        "out_module": "model.layers.23.mlp.up_proj",
+        "in_module": "model.layers.0.mlp.gate_proj",
+        "out_delta": 0.01917964875698086,
+        "in_delta": 0.0136344128847119
+      },
+      "metrics": {
+        "tokens": 3383,
+        "mean_nll": 2.7283728014531308,
+        "ppl": 15.307957656441708
+      }
+    },
+    {
+      "swap": {
+        "out_index": 159,
+        "in_index": 6,
+        "out_module": "model.layers.22.mlp.up_proj",
+        "in_module": "model.layers.0.mlp.down_proj",
+        "out_delta": 0.018870860189199146,
+        "in_delta": 0.00880815401673285
+      },
+      "metrics": {
+        "tokens": 3383,
+        "mean_nll": 2.7309055990838735,
+        "ppl": 15.346778757568615
+      }
+    },
+    {
+      "swap": {
+        "out_index": 166,
+        "in_index": 6,
+        "out_module": "model.layers.23.mlp.up_proj",
+        "in_module": "model.layers.0.mlp.down_proj",
+        "out_delta": 0.01917964875698086,
+        "in_delta": 0.00880815401673285
+      },
+      "metrics": {
+        "tokens": 3383,
+        "mean_nll": 2.7262828015308567,
+        "ppl": 15.275997436192272
+      }
+    }
+  ],
+  "best": {
+    "metrics": {
+      "tokens": 3383,
+      "mean_nll": 2.716064603625407,
+      "ppl": 15.120699057214768
+    },
+    "swap": {
+      "out_module": "-",
+      "in_module": "-",
+      "out_index": -1,
+      "in_index": -1
+    }
+  }
+}

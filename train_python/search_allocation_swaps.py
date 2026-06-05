@@ -120,14 +120,45 @@ def apply_allocation(model: torch.nn.Module, groups: list[dict], alloc: list[int
                 module.weight.data.copy_(quantize_weight(module.weight.data, bits, group_size=group_size))
 
 
-def evaluate_allocation(args, tokenizer, prompts: list[str], groups: list[dict], alloc: list[int]) -> dict:
+def capture_linear_weights(model: torch.nn.Module) -> dict[str, torch.Tensor]:
+    weights: dict[str, torch.Tensor] = {}
+    for name, module in model.named_modules():
+        if isinstance(module, torch.nn.Linear):
+            weights[name] = module.weight.detach().cpu().clone()
+    return weights
+
+
+def restore_linear_weights(model: torch.nn.Module, weights: dict[str, torch.Tensor]) -> None:
+    with torch.no_grad():
+        for name, module in model.named_modules():
+            if not isinstance(module, torch.nn.Linear):
+                continue
+            original = weights.get(name)
+            if original is None:
+                continue
+            module.weight.data.copy_(original.to(device=module.weight.device, dtype=module.weight.dtype))
+
+
+def load_model(args):
     dtype = {"float16": torch.float16, "bfloat16": torch.bfloat16, "float32": torch.float32}[args.dtype]
     model = AutoModelForCausalLM.from_pretrained(args.model, torch_dtype=dtype)
     model.eval()
     model.to(args.device)
+    return model
+
+
+def evaluate_allocation_on_model(
+    args,
+    model: torch.nn.Module,
+    original_weights: dict[str, torch.Tensor],
+    tokenizer,
+    prompts: list[str],
+    groups: list[dict],
+    alloc: list[int],
+) -> dict:
+    restore_linear_weights(model, original_weights)
     apply_allocation(model, groups, alloc, args.group_size)
     metrics = eval_ppl(model, tokenizer, prompts, args.device, args.max_length)
-    del model
     if args.device == "cuda":
         torch.cuda.empty_cache()
     gc.collect()
@@ -220,7 +251,10 @@ def main() -> None:
         tokenizer.pad_token = tokenizer.eos_token
     prompts = load_prompts(args.prompts, args.limit_prompts)
 
-    base_metrics = evaluate_allocation(args, tokenizer, prompts, groups, base_alloc)
+    model = load_model(args)
+    original_weights = capture_linear_weights(model)
+
+    base_metrics = evaluate_allocation_on_model(args, model, original_weights, tokenizer, prompts, groups, base_alloc)
     best_alloc = list(base_alloc)
     best = {"metrics": base_metrics, "swap": {"out_module": "-", "in_module": "-", "out_index": -1, "in_index": -1}}
     trials = []
@@ -228,7 +262,7 @@ def main() -> None:
         trial_alloc = list(base_alloc)
         trial_alloc[out_idx] = 4
         trial_alloc[in_idx] = 8
-        metrics = evaluate_allocation(args, tokenizer, prompts, groups, trial_alloc)
+        metrics = evaluate_allocation_on_model(args, model, original_weights, tokenizer, prompts, groups, trial_alloc)
         swap = {
             "out_index": out_idx,
             "in_index": in_idx,
@@ -244,12 +278,19 @@ def main() -> None:
             best_alloc = trial_alloc
         print(json.dumps({"trial": len(trials), "ppl": metrics["ppl"], "swap": swap}, ensure_ascii=False), flush=True)
 
+    restore_linear_weights(model, original_weights)
+    del model
+    if args.device == "cuda":
+        torch.cuda.empty_cache()
+    gc.collect()
+
     result = {
         "model": args.model,
         "prompts": args.prompts,
         "prompt_count": len(prompts),
         "max_length": args.max_length,
         "group_size": args.group_size,
+        "reuse_model": True,
         "base_allocation": args.base_allocation,
         "base_method": args.base_method,
         "base_metrics": base_metrics,

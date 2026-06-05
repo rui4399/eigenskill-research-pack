@@ -16,8 +16,9 @@ core is narrower:
 4. standalone C++ artifacts for low-rank GEMV, quantization-policy bypass,
    quant-kernel microbenchmarks, a reusable quant-kernel API, C++ allocation
    planning, C++ consensus allocation building, C++ evidence summarization,
-   C++ consensus-allocation audit, C++ split-stability audit, and C++
-   budget-curve report/figure generation, plus GPU guard-log summarization.
+   C++ consensus-allocation audit, C++ split-stability audit, C++
+   budget-curve report/figure generation, C++ swap-search summarization, and
+   GPU guard-log summarization.
 
 The practical publication direction is therefore:
 
@@ -43,7 +44,7 @@ are not completed results in this repository.
   bypass.
 - C++ allocation/reporting utilities that consume measured sensitivity and PPL
   JSON to produce budgeted mixed-precision allocations, random-repeat
-  baselines, and cross-dataset evidence matrices.
+  baselines, cross-dataset evidence matrices, and bounded swap-search reports.
 
 ## What This Is Not
 
@@ -178,6 +179,25 @@ overfitting check because the allocation was built from WikiText2 calibration
 prompts. It should not be cited as a packed quantizer, latency result, or
 hardware efficiency result.
 
+A bounded one-step global-PPL swap search now tests whether the full-module
+SmolLM2 allocation can be improved by swapping one selected 8-bit module out
+and one unselected module in. The script now reuses one loaded model and
+restores CPU-captured Linear weights between trials, which avoids the earlier
+guard-triggering repeated-load path. Four top proxy swaps were checked on
+WikiText2-32 and C4-64:
+
+```text
+WikiText2-32: base 15.1207 PPL, best 15.1207 PPL, improvement 0.0000, 4 trials
+C4-64:        base 21.4269 PPL, best 21.4269 PPL, improvement 0.0000, 4 trials
+```
+
+This is a local-stability negative result: the tested swaps did not beat the
+base allocation on either the in-family WikiText2 slice or the cross-dataset
+C4 slice. It does not prove global optimality; it only rules out this small
+one-swap candidate set. Both runs stayed under the requested GPU-memory guard:
+WikiText2-32 peaked at `6918/8151 MiB` (`84.87%`) and C4-64 peaked at
+`6261/8151 MiB` (`76.81%`).
+
 Evidence files:
 
 ```text
@@ -214,7 +234,13 @@ outputs/smollm2_1p7b_full_random16_evidence_matrix.md
 outputs/smollm2_1p7b_full_random16_wikitext2_64_evidence_matrix.md
 outputs/smollm2_1p7b_full_random16_wikitext2_128_evidence_matrix.md
 outputs/smollm2_1p7b_full_random16_c4_64_evidence_matrix.md
+outputs/smollm2_1p7b_full_swap_search_wikitext2_32_report.md
+outputs/smollm2_1p7b_full_swap_search_wikitext2_32_cpp_summary.md
+outputs/smollm2_1p7b_full_swap_search_c4_64_report.md
+outputs/smollm2_1p7b_full_swap_search_c4_64_cpp_summary.md
+outputs/smollm2_1p7b_swap_search_gpu_guard_summary.md
 inference_cpp/src/quant_evidence_matrix.cpp
+inference_cpp/src/quant_swap_search_summary.cpp
 inference_cpp/src/gpu_guard_summary.cpp
 inference_cpp/src/quant_consensus_builder.cpp
 inference_cpp/src/quant_consensus_audit.cpp
