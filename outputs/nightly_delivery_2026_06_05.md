@@ -254,6 +254,8 @@ outputs/smollm2_1p7b_full_random16_ppl_wikitext2_16_summary.json
 outputs/smollm2_1p7b_full_random16_evidence_matrix.md
 outputs/smollm2_1p7b_full_random16_ppl_wikitext2_64_summary.json
 outputs/smollm2_1p7b_full_random16_wikitext2_64_evidence_matrix.md
+outputs/smollm2_1p7b_full_random16_ppl_wikitext2_128_summary.json
+outputs/smollm2_1p7b_full_random16_wikitext2_128_evidence_matrix.md
 outputs/smollm2_1p7b_full_random16_ppl_c4_64_summary.json
 outputs/smollm2_1p7b_full_random16_c4_64_evidence_matrix.md
 ```
@@ -296,6 +298,18 @@ target vs best random16:     +1.1260 PPL
 target vs random16 mean:     +4.6833 PPL
 ```
 
+Key numbers, WikiText2-128:
+
+```text
+FP16 PPL:                    13.2171
+uniform INT4 PPL:            18.7966
+loss_sensitive_full PPL:     15.3641
+best random16 PPL:           16.2050
+target vs uniform INT4:      +3.4325 PPL
+target vs best random16:     +0.8409 PPL
+target vs random16 mean:     +3.1527 PPL
+```
+
 This repairs the earlier 32-module SmolLM2 best-random failure. The scope is
 still deliberately narrow: short WikiText2 slices, fake quantization, and no
 packed runtime speed claim. The C4-64 follow-up is an overfitting check because
@@ -306,6 +320,7 @@ Multi-slice matrix:
 ```text
 WikiText2-16 target vs best random16: +0.7474 PPL
 WikiText2-64 target vs best random16: +0.7777 PPL
+WikiText2-128 target vs best random16: +0.8409 PPL
 C4-64        target vs best random16: +1.1260 PPL
 ```
 
@@ -327,6 +342,7 @@ consensus-vs-random16 C4:       4586 / 8151 MiB = 56.26%
 SmolLM2 full sensitivity:       4971 / 8151 MiB = 60.99%
 SmolLM2 full random16 PPL:      5133 / 8151 MiB = 62.97%
 SmolLM2 full random16 PPL-64:   5679 / 8151 MiB = 69.67%
+SmolLM2 full random16 PPL-128:  5027 / 8151 MiB = 61.67%
 SmolLM2 full random16 C4-64:    5674 / 8151 MiB = 69.61%
 ```
 

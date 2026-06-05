@@ -96,14 +96,37 @@ loss-sensitive full vs random16 mean: +4.6833 PPL
 gap vs FP16:                           +2.9772 PPL
 ```
 
+Longest WikiText2 slice in this run:
+
+```text
+evaluation prompts: WikiText2 validation, 128 prompts
+max length: 128
+
+FP16 PPL:                13.2171
+uniform INT4 PPL:        18.7966
+loss_sensitive_full PPL: 15.3641
+best random16 PPL:       16.2050
+random16 mean PPL:       18.5168
+```
+
+Margins:
+
+```text
+loss-sensitive full vs uniform INT4: +3.4325 PPL
+loss-sensitive full vs best random16: +0.8409 PPL
+loss-sensitive full vs random16 mean: +3.1527 PPL
+gap vs FP16:                           +2.1469 PPL
+```
+
 The full-module result repairs the earlier 32-module failure mode:
 `loss_sensitive_limit8` beat uniform INT4 and random mean, but lost to the
 best random16 seed by `-0.0341` PPL. With all Linear modules measured, the
 same style of loss-sensitive budget beats the best random16 allocation by
 `+0.7474` PPL on the 16-prompt WikiText2 slice and `+0.7777` PPL on the
-64-prompt WikiText2 slice. The same allocation also stays positive on the
-64-prompt C4 slice, which is a useful overfitting check because the allocation
-was built from WikiText2 calibration prompts.
+64-prompt WikiText2 slice. The 128-prompt WikiText2 slice remains positive at
+`+0.8409` PPL versus best random16. The same allocation also stays positive on
+the 64-prompt C4 slice, which is a useful overfitting check because the
+allocation was built from WikiText2 calibration prompts.
 
 ## GPU Guard
 
@@ -111,6 +134,7 @@ was built from WikiText2 calibration prompts.
 sensitivity max memory: 4971 / 8151 MiB = 60.99%
 PPL-16 max memory:      5133 / 8151 MiB = 62.97%
 PPL-64 max memory:      5679 / 8151 MiB = 69.67%
+PPL-128 max memory:     5027 / 8151 MiB = 61.67%
 C4-64 max memory:       5674 / 8151 MiB = 69.61%
 max-memory-ratio:       0.85
 killed by guard:        false
@@ -138,6 +162,11 @@ outputs/smollm2_1p7b_full_random16_ppl_wikitext2_64_guard.json
 outputs/smollm2_1p7b_full_random16_wikitext2_64_evidence_matrix.md
 outputs/smollm2_1p7b_full_random16_wikitext2_64_evidence_matrix.csv
 outputs/smollm2_1p7b_full_random16_wikitext2_64_evidence_matrix.json
+outputs/smollm2_1p7b_full_random16_ppl_wikitext2_128_summary.json
+outputs/smollm2_1p7b_full_random16_ppl_wikitext2_128_guard.json
+outputs/smollm2_1p7b_full_random16_wikitext2_128_evidence_matrix.md
+outputs/smollm2_1p7b_full_random16_wikitext2_128_evidence_matrix.csv
+outputs/smollm2_1p7b_full_random16_wikitext2_128_evidence_matrix.json
 outputs/smollm2_1p7b_full_random16_ppl_c4_64_summary.json
 outputs/smollm2_1p7b_full_random16_ppl_c4_64_guard.json
 outputs/smollm2_1p7b_full_random16_c4_64_evidence_matrix.md

@@ -157,6 +157,13 @@ loss_sensitive_full PPL  14.8877
 random16 min/mean/max    15.6654 / 18.1114 / 20.5267
 margin vs best random    +0.7777 PPL
 
+SmolLM2-1.7B, WikiText2-128, group size 128, average 4.5 bits:
+FP16 PPL                 13.2171
+uniform INT4 PPL         18.7966
+loss_sensitive_full PPL  15.3641
+random16 min/mean/max    16.2050 / 18.5168 / 21.2702
+margin vs best random    +0.8409 PPL
+
 SmolLM2-1.7B, C4-64, group size 128, average 4.5 bits:
 FP16 PPL                 18.4497
 uniform INT4 PPL         26.3475
@@ -202,6 +209,7 @@ outputs/smollm2_1p7b_full_random16_result.md
 outputs/smollm2_1p7b_full_random16_multi_slice_evidence_matrix.md
 outputs/smollm2_1p7b_full_random16_evidence_matrix.md
 outputs/smollm2_1p7b_full_random16_wikitext2_64_evidence_matrix.md
+outputs/smollm2_1p7b_full_random16_wikitext2_128_evidence_matrix.md
 outputs/smollm2_1p7b_full_random16_c4_64_evidence_matrix.md
 inference_cpp/src/quant_evidence_matrix.cpp
 inference_cpp/src/quant_consensus_builder.cpp
