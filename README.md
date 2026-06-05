@@ -166,6 +166,40 @@ uniform INT4 PPL  49.9061
 GPU peak          3195/8151 MiB = 39.20%
 ```
 
+The follow-up Qwen3-0.6B loss-sensitive allocation measured all 197 Linear
+modules with a 4-prompt calibration probe and a 4.5 average-bit {4,8} budget.
+It allocates 44 modules at 8-bit and 153 modules at 4-bit, protecting 64.72%
+of the measured positive short-probe loss increase. The guarded run stayed
+well below the 85% memory ceiling:
+
+```text
+Qwen3-0.6B sensitivity probe:
+197 / 197 Linear modules measured
+allocation histogram: {4: 153, 8: 44}
+average bits: 4.4997
+GPU peak: 3310/8151 MiB = 40.61%
+```
+
+Quality checks are mixed but useful. On the repository's 8 built-in diagnostic
+prompts, the same allocation improves over both FP16 and uniform INT4, which
+should be treated as a smoke result rather than a dataset result. On the C4-64
+text slice it improves over uniform INT4 while remaining worse than FP16:
+
+```text
+Qwen3-0.6B, built-in diagnostic prompts:
+FP16 285.9696  uniform INT4 287.3424  loss-sensitive {4,8} 225.0283
+
+Qwen3-0.6B, C4-64:
+FP16 36.1380  uniform INT4 52.9352  loss-sensitive {4,8} 47.5872
+```
+
+A true 64-prompt WikiText2 rerun with `max_length=128` was intentionally not
+accepted as evidence because the GPU guard killed it at `6933/8151 MiB`
+(`85.06%`). Older committed Qwen3-0.6B C++ planner rows on WikiText2-64 remain
+available below, but this new low-memory allocation should be read as
+default-prompt plus C4 evidence until a lower-memory WikiText2-64 rerun is
+completed.
+
 In the current unauthenticated HF environment, `google/gemma-3-1b-it` and
 `meta-llama/Llama-3.2-1B-Instruct` are gated, while `HuggingFaceTB/SmolLM3-3B`
 and `Qwen/Qwen3-0.6B` are accessible.

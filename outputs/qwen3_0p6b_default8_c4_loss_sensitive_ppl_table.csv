@@ -1,0 +1,9 @@
+dataset,model,prompt_count,max_length,dtype,config,mode,ppl,mean_nll,delta_nll_vs_fp16,ppl_ratio_vs_fp16,tokens,bit_hist,allocation,method
+default_prompts_8,Qwen/Qwen3-0.6B,8,128,float16,fp16,fp16,285.9696280963674,5.655885609713468,0.0,1.0,143,"{""16"": 197}",,
+default_prompts_8,Qwen/Qwen3-0.6B,8,128,float16,uniform_int4,uniform_int4,287.34238063270976,5.660674468620674,0.0047888589072062615,1.0048003438179098,143,"{""4"": 197}",,
+default_prompts_8,Qwen/Qwen3-0.6B,8,128,float16,uniform_int3,uniform_int3,2295.4069277828808,7.738665417357758,2.0827798076442905,8.026750753437927,143,"{""3"": 197}",,
+default_prompts_8,Qwen/Qwen3-0.6B,8,128,float16,allocation_loss_sensitive_4to8,allocation,225.02829584469464,5.416226153607135,-0.23965945610633277,0.7868957879990792,143,"{""4"": 153, ""8"": 44}",outputs/qwen3_0p6b_loss_sensitive_alloc_4to8_limit4_group128_summary.json,loss_sensitive_4to8
+c4_64,Qwen/Qwen3-0.6B,64,128,float16,fp16,fp16,36.138003190515846,3.5873450315766418,0.0,1.0,7375,"{""16"": 197}",,
+c4_64,Qwen/Qwen3-0.6B,64,128,float16,uniform_int4,uniform_int4,52.93515957849015,3.9690677604028735,0.3817227288262317,1.4648058803753328,7375,"{""4"": 197}",,
+c4_64,Qwen/Qwen3-0.6B,64,128,float16,uniform_int3,uniform_int3,832.2634082252257,6.724148987139686,3.1368039555630443,23.03014374750089,7375,"{""3"": 197}",,
+c4_64,Qwen/Qwen3-0.6B,64,128,float16,allocation_loss_sensitive_4to8,allocation,47.58717946149839,3.862563385914948,0.27521835433830644,1.316818176439458,7375,"{""4"": 153, ""8"": 44}",outputs/qwen3_0p6b_loss_sensitive_alloc_4to8_limit4_group128_summary.json,loss_sensitive_4to8

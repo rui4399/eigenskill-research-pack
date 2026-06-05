@@ -150,6 +150,95 @@ outputs/eigenskill_v2_package_manifest.json
 
 ## Quant Diagnostic Reproduction
 
+The Qwen3-0.6B low-memory allocation path is the shortest current reproduction
+for the newer-model track. It measures all 197 Linear modules, builds a
+loss-sensitive {4,8} allocation, evaluates it on built-in diagnostic prompts
+and C4-64, then emits C++ evidence/guard summaries:
+
+```bash
+python3 train_python/run_with_gpu_guard.py \
+  --max-memory-ratio 0.85 \
+  --poll-seconds 0.5 \
+  --out outputs/qwen3_0p6b_sensitivity_lowmem_gpu_guard_limit4_group128.json \
+  -- \
+  python3 train_python/measure_module_quant_sensitivity.py \
+    --model Qwen/Qwen3-0.6B \
+    --limit-prompts 4 \
+    --max-length 128 \
+    --device cuda \
+    --dtype float16 \
+    --probe-bits 4 \
+    --group-size 128 \
+    --base-bits 4 \
+    --high-bits 8 \
+    --budget-avg-bits 4.5 \
+    --lowmem-row-chunk 32 \
+    --out-json outputs/qwen3_0p6b_module_loss_sensitivity_limit4_group128.json \
+    --out-md outputs/qwen3_0p6b_module_loss_sensitivity_limit4_group128_report.md \
+    --out-allocation outputs/qwen3_0p6b_loss_sensitive_alloc_4to8_limit4_group128_summary.json
+
+python3 train_python/run_with_gpu_guard.py \
+  --max-memory-ratio 0.85 \
+  --poll-seconds 0.5 \
+  --out outputs/qwen3_0p6b_loss_sensitive_eval_gpu_guard_default8.json \
+  -- \
+  python3 train_python/eval_weight_quant_ppl.py \
+    --model Qwen/Qwen3-0.6B \
+    --limit-prompts 64 \
+    --max-length 128 \
+    --device cuda \
+    --dtype float16 \
+    --allocation outputs/qwen3_0p6b_loss_sensitive_alloc_4to8_limit4_group128_summary.json \
+    --allocation-method loss_sensitive_4to8 \
+    --group-size 128 \
+    --reuse-model \
+    --out outputs/qwen3_0p6b_loss_sensitive_vs_uniform_ppl_default8_summary.json
+
+python3 train_python/run_with_gpu_guard.py \
+  --max-memory-ratio 0.85 \
+  --poll-seconds 0.5 \
+  --out outputs/qwen3_0p6b_loss_sensitive_eval_gpu_guard_c4_64.json \
+  -- \
+  python3 train_python/eval_weight_quant_ppl.py \
+    --model Qwen/Qwen3-0.6B \
+    --prompts data_eval/text_prompts/c4_en_validation_64.txt \
+    --limit-prompts 64 \
+    --max-length 128 \
+    --device cuda \
+    --dtype float16 \
+    --allocation outputs/qwen3_0p6b_loss_sensitive_alloc_4to8_limit4_group128_summary.json \
+    --allocation-method loss_sensitive_4to8 \
+    --group-size 128 \
+    --reuse-model \
+    --out outputs/qwen3_0p6b_loss_sensitive_vs_uniform_ppl_c4_64_summary.json
+
+./build/cpp-wsl/quant_evidence_matrix \
+  --input outputs/qwen3_0p6b_loss_sensitive_vs_uniform_ppl_default8_summary.json \
+  --dataset default_prompts_8 \
+  --input outputs/qwen3_0p6b_loss_sensitive_vs_uniform_ppl_c4_64_summary.json \
+  --dataset c4_64 \
+  --target allocation_loss_sensitive_4to8 \
+  --emit markdown \
+  > outputs/qwen3_0p6b_default8_c4_loss_sensitive_evidence_matrix.md
+
+./build/cpp-wsl/gpu_guard_summary \
+  --input qwen3_sensitivity=outputs/qwen3_0p6b_sensitivity_lowmem_gpu_guard_limit4_group128.json \
+  --input qwen3_default8_eval=outputs/qwen3_0p6b_loss_sensitive_eval_gpu_guard_default8.json \
+  --input qwen3_c4_eval=outputs/qwen3_0p6b_loss_sensitive_eval_gpu_guard_c4_64.json \
+  --input qwen3_wikitext2_64_true_guard_fail=outputs/qwen3_0p6b_loss_sensitive_eval_gpu_guard_wikitext2_64_true.json \
+  --emit markdown \
+  > outputs/qwen3_0p6b_lowmem_gpu_guard_summary.md
+```
+
+Committed headline:
+
+```text
+Qwen3-0.6B sensitivity: 197/197 Linear modules, {4:153, 8:44}, 40.61% GPU memory
+Built-in diagnostic prompts: FP16 285.9696, INT4 287.3424, loss-sensitive 225.0283
+C4-64: FP16 36.1380, INT4 52.9352, loss-sensitive 47.5872
+True WikiText2-64 max_length=128 rerun: killed by guard at 85.06%, not used as valid evidence
+```
+
 The OLMo2 consensus repair check is the current most useful guarded GPU
 reproduction path. It reruns the C4/WikiText2 64-prompt fake-quant evaluator
 with the same random16 pool and regenerates the C++ evidence matrix:
