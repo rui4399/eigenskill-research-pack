@@ -24,6 +24,10 @@ Commits pushed in this run:
 9d12662 Add cross-model quant evidence matrix
 a71d7ee Add OLMo2 random16 audit
 1aa8fe2 Show OLMo2 consensus repairs random16 failure
+74ce201 Add OLMo2 consensus repair reproduction script
+94c328f Add revised publication targets
+8b12cf9 Add JSON output for C++ evidence matrix
+745e2b5 Add baseline environment audit
 ```
 
 ## C++ Work
@@ -57,8 +61,17 @@ different target names, for example `wikitext_c4_consensus` or
 Validation:
 
 ```text
-CTest: 8/8 passed
+CTest: 10/10 passed
 ```
+
+Additional C++ reporting utility:
+
+```text
+inference_cpp/src/baseline_install_probe.cpp
+```
+
+It converts pip install logs into Markdown/JSON evidence so failed baseline
+setup attempts do not remain informal terminal notes.
 
 ## Quantization Evidence
 
@@ -156,6 +169,40 @@ consensus-vs-random16 C4:       4586 / 8151 MiB = 56.26%
 
 No guard kill occurred.
 
+## Baseline Package Readiness
+
+Environment audit:
+
+```text
+outputs/baseline_environment_audit.md
+outputs/baseline_environment_audit.json
+```
+
+Install probe:
+
+```text
+outputs/baseline_install_probe.md
+outputs/baseline_install_probe.json
+outputs/baseline_venv_install_optimum.log
+outputs/baseline_venv_install_nodeps_optimum_gptqmodel.log
+```
+
+Key result:
+
+```text
+Full `optimum` dependency install failed with a network read timeout while
+downloading large CUDA-side dependencies.
+
+`pip install --no-deps optimum gptqmodel` succeeded as metadata/build
+probe only:
+  gptqmodel==7.0.0
+  optimum==2.1.0
+```
+
+This does not establish a runnable GPTQ/AWQ baseline yet. It only records
+that public baseline packages are discoverable and that the current blocker
+is dependency installation, not missing package names.
+
 ## Remaining Limitations
 
 This remains a short-slice PyTorch fake-quant diagnostic.
@@ -178,4 +225,3 @@ Next high-value work:
 3. Add an interaction-aware swap/search stage on top of consensus.
 4. Move more allocation/reporting glue from Python into C++ only where it reduces real dependency surface.
 ```
-

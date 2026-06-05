@@ -28,6 +28,7 @@ add_executable(quant_consensus_audit src/quant_consensus_audit.cpp)
 add_executable(quant_sensitivity_stability src/quant_sensitivity_stability.cpp)
 add_executable(quant_budget_curve_summary src/quant_budget_curve_summary.cpp)
 add_executable(quant_consensus_builder src/quant_consensus_builder.cpp)
+add_executable(baseline_install_probe src/baseline_install_probe.cpp)
 target_link_libraries(quant_kernel_bench PRIVATE eigenskill_quant_kernels)
 target_link_libraries(quant_kernel_verify PRIVATE eigenskill_quant_kernels)
 
@@ -86,6 +87,13 @@ if(BUILD_TESTING)
       --budget-avg-bits 5.0
       --emit json
       --no-write
+  )
+  add_test(
+    NAME baseline_install_probe_smoke
+    COMMAND baseline_install_probe
+      --log full=${CMAKE_CURRENT_SOURCE_DIR}/testdata/baseline_install_timeout_fixture.log
+      --log nodeps=${CMAKE_CURRENT_SOURCE_DIR}/testdata/baseline_install_nodeps_success_fixture.log
+      --emit json
   )
 endif()
 
