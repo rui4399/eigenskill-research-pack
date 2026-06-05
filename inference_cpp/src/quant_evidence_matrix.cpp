@@ -218,6 +218,7 @@ std::string choose_target_name(const std::vector<Result>& results, const std::st
     }
     const std::vector<std::string> candidates = {
         "wikitext_c4_consensus",
+        "loss_sensitive_full",
         "cpp_loss_sensitive_budget",
         "blend_sensitivity_85",
         "allocation_loss_sensitive_consensus_4to8",

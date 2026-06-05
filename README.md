@@ -122,7 +122,7 @@ Qwen3 peaked at `5071/8151 MiB` (`62.21%`) and OLMo2 peaked at
 
 The C++ evidence matrix can also merge heterogeneous current targets with
 `--target auto`. The committed cross-model table covers Qwen3-0.6B,
-Qwen3-1.7B, and OLMo2-0425-1B on WikiText2-64/C4-64. After expanding the
+Qwen3-1.7B, OLMo2-0425-1B, and SmolLM2-1.7B on WikiText2/C4 slices. After expanding the
 OLMo2 random baseline from 8 to 16 seeds, five of six rows remain positive
 against the best listed random seed. OLMo2 C4-64 is the important negative row:
 single-split `cpp_loss_sensitive_budget` reaches `35.8428` PPL while the best
@@ -199,6 +199,8 @@ outputs/consensus_budget_curve_report.md
 outputs/consensus_budget_curve.svg
 outputs/cross_model_quant_evidence_matrix_auto.md
 outputs/cross_model_quant_evidence_matrix_auto.csv
+outputs/cross_model_quant_evidence_matrix_extended_auto.md
+outputs/cross_model_quant_evidence_matrix_extended_auto.csv
 outputs/olmo2_0425_1b_random16_negative_audit.md
 outputs/olmo2_0425_1b_consensus_repairs_random16_negative.md
 outputs/olmo2_0425_1b_consensus_vs_random16_evidence_matrix.md

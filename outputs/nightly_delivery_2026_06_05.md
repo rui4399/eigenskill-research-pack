@@ -96,6 +96,8 @@ Cross-model evidence:
 ```text
 outputs/cross_model_quant_evidence_matrix_auto.md
 outputs/cross_model_quant_evidence_matrix_auto.csv
+outputs/cross_model_quant_evidence_matrix_extended_auto.md
+outputs/cross_model_quant_evidence_matrix_extended_auto.csv
 ```
 
 Models covered:
@@ -104,6 +106,7 @@ Models covered:
 Qwen/Qwen3-0.6B
 Qwen/Qwen3-1.7B
 allenai/OLMo-2-0425-1B-Instruct
+HuggingFaceTB/SmolLM2-1.7B-Instruct
 ```
 
 Datasets:
@@ -111,6 +114,7 @@ Datasets:
 ```text
 WikiText2-64
 C4-64
+WikiText2-128
 ```
 
 Important result:
@@ -118,6 +122,8 @@ Important result:
 ```text
 Qwen3-0.6B and Qwen3-1.7B have positive target margins versus best random.
 OLMo2 single-split loss-sensitive allocation has one negative row on C4.
+The extended table adds SmolLM2-1.7B full-module rows; all committed SmolLM2
+rows are positive versus best random16.
 ```
 
 ## Negative Result
