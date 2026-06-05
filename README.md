@@ -25,8 +25,9 @@ production quantizer. Its verified core is narrower:
    C++ consensus-allocation audit, C++ Calibration Split Instability (CSI)
    audit, C++ budget-curve report/figure generation, C++ random-seed baseline
    auditing, C++ swap-search summarization, C++ PPL-summary merging for chunked
-   evaluation, guarded low-memory evaluation-plan generation, and GPU guard-log
-   summarization.
+   evaluation, guarded low-memory evaluation-plan generation, GPU guard-log
+   summarization, and C++ task-accuracy comparison for FP16/INT4/allocation
+   retention audits.
 
 The practical publication direction is therefore:
 
@@ -63,6 +64,9 @@ are not completed results in this repository.
 - A first task-evaluation smoke interface beyond PPL. It is intentionally tiny
   and only validates the pipeline for MMLU/GSM8K/IFEval-style JSONL tasks; it
   is not a benchmark result.
+- A C++ task-comparison gate that consumes multiple task-eval summaries and
+  reports accuracy retention against an FP16 baseline before a run is allowed
+  into paper-facing evidence.
 
 ## What This Is Not
 
