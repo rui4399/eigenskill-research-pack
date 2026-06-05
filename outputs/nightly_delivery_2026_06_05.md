@@ -226,6 +226,18 @@ loss-sensitive vs uniform: +5.2587 PPL
 This is a small 32-module / 16-prompt result, but it is a real closed loop:
 sensitivity measurement -> allocation -> PPL evaluation.
 
+Random16 follow-up:
+
+```text
+outputs/smollm2_1p7b_retry_random16_evidence_matrix.md
+loss_sensitive_limit8 vs uniform INT4: +5.2587 PPL
+loss_sensitive_limit8 vs best random16: -0.0341 PPL
+loss_sensitive_limit8 vs random16 mean: +0.0951 PPL
+```
+
+This makes the SmolLM2 result honest: the small allocation is clearly better
+than uniform INT4, but it is not yet robust against best-of-16 random.
+
 ## GPU Guard
 
 All GPU runs used:

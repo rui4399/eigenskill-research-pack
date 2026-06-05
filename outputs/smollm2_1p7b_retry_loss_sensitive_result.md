@@ -59,6 +59,25 @@ only 16 WikiText2 prompts were evaluated. It should be expanded to all Linear
 modules and random-budget baselines before being treated as a main paper
 result.
 
+## Random16 Follow-Up
+
+The same 16-prompt slice was evaluated against 16 random budget allocations:
+
+```text
+loss_sensitive_limit8 PPL: 12.8844
+best random16 PPL:        12.8503
+random16 mean PPL:        12.9795
+target vs best random16:  -0.0341 PPL
+target vs random16 mean:  +0.0951 PPL
+```
+
+This is a useful negative/ambiguous result. The small loss-sensitive allocation
+beats uniform INT4 and random16 mean, but it does not beat the best random
+allocation in this tiny 32-module / 16-prompt setting. The right next step is
+to expand measurement coverage and use a more stable cross-dataset consensus
+or interaction-aware search before making strong robustness claims for
+SmolLM2-1.7B.
+
 Artifacts:
 
 ```text
@@ -67,6 +86,8 @@ outputs/smollm2_1p7b_module_loss_sensitivity_limit8_group128_report.md
 outputs/smollm2_1p7b_loss_sensitive_alloc_4to8_limit8_group128_summary.json
 outputs/smollm2_1p7b_retry_loss_sensitive_ppl_wikitext2_16_summary.json
 outputs/smollm2_1p7b_retry_loss_sensitive_ppl_wikitext2_16_guard.json
+outputs/smollm2_1p7b_retry_random16_ppl_wikitext2_16_summary.json
+outputs/smollm2_1p7b_retry_random16_evidence_matrix.md
 data_eval/eval_configs/smollm2_1p7b_retry_loss_sensitive_compare.json
+data_eval/eval_configs/smollm2_1p7b_retry_random16_compare.json
 ```
-
