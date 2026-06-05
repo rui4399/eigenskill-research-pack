@@ -147,3 +147,28 @@ The older Python `train_python/summarize_budget_curve.py` and
 `train_python/plot_budget_curve_svg.py` scripts remain as fallback utilities,
 but the committed report and SVG can now be regenerated from the standalone
 C++ executable without NumPy, matplotlib, or PyTorch.
+
+## C++ Builder
+
+The consensus allocation itself can now be regenerated from C++:
+
+```text
+inference_cpp/src/quant_consensus_builder.cpp
+```
+
+The builder consumes the two split allocation JSON files, reconstructs the
+same intersection-first then loss-per-cost budget fill rule, and emits
+evaluator-compatible JSON plus a Markdown report. The current C++ outputs are:
+
+```text
+outputs/qwen3_1p7b_loss_sensitive_wikitext_c4_consensus_alloc_4to8_group128_cpp_summary.json
+outputs/qwen3_1p7b_loss_sensitive_wikitext_c4_consensus_alloc_4to8_group128_cpp_report.md
+outputs/olmo2_0425_1b_loss_sensitive_wikitext_c4_consensus_alloc_4to8_group128_cpp_summary.json
+outputs/olmo2_0425_1b_loss_sensitive_wikitext_c4_consensus_alloc_4to8_group128_cpp_report.md
+```
+
+Regression checks show that these C++ allocations match the earlier Python
+`train_python/build_consensus_allocation.py` outputs exactly at the bit-decision
+level for the committed Qwen3-1.7B and OLMo2-0425-1B artifacts. The Python
+script remains as a fallback/reference implementation, but new consensus
+allocation construction should prefer the C++ executable.

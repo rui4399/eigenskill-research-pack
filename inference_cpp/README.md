@@ -47,6 +47,7 @@ inference_cpp/build-wsl/quant_kernel_verify
 inference_cpp/build-wsl/quant_allocation_planner
 inference_cpp/build-wsl/quant_result_summarizer
 inference_cpp/build-wsl/quant_evidence_matrix
+inference_cpp/build-wsl/quant_consensus_builder
 inference_cpp/build-wsl/quant_consensus_audit
 inference_cpp/build-wsl/quant_sensitivity_stability
 inference_cpp/build-wsl/quant_budget_curve_summary
@@ -121,6 +122,21 @@ versus the random mean:
 consensus allocation, then reports high-bit overlap, Jaccard similarity,
 weighted average bits, budget use, and bit histograms. It audits allocation
 stability only; downstream model quality still comes from the PPL evaluator.
+
+`quant_consensus_builder` is the standalone C++ counterpart to
+`train_python/build_consensus_allocation.py`. It builds the WikiText2+C4
+consensus allocation by locking modules selected by both calibration probes,
+then spending the remaining bit budget by average loss-per-cost score. The
+generated JSON remains compatible with `train_python/eval_weight_quant_ppl.py`.
+
+```bash
+./inference_cpp/build-wsl/quant_consensus_builder \
+  --left outputs/qwen3_1p7b_loss_sensitive_alloc_4to8_limit2_group128_summary.json \
+  --right outputs/qwen3_1p7b_loss_sensitive_alloc_4to8_c4_limit2_group128_summary.json \
+  --budget-avg-bits 4.5 \
+  --out-json outputs/qwen3_1p7b_loss_sensitive_wikitext_c4_consensus_alloc_4to8_group128_cpp_summary.json \
+  --out-md outputs/qwen3_1p7b_loss_sensitive_wikitext_c4_consensus_alloc_4to8_group128_cpp_report.md
+```
 
 ```bash
 ./inference_cpp/build-wsl/quant_consensus_audit \

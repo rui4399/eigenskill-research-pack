@@ -71,6 +71,11 @@ These claims are supported by committed data, scripts, or reports:
   JSON files into a cross-dataset Markdown/CSV table with target-vs-uniform,
   target-vs-best-random, and target-vs-random-mean margins. It is a reporting
   tool, not a quantization algorithm.
+- A standalone C++ consensus-allocation builder now reproduces the Python
+  WikiText2+C4 consensus allocation for Qwen3-1.7B and OLMo2-0425-1B exactly
+  at the bit-decision level while emitting evaluator-compatible JSON and
+  Markdown. This moves the allocation construction path, not only the reporting
+  path, out of Python.
 - A standalone C++ consensus-allocation audit now reads the left/right
   calibration allocations plus the consensus allocation and reports high-bit
   overlap, Jaccard similarity, weighted average bits, budget use, and bit

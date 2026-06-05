@@ -15,8 +15,9 @@ core is narrower:
    `allenai/OLMo-2-0425-1B-Instruct` short slices;
 4. standalone C++ artifacts for low-rank GEMV, quantization-policy bypass,
    quant-kernel microbenchmarks, a reusable quant-kernel API, C++ allocation
-   planning, C++ evidence summarization, C++ consensus-allocation audit,
-   C++ split-stability audit, and C++ budget-curve report/figure generation.
+   planning, C++ consensus allocation building, C++ evidence summarization,
+   C++ consensus-allocation audit, C++ split-stability audit, and C++
+   budget-curve report/figure generation.
 
 The practical publication direction is therefore:
 
@@ -128,15 +129,18 @@ outputs/qwen3_1p7b_wikitext_c4_consensus_random16_evidence_matrix.md
 outputs/qwen3_1p7b_wikitext_c4_consensus_audit.md
 outputs/qwen3_1p7b_wikitext_c4_sensitivity_stability_report.md
 outputs/qwen3_1p7b_wikitext_c4_sensitivity_stability_cpp.md
+outputs/qwen3_1p7b_loss_sensitive_wikitext_c4_consensus_alloc_4to8_group128_cpp_summary.json
 data_eval/eval_configs/olmo2_0425_1b_wikitext_c4_consensus_compare.json
 data_eval/eval_configs/olmo2_0425_1b_consensus_budget_curve.json
 outputs/olmo2_0425_1b_wikitext_c4_consensus_evidence_matrix.md
 outputs/olmo2_0425_1b_wikitext_c4_consensus_audit.md
 outputs/olmo2_0425_1b_wikitext_c4_sensitivity_stability_report.md
 outputs/olmo2_0425_1b_wikitext_c4_sensitivity_stability_cpp.md
+outputs/olmo2_0425_1b_loss_sensitive_wikitext_c4_consensus_alloc_4to8_group128_cpp_summary.json
 outputs/consensus_budget_curve_report.md
 outputs/consensus_budget_curve.svg
 inference_cpp/src/quant_evidence_matrix.cpp
+inference_cpp/src/quant_consensus_builder.cpp
 inference_cpp/src/quant_consensus_audit.cpp
 inference_cpp/src/quant_sensitivity_stability.cpp
 inference_cpp/src/quant_budget_curve_summary.cpp
