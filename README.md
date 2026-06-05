@@ -202,6 +202,19 @@ All runs stayed under the requested GPU-memory guard: WikiText2-32 peaked at
 `6918/8151 MiB` (`84.87%`), WikiText2-64 at `6269/8151 MiB` (`76.91%`), and
 C4-64 at `6261/8151 MiB` (`76.81%`).
 
+Transfer validation of the WikiText2-64 swap allocation shows same-family
+generalization but not cross-dataset improvement:
+
+```text
+WikiText2-128: loss_sensitive_full 15.3641 -> swap_search_wikitext2_64 15.3127
+C4-64:         loss_sensitive_full 21.4269 -> swap_search_wikitext2_64 21.4356
+```
+
+This is useful but bounded: the interaction-aware swap improves WikiText2-128
+by `0.0514` PPL while slightly hurting C4-64 by `0.0087` PPL. The result should
+be framed as same-family search/transfer evidence, not a universal mixed-
+precision allocation improvement.
+
 Evidence files:
 
 ```text
@@ -245,8 +258,12 @@ outputs/smollm2_1p7b_full_swap_search_wikitext2_64_cpp_summary.md
 outputs/smollm2_1p7b_full_swap_search_c4_64_report.md
 outputs/smollm2_1p7b_full_swap_search_c4_64_cpp_summary.md
 outputs/smollm2_1p7b_swap_search_gpu_guard_summary.md
+outputs/smollm2_1p7b_swap_transfer_matrix.md
+outputs/smollm2_1p7b_swap_transfer_wikitext2_128_summary.json
+outputs/smollm2_1p7b_swap_transfer_c4_64_summary.json
 inference_cpp/src/quant_evidence_matrix.cpp
 inference_cpp/src/quant_swap_search_summary.cpp
+inference_cpp/src/quant_transfer_matrix.cpp
 inference_cpp/src/gpu_guard_summary.cpp
 inference_cpp/src/quant_consensus_builder.cpp
 inference_cpp/src/quant_consensus_audit.cpp

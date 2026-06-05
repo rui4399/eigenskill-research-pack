@@ -251,6 +251,16 @@ WikiText2-64: base 14.8877 PPL, best 14.8376 PPL, 8 swaps, 76.91% GPU memory
 C4-64:        base 21.4269 PPL, best 21.4269 PPL, 4 swaps, 76.81% GPU memory
 ```
 
+Transfer check for the WikiText2-64 swap allocation:
+
+```text
+WikiText2-128: loss_sensitive_full 15.3641 -> swap_search_wikitext2_64 15.3127
+C4-64:         loss_sensitive_full 21.4269 -> swap_search_wikitext2_64 21.4356
+```
+
+This is same-family improvement with a small C4 regression, not a universal
+cross-dataset allocation result.
+
 Scope reminder: these are PyTorch fake-quant diagnostics, not packed runtime
 or board-level latency measurements.
 

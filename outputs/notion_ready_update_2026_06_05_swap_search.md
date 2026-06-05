@@ -45,6 +45,20 @@ protection from `model.layers.12.self_attn.v_proj` to
 cross-dataset C4-64 search did not improve. This does not prove global
 optimality, and the C4 row remains the important overfitting caution.
 
+## Transfer Validation
+
+The WikiText2-64 swap allocation was then evaluated outside its search slice:
+
+| dataset | FP16 | uniform INT4 | base PPL | swap PPL | improvement |
+|---|---:|---:|---:|---:|---:|
+| WikiText2-128 | 13.2171 | 18.7966 | 15.3641 | 15.3127 | 0.0514 |
+| C4-64 | 18.4497 | 26.3475 | 21.4269 | 21.4356 | -0.0087 |
+
+Conclusion: the swap has same-family transfer from WikiText2-64 to
+WikiText2-128, but it does not improve the cross-dataset C4 row. This should
+be used as bounded search/transfer evidence rather than a universal
+mixed-precision allocation claim.
+
 ## Evidence Files
 
 ```text
@@ -61,6 +75,9 @@ outputs/smollm2_1p7b_full_swap_search_c4_64_report.md
 outputs/smollm2_1p7b_full_swap_search_c4_64_cpp_summary.md
 outputs/smollm2_1p7b_full_swap_search_c4_64_guard.json
 outputs/smollm2_1p7b_swap_search_gpu_guard_summary.md
+outputs/smollm2_1p7b_swap_transfer_matrix.md
+outputs/smollm2_1p7b_swap_transfer_wikitext2_128_summary.json
+outputs/smollm2_1p7b_swap_transfer_c4_64_summary.json
 ```
 
 ## Verification
