@@ -172,6 +172,10 @@ bool starts_with(const std::string& value, const std::string& prefix) {
     return value.size() >= prefix.size() && std::equal(prefix.begin(), prefix.end(), value.begin());
 }
 
+bool is_random_seed_result(const std::string& name) {
+    return starts_with(name, "random_seed_") || starts_with(name, "random_budget_seed_");
+}
+
 std::vector<Result> read_results_json(const std::string& path) {
     const std::string text = read_text_file(path);
     const std::vector<std::string> objects = extract_array_objects(text, "results");
@@ -235,7 +239,7 @@ AuditRow audit_case(const CaseInput& input, const std::string& target_name) {
     double total = 0.0;
     constexpr double tie_eps = 1.0e-9;
     for (const Result& result : results) {
-        if (!starts_with(result.name, "random_seed_")) continue;
+        if (!is_random_seed_result(result.name)) continue;
         ++row.seed_count;
         total += result.ppl;
         if (!std::isfinite(row.best_seed_ppl) || result.ppl < row.best_seed_ppl) {
@@ -254,7 +258,7 @@ AuditRow audit_case(const CaseInput& input, const std::string& target_name) {
         }
     }
     if (row.seed_count == 0) {
-        throw std::runtime_error("no random_seed_* results found in " + input.path);
+        throw std::runtime_error("no random seed results found in " + input.path);
     }
     row.seed_mean_ppl = total / static_cast<double>(row.seed_count);
     return row;
@@ -310,7 +314,8 @@ double win_rate(const AuditRow& row) {
 void print_markdown(const std::vector<AuditRow>& rows, const std::string& target_name) {
     std::cout << "# Random Baseline Audit\n\n";
     std::cout << "Target: `" << target_name << "`\n\n";
-    std::cout << "Only `random_seed_*` rows are counted as random seeds; aggregate configs such as "
+    std::cout << "Only explicit random-seed rows are counted as random seeds. Accepted prefixes are "
+                 "`random_seed_*` and `random_budget_seed_*`; aggregate configs such as "
                  "`cpp_random_budget` are excluded.\n\n";
     std::cout << "| dataset | target PPL | seed count | win/loss/tie | win rate | best seed | seed min/mean/max | "
                  "margin vs best seed | margin vs seed mean |\n";
@@ -362,7 +367,7 @@ void print_csv(const std::vector<AuditRow>& rows) {
 void print_json(const std::vector<AuditRow>& rows, const std::string& target_name) {
     std::cout << "{\n";
     std::cout << "  \"target\": \"" << json_escape(target_name) << "\",\n";
-    std::cout << "  \"random_selector\": \"random_seed_*\",\n";
+    std::cout << "  \"random_selector\": \"random_seed_*|random_budget_seed_*\",\n";
     std::cout << "  \"rows\": [\n";
     for (std::size_t i = 0; i < rows.size(); ++i) {
         const AuditRow& row = rows[i];
