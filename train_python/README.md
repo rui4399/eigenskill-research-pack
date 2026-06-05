@@ -148,6 +148,29 @@ This writes:
 outputs/eigenskill_v2_package_manifest.json
 ```
 
+## Quant Diagnostic Reproduction
+
+The OLMo2 consensus repair check is the current most useful guarded GPU
+reproduction path. It reruns the C4/WikiText2 64-prompt fake-quant evaluator
+with the same random16 pool and regenerates the C++ evidence matrix:
+
+```bash
+bash train_python/run_olmo2_consensus_repair.sh
+```
+
+It uses:
+
+```text
+train_python/run_with_gpu_guard.py --max-memory-ratio 0.85
+```
+
+Expected headline from the committed run:
+
+```text
+WikiText2-64 consensus PPL 21.0349 vs best random16 21.4637
+C4-64        consensus PPL 35.4726 vs best random16 35.5846
+```
+
 ## Export High-Precision Model
 
 ```bash
