@@ -150,6 +150,30 @@ one-split allocation can fail
 cross-dataset consensus repairs the observed best-random failure case
 ```
 
+## Longer Qwen3-1.7B Slice
+
+The Qwen3-1.7B consensus-vs-random16 evaluation was extended from
+WikiText2-64 to WikiText2-128:
+
+```text
+outputs/qwen3_1p7b_wikitext2_128_consensus_random16_result.md
+outputs/qwen3_1p7b_wikitext_c4_consensus_random16_ppl_wikitext2_128_summary.json
+outputs/qwen3_1p7b_wikitext_c4_consensus_random16_wikitext2_128_evidence_matrix.md
+```
+
+Key result:
+
+```text
+FP16 PPL:                   20.2931
+uniform INT4 PPL:           28.2125
+wikitext_c4_consensus PPL:  24.2065
+best random16 PPL:          25.1876
+target vs best random16:    +0.9811 PPL
+```
+
+This is stronger than the short smoke slice because it uses twice as many
+WikiText2 prompts while keeping the same 16-random allocation pool.
+
 ## GPU Guard
 
 All GPU runs used:
