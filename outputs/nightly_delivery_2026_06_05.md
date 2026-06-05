@@ -388,6 +388,7 @@ outputs/baseline_install_probe.md
 outputs/baseline_install_probe.json
 outputs/baseline_venv_install_optimum.log
 outputs/baseline_venv_install_nodeps_optimum_gptqmodel.log
+outputs/baseline_runtime_import_probe_2026_06_05.md
 ```
 
 Key result:
@@ -405,6 +406,17 @@ probe only:
 This does not establish a runnable GPTQ/AWQ baseline yet. It only records
 that public baseline packages are discoverable and that the current blocker
 is dependency installation, not missing package names.
+
+Active WSL runtime import probe:
+
+```text
+torch: FOUND
+transformers: FOUND
+optimum/gptqmodel/awq/auto_gptq/llmcompressor: missing
+```
+
+So the current runtime remains a PyTorch fake-quant diagnostic environment,
+not a runnable public-baseline comparison environment.
 
 ## Remaining Limitations
 
