@@ -157,6 +157,19 @@ The current candidate list prioritizes `LiquidAI/LFM2.5-350M`, `Qwen/Qwen3-*`,
 `HuggingFaceTB/SmolLM3-3B`, with license-gated models treated as probes rather
 than assumed dependencies.
 
+The same smoke path on `Qwen/Qwen3-0.6B` gives a cleaner near-term baseline:
+
+```text
+Qwen3-0.6B, WikiText2-32:
+FP16 PPL          31.6892
+uniform INT4 PPL  49.9061
+GPU peak          3195/8151 MiB = 39.20%
+```
+
+In the current unauthenticated HF environment, `google/gemma-3-1b-it` and
+`meta-llama/Llama-3.2-1B-Instruct` are gated, while `HuggingFaceTB/SmolLM3-3B`
+and `Qwen/Qwen3-0.6B` are accessible.
+
 SmolLM2-1.7B now has a full-module short-slice check. The first 32-module
 allocation beat uniform INT4 but lost narrowly to the best random16 seed. A
 follow-up run measured all 169 Linear modules and allocated 13 modules at
@@ -266,6 +279,9 @@ outputs/baseline_environment_audit.json
 outputs/recent_small_model_candidates_2026_06_05.md
 outputs/lfm2p5_350m_uniform_smoke_wikitext2_32_summary.json
 outputs/lfm2p5_350m_uniform_smoke_wikitext2_32_evidence.md
+outputs/qwen3_0p6b_uniform_smoke_wikitext2_32_summary.json
+outputs/qwen3_0p6b_uniform_smoke_wikitext2_32_evidence.md
+outputs/recent_model_access_probe_2026_06_05.md
 outputs/smollm2_1p7b_full_random16_result.md
 outputs/smollm2_1p7b_full_random16_multi_slice_evidence_matrix.md
 outputs/smollm2_1p7b_full_gpu_guard_summary.md

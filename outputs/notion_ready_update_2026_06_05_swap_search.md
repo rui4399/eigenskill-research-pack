@@ -126,3 +126,12 @@ google/gemma-3-1b-it
 meta-llama/Llama-3.2-1B-Instruct
 HuggingFaceTB/SmolLM3-3B
 ```
+
+Follow-up access/smoke results:
+
+```text
+Qwen/Qwen3-0.6B: accessible, WikiText2-32 FP16 PPL 31.6892, INT4 PPL 49.9061, guard peak 39.20%
+HuggingFaceTB/SmolLM3-3B: config accessible, larger follow-up candidate
+google/gemma-3-1b-it: gated without current HF auth
+meta-llama/Llama-3.2-1B-Instruct: gated without current HF auth
+```
