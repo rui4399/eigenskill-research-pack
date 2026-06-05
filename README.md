@@ -138,6 +138,25 @@ beats best random16 by `+0.4288` PPL. This is the current cleanest evidence
 that the cross-dataset consensus heuristic is doing useful work beyond a
 single noisy sensitivity split.
 
+The next model track is moving beyond Qwen2.5-era baselines. A first
+compatibility smoke on the 2026-era edge-oriented `LiquidAI/LFM2.5-350M` model
+loads and evaluates locally under the guard:
+
+```text
+LFM2.5-350M, WikiText2-32:
+FP16 PPL          163.9448
+uniform INT4 PPL  135.0303
+GPU peak          3092/8151 MiB = 37.93%
+```
+
+This is not used as headline accuracy evidence because the FP16 PPL is high
+and uniform INT4 unexpectedly improves the short-slice PPL. It is recorded as
+a runnable-model compatibility result and a prompt/tokenizer-fit audit item.
+The current candidate list prioritizes `LiquidAI/LFM2.5-350M`, `Qwen/Qwen3-*`,
+`google/gemma-3-1b-it`, `meta-llama/Llama-3.2-1B-Instruct`, and
+`HuggingFaceTB/SmolLM3-3B`, with license-gated models treated as probes rather
+than assumed dependencies.
+
 SmolLM2-1.7B now has a full-module short-slice check. The first 32-module
 allocation beat uniform INT4 but lost narrowly to the best random16 seed. A
 follow-up run measured all 169 Linear modules and allocated 13 modules at
@@ -244,6 +263,9 @@ outputs/olmo2_0425_1b_consensus_vs_random16_evidence_matrix.md
 outputs/olmo2_0425_1b_consensus_vs_random16_evidence_matrix.json
 outputs/baseline_environment_audit.md
 outputs/baseline_environment_audit.json
+outputs/recent_small_model_candidates_2026_06_05.md
+outputs/lfm2p5_350m_uniform_smoke_wikitext2_32_summary.json
+outputs/lfm2p5_350m_uniform_smoke_wikitext2_32_evidence.md
 outputs/smollm2_1p7b_full_random16_result.md
 outputs/smollm2_1p7b_full_random16_multi_slice_evidence_matrix.md
 outputs/smollm2_1p7b_full_gpu_guard_summary.md

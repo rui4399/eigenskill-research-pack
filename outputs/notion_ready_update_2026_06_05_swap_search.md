@@ -100,3 +100,29 @@ CTest result:
    as search heuristic evidence rather than a closed-form optimum.
 3. Build a real GPTQ/AWQ/llm-compressor baseline environment before making any
    baseline-comparison claims.
+
+## Recent Model Track
+
+The next-model track now explicitly moves beyond Qwen2.5-era baselines. The
+first smoke tested `LiquidAI/LFM2.5-350M`, a 2026-era edge-oriented 350M model.
+
+```text
+WikiText2-32 FP16 PPL:         163.9448
+WikiText2-32 uniform INT4 PPL: 135.0303
+GPU guard peak:                3092 / 8151 MiB = 37.93%
+```
+
+This is only a compatibility smoke. The high FP16 PPL and lower INT4 PPL are
+an anomaly for this prompt slice, so LFM2.5 should not be used as headline
+quality evidence until tokenizer/template and prompt-source fit are audited.
+
+Candidate list:
+
+```text
+LiquidAI/LFM2.5-350M
+Qwen/Qwen3-0.6B
+Qwen/Qwen3-1.7B
+google/gemma-3-1b-it
+meta-llama/Llama-3.2-1B-Instruct
+HuggingFaceTB/SmolLM3-3B
+```
