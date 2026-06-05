@@ -119,6 +119,9 @@ killed by guard:        false
 ## Artifacts
 
 ```text
+outputs/smollm2_1p7b_full_random16_multi_slice_evidence_matrix.md
+outputs/smollm2_1p7b_full_random16_multi_slice_evidence_matrix.csv
+outputs/smollm2_1p7b_full_random16_multi_slice_evidence_matrix.json
 outputs/smollm2_1p7b_sensitivity_full_limit8_gpu_guard.json
 outputs/smollm2_1p7b_module_loss_sensitivity_full_limit8_group128.json
 outputs/smollm2_1p7b_module_loss_sensitivity_full_limit8_group128_report.md

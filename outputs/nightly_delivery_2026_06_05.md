@@ -247,6 +247,7 @@ than uniform INT4, but it is not yet robust against best-of-16 random.
 Full-module follow-up:
 
 ```text
+outputs/smollm2_1p7b_full_random16_multi_slice_evidence_matrix.md
 outputs/smollm2_1p7b_full_random16_result.md
 outputs/smollm2_1p7b_module_loss_sensitivity_full_limit8_group128_report.md
 outputs/smollm2_1p7b_full_random16_ppl_wikitext2_16_summary.json
@@ -299,6 +300,14 @@ This repairs the earlier 32-module SmolLM2 best-random failure. The scope is
 still deliberately narrow: short WikiText2 slices, fake quantization, and no
 packed runtime speed claim. The C4-64 follow-up is an overfitting check because
 the full allocation was built from WikiText2 calibration prompts.
+
+Multi-slice matrix:
+
+```text
+WikiText2-16 target vs best random16: +0.7474 PPL
+WikiText2-64 target vs best random16: +0.7777 PPL
+C4-64        target vs best random16: +1.1260 PPL
+```
 
 ## GPU Guard
 
