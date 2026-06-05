@@ -230,6 +230,40 @@ SOTA claim. The negative WikiText2 best-seed row is kept deliberately: it shows
 that a single 4-prompt loss probe is useful on average but not robust enough to
 dominate every random allocation on every slice.
 
+The same Qwen3-0.6B setup now has a WikiText2+C4 consensus allocation that
+uses the overlap and averaged score/cost signal from two independent short
+calibration probes. This closes the Qwen3-0.6B WikiText2 best-random failure
+case under the same 4.5 average-bit budget:
+
+```text
+Qwen3-0.6B, WikiText2+C4 consensus, group size 128, average 4.5 bits:
+WikiText2-64 len96:
+  FP16 PPL                         33.9865
+  uniform INT4 PPL                 54.6542
+  wikitext_c4_consensus PPL        45.6559
+  category PPL                     50.4746
+  random_seed min/mean/max PPL     48.5030 / 50.4787 / 52.6347
+  wins/losses/ties vs random_seed  15 / 0 / 0
+  margin vs best random_seed       +2.8471 PPL
+C4-64:
+  FP16 PPL                         36.1380
+  uniform INT4 PPL                 52.9352
+  wikitext_c4_consensus PPL        44.9290
+  category PPL                     48.6222
+  random_seed min/mean/max PPL     48.3840 / 49.4427 / 50.7971
+  wins/losses/ties vs random_seed  15 / 0 / 0
+  margin vs best random_seed       +3.4551 PPL
+GPU guard peaks:
+  C4 sensitivity probe             4589/8151 MiB = 56.30%
+  WikiText2 consensus eval         4867/8151 MiB = 59.71%
+  C4 consensus eval                4893/8151 MiB = 60.03%
+```
+
+This is a stronger in-repository diagnostic than the single-split Qwen3-0.6B
+result: consensus beats uniform INT4, the structural category heuristic, and
+all 15 listed random-seed allocations on both short public-text slices. It is
+still fake quantization in PyTorch, not a packed-kernel or board-level result.
+
 A 64-prompt WikiText2 rerun with `max_length=128` was intentionally not
 accepted as evidence because the GPU guard killed it at `6933/8151 MiB`
 (`85.06%`). Reducing the same WikiText2 slice to `max_length=96` completed at
