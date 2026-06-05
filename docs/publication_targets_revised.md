@@ -56,6 +56,17 @@ current evaluator is fake-quant only
 baselines such as GPTQ/AWQ/SmoothQuant/QuaRot are not implemented
 ```
 
+Current environment evidence:
+
+```text
+outputs/baseline_environment_audit.md
+```
+
+At the time of the audit, `auto_gptq`, `awq`, `llmcompressor`, `optimum`,
+`bitsandbytes`, and `gptqmodel` are unavailable in the active WSL Python
+environment, while `torch` and `transformers` are available. This is a
+reproducibility gap, not a publication claim.
+
 ### 3. CIKM / DASFAA / KDD Workshop
 
 Fit:
@@ -119,4 +130,3 @@ Highest value work:
 4. Add exact scripts for every table in the draft.
 5. Keep negative results visible; they are central to the consensus argument.
 ```
-

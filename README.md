@@ -162,6 +162,8 @@ outputs/olmo2_0425_1b_random16_negative_audit.md
 outputs/olmo2_0425_1b_consensus_repairs_random16_negative.md
 outputs/olmo2_0425_1b_consensus_vs_random16_evidence_matrix.md
 outputs/olmo2_0425_1b_consensus_vs_random16_evidence_matrix.json
+outputs/baseline_environment_audit.md
+outputs/baseline_environment_audit.json
 inference_cpp/src/quant_evidence_matrix.cpp
 inference_cpp/src/quant_consensus_builder.cpp
 inference_cpp/src/quant_consensus_audit.cpp
