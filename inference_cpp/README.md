@@ -118,6 +118,23 @@ versus the random mean:
   > outputs/qwen3_1p7b_cpp_random16_evidence_matrix.md
 ```
 
+For cross-model reports where the strongest current target has different names
+across experiments, use `--target auto`. It selects an already present result
+row, preferring `wikitext_c4_consensus` and then `cpp_loss_sensitive_budget`:
+
+```bash
+./inference_cpp/build-wsl/quant_evidence_matrix \
+  --target auto \
+  --input outputs/qwen3_0p6b_cpp_random16_ppl_wikitext2_64_summary.json \
+  --dataset qwen3_0p6b_wikitext2_64 \
+  --input outputs/qwen3_1p7b_wikitext_c4_consensus_random16_ppl_wikitext2_64_summary.json \
+  --dataset qwen3_1p7b_wikitext2_64 \
+  --input outputs/olmo2_0425_1b_cpp_random8_ppl_wikitext2_64_summary.json \
+  --dataset olmo2_0425_1b_wikitext2_64 \
+  --emit markdown \
+  > outputs/cross_model_quant_evidence_matrix_auto.md
+```
+
 `quant_consensus_audit` reads the left/right calibration allocations and a
 consensus allocation, then reports high-bit overlap, Jaccard similarity,
 weighted average bits, budget use, and bit histograms. It audits allocation

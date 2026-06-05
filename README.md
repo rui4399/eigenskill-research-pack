@@ -120,6 +120,13 @@ The guarded runs stayed below the requested 85% GPU-memory ceiling:
 Qwen3 peaked at `5071/8151 MiB` (`62.21%`) and OLMo2 peaked at
 `4376/8151 MiB` (`53.69%`).
 
+The C++ evidence matrix can also merge heterogeneous current targets with
+`--target auto`. The committed cross-model table covers Qwen3-0.6B,
+Qwen3-1.7B, and OLMo2-0425-1B on WikiText2-64/C4-64. All six rows have a
+positive target margin versus uniform INT4, the best listed random seed, and
+the random mean; the weakest current margin is OLMo2 C4-64 versus best random
+at `+0.0084` PPL, so it should be treated as a small positive result.
+
 Evidence files:
 
 ```text
@@ -139,6 +146,8 @@ outputs/olmo2_0425_1b_wikitext_c4_sensitivity_stability_cpp.md
 outputs/olmo2_0425_1b_loss_sensitive_wikitext_c4_consensus_alloc_4to8_group128_cpp_summary.json
 outputs/consensus_budget_curve_report.md
 outputs/consensus_budget_curve.svg
+outputs/cross_model_quant_evidence_matrix_auto.md
+outputs/cross_model_quant_evidence_matrix_auto.csv
 inference_cpp/src/quant_evidence_matrix.cpp
 inference_cpp/src/quant_consensus_builder.cpp
 inference_cpp/src/quant_consensus_audit.cpp

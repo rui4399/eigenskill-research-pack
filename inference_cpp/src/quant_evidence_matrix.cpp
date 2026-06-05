@@ -31,6 +31,7 @@ struct Result {
 
 struct EvidenceRow {
     std::string dataset;
+    std::string target_name;
     double fp16 = std::numeric_limits<double>::quiet_NaN();
     double uniform = std::numeric_limits<double>::quiet_NaN();
     double target = std::numeric_limits<double>::quiet_NaN();
@@ -204,13 +205,41 @@ double find_ppl(const std::vector<Result>& results, const std::string& name) {
     return std::numeric_limits<double>::quiet_NaN();
 }
 
+bool has_result(const std::vector<Result>& results, const std::string& name) {
+    for (const Result& result : results) {
+        if (result.name == name) return true;
+    }
+    return false;
+}
+
+std::string choose_target_name(const std::vector<Result>& results, const std::string& requested) {
+    if (requested != "auto") {
+        return requested;
+    }
+    const std::vector<std::string> candidates = {
+        "wikitext_c4_consensus",
+        "cpp_loss_sensitive_budget",
+        "blend_sensitivity_85",
+        "allocation_loss_sensitive_consensus_4to8",
+        "allocation_loss_sensitive_4to8",
+    };
+    for (const std::string& name : candidates) {
+        if (has_result(results, name)) {
+            return name;
+        }
+    }
+    throw std::runtime_error("could not infer target result name; pass --target explicitly");
+}
+
 EvidenceRow summarize_case(const CaseInput& input, const std::string& target_name) {
     const std::vector<Result> results = read_results_json(input.path);
+    const std::string selected_target = choose_target_name(results, target_name);
     EvidenceRow row;
     row.dataset = input.dataset;
+    row.target_name = selected_target;
     row.fp16 = find_ppl(results, "fp16");
     row.uniform = find_ppl(results, "uniform_int4");
-    row.target = find_ppl(results, target_name);
+    row.target = find_ppl(results, selected_target);
     row.category = find_ppl(results, "cpp_category_budget");
 
     double random_total = 0.0;
@@ -247,10 +276,10 @@ void print_csv_number(double value) {
 }
 
 void print_csv(const std::vector<EvidenceRow>& rows) {
-    std::cout << "dataset,fp16,uniform_int4,target,category,best_random,best_random_name,random_mean,random_max,"
+    std::cout << "dataset,target_name,fp16,uniform_int4,target,category,best_random,best_random_name,random_mean,random_max,"
                  "random_count,target_improvement_vs_uniform,target_margin_vs_best_random,target_margin_vs_random_mean\n";
     for (const EvidenceRow& row : rows) {
-        std::cout << row.dataset << ",";
+        std::cout << row.dataset << "," << row.target_name << ",";
         print_csv_number(row.fp16);
         std::cout << ",";
         print_csv_number(row.uniform);
@@ -277,11 +306,11 @@ void print_csv(const std::vector<EvidenceRow>& rows) {
 void print_markdown(const std::vector<EvidenceRow>& rows, const std::string& target_name) {
     std::cout << "# Quant Evidence Matrix\n\n";
     std::cout << "Target: `" << target_name << "`\n\n";
-    std::cout << "| dataset | FP16 | uniform INT4 | target | category | random min/mean/max | "
+    std::cout << "| dataset | target config | FP16 | uniform INT4 | target | category | random min/mean/max | "
                  "target vs uniform | target vs best random | target vs random mean |\n";
-    std::cout << "|---|---:|---:|---:|---:|---|---:|---:|---:|\n";
+    std::cout << "|---|---|---:|---:|---:|---:|---|---:|---:|---:|\n";
     for (const EvidenceRow& row : rows) {
-        std::cout << "| " << row.dataset << " | ";
+        std::cout << "| " << row.dataset << " | `" << row.target_name << "` | ";
         print_number(row.fp16);
         std::cout << " | ";
         print_number(row.uniform);
@@ -329,7 +358,7 @@ Options parse_args(int argc, char** argv) {
             options.emit = require_value("--emit");
         } else if (arg == "--help" || arg == "-h") {
             std::cout << "Usage: quant_evidence_matrix --input ppl.json --dataset name [--input ppl2.json --dataset name2]\n"
-                         "                             [--target cpp_loss_sensitive_budget] [--emit markdown|csv]\n";
+                         "                             [--target cpp_loss_sensitive_budget|auto] [--emit markdown|csv]\n";
             std::exit(0);
         } else {
             throw std::runtime_error("unknown argument: " + arg);
