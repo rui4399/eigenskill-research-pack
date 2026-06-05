@@ -129,6 +129,37 @@ outputs/smollm2_1p7b_uniform_ppl_wikitext2_16_guard.json
 
 ## 4. Current Claim Boundary
 
+## 4. Baseline Dependency Audit
+
+The current WSL Python environment does not have public quantization packages
+installed:
+
+```text
+auto_gptq: no
+awq: no
+llmcompressor: no
+optimum: no
+bitsandbytes: no
+gptqmodel: no
+```
+
+Therefore this run did not attempt GPTQ/AWQ/SmoothQuant/QuaRot-style
+comparisons. Installing those packages is a separate environment change and
+should be done deliberately, ideally in a pinned virtual environment, because
+the current project already depends on a working CUDA/PyTorch/Transformers
+stack.
+
+The available in-repository baselines for this run were:
+
+```text
+uniform INT4
+structural category budget
+budget-matched random repeats
+C++ evidence matrix over random min/mean/max
+```
+
+## 5. Current Claim Boundary
+
 The strongest current claim remains narrow:
 
 ```text
