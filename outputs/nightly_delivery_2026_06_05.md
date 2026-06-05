@@ -251,9 +251,11 @@ outputs/smollm2_1p7b_full_random16_result.md
 outputs/smollm2_1p7b_module_loss_sensitivity_full_limit8_group128_report.md
 outputs/smollm2_1p7b_full_random16_ppl_wikitext2_16_summary.json
 outputs/smollm2_1p7b_full_random16_evidence_matrix.md
+outputs/smollm2_1p7b_full_random16_ppl_wikitext2_64_summary.json
+outputs/smollm2_1p7b_full_random16_wikitext2_64_evidence_matrix.md
 ```
 
-Key numbers:
+Key numbers, WikiText2-16:
 
 ```text
 measured Linear modules:     169 / 169
@@ -267,8 +269,20 @@ target vs best random16:     +0.7474 PPL
 target vs random16 mean:     +3.5992 PPL
 ```
 
+Key numbers, WikiText2-64:
+
+```text
+FP16 PPL:                    12.6568
+uniform INT4 PPL:            18.5164
+loss_sensitive_full PPL:     14.8877
+best random16 PPL:           15.6654
+target vs uniform INT4:      +3.6286 PPL
+target vs best random16:     +0.7777 PPL
+target vs random16 mean:     +3.2236 PPL
+```
+
 This repairs the earlier 32-module SmolLM2 best-random failure. The scope is
-still deliberately narrow: 16 WikiText2 prompts, fake quantization, and no
+still deliberately narrow: short WikiText2 slices, fake quantization, and no
 packed runtime speed claim.
 
 ## GPU Guard
@@ -288,6 +302,7 @@ consensus-vs-random16 Wikitext: 4593 / 8151 MiB = 56.35%
 consensus-vs-random16 C4:       4586 / 8151 MiB = 56.26%
 SmolLM2 full sensitivity:       4971 / 8151 MiB = 60.99%
 SmolLM2 full random16 PPL:      5133 / 8151 MiB = 62.97%
+SmolLM2 full random16 PPL-64:   5679 / 8151 MiB = 69.67%
 ```
 
 No guard kill occurred.

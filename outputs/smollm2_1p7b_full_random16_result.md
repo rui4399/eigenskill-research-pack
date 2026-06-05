@@ -30,6 +30,8 @@ protected positive delta:    0.7179
 
 ## PPL Evaluation
 
+Short slice:
+
 ```text
 evaluation prompts: WikiText2 validation, 16 prompts
 max length: 128
@@ -50,17 +52,41 @@ loss-sensitive full vs random16 mean: +3.5992 PPL
 gap vs FP16:                           +1.2963 PPL
 ```
 
+Longer slice:
+
+```text
+evaluation prompts: WikiText2 validation, 64 prompts
+max length: 128
+
+FP16 PPL:                12.6568
+uniform INT4 PPL:        18.5164
+loss_sensitive_full PPL: 14.8877
+best random16 PPL:       15.6654
+random16 mean PPL:       18.1114
+```
+
+Margins:
+
+```text
+loss-sensitive full vs uniform INT4: +3.6286 PPL
+loss-sensitive full vs best random16: +0.7777 PPL
+loss-sensitive full vs random16 mean: +3.2236 PPL
+gap vs FP16:                           +2.2309 PPL
+```
+
 The full-module result repairs the earlier 32-module failure mode:
 `loss_sensitive_limit8` beat uniform INT4 and random mean, but lost to the
 best random16 seed by `-0.0341` PPL. With all Linear modules measured, the
 same style of loss-sensitive budget beats the best random16 allocation by
-`+0.7474` PPL on the same 16-prompt WikiText2 slice.
+`+0.7474` PPL on the 16-prompt WikiText2 slice and `+0.7777` PPL on the
+64-prompt WikiText2 slice.
 
 ## GPU Guard
 
 ```text
 sensitivity max memory: 4971 / 8151 MiB = 60.99%
-PPL max memory:         5133 / 8151 MiB = 62.97%
+PPL-16 max memory:      5133 / 8151 MiB = 62.97%
+PPL-64 max memory:      5679 / 8151 MiB = 69.67%
 max-memory-ratio:       0.85
 killed by guard:        false
 ```
@@ -79,6 +105,10 @@ outputs/smollm2_1p7b_full_random16_ppl_wikitext2_16_guard.json
 outputs/smollm2_1p7b_full_random16_evidence_matrix.md
 outputs/smollm2_1p7b_full_random16_evidence_matrix.csv
 outputs/smollm2_1p7b_full_random16_evidence_matrix.json
+outputs/smollm2_1p7b_full_random16_ppl_wikitext2_64_summary.json
+outputs/smollm2_1p7b_full_random16_ppl_wikitext2_64_guard.json
+outputs/smollm2_1p7b_full_random16_wikitext2_64_evidence_matrix.md
+outputs/smollm2_1p7b_full_random16_wikitext2_64_evidence_matrix.csv
+outputs/smollm2_1p7b_full_random16_wikitext2_64_evidence_matrix.json
 data_eval/eval_configs/smollm2_1p7b_full_random16_compare.json
 ```
-
