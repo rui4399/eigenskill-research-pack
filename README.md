@@ -54,6 +54,9 @@ are not completed results in this repository.
   JSON to produce budgeted mixed-precision allocations, random-repeat
   baselines, cross-dataset evidence matrices, random-seed win-rate audits, and
   bounded swap-search reports.
+- A first task-evaluation smoke interface beyond PPL. It is intentionally tiny
+  and only validates the pipeline for MMLU/GSM8K/IFEval-style JSONL tasks; it
+  is not a benchmark result.
 
 ## What This Is Not
 
@@ -981,6 +984,21 @@ calibration probes can disagree sharply on module sensitivity. The new C++ CSI
 report for OLMo2 WikiText2 vs C4 gives `CSI=0.5477`, score-rank instability
 `0.4078`, and top-k instability `0.8360`; see
 `outputs/olmo2_0425_1b_wikitext_c4_calibration_split_instability_cpp.md`.
+
+PPL-only evidence is still insufficient for a serious submission, so the repo
+now includes a small JSONL task-eval smoke path:
+
+```text
+data_eval/task_prompts/quant_task_smoke.jsonl
+train_python/eval_task_jsonl.py
+inference_cpp/src/quant_task_eval_summary.cpp
+outputs/qwen3_0p6b_task_smoke_summary.md
+```
+
+The first Qwen3-0.6B smoke run is deliberately modest: `3/5` exact, with
+`gsm8k_smoke 1/2`, `mmlu_smoke 2/2`, and `ifeval_smoke 0/1`, under a GPU peak
+of `3048/8151 MiB = 37.39%`. This proves the task-eval path is wired, not that
+the model has strong benchmark ability.
 
 The next model wave is tracked in
 `docs/recent_small_model_candidates_2026_06_05.md` and the machine-readable

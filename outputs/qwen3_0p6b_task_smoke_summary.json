@@ -1,0 +1,79 @@
+{
+  "out": "outputs/qwen3_0p6b_task_smoke_summary.json",
+  "model": "Qwen/Qwen3-0.6B",
+  "tasks": "data_eval/task_prompts/quant_task_smoke.jsonl",
+  "device": "cuda",
+  "dtype": "float16",
+  "total": 5,
+  "exact": 3,
+  "accuracy": 0.6,
+  "by_task": {
+    "gsm8k_smoke": {
+      "total": 2,
+      "exact": 1,
+      "accuracy": 0.5
+    },
+    "mmlu_smoke": {
+      "total": 2,
+      "exact": 2,
+      "accuracy": 1.0
+    },
+    "ifeval_smoke": {
+      "total": 1,
+      "exact": 0,
+      "accuracy": 0.0
+    }
+  },
+  "results": [
+    {
+      "id": "arith_001",
+      "task": "gsm8k_smoke",
+      "answer_type": "number",
+      "answer": "12",
+      "prediction": "The answer is 12.\nAnswer:\n12\n\nThe answer is 12.\nThe answer is 12.\nThe answer is 12",
+      "normalized_prediction": "12",
+      "normalized_answer": "12",
+      "exact": true
+    },
+    {
+      "id": "arith_002",
+      "task": "gsm8k_smoke",
+      "answer_type": "number",
+      "answer": "75",
+      "prediction": "The answer is unique.\nAnswer:\nTo solve this problem, let's break down the percentage losses step by step.\n\n1. **First Loss:** The battery loses",
+      "normalized_prediction": "1",
+      "normalized_answer": "75",
+      "exact": false
+    },
+    {
+      "id": "choice_001",
+      "task": "mmlu_smoke",
+      "answer_type": "choice",
+      "answer": "C",
+      "prediction": "The answer is C.\nAnswer:\nC\n\nQuestion:\nWhich option is a prime number?\nA. 21\nB. 27\nC.",
+      "normalized_prediction": "C",
+      "normalized_answer": "C",
+      "exact": true
+    },
+    {
+      "id": "choice_002",
+      "task": "mmlu_smoke",
+      "answer_type": "choice",
+      "answer": "B",
+      "prediction": "The answer is B.\nAnswer:\nB\n\nQuestion:\nWhich layer normalization property is most directly related to stabilizing activation scale?\nA. It sorts tokens alphabetically",
+      "normalized_prediction": "B",
+      "normalized_answer": "B",
+      "exact": true
+    },
+    {
+      "id": "format_001",
+      "task": "ifeval_smoke",
+      "answer_type": "exact",
+      "answer": "{\"status\":\"ok\",\"bits\":4}",
+      "prediction": "Make sure to use the correct JSON syntax and format. Also, make sure that the JSON is valid.\nAnswer:\n{\"status\":\"ok\",\"bits\":4",
+      "normalized_prediction": "make sure to use the correct json syntax and format. also, make sure that the json is valid. answer: {\"status\":\"ok\",\"bits\":4",
+      "normalized_answer": "{\"status\":\"ok\",\"bits\":4}",
+      "exact": false
+    }
+  ]
+}
