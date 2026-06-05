@@ -156,11 +156,20 @@ uniform INT4 PPL         18.5164
 loss_sensitive_full PPL  14.8877
 random16 min/mean/max    15.6654 / 18.1114 / 20.5267
 margin vs best random    +0.7777 PPL
+
+SmolLM2-1.7B, C4-64, group size 128, average 4.5 bits:
+FP16 PPL                 18.4497
+uniform INT4 PPL         26.3475
+loss_sensitive_full PPL  21.4269
+random16 min/mean/max    22.5529 / 26.1102 / 29.7791
+margin vs best random    +1.1260 PPL
 ```
 
 This is stronger than the small SmolLM2 smoke test, but still only a PyTorch
-fake-quant diagnostic on short prompt slices. It should not be cited as a packed
-quantizer, latency result, or hardware efficiency result.
+fake-quant diagnostic on short prompt slices. The C4-64 row is a useful
+overfitting check because the allocation was built from WikiText2 calibration
+prompts. It should not be cited as a packed quantizer, latency result, or
+hardware efficiency result.
 
 Evidence files:
 
@@ -192,6 +201,7 @@ outputs/baseline_environment_audit.json
 outputs/smollm2_1p7b_full_random16_result.md
 outputs/smollm2_1p7b_full_random16_evidence_matrix.md
 outputs/smollm2_1p7b_full_random16_wikitext2_64_evidence_matrix.md
+outputs/smollm2_1p7b_full_random16_c4_64_evidence_matrix.md
 inference_cpp/src/quant_evidence_matrix.cpp
 inference_cpp/src/quant_consensus_builder.cpp
 inference_cpp/src/quant_consensus_audit.cpp
