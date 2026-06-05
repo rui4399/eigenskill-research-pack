@@ -957,6 +957,9 @@ as one process, with killed peaks around 86.3%. The repo now includes a C++
 `quant_ppl_summary_merge` tool plus three remaining four-seed batch configs so
 the C4-128 random16 audit can be completed as guarded chunks and merged into a
 single summary consumed by the existing C++ evidence matrix and random audit.
+The companion `quant_seed_coverage_check` tool verifies that the chunked config
+set covers seeds 20260604-20260619 exactly once and includes the required
+baseline names before GPU time is spent.
 See `docs/qwen3_1p7b_c4_128_random16_chunked_runbook.md`.
 
 OLMo-2-0425-1B-Instruct, WikiText2 16 prompts, uniform smoke:

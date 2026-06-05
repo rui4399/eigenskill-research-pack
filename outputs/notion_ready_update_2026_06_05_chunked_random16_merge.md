@@ -19,6 +19,9 @@ is an operational constraint, not a failed experiment.
   - feed the merged output into `quant_random_baseline_audit`.
 - Added three C4-128 random16 batch configs for seeds 20260608-20260619.
 - Added `docs/qwen3_1p7b_c4_128_random16_chunked_runbook.md`.
+- Added `quant_seed_coverage_check`, a C++ audit tool for detecting missing,
+  duplicate, or out-of-range random seed result names across chunked configs or
+  merged summaries.
 - Updated `README.md` to document the C4-128 random4 result and the chunked
   random16 path.
 
@@ -84,6 +87,7 @@ Additional smoke:
 quant_ppl_summary_merge on fixture summaries
 quant_random_baseline_audit on merged fixture
 quant_ppl_summary_merge self-merge on real Qwen3 C4-128 random4 summary
+quant_seed_coverage_check on fixture configs, including duplicate-failure test
 ```
 
 The real random4 self-merge preserved the audit result:
@@ -93,6 +97,18 @@ target PPL: 32.880630
 seed_count: 4
 wins/losses/ties: 4 / 0 / 0
 margin_vs_best_seed: +0.392768
+```
+
+The real C4-128 random16 config coverage check now passes before the remaining
+GPU batches are run:
+
+```text
+expected seeds: 16
+matched seeds: 16
+missing: 0
+duplicates: 0
+out-of-range: 0
+missing required baseline names: 0
 ```
 
 ## GitHub

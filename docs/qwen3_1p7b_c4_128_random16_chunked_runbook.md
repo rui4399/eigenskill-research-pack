@@ -52,6 +52,31 @@ python3 train_python/run_with_gpu_guard.py --max-memory-ratio 0.85 --poll-second
 
 ## Merge And Audit
 
+Before running the GPU batches, confirm the config files cover every intended
+random seed exactly once:
+
+```bash
+build/cpp-wsl/quant_seed_coverage_check \
+  --input data_eval/eval_configs/qwen3_1p7b_c4_128_consensus_random4_compare.json \
+  --input data_eval/eval_configs/qwen3_1p7b_c4_128_random16_batch1_20260608_11.json \
+  --input data_eval/eval_configs/qwen3_1p7b_c4_128_random16_batch2_20260612_15.json \
+  --input data_eval/eval_configs/qwen3_1p7b_c4_128_random16_batch3_20260616_19.json \
+  --prefix random_budget_seed_ \
+  --start 20260604 \
+  --end 20260619 \
+  --require-name fp16 \
+  --require-name uniform_int4 \
+  --require-name wikitext_c4_consensus \
+  --require-name cpp_category_budget \
+  --emit markdown
+```
+
+Expected result:
+
+```text
+pass, 16 expected seeds, 16 matched seeds, no missing/duplicate/out-of-range entries
+```
+
 ```bash
 build/cpp-wsl/quant_ppl_summary_merge \
   --input outputs/qwen3_1p7b_c4_128_consensus_random4_ppl_summary.json \

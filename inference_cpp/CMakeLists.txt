@@ -26,6 +26,7 @@ add_executable(quant_result_summarizer src/quant_result_summarizer.cpp)
 add_executable(quant_evidence_matrix src/quant_evidence_matrix.cpp)
 add_executable(quant_random_baseline_audit src/quant_random_baseline_audit.cpp)
 add_executable(quant_ppl_summary_merge src/quant_ppl_summary_merge.cpp)
+add_executable(quant_seed_coverage_check src/quant_seed_coverage_check.cpp)
 add_executable(quant_consensus_audit src/quant_consensus_audit.cpp)
 add_executable(quant_sensitivity_stability src/quant_sensitivity_stability.cpp)
 add_executable(quant_budget_curve_summary src/quant_budget_curve_summary.cpp)
@@ -84,6 +85,33 @@ if(BUILD_TESTING)
   set_tests_properties(
     quant_ppl_summary_merge_audit_smoke
     PROPERTIES FIXTURES_REQUIRED ppl_summary_merge_smoke_file
+  )
+  add_test(
+    NAME quant_seed_coverage_check_smoke
+    COMMAND quant_seed_coverage_check
+      --input ${CMAKE_CURRENT_SOURCE_DIR}/testdata/seed_coverage_left_fixture.json
+      --input ${CMAKE_CURRENT_SOURCE_DIR}/testdata/seed_coverage_right_fixture.json
+      --prefix random_budget_seed_
+      --start 1
+      --end 4
+      --require-name fp16
+      --require-name uniform_int4
+      --emit json
+  )
+  add_test(
+    NAME quant_seed_coverage_check_duplicate_fails
+    COMMAND quant_seed_coverage_check
+      --input ${CMAKE_CURRENT_SOURCE_DIR}/testdata/seed_coverage_left_fixture.json
+      --input ${CMAKE_CURRENT_SOURCE_DIR}/testdata/seed_coverage_right_fixture.json
+      --input ${CMAKE_CURRENT_SOURCE_DIR}/testdata/seed_coverage_duplicate_fixture.json
+      --prefix random_budget_seed_
+      --start 1
+      --end 4
+      --emit json
+  )
+  set_tests_properties(
+    quant_seed_coverage_check_duplicate_fails
+    PROPERTIES WILL_FAIL TRUE
   )
   add_test(
     NAME quant_consensus_audit_smoke
