@@ -275,6 +275,88 @@ void print_csv_number(double value) {
     }
 }
 
+std::string json_escape(const std::string& value) {
+    std::ostringstream out;
+    for (const char ch : value) {
+        switch (ch) {
+            case '\\':
+                out << "\\\\";
+                break;
+            case '"':
+                out << "\\\"";
+                break;
+            case '\n':
+                out << "\\n";
+                break;
+            case '\r':
+                out << "\\r";
+                break;
+            case '\t':
+                out << "\\t";
+                break;
+            default:
+                out << ch;
+                break;
+        }
+    }
+    return out.str();
+}
+
+void print_json_number(double value) {
+    if (std::isfinite(value)) {
+        std::cout << std::fixed << std::setprecision(6) << value;
+    } else {
+        std::cout << "null";
+    }
+}
+
+void print_json(const std::vector<EvidenceRow>& rows, const std::string& target_name) {
+    std::cout << "{\n";
+    std::cout << "  \"target\": \"" << json_escape(target_name) << "\",\n";
+    std::cout << "  \"rows\": [\n";
+    for (std::size_t i = 0; i < rows.size(); ++i) {
+        const EvidenceRow& row = rows[i];
+        std::cout << "    {\n";
+        std::cout << "      \"dataset\": \"" << json_escape(row.dataset) << "\",\n";
+        std::cout << "      \"target_name\": \"" << json_escape(row.target_name) << "\",\n";
+        std::cout << "      \"fp16\": ";
+        print_json_number(row.fp16);
+        std::cout << ",\n";
+        std::cout << "      \"uniform_int4\": ";
+        print_json_number(row.uniform);
+        std::cout << ",\n";
+        std::cout << "      \"target_ppl\": ";
+        print_json_number(row.target);
+        std::cout << ",\n";
+        std::cout << "      \"category_ppl\": ";
+        print_json_number(row.category);
+        std::cout << ",\n";
+        std::cout << "      \"best_random_ppl\": ";
+        print_json_number(row.best_random);
+        std::cout << ",\n";
+        std::cout << "      \"best_random_name\": \"" << json_escape(row.best_random_name) << "\",\n";
+        std::cout << "      \"random_mean_ppl\": ";
+        print_json_number(row.random_mean);
+        std::cout << ",\n";
+        std::cout << "      \"random_max_ppl\": ";
+        print_json_number(row.random_max);
+        std::cout << ",\n";
+        std::cout << "      \"random_count\": " << row.random_count << ",\n";
+        std::cout << "      \"target_improvement_vs_uniform\": ";
+        print_json_number(row.uniform - row.target);
+        std::cout << ",\n";
+        std::cout << "      \"target_margin_vs_best_random\": ";
+        print_json_number(row.best_random - row.target);
+        std::cout << ",\n";
+        std::cout << "      \"target_margin_vs_random_mean\": ";
+        print_json_number(row.random_mean - row.target);
+        std::cout << "\n";
+        std::cout << "    }" << (i + 1 == rows.size() ? "\n" : ",\n");
+    }
+    std::cout << "  ]\n";
+    std::cout << "}\n";
+}
+
 void print_csv(const std::vector<EvidenceRow>& rows) {
     std::cout << "dataset,target_name,fp16,uniform_int4,target,category,best_random,best_random_name,random_mean,random_max,"
                  "random_count,target_improvement_vs_uniform,target_margin_vs_best_random,target_margin_vs_random_mean\n";
@@ -358,7 +440,7 @@ Options parse_args(int argc, char** argv) {
             options.emit = require_value("--emit");
         } else if (arg == "--help" || arg == "-h") {
             std::cout << "Usage: quant_evidence_matrix --input ppl.json --dataset name [--input ppl2.json --dataset name2]\n"
-                         "                             [--target cpp_loss_sensitive_budget|auto] [--emit markdown|csv]\n";
+                         "                             [--target cpp_loss_sensitive_budget|auto] [--emit markdown|csv|json]\n";
             std::exit(0);
         } else {
             throw std::runtime_error("unknown argument: " + arg);
@@ -367,8 +449,8 @@ Options parse_args(int argc, char** argv) {
     if (options.cases.empty()) {
         throw std::runtime_error("at least one --input is required");
     }
-    if (options.emit != "markdown" && options.emit != "csv") {
-        throw std::runtime_error("--emit must be markdown or csv");
+    if (options.emit != "markdown" && options.emit != "csv" && options.emit != "json") {
+        throw std::runtime_error("--emit must be markdown, csv, or json");
     }
     return options;
 }
@@ -385,6 +467,8 @@ int main(int argc, char** argv) {
         }
         if (options.emit == "csv") {
             print_csv(rows);
+        } else if (options.emit == "json") {
+            print_json(rows, options.target);
         } else {
             print_markdown(rows, options.target);
         }

@@ -49,6 +49,10 @@ if(BUILD_TESTING)
     COMMAND quant_evidence_matrix --input ${CMAKE_CURRENT_SOURCE_DIR}/testdata/ppl_summary_fixture.json --dataset fixture --emit markdown
   )
   add_test(
+    NAME quant_evidence_matrix_json_smoke
+    COMMAND quant_evidence_matrix --input ${CMAKE_CURRENT_SOURCE_DIR}/testdata/ppl_summary_fixture.json --dataset fixture --emit json
+  )
+  add_test(
     NAME quant_consensus_audit_smoke
     COMMAND quant_consensus_audit
       --left ${CMAKE_CURRENT_SOURCE_DIR}/testdata/allocation_left_fixture.json

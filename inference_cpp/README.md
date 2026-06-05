@@ -103,9 +103,9 @@ generation path available in C++:
 ```
 
 `quant_evidence_matrix` merges multiple evaluator PPL summary JSON files into
-a cross-dataset Markdown or CSV matrix. It reports target improvement versus
-uniform INT4, target margin versus the best random seed, and target margin
-versus the random mean:
+a cross-dataset Markdown, CSV, or JSON matrix. It reports target improvement
+versus uniform INT4, target margin versus the best random seed, and target
+margin versus the random mean:
 
 ```bash
 ./inference_cpp/build-wsl/quant_evidence_matrix \
@@ -134,6 +134,9 @@ row, preferring `wikitext_c4_consensus` and then `cpp_loss_sensitive_budget`:
   --emit markdown \
   > outputs/cross_model_quant_evidence_matrix_auto.md
 ```
+
+Use `--emit json` when another tool should consume the evidence matrix without
+parsing Markdown or CSV.
 
 `quant_consensus_audit` reads the left/right calibration allocations and a
 consensus allocation, then reports high-bit overlap, Jaccard similarity,
