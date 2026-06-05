@@ -171,6 +171,46 @@ WikiText2-64 consensus PPL 21.0349 vs best random16 21.4637
 C4-64        consensus PPL 35.4726 vs best random16 35.5846
 ```
 
+The SmolLM2-1.7B full-module audit reruns the latest 169-Linear-module
+loss-sensitive allocation against a budget-matched random16 pool. The allocation
+file is already committed, so the shortest reproduction path is the evaluator
+plus the C++ evidence matrix:
+
+```bash
+python3 train_python/run_with_gpu_guard.py \
+  --max-memory-ratio 0.85 \
+  --out outputs/smollm2_1p7b_full_random16_ppl_wikitext2_128_guard.json \
+  -- \
+  python3 train_python/eval_weight_quant_ppl.py \
+    --model HuggingFaceTB/SmolLM2-1.7B-Instruct \
+    --prompts data_eval/text_prompts/wikitext2_validation_128.txt \
+    --limit-prompts 128 \
+    --max-length 128 \
+    --device cuda \
+    --dtype float16 \
+    --group-size 128 \
+    --config-json data_eval/eval_configs/smollm2_1p7b_full_random16_compare.json \
+    --reuse-model \
+    --out outputs/smollm2_1p7b_full_random16_ppl_wikitext2_128_summary.json
+
+./build/cpp-wsl/quant_evidence_matrix \
+  --input outputs/smollm2_1p7b_full_random16_ppl_wikitext2_128_summary.json \
+  --dataset wikitext2_128_full \
+  --target loss_sensitive_full \
+  --emit markdown \
+  > outputs/smollm2_1p7b_full_random16_wikitext2_128_evidence_matrix.md
+```
+
+Expected headline from the committed run:
+
+```text
+WikiText2-128 loss_sensitive_full PPL 15.3641 vs best random16 16.2050
+C4-64        loss_sensitive_full PPL 21.4269 vs best random16 22.5529
+```
+
+Scope reminder: these are PyTorch fake-quant diagnostics, not packed runtime
+or board-level latency measurements.
+
 ## Export High-Precision Model
 
 ```bash
