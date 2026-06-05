@@ -122,10 +122,13 @@ Qwen3 peaked at `5071/8151 MiB` (`62.21%`) and OLMo2 peaked at
 
 The C++ evidence matrix can also merge heterogeneous current targets with
 `--target auto`. The committed cross-model table covers Qwen3-0.6B,
-Qwen3-1.7B, and OLMo2-0425-1B on WikiText2-64/C4-64. All six rows have a
-positive target margin versus uniform INT4, the best listed random seed, and
-the random mean; the weakest current margin is OLMo2 C4-64 versus best random
-at `+0.0084` PPL, so it should be treated as a small positive result.
+Qwen3-1.7B, and OLMo2-0425-1B on WikiText2-64/C4-64. After expanding the
+OLMo2 random baseline from 8 to 16 seeds, five of six rows remain positive
+against the best listed random seed. OLMo2 C4-64 is the important negative row:
+single-split `cpp_loss_sensitive_budget` reaches `35.8428` PPL while the best
+random seed reaches `35.5846` PPL. The target still beats uniform INT4 and the
+random mean, but this is evidence that one-split allocation is not robust
+enough by itself.
 
 Evidence files:
 
@@ -148,6 +151,7 @@ outputs/consensus_budget_curve_report.md
 outputs/consensus_budget_curve.svg
 outputs/cross_model_quant_evidence_matrix_auto.md
 outputs/cross_model_quant_evidence_matrix_auto.csv
+outputs/olmo2_0425_1b_random16_negative_audit.md
 inference_cpp/src/quant_evidence_matrix.cpp
 inference_cpp/src/quant_consensus_builder.cpp
 inference_cpp/src/quant_consensus_audit.cpp

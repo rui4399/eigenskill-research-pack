@@ -76,9 +76,11 @@ These claims are supported by committed data, scripts, or reports:
   experiments, for example `wikitext_c4_consensus` on Qwen3-1.7B and
   `cpp_loss_sensitive_budget` on Qwen3-0.6B/OLMo2. This only selects an
   already-evaluated result row; it does not rerun or change the evaluator.
-  The current cross-model table covers six WikiText2/C4 64-prompt rows, all
-  positive against uniform INT4, best listed random, and random mean, with the
-  weakest margin being OLMo2 C4 versus best random at about `+0.0084` PPL.
+  The current cross-model table covers six WikiText2/C4 64-prompt rows. After
+  expanding OLMo2 from random8 to random16, one negative best-random comparison
+  is explicit: OLMo2 C4 `cpp_loss_sensitive_budget` loses to the best random
+  seed by about `0.2582` PPL while still beating uniform INT4 and random mean.
+  This should be reported as calibration-noise evidence, not hidden.
 - A standalone C++ consensus-allocation builder now reproduces the Python
   WikiText2+C4 consensus allocation for Qwen3-1.7B and OLMo2-0425-1B exactly
   at the bit-decision level while emitting evaluator-compatible JSON and
