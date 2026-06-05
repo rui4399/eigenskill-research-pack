@@ -130,6 +130,13 @@ random seed reaches `35.5846` PPL. The target still beats uniform INT4 and the
 random mean, but this is evidence that one-split allocation is not robust
 enough by itself.
 
+The follow-up consensus-vs-random16 run closes that failure case. On the same
+OLMo2 C4-64 slice and random16 pool, `wikitext_c4_consensus` reaches `35.4726`
+PPL and beats the best random seed by `+0.1120` PPL. On WikiText2-64 it also
+beats best random16 by `+0.4288` PPL. This is the current cleanest evidence
+that the cross-dataset consensus heuristic is doing useful work beyond a
+single noisy sensitivity split.
+
 Evidence files:
 
 ```text
@@ -152,6 +159,8 @@ outputs/consensus_budget_curve.svg
 outputs/cross_model_quant_evidence_matrix_auto.md
 outputs/cross_model_quant_evidence_matrix_auto.csv
 outputs/olmo2_0425_1b_random16_negative_audit.md
+outputs/olmo2_0425_1b_consensus_repairs_random16_negative.md
+outputs/olmo2_0425_1b_consensus_vs_random16_evidence_matrix.md
 inference_cpp/src/quant_evidence_matrix.cpp
 inference_cpp/src/quant_consensus_builder.cpp
 inference_cpp/src/quant_consensus_audit.cpp

@@ -81,6 +81,12 @@ These claims are supported by committed data, scripts, or reports:
   is explicit: OLMo2 C4 `cpp_loss_sensitive_budget` loses to the best random
   seed by about `0.2582` PPL while still beating uniform INT4 and random mean.
   This should be reported as calibration-noise evidence, not hidden.
+- A follow-up OLMo2 consensus-vs-random16 check shows that the cross-dataset
+  consensus allocation repairs this specific negative case: on the same C4-64
+  prompt slice and random16 pool, `wikitext_c4_consensus` reaches `35.4726` PPL
+  versus best random `35.5846`, a `+0.1120` PPL margin. On WikiText2-64 the
+  same consensus target beats best random16 by about `+0.4288` PPL. This is a
+  narrow robustness result, not a general SOTA quantization claim.
 - A standalone C++ consensus-allocation builder now reproduces the Python
   WikiText2+C4 consensus allocation for Qwen3-1.7B and OLMo2-0425-1B exactly
   at the bit-decision level while emitting evaluator-compatible JSON and
