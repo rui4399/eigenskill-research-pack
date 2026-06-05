@@ -25,6 +25,7 @@ add_executable(quant_allocation_planner src/quant_allocation_planner.cpp)
 add_executable(quant_result_summarizer src/quant_result_summarizer.cpp)
 add_executable(quant_evidence_matrix src/quant_evidence_matrix.cpp)
 add_executable(quant_random_baseline_audit src/quant_random_baseline_audit.cpp)
+add_executable(quant_ppl_summary_merge src/quant_ppl_summary_merge.cpp)
 add_executable(quant_consensus_audit src/quant_consensus_audit.cpp)
 add_executable(quant_sensitivity_stability src/quant_sensitivity_stability.cpp)
 add_executable(quant_budget_curve_summary src/quant_budget_curve_summary.cpp)
@@ -60,6 +61,29 @@ if(BUILD_TESTING)
   add_test(
     NAME quant_random_baseline_audit_smoke
     COMMAND quant_random_baseline_audit --input ${CMAKE_CURRENT_SOURCE_DIR}/testdata/ppl_summary_fixture.json --dataset fixture --emit json
+  )
+  add_test(
+    NAME quant_ppl_summary_merge_smoke
+    COMMAND quant_ppl_summary_merge
+      --input ${CMAKE_CURRENT_SOURCE_DIR}/testdata/ppl_summary_merge_left_fixture.json
+      --input ${CMAKE_CURRENT_SOURCE_DIR}/testdata/ppl_summary_merge_right_fixture.json
+      --out ${CMAKE_CURRENT_BINARY_DIR}/ppl_summary_merge_smoke.json
+  )
+  set_tests_properties(
+    quant_ppl_summary_merge_smoke
+    PROPERTIES FIXTURES_SETUP ppl_summary_merge_smoke_file
+  )
+  add_test(
+    NAME quant_ppl_summary_merge_audit_smoke
+    COMMAND quant_random_baseline_audit
+      --input ${CMAKE_CURRENT_BINARY_DIR}/ppl_summary_merge_smoke.json
+      --dataset fixture
+      --target wikitext_c4_consensus
+      --emit json
+  )
+  set_tests_properties(
+    quant_ppl_summary_merge_audit_smoke
+    PROPERTIES FIXTURES_REQUIRED ppl_summary_merge_smoke_file
   )
   add_test(
     NAME quant_consensus_audit_smoke

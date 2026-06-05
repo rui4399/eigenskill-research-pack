@@ -1,0 +1,29 @@
+{
+  "model": "fixture",
+  "prompt_count": 2,
+  "max_length": 16,
+  "device": "cuda",
+  "dtype": "float16",
+  "results": [
+    {
+      "name": "fp16",
+      "metrics": {"prompt_count": 2, "mean_nll": 2.302585, "ppl": 10.0},
+      "delta_nll_vs_fp16": 0.0
+    },
+    {
+      "name": "uniform_int4",
+      "metrics": {"prompt_count": 2, "mean_nll": 2.639057, "ppl": 14.0},
+      "delta_nll_vs_fp16": 0.336472
+    },
+    {
+      "name": "wikitext_c4_consensus",
+      "metrics": {"prompt_count": 2, "mean_nll": 2.484907, "ppl": 12.0},
+      "delta_nll_vs_fp16": 0.182322
+    },
+    {
+      "name": "random_budget_seed_1",
+      "metrics": {"prompt_count": 2, "mean_nll": 2.602690, "ppl": 13.5},
+      "delta_nll_vs_fp16": 0.300105
+    }
+  ]
+}
