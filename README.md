@@ -137,6 +137,24 @@ beats best random16 by `+0.4288` PPL. This is the current cleanest evidence
 that the cross-dataset consensus heuristic is doing useful work beyond a
 single noisy sensitivity split.
 
+SmolLM2-1.7B now has a full-module short-slice check. The first 32-module
+allocation beat uniform INT4 but lost narrowly to the best random16 seed. A
+follow-up run measured all 169 Linear modules and allocated 13 modules at
+8-bit under a 4.5 average-bit budget:
+
+```text
+SmolLM2-1.7B, WikiText2-16, group size 128, average 4.5 bits:
+FP16 PPL                 12.6903
+uniform INT4 PPL         18.1431
+loss_sensitive_full PPL  13.9866
+random16 min/mean/max    14.7340 / 17.5858 / 19.9983
+margin vs best random    +0.7474 PPL
+```
+
+This is stronger than the small SmolLM2 smoke test, but still only a PyTorch
+fake-quant diagnostic on 16 prompts. It should not be cited as a packed
+quantizer, latency result, or hardware efficiency result.
+
 Evidence files:
 
 ```text
@@ -164,6 +182,8 @@ outputs/olmo2_0425_1b_consensus_vs_random16_evidence_matrix.md
 outputs/olmo2_0425_1b_consensus_vs_random16_evidence_matrix.json
 outputs/baseline_environment_audit.md
 outputs/baseline_environment_audit.json
+outputs/smollm2_1p7b_full_random16_result.md
+outputs/smollm2_1p7b_full_random16_evidence_matrix.md
 inference_cpp/src/quant_evidence_matrix.cpp
 inference_cpp/src/quant_consensus_builder.cpp
 inference_cpp/src/quant_consensus_audit.cpp

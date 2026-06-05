@@ -78,6 +78,32 @@ to expand measurement coverage and use a more stable cross-dataset consensus
 or interaction-aware search before making strong robustness claims for
 SmolLM2-1.7B.
 
+## Full-Module Follow-Up
+
+The next run expanded measurement coverage from 32 Linear modules to all 169
+Linear modules, still under the same PyTorch fake-quant diagnostic path.
+
+```text
+calibration prompts:        8
+evaluation prompts:         16
+measured Linear modules:    169 / 169
+loss-sensitive allocation:  156 x 4-bit, 13 x 8-bit
+average bits:               4.5
+protected positive delta:   0.7179
+
+FP16 PPL:                   12.6903
+uniform INT4 PPL:           18.1431
+loss_sensitive_full PPL:    13.9866
+best random16 PPL:          14.7340
+target vs uniform INT4:     +4.1565 PPL
+target vs best random16:    +0.7474 PPL
+target vs random16 mean:    +3.5992 PPL
+```
+
+This repairs the small-run failure against best-of-16 random. It should still
+be treated as a short-slice diagnostic, because the evaluation uses only 16
+WikiText2 prompts and does not use a packed quantized runtime.
+
 Artifacts:
 
 ```text
@@ -88,6 +114,10 @@ outputs/smollm2_1p7b_retry_loss_sensitive_ppl_wikitext2_16_summary.json
 outputs/smollm2_1p7b_retry_loss_sensitive_ppl_wikitext2_16_guard.json
 outputs/smollm2_1p7b_retry_random16_ppl_wikitext2_16_summary.json
 outputs/smollm2_1p7b_retry_random16_evidence_matrix.md
+outputs/smollm2_1p7b_full_random16_result.md
+outputs/smollm2_1p7b_full_random16_ppl_wikitext2_16_summary.json
+outputs/smollm2_1p7b_full_random16_evidence_matrix.md
 data_eval/eval_configs/smollm2_1p7b_retry_loss_sensitive_compare.json
 data_eval/eval_configs/smollm2_1p7b_retry_random16_compare.json
+data_eval/eval_configs/smollm2_1p7b_full_random16_compare.json
 ```

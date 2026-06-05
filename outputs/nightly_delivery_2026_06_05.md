@@ -11,10 +11,10 @@ Repository:
 https://github.com/rui4399/eigenskill-research-pack
 ```
 
-Latest pushed commit:
+Latest pushed commit before this closeout block:
 
 ```text
-1aa8fe2 Show OLMo2 consensus repairs random16 failure
+ae49a09 Add SmolLM2 random16 audit
 ```
 
 Commits pushed in this run:
@@ -28,6 +28,12 @@ a71d7ee Add OLMo2 random16 audit
 94c328f Add revised publication targets
 8b12cf9 Add JSON output for C++ evidence matrix
 745e2b5 Add baseline environment audit
+30cb648 Add baseline install probe utility
+99198f6 Add Qwen3 1.7B WikiText2 128 evidence
+a8a25c9 Add Qwen3 multi-slice evidence matrix
+2e6a3e1 Add SmolLM2 1.7B retry smoke evidence
+66a7bc1 Add SmolLM2 1.7B loss-sensitive loop
+ae49a09 Add SmolLM2 random16 audit
 ```
 
 ## C++ Work
@@ -238,6 +244,33 @@ loss_sensitive_limit8 vs random16 mean: +0.0951 PPL
 This makes the SmolLM2 result honest: the small allocation is clearly better
 than uniform INT4, but it is not yet robust against best-of-16 random.
 
+Full-module follow-up:
+
+```text
+outputs/smollm2_1p7b_full_random16_result.md
+outputs/smollm2_1p7b_module_loss_sensitivity_full_limit8_group128_report.md
+outputs/smollm2_1p7b_full_random16_ppl_wikitext2_16_summary.json
+outputs/smollm2_1p7b_full_random16_evidence_matrix.md
+```
+
+Key numbers:
+
+```text
+measured Linear modules:     169 / 169
+allocation:                  156 x 4-bit, 13 x 8-bit
+FP16 PPL:                    12.6903
+uniform INT4 PPL:            18.1431
+loss_sensitive_full PPL:     13.9866
+best random16 PPL:           14.7340
+target vs uniform INT4:      +4.1565 PPL
+target vs best random16:     +0.7474 PPL
+target vs random16 mean:     +3.5992 PPL
+```
+
+This repairs the earlier 32-module SmolLM2 best-random failure. The scope is
+still deliberately narrow: 16 WikiText2 prompts, fake quantization, and no
+packed runtime speed claim.
+
 ## GPU Guard
 
 All GPU runs used:
@@ -253,6 +286,8 @@ random16 WikiText2-64:        4592 / 8151 MiB = 56.34%
 random16 C4-64:               4593 / 8151 MiB = 56.35%
 consensus-vs-random16 Wikitext: 4593 / 8151 MiB = 56.35%
 consensus-vs-random16 C4:       4586 / 8151 MiB = 56.26%
+SmolLM2 full sensitivity:       4971 / 8151 MiB = 60.99%
+SmolLM2 full random16 PPL:      5133 / 8151 MiB = 62.97%
 ```
 
 No guard kill occurred.
