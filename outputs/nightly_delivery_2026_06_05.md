@@ -79,6 +79,16 @@ inference_cpp/src/baseline_install_probe.cpp
 It converts pip install logs into Markdown/JSON evidence so failed baseline
 setup attempts do not remain informal terminal notes.
 
+Additional GPU guard summarizer:
+
+```text
+inference_cpp/src/gpu_guard_summary.cpp
+outputs/smollm2_1p7b_full_gpu_guard_summary.md
+```
+
+It turns `run_with_gpu_guard.py` JSON logs into Markdown/CSV/JSON evidence for
+the requested 85% memory ceiling.
+
 ## Quantization Evidence
 
 Cross-model evidence:
@@ -344,6 +354,14 @@ SmolLM2 full random16 PPL:      5133 / 8151 MiB = 62.97%
 SmolLM2 full random16 PPL-64:   5679 / 8151 MiB = 69.67%
 SmolLM2 full random16 PPL-128:  5027 / 8151 MiB = 61.67%
 SmolLM2 full random16 C4-64:    5674 / 8151 MiB = 69.61%
+```
+
+C++ guard summary:
+
+```text
+outputs/smollm2_1p7b_full_gpu_guard_summary.md
+all rows: pass
+max observed memory row: WikiText2-64 at 5679 / 8151 MiB = 69.67%
 ```
 
 No guard kill occurred.

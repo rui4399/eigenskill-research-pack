@@ -29,6 +29,7 @@ add_executable(quant_sensitivity_stability src/quant_sensitivity_stability.cpp)
 add_executable(quant_budget_curve_summary src/quant_budget_curve_summary.cpp)
 add_executable(quant_consensus_builder src/quant_consensus_builder.cpp)
 add_executable(baseline_install_probe src/baseline_install_probe.cpp)
+add_executable(gpu_guard_summary src/gpu_guard_summary.cpp)
 target_link_libraries(quant_kernel_bench PRIVATE eigenskill_quant_kernels)
 target_link_libraries(quant_kernel_verify PRIVATE eigenskill_quant_kernels)
 
@@ -93,6 +94,12 @@ if(BUILD_TESTING)
     COMMAND baseline_install_probe
       --log full=${CMAKE_CURRENT_SOURCE_DIR}/testdata/baseline_install_timeout_fixture.log
       --log nodeps=${CMAKE_CURRENT_SOURCE_DIR}/testdata/baseline_install_nodeps_success_fixture.log
+      --emit json
+  )
+  add_test(
+    NAME gpu_guard_summary_smoke
+    COMMAND gpu_guard_summary
+      --input fixture=${CMAKE_CURRENT_SOURCE_DIR}/testdata/gpu_guard_fixture.json
       --emit json
   )
 endif()

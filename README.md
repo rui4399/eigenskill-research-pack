@@ -17,7 +17,7 @@ core is narrower:
    quant-kernel microbenchmarks, a reusable quant-kernel API, C++ allocation
    planning, C++ consensus allocation building, C++ evidence summarization,
    C++ consensus-allocation audit, C++ split-stability audit, and C++
-   budget-curve report/figure generation.
+   budget-curve report/figure generation, plus GPU guard-log summarization.
 
 The practical publication direction is therefore:
 
@@ -207,11 +207,13 @@ outputs/baseline_environment_audit.md
 outputs/baseline_environment_audit.json
 outputs/smollm2_1p7b_full_random16_result.md
 outputs/smollm2_1p7b_full_random16_multi_slice_evidence_matrix.md
+outputs/smollm2_1p7b_full_gpu_guard_summary.md
 outputs/smollm2_1p7b_full_random16_evidence_matrix.md
 outputs/smollm2_1p7b_full_random16_wikitext2_64_evidence_matrix.md
 outputs/smollm2_1p7b_full_random16_wikitext2_128_evidence_matrix.md
 outputs/smollm2_1p7b_full_random16_c4_64_evidence_matrix.md
 inference_cpp/src/quant_evidence_matrix.cpp
+inference_cpp/src/gpu_guard_summary.cpp
 inference_cpp/src/quant_consensus_builder.cpp
 inference_cpp/src/quant_consensus_audit.cpp
 inference_cpp/src/quant_sensitivity_stability.cpp
