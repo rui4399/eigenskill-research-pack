@@ -182,23 +182,27 @@ GPU peak: 3310/8151 MiB = 40.61%
 
 Quality checks are mixed but useful. On the repository's 8 built-in diagnostic
 prompts, the same allocation improves over both FP16 and uniform INT4, which
-should be treated as a smoke result rather than a dataset result. On the C4-64
-text slice it improves over uniform INT4 while remaining worse than FP16:
+should be treated as a smoke result rather than a dataset result. On real
+WikiText2/C4 text slices it improves over uniform INT4 while remaining worse
+than FP16:
 
 ```text
 Qwen3-0.6B, built-in diagnostic prompts:
 FP16 285.9696  uniform INT4 287.3424  loss-sensitive {4,8} 225.0283
 
+Qwen3-0.6B, WikiText2-64, max_length 96:
+FP16 33.9865  uniform INT4 54.6542  loss-sensitive {4,8} 49.5352
+target margin vs uniform INT4 +5.1189 PPL
+
 Qwen3-0.6B, C4-64:
 FP16 36.1380  uniform INT4 52.9352  loss-sensitive {4,8} 47.5872
+target margin vs uniform INT4 +5.3480 PPL
 ```
 
-A true 64-prompt WikiText2 rerun with `max_length=128` was intentionally not
+A 64-prompt WikiText2 rerun with `max_length=128` was intentionally not
 accepted as evidence because the GPU guard killed it at `6933/8151 MiB`
-(`85.06%`). Older committed Qwen3-0.6B C++ planner rows on WikiText2-64 remain
-available below, but this new low-memory allocation should be read as
-default-prompt plus C4 evidence until a lower-memory WikiText2-64 rerun is
-completed.
+(`85.06%`). Reducing the same WikiText2 slice to `max_length=96` completed at
+`4236/8151 MiB` (`51.97%`) and is the valid low-memory WikiText2 row above.
 
 In the current unauthenticated HF environment, `google/gemma-3-1b-it` and
 `meta-llama/Llama-3.2-1B-Instruct` are gated, while `HuggingFaceTB/SmolLM3-3B`

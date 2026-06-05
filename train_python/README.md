@@ -235,6 +235,7 @@ Committed headline:
 ```text
 Qwen3-0.6B sensitivity: 197/197 Linear modules, {4:153, 8:44}, 40.61% GPU memory
 Built-in diagnostic prompts: FP16 285.9696, INT4 287.3424, loss-sensitive 225.0283
+WikiText2-64 max_length=96: FP16 33.9865, INT4 54.6542, loss-sensitive 49.5352
 C4-64: FP16 36.1380, INT4 52.9352, loss-sensitive 47.5872
 True WikiText2-64 max_length=128 rerun: killed by guard at 85.06%, not used as valid evidence
 ```
