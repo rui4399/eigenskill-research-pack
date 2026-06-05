@@ -159,6 +159,7 @@ WikiText2-64 to WikiText2-128:
 outputs/qwen3_1p7b_wikitext2_128_consensus_random16_result.md
 outputs/qwen3_1p7b_wikitext_c4_consensus_random16_ppl_wikitext2_128_summary.json
 outputs/qwen3_1p7b_wikitext_c4_consensus_random16_wikitext2_128_evidence_matrix.md
+outputs/qwen3_1p7b_multi_slice_consensus_random16_evidence_matrix.md
 ```
 
 Key result:
@@ -173,6 +174,14 @@ target vs best random16:    +0.9811 PPL
 
 This is stronger than the short smoke slice because it uses twice as many
 WikiText2 prompts while keeping the same 16-random allocation pool.
+
+Multi-slice matrix:
+
+```text
+WikiText2-64  target vs best random16: +1.3425 PPL
+C4-64         target vs best random16: +0.1259 PPL
+WikiText2-128 target vs best random16: +0.9811 PPL
+```
 
 ## GPU Guard
 
