@@ -184,19 +184,23 @@ SmolLM2 allocation can be improved by swapping one selected 8-bit module out
 and one unselected module in. The script now reuses one loaded model and
 restores CPU-captured Linear weights between trials, which avoids the earlier
 guard-triggering repeated-load path. Four top proxy swaps were checked on
-WikiText2-32 and C4-64:
+WikiText2-32 and C4-64, and an expanded 8-swap search was checked on
+WikiText2-64:
 
 ```text
 WikiText2-32: base 15.1207 PPL, best 15.1207 PPL, improvement 0.0000, 4 trials
+WikiText2-64: base 14.8877 PPL, best 14.8376 PPL, improvement 0.0502, 8 trials
 C4-64:        base 21.4269 PPL, best 21.4269 PPL, improvement 0.0000, 4 trials
 ```
 
-This is a local-stability negative result: the tested swaps did not beat the
-base allocation on either the in-family WikiText2 slice or the cross-dataset
-C4 slice. It does not prove global optimality; it only rules out this small
-one-swap candidate set. Both runs stayed under the requested GPU-memory guard:
-WikiText2-32 peaked at `6918/8151 MiB` (`84.87%`) and C4-64 peaked at
-`6261/8151 MiB` (`76.81%`).
+This is an interaction-aware diagnostic: the expanded WikiText2-64 search
+finds a small global-PPL improvement by moving 8-bit protection from
+`model.layers.12.self_attn.v_proj` to `model.layers.22.self_attn.v_proj`,
+while the smaller WikiText2-32 and C4-64 searches do not improve. It does not
+prove global optimality and the C4 row remains the cross-dataset caution.
+All runs stayed under the requested GPU-memory guard: WikiText2-32 peaked at
+`6918/8151 MiB` (`84.87%`), WikiText2-64 at `6269/8151 MiB` (`76.91%`), and
+C4-64 at `6261/8151 MiB` (`76.81%`).
 
 Evidence files:
 
@@ -236,6 +240,8 @@ outputs/smollm2_1p7b_full_random16_wikitext2_128_evidence_matrix.md
 outputs/smollm2_1p7b_full_random16_c4_64_evidence_matrix.md
 outputs/smollm2_1p7b_full_swap_search_wikitext2_32_report.md
 outputs/smollm2_1p7b_full_swap_search_wikitext2_32_cpp_summary.md
+outputs/smollm2_1p7b_full_swap_search_wikitext2_64_report.md
+outputs/smollm2_1p7b_full_swap_search_wikitext2_64_cpp_summary.md
 outputs/smollm2_1p7b_full_swap_search_c4_64_report.md
 outputs/smollm2_1p7b_full_swap_search_c4_64_cpp_summary.md
 outputs/smollm2_1p7b_swap_search_gpu_guard_summary.md

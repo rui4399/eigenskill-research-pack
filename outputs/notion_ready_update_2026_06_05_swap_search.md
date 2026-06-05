@@ -35,12 +35,15 @@ Markdown, CSV, or JSON summaries. It is covered by a CTest smoke test.
 | dataset | base PPL | best PPL | improvement | swaps | guard peak |
 |---|---:|---:|---:|---:|---:|
 | WikiText2-32 | 15.1207 | 15.1207 | 0.0000 | 4 | 84.87% |
+| WikiText2-64 | 14.8877 | 14.8376 | 0.0502 | 8 | 76.91% |
 | C4-64 | 21.4269 | 21.4269 | 0.0000 | 4 | 76.81% |
 
-Interpretation: this is a local-stability negative result. The four tested
-top proxy swaps did not improve the full-module allocation on either the
-in-family WikiText2 slice or the cross-dataset C4 slice. This does not prove
-global optimality; it only rules out this bounded one-swap candidate set.
+Interpretation: this is a mixed interaction-aware result. The expanded
+WikiText2-64 search finds a small global-PPL improvement by moving 8-bit
+protection from `model.layers.12.self_attn.v_proj` to
+`model.layers.22.self_attn.v_proj`. The smaller WikiText2-32 search and the
+cross-dataset C4-64 search did not improve. This does not prove global
+optimality, and the C4 row remains the important overfitting caution.
 
 ## Evidence Files
 
@@ -49,6 +52,10 @@ outputs/smollm2_1p7b_full_swap_search_wikitext2_32_summary.json
 outputs/smollm2_1p7b_full_swap_search_wikitext2_32_report.md
 outputs/smollm2_1p7b_full_swap_search_wikitext2_32_cpp_summary.md
 outputs/smollm2_1p7b_full_swap_search_wikitext2_32_guard.json
+outputs/smollm2_1p7b_full_swap_search_wikitext2_64_summary.json
+outputs/smollm2_1p7b_full_swap_search_wikitext2_64_report.md
+outputs/smollm2_1p7b_full_swap_search_wikitext2_64_cpp_summary.md
+outputs/smollm2_1p7b_full_swap_search_wikitext2_64_guard.json
 outputs/smollm2_1p7b_full_swap_search_c4_64_summary.json
 outputs/smollm2_1p7b_full_swap_search_c4_64_report.md
 outputs/smollm2_1p7b_full_swap_search_c4_64_cpp_summary.md

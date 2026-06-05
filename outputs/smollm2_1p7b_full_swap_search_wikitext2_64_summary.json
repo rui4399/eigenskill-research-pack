@@ -1,0 +1,152 @@
+{
+  "model": "HuggingFaceTB/SmolLM2-1.7B-Instruct",
+  "prompts": "data_eval/text_prompts/wikitext2_validation_128.txt",
+  "prompt_count": 64,
+  "max_length": 128,
+  "group_size": 128,
+  "reuse_model": true,
+  "base_allocation": "outputs/smollm2_1p7b_loss_sensitive_alloc_full_4to8_limit8_group128_summary.json",
+  "base_method": "loss_sensitive_4to8",
+  "base_metrics": {
+    "tokens": 7147,
+    "mean_nll": 2.7005374606245796,
+    "ppl": 14.887731144273172
+  },
+  "trials": [
+    {
+      "swap": {
+        "out_index": 135,
+        "in_index": 156,
+        "out_module": "model.layers.19.self_attn.v_proj",
+        "in_module": "model.layers.22.self_attn.v_proj",
+        "out_delta": 0.0038963481783866882,
+        "in_delta": 0.0038343495130539473
+      },
+      "metrics": {
+        "tokens": 7147,
+        "mean_nll": 2.69813647244516,
+        "ppl": 14.852028755435446
+      }
+    },
+    {
+      "swap": {
+        "out_index": 86,
+        "in_index": 156,
+        "out_module": "model.layers.12.self_attn.v_proj",
+        "in_module": "model.layers.22.self_attn.v_proj",
+        "out_delta": 0.004578811079263723,
+        "in_delta": 0.0038343495130539473
+      },
+      "metrics": {
+        "tokens": 7147,
+        "mean_nll": 2.697162230398099,
+        "ppl": 14.837566330632825
+      }
+    },
+    {
+      "swap": {
+        "out_index": 114,
+        "in_index": 156,
+        "out_module": "model.layers.16.self_attn.v_proj",
+        "in_module": "model.layers.22.self_attn.v_proj",
+        "out_delta": 0.004848287552595032,
+        "in_delta": 0.0038343495130539473
+      },
+      "metrics": {
+        "tokens": 7147,
+        "mean_nll": 2.699099740715849,
+        "ppl": 14.866342136196918
+      }
+    },
+    {
+      "swap": {
+        "out_index": 107,
+        "in_index": 156,
+        "out_module": "model.layers.15.self_attn.v_proj",
+        "in_module": "model.layers.22.self_attn.v_proj",
+        "out_delta": 0.007368441075086274,
+        "in_delta": 0.0038343495130539473
+      },
+      "metrics": {
+        "tokens": 7147,
+        "mean_nll": 2.6991320535555174,
+        "ppl": 14.866822517688023
+      }
+    },
+    {
+      "swap": {
+        "out_index": 164,
+        "in_index": 156,
+        "out_module": "model.layers.23.self_attn.o_proj",
+        "in_module": "model.layers.22.self_attn.v_proj",
+        "out_delta": 0.007799964994191999,
+        "in_delta": 0.0038343495130539473
+      },
+      "metrics": {
+        "tokens": 7147,
+        "mean_nll": 2.702557215160868,
+        "ppl": 14.91783109380917
+      }
+    },
+    {
+      "swap": {
+        "out_index": 72,
+        "in_index": 156,
+        "out_module": "model.layers.10.self_attn.v_proj",
+        "in_module": "model.layers.22.self_attn.v_proj",
+        "out_delta": 0.008682094812392904,
+        "in_delta": 0.0038343495130539473
+      },
+      "metrics": {
+        "tokens": 7147,
+        "mean_nll": 2.6978412096327262,
+        "ppl": 14.847644150991941
+      }
+    },
+    {
+      "swap": {
+        "out_index": 159,
+        "in_index": 4,
+        "out_module": "model.layers.22.mlp.up_proj",
+        "in_module": "model.layers.0.mlp.gate_proj",
+        "out_delta": 0.018870860189199146,
+        "in_delta": 0.0136344128847119
+      },
+      "metrics": {
+        "tokens": 7147,
+        "mean_nll": 2.7274646561212834,
+        "ppl": 15.294062116695674
+      }
+    },
+    {
+      "swap": {
+        "out_index": 166,
+        "in_index": 4,
+        "out_module": "model.layers.23.mlp.up_proj",
+        "in_module": "model.layers.0.mlp.gate_proj",
+        "out_delta": 0.01917964875698086,
+        "in_delta": 0.0136344128847119
+      },
+      "metrics": {
+        "tokens": 7147,
+        "mean_nll": 2.7139788068089765,
+        "ppl": 15.089193220068744
+      }
+    }
+  ],
+  "best": {
+    "swap": {
+      "out_index": 86,
+      "in_index": 156,
+      "out_module": "model.layers.12.self_attn.v_proj",
+      "in_module": "model.layers.22.self_attn.v_proj",
+      "out_delta": 0.004578811079263723,
+      "in_delta": 0.0038343495130539473
+    },
+    "metrics": {
+      "tokens": 7147,
+      "mean_nll": 2.697162230398099,
+      "ppl": 14.837566330632825
+    }
+  }
+}

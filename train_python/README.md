@@ -247,6 +247,7 @@ Expected headline from the committed run:
 
 ```text
 WikiText2-32: base 15.1207 PPL, best 15.1207 PPL, 4 swaps, 84.87% GPU memory
+WikiText2-64: base 14.8877 PPL, best 14.8376 PPL, 8 swaps, 76.91% GPU memory
 C4-64:        base 21.4269 PPL, best 21.4269 PPL, 4 swaps, 76.81% GPU memory
 ```
 
