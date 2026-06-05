@@ -1,5 +1,11 @@
 # EigenSkill Research Pack
 
+Public repository: https://github.com/rui4399/eigenskill-research-pack
+
+Current public HEAD: `4c933e2` (`Add task eval smoke pipeline`). The repository
+has been verified as GitHub `PUBLIC`/`isPrivate=false`; unauthenticated HTTP
+access to the repository URL returns `200 OK`.
+
 EigenSkill is the working codename for a small research pack on hybrid skill
 routing for resource-constrained LLM inference.
 
