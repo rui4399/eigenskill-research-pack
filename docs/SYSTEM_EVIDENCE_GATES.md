@@ -26,14 +26,15 @@ python train_python/build_evidence_ledger.py \
   --gate fused_qkv_quality=outputs/real_system_packer_2026-06-05/fused_qkv_prompt_suite_gate_2026_06_06.json \
   --gate chat_task_stress=outputs/real_system_packer_2026-06-05/chat_task_stress_v3_84_gate_2026_06_06.json \
   --gate public_task_benchmark=outputs/public_task_benchmark_ollama_qwen35_4b_gate_2026_06_06.json \
+  --gate allocation_family_proxy=outputs/q_palette_style_allocation_family_gate_2026_06_06.json \
   --out-json outputs/real_system_packer_2026-06-05/evidence_ledger_2026_06_06.json \
   --out-md outputs/real_system_packer_2026-06-05/EVIDENCE_LEDGER_2026_06_06.md
 ```
 
-The current ledger passes with 12/12 gates across repo hygiene, calibration
+The current ledger passes with 13/13 gates across repo hygiene, calibration
 robustness, artifact integrity, kernel, runtime wiring, selected-row, C++
 runtime, decode integration, QKV replacement, quality, task-retention, and
-capability-retention evidence categories.
+capability-retention, and allocation-comparator evidence categories.
 
 Valid claim:
 
@@ -141,6 +142,37 @@ Invalid claim:
 
 - this proves leaderboard-scale quality, fused-retention quality, or SOTA
   reasoning performance.
+
+## Allocation Family Proxy Gate
+
+`train_python/gate_allocation_family_proxy.py` verifies Q-Palette-style
+measured-sensitivity allocation proxy artifacts. It is a comparator-family gate,
+not an official reproduction claim.
+
+Current gate:
+
+```bash
+python train_python/gate_allocation_family_proxy.py \
+  --case wikitext2=outputs/q_palette_style_qwen3_0p6b_wikitext2_group128_summary.json \
+  --case c4=outputs/q_palette_style_qwen3_0p6b_c4_group128_summary.json \
+  --min-cases 2 \
+  --min-records 100 \
+  --required-method-token q_palette \
+  --out-json outputs/q_palette_style_allocation_family_gate_2026_06_06.json \
+  --out-md outputs/Q_PALETTE_STYLE_ALLOCATION_FAMILY_GATE_2026_06_06.md
+```
+
+Current result: 2 cases, 394 total records, and max average bits `4.4997`
+under a `4.5` target budget.
+
+Valid claim:
+
+- a Q-Palette-style rate-distortion allocation comparator proxy is executable
+  on measured Qwen3-0.6B sensitivity artifacts.
+
+Invalid claim:
+
+- this is a faithful official Q-Palette/IMPQ/WINDQuant reproduction.
 
 ## Baseline Gap Dashboard
 

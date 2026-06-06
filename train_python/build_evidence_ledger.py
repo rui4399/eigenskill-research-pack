@@ -13,6 +13,10 @@ from typing import Any
 CATEGORIES = {
     "quality": "quality",
     "prompt": "quality",
+    "allocation": "allocation comparator",
+    "q_palette": "allocation comparator",
+    "impq": "allocation comparator",
+    "windquant": "allocation comparator",
     "triton": "kernel",
     "selector": "runtime wiring",
     "selected": "selected-row",
@@ -127,6 +131,12 @@ def metric_parts(summary: dict[str, Any]) -> list[str]:
         parts.append(f"passes {summary.get('total_passes')}")
     if (value := finite_float(summary.get("mean_accuracy"))) is not None:
         parts.append(f"accuracy {value:.4f}")
+    if "total_records" in summary:
+        parts.append(f"records {summary.get('total_records')}")
+    if (value := finite_float(summary.get("max_avg_bits"))) is not None:
+        parts.append(f"max avg bits {value:.4f}")
+    if (value := finite_float(summary.get("max_target_avg_bits"))) is not None:
+        parts.append(f"target bits {value:.4f}")
     if (value := finite_float(summary.get("mean_score_spearman"))) is not None:
         parts.append(f"mean Spearman {value:.4f}")
     if (value := finite_float(summary.get("mean_positive_jaccard"))) is not None:

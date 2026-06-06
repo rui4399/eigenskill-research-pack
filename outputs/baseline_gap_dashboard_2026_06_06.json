@@ -1,11 +1,11 @@
 {
-  "date": "2026-06-06T13:25:01+00:00",
+  "date": "2026-06-06T13:38:32+00:00",
   "schema_version": 1,
   "passed": false,
   "item_count": 11,
   "status_counts": {
-    "covered": 7,
-    "missing": 4
+    "covered": 8,
+    "missing": 3
   },
   "family_counts": {
     "in_repo_allocation": {
@@ -21,7 +21,7 @@
       "missing": 1
     },
     "external_allocation": {
-      "missing": 1
+      "covered": 1
     },
     "capability_retention": {
       "covered": 2
@@ -36,7 +36,6 @@
   "paper_blocker_missing": [
     "awq_or_gptq",
     "rotation_family",
-    "allocation_family",
     "mobile_redmi_k80_pro"
   ],
   "items": [
@@ -248,11 +247,14 @@
         "outputs/**/*windquant*summary.json"
       ],
       "required_packages": [],
-      "claim_boundary": "Needed before claiming algorithmic novelty in bit allocation.",
-      "status": "missing",
-      "evidence_count": 0,
+      "claim_boundary": "Q-Palette-style proxy comparator is covered; faithful official Q-Palette/IMPQ/WINDQuant reproductions are still future work.",
+      "status": "covered",
+      "evidence_count": 2,
       "evidence_task_count": 0,
-      "evidence_matches": [],
+      "evidence_matches": [
+        "outputs/q_palette_style_qwen3_0p6b_c4_group128_summary.json",
+        "outputs/q_palette_style_qwen3_0p6b_wikitext2_group128_summary.json"
+      ],
       "evidence_truncated": false,
       "partial_evidence_count": 0,
       "partial_evidence_matches": [],

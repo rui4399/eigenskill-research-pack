@@ -661,6 +661,7 @@ python train_python/build_evidence_ledger.py \
   --gate fused_qkv_quality=outputs/real_system_packer_2026-06-05/fused_qkv_prompt_suite_gate_2026_06_06.json \
   --gate chat_task_stress=outputs/real_system_packer_2026-06-05/chat_task_stress_v3_84_gate_2026_06_06.json \
   --gate public_task_benchmark=outputs/public_task_benchmark_ollama_qwen35_4b_gate_2026_06_06.json \
+  --gate allocation_family_proxy=outputs/q_palette_style_allocation_family_gate_2026_06_06.json \
   --out-json outputs/real_system_packer_2026-06-05/evidence_ledger_2026_06_06.json \
   --out-md outputs/real_system_packer_2026-06-05/EVIDENCE_LEDGER_2026_06_06.md
 ```

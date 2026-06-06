@@ -1,0 +1,46 @@
+{
+  "date": "2026-06-06T13:36:26+00:00",
+  "passed": true,
+  "summary": {
+    "case_count": 2,
+    "total_records": 394,
+    "max_avg_bits": 4.499670112161865,
+    "max_target_avg_bits": 4.5
+  },
+  "cases": [
+    {
+      "label": "wikitext2",
+      "path": "outputs\\q_palette_style_qwen3_0p6b_wikitext2_group128_summary.json",
+      "method": "q_palette_style_lagrangian_proxy",
+      "source": "outputs\\qwen3_0p6b_module_loss_sensitivity_limit4_group128.json",
+      "record_count": 197,
+      "target_avg_bits": 4.5,
+      "avg_bits": 4.499670112161865,
+      "budget_satisfied": true,
+      "objective_distortion": 0.0007903704453420113,
+      "bit_hist": {
+        "3": 87,
+        "4": 45,
+        "8": 65
+      }
+    },
+    {
+      "label": "c4",
+      "path": "outputs\\q_palette_style_qwen3_0p6b_c4_group128_summary.json",
+      "method": "q_palette_style_lagrangian_proxy",
+      "source": "outputs\\qwen3_0p6b_c4_module_loss_sensitivity_limit4_group128.json",
+      "record_count": 197,
+      "target_avg_bits": 4.5,
+      "avg_bits": 4.499670112161865,
+      "budget_satisfied": true,
+      "objective_distortion": 0.0005454215615827707,
+      "bit_hist": {
+        "3": 73,
+        "4": 63,
+        "8": 61
+      }
+    }
+  ],
+  "failures": [],
+  "claim_boundary": "Valid claim: Q-Palette-style measured-sensitivity allocation proxy artifacts exist and satisfy budget. Invalid claim: this is a faithful official Q-Palette/IMPQ/WINDQuant reproduction."
+}

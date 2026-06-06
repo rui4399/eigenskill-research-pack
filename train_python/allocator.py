@@ -283,6 +283,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--target-avg-bits", type=float, default=4.5)
     parser.add_argument("--bits", default="2,3,4,8")
     parser.add_argument("--iterations", type=int, default=100)
+    parser.add_argument("--method-name", default="lagrangian_loss_sensitivity")
     parser.add_argument("--out-json", default="outputs/lagrangian_allocator_summary.json")
     parser.add_argument("--out-md", default="outputs/lagrangian_allocator_report.md")
     return parser.parse_args()
@@ -298,6 +299,7 @@ def main() -> None:
         candidates=candidates,
         iterations=args.iterations,
     )
+    result["method"] = args.method_name
     result["source"] = args.sensitivity_json
 
     out_json = Path(args.out_json)
