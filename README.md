@@ -38,12 +38,13 @@ SOTA or deployment claims.
 
 Read the repository in this order:
 
-1. `docs/PAPER_CLAIM_MATRIX.md` for the claim firewall.
-2. `outputs/real_system_packer_2026-06-05/EVIDENCE_LEDGER_2026_06_06.md`
+1. `docs/README.md` for the documentation map.
+2. `docs/PAPER_CLAIM_MATRIX.md` for the claim firewall.
+3. `outputs/real_system_packer_2026-06-05/EVIDENCE_LEDGER_2026_06_06.md`
    for the current 22 paper-facing gates.
-3. `outputs/BASELINE_GAP_DASHBOARD_2026_06_06.md` for missing official
+4. `outputs/BASELINE_GAP_DASHBOARD_2026_06_06.md` for missing official
    baselines and mobile/runtime blockers.
-4. `docs/ARTIFACT_MANIFEST.md` for the curated artifact map.
+5. `docs/ARTIFACT_MANIFEST.md` for the curated artifact map.
 
 The many helper scripts and raw `outputs/` files are supporting material. They
 should not be read as independent paper claims unless the claim matrix lists
@@ -90,6 +91,10 @@ The large `outputs/` tree is intentional for the current artifact branch because
 the evidence ledger points to committed JSON/Markdown files. Historical delivery
 notes, private NotebookLM/Obsidian exports, and speculative swarm/acoustic
 concept drafts are not part of the public artifact boundary.
+
+Do not treat the number of Markdown reports, C++ files, or output artifacts as a
+research contribution. The paper-facing contribution is the gated evidence set
+and its claim boundaries.
 
 ## C++ Scope
 

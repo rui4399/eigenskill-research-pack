@@ -1,120 +1,105 @@
 # Paper Targets And Readiness
 
-Date: 2026-06-05
+Date: 2026-06-07
 
-This note keeps the submission story realistic. It avoids NeurIPS/MLSys and
-does not frame the current repository as a production quantizer or edge
-runtime.
+This file is the single publication-readiness note for the public repository.
+Older venue lists were folded here so the project does not present several
+competing submission stories.
 
 ## Current Defensible Contribution
 
 The strongest current paper direction is:
 
 ```text
-Calibration-robust mixed-precision fake-quant allocation via cross-dataset
-consensus sensitivity, with deterministic C++ audit/reporting tools.
+Calibration split instability in mixed-precision LLM quantization, with
+consensus sensitivity allocation and gated packed-system evidence.
 ```
 
 The current evidence supports:
 
-- small-model fake-quant diagnostics across Qwen3-0.6B, Qwen3-1.7B,
-  OLMo2-0425-1B-Instruct, and SmolLM2-1.7B boundary cases;
-- two text sources: WikiText2 and C4;
-- random-repeat comparisons at 4.5 average bits;
-- budget curves at 4.25, 4.50, and 4.75 average bits;
-- minimal AutoAWQ readiness probes on Qwen2.5-0.5B-Instruct, including a
-  public-calibrated W4 group-128 bundle and tiny public WikiText2/C4 matched
-  FP16-vs-AutoAWQ PPL slices;
-- C++ audits for allocation consensus and split-stability;
-- guarded GPU logs with explicit peak-VRAM records and claim boundaries.
+- calibration-split instability diagnostics on Qwen3-0.6B, Qwen3-1.7B,
+  OLMo-2-0425-1B-Instruct, and SmolLM2-1.7B boundary cases;
+- WikiText2/C4 short-slice fake-quant PPL comparisons and random-repeat
+  allocation audits around the 4.5 average-bit budget;
+- budget and robustness gates for mean consensus, robust-LCB, transfer
+  boundaries, and bounded interaction-aware swap search;
+- a public-calibrated AutoAWQ W4 group-128 readiness bundle on
+  Qwen2.5-0.5B-Instruct with tiny public WikiText2/C4 matched PPL slices;
+- ESMP package integrity, Triton shape-family kernels, selected-row probes, and
+  shallow generation integration gates;
+- explicit gap tracking for official baselines, task retention, and mobile
+  deployment.
 
-## Venues To Consider Later
+The current evidence does not support a broad quantization-method claim, a
+production runtime claim, or a real-device deployment claim.
 
-These are candidate directions, not guaranteed fit or current acceptance
-targets:
+## Best-Fit Near-Term Venues
 
-- `TMLR`: good if the method becomes a clean learning/optimization story with
-  strong ablations and open review tolerance for negative results.
-- `Neural Networks`: possible if the paper emphasizes mixed-precision
-  allocation, robustness, and empirical depth across several architectures.
-- `Information Sciences`: possible if the work becomes an optimization and
-  intelligent-systems contribution with broader comparisons.
-- `Knowledge-Based Systems`: possible if the policy/kernel routing angle is
-  expanded into decision systems and validated on real tasks.
-- `Engineering Applications of Artificial Intelligence`: possible for an
-  engineering-focused version with robust experiments and deployability
-  evidence.
-- `Pattern Recognition`: only plausible if task-level accuracy and compression
-  baselines become much stronger; current PPL-only evidence is too narrow.
-- `IEEE Transactions on Artificial Intelligence` or similar IEEE AI venues:
-  possible if the method is framed as robust resource-aware model optimization,
-  but baseline expectations are high.
-- model compression / efficient AI workshops attached to ICLR/ICML/ACL/KDD:
-  realistic short-cycle targets once baselines and ablations are cleaned up.
+These are fit hypotheses, not acceptance claims. School and CCF/CAS recognition
+rules drift, so verify the latest official list before choosing a target.
 
-Venue rankings and school recognition rules drift. Verify the current official
-school list and latest journal/CCF/CAS categorization before committing to a
-target.
+| Route | Why it fits | What must improve first |
+|---|---|---|
+| ACL Findings / EMNLP Findings / COLING | Compression diagnostic, calibration robustness, public task subsets. | Larger slices, stronger task retention, clearer baseline table. |
+| AAAI / IJCAI | Resource-aware optimization with empirical robustness. | Official AWQ/GPTQ or faithful comparator, more seeds, more models. |
+| TMLR | Clean problem definition plus negative evidence and ablations. | Stronger theory/variance framing and reproducible baseline package. |
+| Neural Networks / Information Sciences | Journal-length robustness and optimization study. | Broader model ladder, statistical tests, official baselines. |
+| Engineering Applications of Artificial Intelligence | Engineering artifact with gated systems evidence. | Runtime or device metrics beyond module-level probes. |
+| Efficient-LLM / model-compression workshops | Short-cycle artifact release and focused feedback. | Clean tables, exact scripts, and conservative claims. |
+
+Avoid positioning the current artifact for ASPLOS/ISCA/MICRO/OSDI-style systems
+venues until there is real runtime integration, end-to-end TTFT/tokens/s, memory
+and power evidence. Avoid TNNLS/TPAMI-style claims until the theory and task
+evidence become much deeper.
 
 ## Not Ready For Mainline Submission
 
-Do not submit the current repo as a full journal/conference paper yet. The
-missing pieces are clear:
+The blockers are concrete:
 
-1. Production baselines: RTN, GPTQ, AWQ, SmoothQuant, QuaRot/SpinQuant-style
-   rotations, and at least one common mixed-precision allocator.
-2. More models: at minimum a 0.5B/1B/1.5B/3B scale ladder, plus one non-Qwen
-   family beyond OLMo2.
-3. Larger evaluation: more WikiText2/C4 prompts, and at least one downstream
-   task suite beyond PPL.
-4. Statistical robustness: multiple calibration seeds and bootstrap confidence
-   intervals for the consensus-vs-single-split claim.
-5. Runtime evidence: packed quantized weights or a real integration with an
-   inference backend; current PyTorch fake quant cannot support latency,
-   memory, or energy claims.
-6. Hardware evidence: only after a board or runtime benchmark exists should
-   the paper say "edge" empirically.
+1. Official baselines: matched AWQ/GPTQ/SmoothQuant and at least one faithful
+   rotation or mixed-precision allocation comparator.
+2. Larger evaluation: more WikiText2/C4 prompts and multiple calibration seeds.
+3. Downstream retention: MMLU/GSM8K/IFEval or similar task slices on the actual
+   quantized/fused variants, not only base-model capability smoke.
+4. Statistical robustness: bootstrap or confidence intervals for
+   consensus-vs-single-split risk.
+5. Runtime evidence: packed quantized weights integrated into an inference path;
+   PyTorch fake quant cannot justify latency, memory, or energy claims.
+6. Mobile evidence: Redmi K80 Pro or another real device needs TTFT, tokens/s,
+   peak memory, thermal and power logs before any deployment language is used.
 
-## Near-Term Submission Path
+## Near-Term Artifact Path
 
-The fastest credible path is a workshop or arXiv technical report:
+The next credible public milestone is a technical report or workshop artifact:
 
 ```text
-Title shape:
-Cross-Dataset Consensus Sensitivity for Robust Mixed-Precision LLM Fake
-Quantization Diagnostics
+Calibration Split Instability in Mixed-Precision LLM Quantization:
+Consensus Sensitivity Allocation with Gated Packed-System Evidence
 ```
 
-Required additions before that:
+Before releasing that version:
 
-- add RTN/uniform and one public baseline beyond random/category;
-- run at least 256 or 512 prompts on WikiText2/C4 for Qwen3 and OLMo2;
-- scale the public-calibrated AutoAWQ bundle beyond tiny slices and add
-  GPTQ/GPTQModel or another faithful public PTQ comparator under the same
-  calibration/evaluation protocol;
-- report calibration-seed variance;
-- include the budget curve figure from `outputs/consensus_budget_curve.svg`;
-- keep all claims explicitly scoped to fake-quant diagnostics.
+- scale the public-calibrated AutoAWQ probe beyond tiny slices;
+- add GPTQ/GPTQModel or another faithful public PTQ comparator under the same
+  calibration and evaluation protocol;
+- rerun core fake-quant rows with more calibration seeds;
+- include the budget-curve figure from `outputs/consensus_budget_curve.svg`;
+- keep C++ reporting tools framed as reproducibility infrastructure unless tied
+  to measured kernel/runtime gates.
 
-## Longer-Term Strong Paper Shape
+## Stronger Paper Shape
 
-For a stronger journal or recognized conference version, the paper should become:
+A stronger journal or recognized-conference version should define:
 
-```text
-Robust calibration under noisy sensitivity estimates for constrained
-mixed-precision LLM quantization.
-```
+- a noisy sensitivity estimator `s_i(D)` over calibration data;
+- a consensus estimator across calibration distributions or splits;
+- a constrained bit-allocation objective under a fixed average-bit budget;
+- a robustness objective over calibration perturbations;
+- downstream risk measured by PPL and task degradation.
 
-The core math should define:
+The systems contribution should remain scoped until the runtime catches up:
 
-- noisy sensitivity estimator `s_i(D)`;
-- consensus estimator across calibration distributions;
-- budgeted allocation as constrained optimization;
-- robustness objective over calibration-set perturbations;
-- downstream risk measured by PPL/task degradation under bit budget.
-
-The systems part should stay modest until packed kernels are implemented:
-
-- C++ audit and allocation tools are reproducibility infrastructure;
-- C++ selected-row/mixed-bit kernels are microbenchmarks;
-- no hardware speedup claim without a real runtime path.
+- ESMP packaging and C++ inspection are real artifact infrastructure;
+- Triton and selected-row kernels are module-level probes;
+- no end-to-end speed or mobile claim should appear without physical
+  measurements.

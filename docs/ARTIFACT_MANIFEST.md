@@ -18,6 +18,7 @@ paper claims.
 
 | Purpose | Artifact |
 |---|---|
+| Documentation map | `docs/README.md` |
 | Top-level gate ledger | `outputs/real_system_packer_2026-06-05/EVIDENCE_LEDGER_2026_06_06.md` |
 | Calibration split instability benchmark | `outputs/CALIBRATION_INSTABILITY_BENCHMARK_2026_06_06.md` |
 | Calibration robustness stress gate | `outputs/CALIBRATION_ROBUSTNESS_STRESS_GATE_2026_06_07.md` |
@@ -81,6 +82,9 @@ not be cited as current paper evidence without an explicit claim-matrix row.
 Internal delivery/update notes, wake-up summaries, Notion-ready snippets, and
 the old cross-medium swarm concept draft were removed from the tracked artifact
 tree because they are process state rather than reproducible evidence.
+
+Reader rule: do not start from the `outputs/` root. Start from
+`docs/README.md`, then the claim matrix, then the specific gate artifact.
 
 ## Cleanup Policy
 
