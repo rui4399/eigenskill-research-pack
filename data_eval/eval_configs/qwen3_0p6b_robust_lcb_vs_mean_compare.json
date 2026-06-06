@@ -1,0 +1,16 @@
+[
+  {"name": "fp16", "mode": "fp16"},
+  {"name": "uniform_int4", "mode": "uniform_int4"},
+  {
+    "name": "wikitext_c4_mean_consensus",
+    "mode": "allocation",
+    "allocation": "outputs/qwen3_0p6b_wikitext2_c4_consensus_alloc_4to8_limit4_group128_summary.json",
+    "method": "loss_sensitive_consensus_4to8"
+  },
+  {
+    "name": "wikitext_c4_robust_lcb",
+    "mode": "allocation",
+    "allocation": "outputs/qwen3_0p6b_robust_lcb_wikitext_c4_consensus_alloc_4to8_group128_summary.json",
+    "method": "loss_sensitive_robust_lcb_consensus_4to8"
+  }
+]

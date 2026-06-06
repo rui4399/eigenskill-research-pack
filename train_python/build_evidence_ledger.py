@@ -139,6 +139,14 @@ def metric_parts(summary: dict[str, Any]) -> list[str]:
         parts.append(f"passes {summary.get('total_passes')}")
     if (value := finite_float(summary.get("mean_accuracy"))) is not None:
         parts.append(f"accuracy {value:.4f}")
+    if "target_wins_vs_uniform" in summary:
+        parts.append(f"wins/uniform {summary.get('target_wins_vs_uniform')}")
+    if "target_wins_vs_mean" in summary:
+        parts.append(f"wins/mean {summary.get('target_wins_vs_mean')}")
+    if (value := finite_float(summary.get("mean_target_margin_vs_uniform"))) is not None:
+        parts.append(f"margin vs uniform {value:.4f}")
+    if (value := finite_float(summary.get("mean_target_margin_vs_mean"))) is not None:
+        parts.append(f"margin vs mean {value:.4f}")
     if "total_records" in summary:
         parts.append(f"records {summary.get('total_records')}")
     if "total_high_bit_modules" in summary:

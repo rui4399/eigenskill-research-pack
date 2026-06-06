@@ -1,0 +1,9 @@
+dataset,model,prompt_count,max_length,dtype,config,mode,ppl,mean_nll,delta_nll_vs_fp16,ppl_ratio_vs_fp16,tokens,bit_hist,allocation,method
+wikitext2_64_len96,Qwen/Qwen3-0.6B,64,96,float16,fp16,fp16,33.98650563871633,3.5259635528543654,0.0,1.0,5686,"{""16"": 197}",,
+wikitext2_64_len96,Qwen/Qwen3-0.6B,64,96,float16,uniform_int4,uniform_int4,54.654160803363276,4.001025347193068,0.475061794338703,1.6081135667299382,5686,"{""4"": 197}",,
+wikitext2_64_len96,Qwen/Qwen3-0.6B,64,96,float16,wikitext_c4_mean_consensus,allocation,45.65585408343952,3.8211318372296397,0.2951682843752743,1.343352404885951,5686,"{""4"": 151, ""8"": 46}",outputs/qwen3_0p6b_wikitext2_c4_consensus_alloc_4to8_limit4_group128_summary.json,loss_sensitive_consensus_4to8
+wikitext2_64_len96,Qwen/Qwen3-0.6B,64,96,float16,wikitext_c4_robust_lcb,allocation,49.22233581756269,3.896347500512267,0.37038394765790184,1.4482905757010274,5686,"{""4"": 159, ""8"": 38}",outputs/qwen3_0p6b_robust_lcb_wikitext_c4_consensus_alloc_4to8_group128_summary.json,loss_sensitive_robust_lcb_consensus_4to8
+c4_64,Qwen/Qwen3-0.6B,64,128,float16,fp16,fp16,36.138003190515846,3.5873450315766418,0.0,1.0,7375,"{""16"": 197}",,
+c4_64,Qwen/Qwen3-0.6B,64,128,float16,uniform_int4,uniform_int4,52.93515957849015,3.9690677604028735,0.3817227288262317,1.4648058803753328,7375,"{""4"": 197}",,
+c4_64,Qwen/Qwen3-0.6B,64,128,float16,wikitext_c4_mean_consensus,allocation,44.92896776288526,3.8050827484777416,0.2177377169010999,1.2432609385201596,7375,"{""4"": 151, ""8"": 46}",outputs/qwen3_0p6b_wikitext2_c4_consensus_alloc_4to8_limit4_group128_summary.json,loss_sensitive_consensus_4to8
+c4_64,Qwen/Qwen3-0.6B,64,128,float16,wikitext_c4_robust_lcb,allocation,47.12929046488277,3.8528946859715347,0.265549654394893,1.3041476092749782,7375,"{""4"": 159, ""8"": 38}",outputs/qwen3_0p6b_robust_lcb_wikitext_c4_consensus_alloc_4to8_group128_summary.json,loss_sensitive_robust_lcb_consensus_4to8

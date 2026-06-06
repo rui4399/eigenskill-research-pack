@@ -28,13 +28,14 @@ python train_python/build_evidence_ledger.py \
   --gate public_task_benchmark=outputs/public_task_benchmark_ollama_qwen35_4b_gate_2026_06_06.json \
   --gate allocation_family_proxy=outputs/q_palette_style_allocation_family_gate_2026_06_06.json \
   --gate robust_lcb_consensus=outputs/robust_lcb_consensus_family_gate_2026_06_06.json \
+  --gate robust_lcb_quality=outputs/qwen3_0p6b_robust_lcb_quality_gate_2026_06_07.json \
   --gate rotation_family_proxy=outputs/quarot_spinquant_rotation_family_gate_2026_06_06.json \
   --gate awq_gptq_proxy=outputs/awq_gptq_proxy_gate_2026_06_06.json \
   --out-json outputs/real_system_packer_2026-06-05/evidence_ledger_2026_06_06.json \
   --out-md outputs/real_system_packer_2026-06-05/EVIDENCE_LEDGER_2026_06_06.md
 ```
 
-The current ledger passes with 16/16 gates across repo hygiene, calibration
+The current ledger passes with 17/17 gates across repo hygiene, calibration
 robustness, artifact integrity, kernel, runtime wiring, selected-row, C++
 runtime, decode integration, QKV replacement, quality, task-retention, and
 capability-retention, allocation-comparator, rotation-comparator, and
@@ -398,6 +399,38 @@ Invalid claim:
 
 - robust-LCB consensus alone proves downstream PPL/task quality, mobile
   deployment, or SOTA quantization quality.
+
+## Robust-LCB Quality Boundary Gate
+
+`train_python/gate_robust_lcb_quality.py` verifies the downstream fake-quant
+PPL boundary for robust-LCB on the current Qwen3-0.6B WikiText2/C4 slices. It
+requires robust-LCB to beat uniform INT4 under the GPU guard, but it does not
+require robust-LCB to beat mean consensus; that comparison is reported as
+boundary evidence.
+
+Current gate:
+
+```bash
+python train_python/gate_robust_lcb_quality.py \
+  --case wikitext2_64_len96=outputs/qwen3_0p6b_robust_lcb_vs_mean_ppl_wikitext2_64_len96_summary.json=outputs/qwen3_0p6b_robust_lcb_vs_mean_gpu_guard_wikitext2_64_len96.json \
+  --case c4_64=outputs/qwen3_0p6b_robust_lcb_vs_mean_ppl_c4_64_summary.json=outputs/qwen3_0p6b_robust_lcb_vs_mean_gpu_guard_c4_64.json \
+  --out-json outputs/qwen3_0p6b_robust_lcb_quality_gate_2026_06_07.json \
+  --out-md outputs/QWEN3_0P6B_ROBUST_LCB_QUALITY_GATE_2026_06_07.md
+```
+
+Current result: robust-LCB wins 2/2 versus uniform INT4, wins 0/2 versus mean
+consensus, has mean PPL margin `+5.6188` versus uniform and `-2.8834` versus
+mean consensus, and stays below the 90% guard with max VRAM ratio `0.7032`.
+
+Valid claim:
+
+- robust-LCB has guarded downstream PPL evidence that it is better than uniform
+  INT4 on these two Qwen3-0.6B slices.
+
+Invalid claim:
+
+- robust-LCB is superior to mean consensus, SOTA, or quality-preserving across
+  broader tasks.
 
 ## Triton Mixed-GEMM Gate
 

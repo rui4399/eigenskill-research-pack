@@ -1,0 +1,65 @@
+{
+  "date": "2026-06-06T16:28:55+00:00",
+  "passed": true,
+  "summary": {
+    "case_count": 2,
+    "target_config": "wikitext_c4_robust_lcb",
+    "uniform_config": "uniform_int4",
+    "mean_config": "wikitext_c4_mean_consensus",
+    "target_wins_vs_uniform": 2,
+    "target_wins_vs_mean": 0,
+    "max_guard_vram_ratio": 0.7032265979634401,
+    "mean_target_margin_vs_uniform": 5.618847049703984,
+    "mean_target_margin_vs_mean": -2.88340221806034
+  },
+  "cases": [
+    {
+      "label": "wikitext2_64_len96",
+      "ppl_path": "outputs\\qwen3_0p6b_robust_lcb_vs_mean_ppl_wikitext2_64_len96_summary.json",
+      "guard_path": "outputs\\qwen3_0p6b_robust_lcb_vs_mean_gpu_guard_wikitext2_64_len96.json",
+      "model": "Qwen/Qwen3-0.6B",
+      "prompt_count": 64,
+      "max_length": 96,
+      "fp16_ppl": 33.98650563871633,
+      "uniform_ppl": 54.654160803363276,
+      "mean_ppl": 45.65585408343952,
+      "target_ppl": 49.22233581756269,
+      "target_margin_vs_uniform": 5.4318249858005885,
+      "target_margin_vs_mean": -3.5664817341231654,
+      "target_beats_uniform": true,
+      "target_beats_mean": false,
+      "guard": {
+        "returncode": 0,
+        "killed_by_guard": false,
+        "killed_by_timeout": false,
+        "max_memory_used_ratio": 0.7032265979634401,
+        "max_utilization_gpu_pct": 48
+      }
+    },
+    {
+      "label": "c4_64",
+      "ppl_path": "outputs\\qwen3_0p6b_robust_lcb_vs_mean_ppl_c4_64_summary.json",
+      "guard_path": "outputs\\qwen3_0p6b_robust_lcb_vs_mean_gpu_guard_c4_64.json",
+      "model": "Qwen/Qwen3-0.6B",
+      "prompt_count": 64,
+      "max_length": 128,
+      "fp16_ppl": 36.138003190515846,
+      "uniform_ppl": 52.93515957849015,
+      "mean_ppl": 44.92896776288526,
+      "target_ppl": 47.12929046488277,
+      "target_margin_vs_uniform": 5.805869113607379,
+      "target_margin_vs_mean": -2.2003227019975142,
+      "target_beats_uniform": true,
+      "target_beats_mean": false,
+      "guard": {
+        "returncode": 0,
+        "killed_by_guard": false,
+        "killed_by_timeout": false,
+        "max_memory_used_ratio": 0.6978284873021715,
+        "max_utilization_gpu_pct": 55
+      }
+    }
+  ],
+  "failures": [],
+  "claim_boundary": "Valid claim: on the measured guarded Qwen3-0.6B fake-quant PPL slices, robust-LCB improves over uniform INT4 and its comparison against mean consensus is explicitly reported. Invalid claim: this proves robust-LCB is the best allocation policy or establishes SOTA quantization quality."
+}

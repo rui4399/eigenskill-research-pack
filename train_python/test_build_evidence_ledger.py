@@ -43,6 +43,22 @@ class BuildEvidenceLedgerTests(unittest.TestCase):
             self.assertEqual(result["failed_count"], 1)
             self.assertEqual(result["failures"][0]["failures"], ["boom"])
 
+    def test_quality_boundary_metrics_are_reported(self) -> None:
+        metrics = ledger.metric_parts(
+            {
+                "case_count": 2,
+                "target_wins_vs_uniform": 2,
+                "target_wins_vs_mean": 0,
+                "mean_target_margin_vs_uniform": 5.61,
+                "mean_target_margin_vs_mean": -2.88,
+            }
+        )
+        joined = "; ".join(metrics)
+        self.assertIn("wins/uniform 2", joined)
+        self.assertIn("wins/mean 0", joined)
+        self.assertIn("margin vs uniform 5.6100", joined)
+        self.assertIn("margin vs mean -2.8800", joined)
+
     def test_parse_gate_spec_requires_label(self) -> None:
         label, path = ledger.parse_gate_spec("foo=bar.json")
         self.assertEqual(label, "foo")
