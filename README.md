@@ -128,6 +128,9 @@ sweep:
 `outputs/real_system_packer_2026-06-05/TRITON_QWEN_SHAPE_FAMILY_GATE_2026_06_06.md`.
 The aggregate table is in
 `outputs/real_system_packer_2026-06-05/TRITON_QWEN_SHAPE_FAMILY_2026_06_06.md`.
+The deploy-planning selector chooses one measured block config per
+shape/batch group:
+`outputs/real_system_packer_2026-06-05/TRITON_QWEN_SHAPE_KERNEL_CONFIG_SELECTOR_2026_06_06.md`.
 Gate policy and claim boundaries are in `docs/SYSTEM_EVIDENCE_GATES.md`.
 
 End-to-end smoke metrics are tracked separately from kernel evidence:
@@ -342,6 +345,19 @@ python train_python/gate_triton_tuning.py \
   --min-rowwise-wins 70 \
   --max-rel-l2 0.20 \
   --max-vram-ratio 0.90
+
+python train_python/select_triton_kernel_configs.py \
+  --input outputs/real_system_packer_2026-06-05/gpu_tuning_shape_1024x1024_2026_06_06/tuning_results.jsonl \
+  --input outputs/real_system_packer_2026-06-05/gpu_tuning_shape_2048x1024_2026_06_06/tuning_results.jsonl \
+  --input outputs/real_system_packer_2026-06-05/gpu_tuning_shape_3072x1024_2026_06_06/tuning_results.jsonl \
+  --input outputs/real_system_packer_2026-06-05/gpu_tuning_shape_1024x3072_2026_06_06/tuning_results.jsonl \
+  --out-json outputs/real_system_packer_2026-06-05/triton_qwen_shape_kernel_config_selector_2026_06_06.json \
+  --out-md outputs/real_system_packer_2026-06-05/TRITON_QWEN_SHAPE_KERNEL_CONFIG_SELECTOR_2026_06_06.md \
+  --max-rel-l2 0.20 \
+  --max-vram-ratio 0.90 \
+  --min-valid-groups 8 \
+  --min-fp16-winning-groups 5 \
+  --min-best-fp16-speedup 2.00
 ```
 
 ## Reproduce: End-to-End Metric Summary

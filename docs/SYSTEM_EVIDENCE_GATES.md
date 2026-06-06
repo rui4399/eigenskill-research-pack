@@ -61,3 +61,29 @@ kernel configurations under the configured VRAM guard.
 
 It does not support claims about end-to-end LLM speedup, mobile latency, Tensor
 Core production readiness, or quantization SOTA.
+
+## Triton Kernel Config Selector
+
+`train_python/select_triton_kernel_configs.py` converts the measured tuning
+family into one deterministic config per shape/batch/high_every group. It is a
+deployment-planning artifact for the prototype runtime.
+
+Current selector gate:
+
+```bash
+python train_python/select_triton_kernel_configs.py \
+  --input outputs/real_system_packer_2026-06-05/gpu_tuning_shape_1024x1024_2026_06_06/tuning_results.jsonl \
+  --input outputs/real_system_packer_2026-06-05/gpu_tuning_shape_2048x1024_2026_06_06/tuning_results.jsonl \
+  --input outputs/real_system_packer_2026-06-05/gpu_tuning_shape_3072x1024_2026_06_06/tuning_results.jsonl \
+  --input outputs/real_system_packer_2026-06-05/gpu_tuning_shape_1024x3072_2026_06_06/tuning_results.jsonl \
+  --out-json outputs/real_system_packer_2026-06-05/triton_qwen_shape_kernel_config_selector_2026_06_06.json \
+  --out-md outputs/real_system_packer_2026-06-05/TRITON_QWEN_SHAPE_KERNEL_CONFIG_SELECTOR_2026_06_06.md \
+  --max-rel-l2 0.20 \
+  --max-vram-ratio 0.90 \
+  --min-valid-groups 8 \
+  --min-fp16-winning-groups 5 \
+  --min-best-fp16-speedup 2.00
+```
+
+The current selector passes with 8 valid groups, 6 FP16-winning groups, 7
+row-wise-winning groups, and max selected grouped/FP16 speedup 2.7647x.
