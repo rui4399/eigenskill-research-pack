@@ -413,8 +413,9 @@ Valid claim:
 
 Invalid claim:
 
-- a dashboard row marked `missing`, `partial`, `package_only`,
-  `evidence_without_package_audit`, or `partial_without_package_audit` supports
+- a dashboard row marked `missing`, `partial`, `proxy_only`,
+  `package_only`, `evidence_without_package_audit`,
+  `partial_without_package_audit`, or `proxy_without_package_audit` supports
   paper-facing competitiveness.
 
 ## Calibration Instability Benchmark Gate

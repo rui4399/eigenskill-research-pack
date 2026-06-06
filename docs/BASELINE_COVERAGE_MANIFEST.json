@@ -57,51 +57,66 @@
       "claim_boundary": "Defines the measured problem setting; not a quality-retention proof by itself."
     },
     {
-      "id": "awq_or_gptq",
+      "id": "official_awq_gptq",
       "family": "external_ptq",
       "priority": "high",
       "paper_blocker": true,
-      "description": "At least one public PTQ family baseline or clearly bounded AWQ/GPTQ-style proxy.",
+      "description": "Faithful official AWQ/GPTQ-family PTQ baseline under matched calibration and evaluation.",
       "required_evidence_globs": [
-        "outputs/**/*awq*summary.json",
-        "outputs/**/*gptq*summary.json"
+        "outputs/**/*official*awq*summary.json",
+        "outputs/**/*official*gptq*summary.json",
+        "outputs/**/*auto_gptq*official*summary.json",
+        "outputs/**/*gptqmodel*official*summary.json"
+      ],
+      "proxy_evidence_globs": [
+        "outputs/**/*awq_gptq_proxy*summary.json"
       ],
       "required_packages": [
         "awq",
         "auto_gptq",
-        "gptqmodel",
-        "optimum"
+        "gptqmodel"
       ],
       "package_mode": "any",
-      "claim_boundary": "AWQ/GPTQ-style proxy coverage plus an available external PTQ ecosystem package is only related-family evidence; faithful official AWQ/GPTQ competitiveness still requires matched public runs."
+      "claim_boundary": "Current AWQ/GPTQ-style proxy artifacts are useful related-family diagnostics, but they do not cover faithful official AWQ/GPTQ baseline claims."
     },
     {
-      "id": "rotation_family",
+      "id": "official_rotation_family",
       "family": "external_rotation",
       "priority": "high",
       "paper_blocker": true,
-      "description": "Rotation/outlier mitigation baseline family such as QuaRot or SpinQuant.",
+      "description": "Faithful rotation/outlier mitigation baseline family such as QuaRot or SpinQuant.",
       "required_evidence_globs": [
-        "outputs/**/*quarot*summary.json",
-        "outputs/**/*spinquant*summary.json",
-        "outputs/**/*rotation*baseline*summary.json"
+        "outputs/**/*official*quarot*summary.json",
+        "outputs/**/*official*spinquant*summary.json",
+        "outputs/**/*quarot*faithful*summary.json",
+        "outputs/**/*spinquant*faithful*summary.json"
+      ],
+      "proxy_evidence_globs": [
+        "outputs/**/*rotation*baseline*summary.json",
+        "outputs/**/*quarot_spinquant_rotation*summary.json"
       ],
       "required_packages": [],
-      "claim_boundary": "QuaRot/SpinQuant-style proxy coverage is acceptable for related-family coverage; faithful official rotation implementations and activation/KV quality claims still require stronger evidence."
+      "claim_boundary": "Current rotation-family proxy artifacts are useful related-family diagnostics, but they do not cover faithful QuaRot/SpinQuant implementation or activation/KV quality claims."
     },
     {
-      "id": "allocation_family",
+      "id": "official_allocation_family",
       "family": "external_allocation",
       "priority": "high",
       "paper_blocker": true,
-      "description": "Recent mixed-precision allocation comparator such as Q-Palette, IMPQ, or WINDQuant.",
+      "description": "Faithful recent mixed-precision allocation comparator such as Q-Palette, IMPQ, or WINDQuant.",
       "required_evidence_globs": [
-        "outputs/**/*q_palette*summary.json",
-        "outputs/**/*impq*summary.json",
-        "outputs/**/*windquant*summary.json"
+        "outputs/**/*official*q_palette*summary.json",
+        "outputs/**/*official*impq*summary.json",
+        "outputs/**/*official*windquant*summary.json",
+        "outputs/**/*q_palette*faithful*summary.json",
+        "outputs/**/*impq*faithful*summary.json",
+        "outputs/**/*windquant*faithful*summary.json"
+      ],
+      "proxy_evidence_globs": [
+        "outputs/**/*q_palette_style*summary.json"
       ],
       "required_packages": [],
-      "claim_boundary": "Q-Palette-style proxy comparator is covered; faithful official Q-Palette/IMPQ/WINDQuant reproductions are still future work."
+      "claim_boundary": "Current Q-Palette-style proxy artifacts are useful related-family diagnostics, but they do not cover faithful Q-Palette/IMPQ/WINDQuant reproduction claims."
     },
     {
       "id": "public_task_schema_smoke",

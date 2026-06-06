@@ -60,7 +60,8 @@ Supported:
   random mixed-precision allocations on the committed short fake-quant slices;
 - current packed artifacts and runtime probes are machine-checkable through
   gates;
-- missing baselines and hardware evidence are explicitly tracked.
+- missing official baselines and hardware evidence are explicitly tracked;
+  proxy artifacts are not counted as faithful official baseline completion.
 
 Not supported yet:
 

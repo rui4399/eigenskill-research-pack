@@ -1,6 +1,6 @@
 # Evidence Ledger
 
-Date: `2026-06-06T20:09:36+00:00`
+Date: `2026-06-06T20:16:10+00:00`
 Status: **PASS**
 Gates: `22 / 22` passed
 Categories: `allocation comparator, artifact integrity, c++ runtime, calibration robustness, capability retention, decode integration, kernel, paper alignment, ptq comparator, qkv replacement, quality, repo hygiene, rotation comparator, runtime wiring, selected-row, task retention`

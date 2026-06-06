@@ -332,7 +332,8 @@ benchmarks, and real packed inference measurements.
 1. The main quality evidence is short-slice fake-quant PPL, not packed-runtime
    quality.
 2. Official GPTQ, AWQ, SmoothQuant, QuaRot, and SpinQuant baselines are not yet
-   faithfully reproduced.
+   faithfully reproduced. The baseline dashboard now separates proxy evidence
+   from faithful official baseline coverage.
 3. Public task evidence is limited local subset coverage, not leaderboard-scale
    capability retention or fused quantized retention.
 4. System evidence is prototype/module-level; no Redmi K80 Pro or board-level

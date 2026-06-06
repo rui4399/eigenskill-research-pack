@@ -69,7 +69,9 @@ Invalid claim:
 The following remain explicit non-claims:
 
 - official GPTQ/AWQ/SmoothQuant/QuaRot/SpinQuant baselines are not faithfully
-  reproduced;
+  reproduced; current AWQ/GPTQ, rotation, and allocation artifacts are proxy
+  diagnostics, and the baseline dashboard keeps them separate from official
+  coverage;
 - no Redmi K80 Pro or board-level TTFT, tokens/s, energy, thermal, or physical
   memory evidence is complete;
 - no production Tensor Core or mobile LLM runtime is claimed;

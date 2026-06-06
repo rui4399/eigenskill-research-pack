@@ -101,6 +101,34 @@ class BaselineGapDashboardTests(unittest.TestCase):
         self.assertFalse(dashboard.packages_ok(["torch", "triton"], available, "all"))
         self.assertTrue(dashboard.packages_ok(["torch", "triton"], available, "any"))
 
+    def test_proxy_evidence_does_not_cover_official_baseline(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            output_dir = root / "outputs"
+            output_dir.mkdir()
+            (output_dir / "awq_gptq_proxy_summary.json").write_text("{}", encoding="utf-8")
+            manifest = {
+                "schema_version": 1,
+                "items": [
+                    {
+                        "id": "official_awq_gptq",
+                        "family": "external_ptq",
+                        "priority": "high",
+                        "paper_blocker": True,
+                        "required_evidence_globs": ["outputs/*official_awq*.json", "outputs/*official_gptq*.json"],
+                        "proxy_evidence_globs": ["outputs/*awq_gptq_proxy*.json"],
+                        "required_packages": ["awq", "auto_gptq"],
+                        "package_mode": "any",
+                    }
+                ],
+            }
+            result = dashboard.evaluate_manifest(root, manifest, {"packages": []})
+
+        self.assertEqual(result["items"][0]["status"], "proxy_without_package_audit")
+        self.assertEqual(result["items"][0]["proxy_evidence_count"], 1)
+        self.assertFalse(result["passed"])
+        self.assertEqual(result["paper_blocker_missing"], ["official_awq_gptq"])
+
     def test_writes_markdown(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             path = Path(tmp) / "dashboard.md"
