@@ -418,6 +418,59 @@ Invalid claim:
   `partial_without_package_audit`, or `proxy_without_package_audit` supports
   paper-facing competitiveness.
 
+## Official AutoAWQ Smoke Probe
+
+`train_python/run_official_awq_smoke.py` is a minimal package-readiness probe.
+It exists to verify that AutoAWQ can execute, save local quantized artifacts,
+and run one short generation smoke under the GPU guard. It is intentionally not
+part of the 22-gate paper-facing ledger.
+
+Example WSL/GPU command:
+
+```bash
+python3 train_python/run_with_gpu_guard.py \
+  --max-memory-ratio 0.90 \
+  --max-start-memory-ratio 0.90 \
+  --min-disk-free-gb 8 \
+  --poll-seconds 2 \
+  --timeout-sec 1800 \
+  --out outputs/official_awq_smoke_qwen25_0p5b_gpu_guard_2026_06_07.json \
+  -- \
+  python3 train_python/run_official_awq_smoke.py \
+    --model Qwen/Qwen2.5-0.5B-Instruct \
+    --save-dir outputs/official_awq_smoke_2026_06_07/qwen25_0p5b_awq_model \
+    --out-json outputs/official_awq_smoke_qwen25_0p5b_summary_2026_06_07.json \
+    --out-md outputs/OFFICIAL_AWQ_SMOKE_QWEN25_0P5B_2026_06_07.md \
+    --max-calib-samples 4 \
+    --max-calib-seq-len 16 \
+    --max-chunk-memory-mib 256 \
+    --device-map cuda:0 \
+    --max-new-tokens 12
+```
+
+Gate command:
+
+```bash
+python train_python/gate_official_awq_smoke.py \
+  --summary-json outputs/official_awq_smoke_qwen25_0p5b_summary_2026_06_07.json \
+  --guard-json outputs/official_awq_smoke_qwen25_0p5b_gpu_guard_2026_06_07.json \
+  --out-json outputs/official_awq_smoke_gate_2026_06_07.json \
+  --out-md outputs/OFFICIAL_AWQ_SMOKE_GATE_2026_06_07.md
+```
+
+Current result: AutoAWQ 0.2.9, Qwen2.5-0.5B-Instruct, W4 group-128, six local
+artifact files, 469,809,733 artifact bytes, peak guard VRAM ratio `0.6153`.
+
+Valid claim:
+
+- AutoAWQ can run a minimal local quantization and generation smoke under the
+  configured guard.
+
+Invalid claim:
+
+- this is a matched AWQ/GPTQ baseline, a quality-retention comparison, a
+  leaderboard result, or production runtime evidence.
+
 ## Calibration Instability Benchmark Gate
 
 `train_python/build_calibration_instability_benchmark.py` aggregates multiple

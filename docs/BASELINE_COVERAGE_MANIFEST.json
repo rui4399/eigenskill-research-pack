@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "date": "2026-06-06",
+  "date": "2026-06-07",
   "purpose": "Track which related-work and reviewer-critical baselines have executable evidence in this repository.",
   "items": [
     {
@@ -57,27 +57,50 @@
       "claim_boundary": "Defines the measured problem setting; not a quality-retention proof by itself."
     },
     {
-      "id": "official_awq_gptq",
+      "id": "official_awq_smoke",
+      "family": "external_ptq_readiness",
+      "priority": "optional",
+      "paper_blocker": false,
+      "description": "Minimal AutoAWQ package execution smoke that produces local quantized artifacts under GPU guard.",
+      "required_evidence_globs": [
+        "outputs/**/*official*awq*smoke*summary*.json",
+        "outputs/**/*official*awq*smoke*gate*.json"
+      ],
+      "required_packages": [
+        "autoawq"
+      ],
+      "package_mode": "any",
+      "claim_boundary": "Readiness probe only: it may show that AutoAWQ can run locally, but it is not a matched AWQ baseline or quality-retention comparison."
+    },
+    {
+      "id": "official_awq_gptq_competitive",
       "family": "external_ptq",
       "priority": "high",
       "paper_blocker": true,
-      "description": "Faithful official AWQ/GPTQ-family PTQ baseline under matched calibration and evaluation.",
+      "description": "Faithful official AWQ/GPTQ-family PTQ baseline under matched calibration, budget, and evaluation.",
       "required_evidence_globs": [
-        "outputs/**/*official*awq*summary.json",
-        "outputs/**/*official*gptq*summary.json",
-        "outputs/**/*auto_gptq*official*summary.json",
-        "outputs/**/*gptqmodel*official*summary.json"
+        "outputs/**/*official*awq*matched*summary.json",
+        "outputs/**/*official*awq*competitive*summary.json",
+        "outputs/**/*official*gptq*matched*summary.json",
+        "outputs/**/*official*gptq*competitive*summary.json",
+        "outputs/**/*auto_gptq*official*matched*summary.json",
+        "outputs/**/*gptqmodel*official*matched*summary.json"
+      ],
+      "partial_evidence_globs": [
+        "outputs/**/*official*awq*smoke*summary*.json",
+        "outputs/**/*official*awq*smoke*gate*.json"
       ],
       "proxy_evidence_globs": [
         "outputs/**/*awq_gptq_proxy*summary.json"
       ],
       "required_packages": [
+        "autoawq",
         "awq",
         "auto_gptq",
         "gptqmodel"
       ],
       "package_mode": "any",
-      "claim_boundary": "Current AWQ/GPTQ-style proxy artifacts are useful related-family diagnostics, but they do not cover faithful official AWQ/GPTQ baseline claims."
+      "claim_boundary": "Smoke and proxy artifacts are useful readiness diagnostics, but they do not cover faithful official AWQ/GPTQ baseline claims without matched calibration, budget, PPL, and task comparisons."
     },
     {
       "id": "official_rotation_family",

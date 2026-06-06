@@ -11,27 +11,36 @@ from pathlib import Path
 
 
 PACKAGES = [
-    "auto_gptq",
-    "awq",
-    "llmcompressor",
-    "optimum",
-    "bitsandbytes",
-    "gptqmodel",
-    "transformers",
-    "torch",
-    "triton",
+    {"name": "auto_gptq"},
+    {"name": "autoawq", "import_name": "awq", "distribution_name": "autoawq"},
+    {"name": "awq"},
+    {"name": "llmcompressor"},
+    {"name": "optimum"},
+    {"name": "bitsandbytes"},
+    {"name": "gptqmodel"},
+    {"name": "transformers"},
+    {"name": "torch"},
+    {"name": "triton"},
 ]
 
 
-def package_status(name: str) -> dict:
-    found = importlib.util.find_spec(name) is not None
+def package_status(name: str, import_name: str | None = None, distribution_name: str | None = None) -> dict:
+    import_name = import_name or name
+    distribution_name = distribution_name or name
+    found = importlib.util.find_spec(import_name) is not None
     version = ""
     if found:
         try:
-            version = importlib.metadata.version(name)
+            version = importlib.metadata.version(distribution_name)
         except importlib.metadata.PackageNotFoundError:
             version = ""
-    return {"name": name, "available": found, "version": version}
+    return {
+        "name": name,
+        "import_name": import_name,
+        "distribution_name": distribution_name,
+        "available": found,
+        "version": version,
+    }
 
 
 def run_command(command: list[str]) -> dict:
@@ -130,7 +139,7 @@ def main() -> None:
             "version": sys.version.replace("\n", " "),
             "platform": platform.platform(),
         },
-        "packages": [package_status(name) for name in PACKAGES],
+        "packages": [package_status(**spec) for spec in PACKAGES],
         "torch": torch_status(),
         "nvidia_smi": run_command(
             [

@@ -114,14 +114,14 @@ def classify_item(
         return "covered" if task_threshold_ok else "partial"
     if matches and not package_ok:
         return "evidence_without_package_audit"
-    if proxy_matches and package_ok:
-        return "proxy_only"
-    if proxy_matches and not package_ok:
-        return "proxy_without_package_audit"
     if partial_matches and package_ok:
         return "partial"
     if partial_matches and not package_ok:
         return "partial_without_package_audit"
+    if proxy_matches and package_ok:
+        return "proxy_only"
+    if proxy_matches and not package_ok:
+        return "proxy_without_package_audit"
     if not matches and package_ok and item.get("required_packages"):
         return "package_only"
     return "missing"

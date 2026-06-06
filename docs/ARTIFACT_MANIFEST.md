@@ -35,6 +35,15 @@ paper claims.
 | System gate command runbook | `docs/SYSTEM_EVIDENCE_RUNBOOK.md` |
 | Current ICLR/CCF-A style draft | `paper_drafts/eigenskill_q_iclr_ccfa_draft_en_2026_06_07.md` |
 
+## Non-Ledger Readiness Probes
+
+These artifacts are useful for environment readiness and reviewer-risk
+tracking, but they are not counted in the 22-gate paper-facing ledger.
+
+| Purpose | Artifact | Boundary |
+|---|---|---|
+| Minimal AutoAWQ package smoke | `outputs/OFFICIAL_AWQ_SMOKE_GATE_2026_06_07.md` | Shows AutoAWQ can quantize and save a tiny local Qwen2.5-0.5B artifact under guard; not a matched AWQ baseline or quality-retention result. |
+
 ## Supporting System Artifacts
 
 These support the systems-prototype side. They should be cited only with the

@@ -1,11 +1,11 @@
 {
-  "date": "2026-06-06T20:16:10+00:00",
+  "date": "2026-06-06T20:45:23+00:00",
   "schema_version": 1,
   "passed": false,
-  "item_count": 11,
+  "item_count": 12,
   "status_counts": {
-    "covered": 7,
-    "proxy_without_package_audit": 1,
+    "covered": 8,
+    "partial": 1,
     "proxy_only": 2,
     "missing": 1
   },
@@ -16,8 +16,11 @@
     "calibration_robustness": {
       "covered": 1
     },
+    "external_ptq_readiness": {
+      "covered": 1
+    },
     "external_ptq": {
-      "proxy_without_package_audit": 1
+      "partial": 1
     },
     "external_rotation": {
       "proxy_only": 1
@@ -36,7 +39,7 @@
     }
   },
   "paper_blocker_missing": [
-    "official_awq_gptq",
+    "official_awq_gptq_competitive",
     "official_rotation_family",
     "official_allocation_family",
     "mobile_redmi_k80_pro"
@@ -177,34 +180,82 @@
       "package_summary": []
     },
     {
-      "id": "official_awq_gptq",
+      "id": "official_awq_smoke",
+      "family": "external_ptq_readiness",
+      "priority": "optional",
+      "paper_blocker": false,
+      "description": "Minimal AutoAWQ package execution smoke that produces local quantized artifacts under GPU guard.",
+      "required_evidence_globs": [
+        "outputs/**/*official*awq*smoke*summary*.json",
+        "outputs/**/*official*awq*smoke*gate*.json"
+      ],
+      "required_packages": [
+        "autoawq"
+      ],
+      "package_mode": "any",
+      "claim_boundary": "Readiness probe only: it may show that AutoAWQ can run locally, but it is not a matched AWQ baseline or quality-retention comparison.",
+      "status": "covered",
+      "evidence_count": 2,
+      "evidence_task_count": 0,
+      "evidence_matches": [
+        "outputs/official_awq_smoke_gate_2026_06_07.json",
+        "outputs/official_awq_smoke_qwen25_0p5b_summary_2026_06_07.json"
+      ],
+      "evidence_truncated": false,
+      "partial_evidence_count": 0,
+      "partial_evidence_matches": [],
+      "partial_evidence_truncated": false,
+      "proxy_evidence_count": 0,
+      "proxy_evidence_matches": [],
+      "proxy_evidence_truncated": false,
+      "package_ok": true,
+      "package_summary": [
+        {
+          "name": "autoawq",
+          "available": true,
+          "version": "0.2.9"
+        }
+      ]
+    },
+    {
+      "id": "official_awq_gptq_competitive",
       "family": "external_ptq",
       "priority": "high",
       "paper_blocker": true,
-      "description": "Faithful official AWQ/GPTQ-family PTQ baseline under matched calibration and evaluation.",
+      "description": "Faithful official AWQ/GPTQ-family PTQ baseline under matched calibration, budget, and evaluation.",
       "required_evidence_globs": [
-        "outputs/**/*official*awq*summary.json",
-        "outputs/**/*official*gptq*summary.json",
-        "outputs/**/*auto_gptq*official*summary.json",
-        "outputs/**/*gptqmodel*official*summary.json"
+        "outputs/**/*official*awq*matched*summary.json",
+        "outputs/**/*official*awq*competitive*summary.json",
+        "outputs/**/*official*gptq*matched*summary.json",
+        "outputs/**/*official*gptq*competitive*summary.json",
+        "outputs/**/*auto_gptq*official*matched*summary.json",
+        "outputs/**/*gptqmodel*official*matched*summary.json"
+      ],
+      "partial_evidence_globs": [
+        "outputs/**/*official*awq*smoke*summary*.json",
+        "outputs/**/*official*awq*smoke*gate*.json"
       ],
       "proxy_evidence_globs": [
         "outputs/**/*awq_gptq_proxy*summary.json"
       ],
       "required_packages": [
+        "autoawq",
         "awq",
         "auto_gptq",
         "gptqmodel"
       ],
       "package_mode": "any",
-      "claim_boundary": "Current AWQ/GPTQ-style proxy artifacts are useful related-family diagnostics, but they do not cover faithful official AWQ/GPTQ baseline claims.",
-      "status": "proxy_without_package_audit",
+      "claim_boundary": "Smoke and proxy artifacts are useful readiness diagnostics, but they do not cover faithful official AWQ/GPTQ baseline claims without matched calibration, budget, PPL, and task comparisons.",
+      "status": "partial",
       "evidence_count": 0,
       "evidence_task_count": 0,
       "evidence_matches": [],
       "evidence_truncated": false,
-      "partial_evidence_count": 0,
-      "partial_evidence_matches": [],
+      "partial_evidence_count": 2,
+      "partial_evidence_matches": [
+        "outputs/official_awq_smoke_gate_2026_06_07.json",
+        "outputs/official_awq_smoke_qwen25_0p5b_summary_2026_06_07.json"
+      ],
       "partial_evidence_truncated": false,
       "proxy_evidence_count": 2,
       "proxy_evidence_matches": [
@@ -212,11 +263,16 @@
         "outputs/awq_gptq_proxy_qwen3_0p6b_wikitext2_group128_summary.json"
       ],
       "proxy_evidence_truncated": false,
-      "package_ok": false,
+      "package_ok": true,
       "package_summary": [
         {
+          "name": "autoawq",
+          "available": true,
+          "version": "0.2.9"
+        },
+        {
           "name": "awq",
-          "available": false,
+          "available": true,
           "version": ""
         },
         {

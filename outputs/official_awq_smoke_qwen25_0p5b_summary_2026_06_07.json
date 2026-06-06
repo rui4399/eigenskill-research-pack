@@ -1,0 +1,60 @@
+{
+  "date": "2026-06-06T20:42:27+00:00",
+  "passed": true,
+  "model": "Qwen/Qwen2.5-0.5B-Instruct",
+  "package": {
+    "name": "autoawq",
+    "version": "0.2.9"
+  },
+  "quant_config": {
+    "zero_point": true,
+    "q_group_size": 128,
+    "w_bit": 4,
+    "version": "GEMM"
+  },
+  "calibration": {
+    "sample_count": 4,
+    "max_calib_seq_len": 16,
+    "plan": {
+      "accepted_sample_count": 3,
+      "skipped_sample_count": 1,
+      "accepted_token_lengths": [
+        14,
+        16,
+        14
+      ],
+      "skipped_token_lengths": [
+        19
+      ],
+      "total_accepted_tokens": 44,
+      "max_seq_len": 16,
+      "expected_awq_blocks": 2,
+      "ok": true
+    }
+  },
+  "artifact": {
+    "path": "outputs/official_awq_smoke_2026_06_07/qwen25_0p5b_awq_model",
+    "file_count": 6,
+    "total_bytes": 469809733,
+    "suffix_counts": {
+      ".jinja": 1,
+      ".json": 4,
+      ".safetensors": 1
+    },
+    "sample_files": [
+      "chat_template.jinja",
+      "config.json",
+      "generation_config.json",
+      "model.safetensors",
+      "tokenizer.json",
+      "tokenizer_config.json"
+    ]
+  },
+  "generation_smoke": {
+    "ok": true,
+    "prompt": "Give one short reason calibration robustness matters.",
+    "text": "Give one short reason calibration robustness matters. Calibration is a critical aspect of the measurement process because it involves"
+  },
+  "error": "",
+  "elapsed_seconds": 85.51401853561401
+}

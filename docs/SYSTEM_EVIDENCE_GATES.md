@@ -64,14 +64,23 @@ Invalid claim:
 | `fused_qkv_quality` | QKV quality smoke | `outputs/real_system_packer_2026-06-05/FUSED_QKV_PROMPT_SUITE_GATE_2026_06_06.md` | A conservative QKV8 repack candidate preserves a six-prompt suite under a quality gate. |
 | `chat_task_stress` | deterministic task retention | `outputs/real_system_packer_2026-06-05/CHAT_TASK_STRESS_V3_84_GATE_2026_06_06.md` | The selected K-only candidate survives an 84-task deterministic stress suite with one allowed regression. |
 
+## Non-Ledger Readiness Probes
+
+These probes are tracked because they reduce environment uncertainty, but they
+are not counted in the current 22-gate paper-facing ledger.
+
+| probe | category | primary artifact | boundary |
+|---|---|---|---|
+| `official_awq_smoke` | external PTQ readiness | `outputs/OFFICIAL_AWQ_SMOKE_GATE_2026_06_07.md` | AutoAWQ 0.2.9 can quantize and save a tiny Qwen2.5-0.5B artifact under guard; this is not a matched AWQ/GPTQ baseline or quality-retention result. |
+
 ## Readiness Gaps
 
 The following remain explicit non-claims:
 
-- official GPTQ/AWQ/SmoothQuant/QuaRot/SpinQuant baselines are not faithfully
-  reproduced; current AWQ/GPTQ, rotation, and allocation artifacts are proxy
-  diagnostics, and the baseline dashboard keeps them separate from official
-  coverage;
+- official matched GPTQ/AWQ/SmoothQuant/QuaRot/SpinQuant baselines are not
+  faithfully reproduced; current AWQ/GPTQ smoke/proxy, rotation proxy, and
+  allocation proxy artifacts are diagnostics, and the baseline dashboard keeps
+  them separate from official competitive coverage;
 - no Redmi K80 Pro or board-level TTFT, tokens/s, energy, thermal, or physical
   memory evidence is complete;
 - no production Tensor Core or mobile LLM runtime is claimed;

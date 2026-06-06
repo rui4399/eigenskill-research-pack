@@ -1,76 +1,68 @@
 # EigenSkill-Q
 
-EigenSkill-Q is a reproducible research artifact for **calibration split
-instability in mixed-precision LLM quantization**. It studies a narrow problem:
+EigenSkill-Q is a reproducible artifact for one narrow research question:
 
 ```text
-Small calibration splits can give inconsistent module-sensitivity rankings.
-Can a cross-split consensus policy reduce worst-split risk under the same
-mixed-precision bit budget?
+When mixed-precision LLM quantization uses very small calibration splits,
+how unstable are module-sensitivity rankings, and can cross-split consensus
+reduce worst-split allocation risk under the same bit budget?
 ```
 
-The repository also contains packed-system prototypes, but they are kept behind
-explicit evidence gates. This is not presented as a production quantizer, a
-state-of-the-art PTQ implementation, or a completed mobile/edge runtime.
+This repository is intentionally **not** presented as a new production
+quantizer, a SOTA PTQ method, or a completed mobile runtime. The public tree is
+organized around evidence boundaries so that a reviewer can tell which claims
+are supported, which are proxies, and which are still blockers.
 
-## Current Evidence
+## Status Snapshot
 
-The current paper-facing evidence ledger passes **22 / 22 gates**:
+| area | current state | allowed reading |
+|---|---|---|
+| Calibration instability | measured on small public model/dataset slices | problem evidence |
+| Consensus allocation | passes committed short fake-quant stress gates | robustness diagnostic |
+| Public task coverage | guarded local subset ladder, not leaderboard-scale | capability smoke |
+| Packed runtime | gated ESMP/Triton/C++ prototypes | module-level system evidence |
+| Official PTQ baselines | AutoAWQ smoke passes; faithful matched AWQ/GPTQ baselines are still blockers | readiness only |
+| Mobile/Redmi evidence | no real TTFT/tokens/s/memory logs yet | no deployment claim |
+
+Current paper-facing ledger:
 
 ```text
 outputs/real_system_packer_2026-06-05/EVIDENCE_LEDGER_2026_06_06.md
 ```
 
-Read the repository in this order:
+Current ledger status: **22 / 22 gates pass**. This means the committed gate
+artifacts are internally consistent; it does **not** mean the paper is ready for
+SOTA or deployment claims.
 
-1. `docs/PAPER_CLAIM_MATRIX.md` for allowed and rejected claims.
+## Read First
+
+1. `docs/PAPER_CLAIM_MATRIX.md` defines allowed and rejected claims.
 2. `outputs/real_system_packer_2026-06-05/EVIDENCE_LEDGER_2026_06_06.md`
-   for the current gate set.
-3. `docs/ARTIFACT_MANIFEST.md` for the shortest artifact map.
-4. `docs/SYSTEM_EVIDENCE_GATES.md` for the short gate index.
-5. `paper_drafts/eigenskill_q_iclr_ccfa_draft_en_2026_06_07.md` only after
-   checking the evidence boundary.
+   lists every current gate.
+3. `outputs/BASELINE_GAP_DASHBOARD_2026_06_06.md` shows paper-blocking gaps
+   and separates AutoAWQ smoke from matched AWQ/GPTQ baselines.
+4. `docs/SYSTEM_EVIDENCE_GATES.md` is the short gate index.
+5. `docs/SYSTEM_EVIDENCE_RUNBOOK.md` contains the long reproduction commands.
 
-The strongest supported findings are:
+## Supported Claims
 
-| Finding | Current evidence | Boundary |
-|---|---:|---|
-| Calibration split rankings are unstable across small public model slices. | 3 / 3 measured cases unstable; mean score/cost Spearman `0.0713`; top-20 Jaccard `0.1022`. | Establishes the problem setting, not method superiority. |
-| Consensus-style target policies pass the committed fake-quant stress gate. | 11 / 11 wins vs uniform INT4, best random seed, and random mean; one-sided sign-test p `0.000488` vs best random. | Short-slice fake-quant PPL only. |
-| Consensus reduces worse-single-split risk on paired Qwen3 transfer slices. | 4 / 4 wins vs the worse single-split policy; 2 / 4 wins vs the best single-split policy; max best-single regret `0.3046` PPL. | Robustness boundary evidence, not an oracle claim. |
-| Bounded global-feedback swap search exposes interaction effects. | 3 search cases, 16 trials, 5 improved trials, and 5 locally-negative-but-globally-improved counterexamples; transfer max regret `0.0087` PPL. | Interaction-aware fake-quant diagnostic, not a production allocator. |
-| Public task coverage is guarded beyond schema smoke. | A two-model local Ollama ladder covers 200 public-task rows. Qwen2.5-abliterate-7B is the best current case with `39 / 100`; the weaker 4B case is retained at `4 / 100`; peak guard VRAM ratio `0.8865`. | Local subset evidence only, not leaderboard, monotonic scaling, or fused-retention evidence. |
-| Packed-system components are executable and gated. | ESMP package integrity, Triton shape-family, selector, selected-row, C++ runtime, fused-sidecar, and shallow QKV gates pass. | Prototype/module-level evidence, not end-to-end deployment. |
+- Small calibration splits can produce unstable module-sensitivity rankings in
+  the measured cases.
+- Consensus-style allocation can reduce several short-slice fake-quant risks
+  versus uniform INT4 and random budget-matched allocations.
+- Packed artifacts and runtime probes are executable through explicit gates.
+- Proxy comparators are separated from faithful official baselines in the gap
+  dashboard.
 
-Start here for exact claim boundaries:
+## Non-Claims
 
-```text
-docs/PAPER_CLAIM_MATRIX.md
-docs/SYSTEM_EVIDENCE_GATES.md
-docs/ARTIFACT_MANIFEST.md
-outputs/BASELINE_GAP_DASHBOARD_2026_06_06.md
-```
-
-## What This Repository Claims
-
-Supported:
-
-- small calibration splits can produce unstable sensitivity rankings;
-- cross-split consensus allocation can improve robustness over uniform and
-  random mixed-precision allocations on the committed short fake-quant slices;
-- current packed artifacts and runtime probes are machine-checkable through
-  gates;
-- missing official baselines and hardware evidence are explicitly tracked;
-  proxy artifacts are not counted as faithful official baseline completion.
-
-Not supported yet:
-
-- state-of-the-art quantization quality;
-- faithful official GPTQ/AWQ/SmoothQuant/QuaRot/SpinQuant reproduction;
-- real Redmi K80 Pro, board-level latency, energy, or memory evidence;
-- production Tensor Core or mobile LLM runtime readiness;
-- proof that spectral/eigen routing survives nonlinear Transformer blocks;
-- the old leaked v2 routing result as generalization evidence.
+- No SOTA quantization quality claim.
+- No faithful matched GPTQ/AWQ/SmoothQuant/QuaRot/SpinQuant comparison yet.
+- No Redmi K80 Pro, board-level latency, energy, thermal, or physical memory
+  evidence yet.
+- No production Tensor Core or mobile LLM runtime claim.
+- No proof that spectral/eigen routing survives nonlinear Transformer blocks.
+- No use of the old leaked v2 routing result as generalization evidence.
 
 ## Repository Layout
 

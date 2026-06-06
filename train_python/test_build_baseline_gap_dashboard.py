@@ -129,6 +129,60 @@ class BaselineGapDashboardTests(unittest.TestCase):
         self.assertFalse(result["passed"])
         self.assertEqual(result["paper_blocker_missing"], ["official_awq_gptq"])
 
+    def test_official_awq_smoke_does_not_cover_competitive_baseline(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            output_dir = root / "outputs"
+            output_dir.mkdir()
+            (output_dir / "official_awq_smoke_qwen25_0p5b_summary_2026_06_07.json").write_text(
+                "{}",
+                encoding="utf-8",
+            )
+            manifest = {
+                "schema_version": 1,
+                "items": [
+                    {
+                        "id": "official_awq_smoke",
+                        "family": "external_ptq_readiness",
+                        "priority": "optional",
+                        "paper_blocker": False,
+                        "required_evidence_globs": ["outputs/*official_awq_smoke*summary*.json"],
+                        "required_packages": ["autoawq"],
+                    },
+                    {
+                        "id": "official_awq_gptq_competitive",
+                        "family": "external_ptq",
+                        "priority": "high",
+                        "paper_blocker": True,
+                        "required_evidence_globs": ["outputs/*official_awq_matched*summary.json"],
+                        "partial_evidence_globs": ["outputs/*official_awq_smoke*summary*.json"],
+                        "required_packages": ["autoawq"],
+                    },
+                ],
+            }
+            result = dashboard.evaluate_manifest(
+                root,
+                manifest,
+                {"packages": [{"name": "autoawq", "available": True, "version": "0.2.9"}]},
+            )
+
+        statuses = {item["id"]: item["status"] for item in result["items"]}
+        self.assertEqual(statuses["official_awq_smoke"], "covered")
+        self.assertEqual(statuses["official_awq_gptq_competitive"], "partial")
+        self.assertFalse(result["passed"])
+        self.assertEqual(result["paper_blocker_missing"], ["official_awq_gptq_competitive"])
+
+    def test_partial_evidence_takes_precedence_over_proxy(self) -> None:
+        item = {"min_total_tasks": 0}
+        status = dashboard.classify_item(
+            item,
+            matches=[],
+            partial_matches=["outputs/official_awq_smoke_summary.json"],
+            proxy_matches=["outputs/awq_gptq_proxy_summary.json"],
+            package_ok=True,
+        )
+        self.assertEqual(status, "partial")
+
     def test_writes_markdown(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             path = Path(tmp) / "dashboard.md"
