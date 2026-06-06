@@ -1,6 +1,8 @@
 # EigenSkill-Q：面向受限推理的跨数据集一致性敏感度混合精度量化诊断
 
 > CCF 风格论文初稿，2026-06-05。本文按正式学术论文结构组织，写法参考经典系统/模型论文的“问题清晰化、方法简洁化、实验证据驱动”范式，但不复用其原文表述。当前稿件是技术报告级草案，尚未满足正式投稿所需的完整基线、硬件与统计显著性要求。
+>
+> 状态更新，2026-06-07：本中文稿保留为历史草稿。当前更接近投稿骨架的版本是 `paper_drafts/eigenskill_q_iclr_ccfa_draft_en_2026_06_07.md`，它已纳入 20-gate evidence ledger、calibration robustness stress、consensus transfer boundary 和 interaction-aware swap boundary。若两者不一致，以新版英文稿和 `docs/PAPER_CLAIM_MATRIX.md` 为准。
 
 ## 摘要
 
@@ -316,13 +318,16 @@ outputs/qwen3_0p6b_lowmem_consensus_random16_evidence_matrix.md
 outputs/qwen3_0p6b_lowmem_consensus_random16_random_seed_audit.md
 outputs/qwen3_0p6b_lowmem_consensus_random16_gpu_guard_summary.md
 outputs/qwen3_0p6b_wikitext2_c4_consensus_alloc_4to8_limit4_group128_report.md
-outputs/notion_ready_update_2026_06_05_qwen3_0p6b_consensus_random16.md
+outputs/INTERACTION_SWAP_BOUNDARY_GATE_2026_06_07.md
+outputs/real_system_packer_2026-06-05/EVIDENCE_LEDGER_2026_06_06.md
 docs/consensus-allocation-method.md
-docs/scope-and-claims.md
+docs/PAPER_CLAIM_MATRIX.md
 ```
 
-对应 Git commit：
+旧稿对应早期 Git commit：
 
 ```text
 f0cadb7adc0a660c4945ffb542b2fc5ea0f55fc9
 ```
+
+新版英文稿对应后续公开分支提交，详见 GitHub PR commit history。

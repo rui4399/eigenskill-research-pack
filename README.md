@@ -121,3 +121,9 @@ Consensus Sensitivity Allocation with Gated Packed-System Evidence
 This is narrower than the original EigenSkill vision, but it is reviewable:
 it defines a measurable instability problem, gives a conservative allocation
 response, and keeps system claims behind executable gates.
+
+Current paper draft:
+
+```text
+paper_drafts/eigenskill_q_iclr_ccfa_draft_en_2026_06_07.md
+```
