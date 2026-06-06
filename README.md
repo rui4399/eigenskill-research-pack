@@ -18,11 +18,13 @@ than uniform or random mixed-precision allocations under the same bit budget?
 ## Current Status
 
 The paper-facing evidence set is indexed by executable gates. The current
-ledger passes **18/18 gates**:
+ledger passes **19/19 gates**:
 
 - calibration split instability across Qwen3-0.6B, Qwen3-1.7B, and OLMo2-1B;
 - calibration-robustness stress evidence across 11 committed fake-quant PPL
   slices;
+- cross-split transfer boundary evidence for single-split versus consensus
+  policies;
 - consensus and robust-LCB allocation artifacts under a 4.5 average-bit budget;
 - guarded Qwen3-0.6B downstream PPL boundary evidence for robust-LCB;
 - Q-Palette, AWQ/GPTQ, and QuaRot/SpinQuant-style proxy comparator coverage;
@@ -119,6 +121,28 @@ Evidence:
 
 ```text
 outputs/CALIBRATION_ROBUSTNESS_STRESS_GATE_2026_06_07.md
+```
+
+### Cross-Split Transfer Boundary
+
+The transfer-boundary gate compares WikiText2-only, C4-only, and cross-split
+consensus policies on paired WikiText2/C4 evaluation summaries for Qwen3-0.6B
+and Qwen3-1.7B. This is intentionally a boundary result: consensus is not
+claimed to always beat the best single-split policy.
+
+```text
+cases:                         2
+paired slices:                 4
+wins vs worse single-split:    4 / 4
+wins vs best single-split:     2 / 4
+min margin vs worse single:    +0.8726 PPL
+max regret vs best single:     +0.3046 PPL
+```
+
+Evidence:
+
+```text
+outputs/CONSENSUS_TRANSFER_BOUNDARY_GATE_2026_06_07.md
 ```
 
 ### Robust-LCB Boundary Evidence
@@ -219,6 +243,7 @@ python train_python/build_evidence_ledger.py \
   --gate public_hygiene=outputs/real_system_packer_2026-06-05/public_repo_hygiene_gate_2026_06_06.json \
   --gate calibration_instability=outputs/calibration_instability_benchmark_2026_06_06.json \
   --gate calibration_robustness_stress=outputs/calibration_robustness_stress_gate_2026_06_07.json \
+  --gate consensus_transfer_boundary=outputs/consensus_transfer_boundary_gate_2026_06_07.json \
   --gate esmp_package=outputs/real_system_packer_2026-06-05/esmp_package_verify_qwen3_0p6b_limit8_2026_06_06.json \
   --gate triton_shape_family=outputs/real_system_packer_2026-06-05/triton_qwen_shape_family_gate_2026_06_06.json \
   --gate selector_runtime=outputs/real_system_packer_2026-06-05/selector_runtime_smoke_gate_2026_06_06.json \

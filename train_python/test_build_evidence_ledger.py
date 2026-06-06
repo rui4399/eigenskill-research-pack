@@ -82,6 +82,24 @@ class BuildEvidenceLedgerTests(unittest.TestCase):
         self.assertIn("sign p/best-random 0.00049", joined)
         self.assertIn("mean FP16 regret 4.1600", joined)
 
+    def test_transfer_boundary_metrics_are_reported(self) -> None:
+        metrics = ledger.metric_parts(
+            {
+                "case_count": 2,
+                "slice_count": 4,
+                "consensus_wins_vs_worst_single": 4,
+                "consensus_wins_vs_best_single": 2,
+                "min_margin_vs_worst_single": 0.87,
+                "max_regret_vs_best_single": 0.30,
+            }
+        )
+        joined = "; ".join(metrics)
+        self.assertIn("slices 4", joined)
+        self.assertIn("wins/worst-single 4", joined)
+        self.assertIn("wins/best-single 2", joined)
+        self.assertIn("min margin/worst-single 0.8700", joined)
+        self.assertIn("max regret/best-single 0.3000", joined)
+
     def test_parse_gate_spec_requires_label(self) -> None:
         label, path = ledger.parse_gate_spec("foo=bar.json")
         self.assertEqual(label, "foo")

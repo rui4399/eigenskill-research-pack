@@ -17,6 +17,7 @@ python train_python/build_evidence_ledger.py \
   --gate public_hygiene=outputs/real_system_packer_2026-06-05/public_repo_hygiene_gate_2026_06_06.json \
   --gate calibration_instability=outputs/calibration_instability_benchmark_2026_06_06.json \
   --gate calibration_robustness_stress=outputs/calibration_robustness_stress_gate_2026_06_07.json \
+  --gate consensus_transfer_boundary=outputs/consensus_transfer_boundary_gate_2026_06_07.json \
   --gate esmp_package=outputs/real_system_packer_2026-06-05/esmp_package_verify_qwen3_0p6b_limit8_2026_06_06.json \
   --gate triton_shape_family=outputs/real_system_packer_2026-06-05/triton_qwen_shape_family_gate_2026_06_06.json \
   --gate selector_runtime=outputs/real_system_packer_2026-06-05/selector_runtime_smoke_gate_2026_06_06.json \
@@ -36,7 +37,7 @@ python train_python/build_evidence_ledger.py \
   --out-md outputs/real_system_packer_2026-06-05/EVIDENCE_LEDGER_2026_06_06.md
 ```
 
-The current ledger passes with 18/18 gates across repo hygiene, calibration
+The current ledger passes with 19/19 gates across repo hygiene, calibration
 robustness, artifact integrity, kernel, runtime wiring, selected-row, C++
 runtime, decode integration, QKV replacement, quality, task-retention, and
 capability-retention, allocation-comparator, rotation-comparator, and
@@ -414,6 +415,42 @@ Invalid claim:
 
 - this proves SOTA PTQ, official baseline superiority, downstream task
   retention, or production runtime quality.
+
+## Consensus Transfer Boundary Gate
+
+`train_python/build_consensus_transfer_boundary.py` compares the WikiText2-only,
+C4-only, and cross-split consensus policies on paired WikiText2/C4 PPL summaries.
+This is a boundary gate: consensus is allowed to have small regret versus the
+best single-split policy, but it must avoid the worse single-split policy on the
+paired slices.
+
+Current gate:
+
+```bash
+python train_python/build_consensus_transfer_boundary.py \
+  --case qwen3_0p6b=outputs/qwen3_0p6b_lowmem_consensus_random16_ppl_wikitext2_64_len96_summary.json=outputs/qwen3_0p6b_lowmem_consensus_random16_ppl_c4_64_summary.json \
+  --case qwen3_1p7b=outputs/qwen3_1p7b_wikitext_c4_consensus_random16_ppl_wikitext2_64_summary.json=outputs/qwen3_1p7b_wikitext_c4_consensus_random16_ppl_c4_64_summary.json \
+  --min-cases 2 \
+  --max-regret-vs-best-single 0.5 \
+  --min-worst-single-win-rate 1.0 \
+  --out-json outputs/consensus_transfer_boundary_gate_2026_06_07.json \
+  --out-md outputs/CONSENSUS_TRANSFER_BOUNDARY_GATE_2026_06_07.md
+```
+
+Current result: 2 cases and 4 paired slices. Consensus wins 4/4 versus the
+worse single-split policy, wins 2/4 versus the best single-split policy, has
+minimum margin `+0.8726` PPL versus the worse single split, and maximum regret
+`+0.3046` PPL versus the best single split.
+
+Valid claim:
+
+- consensus reduces the worst-single-split risk on the current paired Qwen3
+  transfer slices while keeping regret versus the best single split bounded.
+
+Invalid claim:
+
+- consensus always beats the best single-split allocation, or this gate proves
+  broad downstream task retention.
 
 ## Robust-LCB Consensus Allocation Gate
 

@@ -141,6 +141,8 @@ def metric_parts(summary: dict[str, Any]) -> list[str]:
         parts.append(f"placeholders {summary.get('placeholder_count')}")
     if "case_count" in summary:
         parts.append(f"cases {summary.get('case_count')}")
+    if "slice_count" in summary:
+        parts.append(f"slices {summary.get('slice_count')}")
     if "unstable_case_count" in summary:
         parts.append(f"unstable {summary.get('unstable_case_count')}")
     if "total_tasks" in summary:
@@ -186,6 +188,20 @@ def metric_parts(summary: dict[str, Any]) -> list[str]:
         parts.append(f"sign p/best-random {value:.5g}")
     if (value := finite_float(summary.get("sign_test_p_vs_random_mean"))) is not None:
         parts.append(f"sign p/random-mean {value:.5g}")
+    if "consensus_wins_vs_left_single" in summary:
+        parts.append(f"wins/left-single {summary.get('consensus_wins_vs_left_single')}")
+    if "consensus_wins_vs_right_single" in summary:
+        parts.append(f"wins/right-single {summary.get('consensus_wins_vs_right_single')}")
+    if "consensus_wins_vs_best_single" in summary:
+        parts.append(f"wins/best-single {summary.get('consensus_wins_vs_best_single')}")
+    if "consensus_wins_vs_worst_single" in summary:
+        parts.append(f"wins/worst-single {summary.get('consensus_wins_vs_worst_single')}")
+    if (value := finite_float(summary.get("min_margin_vs_worst_single"))) is not None:
+        parts.append(f"min margin/worst-single {value:.4f}")
+    if (value := finite_float(summary.get("mean_regret_vs_best_single"))) is not None:
+        parts.append(f"mean regret/best-single {value:.4f}")
+    if (value := finite_float(summary.get("max_regret_vs_best_single"))) is not None:
+        parts.append(f"max regret/best-single {value:.4f}")
     if "total_records" in summary:
         parts.append(f"records {summary.get('total_records')}")
     if "total_high_bit_modules" in summary:
