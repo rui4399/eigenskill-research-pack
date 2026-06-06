@@ -1,451 +1,107 @@
-# EigenSkill C++ Artifacts
+# C++ Evidence Tools
 
-This directory contains standalone C++ artifacts for EigenSkill. They do not
-depend on llama.cpp, RKNN, ExecuTorch, or any model runtime.
+This directory contains standalone C++ tools used by the EigenSkill-Q research
+pack. Treat them as reproducibility, packing, and microbenchmark artifacts. They
+are not a full LLM inference runtime and do not depend on llama.cpp, RKNN,
+ExecuTorch, or a mobile NPU SDK.
 
-## Low-Rank GEMV Microbenchmark
-
-The first artifact isolates the core low-rank arithmetic claim:
+Current paper-facing role:
 
 ```text
-dense path:      y = W x
-skill path:      z = U^T x; z2 = A z; y = U z2
+measured sensitivity JSON
+  -> C++ allocation / consensus / stability audits
+  -> ESMPQ001 package checks and selected-row runtime probes
+  -> evidence gates documented at docs/SYSTEM_EVIDENCE_GATES.md
 ```
 
-The dense path costs `O(d^2)`. The low-rank skill path costs
-`O(dk + k^2 + dk)`, where `k << d`.
+## What Is Paper-Facing
 
-## Build On Windows
+| Area | Executables | Claim boundary |
+|---|---|---|
+| Quant-policy bypass | `quant_policy_bypass` | Deterministic decision-field evaluation for the no-leak v1 policy split. |
+| Allocation planning | `quant_allocation_planner` | Budgeted `{4,8}` allocation from measured module sensitivity. |
+| Consensus and stability audits | `quant_consensus_builder`, `quant_consensus_audit`, `quant_sensitivity_stability`, `quant_transfer_matrix` | Reproducible calibration-split diagnostics, not SOTA quantization. |
+| Evidence summaries | `quant_result_summarizer`, `quant_evidence_matrix`, `quant_budget_curve_summary`, `quant_ppl_summary_merge`, `gpu_guard_summary` | Report generation and auditability. |
+| ESMP package layer | `mixed_precision_packer`, `mixed_precision_runtime_bench`, `esmp_inspect` | Real mixed-bit binary packaging and module-level probes, not end-to-end deployment. |
+| Kernel checks | `quant_kernel_verify`, `quant_kernel_bench` | Microbenchmark and correctness coverage for low-bit/selected-row paths. |
+
+The historical `eigenskill_bench` low-rank benchmark remains available as a
+best-case arithmetic sanity check. It should not be used as evidence for
+nonlinear Transformer eigen-routing.
+
+## Build
+
+Windows/MSVC:
 
 ```powershell
 powershell -ExecutionPolicy Bypass -File .\inference_cpp\build-msvc.ps1
 ```
 
-The script locates Visual Studio with `vswhere`, initializes the x64 MSVC
-environment, and writes the executable to:
-
-```text
-inference_cpp\build\eigenskill_bench.exe
-```
-
-## Build With CMake
-
-The same three C++ artifacts can also be built with CMake on Linux/WSL:
-
-```bash
-cmake -S inference_cpp -B inference_cpp/build-wsl -DCMAKE_BUILD_TYPE=Release
-cmake --build inference_cpp/build-wsl -j
-```
-
-Executables:
-
-```text
-inference_cpp/build-wsl/eigenskill_bench
-inference_cpp/build-wsl/quant_policy_bypass
-inference_cpp/build-wsl/quant_kernel_bench
-inference_cpp/build-wsl/quant_kernel_verify
-inference_cpp/build-wsl/quant_allocation_planner
-inference_cpp/build-wsl/quant_result_summarizer
-inference_cpp/build-wsl/quant_evidence_matrix
-inference_cpp/build-wsl/quant_consensus_builder
-inference_cpp/build-wsl/quant_consensus_audit
-inference_cpp/build-wsl/quant_sensitivity_stability
-inference_cpp/build-wsl/quant_budget_curve_summary
-```
-
-`quant_allocation_planner` is wired into the Qwen3-1.7B fake-quant evidence
-path. It consumes
-`outputs/qwen3_1p7b_module_loss_sensitivity_limit2_group128.json` and emits
-`outputs/qwen3_1p7b_cpp_allocation_planner_4p5_summary.json`; the resulting
-loss-sensitive budget improves over uniform INT4 and random budget on the
-16-prompt WikiText2 slice, while the category budget remains stronger for that
-specific slice. The planner also includes an experimental `hybrid_budget`
-ordering that blends normalized loss-per-cost sensitivity with the structural
-category prior; current Qwen3-1.7B evidence keeps it as an ablation because it
-does not beat `category_budget`.
-
-The same planner now emits a small `blend_sensitivity_XX` sweep. On the
-Qwen3-1.7B WikiText2 slices, `blend_sensitivity_05` and
-`blend_sensitivity_45` are the current best in-repo allocations: they improve
-over `category_budget` on the 16-prompt slice and remain slightly better on
-the 64-prompt check at the same average-bit budget.
-
-The planner also supports `--random-repeats N`. The default remains one
-`random_budget` allocation for backward compatibility. When `N > 1`, it appends
-`random_budget_seed_<seed>` summaries using consecutive seeds. This is used by
-the OLMo2 C4/WikiText2 checks to avoid comparing against a single lucky or
-unlucky random budget.
-
-Example:
-
-```bash
-./inference_cpp/build-wsl/quant_allocation_planner \
-  --sensitivity-json outputs/olmo2_0425_1b_module_loss_sensitivity_limit2_group128.json \
-  --budget-avg-bits 4.5 \
-  --seed 20260605 \
-  --random-repeats 8 \
-  --emit json \
-  > outputs/olmo2_0425_1b_cpp_allocation_planner_random8_4p5_summary.json
-```
-
-`quant_result_summarizer` reads evaluator PPL summary JSON and emits a compact
-Markdown or CSV ranking, including random-budget min/mean/max and the target
-allocation margin versus the best random seed. This keeps the evidence-table
-generation path available in C++:
-
-```bash
-./inference_cpp/build-wsl/quant_result_summarizer \
-  --input outputs/olmo2_0425_1b_cpp_random8_ppl_wikitext2_64_summary.json \
-  --dataset olmo2-wikitext2-64 \
-  --target cpp_loss_sensitive_budget \
-  --emit markdown \
-  > outputs/olmo2_0425_1b_cpp_random8_wikitext2_64_summary.md
-```
-
-`quant_evidence_matrix` merges multiple evaluator PPL summary JSON files into
-a cross-dataset Markdown, CSV, or JSON matrix. It reports target improvement
-versus uniform INT4, target margin versus the best random seed, and target
-margin versus the random mean:
-
-```bash
-./inference_cpp/build-wsl/quant_evidence_matrix \
-  --input outputs/qwen3_1p7b_cpp_random16_ppl_wikitext2_64_summary.json \
-  --dataset Qwen3-1.7B-WikiText2-64 \
-  --input outputs/qwen3_1p7b_cpp_random16_ppl_c4_64_summary.json \
-  --dataset Qwen3-1.7B-C4-64 \
-  --target cpp_loss_sensitive_budget \
-  --emit markdown \
-  > outputs/qwen3_1p7b_cpp_random16_evidence_matrix.md
-```
-
-For cross-model reports where the strongest current target has different names
-across experiments, use `--target auto`. It selects an already present result
-row, preferring `wikitext_c4_consensus` and then `cpp_loss_sensitive_budget`:
-
-```bash
-./inference_cpp/build-wsl/quant_evidence_matrix \
-  --target auto \
-  --input outputs/qwen3_0p6b_cpp_random16_ppl_wikitext2_64_summary.json \
-  --dataset qwen3_0p6b_wikitext2_64 \
-  --input outputs/qwen3_1p7b_wikitext_c4_consensus_random16_ppl_wikitext2_64_summary.json \
-  --dataset qwen3_1p7b_wikitext2_64 \
-  --input outputs/olmo2_0425_1b_cpp_random8_ppl_wikitext2_64_summary.json \
-  --dataset olmo2_0425_1b_wikitext2_64 \
-  --emit markdown \
-  > outputs/cross_model_quant_evidence_matrix_auto.md
-```
-
-Use `--emit json` when another tool should consume the evidence matrix without
-parsing Markdown or CSV.
-
-`quant_consensus_audit` reads the left/right calibration allocations and a
-consensus allocation, then reports high-bit overlap, Jaccard similarity,
-weighted average bits, budget use, and bit histograms. It audits allocation
-stability only; downstream model quality still comes from the PPL evaluator.
-
-`quant_consensus_builder` is the standalone C++ counterpart to
-`train_python/build_consensus_allocation.py`. It builds the WikiText2+C4
-consensus allocation by locking modules selected by both calibration probes,
-then spending the remaining bit budget by average loss-per-cost score. The
-generated JSON remains compatible with `train_python/eval_weight_quant_ppl.py`.
-
-```bash
-./inference_cpp/build-wsl/quant_consensus_builder \
-  --left outputs/qwen3_1p7b_loss_sensitive_alloc_4to8_limit2_group128_summary.json \
-  --right outputs/qwen3_1p7b_loss_sensitive_alloc_4to8_c4_limit2_group128_summary.json \
-  --budget-avg-bits 4.5 \
-  --out-json outputs/qwen3_1p7b_loss_sensitive_wikitext_c4_consensus_alloc_4to8_group128_cpp_summary.json \
-  --out-md outputs/qwen3_1p7b_loss_sensitive_wikitext_c4_consensus_alloc_4to8_group128_cpp_report.md
-```
-
-```bash
-./inference_cpp/build-wsl/quant_consensus_audit \
-  --left outputs/olmo2_0425_1b_loss_sensitive_alloc_4to8_limit2_group128_summary.json \
-  --right outputs/olmo2_0425_1b_loss_sensitive_alloc_4to8_c4_limit2_group128_summary.json \
-  --consensus outputs/olmo2_0425_1b_loss_sensitive_wikitext_c4_consensus_alloc_4to8_group128_summary.json \
-  --label OLMo2-0425-1B-WikiText2-C4 \
-  --emit markdown \
-  > outputs/olmo2_0425_1b_wikitext_c4_consensus_audit.md
-```
-
-`quant_sensitivity_stability` reads two module-sensitivity JSON files and
-reports positive-set Jaccard, signed-delta agreement, Pearson/Spearman/Kendall
-statistics, and top-k score overlap. It is the C++ counterpart to
-`train_python/compare_sensitivity_splits.py`:
-
-```bash
-./inference_cpp/build-wsl/quant_sensitivity_stability \
-  --left outputs/qwen3_1p7b_module_loss_sensitivity_limit2_group128.json \
-  --right outputs/qwen3_1p7b_module_loss_sensitivity_c4_limit2_group128.json \
-  --left-name WikiText2 \
-  --right-name C4 \
-  --top-k 10,20,40 \
-  --emit markdown \
-  > outputs/qwen3_1p7b_wikitext_c4_sensitivity_stability_cpp.md
-```
-
-`quant_budget_curve_summary` reads evaluator PPL summary JSON files and
-regenerates the consensus budget-curve Markdown, CSV, JSON, and dependency-free
-SVG figure. It is the C++ counterpart to `train_python/summarize_budget_curve.py`
-and `train_python/plot_budget_curve_svg.py`:
-
-```bash
-./inference_cpp/build-wsl/quant_budget_curve_summary \
-  --input Qwen3-1.7B-WikiText2-64=outputs/qwen3_1p7b_consensus_budget_curve_ppl_wikitext2_64_summary.json \
-  --input Qwen3-1.7B-WikiText2-128=outputs/qwen3_1p7b_consensus_budget_curve_ppl_wikitext2_128_summary.json \
-  --input Qwen3-1.7B-C4-64=outputs/qwen3_1p7b_consensus_budget_curve_ppl_c4_64_summary.json \
-  --input OLMo2-1B-WikiText2-64=outputs/olmo2_0425_1b_consensus_budget_curve_ppl_wikitext2_64_summary.json \
-  --input OLMo2-1B-WikiText2-128=outputs/olmo2_0425_1b_consensus_budget_curve_ppl_wikitext2_128_summary.json \
-  --input OLMo2-1B-C4-64=outputs/olmo2_0425_1b_consensus_budget_curve_ppl_c4_64_summary.json
-```
-
-## Run
-
-```powershell
-.\inference_cpp\build\eigenskill_bench.exe
-```
-
-Useful options:
-
-```text
---dims 512,1024,2048
---ks 1,4,8,16,32
---iters 200
---warmup 20
---seed 42
-```
-
-Example:
-
-```powershell
-.\inference_cpp\build\eigenskill_bench.exe --dims 1024,2048 --ks 4,8,16 --iters 300
-```
-
-## Output Columns
-
-```text
-d                  hidden dimension
-k                  skill subspace dimension
-dense_ms           average dense GEMV latency per iteration
-skill_ms           average low-rank skill path latency per iteration
-speedup            dense_ms / skill_ms
-dense_gflops       approximate dense arithmetic throughput
-skill_gflops       approximate low-rank arithmetic throughput
-rel_l2_error       relative L2 error against W = U A U^T synthetic baseline
-```
-
-For this first benchmark, `W` is generated as `U A U^T`, so the low-rank path is
-mathematically equivalent up to floating-point accumulation differences. This
-intentionally measures the best-case systems ceiling. Later experiments should
-add an arbitrary dense `W`, train or fit `U/A`, and report approximation error.
-
-## Quantization-Policy Bypass Evaluator
-
-The second artifact is a deterministic C++ evaluator for the v1
-quantization-policy skills:
-
-```text
-outlier_detect
-bit_allocate
-rotation_select
-residual_patch
-kv_policy
-```
-
-It parses the committed JSONL split, applies the same policy rules as
-`train_python/hybrid_eval_quant_policy.py`, and reports whether the
-decision-bearing fields match the gold JSON. This is a policy-kernel evaluator,
-not a general JSON parser and not an integrated LLM runtime.
-
-### Build
+Targeted Windows builds:
 
 ```powershell
 powershell -ExecutionPolicy Bypass -File .\inference_cpp\build-msvc.ps1 -Target quant-policy
-```
-
-Output:
-
-```text
-inference_cpp\build\quant_policy_bypass.exe
-```
-
-### Run
-
-```powershell
-.\inference_cpp\build\quant_policy_bypass.exe `
-  --data data_eval\eigenskill_quant_v1\eval.jsonl `
-  --out outputs\eigenskill_quant_v1_eval_cpp_policy_summary.json
-
-.\inference_cpp\build\quant_policy_bypass.exe `
-  --data data_eval\eigenskill_quant_v1\test.jsonl `
-  --out outputs\eigenskill_quant_v1_test_cpp_policy_summary.json
-```
-
-Verified local Windows/MSVC result:
-
-```text
-eval: n=400, policy_fields_exact=1.0, decision_exact=1.0, parse_error=0.0
-test: n=400, policy_fields_exact=1.0, decision_exact=1.0, parse_error=0.0
-```
-
-The Python evaluator remains the stricter full JSON baseline because it checks
-auxiliary numeric fields such as `risk` and `score`. The C++ evaluator is scoped
-to the fields that determine the downstream quantization-policy decision.
-
-## Quant Kernel Microbenchmark
-
-The third artifact benchmarks standalone kernel shapes that matter for the
-quantization-policy direction:
-
-```text
-scalar fp32 dense GEMV      full d x d floating-point matrix-vector multiply
-AVX2 fp32 dense GEMV        vectorized FP32 dot path when AVX2 is available
-packed int4 dequant GEMV    row-scale INT4 weights unpacked during GEMV
-packed int3 dequant GEMV    row-scale INT3 weights unpacked during GEMV
-selected-row GEMV           only a policy-selected subset of output rows
-AVX2 selected-row GEMV      vectorized selected-row dot path when available
-scalar skill bypass         y = lambda x, the O(d) idealized eigen-skill path
-```
-
-This is still a microbenchmark, not an integrated LLM runtime. It does verify
-the C++ implementation surface for packed low-bit weights and dynamic row
-subsets, which the earlier low-rank benchmark did not cover.
-
-### Build
-
-```powershell
 powershell -ExecutionPolicy Bypass -File .\inference_cpp\build-msvc.ps1 -Target quant-kernel
-```
-
-Output:
-
-```text
-inference_cpp\build\quant_kernel_bench.exe
-```
-
-### Run
-
-```powershell
-.\inference_cpp\build\quant_kernel_bench.exe --dims 512,1024,2048 --active-rows 16,64,256 --iters 200
-```
-
-Output columns:
-
-```text
-d            hidden dimension / square matrix size
-rows         selected output rows for selected-row GEMV
-dense_ms     scalar FP32 dense GEMV latency
-davx_ms      AVX2 FP32 dense GEMV latency, or scalar fallback when disabled
-int4_ms      packed INT4 dequant GEMV latency
-int3_ms      packed INT3 dequant GEMV latency
-sel_ms       scalar selected-row GEMV latency
-selavx_ms    AVX2 selected-row GEMV latency, or scalar fallback when disabled
-scalar_ms    y = lambda x latency
-davx_x       dense_ms / davx_ms
-int4_x       dense_ms / int4_ms
-int3_x       dense_ms / int3_ms
-sel_x        dense_ms / sel_ms
-selavx_x     dense_ms / selavx_ms
-scalar_x     dense_ms / scalar_ms
-davx_err     relative L2 error of AVX2 dense output versus scalar dense output
-int4_err     relative L2 error of INT4 output versus FP32 dense output
-int3_err     relative L2 error of INT3 output versus FP32 dense output
-sel_err      selected-row output error versus same rows from FP32 dense output
-selavx_err   selected-row AVX2 error versus same rows from FP32 dense output
-```
-
-## Reusable Quant Kernel API
-
-The quant-kernel implementation is also exposed as a small C++ API, not only a
-benchmark executable:
-
-```text
-inference_cpp/include/eigenskill/quant_kernels.hpp
-inference_cpp/src/quant_kernels.cpp
-```
-
-Covered functions:
-
-```text
-dense_gemv
-dense_gemv_avx2
-selected_rows_gemv
-selected_rows_gemv_avx2
-pack_lowbit_per_row
-lowbit_dequant_gemv
-unpack_signed_bits
-pack_int4_per_row
-int4_dequant_gemv
-scalar_skill_bypass
-rel_l2_error
-```
-
-Build and run the verifier on Windows/MSVC:
-
-```powershell
 powershell -ExecutionPolicy Bypass -File .\inference_cpp\build-msvc.ps1 -Target quant-verify
-.\inference_cpp\build\quant_kernel_verify.exe --dim 512 --active-rows 32
 ```
 
-Build and run the verifier with CMake/WSL:
+WSL/Linux CMake:
 
 ```bash
 cmake -S inference_cpp -B inference_cpp/build-wsl -DCMAKE_BUILD_TYPE=Release
 cmake --build inference_cpp/build-wsl -j
-./inference_cpp/build-wsl/quant_kernel_verify --dim 512 --active-rows 32
 ctest --test-dir inference_cpp/build-wsl --output-on-failure
 ```
 
-The verifier checks AVX2 dense GEMV, selected-row GEMV, selected-row AVX2 GEMV,
-INT4/INT3 finite output, and scalar bypass correctness against scalar
-references.
+## Minimal Checks
 
-## Quant Allocation Planner
-
-The fourth artifact moves the budgeted mixed-precision allocation step into
-C++. It consumes either a compact CSV fixture or the existing module-sensitivity
-JSON produced by `train_python/measure_module_quant_sensitivity.py`, then emits
-three evaluator-compatible allocation methods:
-
-```text
-loss_sensitive_budget    rank by positive_delta_nll / extra_bit_cost
-random_budget            shuffled budget fill with the same bit range
-category_budget          structural heuristic over attention/MLP categories
-```
-
-The JSON output contains `groups`, `allocations`, and `summaries`, so it can be
-passed directly to `train_python/eval_weight_quant_ppl.py` with
-`--allocation-method loss_sensitive_budget`, `random_budget`, or
-`category_budget`.
-
-Build and run with CMake/WSL:
+Deterministic policy bypass:
 
 ```bash
-cmake --build build/cpp-wsl -j
-./build/cpp-wsl/quant_allocation_planner \
-  --sensitivity-json outputs/qwen25_1p5b_module_loss_sensitivity_limit8_group128.json \
-  --budget-avg-bits 4.5 \
-  --emit json > outputs/qwen25_1p5b_cpp_allocation_planner_4p5_summary.json
+./inference_cpp/build-wsl/quant_policy_bypass \
+  --data data_eval/eigenskill_quant_v1/eval.jsonl \
+  --min-decision-exact 1.0 \
+  --out outputs/eigenskill_quant_v1_eval_cpp_policy_summary.json
 ```
 
-Fixture smoke:
+Quant-kernel verifier:
 
 ```bash
-./build/cpp-wsl/quant_allocation_planner \
-  --csv inference_cpp/testdata/allocation_fixture.csv \
-  --budget-avg-bits 4.8 \
-  --emit json
+./inference_cpp/build-wsl/quant_kernel_verify --dim 512 --active-rows 32
 ```
 
-Verified Qwen2.5-1.5B 16-prompt WikiText2 result from the C++ planner output:
+ESMP package smoke:
 
-```text
-FP16                         PPL 10.76
-uniform INT4                 PPL 15.04
-C++ loss-sensitive {4,8}     PPL 13.14
-C++ random budget {4,8}      PPL 13.75
-C++ category budget {4,8}    PPL 14.28
+```bash
+./inference_cpp/build-wsl/mixed_precision_packer \
+  --synthetic \
+  --rows 64 \
+  --cols 96 \
+  --default-bits 4 \
+  --sensitive-every 8 \
+  --sensitive-bits 8 \
+  --out build/cpp-wsl/mixed_precision_packer_smoke.esmp \
+  --manifest-out build/cpp-wsl/mixed_precision_packer_smoke.json \
+  --verify
+
+./inference_cpp/build-wsl/esmp_inspect \
+  --input build/cpp-wsl/mixed_precision_packer_smoke.esmp \
+  --expect-rows 64 \
+  --expect-cols 96 \
+  --max-avg-bits 4.6 \
+  --min-compression-vs-fp32 4.0 \
+  --require-bits 4,8 \
+  --verify-row-sums
 ```
 
-GPU guard for that evaluator run reported peak `4678/8151 MiB` (`57.39%`),
-below the requested 85% limit.
+## Important Non-Claims
+
+- The scalar low-bit CPU path is not presented as an INT4 speedup result.
+- The selected-row and ESMP tools are module-level evidence, not full TTFT or
+  tokens/s deployment proof.
+- The low-rank benchmark is historical and does not prove spectral routing
+  through nonlinear Transformer layers.
+- C++ report generators improve reproducibility; they are not themselves a
+  systems contribution unless tied to executable gates and measured artifacts.
+
+For the authoritative claim boundary, see `docs/PAPER_CLAIM_MATRIX.md`.

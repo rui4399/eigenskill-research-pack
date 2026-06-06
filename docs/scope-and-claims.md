@@ -1,5 +1,11 @@
 # Scope And Claims
 
+Status note, 2026-06-07: this file is retained as historical context for the
+early EigenSkill routing and quantization-policy work. The current public claim
+boundary is now maintained in `docs/PAPER_CLAIM_MATRIX.md`, while executable
+gate commands live in `docs/SYSTEM_EVIDENCE_GATES.md`. If this file conflicts
+with those two documents, the claim matrix and gate document are authoritative.
+
 This document defines the public claim boundary for the current EigenSkill
 research pack. It is intentionally conservative.
 
@@ -8,8 +14,9 @@ research pack. It is intentionally conservative.
 Use this framing:
 
 ```text
-EigenSkill is a reproducible proof-of-concept for hybrid skill routing and
-deterministic quantization-policy bypass around a small LLM.
+EigenSkill-Q is a reproducible research pack for calibration split instability
+and conservative mixed-precision allocation, with deterministic C++/packed
+runtime prototypes kept behind executable evidence gates.
 ```
 
 Do not use this framing yet:
