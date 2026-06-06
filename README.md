@@ -44,11 +44,14 @@ Implemented and committed:
 - A real public-schema task smoke path using streamed GSM8K and MMLU
   abstract-algebra samples, kept as negative capability-retention evidence for
   the current small Qwen3-0.6B baseline.
+- A QuaRot/SpinQuant-style rotation-family proxy gate over measured Qwen3-0.6B
+  WikiText2/C4 sensitivity artifacts, kept explicitly separate from faithful
+  official rotation implementations.
 - A top-level evidence ledger that aggregates the current paper-facing gates
   into one reproducible pass/fail table.
 - A machine-readable baseline coverage manifest and gap dashboard that keep
-  missing external PTQ, rotation, allocation, mobile, and task-retention
-  evidence visible instead of turning it into accidental claims.
+  missing external PTQ, mobile, and faithful SOTA-comparison evidence
+  visible instead of turning it into accidental claims.
 - PyTorch fake-quant PPL experiments on small public models and short
   WikiText2/C4 slices.
 - A LoRA training entry point with optional completion-only loss masking for
@@ -59,7 +62,7 @@ Not claimed:
 - No real board-level latency or energy evidence yet.
 - No packed INT4/INT3 production matmul result yet. The Triton path is a
   prototype kernel benchmark, not a production transformer runtime.
-- No GPTQ/AWQ/SmoothQuant/QuaRot/SpinQuant SOTA comparison yet.
+- No GPTQ/AWQ/SmoothQuant or faithful QuaRot/SpinQuant SOTA comparison yet.
 - No proof that spectral/eigen routing survives nonlinear Transformer blocks.
 - No committed model weights or LoRA adapter weights.
 
@@ -133,6 +136,21 @@ Mean top-20 Jaccard:      0.1022
 
 The corresponding report is
 `outputs/CALIBRATION_INSTABILITY_BENCHMARK_2026_06_06.md`.
+
+The rotation-family proxy now covers the QuaRot/SpinQuant related-method family
+without pretending to be an official implementation:
+
+```text
+Qwen3-0.6B measured module sensitivity, rotation budget 35% module cost
+WikiText2: 197 records, 82 rotated candidates, cost fraction 0.3484,
+           projected sensitivity reduction 0.0848
+C4:        197 records, 85 rotated candidates, cost fraction 0.3484,
+           projected sensitivity reduction 0.1020
+Gate:      2 cases, 394 records, 167 rotated candidates, PASS
+```
+
+The corresponding report is
+`outputs/QUAROT_SPINQUANT_ROTATION_FAMILY_GATE_2026_06_06.md`.
 
 All listed GPU runs stayed below the requested 85% VRAM guard. Example peaks:
 Qwen3-0.6B consensus eval stayed near 60% of an 8 GB GPU; Qwen3-1.7B stayed
@@ -662,6 +680,7 @@ python train_python/build_evidence_ledger.py \
   --gate chat_task_stress=outputs/real_system_packer_2026-06-05/chat_task_stress_v3_84_gate_2026_06_06.json \
   --gate public_task_benchmark=outputs/public_task_benchmark_ollama_qwen35_4b_gate_2026_06_06.json \
   --gate allocation_family_proxy=outputs/q_palette_style_allocation_family_gate_2026_06_06.json \
+  --gate rotation_family_proxy=outputs/quarot_spinquant_rotation_family_gate_2026_06_06.json \
   --out-json outputs/real_system_packer_2026-06-05/evidence_ledger_2026_06_06.json \
   --out-md outputs/real_system_packer_2026-06-05/EVIDENCE_LEDGER_2026_06_06.md
 ```
@@ -695,7 +714,7 @@ Calibration Split Instability in LLM Mixed-Precision Quantization
 
 Minimum next experiments before claiming a strong venue:
 
-1. Add GPTQ/AWQ/SmoothQuant/QuaRot/SpinQuant-style baselines where applicable.
+1. Add GPTQ/AWQ/SmoothQuant and faithful QuaRot/SpinQuant baselines where applicable.
 2. Add MMLU/GSM8K/IFEval/BBH-style task retention, not only PPL.
 3. Repeat calibration splits and report variance, rank correlation, Jaccard,
    and allocation transfer across datasets.

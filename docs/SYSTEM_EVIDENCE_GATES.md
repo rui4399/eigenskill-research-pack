@@ -27,14 +27,16 @@ python train_python/build_evidence_ledger.py \
   --gate chat_task_stress=outputs/real_system_packer_2026-06-05/chat_task_stress_v3_84_gate_2026_06_06.json \
   --gate public_task_benchmark=outputs/public_task_benchmark_ollama_qwen35_4b_gate_2026_06_06.json \
   --gate allocation_family_proxy=outputs/q_palette_style_allocation_family_gate_2026_06_06.json \
+  --gate rotation_family_proxy=outputs/quarot_spinquant_rotation_family_gate_2026_06_06.json \
   --out-json outputs/real_system_packer_2026-06-05/evidence_ledger_2026_06_06.json \
   --out-md outputs/real_system_packer_2026-06-05/EVIDENCE_LEDGER_2026_06_06.md
 ```
 
-The current ledger passes with 13/13 gates across repo hygiene, calibration
+The current ledger passes with 14/14 gates across repo hygiene, calibration
 robustness, artifact integrity, kernel, runtime wiring, selected-row, C++
 runtime, decode integration, QKV replacement, quality, task-retention, and
-capability-retention, and allocation-comparator evidence categories.
+capability-retention, allocation-comparator, and rotation-comparator evidence
+categories.
 
 Valid claim:
 
@@ -173,6 +175,62 @@ Valid claim:
 Invalid claim:
 
 - this is a faithful official Q-Palette/IMPQ/WINDQuant reproduction.
+
+## Rotation Family Proxy Gate
+
+`train_python/build_rotation_family_proxy.py` and
+`train_python/gate_rotation_family_proxy.py` provide a QuaRot/SpinQuant-style
+rotation/outlier-mitigation family proxy. The generator consumes measured
+module loss-sensitivity artifacts, selects plausible rotation targets under a
+fixed module-cost budget, and records a conservative projected sensitivity
+reduction. This is a related-family coverage gate, not an official rotation
+implementation.
+
+Current generation:
+
+```bash
+python train_python/build_rotation_family_proxy.py \
+  --input outputs/qwen3_0p6b_module_loss_sensitivity_limit4_group128.json \
+  --rotation-budget-fraction 0.35 \
+  --out-json outputs/quarot_spinquant_rotation_baseline_qwen3_0p6b_wikitext2_group128_summary.json \
+  --out-md outputs/QUAROT_SPINQUANT_ROTATION_BASELINE_QWEN3_0P6B_WIKITEXT2_GROUP128.md
+
+python train_python/build_rotation_family_proxy.py \
+  --input outputs/qwen3_0p6b_c4_module_loss_sensitivity_limit4_group128.json \
+  --rotation-budget-fraction 0.35 \
+  --out-json outputs/quarot_spinquant_rotation_baseline_qwen3_0p6b_c4_group128_summary.json \
+  --out-md outputs/QUAROT_SPINQUANT_ROTATION_BASELINE_QWEN3_0P6B_C4_GROUP128.md
+```
+
+Current gate:
+
+```bash
+python train_python/gate_rotation_family_proxy.py \
+  --case wikitext2=outputs/quarot_spinquant_rotation_baseline_qwen3_0p6b_wikitext2_group128_summary.json \
+  --case c4=outputs/quarot_spinquant_rotation_baseline_qwen3_0p6b_c4_group128_summary.json \
+  --min-cases 2 \
+  --min-records 100 \
+  --min-rotated 20 \
+  --required-method-token rotation \
+  --required-policy-tokens quarot,spinquant \
+  --min-reduction-ratio 0.05 \
+  --out-json outputs/quarot_spinquant_rotation_family_gate_2026_06_06.json \
+  --out-md outputs/QUAROT_SPINQUANT_ROTATION_FAMILY_GATE_2026_06_06.md
+```
+
+Current result: 2 cases, 394 measured module records, 167 rotation candidates,
+max rotated cost fraction `0.3484` under the `0.35` budget, and mean projected
+sensitivity reduction ratio `0.0934`.
+
+Valid claim:
+
+- a QuaRot/SpinQuant-style rotation-family proxy is executable on measured
+  Qwen3-0.6B sensitivity artifacts.
+
+Invalid claim:
+
+- this is a faithful official QuaRot/SpinQuant implementation, an activation
+  rotation kernel, or proof of activation/KV quality retention.
 
 ## Baseline Gap Dashboard
 

@@ -1,11 +1,11 @@
 {
-  "date": "2026-06-06T13:38:32+00:00",
+  "date": "2026-06-06T14:06:26+00:00",
   "schema_version": 1,
   "passed": false,
   "item_count": 11,
   "status_counts": {
-    "covered": 8,
-    "missing": 3
+    "covered": 9,
+    "missing": 2
   },
   "family_counts": {
     "in_repo_allocation": {
@@ -18,7 +18,7 @@
       "missing": 1
     },
     "external_rotation": {
-      "missing": 1
+      "covered": 1
     },
     "external_allocation": {
       "covered": 1
@@ -35,7 +35,6 @@
   },
   "paper_blocker_missing": [
     "awq_or_gptq",
-    "rotation_family",
     "mobile_redmi_k80_pro"
   ],
   "items": [
@@ -223,11 +222,14 @@
         "outputs/**/*rotation*baseline*summary.json"
       ],
       "required_packages": [],
-      "claim_boundary": "Required before making activation/KV or outlier-mitigation claims.",
-      "status": "missing",
-      "evidence_count": 0,
+      "claim_boundary": "QuaRot/SpinQuant-style proxy coverage is acceptable for related-family coverage; faithful official rotation implementations and activation/KV quality claims still require stronger evidence.",
+      "status": "covered",
+      "evidence_count": 2,
       "evidence_task_count": 0,
-      "evidence_matches": [],
+      "evidence_matches": [
+        "outputs/quarot_spinquant_rotation_baseline_qwen3_0p6b_c4_group128_summary.json",
+        "outputs/quarot_spinquant_rotation_baseline_qwen3_0p6b_wikitext2_group128_summary.json"
+      ],
       "evidence_truncated": false,
       "partial_evidence_count": 0,
       "partial_evidence_matches": [],

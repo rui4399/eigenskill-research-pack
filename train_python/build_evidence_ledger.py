@@ -17,6 +17,9 @@ CATEGORIES = {
     "q_palette": "allocation comparator",
     "impq": "allocation comparator",
     "windquant": "allocation comparator",
+    "rotation": "rotation comparator",
+    "quarot": "rotation comparator",
+    "spinquant": "rotation comparator",
     "triton": "kernel",
     "selector": "runtime wiring",
     "selected": "selected-row",
@@ -133,6 +136,12 @@ def metric_parts(summary: dict[str, Any]) -> list[str]:
         parts.append(f"accuracy {value:.4f}")
     if "total_records" in summary:
         parts.append(f"records {summary.get('total_records')}")
+    if "total_rotated" in summary:
+        parts.append(f"rotated {summary.get('total_rotated')}")
+    if (value := finite_float(summary.get("max_rotated_cost_fraction"))) is not None:
+        parts.append(f"rotation cost {value:.4f}")
+    if (value := finite_float(summary.get("mean_projected_reduction_ratio"))) is not None:
+        parts.append(f"projected reduction {value:.4f}")
     if (value := finite_float(summary.get("max_avg_bits"))) is not None:
         parts.append(f"max avg bits {value:.4f}")
     if (value := finite_float(summary.get("max_target_avg_bits"))) is not None:

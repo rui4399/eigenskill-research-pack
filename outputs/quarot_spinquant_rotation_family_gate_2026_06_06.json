@@ -1,0 +1,51 @@
+{
+  "date": "2026-06-06T14:05:20+00:00",
+  "passed": true,
+  "summary": {
+    "case_count": 2,
+    "total_records": 394,
+    "total_rotated": 167,
+    "max_rotated_cost_fraction": 0.348361557070596,
+    "mean_projected_reduction_ratio": 0.09336238446383241
+  },
+  "cases": [
+    {
+      "label": "wikitext2",
+      "path": "outputs\\quarot_spinquant_rotation_baseline_qwen3_0p6b_wikitext2_group128_summary.json",
+      "method": "quarot_spinquant_style_rotation_baseline_proxy",
+      "source": "outputs\\qwen3_0p6b_module_loss_sensitivity_limit4_group128.json",
+      "record_count": 197,
+      "rotated_count": 82,
+      "rotation_budget_fraction": 0.35,
+      "rotated_cost_fraction": 0.348361557070596,
+      "base_positive_sensitivity": 0.9409399228552875,
+      "projected_positive_sensitivity_after_rotation": 0.8611869932200473,
+      "projected_reduction_ratio": 0.0847587903308741,
+      "policy_hist": {
+        "none": 115,
+        "quarot_static_hadamard_proxy": 24,
+        "spinquant_learned_rotation_proxy": 58
+      }
+    },
+    {
+      "label": "c4",
+      "path": "outputs\\quarot_spinquant_rotation_baseline_qwen3_0p6b_c4_group128_summary.json",
+      "method": "quarot_spinquant_style_rotation_baseline_proxy",
+      "source": "outputs\\qwen3_0p6b_c4_module_loss_sensitivity_limit4_group128.json",
+      "record_count": 197,
+      "rotated_count": 85,
+      "rotation_budget_fraction": 0.35,
+      "rotated_cost_fraction": 0.348361557070596,
+      "base_positive_sensitivity": 0.498615562915802,
+      "projected_positive_sensitivity_after_rotation": 0.4477737390995026,
+      "projected_reduction_ratio": 0.10196597859679073,
+      "policy_hist": {
+        "quarot_static_hadamard_proxy": 25,
+        "none": 112,
+        "spinquant_learned_rotation_proxy": 60
+      }
+    }
+  ],
+  "failures": [],
+  "claim_boundary": "Valid claim: QuaRot/SpinQuant-style rotation-family proxy artifacts exist, rotate measured modules under budget, and record projected sensitivity reduction. Invalid claim: this is a faithful official QuaRot/SpinQuant reproduction or proof of activation-rotation quality retention."
+}
