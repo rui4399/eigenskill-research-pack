@@ -125,6 +125,106 @@ selected-row cached path can win on the current environment (`1.1767x` vs dense
 full), while `triton_selected` remains launch-bound (`0.5668x` vs dense full).
 Use this as a constraint for kernel/runtime work, not as an acceleration claim.
 
+## Fused Sidecar Generation Gate
+
+`train_python/gate_fused_sidecar_generation.py` gates the fused selected-row
+sidecar smoke. This is an integration check, not a replacement claim: sidecar
+kernels run on real HF generation activations and discard their outputs while
+the dense Transformer path still executes.
+
+Current gate:
+
+```bash
+python train_python/gate_fused_sidecar_generation.py \
+  --generation-json outputs/real_system_packer_2026-06-05/qwen3_fused_sidecar_generation_3layer_async.json \
+  --baseline-json outputs/real_system_packer_2026-06-05/qwen3_fused_sidecar_baseline_16tok.json \
+  --guard-json outputs/real_system_packer_2026-06-05/qwen3_fused_sidecar_generation_3layer_async_gpu_guard.json \
+  --out-json outputs/real_system_packer_2026-06-05/fused_sidecar_generation_gate_2026_06_06.json \
+  --out-md outputs/real_system_packer_2026-06-05/FUSED_SIDECAR_GENERATION_GATE_2026_06_06.md \
+  --min-layers 3 \
+  --min-sidecars 3 \
+  --min-sidecar-calls 48 \
+  --min-calls-per-sidecar 16 \
+  --min-selected-rows-total 192 \
+  --min-generated-tokens 16 \
+  --min-tokens-per-second 20.0 \
+  --max-median-sidecar-ms 0.30 \
+  --max-max-sidecar-ms 0.50 \
+  --require-prefill-shape \
+  --require-decode-shape \
+  --min-tps-ratio-vs-baseline 0.75 \
+  --max-memory-ratio 0.90
+```
+
+The current gate passes with 3 sidecars, 48 sidecar calls, exact generated-text
+match versus the same-loader baseline, 0.8080x baseline throughput, 0.206160 ms
+median sidecar CUDA event time, and 43.96% peak guard memory.
+
+Valid claim:
+
+- fused selected-row ESMP kernels execute inside the real HF generation loop
+  with measured CUDA event timing and bounded additive overhead.
+
+Invalid claim:
+
+- sidecar execution proves end-to-end acceleration. It does not replace dense
+  QKV computation.
+
+## Fused QKV Replacement Generation Gate
+
+`train_python/gate_fused_qkv_generation.py` gates the stronger replacement
+smoke from `train_python/measure_esmp_fused_qkv_generation.py`. This path
+actually replaces selected `q_proj`, `k_proj`, and `v_proj` modules with a
+shared fused ESMP runtime. The gate checks generation success, compression,
+TTFT/throughput versus a same-loader baseline, GPU guard compliance, and the
+QKV cache invariant:
+
+```text
+wrapper_calls == fused_compute_calls + cache_hits
+fused_compute_calls == cache_misses
+```
+
+Current gate:
+
+```bash
+python train_python/gate_fused_qkv_generation.py \
+  --generation-json outputs/real_system_packer_2026-06-05/qwen3_fused_qkv_generation_1layer_64tok.json \
+  --baseline-json outputs/real_system_packer_2026-06-05/qwen3_fused_qkv_baseline_64tok.json \
+  --guard-json outputs/real_system_packer_2026-06-05/qwen3_fused_qkv_generation_1layer_64tok_gpu_guard.json \
+  --out-json outputs/real_system_packer_2026-06-05/fused_qkv_generation_gate_2026_06_06.json \
+  --out-md outputs/real_system_packer_2026-06-05/FUSED_QKV_GENERATION_GATE_2026_06_06.md \
+  --min-replacements 1 \
+  --min-generated-tokens 64 \
+  --min-tokens-per-second 25.0 \
+  --min-compression-vs-fp32 6.0 \
+  --max-median-replacement-ms 0.25 \
+  --max-max-replacement-ms 0.70 \
+  --min-wrapper-calls-per-replacement 192 \
+  --min-fused-compute-calls-per-replacement 64 \
+  --min-cache-hits-per-replacement 128 \
+  --min-cache-misses-per-replacement 64 \
+  --min-tps-ratio-vs-baseline 1.05 \
+  --max-ttft-ratio-vs-baseline 1.00 \
+  --min-common-prefix-chars 100 \
+  --max-memory-ratio 0.90
+```
+
+The current gate passes on Qwen3-0.6B layer-0 QKV replacement with 64 generated
+tokens, 1.1300x tokens/s versus the same-loader baseline, 0.6839x TTFT ratio,
+6.1682x compression versus FP32, 192/64/128/64 wrapper/fused/hit/miss calls,
+0.192896 ms median replacement CUDA event time, and 44.01% peak guard memory.
+The generated text is not an exact match, but it keeps a 210-character common
+prefix in this smoke; quality preservation remains a separate open gate.
+
+Valid claim:
+
+- a shallow fused packed QKV replacement can execute inside HF generation and
+  shows guarded smoke-level speed and memory evidence.
+
+Invalid claim:
+
+- this establishes full-model quality-preserving quantized generation.
+
 ## C++ ESMP Runtime Sweep Gate
 
 `train_python/gate_cpp_runtime_sweep.py` gates the C++ ESMP selected-row runtime
@@ -158,6 +258,10 @@ Valid claim:
 - selected-row routing has a formal gate for module-level evidence, while the
   focused current-environment smoke keeps the low-batch Triton limitation
   explicit.
+- fused selected-row sidecars have a formal decode-loop integration gate with
+  bounded additive overhead.
+- fused packed QKV replacement has a formal guarded smoke gate for shallow
+  replacement, including cache-invariant checks.
 - C++ ESMP selected-row runtime has a formal sweep gate; it supports
   module-level bypass claims but not full LLM acceleration claims.
 
@@ -165,4 +269,5 @@ Invalid claim:
 
 - selector-driven generation is faster end-to-end;
 - selector coverage generalizes to unmeasured shapes;
+- fused QKV replacement is quality-preserving across prompts or layers;
 - mobile, Tensor Core production, or CCF-A system claims are established.

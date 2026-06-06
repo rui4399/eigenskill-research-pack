@@ -32,6 +32,9 @@ Implemented and committed:
   packer/runtime bench and Python reconstruction/generation tools.
 - A PC-side Triton packed INT4/INT8 mixed-GEMM prototype plus an executable
   evidence gate for block-tuning results.
+- Executable sidecar and fused-QKV generation gates that validate guarded HF
+  generation integration, shallow QKV replacement behavior, and Q/K/V cache
+  invariants.
 - PyTorch fake-quant PPL experiments on small public models and short
   WikiText2/C4 slices.
 - A LoRA training entry point with optional completion-only loss masking for
@@ -141,6 +144,14 @@ Selected-row routing/bypass evidence is gated in
 `outputs/real_system_packer_2026-06-05/SELECTED_ROW_BENCHMARK_GATE_2026_06_06.md`;
 the focused current-environment q_proj smoke is in
 `outputs/real_system_packer_2026-06-05/SELECTED_ROW_QPROJ64_FOCUS_2026_06_06.md`.
+The decode-loop integration path is now gated separately:
+`outputs/real_system_packer_2026-06-05/FUSED_SIDECAR_GENERATION_GATE_2026_06_06.md`
+checks that fused selected-row sidecars execute on real HF generation
+activations with bounded additive overhead. The stronger replacement smoke is
+gated in
+`outputs/real_system_packer_2026-06-05/FUSED_QKV_GENERATION_GATE_2026_06_06.md`;
+it verifies shallow fused packed QKV replacement inside HF generation, including
+Q/K/V cache reuse, TTFT, throughput, compression, and GPU guard compliance.
 Gate policy and claim boundaries are in `docs/SYSTEM_EVIDENCE_GATES.md`.
 
 End-to-end smoke metrics are tracked separately from kernel evidence:
@@ -151,13 +162,18 @@ same-loader warm baseline:  TTFT 0.0347 s, 25.0523 tok/s, 1173.2993 MiB
 cached ESMP 3-module warm:  TTFT 0.0320 s, 28.8295 tok/s, 1175.2993 MiB
 Triton ESMP 3-module cold:  TTFT 1.9611 s,  4.9957 tok/s, 1169.8462 MiB
 fused QKV 3-layer warm:     TTFT 0.0315 s, 25.8158 tok/s, 1156.4868 MiB
+fused QKV 1-layer 64tok:    TTFT 0.0330 s, 30.2441 tok/s, 1173.6138 MiB
 ```
 
 The concise system table is in
 `outputs/real_system_packer_2026-06-05/END_TO_END_SYSTEM_METRICS_2026_06_06.md`.
 Interpretation: cached/fused smoke wiring is viable, while the Triton-swapped
 end-to-end path still needs fusion and scheduling work before it can be claimed
-as runtime acceleration.
+as runtime acceleration. The fused QKV replacement gate supports only a shallow
+1-layer smoke claim: it passes with 1.1300x tokens/s versus the same-loader
+64-token baseline, 0.6839x TTFT ratio, 6.1682x compression versus FP32, and
+192/64/128/64 wrapper/fused/cache-hit/cache-miss calls. The generated text is
+not an exact match in the 64-token run, so quality preservation remains open.
 
 ## Negative Evidence Kept On Purpose
 
@@ -452,6 +468,56 @@ python train_python/benchmark_esmp_linear_runtimes.py \
   --out-jsonl outputs/real_system_packer_2026-06-05/esmp_linear_selector_benchmark_2026_06_06.jsonl \
   --out-csv outputs/real_system_packer_2026-06-05/esmp_linear_selector_benchmark_2026_06_06.csv \
   --out-md outputs/real_system_packer_2026-06-05/ESMP_LINEAR_SELECTOR_BENCHMARK_2026_06_06.md
+```
+
+## Reproduce: Fused Generation Gates
+
+The sidecar gate proves that fused selected-row kernels can run on live
+generation activations without replacing dense QKV. The QKV replacement gate is
+stronger: it verifies that selected Q/K/V projections are replaced by the fused
+ESMP runtime and that QKV cache reuse occurred.
+
+```bash
+python train_python/gate_fused_sidecar_generation.py \
+  --generation-json outputs/real_system_packer_2026-06-05/qwen3_fused_sidecar_generation_3layer_async.json \
+  --baseline-json outputs/real_system_packer_2026-06-05/qwen3_fused_sidecar_baseline_16tok.json \
+  --guard-json outputs/real_system_packer_2026-06-05/qwen3_fused_sidecar_generation_3layer_async_gpu_guard.json \
+  --out-json outputs/real_system_packer_2026-06-05/fused_sidecar_generation_gate_2026_06_06.json \
+  --out-md outputs/real_system_packer_2026-06-05/FUSED_SIDECAR_GENERATION_GATE_2026_06_06.md \
+  --min-layers 3 \
+  --min-sidecars 3 \
+  --min-sidecar-calls 48 \
+  --min-calls-per-sidecar 16 \
+  --min-selected-rows-total 192 \
+  --min-generated-tokens 16 \
+  --min-tokens-per-second 20.0 \
+  --max-median-sidecar-ms 0.30 \
+  --max-max-sidecar-ms 0.50 \
+  --require-prefill-shape \
+  --require-decode-shape \
+  --min-tps-ratio-vs-baseline 0.75 \
+  --max-memory-ratio 0.90
+
+python train_python/gate_fused_qkv_generation.py \
+  --generation-json outputs/real_system_packer_2026-06-05/qwen3_fused_qkv_generation_1layer_64tok.json \
+  --baseline-json outputs/real_system_packer_2026-06-05/qwen3_fused_qkv_baseline_64tok.json \
+  --guard-json outputs/real_system_packer_2026-06-05/qwen3_fused_qkv_generation_1layer_64tok_gpu_guard.json \
+  --out-json outputs/real_system_packer_2026-06-05/fused_qkv_generation_gate_2026_06_06.json \
+  --out-md outputs/real_system_packer_2026-06-05/FUSED_QKV_GENERATION_GATE_2026_06_06.md \
+  --min-replacements 1 \
+  --min-generated-tokens 64 \
+  --min-tokens-per-second 25.0 \
+  --min-compression-vs-fp32 6.0 \
+  --max-median-replacement-ms 0.25 \
+  --max-max-replacement-ms 0.70 \
+  --min-wrapper-calls-per-replacement 192 \
+  --min-fused-compute-calls-per-replacement 64 \
+  --min-cache-hits-per-replacement 128 \
+  --min-cache-misses-per-replacement 64 \
+  --min-tps-ratio-vs-baseline 1.05 \
+  --max-ttft-ratio-vs-baseline 1.00 \
+  --min-common-prefix-chars 100 \
+  --max-memory-ratio 0.90
 ```
 
 ## Reproduce: End-to-End Metric Summary
