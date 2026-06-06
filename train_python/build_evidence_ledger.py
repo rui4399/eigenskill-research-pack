@@ -89,6 +89,16 @@ def infer_category(label: str) -> str:
 
 def metric_parts(summary: dict[str, Any]) -> list[str]:
     parts: list[str] = []
+
+    def append_ci(label: str, key: str) -> None:
+        ci = summary.get(key)
+        if not isinstance(ci, dict):
+            return
+        low = finite_float(ci.get("low"))
+        high = finite_float(ci.get("high"))
+        if low is not None and high is not None:
+            parts.append(f"{label} CI [{low:.4f}, {high:.4f}]")
+
     if "valid_configs" in summary:
         parts.append(f"configs {summary.get('valid_configs')}/{summary.get('total_configs')}")
     if "fp16_wins" in summary:
@@ -153,20 +163,29 @@ def metric_parts(summary: dict[str, Any]) -> list[str]:
         parts.append(f"margin vs mean {value:.4f}")
     if (value := finite_float(summary.get("mean_margin_vs_uniform"))) is not None:
         parts.append(f"mean margin/uniform {value:.4f}")
+    append_ci("mean margin/uniform", "mean_margin_vs_uniform_ci")
     if (value := finite_float(summary.get("worst_margin_vs_uniform"))) is not None:
         parts.append(f"worst margin/uniform {value:.4f}")
     if (value := finite_float(summary.get("mean_margin_vs_best_random"))) is not None:
         parts.append(f"mean margin/best-random {value:.4f}")
+    append_ci("mean margin/best-random", "mean_margin_vs_best_random_ci")
     if (value := finite_float(summary.get("worst_margin_vs_best_random"))) is not None:
         parts.append(f"worst margin/best-random {value:.4f}")
     if (value := finite_float(summary.get("mean_margin_vs_random_mean"))) is not None:
         parts.append(f"mean margin/random-mean {value:.4f}")
+    append_ci("mean margin/random-mean", "mean_margin_vs_random_mean_ci")
     if (value := finite_float(summary.get("worst_margin_vs_random_mean"))) is not None:
         parts.append(f"worst margin/random-mean {value:.4f}")
     if (value := finite_float(summary.get("mean_fp16_regret"))) is not None:
         parts.append(f"mean FP16 regret {value:.4f}")
     if (value := finite_float(summary.get("max_fp16_regret"))) is not None:
         parts.append(f"max FP16 regret {value:.4f}")
+    if (value := finite_float(summary.get("sign_test_p_vs_uniform"))) is not None:
+        parts.append(f"sign p/uniform {value:.5g}")
+    if (value := finite_float(summary.get("sign_test_p_vs_best_random"))) is not None:
+        parts.append(f"sign p/best-random {value:.5g}")
+    if (value := finite_float(summary.get("sign_test_p_vs_random_mean"))) is not None:
+        parts.append(f"sign p/random-mean {value:.5g}")
     if "total_records" in summary:
         parts.append(f"records {summary.get('total_records')}")
     if "total_high_bit_modules" in summary:

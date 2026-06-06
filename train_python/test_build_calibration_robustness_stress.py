@@ -21,6 +21,17 @@ def write_ppl_summary(path: Path, rows: dict[str, float]) -> Path:
 
 
 class CalibrationRobustnessStressTests(unittest.TestCase):
+    def test_sign_test_p_value_is_exact_one_sided(self) -> None:
+        self.assertAlmostEqual(stress.sign_test_p_value(wins=3, trials=3), 0.125)
+        self.assertAlmostEqual(stress.sign_test_p_value(wins=2, trials=3), 0.5)
+
+    def test_bootstrap_ci_is_deterministic_and_contains_mean(self) -> None:
+        first = stress.bootstrap_mean_ci([1.0, 2.0, 3.0], iterations=200, seed=11)
+        second = stress.bootstrap_mean_ci([1.0, 2.0, 3.0], iterations=200, seed=11)
+        self.assertEqual(first, second)
+        self.assertLessEqual(first["low"], first["mean"])
+        self.assertGreaterEqual(first["high"], first["mean"])
+
     def test_case_metrics_measure_uniform_random_and_fp16_regret(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             path = write_ppl_summary(
@@ -80,6 +91,8 @@ class CalibrationRobustnessStressTests(unittest.TestCase):
 
         self.assertFalse(report["passed"])
         self.assertEqual(report["summary"]["target_wins_vs_best_random"], 1)
+        self.assertIn("sign_test_p_vs_best_random", report["summary"])
+        self.assertIn("mean_margin_vs_best_random_ci", report["summary"])
         self.assertIn("best-random win rate", report["failures"][0])
 
 

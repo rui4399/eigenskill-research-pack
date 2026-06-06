@@ -110,6 +110,8 @@ wins vs best random seed:      11 / 11
 wins vs random-seed mean:      11 / 11
 mean margin vs uniform:        +4.2942 PPL
 worst margin vs best random:   +0.1120 PPL
+best-random margin 95% CI:     [+0.6143, +1.7982] PPL
+one-sided sign-test p:         0.000488
 mean FP16 regret:              +4.1683 PPL
 ```
 

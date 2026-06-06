@@ -67,7 +67,9 @@ class BuildEvidenceLedgerTests(unittest.TestCase):
                 "target_wins_vs_best_random": 11,
                 "target_wins_vs_random_mean": 11,
                 "mean_margin_vs_uniform": 4.29,
+                "mean_margin_vs_uniform_ci": {"low": 3.0, "high": 5.0},
                 "worst_margin_vs_best_random": 0.11,
+                "sign_test_p_vs_best_random": 0.00049,
                 "mean_fp16_regret": 4.16,
             }
         )
@@ -75,7 +77,9 @@ class BuildEvidenceLedgerTests(unittest.TestCase):
         self.assertIn("wins/best-random 11", joined)
         self.assertIn("wins/random-mean 11", joined)
         self.assertIn("mean margin/uniform 4.2900", joined)
+        self.assertIn("mean margin/uniform CI [3.0000, 5.0000]", joined)
         self.assertIn("worst margin/best-random 0.1100", joined)
+        self.assertIn("sign p/best-random 0.00049", joined)
         self.assertIn("mean FP16 regret 4.1600", joined)
 
     def test_parse_gate_spec_requires_label(self) -> None:

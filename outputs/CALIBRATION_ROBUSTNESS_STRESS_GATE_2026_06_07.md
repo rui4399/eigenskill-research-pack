@@ -1,6 +1,6 @@
 # Calibration Robustness Stress Gate
 
-Date: `2026-06-06T17:00:37+00:00`
+Date: `2026-06-06T17:23:38+00:00`
 Status: **PASS**
 
 ## Summary
@@ -14,6 +14,14 @@ Status: **PASS**
 - mean margin vs best random: `1.1622`
 - worst margin vs best random: `0.1120`
 - mean FP16 regret: `4.1683`
+
+## Statistical Checks
+
+| comparison | mean margin | bootstrap 95% CI | one-sided sign-test p |
+|---|---:|---:|---:|
+| target vs uniform INT4 | 4.2942 | [3.0664, 5.6886] | 0.000488 |
+| target vs best random seed | 1.1622 | [0.6143, 1.7982] | 0.000488 |
+| target vs random-seed mean | 2.7444 | [1.7921, 3.5862] | 0.000488 |
 
 ## Cases
 

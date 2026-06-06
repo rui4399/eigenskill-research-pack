@@ -401,7 +401,9 @@ python train_python/build_calibration_robustness_stress.py \
 
 Current result: 11/11 wins versus uniform INT4, 11/11 wins versus the best
 random seed, 11/11 wins versus the random-seed mean, mean margin `+4.2942` PPL
-versus uniform, and worst margin `+0.1120` PPL versus the best random seed.
+versus uniform, worst margin `+0.1120` PPL versus the best random seed,
+bootstrap 95% CI `[+0.6143, +1.7982]` PPL for the mean best-random margin, and
+one-sided sign-test p-value `0.000488`.
 
 Valid claim:
 

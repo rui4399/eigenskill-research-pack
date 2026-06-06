@@ -10,6 +10,8 @@ new production quantizer.
 
 import argparse
 import json
+import math
+import random
 from dataclasses import dataclass
 from datetime import datetime, timezone
 from pathlib import Path
@@ -59,6 +61,46 @@ def mean(values: list[float]) -> float | None:
     if not values:
         return None
     return sum(values) / len(values)
+
+
+def percentile(sorted_values: list[float], q: float) -> float | None:
+    if not sorted_values:
+        return None
+    if len(sorted_values) == 1:
+        return sorted_values[0]
+    pos = min(max(q, 0.0), 1.0) * (len(sorted_values) - 1)
+    lo = int(pos)
+    hi = min(lo + 1, len(sorted_values) - 1)
+    weight = pos - lo
+    return sorted_values[lo] * (1.0 - weight) + sorted_values[hi] * weight
+
+
+def bootstrap_mean_ci(values: list[float], *, iterations: int = 2000, seed: int = 20260607, alpha: float = 0.05) -> dict[str, Any]:
+    clean = [float(value) for value in values if finite(value) is not None]
+    if not clean:
+        return {"count": 0, "mean": None, "low": None, "high": None, "iterations": iterations, "alpha": alpha}
+    rng = random.Random(seed)
+    estimates: list[float] = []
+    for _idx in range(iterations):
+        sample = [clean[rng.randrange(len(clean))] for _item in clean]
+        estimates.append(sum(sample) / len(sample))
+    estimates.sort()
+    return {
+        "count": len(clean),
+        "mean": mean(clean),
+        "low": percentile(estimates, alpha / 2.0),
+        "high": percentile(estimates, 1.0 - alpha / 2.0),
+        "iterations": iterations,
+        "alpha": alpha,
+        "seed": seed,
+    }
+
+
+def sign_test_p_value(*, wins: int, trials: int) -> float | None:
+    if trials <= 0:
+        return None
+    wins = max(0, min(int(wins), int(trials)))
+    return sum(math.comb(trials, k) for k in range(wins, trials + 1)) / (2**trials)
 
 
 def read_results(path: Path) -> dict[str, float]:
@@ -195,12 +237,18 @@ def build_report(
             "random_mean_win_rate": random_mean_wins / count if count else 0.0,
             "mean_margin_vs_uniform": mean(uniform_margins),
             "worst_margin_vs_uniform": min(uniform_margins) if uniform_margins else None,
+            "mean_margin_vs_uniform_ci": bootstrap_mean_ci(uniform_margins, seed=20260607),
             "mean_margin_vs_best_random": mean(best_random_margins),
             "worst_margin_vs_best_random": min(best_random_margins) if best_random_margins else None,
+            "mean_margin_vs_best_random_ci": bootstrap_mean_ci(best_random_margins, seed=20260608),
             "mean_margin_vs_random_mean": mean(random_mean_margins),
             "worst_margin_vs_random_mean": min(random_mean_margins) if random_mean_margins else None,
+            "mean_margin_vs_random_mean_ci": bootstrap_mean_ci(random_mean_margins, seed=20260609),
             "mean_fp16_regret": mean(fp16_regrets),
             "max_fp16_regret": max(fp16_regrets) if fp16_regrets else None,
+            "sign_test_p_vs_uniform": sign_test_p_value(wins=uniform_wins, trials=count),
+            "sign_test_p_vs_best_random": sign_test_p_value(wins=best_random_wins, trials=count),
+            "sign_test_p_vs_random_mean": sign_test_p_value(wins=random_mean_wins, trials=count),
         },
         "failures": failures,
         "cases": rows,
@@ -236,6 +284,26 @@ def write_markdown(path: Path, report: dict[str, Any]) -> None:
         f"- mean margin vs best random: `{fmt(summary['mean_margin_vs_best_random'])}`",
         f"- worst margin vs best random: `{fmt(summary['worst_margin_vs_best_random'])}`",
         f"- mean FP16 regret: `{fmt(summary['mean_fp16_regret'])}`",
+        "",
+        "## Statistical Checks",
+        "",
+        "| comparison | mean margin | bootstrap 95% CI | one-sided sign-test p |",
+        "|---|---:|---:|---:|",
+        (
+            f"| target vs uniform INT4 | {fmt(summary['mean_margin_vs_uniform'])} | "
+            f"[{fmt(summary['mean_margin_vs_uniform_ci']['low'])}, {fmt(summary['mean_margin_vs_uniform_ci']['high'])}] | "
+            f"{fmt(summary['sign_test_p_vs_uniform'], 6)} |"
+        ),
+        (
+            f"| target vs best random seed | {fmt(summary['mean_margin_vs_best_random'])} | "
+            f"[{fmt(summary['mean_margin_vs_best_random_ci']['low'])}, {fmt(summary['mean_margin_vs_best_random_ci']['high'])}] | "
+            f"{fmt(summary['sign_test_p_vs_best_random'], 6)} |"
+        ),
+        (
+            f"| target vs random-seed mean | {fmt(summary['mean_margin_vs_random_mean'])} | "
+            f"[{fmt(summary['mean_margin_vs_random_mean_ci']['low'])}, {fmt(summary['mean_margin_vs_random_mean_ci']['high'])}] | "
+            f"{fmt(summary['sign_test_p_vs_random_mean'], 6)} |"
+        ),
         "",
         "## Cases",
         "",
