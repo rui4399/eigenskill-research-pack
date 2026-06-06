@@ -1,54 +1,164 @@
 {
+  "date": "2026-06-06T14:49:30+00:00",
+  "audit_mode": "multi_environment_union",
   "python": {
-    "executable": "/usr/bin/python3",
-    "version": "3.10.12 (main, Mar  3 2026, 11:56:32) [GCC 11.4.0]",
-    "platform": "Linux-6.6.87.2-microsoft-standard-WSL2-x86_64-with-glibc2.35"
+    "executable": "multi-environment",
+    "version": "see environments[]",
+    "platform": "see environments[]"
   },
   "packages": [
     {
       "name": "auto_gptq",
       "available": false,
-      "version": ""
+      "version": "",
+      "sources": [
+        {
+          "label": "windows_optimum",
+          "available": false,
+          "version": ""
+        },
+        {
+          "label": "wsl_gpu",
+          "available": false,
+          "version": ""
+        }
+      ]
     },
     {
       "name": "awq",
       "available": false,
-      "version": ""
-    },
-    {
-      "name": "llmcompressor",
-      "available": false,
-      "version": ""
-    },
-    {
-      "name": "optimum",
-      "available": false,
-      "version": ""
+      "version": "",
+      "sources": [
+        {
+          "label": "windows_optimum",
+          "available": false,
+          "version": ""
+        },
+        {
+          "label": "wsl_gpu",
+          "available": false,
+          "version": ""
+        }
+      ]
     },
     {
       "name": "bitsandbytes",
       "available": false,
-      "version": ""
+      "version": "",
+      "sources": [
+        {
+          "label": "windows_optimum",
+          "available": false,
+          "version": ""
+        },
+        {
+          "label": "wsl_gpu",
+          "available": false,
+          "version": ""
+        }
+      ]
     },
     {
       "name": "gptqmodel",
       "available": false,
-      "version": ""
+      "version": "",
+      "sources": [
+        {
+          "label": "windows_optimum",
+          "available": false,
+          "version": ""
+        },
+        {
+          "label": "wsl_gpu",
+          "available": false,
+          "version": ""
+        }
+      ]
     },
     {
-      "name": "transformers",
+      "name": "llmcompressor",
+      "available": false,
+      "version": "",
+      "sources": [
+        {
+          "label": "windows_optimum",
+          "available": false,
+          "version": ""
+        },
+        {
+          "label": "wsl_gpu",
+          "available": false,
+          "version": ""
+        }
+      ]
+    },
+    {
+      "name": "optimum",
       "available": true,
-      "version": "5.8.1"
+      "version": "2.1.0",
+      "sources": [
+        {
+          "label": "windows_optimum",
+          "available": true,
+          "version": "2.1.0"
+        },
+        {
+          "label": "wsl_gpu",
+          "available": false,
+          "version": ""
+        }
+      ]
     },
     {
       "name": "torch",
       "available": true,
-      "version": "2.12.0+cu130"
+      "version": "2.12.0",
+      "sources": [
+        {
+          "label": "windows_optimum",
+          "available": true,
+          "version": "2.12.0"
+        },
+        {
+          "label": "wsl_gpu",
+          "available": true,
+          "version": "2.12.0+cu130"
+        }
+      ]
+    },
+    {
+      "name": "transformers",
+      "available": true,
+      "version": "5.10.2",
+      "sources": [
+        {
+          "label": "windows_optimum",
+          "available": true,
+          "version": "5.10.2"
+        },
+        {
+          "label": "wsl_gpu",
+          "available": true,
+          "version": "5.8.1"
+        }
+      ]
     },
     {
       "name": "triton",
       "available": true,
-      "version": "3.7.0"
+      "version": "3.7.0",
+      "sources": [
+        {
+          "label": "windows_optimum",
+          "available": false,
+          "version": ""
+        },
+        {
+          "label": "wsl_gpu",
+          "available": true,
+          "version": "3.7.0"
+        }
+      ]
     }
   ],
   "torch": {
@@ -59,7 +169,8 @@
     "device_count": 1,
     "device_names": [
       "NVIDIA GeForce RTX 5070 Laptop GPU"
-    ]
+    ],
+    "source_label": "wsl_gpu"
   },
   "nvidia_smi": {
     "command": [
@@ -70,5 +181,62 @@
     "returncode": 0,
     "stdout": "NVIDIA GeForce RTX 5070 Laptop GPU, 8151 MiB, 591.86",
     "stderr": ""
-  }
+  },
+  "environments": [
+    {
+      "label": "windows_optimum",
+      "python": {
+        "executable": "D:\\anaconda3\\python.exe",
+        "version": "3.13.9 | packaged by Anaconda, Inc. | (main, Oct 21 2025, 19:09:58) [MSC v.1929 64 bit (AMD64)]",
+        "platform": "Windows-11-10.0.26200-SP0"
+      },
+      "torch": {
+        "available": true,
+        "version": "2.12.0+cpu",
+        "cuda_available": false,
+        "cuda_version": null,
+        "device_count": 0,
+        "device_names": []
+      },
+      "nvidia_smi": {
+        "command": [
+          "nvidia-smi",
+          "--query-gpu=name,memory.total,driver_version",
+          "--format=csv,noheader"
+        ],
+        "returncode": 0,
+        "stdout": "NVIDIA GeForce RTX 5070 Laptop GPU, 8151 MiB, 591.86",
+        "stderr": ""
+      }
+    },
+    {
+      "label": "wsl_gpu",
+      "python": {
+        "executable": "/usr/bin/python3",
+        "version": "3.10.12 (main, Mar  3 2026, 11:56:32) [GCC 11.4.0]",
+        "platform": "Linux-6.6.87.2-microsoft-standard-WSL2-x86_64-with-glibc2.35"
+      },
+      "torch": {
+        "available": true,
+        "version": "2.12.0+cu130",
+        "cuda_available": true,
+        "cuda_version": "13.0",
+        "device_count": 1,
+        "device_names": [
+          "NVIDIA GeForce RTX 5070 Laptop GPU"
+        ]
+      },
+      "nvidia_smi": {
+        "command": [
+          "nvidia-smi",
+          "--query-gpu=name,memory.total,driver_version",
+          "--format=csv,noheader"
+        ],
+        "returncode": 0,
+        "stdout": "NVIDIA GeForce RTX 5070 Laptop GPU, 8151 MiB, 591.86",
+        "stderr": ""
+      }
+    }
+  ],
+  "interpretation": "Package availability is the union across the listed local environments. Use environment-specific audit files to determine where a package actually ran."
 }

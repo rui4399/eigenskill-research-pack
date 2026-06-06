@@ -28,15 +28,16 @@ python train_python/build_evidence_ledger.py \
   --gate public_task_benchmark=outputs/public_task_benchmark_ollama_qwen35_4b_gate_2026_06_06.json \
   --gate allocation_family_proxy=outputs/q_palette_style_allocation_family_gate_2026_06_06.json \
   --gate rotation_family_proxy=outputs/quarot_spinquant_rotation_family_gate_2026_06_06.json \
+  --gate awq_gptq_proxy=outputs/awq_gptq_proxy_gate_2026_06_06.json \
   --out-json outputs/real_system_packer_2026-06-05/evidence_ledger_2026_06_06.json \
   --out-md outputs/real_system_packer_2026-06-05/EVIDENCE_LEDGER_2026_06_06.md
 ```
 
-The current ledger passes with 14/14 gates across repo hygiene, calibration
+The current ledger passes with 15/15 gates across repo hygiene, calibration
 robustness, artifact integrity, kernel, runtime wiring, selected-row, C++
 runtime, decode integration, QKV replacement, quality, task-retention, and
-capability-retention, allocation-comparator, and rotation-comparator evidence
-categories.
+capability-retention, allocation-comparator, rotation-comparator, and
+PTQ-comparator evidence categories.
 
 Valid claim:
 
@@ -175,6 +176,72 @@ Valid claim:
 Invalid claim:
 
 - this is a faithful official Q-Palette/IMPQ/WINDQuant reproduction.
+
+## AWQ/GPTQ Proxy Gate
+
+`train_python/build_awq_gptq_proxy.py` and
+`train_python/gate_awq_gptq_proxy.py` provide an executable AWQ/GPTQ-style PTQ
+proxy. The generator consumes measured module loss-sensitivity artifacts and
+produces two budgeted 4/8-bit policies:
+
+- `gptq_loss_hessian_proxy`: protects modules by loss/Hessian-style sensitivity.
+- `awq_activation_saliency_proxy`: protects modules by sensitivity plus
+  role/shape saliency.
+
+`train_python/merge_baseline_environment_audits.py` merges package audits across
+local environments, so the dashboard can truthfully see both Windows `optimum`
+availability and WSL GPU `triton` availability without pretending they came from
+the same Python interpreter.
+
+Current generation:
+
+```bash
+python train_python/build_awq_gptq_proxy.py \
+  --input outputs/qwen3_0p6b_module_loss_sensitivity_limit4_group128.json \
+  --environment-audit outputs/baseline_environment_audit.json \
+  --target-avg-bits 4.5 \
+  --out-json outputs/awq_gptq_proxy_qwen3_0p6b_wikitext2_group128_summary.json \
+  --out-md outputs/AWQ_GPTQ_PROXY_QWEN3_0P6B_WIKITEXT2_GROUP128.md
+
+python train_python/build_awq_gptq_proxy.py \
+  --input outputs/qwen3_0p6b_c4_module_loss_sensitivity_limit4_group128.json \
+  --environment-audit outputs/baseline_environment_audit.json \
+  --target-avg-bits 4.5 \
+  --out-json outputs/awq_gptq_proxy_qwen3_0p6b_c4_group128_summary.json \
+  --out-md outputs/AWQ_GPTQ_PROXY_QWEN3_0P6B_C4_GROUP128.md
+```
+
+Current gate:
+
+```bash
+python train_python/gate_awq_gptq_proxy.py \
+  --case wikitext2=outputs/awq_gptq_proxy_qwen3_0p6b_wikitext2_group128_summary.json \
+  --case c4=outputs/awq_gptq_proxy_qwen3_0p6b_c4_group128_summary.json \
+  --min-cases 2 \
+  --min-records 100 \
+  --required-artifact-token awq_gptq \
+  --required-method-tokens awq,gptq \
+  --target-avg-bits 4.5 \
+  --min-protected-ratio 0.50 \
+  --require-external-package \
+  --out-json outputs/awq_gptq_proxy_gate_2026_06_06.json \
+  --out-md outputs/AWQ_GPTQ_PROXY_GATE_2026_06_06.md
+```
+
+Current result: 2 cases, 394 records, `optimum` available in the merged audit,
+and both AWQ/GPTQ proxy policies satisfy the `4.5` average-bit budget. Protected
+positive-sensitivity ratios are `0.6472/0.6452` on WikiText2 and
+`0.5865/0.5772` on C4 for GPTQ/AWQ respectively.
+
+Valid claim:
+
+- AWQ/GPTQ-style proxy baselines are executable over measured Qwen3-0.6B
+  sensitivity artifacts.
+
+Invalid claim:
+
+- this is an official AWQ/GPTQ quantizer run, a GPU PTQ implementation, or a
+  SOTA PTQ comparison.
 
 ## Rotation Family Proxy Gate
 

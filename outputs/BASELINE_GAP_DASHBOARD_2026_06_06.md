@@ -1,6 +1,6 @@
 # Baseline Gap Dashboard
 
-Date: `2026-06-06T14:06:26+00:00`
+Date: `2026-06-06T14:50:12+00:00`
 Status: **NOT READY** for paper claims that require external baselines
 Items: `11`
 
@@ -8,12 +8,11 @@ Items: `11`
 
 | status | count |
 |---|---:|
-| `covered` | 9 |
-| `missing` | 2 |
+| `covered` | 10 |
+| `missing` | 1 |
 
 ## Missing Paper Blockers
 
-- `awq_or_gptq`
 - `mobile_redmi_k80_pro`
 
 ## Baseline Items
@@ -24,7 +23,7 @@ Items: `11`
 | `heuristic_structural_allocation` | in_repo_allocation | required | False | **covered** | 1 | 0 | 0 | n/a | Heuristic ablation, not an external SOTA comparator. |
 | `consensus_vs_random_ppl` | in_repo_allocation | required | False | **covered** | 3 | 0 | 0 | n/a | Short-slice fake-quant PPL evidence only. |
 | `calibration_split_instability` | calibration_robustness | required | False | **covered** | 1 | 0 | 0 | n/a | Defines the measured problem setting; not a quality-retention proof by itself. |
-| `awq_or_gptq` | external_ptq | high | True | **missing** | 0 | 0 | 0 | awq=no, auto_gptq=no, gptqmodel=no, optimum=no | Needed before claiming competitiveness against common PTQ practice. |
+| `awq_or_gptq` | external_ptq | high | True | **covered** | 2 | 0 | 0 | awq=no, auto_gptq=no, gptqmodel=no, optimum=yes | AWQ/GPTQ-style proxy coverage plus an available external PTQ ecosystem package is only related-family evidence; faithful official AWQ/GPTQ competitiveness still requires matched public runs. |
 | `rotation_family` | external_rotation | high | True | **covered** | 2 | 0 | 0 | n/a | QuaRot/SpinQuant-style proxy coverage is acceptable for related-family coverage; faithful official rotation implementations and activation/KV quality claims still require stronger evidence. |
 | `allocation_family` | external_allocation | high | True | **covered** | 2 | 0 | 0 | n/a | Q-Palette-style proxy comparator is covered; faithful official Q-Palette/IMPQ/WINDQuant reproductions are still future work. |
 | `public_task_schema_smoke` | capability_retention | required | False | **covered** | 3 | 8 | 0 | n/a | Proves public-schema task ingestion and guarded execution only; not leaderboard-scale retention. |

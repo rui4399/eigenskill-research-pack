@@ -1,15 +1,15 @@
 # Evidence Ledger
 
-Date: `2026-06-06T14:16:19+00:00`
+Date: `2026-06-06T15:04:57+00:00`
 Status: **PASS**
-Gates: `14 / 14` passed
-Categories: `allocation comparator, artifact integrity, c++ runtime, calibration robustness, capability retention, decode integration, kernel, qkv replacement, quality, repo hygiene, rotation comparator, runtime wiring, selected-row, task retention`
+Gates: `15 / 15` passed
+Categories: `allocation comparator, artifact integrity, c++ runtime, calibration robustness, capability retention, decode integration, kernel, ptq comparator, qkv replacement, quality, repo hygiene, rotation comparator, runtime wiring, selected-row, task retention`
 
 ## Gate Summary
 
 | gate | category | status | key metrics | source |
 |---|---|---|---|---|
-| `public_hygiene` | repo hygiene | **PASS** | tracked files 1596; forbidden files 0; placeholders 0 | `outputs/real_system_packer_2026-06-05/public_repo_hygiene_gate_2026_06_06.json` |
+| `public_hygiene` | repo hygiene | **PASS** | tracked files 1612; forbidden files 0; placeholders 0 | `outputs/real_system_packer_2026-06-05/public_repo_hygiene_gate_2026_06_06.json` |
 | `calibration_instability` | calibration robustness | **PASS** | cases 3; unstable 3; mean Spearman 0.0713; mean Jaccard 0.4349; top20 Jaccard 0.1022 | `outputs/calibration_instability_benchmark_2026_06_06.json` |
 | `esmp_package` | artifact integrity | **PASS** | checked modules 8/8; missing files 0; failed modules 0; checked compression 6.2797x | `outputs/real_system_packer_2026-06-05/esmp_package_verify_qwen3_0p6b_limit8_2026_06_06.json` |
 | `triton_shape_family` | kernel | **PASS** | configs 96/96; FP16 wins 10; best FP16 2.7647x; VRAM 0.4514 | `outputs/real_system_packer_2026-06-05/triton_qwen_shape_family_gate_2026_06_06.json` |
@@ -23,6 +23,7 @@ Categories: `allocation comparator, artifact integrity, c++ runtime, calibration
 | `public_task_benchmark` | capability retention | **PASS** | cases 2; tasks 100; passes 4; accuracy 0.0400; VRAM 0.8826 | `outputs/public_task_benchmark_ollama_qwen35_4b_gate_2026_06_06.json` |
 | `allocation_family_proxy` | allocation comparator | **PASS** | cases 2; records 394; max avg bits 4.4997; target bits 4.5000 | `outputs/q_palette_style_allocation_family_gate_2026_06_06.json` |
 | `rotation_family_proxy` | rotation comparator | **PASS** | cases 2; records 394; rotated 167; rotation cost 0.3484; projected reduction 0.0934 | `outputs/quarot_spinquant_rotation_family_gate_2026_06_06.json` |
+| `awq_gptq_proxy` | ptq comparator | **PASS** | cases 2; records 394; packages 1; methods 4 | `outputs/awq_gptq_proxy_gate_2026_06_06.json` |
 
 ## Failures
 

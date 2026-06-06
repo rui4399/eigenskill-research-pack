@@ -17,6 +17,9 @@ CATEGORIES = {
     "q_palette": "allocation comparator",
     "impq": "allocation comparator",
     "windquant": "allocation comparator",
+    "awq": "ptq comparator",
+    "gptq": "ptq comparator",
+    "ptq": "ptq comparator",
     "rotation": "rotation comparator",
     "quarot": "rotation comparator",
     "spinquant": "rotation comparator",
@@ -138,6 +141,10 @@ def metric_parts(summary: dict[str, Any]) -> list[str]:
         parts.append(f"records {summary.get('total_records')}")
     if "total_rotated" in summary:
         parts.append(f"rotated {summary.get('total_rotated')}")
+    if "available_package_count" in summary:
+        parts.append(f"packages {summary.get('available_package_count')}")
+    if "method_count" in summary:
+        parts.append(f"methods {summary.get('method_count')}")
     if (value := finite_float(summary.get("max_rotated_cost_fraction"))) is not None:
         parts.append(f"rotation cost {value:.4f}")
     if (value := finite_float(summary.get("mean_projected_reduction_ratio"))) is not None:

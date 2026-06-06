@@ -18,9 +18,12 @@ from typing import Any
 
 try:
     import torch
-    from transformers import AutoModelForCausalLM, AutoTokenizer
 except ModuleNotFoundError:  # pragma: no cover
     torch = None
+
+try:
+    from transformers import AutoModelForCausalLM, AutoTokenizer
+except ModuleNotFoundError:  # pragma: no cover
     AutoModelForCausalLM = None
     AutoTokenizer = None
 

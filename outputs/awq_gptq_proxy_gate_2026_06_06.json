@@ -1,0 +1,450 @@
+{
+  "date": "2026-06-06T14:42:50+00:00",
+  "passed": true,
+  "summary": {
+    "case_count": 2,
+    "total_records": 394,
+    "available_package_count": 1,
+    "method_count": 4
+  },
+  "cases": [
+    {
+      "label": "wikitext2",
+      "path": "outputs\\awq_gptq_proxy_qwen3_0p6b_wikitext2_group128_summary.json",
+      "method": "awq_gptq_style_ptq_baseline_proxy",
+      "source": "outputs\\qwen3_0p6b_module_loss_sensitivity_limit4_group128.json",
+      "record_count": 197,
+      "methods": [
+        "gptq_loss_hessian_proxy",
+        "awq_activation_saliency_proxy"
+      ],
+      "available_packages": [
+        "optimum"
+      ],
+      "summaries": [
+        {
+          "name": "gptq_loss_hessian_proxy",
+          "groups": 197,
+          "target_avg_bits": 4.5,
+          "avg_bits": 4.499670112161865,
+          "budget_satisfied": true,
+          "bit_hist": {
+            "4": 153,
+            "8": 44
+          },
+          "protected_count": 44,
+          "positive_sensitivity_total": 0.9409399228552875,
+          "positive_sensitivity_protected": 0.6089455787449527,
+          "positive_sensitivity_protected_ratio": 0.6471673312543738,
+          "top_protected_modules": [
+            {
+              "module": "model.layers.20.self_attn.v_proj",
+              "role": "v_proj",
+              "score": 1.0,
+              "sensitivity": 0.02383974806903133,
+              "bits": 8
+            },
+            {
+              "module": "model.layers.21.self_attn.v_proj",
+              "role": "v_proj",
+              "score": 0.9525212779103425,
+              "sensitivity": 0.022707867295774342,
+              "bits": 8
+            },
+            {
+              "module": "model.layers.18.self_attn.v_proj",
+              "role": "v_proj",
+              "score": 0.8051660462008113,
+              "sensitivity": 0.019194955695165383,
+              "bits": 8
+            },
+            {
+              "module": "model.layers.4.self_attn.v_proj",
+              "role": "v_proj",
+              "score": 0.7981256971507426,
+              "sensitivity": 0.0190271155474937,
+              "bits": 8
+            },
+            {
+              "module": "model.layers.10.self_attn.k_proj",
+              "role": "k_proj",
+              "score": 0.6876208497354774,
+              "sensitivity": 0.01639270782470703,
+              "bits": 8
+            },
+            {
+              "module": "model.layers.1.mlp.gate_proj",
+              "role": "gate_proj",
+              "score": 0.6808719828101334,
+              "sensitivity": 0.04511979508073338,
+              "bits": 8
+            },
+            {
+              "module": "model.layers.17.self_attn.v_proj",
+              "role": "v_proj",
+              "score": 0.6088579893508146,
+              "sensitivity": 0.014515021075940382,
+              "bits": 8
+            },
+            {
+              "module": "model.layers.26.mlp.up_proj",
+              "role": "up_proj",
+              "score": 0.6085201848590375,
+              "sensitivity": 0.040325210519032595,
+              "bits": 8
+            },
+            {
+              "module": "model.layers.26.mlp.gate_proj",
+              "role": "gate_proj",
+              "score": 0.5978122098411341,
+              "sensitivity": 0.03961561803948399,
+              "bits": 8
+            },
+            {
+              "module": "model.layers.23.self_attn.k_proj",
+              "role": "k_proj",
+              "score": 0.552195714853663,
+              "sensitivity": 0.013164206726909988,
+              "bits": 8
+            },
+            {
+              "module": "model.layers.16.self_attn.v_proj",
+              "role": "v_proj",
+              "score": 0.5294087668579903,
+              "sensitivity": 0.012620971627431032,
+              "bits": 8
+            },
+            {
+              "module": "model.layers.26.self_attn.k_proj",
+              "role": "k_proj",
+              "score": 0.5121384714318378,
+              "sensitivity": 0.012209252135393811,
+              "bits": 8
+            }
+          ]
+        },
+        {
+          "name": "awq_activation_saliency_proxy",
+          "groups": 197,
+          "target_avg_bits": 4.5,
+          "avg_bits": 4.499670112161865,
+          "budget_satisfied": true,
+          "bit_hist": {
+            "4": 155,
+            "8": 42
+          },
+          "protected_count": 42,
+          "positive_sensitivity_total": 0.9409399228552875,
+          "positive_sensitivity_protected": 0.6071383201912521,
+          "positive_sensitivity_protected_ratio": 0.6452466363090297,
+          "top_protected_modules": [
+            {
+              "module": "model.layers.1.mlp.gate_proj",
+              "role": "gate_proj",
+              "score": 1.0,
+              "sensitivity": 0.04511979508073338,
+              "bits": 8
+            },
+            {
+              "module": "model.layers.20.self_attn.v_proj",
+              "role": "v_proj",
+              "score": 0.9598428972350516,
+              "sensitivity": 0.02383974806903133,
+              "bits": 8
+            },
+            {
+              "module": "model.layers.21.self_attn.v_proj",
+              "role": "v_proj",
+              "score": 0.9142707830674968,
+              "sensitivity": 0.022707867295774342,
+              "bits": 8
+            },
+            {
+              "module": "model.layers.26.mlp.up_proj",
+              "role": "up_proj",
+              "score": 0.893736561677158,
+              "sensitivity": 0.040325210519032595,
+              "bits": 8
+            },
+            {
+              "module": "model.layers.26.mlp.gate_proj",
+              "role": "gate_proj",
+              "score": 0.878009706573341,
+              "sensitivity": 0.03961561803948399,
+              "bits": 8
+            },
+            {
+              "module": "model.layers.18.self_attn.v_proj",
+              "role": "v_proj",
+              "score": 0.772832910540678,
+              "sensitivity": 0.019194955695165383,
+              "bits": 8
+            },
+            {
+              "module": "model.layers.4.self_attn.v_proj",
+              "role": "v_proj",
+              "score": 0.7660752815109141,
+              "sensitivity": 0.0190271155474937,
+              "bits": 8
+            },
+            {
+              "module": "model.layers.2.mlp.up_proj",
+              "role": "up_proj",
+              "score": 0.7453923888929735,
+              "sensitivity": 0.03363195184158929,
+              "bits": 8
+            },
+            {
+              "module": "model.layers.10.self_attn.k_proj",
+              "role": "k_proj",
+              "score": 0.6600079886093287,
+              "sensitivity": 0.01639270782470703,
+              "bits": 8
+            },
+            {
+              "module": "model.layers.17.self_attn.v_proj",
+              "role": "v_proj",
+              "score": 0.5844080165031941,
+              "sensitivity": 0.014515021075940382,
+              "bits": 8
+            },
+            {
+              "module": "model.layers.23.self_attn.k_proj",
+              "role": "k_proj",
+              "score": 0.5300211347859203,
+              "sensitivity": 0.013164206726909988,
+              "bits": 8
+            },
+            {
+              "module": "model.layers.0.mlp.up_proj",
+              "role": "up_proj",
+              "score": 0.5288364041089277,
+              "sensitivity": 0.02386099018462673,
+              "bits": 8
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "label": "c4",
+      "path": "outputs\\awq_gptq_proxy_qwen3_0p6b_c4_group128_summary.json",
+      "method": "awq_gptq_style_ptq_baseline_proxy",
+      "source": "outputs\\qwen3_0p6b_c4_module_loss_sensitivity_limit4_group128.json",
+      "record_count": 197,
+      "methods": [
+        "gptq_loss_hessian_proxy",
+        "awq_activation_saliency_proxy"
+      ],
+      "available_packages": [
+        "optimum"
+      ],
+      "summaries": [
+        {
+          "name": "gptq_loss_hessian_proxy",
+          "groups": 197,
+          "target_avg_bits": 4.5,
+          "avg_bits": 4.499670112161865,
+          "budget_satisfied": true,
+          "bit_hist": {
+            "4": 158,
+            "8": 39
+          },
+          "protected_count": 39,
+          "positive_sensitivity_total": 0.498615562915802,
+          "positive_sensitivity_protected": 0.2924158573150635,
+          "positive_sensitivity_protected_ratio": 0.5864555362152662,
+          "top_protected_modules": [
+            {
+              "module": "model.layers.0.self_attn.v_proj",
+              "role": "v_proj",
+              "score": 1.0,
+              "sensitivity": 0.025031864643096924,
+              "bits": 8
+            },
+            {
+              "module": "model.layers.2.self_attn.v_proj",
+              "role": "v_proj",
+              "score": 0.55175550343481,
+              "sensitivity": 0.013811469078063965,
+              "bits": 8
+            },
+            {
+              "module": "model.layers.2.mlp.down_proj",
+              "role": "down_proj",
+              "score": 0.3942487513525705,
+              "sensitivity": 0.027432382106781006,
+              "bits": 8
+            },
+            {
+              "module": "model.layers.20.self_attn.q_proj",
+              "role": "q_proj",
+              "score": 0.27594672567497647,
+              "sensitivity": 0.013157069683074951,
+              "bits": 8
+            },
+            {
+              "module": "model.layers.11.self_attn.k_proj",
+              "role": "k_proj",
+              "score": 0.27452525805721906,
+              "sensitivity": 0.0068718791007995605,
+              "bits": 8
+            },
+            {
+              "module": "model.layers.27.mlp.down_proj",
+              "role": "down_proj",
+              "score": 0.24063497332626013,
+              "sensitivity": 0.016743719577789307,
+              "bits": 8
+            },
+            {
+              "module": "model.layers.10.self_attn.v_proj",
+              "role": "v_proj",
+              "score": 0.21664186301239385,
+              "sensitivity": 0.00542294979095459,
+              "bits": 8
+            },
+            {
+              "module": "model.layers.12.self_attn.k_proj",
+              "role": "k_proj",
+              "score": 0.21256295167454428,
+              "sensitivity": 0.005320847034454346,
+              "bits": 8
+            },
+            {
+              "module": "model.layers.16.self_attn.v_proj",
+              "role": "v_proj",
+              "score": 0.18972533425404497,
+              "sensitivity": 0.004749178886413574,
+              "bits": 8
+            },
+            {
+              "module": "model.layers.12.self_attn.v_proj",
+              "role": "v_proj",
+              "score": 0.18180324550855426,
+              "sensitivity": 0.00455087423324585,
+              "bits": 8
+            },
+            {
+              "module": "model.layers.20.mlp.up_proj",
+              "role": "up_proj",
+              "score": 0.1795298818841335,
+              "sensitivity": 0.012491941452026367,
+              "bits": 8
+            },
+            {
+              "module": "model.layers.26.mlp.up_proj",
+              "role": "up_proj",
+              "score": 0.1746548720654361,
+              "sensitivity": 0.01215273141860962,
+              "bits": 8
+            }
+          ]
+        },
+        {
+          "name": "awq_activation_saliency_proxy",
+          "groups": 197,
+          "target_avg_bits": 4.5,
+          "avg_bits": 4.499670112161865,
+          "budget_satisfied": true,
+          "bit_hist": {
+            "4": 162,
+            "8": 35
+          },
+          "protected_count": 35,
+          "positive_sensitivity_total": 0.498615562915802,
+          "positive_sensitivity_protected": 0.28781354427337646,
+          "positive_sensitivity_protected_ratio": 0.5772253529157847,
+          "top_protected_modules": [
+            {
+              "module": "model.layers.0.self_attn.v_proj",
+              "role": "v_proj",
+              "score": 1.0,
+              "sensitivity": 0.025031864643096924,
+              "bits": 8
+            },
+            {
+              "module": "model.layers.2.self_attn.v_proj",
+              "role": "v_proj",
+              "score": 0.5517555034348101,
+              "sensitivity": 0.013811469078063965,
+              "bits": 8
+            },
+            {
+              "module": "model.layers.2.mlp.down_proj",
+              "role": "down_proj",
+              "score": 0.5484184059591649,
+              "sensitivity": 0.027432382106781006,
+              "bits": 8
+            },
+            {
+              "module": "model.layers.20.self_attn.q_proj",
+              "role": "q_proj",
+              "score": 0.364345479675443,
+              "sensitivity": 0.013157069683074951,
+              "bits": 8
+            },
+            {
+              "module": "model.layers.27.mlp.down_proj",
+              "role": "down_proj",
+              "score": 0.3347344742040699,
+              "sensitivity": 0.016743719577789307,
+              "bits": 8
+            },
+            {
+              "module": "model.layers.20.mlp.up_proj",
+              "role": "up_proj",
+              "score": 0.2747078854095676,
+              "sensitivity": 0.012491941452026367,
+              "bits": 8
+            },
+            {
+              "module": "model.layers.11.self_attn.k_proj",
+              "role": "k_proj",
+              "score": 0.2745252580572191,
+              "sensitivity": 0.0068718791007995605,
+              "bits": 8
+            },
+            {
+              "module": "model.layers.26.mlp.up_proj",
+              "role": "up_proj",
+              "score": 0.2672483827095683,
+              "sensitivity": 0.01215273141860962,
+              "bits": 8
+            },
+            {
+              "module": "model.layers.4.mlp.gate_proj",
+              "role": "gate_proj",
+              "score": 0.22435788062744277,
+              "sensitivity": 0.010202348232269287,
+              "bits": 8
+            },
+            {
+              "module": "model.layers.10.self_attn.v_proj",
+              "role": "v_proj",
+              "score": 0.2166418630123939,
+              "sensitivity": 0.00542294979095459,
+              "bits": 8
+            },
+            {
+              "module": "model.layers.12.self_attn.k_proj",
+              "role": "k_proj",
+              "score": 0.2125629516745443,
+              "sensitivity": 0.005320847034454346,
+              "bits": 8
+            },
+            {
+              "module": "model.layers.26.self_attn.q_proj",
+              "role": "q_proj",
+              "score": 0.210074824023903,
+              "sensitivity": 0.007586121559143066,
+              "bits": 8
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "failures": [],
+  "claim_boundary": "Valid claim: AWQ/GPTQ-style proxy artifacts exist and an external PTQ ecosystem package is available. Invalid claim: this is an official AWQ/GPTQ run, GPU PTQ implementation, or SOTA baseline comparison."
+}

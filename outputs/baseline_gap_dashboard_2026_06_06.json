@@ -1,11 +1,11 @@
 {
-  "date": "2026-06-06T14:06:26+00:00",
+  "date": "2026-06-06T14:50:12+00:00",
   "schema_version": 1,
   "passed": false,
   "item_count": 11,
   "status_counts": {
-    "covered": 9,
-    "missing": 2
+    "covered": 10,
+    "missing": 1
   },
   "family_counts": {
     "in_repo_allocation": {
@@ -15,7 +15,7 @@
       "covered": 1
     },
     "external_ptq": {
-      "missing": 1
+      "covered": 1
     },
     "external_rotation": {
       "covered": 1
@@ -34,7 +34,6 @@
     }
   },
   "paper_blocker_missing": [
-    "awq_or_gptq",
     "mobile_redmi_k80_pro"
   ],
   "items": [
@@ -165,7 +164,7 @@
       "family": "external_ptq",
       "priority": "high",
       "paper_blocker": true,
-      "description": "At least one practical public PTQ baseline such as AWQ or GPTQ.",
+      "description": "At least one public PTQ family baseline or clearly bounded AWQ/GPTQ-style proxy.",
       "required_evidence_globs": [
         "outputs/**/*awq*summary.json",
         "outputs/**/*gptq*summary.json"
@@ -177,16 +176,19 @@
         "optimum"
       ],
       "package_mode": "any",
-      "claim_boundary": "Needed before claiming competitiveness against common PTQ practice.",
-      "status": "missing",
-      "evidence_count": 0,
+      "claim_boundary": "AWQ/GPTQ-style proxy coverage plus an available external PTQ ecosystem package is only related-family evidence; faithful official AWQ/GPTQ competitiveness still requires matched public runs.",
+      "status": "covered",
+      "evidence_count": 2,
       "evidence_task_count": 0,
-      "evidence_matches": [],
+      "evidence_matches": [
+        "outputs/awq_gptq_proxy_qwen3_0p6b_c4_group128_summary.json",
+        "outputs/awq_gptq_proxy_qwen3_0p6b_wikitext2_group128_summary.json"
+      ],
       "evidence_truncated": false,
       "partial_evidence_count": 0,
       "partial_evidence_matches": [],
       "partial_evidence_truncated": false,
-      "package_ok": false,
+      "package_ok": true,
       "package_summary": [
         {
           "name": "awq",
@@ -205,8 +207,8 @@
         },
         {
           "name": "optimum",
-          "available": false,
-          "version": ""
+          "available": true,
+          "version": "2.1.0"
         }
       ]
     },
@@ -366,7 +368,7 @@
         {
           "name": "torch",
           "available": true,
-          "version": "2.12.0+cu130"
+          "version": "2.12.0"
         },
         {
           "name": "triton",

@@ -21,6 +21,7 @@ interpretation. Anything outside these rows remains future work.
 | Current chat-task stress retention is measured rather than hidden. | 84-task stress gate. | `outputs/real_system_packer_2026-06-05/CHAT_TASK_STRESS_V3_84_GATE_2026_06_06.md` | Allows one known regression; does not prove production readiness. |
 | Public-schema task evaluation is wired. | Streamed GSM8K and MMLU abstract-algebra smoke fixtures plus Qwen3-0.6B guarded baseline outputs. | `outputs/PUBLIC_TASK_SMOKE_MANIFEST_2026_06_06.md`, `outputs/PUBLIC_TASK_SMOKE_MMLU_QWEN3_0P6B.md`, `outputs/PUBLIC_TASK_SMOKE_GSM8K_QWEN3_0P6B.md` | Tiny negative smoke only: 0/4 on each slice; not broad task retention. |
 | Public MMLU/GSM8K subset evaluation is guarded at 100 tasks. | Ollama qwen35-4B local API run on 50 MMLU abstract-algebra and 50 GSM8K rows. | `outputs/PUBLIC_TASK_BENCHMARK_OLLAMA_QWEN35_4B_GATE_2026_06_06.md` | Coverage and negative capability evidence only: 4/100 total passes; not leaderboard-scale or fused-retention evidence. |
+| An AWQ/GPTQ-style PTQ proxy is executable. | Measured Qwen3-0.6B WikiText2/C4 sensitivity artifacts produce budgeted GPTQ-loss and AWQ-saliency proxy policies, with `optimum` available in the merged package audit. | `outputs/AWQ_GPTQ_PROXY_GATE_2026_06_06.md` | Proxy comparator-family coverage only; not an official AWQ/GPTQ quantizer run or SOTA PTQ comparison. |
 | A Q-Palette-style allocation comparator proxy is executable. | Measured Qwen3-0.6B WikiText2/C4 sensitivity artifacts produce budget-satisfying rate-distortion allocations. | `outputs/Q_PALETTE_STYLE_ALLOCATION_FAMILY_GATE_2026_06_06.md` | Proxy comparator only; not a faithful official Q-Palette/IMPQ/WINDQuant reproduction. |
 | A QuaRot/SpinQuant-style rotation-family proxy is executable. | Measured Qwen3-0.6B WikiText2/C4 sensitivity artifacts produce budgeted rotation/outlier-mitigation proxy summaries. | `outputs/QUAROT_SPINQUANT_ROTATION_FAMILY_GATE_2026_06_06.md` | Proxy comparator-family coverage only; not a faithful official QuaRot/SpinQuant implementation or activation/KV quality proof. |
 | The current paper-facing evidence set passes as a ledger. | Top-level evidence ledger. | `outputs/real_system_packer_2026-06-05/EVIDENCE_LEDGER_2026_06_06.md` | A ledger pass means listed gates passed, not that the paper is top-tier ready. |
@@ -30,7 +31,8 @@ interpretation. Anything outside these rows remains future work.
 
 | claim | status | required next evidence |
 |---|---|---|
-| EigenSkill-Q is a SOTA quantizer. | Rejected. | GPTQ/AWQ/SmoothQuant and faithful QuaRot/SpinQuant comparisons on matched public benchmarks. |
+| EigenSkill-Q is a SOTA quantizer. | Rejected. | Official GPTQ/AWQ/SmoothQuant and faithful QuaRot/SpinQuant comparisons on matched public benchmarks. |
+| EigenSkill-Q faithfully runs AWQ/GPTQ PTQ. | Not yet. | Official AWQ/GPTQ package runs or faithful reproductions with matched calibration, packed outputs, and quality evaluation. |
 | EigenSkill-Q is competitive with recent mixed-precision allocation papers. | Not yet. | Q-Palette/IMPQ/WINDQuant-style comparisons or faithful reimplementations under matched budgets. |
 | EigenSkill-Q faithfully implements rotation-family PTQ. | Not yet. | Official or faithful QuaRot/SpinQuant transforms, activation/KV rotation kernels, and quality-retention evaluation. |
 | The system has mobile/Redmi K80 Pro latency evidence. | Not yet. | On-device TTFT, tokens/s, peak memory, and thermal/power logs. |

@@ -1,45 +1,37 @@
 # Baseline Environment Audit
 
-This audit records whether public quantization baseline packages are
-available in the current Python environment. It does not install
-packages or mutate the environment.
+Date: `2026-06-06T14:49:30+00:00`
+Mode: `multi_environment_union`
 
-## Python
+## Merged Packages
 
-- executable: `/usr/bin/python3`
-- version: `3.10.12 (main, Mar  3 2026, 11:56:32) [GCC 11.4.0]`
-- platform: `Linux-6.6.87.2-microsoft-standard-WSL2-x86_64-with-glibc2.35`
+| package | available | version | sources |
+|---|---:|---|---|
+| `auto_gptq` | False | `` | `windows_optimum=no:, wsl_gpu=no:` |
+| `awq` | False | `` | `windows_optimum=no:, wsl_gpu=no:` |
+| `bitsandbytes` | False | `` | `windows_optimum=no:, wsl_gpu=no:` |
+| `gptqmodel` | False | `` | `windows_optimum=no:, wsl_gpu=no:` |
+| `llmcompressor` | False | `` | `windows_optimum=no:, wsl_gpu=no:` |
+| `optimum` | True | `2.1.0` | `windows_optimum=yes:2.1.0, wsl_gpu=no:` |
+| `torch` | True | `2.12.0` | `windows_optimum=yes:2.12.0, wsl_gpu=yes:2.12.0+cu130` |
+| `transformers` | True | `5.10.2` | `windows_optimum=yes:5.10.2, wsl_gpu=yes:5.8.1` |
+| `triton` | True | `3.7.0` | `windows_optimum=no:, wsl_gpu=yes:3.7.0` |
 
-## Torch/CUDA
+## Torch/CUDA Selected For Dashboard
 
+- source: `wsl_gpu`
 - torch available: `True`
 - torch version: `2.12.0+cu130`
 - cuda available: `True`
-- cuda version: `13.0`
 - devices: `['NVIDIA GeForce RTX 5070 Laptop GPU']`
 
-## Baseline Packages
+## Environments
 
-| package | available | version |
-|---|---:|---|
-| `auto_gptq` | False | `` |
-| `awq` | False | `` |
-| `llmcompressor` | False | `` |
-| `optimum` | False | `` |
-| `bitsandbytes` | False | `` |
-| `gptqmodel` | False | `` |
-| `transformers` | True | `5.8.1` |
-| `torch` | True | `2.12.0+cu130` |
-| `triton` | True | `3.7.0` |
-
-## NVIDIA-SMI
-
-```text
-NVIDIA GeForce RTX 5070 Laptop GPU, 8151 MiB, 591.86
-```
+| label | python | platform | torch | cuda |
+|---|---|---|---|---:|
+| `windows_optimum` | `D:\anaconda3\python.exe` | `Windows-11-10.0.26200-SP0` | `2.12.0+cpu` | False |
+| `wsl_gpu` | `/usr/bin/python3` | `Linux-6.6.87.2-microsoft-standard-WSL2-x86_64-with-glibc2.35` | `2.12.0+cu130` | True |
 
 ## Interpretation
 
-If GPTQ/AWQ/SmoothQuant-style packages are unavailable, claims must stay
-limited to the repository's fake-quant diagnostics until a pinned baseline
-environment is installed and evaluated.
+- Package availability is the union across the listed local environments. Use environment-specific audit files to determine where a package actually ran.

@@ -44,6 +44,10 @@ Implemented and committed:
 - A real public-schema task smoke path using streamed GSM8K and MMLU
   abstract-algebra samples, kept as negative capability-retention evidence for
   the current small Qwen3-0.6B baseline.
+- An AWQ/GPTQ-style PTQ proxy gate over measured Qwen3-0.6B WikiText2/C4
+  sensitivity artifacts, plus a multi-environment baseline audit showing
+  `optimum` availability in Windows Python and `triton` availability in WSL
+  GPU Python.
 - A QuaRot/SpinQuant-style rotation-family proxy gate over measured Qwen3-0.6B
   WikiText2/C4 sensitivity artifacts, kept explicitly separate from faithful
   official rotation implementations.
@@ -62,7 +66,7 @@ Not claimed:
 - No real board-level latency or energy evidence yet.
 - No packed INT4/INT3 production matmul result yet. The Triton path is a
   prototype kernel benchmark, not a production transformer runtime.
-- No GPTQ/AWQ/SmoothQuant or faithful QuaRot/SpinQuant SOTA comparison yet.
+- No official GPTQ/AWQ/SmoothQuant or faithful QuaRot/SpinQuant SOTA comparison yet.
 - No proof that spectral/eigen routing survives nonlinear Transformer blocks.
 - No committed model weights or LoRA adapter weights.
 
@@ -152,9 +156,23 @@ Gate:      2 cases, 394 records, 167 rotated candidates, PASS
 The corresponding report is
 `outputs/QUAROT_SPINQUANT_ROTATION_FAMILY_GATE_2026_06_06.md`.
 
-All listed GPU runs stayed below the requested 85% VRAM guard. Example peaks:
-Qwen3-0.6B consensus eval stayed near 60% of an 8 GB GPU; Qwen3-1.7B stayed
-near 62%; OLMo2-1B stayed near 54%.
+The AWQ/GPTQ proxy covers the common PTQ family as a measured-sensitivity
+baseline proxy, not as an official quantizer run:
+
+```text
+Qwen3-0.6B measured module sensitivity, average 4.5 bits
+WikiText2: GPTQ proxy protected sensitivity 0.6472,
+           AWQ proxy protected sensitivity 0.6452
+C4:        GPTQ proxy protected sensitivity 0.5865,
+           AWQ proxy protected sensitivity 0.5772
+Gate:      2 cases, 394 records, optimum package available, PASS
+```
+
+The corresponding report is `outputs/AWQ_GPTQ_PROXY_GATE_2026_06_06.md`.
+
+Current active GPU runs are kept under the requested 90% VRAM guard. Older PPL
+experiments stayed below the earlier 85% target; the guarded Ollama public-task
+benchmark peaked at 0.8826, still below the current 90% cap.
 
 The latest packed-kernel smoke moves the systems evidence beyond CPU-only
 microbenchmarks:
@@ -681,6 +699,7 @@ python train_python/build_evidence_ledger.py \
   --gate public_task_benchmark=outputs/public_task_benchmark_ollama_qwen35_4b_gate_2026_06_06.json \
   --gate allocation_family_proxy=outputs/q_palette_style_allocation_family_gate_2026_06_06.json \
   --gate rotation_family_proxy=outputs/quarot_spinquant_rotation_family_gate_2026_06_06.json \
+  --gate awq_gptq_proxy=outputs/awq_gptq_proxy_gate_2026_06_06.json \
   --out-json outputs/real_system_packer_2026-06-05/evidence_ledger_2026_06_06.json \
   --out-md outputs/real_system_packer_2026-06-05/EVIDENCE_LEDGER_2026_06_06.md
 ```
@@ -714,7 +733,7 @@ Calibration Split Instability in LLM Mixed-Precision Quantization
 
 Minimum next experiments before claiming a strong venue:
 
-1. Add GPTQ/AWQ/SmoothQuant and faithful QuaRot/SpinQuant baselines where applicable.
+1. Replace AWQ/GPTQ/rotation proxies with faithful official PTQ baselines where applicable.
 2. Add MMLU/GSM8K/IFEval/BBH-style task retention, not only PPL.
 3. Repeat calibration splits and report variance, rank correlation, Jaccard,
    and allocation transfer across datasets.

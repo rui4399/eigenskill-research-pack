@@ -24,10 +24,13 @@ from typing import Any
 try:
     import torch
     import torch.nn as nn
-    from transformers import AutoModelForCausalLM, AutoTokenizer
 except ModuleNotFoundError:  # pragma: no cover
     torch = None
     nn = None
+
+try:
+    from transformers import AutoModelForCausalLM, AutoTokenizer
+except ModuleNotFoundError:  # pragma: no cover
     AutoModelForCausalLM = None
     AutoTokenizer = None
 
