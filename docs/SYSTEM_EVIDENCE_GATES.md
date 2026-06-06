@@ -72,14 +72,15 @@ are not counted in the current 22-gate paper-facing ledger.
 | probe | category | primary artifact | boundary |
 |---|---|---|---|
 | `official_awq_smoke` | external PTQ readiness | `outputs/OFFICIAL_AWQ_SMOKE_GATE_2026_06_07.md` | AutoAWQ 0.2.9 can quantize and save a tiny Qwen2.5-0.5B artifact under guard; this is not a matched AWQ/GPTQ baseline or quality-retention result. |
+| `official_awq_matched_ppl` | external PTQ readiness | `outputs/OFFICIAL_AWQ_MATCHED_PPL_GATE_2026_06_07.md` | The same four-prompt slice can be evaluated under FP16 and local AutoAWQ W4 group-128 with PPL ratio 1.1789; this is not a full public-dataset AWQ/GPTQ baseline. |
 
 ## Readiness Gaps
 
 The following remain explicit non-claims:
 
 - official matched GPTQ/AWQ/SmoothQuant/QuaRot/SpinQuant baselines are not
-  faithfully reproduced; current AWQ/GPTQ smoke/proxy, rotation proxy, and
-  allocation proxy artifacts are diagnostics, and the baseline dashboard keeps
+  faithfully reproduced; current AWQ/GPTQ smoke/matched-PPL/proxy, rotation
+  proxy, and allocation proxy artifacts are diagnostics, and the baseline dashboard keeps
   them separate from official competitive coverage;
 - no Redmi K80 Pro or board-level TTFT, tokens/s, energy, thermal, or physical
   memory evidence is complete;

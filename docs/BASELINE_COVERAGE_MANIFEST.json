@@ -73,22 +73,40 @@
       "claim_boundary": "Readiness probe only: it may show that AutoAWQ can run locally, but it is not a matched AWQ baseline or quality-retention comparison."
     },
     {
+      "id": "official_awq_matched_ppl_smoke",
+      "family": "external_ptq_readiness",
+      "priority": "optional",
+      "paper_blocker": false,
+      "description": "Minimal matched FP16-vs-AutoAWQ PPL comparison on the same prompt slice.",
+      "required_evidence_globs": [
+        "outputs/**/*official*awq*matched*ppl*summary*.json",
+        "outputs/**/*official*awq*matched*ppl*gate*.json"
+      ],
+      "required_packages": [
+        "autoawq"
+      ],
+      "package_mode": "any",
+      "claim_boundary": "Readiness PPL probe only: it may show a same-prompt FP16-vs-AutoAWQ comparison, but it is not a full public-dataset AWQ/GPTQ baseline."
+    },
+    {
       "id": "official_awq_gptq_competitive",
       "family": "external_ptq",
       "priority": "high",
       "paper_blocker": true,
       "description": "Faithful official AWQ/GPTQ-family PTQ baseline under matched calibration, budget, and evaluation.",
       "required_evidence_globs": [
-        "outputs/**/*official*awq*matched*summary.json",
         "outputs/**/*official*awq*competitive*summary.json",
-        "outputs/**/*official*gptq*matched*summary.json",
+        "outputs/**/*official*awq*full_eval*summary.json",
         "outputs/**/*official*gptq*competitive*summary.json",
-        "outputs/**/*auto_gptq*official*matched*summary.json",
-        "outputs/**/*gptqmodel*official*matched*summary.json"
+        "outputs/**/*official*gptq*full_eval*summary.json",
+        "outputs/**/*auto_gptq*official*competitive*summary.json",
+        "outputs/**/*gptqmodel*official*competitive*summary.json"
       ],
       "partial_evidence_globs": [
         "outputs/**/*official*awq*smoke*summary*.json",
-        "outputs/**/*official*awq*smoke*gate*.json"
+        "outputs/**/*official*awq*smoke*gate*.json",
+        "outputs/**/*official*awq*matched*ppl*summary*.json",
+        "outputs/**/*official*awq*matched*ppl*gate*.json"
       ],
       "proxy_evidence_globs": [
         "outputs/**/*awq_gptq_proxy*summary.json"

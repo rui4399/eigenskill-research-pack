@@ -471,6 +471,57 @@ Invalid claim:
 - this is a matched AWQ/GPTQ baseline, a quality-retention comparison, a
   leaderboard result, or production runtime evidence.
 
+## Official AutoAWQ Matched PPL Probe
+
+`train_python/run_official_awq_matched_ppl.py` evaluates the same prompt slice
+with the FP16 model and the local AutoAWQ artifact. This is a readiness bridge
+between package smoke and a future full AWQ/GPTQ baseline.
+
+Example WSL/GPU command:
+
+```bash
+python3 train_python/run_with_gpu_guard.py \
+  --max-memory-ratio 0.90 \
+  --max-start-memory-ratio 0.90 \
+  --min-disk-free-gb 8 \
+  --poll-seconds 2 \
+  --timeout-sec 900 \
+  --out outputs/official_awq_matched_ppl_qwen25_0p5b_gpu_guard_2026_06_07.json \
+  -- \
+  python3 train_python/run_official_awq_matched_ppl.py \
+    --model Qwen/Qwen2.5-0.5B-Instruct \
+    --awq-artifact outputs/official_awq_smoke_2026_06_07/qwen25_0p5b_awq_model \
+    --limit-prompts 4 \
+    --max-length 96 \
+    --device cuda \
+    --dtype float16 \
+    --out-json outputs/official_awq_matched_ppl_qwen25_0p5b_summary_2026_06_07.json \
+    --out-md outputs/OFFICIAL_AWQ_MATCHED_PPL_QWEN25_0P5B_2026_06_07.md
+```
+
+Gate command:
+
+```bash
+python train_python/gate_official_awq_matched_ppl.py \
+  --summary-json outputs/official_awq_matched_ppl_qwen25_0p5b_summary_2026_06_07.json \
+  --guard-json outputs/official_awq_matched_ppl_qwen25_0p5b_gpu_guard_2026_06_07.json \
+  --out-json outputs/official_awq_matched_ppl_gate_2026_06_07.json \
+  --out-md outputs/OFFICIAL_AWQ_MATCHED_PPL_GATE_2026_06_07.md
+```
+
+Current result: 4 prompts, 73 tokens, FP16 PPL `197.532`, AutoAWQ W4 group-128
+PPL `232.863`, PPL ratio `1.1789`, delta NLL `0.1645`, peak guard VRAM ratio
+`0.6057`.
+
+Valid claim:
+
+- a minimal same-prompt FP16-vs-AutoAWQ PPL comparison completed under guard.
+
+Invalid claim:
+
+- this is a full WikiText2/C4 baseline, task-retention result, official GPTQ
+  comparison, or SOTA PTQ result.
+
 ## Calibration Instability Benchmark Gate
 
 `train_python/build_calibration_instability_benchmark.py` aggregates multiple

@@ -1,0 +1,76 @@
+{
+  "date": "2026-06-06T21:06:31+00:00",
+  "passed": true,
+  "model": "Qwen/Qwen2.5-0.5B-Instruct",
+  "awq_artifact": "outputs/official_awq_smoke_2026_06_07/qwen25_0p5b_awq_model",
+  "prompt_source": "default",
+  "prompt_count": 4,
+  "tokens": 73,
+  "package": {
+    "name": "autoawq",
+    "version": "0.2.9"
+  },
+  "fp16": {
+    "prompt_count": 4,
+    "tokens": 73,
+    "mean_nll": 5.28590040990751,
+    "ppl": 197.53196313550743,
+    "per_prompt": [
+      {
+        "tokens": 16,
+        "loss": 6.891134738922119,
+        "ppl": 983.5168190687826
+      },
+      {
+        "tokens": 15,
+        "loss": 5.672592639923096,
+        "ppl": 290.7874651220576
+      },
+      {
+        "tokens": 20,
+        "loss": 4.821524143218994,
+        "ppl": 124.15417539173868
+      },
+      {
+        "tokens": 22,
+        "loss": 4.276963710784912,
+        "ppl": 72.02142979586496
+      }
+    ]
+  },
+  "awq": {
+    "prompt_count": 4,
+    "tokens": 73,
+    "mean_nll": 5.450448735119545,
+    "ppl": 232.8626361090369,
+    "per_prompt": [
+      {
+        "tokens": 16,
+        "loss": 6.979097366333008,
+        "ppl": 1073.9485472502763
+      },
+      {
+        "tokens": 15,
+        "loss": 5.717780590057373,
+        "ppl": 304.2289643314578
+      },
+      {
+        "tokens": 20,
+        "loss": 5.095430374145508,
+        "ppl": 163.2740984561934
+      },
+      {
+        "tokens": 22,
+        "loss": 4.4791765213012695,
+        "ppl": 88.16204321072654
+      }
+    ]
+  },
+  "comparison": {
+    "delta_nll_awq_minus_fp16": 0.164548325212035,
+    "ppl_ratio_awq_vs_fp16": 1.178860536860521
+  },
+  "elapsed_seconds": 22.504462957382202,
+  "failures": [],
+  "claim_boundary": "Valid claim: a minimal matched FP16-vs-AutoAWQ PPL comparison ran on the same prompt slice. Invalid claim: this is a competitive AWQ/GPTQ baseline, leaderboard result, or broad task-retention proof."
+}

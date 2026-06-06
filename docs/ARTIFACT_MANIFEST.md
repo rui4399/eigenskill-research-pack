@@ -7,7 +7,7 @@ not a new result.
 Current tracked output footprint:
 
 ```text
-outputs/ tracked files:                         1360
+outputs/ tracked files:                         1370
 outputs/real_system_packer_2026-06-05 files:     744
 ```
 
@@ -43,6 +43,7 @@ tracking, but they are not counted in the 22-gate paper-facing ledger.
 | Purpose | Artifact | Boundary |
 |---|---|---|
 | Minimal AutoAWQ package smoke | `outputs/OFFICIAL_AWQ_SMOKE_GATE_2026_06_07.md` | Shows AutoAWQ can quantize and save a tiny local Qwen2.5-0.5B artifact under guard; not a matched AWQ baseline or quality-retention result. |
+| Minimal AutoAWQ matched PPL probe | `outputs/OFFICIAL_AWQ_MATCHED_PPL_GATE_2026_06_07.md` | Shows same-prompt FP16-vs-AutoAWQ PPL can run under guard; not a full public-dataset AWQ/GPTQ baseline. |
 
 ## Supporting System Artifacts
 

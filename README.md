@@ -21,7 +21,7 @@ are supported, which are proxies, and which are still blockers.
 | Consensus allocation | passes committed short fake-quant stress gates | robustness diagnostic |
 | Public task coverage | guarded local subset ladder, not leaderboard-scale | capability smoke |
 | Packed runtime | gated ESMP/Triton/C++ prototypes | module-level system evidence |
-| Official PTQ baselines | AutoAWQ smoke passes; faithful matched AWQ/GPTQ baselines are still blockers | readiness only |
+| Official PTQ baselines | AutoAWQ smoke and matched PPL probe pass; faithful public AWQ/GPTQ baselines are still blockers | readiness only |
 | Mobile/Redmi evidence | no real TTFT/tokens/s/memory logs yet | no deployment claim |
 
 Current paper-facing ledger:
@@ -40,7 +40,7 @@ SOTA or deployment claims.
 2. `outputs/real_system_packer_2026-06-05/EVIDENCE_LEDGER_2026_06_06.md`
    lists every current gate.
 3. `outputs/BASELINE_GAP_DASHBOARD_2026_06_06.md` shows paper-blocking gaps
-   and separates AutoAWQ smoke from matched AWQ/GPTQ baselines.
+   and separates AutoAWQ smoke/matched-PPL probes from full AWQ/GPTQ baselines.
 4. `docs/SYSTEM_EVIDENCE_GATES.md` is the short gate index.
 5. `docs/SYSTEM_EVIDENCE_RUNBOOK.md` contains the long reproduction commands.
 

@@ -1,10 +1,10 @@
 {
-  "date": "2026-06-06T20:45:23+00:00",
+  "date": "2026-06-06T21:08:20+00:00",
   "schema_version": 1,
   "passed": false,
-  "item_count": 12,
+  "item_count": 13,
   "status_counts": {
-    "covered": 8,
+    "covered": 9,
     "partial": 1,
     "proxy_only": 2,
     "missing": 1
@@ -17,7 +17,7 @@
       "covered": 1
     },
     "external_ptq_readiness": {
-      "covered": 1
+      "covered": 2
     },
     "external_ptq": {
       "partial": 1
@@ -218,22 +218,62 @@
       ]
     },
     {
+      "id": "official_awq_matched_ppl_smoke",
+      "family": "external_ptq_readiness",
+      "priority": "optional",
+      "paper_blocker": false,
+      "description": "Minimal matched FP16-vs-AutoAWQ PPL comparison on the same prompt slice.",
+      "required_evidence_globs": [
+        "outputs/**/*official*awq*matched*ppl*summary*.json",
+        "outputs/**/*official*awq*matched*ppl*gate*.json"
+      ],
+      "required_packages": [
+        "autoawq"
+      ],
+      "package_mode": "any",
+      "claim_boundary": "Readiness PPL probe only: it may show a same-prompt FP16-vs-AutoAWQ comparison, but it is not a full public-dataset AWQ/GPTQ baseline.",
+      "status": "covered",
+      "evidence_count": 2,
+      "evidence_task_count": 0,
+      "evidence_matches": [
+        "outputs/official_awq_matched_ppl_gate_2026_06_07.json",
+        "outputs/official_awq_matched_ppl_qwen25_0p5b_summary_2026_06_07.json"
+      ],
+      "evidence_truncated": false,
+      "partial_evidence_count": 0,
+      "partial_evidence_matches": [],
+      "partial_evidence_truncated": false,
+      "proxy_evidence_count": 0,
+      "proxy_evidence_matches": [],
+      "proxy_evidence_truncated": false,
+      "package_ok": true,
+      "package_summary": [
+        {
+          "name": "autoawq",
+          "available": true,
+          "version": "0.2.9"
+        }
+      ]
+    },
+    {
       "id": "official_awq_gptq_competitive",
       "family": "external_ptq",
       "priority": "high",
       "paper_blocker": true,
       "description": "Faithful official AWQ/GPTQ-family PTQ baseline under matched calibration, budget, and evaluation.",
       "required_evidence_globs": [
-        "outputs/**/*official*awq*matched*summary.json",
         "outputs/**/*official*awq*competitive*summary.json",
-        "outputs/**/*official*gptq*matched*summary.json",
+        "outputs/**/*official*awq*full_eval*summary.json",
         "outputs/**/*official*gptq*competitive*summary.json",
-        "outputs/**/*auto_gptq*official*matched*summary.json",
-        "outputs/**/*gptqmodel*official*matched*summary.json"
+        "outputs/**/*official*gptq*full_eval*summary.json",
+        "outputs/**/*auto_gptq*official*competitive*summary.json",
+        "outputs/**/*gptqmodel*official*competitive*summary.json"
       ],
       "partial_evidence_globs": [
         "outputs/**/*official*awq*smoke*summary*.json",
-        "outputs/**/*official*awq*smoke*gate*.json"
+        "outputs/**/*official*awq*smoke*gate*.json",
+        "outputs/**/*official*awq*matched*ppl*summary*.json",
+        "outputs/**/*official*awq*matched*ppl*gate*.json"
       ],
       "proxy_evidence_globs": [
         "outputs/**/*awq_gptq_proxy*summary.json"
@@ -251,8 +291,10 @@
       "evidence_task_count": 0,
       "evidence_matches": [],
       "evidence_truncated": false,
-      "partial_evidence_count": 2,
+      "partial_evidence_count": 4,
       "partial_evidence_matches": [
+        "outputs/official_awq_matched_ppl_gate_2026_06_07.json",
+        "outputs/official_awq_matched_ppl_qwen25_0p5b_summary_2026_06_07.json",
         "outputs/official_awq_smoke_gate_2026_06_07.json",
         "outputs/official_awq_smoke_qwen25_0p5b_summary_2026_06_07.json"
       ],
