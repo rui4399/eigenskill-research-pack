@@ -14,14 +14,24 @@ measured sensitivity JSON
   -> evidence gates documented at docs/SYSTEM_EVIDENCE_GATES.md
 ```
 
-## What Is Paper-Facing
+## Contribution Tiers
+
+Not every C++ executable has the same research weight. Use this tiering when
+describing the repository publicly.
+
+| Tier | Files / executables | What they support | What they do not support |
+|---|---|---|---|
+| Core system artifacts | `quant_kernels.cpp`, `esmp_format.cpp`, `mixed_precision_packer`, `mixed_precision_runtime_bench`, `esmp_inspect` | Mixed-bit packing, ESMPQ001 binary inspection, selected-row/module-level probes. | End-to-end LLM TTFT, tokens/s, mobile deployment, or production Tensor Core runtime. |
+| Algorithm diagnostics | `quant_allocation_planner`, `quant_consensus_builder`, `quant_consensus_audit`, `quant_sensitivity_stability`, `quant_transfer_matrix`, `quant_policy_bypass` | Budget allocation, calibration-split stability checks, deterministic policy-field evaluation. | A new PTQ quantizer or faithful AWQ/GPTQ/QuaRot/Q-Palette implementation. |
+| Reporting and guard summaries | `quant_result_summarizer`, `quant_evidence_matrix`, `quant_budget_curve_summary`, `quant_ppl_summary_merge`, `quant_random_baseline_audit`, `quant_seed_coverage_check`, `gpu_guard_summary`, `quant_task_eval_summary`, `quant_task_compare`, `quant_swap_search_summary`, `quant_chunked_eval_plan`, `baseline_install_probe` | Reproducibility, audit trails, result aggregation, and failure visibility. | Systems contribution by themselves. |
+
+## Paper-Facing C++ Boundaries
 
 | Area | Executables | Claim boundary |
 |---|---|---|
 | Quant-policy bypass | `quant_policy_bypass` | Deterministic decision-field evaluation for the no-leak v1 policy split. |
 | Allocation planning | `quant_allocation_planner` | Budgeted `{4,8}` allocation from measured module sensitivity. |
 | Consensus and stability audits | `quant_consensus_builder`, `quant_consensus_audit`, `quant_sensitivity_stability`, `quant_transfer_matrix` | Reproducible calibration-split diagnostics, not SOTA quantization. |
-| Evidence summaries | `quant_result_summarizer`, `quant_evidence_matrix`, `quant_budget_curve_summary`, `quant_ppl_summary_merge`, `gpu_guard_summary` | Report generation and auditability. |
 | ESMP package layer | `mixed_precision_packer`, `mixed_precision_runtime_bench`, `esmp_inspect` | Real mixed-bit binary packaging and module-level probes, not end-to-end deployment. |
 | Kernel checks | `quant_kernel_verify`, `quant_kernel_bench` | Microbenchmark and correctness coverage for low-bit/selected-row paths. |
 
