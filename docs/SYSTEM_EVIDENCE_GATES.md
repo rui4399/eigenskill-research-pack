@@ -30,6 +30,27 @@ python train_python/gate_triton_tuning.py \
   --max-vram-ratio 0.90
 ```
 
+The `--input` flag is repeatable, so the same gate can validate a multi-shape
+family sweep.
+
+Current Qwen-shape family gate:
+
+```bash
+python train_python/gate_triton_tuning.py \
+  --input outputs/real_system_packer_2026-06-05/gpu_tuning_shape_1024x1024_2026_06_06/tuning_results.jsonl \
+  --input outputs/real_system_packer_2026-06-05/gpu_tuning_shape_2048x1024_2026_06_06/tuning_results.jsonl \
+  --input outputs/real_system_packer_2026-06-05/gpu_tuning_shape_3072x1024_2026_06_06/tuning_results.jsonl \
+  --input outputs/real_system_packer_2026-06-05/gpu_tuning_shape_1024x3072_2026_06_06/tuning_results.jsonl \
+  --out-json outputs/real_system_packer_2026-06-05/triton_qwen_shape_family_gate_2026_06_06.json \
+  --out-md outputs/real_system_packer_2026-06-05/TRITON_QWEN_SHAPE_FAMILY_GATE_2026_06_06.md \
+  --min-valid-configs 96 \
+  --min-fp16-wins 8 \
+  --min-best-fp16-speedup 2.00 \
+  --min-rowwise-wins 70 \
+  --max-rel-l2 0.20 \
+  --max-vram-ratio 0.90
+```
+
 Passing this gate supports only this narrow claim:
 
 ```text

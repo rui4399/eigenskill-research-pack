@@ -162,7 +162,7 @@ def write_markdown(path: Path, result: dict[str, Any]) -> None:
 
 def main() -> None:
     parser = argparse.ArgumentParser(description="Validate Triton tuning evidence against explicit thresholds.")
-    parser.add_argument("--input", type=Path, required=True, help="Path to tuning_results.jsonl.")
+    parser.add_argument("--input", action="append", type=Path, required=True, help="Path to tuning_results.jsonl; repeatable.")
     parser.add_argument("--out-json", type=Path, default=Path("outputs/real_system_packer_2026-06-05/triton_tuning_gate.json"))
     parser.add_argument("--out-md", type=Path, default=Path("outputs/real_system_packer_2026-06-05/TRITON_TUNING_GATE.md"))
     parser.add_argument("--min-valid-configs", type=int, default=8)
@@ -173,11 +173,14 @@ def main() -> None:
     parser.add_argument("--max-vram-ratio", type=float, default=0.90)
     args = parser.parse_args()
 
-    summary = summarize(load_jsonl(args.input))
+    rows: list[dict[str, Any]] = []
+    for path in args.input:
+        rows.extend(load_jsonl(path))
+    summary = summarize(rows)
     failures = check_gate(summary, args)
     result = {
         "passed": not failures,
-        "input": str(args.input),
+        "inputs": [str(path) for path in args.input],
         "thresholds": {
             "min_valid_configs": args.min_valid_configs,
             "min_fp16_wins": args.min_fp16_wins,

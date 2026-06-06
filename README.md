@@ -111,21 +111,23 @@ The latest packed-kernel smoke moves the systems evidence beyond CPU-only
 microbenchmarks:
 
 ```text
-RTX 5070 Laptop GPU, 2048x1024 Linear shape, high_every=16
-Triton configs completed:                 24/24
-Configs faster than torch FP16:            2/24
-Configs faster than row-wise mixed path:  21/24
-Best grouped packed INT4/INT8 speedup:     1.6543x vs torch FP16
-Best grouped speedup vs row-wise path:     3.5292x
-Compression ratio vs FP16 weights:         3.7034x
-Max grouped rel-L2:                        0.1382
+RTX 5070 Laptop GPU, Qwen-like Linear shapes
+Shapes:                                  1024x1024, 2048x1024, 3072x1024, 1024x3072
+Triton configs completed:                96/96
+Configs faster than torch FP16:           10/96
+Configs faster than row-wise mixed path:  78/96
+Best grouped packed INT4/INT8 speedup:    2.7647x vs torch FP16
+Best grouped speedup vs row-wise path:    5.1794x
+Compression ratio vs FP16 weights:        3.7034x-3.7441x
+Max grouped rel-L2:                       0.1492
 Max observed VRAM ratio:                   0.4514
 ```
 
-The evidence gate is executable and passed on the committed smoke sweep:
-`outputs/real_system_packer_2026-06-05/TRITON_TUNING_GATE_2026_06_06.md`.
+The evidence gate is executable and passed on the committed Qwen-shape family
+sweep:
+`outputs/real_system_packer_2026-06-05/TRITON_QWEN_SHAPE_FAMILY_GATE_2026_06_06.md`.
 The aggregate table is in
-`outputs/real_system_packer_2026-06-05/TRITON_TUNING_SMOKE_2026_06_06.md`.
+`outputs/real_system_packer_2026-06-05/TRITON_QWEN_SHAPE_FAMILY_2026_06_06.md`.
 Gate policy and claim boundaries are in `docs/SYSTEM_EVIDENCE_GATES.md`.
 
 End-to-end smoke metrics are tracked separately from kernel evidence:
@@ -310,27 +312,34 @@ This path benchmarks real packed INT4/INT8 storage on a CUDA GPU. It is still a
 kernel-level experiment, not TTFT/tokens-per-second evidence.
 
 ```bash
-python train_python/tune_triton_blocks.py \
-  --out-dir outputs/real_system_packer_2026-06-05/gpu_tuning_smoke_2026_06_06 \
-  --max-memory-ratio 0.90 \
-  --iters 30 \
-  --warmup 8 \
-  --rows 2048 \
-  --cols 1024 \
-  --batches 8,16 \
-  --high-every 16 \
-  --block-ms 16,32 \
-  --block-ns 8,16,32 \
-  --block-ks 64,128
+for shape in 1024x1024 2048x1024 3072x1024 1024x3072; do
+  rows=${shape%x*}
+  cols=${shape#*x}
+  python train_python/tune_triton_blocks.py \
+    --out-dir outputs/real_system_packer_2026-06-05/gpu_tuning_shape_${shape}_2026_06_06 \
+    --max-memory-ratio 0.90 \
+    --iters 30 \
+    --warmup 8 \
+    --rows "$rows" \
+    --cols "$cols" \
+    --batches 8,16 \
+    --high-every 16 \
+    --block-ms 16,32 \
+    --block-ns 8,16,32 \
+    --block-ks 64,128
+done
 
 python train_python/gate_triton_tuning.py \
-  --input outputs/real_system_packer_2026-06-05/gpu_tuning_smoke_2026_06_06/tuning_results.jsonl \
-  --out-json outputs/real_system_packer_2026-06-05/triton_tuning_gate_2026_06_06.json \
-  --out-md outputs/real_system_packer_2026-06-05/TRITON_TUNING_GATE_2026_06_06.md \
-  --min-valid-configs 24 \
-  --min-fp16-wins 2 \
-  --min-best-fp16-speedup 1.20 \
-  --min-rowwise-wins 20 \
+  --input outputs/real_system_packer_2026-06-05/gpu_tuning_shape_1024x1024_2026_06_06/tuning_results.jsonl \
+  --input outputs/real_system_packer_2026-06-05/gpu_tuning_shape_2048x1024_2026_06_06/tuning_results.jsonl \
+  --input outputs/real_system_packer_2026-06-05/gpu_tuning_shape_3072x1024_2026_06_06/tuning_results.jsonl \
+  --input outputs/real_system_packer_2026-06-05/gpu_tuning_shape_1024x3072_2026_06_06/tuning_results.jsonl \
+  --out-json outputs/real_system_packer_2026-06-05/triton_qwen_shape_family_gate_2026_06_06.json \
+  --out-md outputs/real_system_packer_2026-06-05/TRITON_QWEN_SHAPE_FAMILY_GATE_2026_06_06.md \
+  --min-valid-configs 96 \
+  --min-fp16-wins 8 \
+  --min-best-fp16-speedup 2.00 \
+  --min-rowwise-wins 70 \
   --max-rel-l2 0.20 \
   --max-vram-ratio 0.90
 ```
