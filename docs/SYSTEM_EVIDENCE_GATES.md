@@ -107,6 +107,24 @@ current 1-module Qwen3-0.6B q_proj benchmark confirms selector calls for batch
 small-batch cases. Treat this as evidence for the next systems work item:
 fusion, persistent scheduling, or a lower-launch-overhead decode path.
 
+## Selected-Row Runtime Gate
+
+`train_python/gate_selected_row_benchmark.py` gates the selected-row routing
+benchmark. The current formal gate uses
+`outputs/real_system_packer_2026-06-05/esmp_selected_rows.json` and passes with:
+
+- 108 successful rows and 0 failed rows;
+- 27 `triton_selected` cases;
+- 4 `triton_selected` wins over dense full output;
+- best `triton_selected` speedup vs dense full: 2.2406x;
+- median `cached_selected` speedup vs dense full: 1.2565x;
+- peak guard memory below 90%.
+
+A fresh focused q_proj batch-12 selected-64 smoke was also run. It confirms the
+selected-row cached path can win on the current environment (`1.1767x` vs dense
+full), while `triton_selected` remains launch-bound (`0.5668x` vs dense full).
+Use this as a constraint for kernel/runtime work, not as an acceleration claim.
+
 Valid claim:
 
 - measured Triton tuning artifacts can now drive the prototype ESMP generation
@@ -116,6 +134,9 @@ Valid claim:
   compression, generated-token presence, and GPU memory guard compliance.
 - selector-driven module-runtime benchmark records per-case selector calls and
   currently exposes low-batch kernel overhead rather than speedup.
+- selected-row routing has a formal gate for module-level evidence, while the
+  focused current-environment smoke keeps the low-batch Triton limitation
+  explicit.
 
 Invalid claim:
 

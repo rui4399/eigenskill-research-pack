@@ -137,6 +137,10 @@ The corresponding automated gate is
 `outputs/real_system_packer_2026-06-05/SELECTOR_RUNTIME_SMOKE_GATE_2026_06_06.md`.
 Selector-driven module-runtime benchmarking is tracked in
 `outputs/real_system_packer_2026-06-05/ESMP_LINEAR_SELECTOR_BENCHMARK_2026_06_06.md`.
+Selected-row routing/bypass evidence is gated in
+`outputs/real_system_packer_2026-06-05/SELECTED_ROW_BENCHMARK_GATE_2026_06_06.md`;
+the focused current-environment q_proj smoke is in
+`outputs/real_system_packer_2026-06-05/SELECTED_ROW_QPROJ64_FOCUS_2026_06_06.md`.
 Gate policy and claim boundaries are in `docs/SYSTEM_EVIDENCE_GATES.md`.
 
 End-to-end smoke metrics are tracked separately from kernel evidence:
@@ -314,6 +318,25 @@ Format details are in `docs/ESMPQ001_FORMAT.md`.
 
 Latest local smoke report:
 `outputs/real_system_packer_2026-06-05/REAL_SYSTEM_SMOKE_2026_06_06.md`.
+
+Selected-row evidence gate:
+
+```bash
+python train_python/gate_selected_row_benchmark.py \
+  --benchmark-json outputs/real_system_packer_2026-06-05/esmp_selected_rows.json \
+  --guard-json outputs/real_system_packer_2026-06-05/esmp_selected_rows_gpu_guard.json \
+  --out-json outputs/real_system_packer_2026-06-05/selected_row_benchmark_gate_2026_06_06.json \
+  --out-md outputs/real_system_packer_2026-06-05/SELECTED_ROW_BENCHMARK_GATE_2026_06_06.md \
+  --min-ok-rows 100 \
+  --max-failed-rows 0 \
+  --min-packed-cases 27 \
+  --min-packed-wins-vs-full 4 \
+  --min-best-packed-speedup-vs-full 2.0 \
+  --max-rel-l2 0.25 \
+  --min-cached-median-speedup-vs-full 1.1 \
+  --min-dense-selected-wins-vs-full 17 \
+  --max-memory-ratio 0.90
+```
 
 ## Reproduce: Triton Mixed-GEMM Prototype
 
