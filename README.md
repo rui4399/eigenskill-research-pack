@@ -41,6 +41,9 @@ Implemented and committed:
   preservation evidence from acceleration claims.
 - A deterministic 84-task chat stress-retention gate that records the remaining
   regression budget instead of hiding output drift.
+- A real public-schema task smoke path using streamed GSM8K and MMLU
+  abstract-algebra samples, kept as negative capability-retention evidence for
+  the current small Qwen3-0.6B baseline.
 - A top-level evidence ledger that aggregates the current paper-facing gates
   into one reproducible pass/fail table.
 - A machine-readable baseline coverage manifest and gap dashboard that keep
@@ -188,6 +191,10 @@ Task-retention stress evidence is gated in
 The current K-only layers `[1, 7]` candidate passes the configured 84-task
 stress gate with 45/84 fused passes versus 46/84 baseline passes, one explicit
 JSON-key regression, 0.9746x mean speed, and 54.69% peak guard memory.
+The first real public-schema smoke is intentionally small and negative:
+Qwen3-0.6B scores `0/4` on streamed MMLU abstract-algebra and `0/4` on streamed
+GSM8K under the 90% VRAM guard. This proves the public-task path is wired, not
+that capability retention is solved.
 The top-level evidence ledger is
 `outputs/real_system_packer_2026-06-05/EVIDENCE_LEDGER_2026_06_06.md`; it
 currently passes with 11/11 paper-facing gates across repo hygiene, calibration
@@ -642,6 +649,9 @@ python train_python/gate_chat_task_regression_analysis.py \
   --max-memory-ratio 0.90
 
 python train_python/build_evidence_ledger.py \
+  --gate public_hygiene=outputs/real_system_packer_2026-06-05/public_repo_hygiene_gate_2026_06_06.json \
+  --gate calibration_instability=outputs/calibration_instability_benchmark_2026_06_06.json \
+  --gate esmp_package=outputs/real_system_packer_2026-06-05/esmp_package_verify_qwen3_0p6b_limit8_2026_06_06.json \
   --gate triton_shape_family=outputs/real_system_packer_2026-06-05/triton_qwen_shape_family_gate_2026_06_06.json \
   --gate selector_runtime=outputs/real_system_packer_2026-06-05/selector_runtime_smoke_gate_2026_06_06.json \
   --gate selected_row=outputs/real_system_packer_2026-06-05/selected_row_benchmark_gate_2026_06_06.json \

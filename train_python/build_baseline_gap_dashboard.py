@@ -43,6 +43,38 @@ def evidence_matches(root: Path, patterns: list[str]) -> list[str]:
     return sorted(matches)
 
 
+def task_count_from_payload(payload: dict[str, Any]) -> int:
+    for key in ("task_count", "total", "tasks"):
+        value = payload.get(key)
+        if isinstance(value, int):
+            return value
+    for split in ("baseline", "fused"):
+        aggregate = payload.get(split, {}).get("aggregate", {}) if isinstance(payload.get(split), dict) else {}
+        value = aggregate.get("tasks")
+        if isinstance(value, int):
+            return value
+    summary = payload.get("summary", {})
+    if isinstance(summary, dict):
+        value = summary.get("tasks")
+        if isinstance(value, int):
+            return value
+    return 0
+
+
+def total_task_count(root: Path, matches: list[str]) -> int:
+    total = 0
+    for match in matches:
+        path = root / match
+        if path.suffix.lower() != ".json":
+            continue
+        try:
+            payload = load_json(path)
+        except (OSError, json.JSONDecodeError):
+            continue
+        total += task_count_from_payload(payload)
+    return total
+
+
 def packages_ok(required: list[str], available: dict[str, dict[str, Any]], mode: str) -> bool:
     if not required:
         return True
@@ -68,9 +100,17 @@ def package_summary(required: list[str], available: dict[str, dict[str, Any]]) -
     return rows
 
 
-def classify_item(item: dict[str, Any], matches: list[str], partial_matches: list[str], package_ok: bool) -> str:
+def classify_item(
+    item: dict[str, Any],
+    matches: list[str],
+    partial_matches: list[str],
+    package_ok: bool,
+    task_count: int = 0,
+) -> str:
+    min_total_tasks = int(item.get("min_total_tasks", 0) or 0)
+    task_threshold_ok = not min_total_tasks or task_count >= min_total_tasks
     if matches and package_ok:
-        return "covered"
+        return "covered" if task_threshold_ok else "partial"
     if matches and not package_ok:
         return "evidence_without_package_audit"
     if partial_matches and package_ok:
@@ -94,11 +134,13 @@ def evaluate_manifest(root: Path, manifest: dict[str, Any], audit: dict[str, Any
         mode = str(item.get("package_mode", "any"))
         matches = evidence_matches(root, required_globs)
         partial_matches = evidence_matches(root, partial_globs)
+        task_count = total_task_count(root, matches)
         package_ok = packages_ok(required_packages, available, mode)
-        status = classify_item(item, matches, partial_matches, package_ok)
+        status = classify_item(item, matches, partial_matches, package_ok, task_count)
         row = dict(item)
         row["status"] = status
         row["evidence_count"] = len(matches)
+        row["evidence_task_count"] = task_count
         row["evidence_matches"] = matches[:20]
         row["evidence_truncated"] = len(matches) > 20
         row["partial_evidence_count"] = len(partial_matches)
@@ -131,7 +173,7 @@ def evaluate_manifest(root: Path, manifest: dict[str, Any], audit: dict[str, Any
         "items": items,
         "interpretation": {
             "covered": "At least one committed artifact matched the manifest evidence pattern and required packages are available or not needed.",
-            "partial": "Only a narrower substitute artifact exists; this should remain a paper-blocking gap when the item is marked as a blocker.",
+            "partial": "Only a narrower substitute artifact exists, or the matched task artifacts are below the configured task-count threshold.",
             "package_only": "A required package family is available, but no committed comparison artifact exists yet.",
             "evidence_without_package_audit": "A committed artifact exists, but the package audit does not show the expected package family.",
             "partial_without_package_audit": "A narrower substitute artifact exists, but the package audit does not show the expected package family.",
@@ -168,8 +210,8 @@ def write_markdown(path: Path, dashboard: dict[str, Any]) -> None:
             "",
             "## Baseline Items",
             "",
-            "| id | family | priority | blocker | status | evidence | partial | packages | boundary |",
-            "|---|---|---|---:|---|---:|---:|---|---|",
+            "| id | family | priority | blocker | status | evidence | tasks | partial | packages | boundary |",
+            "|---|---|---|---:|---|---:|---:|---:|---|---|",
         ]
     )
     for item in dashboard["items"]:
@@ -183,7 +225,8 @@ def write_markdown(path: Path, dashboard: dict[str, Any]) -> None:
         lines.append(
             f"| `{item.get('id')}` | {item.get('family')} | {item.get('priority')} | "
             f"{bool(item.get('paper_blocker'))} | **{item.get('status')}** | "
-            f"{item.get('evidence_count')} | {item.get('partial_evidence_count', 0)} | {packages} | {boundary} |"
+            f"{item.get('evidence_count')} | {item.get('evidence_task_count', 0)} | "
+            f"{item.get('partial_evidence_count', 0)} | {packages} | {boundary} |"
         )
 
     lines.extend(

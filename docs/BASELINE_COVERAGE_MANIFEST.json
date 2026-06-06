@@ -104,13 +104,31 @@
       "claim_boundary": "Needed before claiming algorithmic novelty in bit allocation."
     },
     {
+      "id": "public_task_schema_smoke",
+      "family": "capability_retention",
+      "priority": "required",
+      "paper_blocker": false,
+      "description": "Tiny real public-task schema smoke covering GSM8K and MMLU ingestion.",
+      "required_evidence_globs": [
+        "outputs/public_task_smoke_manifest_2026_06_06.json",
+        "outputs/public_task_smoke_mmlu_qwen3_0p6b_summary.json",
+        "outputs/public_task_smoke_gsm8k_qwen3_0p6b_summary.json"
+      ],
+      "required_packages": [],
+      "min_total_tasks": 8,
+      "claim_boundary": "Proves public-schema task ingestion and guarded execution only; not leaderboard-scale retention."
+    },
+    {
       "id": "public_task_benchmarks",
       "family": "capability_retention",
       "priority": "high",
       "paper_blocker": true,
       "description": "Task retention beyond PPL, for example MMLU/GSM8K/IFEval/HumanEval/BBH subsets.",
       "partial_evidence_globs": [
-        "outputs/real_system_packer_2026-06-05/chat_task_stress_v3_84_gate_2026_06_06.json"
+        "outputs/real_system_packer_2026-06-05/chat_task_stress_v3_84_gate_2026_06_06.json",
+        "outputs/public_task_smoke_manifest_2026_06_06.json",
+        "outputs/public_task_smoke_mmlu_qwen3_0p6b_summary.json",
+        "outputs/public_task_smoke_gsm8k_qwen3_0p6b_summary.json"
       ],
       "required_evidence_globs": [
         "outputs/**/*mmlu*summary.json",
@@ -120,6 +138,7 @@
         "outputs/**/*bbh*summary.json"
       ],
       "required_packages": [],
+      "min_total_tasks": 100,
       "claim_boundary": "Current deterministic stress gate is partial; broad public task retention is still missing."
     },
     {

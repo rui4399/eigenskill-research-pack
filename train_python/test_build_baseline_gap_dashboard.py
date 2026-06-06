@@ -64,6 +64,35 @@ class BaselineGapDashboardTests(unittest.TestCase):
             self.assertFalse(result["passed"])
             self.assertEqual(result["paper_blocker_missing"], ["partial", "package_only", "missing"])
 
+    def test_task_count_threshold_keeps_small_smoke_partial(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            output_dir = root / "outputs"
+            output_dir.mkdir()
+            summary = output_dir / "mmlu_smoke_summary.json"
+            summary.write_text(
+                json.dumps({"task_count": 4, "baseline": {"aggregate": {"tasks": 4}}}),
+                encoding="utf-8",
+            )
+            manifest = {
+                "schema_version": 1,
+                "items": [
+                    {
+                        "id": "broad_public_tasks",
+                        "family": "capability",
+                        "priority": "high",
+                        "paper_blocker": True,
+                        "required_evidence_globs": ["outputs/*mmlu*summary.json"],
+                        "required_packages": [],
+                        "min_total_tasks": 100,
+                    }
+                ],
+            }
+            result = dashboard.evaluate_manifest(root, manifest, {"packages": []})
+            self.assertEqual(result["items"][0]["status"], "partial")
+            self.assertEqual(result["items"][0]["evidence_task_count"], 4)
+            self.assertFalse(result["passed"])
+
     def test_all_package_mode_requires_every_package(self) -> None:
         available = {
             "torch": {"available": True},

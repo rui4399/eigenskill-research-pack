@@ -1,10 +1,10 @@
 {
-  "date": "2026-06-06T11:34:54+00:00",
+  "date": "2026-06-06T12:30:21+00:00",
   "schema_version": 1,
   "passed": false,
-  "item_count": 10,
+  "item_count": 11,
   "status_counts": {
-    "covered": 5,
+    "covered": 6,
     "missing": 4,
     "partial": 1
   },
@@ -25,6 +25,7 @@
       "missing": 1
     },
     "capability_retention": {
+      "covered": 1,
       "partial": 1
     },
     "system_kernel": {
@@ -57,6 +58,7 @@
       "claim_boundary": "Useful sanity baseline only; beating random does not prove method novelty.",
       "status": "covered",
       "evidence_count": 49,
+      "evidence_task_count": 0,
       "evidence_matches": [
         "outputs/olmo2_0425_1b_consensus_vs_random16_evidence_matrix.json",
         "outputs/olmo2_0425_1b_consensus_vs_random16_ppl_c4_64_summary.json",
@@ -100,6 +102,7 @@
       "claim_boundary": "Heuristic ablation, not an external SOTA comparator.",
       "status": "covered",
       "evidence_count": 1,
+      "evidence_task_count": 0,
       "evidence_matches": [
         "outputs/qwen25_1p5b_baseline_allocations_4to8_limit8_group128_summary.json"
       ],
@@ -125,6 +128,7 @@
       "claim_boundary": "Short-slice fake-quant PPL evidence only.",
       "status": "covered",
       "evidence_count": 3,
+      "evidence_task_count": 0,
       "evidence_matches": [
         "outputs/cross_model_quant_evidence_matrix_extended_auto.json",
         "outputs/olmo2_0425_1b_consensus_vs_random16_ppl_c4_64_summary.json",
@@ -150,6 +154,7 @@
       "claim_boundary": "Defines the measured problem setting; not a quality-retention proof by itself.",
       "status": "covered",
       "evidence_count": 1,
+      "evidence_task_count": 0,
       "evidence_matches": [
         "outputs/calibration_instability_benchmark_2026_06_06.json"
       ],
@@ -180,6 +185,7 @@
       "claim_boundary": "Needed before claiming competitiveness against common PTQ practice.",
       "status": "missing",
       "evidence_count": 0,
+      "evidence_task_count": 0,
       "evidence_matches": [],
       "evidence_truncated": false,
       "partial_evidence_count": 0,
@@ -224,6 +230,7 @@
       "claim_boundary": "Required before making activation/KV or outlier-mitigation claims.",
       "status": "missing",
       "evidence_count": 0,
+      "evidence_task_count": 0,
       "evidence_matches": [],
       "evidence_truncated": false,
       "partial_evidence_count": 0,
@@ -247,7 +254,37 @@
       "claim_boundary": "Needed before claiming algorithmic novelty in bit allocation.",
       "status": "missing",
       "evidence_count": 0,
+      "evidence_task_count": 0,
       "evidence_matches": [],
+      "evidence_truncated": false,
+      "partial_evidence_count": 0,
+      "partial_evidence_matches": [],
+      "partial_evidence_truncated": false,
+      "package_ok": true,
+      "package_summary": []
+    },
+    {
+      "id": "public_task_schema_smoke",
+      "family": "capability_retention",
+      "priority": "required",
+      "paper_blocker": false,
+      "description": "Tiny real public-task schema smoke covering GSM8K and MMLU ingestion.",
+      "required_evidence_globs": [
+        "outputs/public_task_smoke_manifest_2026_06_06.json",
+        "outputs/public_task_smoke_mmlu_qwen3_0p6b_summary.json",
+        "outputs/public_task_smoke_gsm8k_qwen3_0p6b_summary.json"
+      ],
+      "required_packages": [],
+      "min_total_tasks": 8,
+      "claim_boundary": "Proves public-schema task ingestion and guarded execution only; not leaderboard-scale retention.",
+      "status": "covered",
+      "evidence_count": 3,
+      "evidence_task_count": 8,
+      "evidence_matches": [
+        "outputs/public_task_smoke_gsm8k_qwen3_0p6b_summary.json",
+        "outputs/public_task_smoke_manifest_2026_06_06.json",
+        "outputs/public_task_smoke_mmlu_qwen3_0p6b_summary.json"
+      ],
       "evidence_truncated": false,
       "partial_evidence_count": 0,
       "partial_evidence_matches": [],
@@ -262,7 +299,10 @@
       "paper_blocker": true,
       "description": "Task retention beyond PPL, for example MMLU/GSM8K/IFEval/HumanEval/BBH subsets.",
       "partial_evidence_globs": [
-        "outputs/real_system_packer_2026-06-05/chat_task_stress_v3_84_gate_2026_06_06.json"
+        "outputs/real_system_packer_2026-06-05/chat_task_stress_v3_84_gate_2026_06_06.json",
+        "outputs/public_task_smoke_manifest_2026_06_06.json",
+        "outputs/public_task_smoke_mmlu_qwen3_0p6b_summary.json",
+        "outputs/public_task_smoke_gsm8k_qwen3_0p6b_summary.json"
       ],
       "required_evidence_globs": [
         "outputs/**/*mmlu*summary.json",
@@ -272,13 +312,21 @@
         "outputs/**/*bbh*summary.json"
       ],
       "required_packages": [],
+      "min_total_tasks": 100,
       "claim_boundary": "Current deterministic stress gate is partial; broad public task retention is still missing.",
       "status": "partial",
-      "evidence_count": 0,
-      "evidence_matches": [],
+      "evidence_count": 2,
+      "evidence_task_count": 8,
+      "evidence_matches": [
+        "outputs/public_task_smoke_gsm8k_qwen3_0p6b_summary.json",
+        "outputs/public_task_smoke_mmlu_qwen3_0p6b_summary.json"
+      ],
       "evidence_truncated": false,
-      "partial_evidence_count": 1,
+      "partial_evidence_count": 4,
       "partial_evidence_matches": [
+        "outputs/public_task_smoke_gsm8k_qwen3_0p6b_summary.json",
+        "outputs/public_task_smoke_manifest_2026_06_06.json",
+        "outputs/public_task_smoke_mmlu_qwen3_0p6b_summary.json",
         "outputs/real_system_packer_2026-06-05/chat_task_stress_v3_84_gate_2026_06_06.json"
       ],
       "partial_evidence_truncated": false,
@@ -302,6 +350,7 @@
       "claim_boundary": "Kernel-level evidence only; not end-to-end LLM acceleration.",
       "status": "covered",
       "evidence_count": 1,
+      "evidence_task_count": 0,
       "evidence_matches": [
         "outputs/real_system_packer_2026-06-05/triton_qwen_shape_family_gate_2026_06_06.json"
       ],
@@ -338,6 +387,7 @@
       "claim_boundary": "No mobile deployment claim until real device logs exist.",
       "status": "missing",
       "evidence_count": 0,
+      "evidence_task_count": 0,
       "evidence_matches": [],
       "evidence_truncated": false,
       "partial_evidence_count": 0,
@@ -349,7 +399,7 @@
   ],
   "interpretation": {
     "covered": "At least one committed artifact matched the manifest evidence pattern and required packages are available or not needed.",
-    "partial": "Only a narrower substitute artifact exists; this should remain a paper-blocking gap when the item is marked as a blocker.",
+    "partial": "Only a narrower substitute artifact exists, or the matched task artifacts are below the configured task-count threshold.",
     "package_only": "A required package family is available, but no committed comparison artifact exists yet.",
     "evidence_without_package_audit": "A committed artifact exists, but the package audit does not show the expected package family.",
     "partial_without_package_audit": "A narrower substitute artifact exists, but the package audit does not show the expected package family.",
