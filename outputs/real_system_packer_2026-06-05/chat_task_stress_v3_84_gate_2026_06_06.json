@@ -1,0 +1,143 @@
+{
+  "passed": true,
+  "failures": [],
+  "summary": {
+    "candidate": "konly_layers17",
+    "tasks": 84,
+    "task_types": 8,
+    "baseline_passes": 46,
+    "fused_passes": 45,
+    "baseline_accuracy": 0.5476190476190477,
+    "fused_accuracy": 0.5357142857142857,
+    "pass_delta": -1,
+    "regressions": 1,
+    "fixes": 0,
+    "speedup": 0.9745826852660163,
+    "path": "C:\\Users\\18042\\Documents\\Codex\\2026-06-01\\chatgpt-context-request-algorithm-system-co\\github_publish\\eigenskill-research-pack\\outputs\\real_system_packer_2026-06-05\\chat_task_stress_v3_84_qwen3_0p6b_no_think_layers17_konly_32tok.json",
+    "guard_max_memory_used_ratio": 0.5469267574530733,
+    "guard_max_memory_used_mib": 4458,
+    "guard_memory_total_mib": 8151
+  },
+  "type_summary": {
+    "all_of": {
+      "tasks": 12,
+      "baseline_passes": 9,
+      "fused_passes": 9,
+      "regressions": 0,
+      "fixes": 0,
+      "both_pass": 9,
+      "both_fail": 3
+    },
+    "contains_all": {
+      "tasks": 12,
+      "baseline_passes": 0,
+      "fused_passes": 0,
+      "regressions": 0,
+      "fixes": 0,
+      "both_pass": 0,
+      "both_fail": 12
+    },
+    "contains_none": {
+      "tasks": 12,
+      "baseline_passes": 12,
+      "fused_passes": 12,
+      "regressions": 0,
+      "fixes": 0,
+      "both_pass": 12,
+      "both_fail": 0
+    },
+    "json_keys": {
+      "tasks": 12,
+      "baseline_passes": 7,
+      "fused_passes": 6,
+      "regressions": 1,
+      "fixes": 0,
+      "both_pass": 6,
+      "both_fail": 5
+    },
+    "mcq": {
+      "tasks": 12,
+      "baseline_passes": 10,
+      "fused_passes": 10,
+      "regressions": 0,
+      "fixes": 0,
+      "both_pass": 10,
+      "both_fail": 2
+    },
+    "number": {
+      "tasks": 12,
+      "baseline_passes": 3,
+      "fused_passes": 3,
+      "regressions": 0,
+      "fixes": 0,
+      "both_pass": 3,
+      "both_fail": 9
+    },
+    "sentence_count": {
+      "tasks": 6,
+      "baseline_passes": 4,
+      "fused_passes": 4,
+      "regressions": 0,
+      "fixes": 0,
+      "both_pass": 4,
+      "both_fail": 2
+    },
+    "word_count": {
+      "tasks": 6,
+      "baseline_passes": 1,
+      "fused_passes": 1,
+      "regressions": 0,
+      "fixes": 0,
+      "both_pass": 1,
+      "both_fail": 5
+    }
+  },
+  "regressions": [
+    {
+      "id": "stress_json_keys_001",
+      "type": "json_keys",
+      "kind": "regression",
+      "expected": [
+        "risk",
+        "evidence"
+      ],
+      "baseline_text": "<think> </think> ```json { \"risk\": \"calibration_split_instability\", \"evidence\": \"calibration_split_instability\" }",
+      "fused_text": "<think> </think> ```json { \"risk\": \"calibration_split_inconsistency\", \"evidence\": \"calibration_split_inconsistency",
+      "baseline_score": {
+        "passed": true,
+        "found": [
+          "evidence",
+          "risk"
+        ],
+        "expected": [
+          "evidence",
+          "risk"
+        ]
+      },
+      "fused_score": {
+        "passed": false,
+        "found": [],
+        "expected": [
+          "evidence",
+          "risk"
+        ]
+      }
+    }
+  ],
+  "fixes": [],
+  "thresholds": {
+    "candidate": "konly_layers17",
+    "min_candidates": 3,
+    "min_tasks": 84,
+    "min_task_types": 8,
+    "min_baseline_passes": 46,
+    "min_fused_passes": 45,
+    "min_fused_accuracy": 0.535,
+    "max_pass_loss": 1,
+    "max_regressions": 1,
+    "max_regressions_per_type": 1,
+    "require_type_fused_pass": false,
+    "min_speedup": 0.95,
+    "max_memory_ratio": 0.9
+  }
+}

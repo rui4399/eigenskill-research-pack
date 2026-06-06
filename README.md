@@ -37,6 +37,8 @@ Implemented and committed:
   invariants.
 - A fused-QKV prompt-suite quality gate that separates conservative text/task
   preservation evidence from acceleration claims.
+- A deterministic 84-task chat stress-retention gate that records the remaining
+  regression budget instead of hiding output drift.
 - PyTorch fake-quant PPL experiments on small public models and short
   WikiText2/C4 slices.
 - A LoRA training entry point with optional completion-only loss masking for
@@ -160,6 +162,11 @@ it passes on the layers `[1, 7]` QKV8 repack candidate with 6/6 exact
 prompt-suite matches, 0 rule-score regressions, 3.9082x compression, and
 43.59% peak guard memory. It is a quality gate, not a speed claim: mean
 tokens/s is 0.8957x of the baseline on that suite.
+Task-retention stress evidence is gated in
+`outputs/real_system_packer_2026-06-05/CHAT_TASK_STRESS_V3_84_GATE_2026_06_06.md`.
+The current K-only layers `[1, 7]` candidate passes the configured 84-task
+stress gate with 45/84 fused passes versus 46/84 baseline passes, one explicit
+JSON-key regression, 0.9746x mean speed, and 54.69% peak guard memory.
 Gate policy and claim boundaries are in `docs/SYSTEM_EVIDENCE_GATES.md`.
 
 End-to-end smoke metrics are tracked separately from kernel evidence:
@@ -485,6 +492,7 @@ generation activations without replacing dense QKV. The QKV replacement gate is
 stronger: it verifies that selected Q/K/V projections are replaced by the fused
 ESMP runtime and that QKV cache reuse occurred. The prompt-suite gate is a
 separate quality-preservation check for a conservative replacement candidate.
+The chat-task gate is a deterministic task-retention stress check.
 
 ```bash
 python train_python/gate_fused_sidecar_generation.py \
@@ -557,6 +565,24 @@ python train_python/gate_fused_qkv_prompt_suite.py \
   --max-rule-regressions 0 \
   --min-fused-rule-pass-rate 0.80 \
   --max-fused-rule-pass-drop 0 \
+  --max-memory-ratio 0.90
+
+python train_python/gate_chat_task_regression_analysis.py \
+  --analysis-json outputs/real_system_packer_2026-06-05/chat_task_stress_v3_84_regression_analysis.json \
+  --candidate konly_layers17 \
+  --guard-json outputs/real_system_packer_2026-06-05/chat_task_stress_v3_84_qwen3_0p6b_no_think_layers17_konly_32tok_gpu_guard.json \
+  --out-json outputs/real_system_packer_2026-06-05/chat_task_stress_v3_84_gate_2026_06_06.json \
+  --out-md outputs/real_system_packer_2026-06-05/CHAT_TASK_STRESS_V3_84_GATE_2026_06_06.md \
+  --min-candidates 3 \
+  --min-tasks 84 \
+  --min-task-types 8 \
+  --min-baseline-passes 46 \
+  --min-fused-passes 45 \
+  --min-fused-accuracy 0.535 \
+  --max-pass-loss 1 \
+  --max-regressions 1 \
+  --max-regressions-per-type 1 \
+  --min-speedup 0.95 \
   --max-memory-ratio 0.90
 ```
 

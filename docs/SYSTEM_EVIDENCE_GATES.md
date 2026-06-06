@@ -290,6 +290,52 @@ Invalid claim:
 - this proves semantic quality preservation across tasks, datasets, or larger
   prompt distributions.
 
+## Chat Task Stress-Retention Gate
+
+`train_python/gate_chat_task_regression_analysis.py` gates deterministic
+chat-task retention results from `train_python/eval_chat_task_benchmark.py` and
+`train_python/analyze_chat_task_regressions.py`. This is stronger than pure
+text similarity because rows are scored by task-specific rules, but it is still
+a local stress suite rather than a public benchmark replacement.
+
+Current gate:
+
+```bash
+python train_python/gate_chat_task_regression_analysis.py \
+  --analysis-json outputs/real_system_packer_2026-06-05/chat_task_stress_v3_84_regression_analysis.json \
+  --candidate konly_layers17 \
+  --guard-json outputs/real_system_packer_2026-06-05/chat_task_stress_v3_84_qwen3_0p6b_no_think_layers17_konly_32tok_gpu_guard.json \
+  --out-json outputs/real_system_packer_2026-06-05/chat_task_stress_v3_84_gate_2026_06_06.json \
+  --out-md outputs/real_system_packer_2026-06-05/CHAT_TASK_STRESS_V3_84_GATE_2026_06_06.md \
+  --min-candidates 3 \
+  --min-tasks 84 \
+  --min-task-types 8 \
+  --min-baseline-passes 46 \
+  --min-fused-passes 45 \
+  --min-fused-accuracy 0.535 \
+  --max-pass-loss 1 \
+  --max-regressions 1 \
+  --max-regressions-per-type 1 \
+  --min-speedup 0.95 \
+  --max-memory-ratio 0.90
+```
+
+The current gate passes for `konly_layers17` with 84 tasks across 8 task types.
+Baseline passes 46/84 and fused passes 45/84, so the candidate has one allowed
+regression and a pass delta of -1. Mean fused/baseline speed is 0.9746x and
+peak guard memory is 54.69%. The single regression is preserved in the report:
+`stress_json_keys_001` loses a required JSON-key parse.
+
+Valid claim:
+
+- the K-only layers `[1, 7]` replacement candidate survives a deterministic
+  84-task stress-retention gate under a one-regression budget.
+
+Invalid claim:
+
+- this is a public benchmark result or proof of broad task-quality
+  preservation.
+
 ## C++ ESMP Runtime Sweep Gate
 
 `train_python/gate_cpp_runtime_sweep.py` gates the C++ ESMP selected-row runtime
@@ -329,6 +375,8 @@ Valid claim:
   replacement, including cache-invariant checks.
 - fused QKV prompt-suite quality has a formal gate for the conservative
   layers `[1, 7]` QKV8 repack candidate.
+- chat-task stress retention has a formal 84-task gate with the remaining
+  one-row regression explicitly reported.
 - C++ ESMP selected-row runtime has a formal sweep gate; it supports
   module-level bypass claims but not full LLM acceleration claims.
 
@@ -338,4 +386,6 @@ Invalid claim:
 - selector coverage generalizes to unmeasured shapes;
 - fused QKV replacement is quality-preserving across prompts or layers;
 - prompt-suite exact preservation on six prompts is a broad semantic benchmark;
+- deterministic chat-task stress passing under a regression budget replaces
+  public MMLU/GSM8K/IFEval-style evaluation;
 - mobile, Tensor Core production, or CCF-A system claims are established.
