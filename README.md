@@ -15,7 +15,7 @@ state-of-the-art PTQ implementation, or a completed mobile/edge runtime.
 
 ## Current Evidence
 
-The current paper-facing evidence ledger passes **19 / 19 gates**:
+The current paper-facing evidence ledger passes **20 / 20 gates**:
 
 ```text
 outputs/real_system_packer_2026-06-05/EVIDENCE_LEDGER_2026_06_06.md
@@ -28,6 +28,7 @@ The strongest supported findings are:
 | Calibration split rankings are unstable across small public model slices. | 3 / 3 measured cases unstable; mean score/cost Spearman `0.0713`; top-20 Jaccard `0.1022`. | Establishes the problem setting, not method superiority. |
 | Consensus-style target policies pass the committed fake-quant stress gate. | 11 / 11 wins vs uniform INT4, best random seed, and random mean; one-sided sign-test p `0.000488` vs best random. | Short-slice fake-quant PPL only. |
 | Consensus reduces worse-single-split risk on paired Qwen3 transfer slices. | 4 / 4 wins vs the worse single-split policy; 2 / 4 wins vs the best single-split policy; max best-single regret `0.3046` PPL. | Robustness boundary evidence, not an oracle claim. |
+| Bounded global-feedback swap search exposes interaction effects. | 3 search cases, 16 trials, 5 improved trials, and 5 locally-negative-but-globally-improved counterexamples; transfer max regret `0.0087` PPL. | Interaction-aware fake-quant diagnostic, not a production allocator. |
 | Packed-system components are executable and gated. | ESMP package integrity, Triton shape-family, selector, selected-row, C++ runtime, fused-sidecar, and shallow QKV gates pass. | Prototype/module-level evidence, not end-to-end deployment. |
 
 Start here for exact claim boundaries:

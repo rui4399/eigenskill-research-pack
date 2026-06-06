@@ -14,6 +14,8 @@ CATEGORIES = {
     "quality": "quality",
     "prompt": "quality",
     "allocation": "allocation comparator",
+    "interaction": "allocation comparator",
+    "swap": "allocation comparator",
     "consensus": "allocation comparator",
     "robust_lcb": "allocation comparator",
     "q_palette": "allocation comparator",
@@ -202,6 +204,20 @@ def metric_parts(summary: dict[str, Any]) -> list[str]:
         parts.append(f"mean regret/best-single {value:.4f}")
     if (value := finite_float(summary.get("max_regret_vs_best_single"))) is not None:
         parts.append(f"max regret/best-single {value:.4f}")
+    if "total_trials" in summary:
+        parts.append(f"trials {summary.get('total_trials')}")
+    if "improved_case_count" in summary:
+        parts.append(f"improved cases {summary.get('improved_case_count')}")
+    if "improved_trial_count" in summary:
+        parts.append(f"improved trials {summary.get('improved_trial_count')}")
+    if "interaction_counterexample_count" in summary:
+        parts.append(f"interaction counterexamples {summary.get('interaction_counterexample_count')}")
+    if (value := finite_float(summary.get("max_best_improvement_ppl"))) is not None:
+        parts.append(f"max best improvement {value:.4f}")
+    if "transfer_positive_rows" in summary:
+        parts.append(f"transfer positives {summary.get('transfer_positive_rows')}")
+    if (value := finite_float(summary.get("transfer_max_regret_ppl"))) is not None:
+        parts.append(f"transfer max regret {value:.4f}")
     if "total_records" in summary:
         parts.append(f"records {summary.get('total_records')}")
     if "total_high_bit_modules" in summary:

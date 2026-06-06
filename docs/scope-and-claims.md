@@ -38,6 +38,8 @@ In compressed form, the supported claims are:
   gate against uniform INT4 and random mixed-precision baselines;
 - paired Qwen3 transfer slices show consensus avoiding the worse single-split
   policy, with bounded regret versus the best single split;
+- bounded global-feedback swap search exposes interaction counterexamples that
+  additive module ranking misses on committed SmolLM2-1.7B fake-quant slices;
 - ESMP package integrity, selected-row probes, Triton shape-family kernels, and
   shallow generation integrations are executable prototype evidence;
 - missing official baselines, task benchmarks, and hardware measurements are

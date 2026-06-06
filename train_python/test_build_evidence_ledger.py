@@ -100,6 +100,26 @@ class BuildEvidenceLedgerTests(unittest.TestCase):
         self.assertIn("min margin/worst-single 0.8700", joined)
         self.assertIn("max regret/best-single 0.3000", joined)
 
+    def test_interaction_swap_metrics_are_reported(self) -> None:
+        metrics = ledger.metric_parts(
+            {
+                "case_count": 3,
+                "total_trials": 16,
+                "improved_case_count": 1,
+                "improved_trial_count": 5,
+                "interaction_counterexample_count": 5,
+                "max_best_improvement_ppl": 0.0501,
+                "transfer_positive_rows": 1,
+                "transfer_max_regret_ppl": 0.0087,
+            }
+        )
+        joined = "; ".join(metrics)
+        self.assertIn("trials 16", joined)
+        self.assertIn("improved cases 1", joined)
+        self.assertIn("interaction counterexamples 5", joined)
+        self.assertIn("max best improvement 0.0501", joined)
+        self.assertIn("transfer max regret 0.0087", joined)
+
     def test_parse_gate_spec_requires_label(self) -> None:
         label, path = ledger.parse_gate_spec("foo=bar.json")
         self.assertEqual(label, "foo")

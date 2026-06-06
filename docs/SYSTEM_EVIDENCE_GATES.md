@@ -18,6 +18,7 @@ python train_python/build_evidence_ledger.py \
   --gate calibration_instability=outputs/calibration_instability_benchmark_2026_06_06.json \
   --gate calibration_robustness_stress=outputs/calibration_robustness_stress_gate_2026_06_07.json \
   --gate consensus_transfer_boundary=outputs/consensus_transfer_boundary_gate_2026_06_07.json \
+  --gate interaction_swap_boundary=outputs/interaction_swap_boundary_gate_2026_06_07.json \
   --gate esmp_package=outputs/real_system_packer_2026-06-05/esmp_package_verify_qwen3_0p6b_limit8_2026_06_06.json \
   --gate triton_shape_family=outputs/real_system_packer_2026-06-05/triton_qwen_shape_family_gate_2026_06_06.json \
   --gate selector_runtime=outputs/real_system_packer_2026-06-05/selector_runtime_smoke_gate_2026_06_06.json \
@@ -37,7 +38,7 @@ python train_python/build_evidence_ledger.py \
   --out-md outputs/real_system_packer_2026-06-05/EVIDENCE_LEDGER_2026_06_06.md
 ```
 
-The current ledger passes with 19/19 gates across repo hygiene, calibration
+The current ledger passes with 20/20 gates across repo hygiene, calibration
 robustness, artifact integrity, kernel, runtime wiring, selected-row, C++
 runtime, decode integration, QKV replacement, quality, task-retention, and
 capability-retention, allocation-comparator, rotation-comparator, and
@@ -453,6 +454,47 @@ Invalid claim:
 
 - consensus always beats the best single-split allocation, or this gate proves
   broad downstream task retention.
+
+## Interaction-Aware Swap Boundary Gate
+
+`train_python/build_interaction_swap_boundary.py` turns bounded one-step
+swap-search outputs into a machine-checkable global-feedback diagnostic. It
+starts from additive sensitivity allocations, evaluates proposed one-out/one-in
+swaps with global PPL, and records whether global feedback exposes interactions
+that the local proxy would miss.
+
+Current gate:
+
+```bash
+python train_python/build_interaction_swap_boundary.py \
+  --search-case wikitext2_32=outputs/smollm2_1p7b_full_swap_search_wikitext2_32_summary.json=outputs/smollm2_1p7b_full_swap_search_wikitext2_32_guard.json \
+  --search-case wikitext2_64=outputs/smollm2_1p7b_full_swap_search_wikitext2_64_summary.json=outputs/smollm2_1p7b_full_swap_search_wikitext2_64_guard.json \
+  --search-case c4_64=outputs/smollm2_1p7b_full_swap_search_c4_64_summary.json=outputs/smollm2_1p7b_full_swap_search_c4_64_guard.json \
+  --transfer-matrix outputs/smollm2_1p7b_swap_transfer_matrix.json \
+  --min-cases 3 \
+  --min-improved-cases 1 \
+  --min-interaction-counterexamples 1 \
+  --min-total-trials 12 \
+  --max-transfer-regret-ppl 0.02 \
+  --max-guard-vram-ratio 0.85 \
+  --out-json outputs/interaction_swap_boundary_gate_2026_06_07.json \
+  --out-md outputs/INTERACTION_SWAP_BOUNDARY_GATE_2026_06_07.md
+```
+
+Current result: 3 search cases, 16 evaluated swaps, 5 improved trials, and 5
+locally-negative-but-globally-improved counterexamples. The best local
+improvement is `+0.0502` PPL. Transfer has 1/2 positive rows and maximum regret
+`0.0087` PPL. Peak guard VRAM ratio is `0.8487`.
+
+Valid claim:
+
+- bounded global-PPL feedback exposes interaction effects beyond independent
+  module ranking in the committed SmolLM2-1.7B fake-quant diagnostic.
+
+Invalid claim:
+
+- this proves a globally optimal allocator, broad transfer, SOTA quantization,
+  or production runtime behavior.
 
 ## Robust-LCB Consensus Allocation Gate
 

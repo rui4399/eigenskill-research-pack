@@ -1,0 +1,287 @@
+{
+  "date": "2026-06-06T18:13:04+00:00",
+  "passed": true,
+  "summary": {
+    "case_count": 3,
+    "total_trials": 16,
+    "improved_case_count": 1,
+    "improved_trial_count": 5,
+    "interaction_counterexample_count": 5,
+    "mean_best_improvement_ppl": 0.01672160454678225,
+    "max_best_improvement_ppl": 0.05016481364034675,
+    "min_best_improvement_ppl": 0.0,
+    "transfer_row_count": 2,
+    "transfer_positive_rows": 1,
+    "transfer_max_regret_ppl": 0.008701,
+    "max_allowed_transfer_regret_ppl": 0.02,
+    "max_guard_vram_ratio": 0.8487302171512697,
+    "max_allowed_guard_vram_ratio": 0.85
+  },
+  "failures": [],
+  "cases": [
+    {
+      "label": "wikitext2_32",
+      "summary_path": "outputs\\smollm2_1p7b_full_swap_search_wikitext2_32_summary.json",
+      "guard": {
+        "path": "outputs\\smollm2_1p7b_full_swap_search_wikitext2_32_guard.json",
+        "returncode": 0,
+        "killed": false,
+        "max_memory_ratio": 0.8487302171512697,
+        "max_memory_mib": 6918.0,
+        "memory_total_mib": 8151.0,
+        "max_utilization_pct": 69.0
+      },
+      "model": "HuggingFaceTB/SmolLM2-1.7B-Instruct",
+      "prompt_count": 32,
+      "max_length": 128,
+      "group_size": 128,
+      "base_ppl": 15.120699057214768,
+      "best_ppl": 15.120699057214768,
+      "best_improvement_ppl": 0.0,
+      "trial_count": 4,
+      "improved_trial_count": 0,
+      "interaction_counterexample_count": 0,
+      "best_swap": {
+        "out_module": "-",
+        "in_module": "-",
+        "proxy_gain": null,
+        "locally_negative": false
+      },
+      "trials": [
+        {
+          "out_module": "model.layers.22.mlp.up_proj",
+          "in_module": "model.layers.0.mlp.gate_proj",
+          "ppl": 15.371762133377503,
+          "global_improvement_ppl": -0.25106307616273504,
+          "proxy_gain": -0.005236447304487246,
+          "globally_improved": false,
+          "locally_negative_but_globally_improved": false
+        },
+        {
+          "out_module": "model.layers.23.mlp.up_proj",
+          "in_module": "model.layers.0.mlp.gate_proj",
+          "ppl": 15.307957656441708,
+          "global_improvement_ppl": -0.18725859922694,
+          "proxy_gain": -0.005545235872268961,
+          "globally_improved": false,
+          "locally_negative_but_globally_improved": false
+        },
+        {
+          "out_module": "model.layers.22.mlp.up_proj",
+          "in_module": "model.layers.0.mlp.down_proj",
+          "ppl": 15.346778757568615,
+          "global_improvement_ppl": -0.2260797003538464,
+          "proxy_gain": -0.010062706172466296,
+          "globally_improved": false,
+          "locally_negative_but_globally_improved": false
+        },
+        {
+          "out_module": "model.layers.23.mlp.up_proj",
+          "in_module": "model.layers.0.mlp.down_proj",
+          "ppl": 15.275997436192272,
+          "global_improvement_ppl": -0.15529837897750376,
+          "proxy_gain": -0.01037149474024801,
+          "globally_improved": false,
+          "locally_negative_but_globally_improved": false
+        }
+      ]
+    },
+    {
+      "label": "wikitext2_64",
+      "summary_path": "outputs\\smollm2_1p7b_full_swap_search_wikitext2_64_summary.json",
+      "guard": {
+        "path": "outputs\\smollm2_1p7b_full_swap_search_wikitext2_64_guard.json",
+        "returncode": 0,
+        "killed": false,
+        "max_memory_ratio": 0.7691080848975586,
+        "max_memory_mib": 6269.0,
+        "memory_total_mib": 8151.0,
+        "max_utilization_pct": 68.0
+      },
+      "model": "HuggingFaceTB/SmolLM2-1.7B-Instruct",
+      "prompt_count": 64,
+      "max_length": 128,
+      "group_size": 128,
+      "base_ppl": 14.887731144273172,
+      "best_ppl": 14.837566330632825,
+      "best_improvement_ppl": 0.05016481364034675,
+      "trial_count": 8,
+      "improved_trial_count": 5,
+      "interaction_counterexample_count": 5,
+      "best_swap": {
+        "out_module": "model.layers.12.self_attn.v_proj",
+        "in_module": "model.layers.22.self_attn.v_proj",
+        "proxy_gain": -0.0007444615662097753,
+        "locally_negative": true
+      },
+      "trials": [
+        {
+          "out_module": "model.layers.19.self_attn.v_proj",
+          "in_module": "model.layers.22.self_attn.v_proj",
+          "ppl": 14.852028755435446,
+          "global_improvement_ppl": 0.03570238883772525,
+          "proxy_gain": -6.19986653327409e-05,
+          "globally_improved": true,
+          "locally_negative_but_globally_improved": true
+        },
+        {
+          "out_module": "model.layers.12.self_attn.v_proj",
+          "in_module": "model.layers.22.self_attn.v_proj",
+          "ppl": 14.837566330632825,
+          "global_improvement_ppl": 0.05016481364034675,
+          "proxy_gain": -0.0007444615662097753,
+          "globally_improved": true,
+          "locally_negative_but_globally_improved": true
+        },
+        {
+          "out_module": "model.layers.16.self_attn.v_proj",
+          "in_module": "model.layers.22.self_attn.v_proj",
+          "ppl": 14.866342136196918,
+          "global_improvement_ppl": 0.021389008076253546,
+          "proxy_gain": -0.0010139380395410846,
+          "globally_improved": true,
+          "locally_negative_but_globally_improved": true
+        },
+        {
+          "out_module": "model.layers.15.self_attn.v_proj",
+          "in_module": "model.layers.22.self_attn.v_proj",
+          "ppl": 14.866822517688023,
+          "global_improvement_ppl": 0.020908626585148582,
+          "proxy_gain": -0.0035340915620323266,
+          "globally_improved": true,
+          "locally_negative_but_globally_improved": true
+        },
+        {
+          "out_module": "model.layers.23.self_attn.o_proj",
+          "in_module": "model.layers.22.self_attn.v_proj",
+          "ppl": 14.91783109380917,
+          "global_improvement_ppl": -0.03009994953599815,
+          "proxy_gain": -0.003965615481138052,
+          "globally_improved": false,
+          "locally_negative_but_globally_improved": false
+        },
+        {
+          "out_module": "model.layers.10.self_attn.v_proj",
+          "in_module": "model.layers.22.self_attn.v_proj",
+          "ppl": 14.847644150991941,
+          "global_improvement_ppl": 0.04008699328123022,
+          "proxy_gain": -0.004847745299338957,
+          "globally_improved": true,
+          "locally_negative_but_globally_improved": true
+        },
+        {
+          "out_module": "model.layers.22.mlp.up_proj",
+          "in_module": "model.layers.0.mlp.gate_proj",
+          "ppl": 15.294062116695674,
+          "global_improvement_ppl": -0.40633097242250216,
+          "proxy_gain": -0.005236447304487246,
+          "globally_improved": false,
+          "locally_negative_but_globally_improved": false
+        },
+        {
+          "out_module": "model.layers.23.mlp.up_proj",
+          "in_module": "model.layers.0.mlp.gate_proj",
+          "ppl": 15.089193220068744,
+          "global_improvement_ppl": -0.20146207579557185,
+          "proxy_gain": -0.005545235872268961,
+          "globally_improved": false,
+          "locally_negative_but_globally_improved": false
+        }
+      ]
+    },
+    {
+      "label": "c4_64",
+      "summary_path": "outputs\\smollm2_1p7b_full_swap_search_c4_64_summary.json",
+      "guard": {
+        "path": "outputs\\smollm2_1p7b_full_swap_search_c4_64_guard.json",
+        "returncode": 0,
+        "killed": false,
+        "max_memory_ratio": 0.7681266102318733,
+        "max_memory_mib": 6261.0,
+        "memory_total_mib": 8151.0,
+        "max_utilization_pct": 66.0
+      },
+      "model": "HuggingFaceTB/SmolLM2-1.7B-Instruct",
+      "prompt_count": 64,
+      "max_length": 128,
+      "group_size": 128,
+      "base_ppl": 21.42692393879864,
+      "best_ppl": 21.42692393879864,
+      "best_improvement_ppl": 0.0,
+      "trial_count": 4,
+      "improved_trial_count": 0,
+      "interaction_counterexample_count": 0,
+      "best_swap": {
+        "out_module": "-",
+        "in_module": "-",
+        "proxy_gain": null,
+        "locally_negative": false
+      },
+      "trials": [
+        {
+          "out_module": "model.layers.22.mlp.up_proj",
+          "in_module": "model.layers.0.mlp.gate_proj",
+          "ppl": 22.00814802432265,
+          "global_improvement_ppl": -0.5812240855240098,
+          "proxy_gain": -0.005236447304487246,
+          "globally_improved": false,
+          "locally_negative_but_globally_improved": false
+        },
+        {
+          "out_module": "model.layers.23.mlp.up_proj",
+          "in_module": "model.layers.0.mlp.gate_proj",
+          "ppl": 21.701960486727838,
+          "global_improvement_ppl": -0.2750365479291972,
+          "proxy_gain": -0.005545235872268961,
+          "globally_improved": false,
+          "locally_negative_but_globally_improved": false
+        },
+        {
+          "out_module": "model.layers.22.mlp.up_proj",
+          "in_module": "model.layers.0.mlp.down_proj",
+          "ppl": 21.902609424411686,
+          "global_improvement_ppl": -0.47568548561304524,
+          "proxy_gain": -0.010062706172466296,
+          "globally_improved": false,
+          "locally_negative_but_globally_improved": false
+        },
+        {
+          "out_module": "model.layers.23.mlp.up_proj",
+          "in_module": "model.layers.0.mlp.down_proj",
+          "ppl": 21.595758630222143,
+          "global_improvement_ppl": -0.16883469142350194,
+          "proxy_gain": -0.01037149474024801,
+          "globally_improved": false,
+          "locally_negative_but_globally_improved": false
+        }
+      ]
+    }
+  ],
+  "transfer": {
+    "path": "outputs\\smollm2_1p7b_swap_transfer_matrix.json",
+    "row_count": 2,
+    "positive_rows": 1,
+    "nonnegative_rows": 1,
+    "max_regret_ppl": 0.008701,
+    "mean_improvement_ppl": 0.021329,
+    "rows": [
+      {
+        "dataset": "wikitext2_128",
+        "base_ppl": 15.364061,
+        "target_ppl": 15.312701,
+        "improvement_ppl": 0.051359,
+        "regret_ppl": 0.0,
+        "guard_status": "pass"
+      },
+      {
+        "dataset": "c4_64",
+        "base_ppl": 21.426924,
+        "target_ppl": 21.435625,
+        "improvement_ppl": -0.008701,
+        "regret_ppl": 0.008701,
+        "guard_status": "pass"
+      }
+    ]
+  },
+  "interpretation": "This gate supports a narrow interaction-aware diagnostic claim: bounded global-PPL swap search can find at least one improvement missed by the additive proxy, while current cross-split transfer evidence is only a small bounded-regret result."
+}
