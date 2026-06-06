@@ -32,7 +32,8 @@ as generalization evidence.
 | verify ESMP package integrity | `verify_esmp_package.py` |
 | tune and gate Triton mixed GEMM | `tune_triton_blocks.py`, `gate_triton_tuning.py` |
 | measure prototype generation paths | `measure_esmp_generation_latency.py` |
-| build the paper-facing evidence ledger | `build_evidence_ledger.py` |
+| build the current paper-facing evidence ledger | `build_current_evidence_ledger.py` |
+| build a custom evidence ledger | `build_evidence_ledger.py` |
 | gate public repo hygiene | `gate_public_repo_hygiene.py` |
 | audit external baseline package availability | `audit_baseline_environment.py` |
 | build baseline/readiness gap dashboard | `build_baseline_gap_dashboard.py` |
@@ -72,28 +73,7 @@ python train_python/build_calibration_instability_benchmark.py \
 Build the current evidence ledger:
 
 ```bash
-python train_python/build_evidence_ledger.py \
-  --gate public_hygiene=outputs/real_system_packer_2026-06-05/public_repo_hygiene_gate_2026_06_06.json \
-  --gate calibration_instability=outputs/calibration_instability_benchmark_2026_06_06.json \
-  --gate calibration_robustness_stress=outputs/calibration_robustness_stress_gate_2026_06_07.json \
-  --gate consensus_transfer_boundary=outputs/consensus_transfer_boundary_gate_2026_06_07.json \
-  --gate esmp_package=outputs/real_system_packer_2026-06-05/esmp_package_verify_qwen3_0p6b_limit8_2026_06_06.json \
-  --gate triton_shape_family=outputs/real_system_packer_2026-06-05/triton_qwen_shape_family_gate_2026_06_06.json \
-  --gate selector_runtime=outputs/real_system_packer_2026-06-05/selector_runtime_smoke_gate_2026_06_06.json \
-  --gate selected_row=outputs/real_system_packer_2026-06-05/selected_row_benchmark_gate_2026_06_06.json \
-  --gate cpp_runtime=outputs/real_system_packer_2026-06-05/cpp_runtime_sweep_gate_2026_06_06.json \
-  --gate fused_sidecar=outputs/real_system_packer_2026-06-05/fused_sidecar_generation_gate_2026_06_06.json \
-  --gate fused_qkv_speed=outputs/real_system_packer_2026-06-05/fused_qkv_generation_gate_2026_06_06.json \
-  --gate fused_qkv_quality=outputs/real_system_packer_2026-06-05/fused_qkv_prompt_suite_gate_2026_06_06.json \
-  --gate chat_task_stress=outputs/real_system_packer_2026-06-05/chat_task_stress_v3_84_gate_2026_06_06.json \
-  --gate public_task_benchmark=outputs/public_task_benchmark_ollama_qwen35_4b_gate_2026_06_06.json \
-  --gate allocation_family_proxy=outputs/q_palette_style_allocation_family_gate_2026_06_06.json \
-  --gate robust_lcb_consensus=outputs/robust_lcb_consensus_family_gate_2026_06_06.json \
-  --gate robust_lcb_quality=outputs/qwen3_0p6b_robust_lcb_quality_gate_2026_06_07.json \
-  --gate rotation_family_proxy=outputs/quarot_spinquant_rotation_family_gate_2026_06_06.json \
-  --gate awq_gptq_proxy=outputs/awq_gptq_proxy_gate_2026_06_06.json \
-  --out-json outputs/real_system_packer_2026-06-05/evidence_ledger_2026_06_06.json \
-  --out-md outputs/real_system_packer_2026-06-05/EVIDENCE_LEDGER_2026_06_06.md
+python train_python/build_current_evidence_ledger.py
 ```
 
 Build the baseline/readiness gap dashboard:

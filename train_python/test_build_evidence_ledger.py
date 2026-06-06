@@ -120,6 +120,25 @@ class BuildEvidenceLedgerTests(unittest.TestCase):
         self.assertIn("max best improvement 0.0501", joined)
         self.assertIn("transfer max regret 0.0087", joined)
 
+    def test_paper_alignment_metrics_are_reported(self) -> None:
+        metrics = ledger.metric_parts(
+            {
+                "required_reference_count": 8,
+                "missing_required_reference_count": 0,
+                "referenced_repo_path_count": 33,
+                "missing_referenced_path_count": 0,
+                "unsafe_claim_count": 0,
+                "stale_token_count": 0,
+                "ledger_gate_count": 20,
+            }
+        )
+        joined = "; ".join(metrics)
+        self.assertIn("required refs 8", joined)
+        self.assertIn("missing refs 0", joined)
+        self.assertIn("paper paths 33", joined)
+        self.assertIn("unsafe claims 0", joined)
+        self.assertEqual(ledger.infer_category("paper_evidence_alignment"), "paper alignment")
+
     def test_parse_gate_spec_requires_label(self) -> None:
         label, path = ledger.parse_gate_spec("foo=bar.json")
         self.assertEqual(label, "foo")

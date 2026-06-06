@@ -40,6 +40,8 @@ CATEGORIES = {
     "task_benchmark": "capability retention",
     "benchmark": "capability retention",
     "capability": "capability retention",
+    "paper": "paper alignment",
+    "alignment": "paper alignment",
     "hygiene": "repo hygiene",
     "public": "repo hygiene",
     "calibration": "calibration robustness",
@@ -141,6 +143,20 @@ def metric_parts(summary: dict[str, Any]) -> list[str]:
         parts.append(f"forbidden files {summary.get('forbidden_file_count')}")
     if "placeholder_count" in summary:
         parts.append(f"placeholders {summary.get('placeholder_count')}")
+    if "required_reference_count" in summary:
+        parts.append(f"required refs {summary.get('required_reference_count')}")
+    if "missing_required_reference_count" in summary:
+        parts.append(f"missing refs {summary.get('missing_required_reference_count')}")
+    if "referenced_repo_path_count" in summary:
+        parts.append(f"paper paths {summary.get('referenced_repo_path_count')}")
+    if "missing_referenced_path_count" in summary:
+        parts.append(f"missing paths {summary.get('missing_referenced_path_count')}")
+    if "unsafe_claim_count" in summary:
+        parts.append(f"unsafe claims {summary.get('unsafe_claim_count')}")
+    if "stale_token_count" in summary:
+        parts.append(f"stale tokens {summary.get('stale_token_count')}")
+    if "ledger_gate_count" in summary:
+        parts.append(f"ledger gates {summary.get('ledger_gate_count')}")
     if "case_count" in summary:
         parts.append(f"cases {summary.get('case_count')}")
     if "slice_count" in summary:

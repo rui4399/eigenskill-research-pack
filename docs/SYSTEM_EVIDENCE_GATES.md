@@ -6,11 +6,19 @@ by an executable gate and an explicit claim boundary.
 
 ## Evidence Ledger
 
-`train_python/build_evidence_ledger.py` is the top-level evidence index. It
-loads individual gate JSON files, verifies that every listed gate passed, and
-writes one paper-facing ledger table.
+`train_python/build_current_evidence_ledger.py` is the stable public entry
+point for the current paper-facing gate set. It fixes the 21 gate paths in one
+manifest, rebuilds the ledger, and avoids copying a long `--gate` list across
+README files and paper appendices.
 
 Current ledger:
+
+```bash
+python train_python/build_current_evidence_ledger.py
+```
+
+`train_python/build_evidence_ledger.py` is the lower-level builder for custom
+or future gate manifests. The expanded form of the current 21-gate ledger is:
 
 ```bash
 python train_python/build_evidence_ledger.py \
@@ -19,6 +27,7 @@ python train_python/build_evidence_ledger.py \
   --gate calibration_robustness_stress=outputs/calibration_robustness_stress_gate_2026_06_07.json \
   --gate consensus_transfer_boundary=outputs/consensus_transfer_boundary_gate_2026_06_07.json \
   --gate interaction_swap_boundary=outputs/interaction_swap_boundary_gate_2026_06_07.json \
+  --gate paper_evidence_alignment=outputs/paper_evidence_alignment_gate_2026_06_07.json \
   --gate esmp_package=outputs/real_system_packer_2026-06-05/esmp_package_verify_qwen3_0p6b_limit8_2026_06_06.json \
   --gate triton_shape_family=outputs/real_system_packer_2026-06-05/triton_qwen_shape_family_gate_2026_06_06.json \
   --gate selector_runtime=outputs/real_system_packer_2026-06-05/selector_runtime_smoke_gate_2026_06_06.json \
@@ -38,11 +47,11 @@ python train_python/build_evidence_ledger.py \
   --out-md outputs/real_system_packer_2026-06-05/EVIDENCE_LEDGER_2026_06_06.md
 ```
 
-The current ledger passes with 20/20 gates across repo hygiene, calibration
+The current ledger passes with 21/21 gates across repo hygiene, calibration
 robustness, artifact integrity, kernel, runtime wiring, selected-row, C++
 runtime, decode integration, QKV replacement, quality, task-retention, and
 capability-retention, allocation-comparator, rotation-comparator, and
-PTQ-comparator evidence categories.
+PTQ-comparator, and paper-alignment evidence categories.
 
 Valid claim:
 
@@ -119,6 +128,37 @@ Valid claim:
 Invalid claim:
 
 - repository hygiene proves experimental correctness.
+
+## Paper Evidence Alignment Gate
+
+`train_python/gate_paper_evidence_alignment.py` checks that the current paper
+draft cites committed evidence artifacts, does not reference removed process
+files, and keeps high-risk phrases such as SOTA, production runtime, mobile
+deployment, and board-level measurements inside explicit non-claim language.
+
+Current gate:
+
+```bash
+python train_python/gate_paper_evidence_alignment.py \
+  --paper paper_drafts/eigenskill_q_iclr_ccfa_draft_en_2026_06_07.md \
+  --expected-gate-count 21 \
+  --out-json outputs/paper_evidence_alignment_gate_2026_06_07.json \
+  --out-md outputs/PAPER_EVIDENCE_ALIGNMENT_GATE_2026_06_07.md
+```
+
+Current result: 8/8 required evidence references present, 33 referenced repo
+paths found and 0 missing, 0 stale forbidden tokens, 0 unsafe non-negated claim
+lines, and the paper mentions the current 21-gate ledger.
+
+Valid claim:
+
+- the current paper draft is aligned with the committed evidence boundary and
+  does not contain unguarded high-risk claims detected by this scanner.
+
+Invalid claim:
+
+- this proves the paper is accepted, complete, or sufficient for ICLR/CCF-A
+  submission.
 
 ## Public Task Benchmark Gate
 

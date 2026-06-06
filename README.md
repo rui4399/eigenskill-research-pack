@@ -15,7 +15,7 @@ state-of-the-art PTQ implementation, or a completed mobile/edge runtime.
 
 ## Current Evidence
 
-The current paper-facing evidence ledger passes **20 / 20 gates**:
+The current paper-facing evidence ledger passes **21 / 21 gates**:
 
 ```text
 outputs/real_system_packer_2026-06-05/EVIDENCE_LEDGER_2026_06_06.md
@@ -94,6 +94,12 @@ python train_python/gate_public_repo_hygiene.py \
 ```
 
 For the full ledger rebuild command, see:
+
+```bash
+python train_python/build_current_evidence_ledger.py
+```
+
+For detailed gate commands and claim boundaries, see:
 
 ```text
 docs/SYSTEM_EVIDENCE_GATES.md

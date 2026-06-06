@@ -32,6 +32,7 @@ interpretation. Anything outside these rows remains future work.
 | The current paper-facing evidence set passes as a ledger. | Top-level evidence ledger. | `outputs/real_system_packer_2026-06-05/EVIDENCE_LEDGER_2026_06_06.md` | A ledger pass means listed gates passed, not that the paper is top-tier ready. |
 | Missing baseline families are explicitly tracked. | Machine-readable baseline coverage manifest and generated gap dashboard. | `docs/BASELINE_COVERAGE_MANIFEST.json`, `outputs/BASELINE_GAP_DASHBOARD_2026_06_06.md` | Tracks readiness gaps; does not turn missing external baselines into evidence. |
 | The public tree excludes private/process artifacts and speculative concept drafts. | Public hygiene gate rejects generated delivery bundles, root Codex resume files, Notion/wake-up/nightly update snippets, NotebookLM/Obsidian exports, and old swarm/acoustic concept drafts. | `train_python/gate_public_repo_hygiene.py`, `outputs/real_system_packer_2026-06-05/PUBLIC_REPO_HYGIENE_GATE_2026_06_06.md` | Repository hygiene protects presentation quality; it is not experimental evidence. |
+| The current paper draft is aligned with committed evidence artifacts. | Paper evidence alignment gate checks required evidence references, referenced repo paths, stale process tokens, unsafe non-negated claim phrases, and current ledger gate count. | `outputs/PAPER_EVIDENCE_ALIGNMENT_GATE_2026_06_07.md`, `paper_drafts/eigenskill_q_iclr_ccfa_draft_en_2026_06_07.md` | Draft alignment is a writing-quality gate; it does not prove acceptance, novelty, or complete baselines. |
 
 ## Rejected Or Not-Yet Claims
 
@@ -41,6 +42,7 @@ interpretation. Anything outside these rows remains future work.
 | EigenSkill-Q faithfully runs AWQ/GPTQ PTQ. | Not yet. | Official AWQ/GPTQ package runs or faithful reproductions with matched calibration, packed outputs, and quality evaluation. |
 | EigenSkill-Q is competitive with recent mixed-precision allocation papers. | Not yet. | Q-Palette/IMPQ/WINDQuant-style comparisons or faithful reimplementations under matched budgets. |
 | The swap-search gate proves a global optimum allocator. | Rejected. | The current search is bounded one-step feedback over small fake-quant slices; global optimality would require a larger search space and stronger validation. |
+| The paper draft is submission-ready because the alignment gate passes. | Rejected. | The gate only checks evidence/path/claim alignment; official baselines, broader tasks, and stronger hardware evidence remain missing. |
 | Robust-LCB is better than mean consensus. | Rejected for current data. | The current Qwen3-0.6B boundary gate records 0/2 wins versus mean consensus; a future claim would need broader downstream evidence. |
 | EigenSkill-Q faithfully implements rotation-family PTQ. | Not yet. | Official or faithful QuaRot/SpinQuant transforms, activation/KV rotation kernels, and quality-retention evaluation. |
 | The system has mobile/Redmi K80 Pro latency evidence. | Not yet. | On-device TTFT, tokens/s, peak memory, and thermal/power logs. |

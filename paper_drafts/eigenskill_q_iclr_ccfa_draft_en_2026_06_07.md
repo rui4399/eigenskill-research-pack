@@ -3,9 +3,10 @@
 **Consensus Sensitivity Allocation with Gated Packed-System Evidence**
 
 > ICLR/CCF-A-style research draft, 2026-06-07. This is a paper draft grounded in
-> the current repository evidence ledger. It is not a submission-ready claim of
-> state-of-the-art quantization, official PTQ baseline superiority, or production
-> hardware deployment.
+> the current repository evidence ledger. It is not a submission-ready claim.
+> It does not claim state-of-the-art quantization or official PTQ baseline
+> superiority. It does not claim production runtime readiness or hardware
+> deployment.
 
 ## Abstract
 
@@ -21,7 +22,7 @@ fake-quant loss sensitivity on multiple calibration views, allocates a fixed
 `{4,8}`-bit budget through cross-split consensus sensitivity, and records every
 paper-facing result through executable evidence gates. Across Qwen3-0.6B,
 Qwen3-1.7B, OLMo2-0425-1B-Instruct, and SmolLM2-1.7B short-slice diagnostics,
-the current evidence ledger passes 20/20 gates. The calibration-instability
+the current evidence ledger passes 21/21 gates. The calibration-instability
 gate finds 3/3 unstable model/dataset cases with mean score/cost Spearman
 0.0713 and mean top-20 Jaccard 0.1022. The robustness stress gate reports
 11/11 wins versus uniform INT4, best random seed, and random-seed mean under the
@@ -70,7 +71,7 @@ offers three narrower contributions:
    consensus allocator that protects modules that are consistently sensitive or
    have high average sensitivity under a fixed `{4,8}` budget.
 3. **Gated evidence discipline.** We convert scattered fake-quant, runtime,
-   task-smoke, and repository-hygiene outputs into 20 executable gates, each
+   task-smoke, paper-alignment, and repository-hygiene outputs into 21 executable gates, each
    with an explicit claim boundary.
 
 The paper is intentionally conservative. It keeps negative results visible:
@@ -200,15 +201,16 @@ future allocator.
 ## 6. Evidence Gates
 
 Every paper-facing claim is indexed by a gate JSON and a Markdown report. The
-current ledger passes 20/20 gates. The most important gates are:
+current ledger passes 21/21 gates. The most important gates are:
 
 | Gate | Evidence | Valid claim | Non-claim |
 |---|---|---|---|
 | Calibration instability | 3 Qwen3/OLMo2 split comparisons | Small calibration splits induce unstable module rankings. | Instability alone proves consensus is superior. |
-| Robustness stress | 11 short fake-quant PPL slices | Target policies beat uniform and random baselines on committed slices. | SOTA PTQ or task retention. |
+| Robustness stress | 11 short fake-quant PPL slices | Target policies beat uniform and random baselines on committed slices. | Not SOTA PTQ or task retention. |
 | Consensus transfer boundary | 4 paired Qwen3 slices | Consensus avoids the worse single-split policy with bounded best-single regret. | Consensus always beats the best single split. |
 | Interaction swap boundary | 16 SmolLM2-1.7B swap trials | Global feedback exposes local-proxy failures. | Global optimality or broad transfer. |
 | Packed-system gates | ESMP, Triton, selected-row, sidecar, QKV smoke | Prototype components are executable and audited. | Production Tensor Core/mobile runtime. |
+| Paper evidence alignment | Paper draft, required evidence paths, claim-risk scan | The draft cites committed evidence and avoids unsafe non-negated claims. | Peer-review acceptance or complete baseline coverage. |
 
 The evidence ledger is:
 
@@ -298,7 +300,8 @@ audit mixed-bit matrices; Triton shape-family tuning finds selected shape wins;
 selected-row and C++ runtime sweeps report module-level wins; shallow fused-QKV
 generation and prompt-suite gates verify narrow integration paths. The ledger
 records these as executable system evidence, but the paper does not claim
-end-to-end TTFT/tokens/s wins on a real mobile or edge board.
+end-to-end quality preservation. It does not claim TTFT/tokens/s wins, real
+mobile results, or edge-board deployment.
 
 ## 8. Discussion
 
@@ -330,8 +333,8 @@ benchmarks, and real packed inference measurements.
    faithfully reproduced.
 3. Public task evidence is currently negative smoke coverage, not capability
    retention.
-4. System evidence is prototype/module-level; Redmi K80 Pro or board-level TTFT,
-   tokens/s, memory, energy, and thermal logs are not complete.
+4. System evidence is prototype/module-level; no Redmi K80 Pro or board-level
+   TTFT, tokens/s, memory, energy, or thermal logs are complete.
 5. The bit set is limited to `{4,8}` in the main allocation diagnostics.
 6. The interaction-aware search is bounded one-step feedback, not a global
    optimization algorithm.
@@ -371,29 +374,7 @@ python -m unittest discover -s train_python -p "test_*.py"
 python train_python/gate_public_repo_hygiene.py \
   --out-json outputs/real_system_packer_2026-06-05/public_repo_hygiene_gate_2026_06_06.json \
   --out-md outputs/real_system_packer_2026-06-05/PUBLIC_REPO_HYGIENE_GATE_2026_06_06.md
-python train_python/build_evidence_ledger.py \
-  --gate public_hygiene=outputs/real_system_packer_2026-06-05/public_repo_hygiene_gate_2026_06_06.json \
-  --gate calibration_instability=outputs/calibration_instability_benchmark_2026_06_06.json \
-  --gate calibration_robustness_stress=outputs/calibration_robustness_stress_gate_2026_06_07.json \
-  --gate consensus_transfer_boundary=outputs/consensus_transfer_boundary_gate_2026_06_07.json \
-  --gate interaction_swap_boundary=outputs/interaction_swap_boundary_gate_2026_06_07.json \
-  --gate esmp_package=outputs/real_system_packer_2026-06-05/esmp_package_verify_qwen3_0p6b_limit8_2026_06_06.json \
-  --gate triton_shape_family=outputs/real_system_packer_2026-06-05/triton_qwen_shape_family_gate_2026_06_06.json \
-  --gate selector_runtime=outputs/real_system_packer_2026-06-05/selector_runtime_smoke_gate_2026_06_06.json \
-  --gate selected_row=outputs/real_system_packer_2026-06-05/selected_row_benchmark_gate_2026_06_06.json \
-  --gate cpp_runtime=outputs/real_system_packer_2026-06-05/cpp_runtime_sweep_gate_2026_06_06.json \
-  --gate fused_sidecar=outputs/real_system_packer_2026-06-05/fused_sidecar_generation_gate_2026_06_06.json \
-  --gate fused_qkv_speed=outputs/real_system_packer_2026-06-05/fused_qkv_generation_gate_2026_06_06.json \
-  --gate fused_qkv_quality=outputs/real_system_packer_2026-06-05/fused_qkv_prompt_suite_gate_2026_06_06.json \
-  --gate chat_task_stress=outputs/real_system_packer_2026-06-05/chat_task_stress_v3_84_gate_2026_06_06.json \
-  --gate public_task_benchmark=outputs/public_task_benchmark_ollama_qwen35_4b_gate_2026_06_06.json \
-  --gate allocation_family_proxy=outputs/q_palette_style_allocation_family_gate_2026_06_06.json \
-  --gate robust_lcb_consensus=outputs/robust_lcb_consensus_family_gate_2026_06_06.json \
-  --gate robust_lcb_quality=outputs/qwen3_0p6b_robust_lcb_quality_gate_2026_06_07.json \
-  --gate rotation_family_proxy=outputs/quarot_spinquant_rotation_family_gate_2026_06_06.json \
-  --gate awq_gptq_proxy=outputs/awq_gptq_proxy_gate_2026_06_06.json \
-  --out-json outputs/real_system_packer_2026-06-05/evidence_ledger_2026_06_06.json \
-  --out-md outputs/real_system_packer_2026-06-05/EVIDENCE_LEDGER_2026_06_06.md
+python train_python/build_current_evidence_ledger.py
 ```
 
 ## References
