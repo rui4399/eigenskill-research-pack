@@ -75,6 +75,7 @@ are not counted in the current 22-gate paper-facing ledger.
 | `official_awq_matched_ppl` | external PTQ readiness | `outputs/OFFICIAL_AWQ_MATCHED_PPL_GATE_2026_06_07.md` | The same four-prompt slice can be evaluated under FP16 and local AutoAWQ W4 group-128 with PPL ratio 1.1789; this is not a full public-dataset AWQ/GPTQ baseline. |
 | `official_awq_public_wikitext2_ppl` | external PTQ readiness | `outputs/OFFICIAL_AWQ_MATCHED_PPL_QWEN25_0P5B_WIKITEXT2_GATE_2026_06_07.md` | A tiny public WikiText2 slice runs under FP16 and local AutoAWQ W4 group-128 with PPL ratio 1.2705 over 760 tokens; this is not a complete AWQ/GPTQ baseline. |
 | `official_awq_public_c4_ppl` | external PTQ readiness | `outputs/OFFICIAL_AWQ_MATCHED_PPL_QWEN25_0P5B_C4_GATE_2026_06_07.md` | A tiny public C4 validation slice runs under FP16 and local AutoAWQ W4 group-128 with PPL ratio 1.1824 over 727 tokens; this is not a complete AWQ/GPTQ baseline. |
+| `official_awq_public_calib_bundle` | external PTQ readiness | `outputs/OFFICIAL_AWQ_PUBLIC_CALIB_QWEN25_0P5B_BUNDLE_GATE_2026_06_07.md` | A public-calibration AutoAWQ W4 group-128 bundle quantizes under guard and evaluates tiny public WikiText2/C4 PPL slices; this is partial official-package evidence, not GPTQ/AWQ competitive coverage. |
 
 ## Readiness Gaps
 

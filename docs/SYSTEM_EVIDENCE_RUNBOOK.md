@@ -540,10 +540,63 @@ outputs/OFFICIAL_AWQ_MATCHED_PPL_QWEN25_0P5B_WIKITEXT2_GATE_2026_06_07.md
 outputs/OFFICIAL_AWQ_MATCHED_PPL_QWEN25_0P5B_C4_GATE_2026_06_07.md
 ```
 
+Public-calibration AutoAWQ bundle:
+
+```bash
+python train_python/build_public_ppl_prompts.py \
+  --out-dir data_eval/public_calib_prompts_2026_06_07 \
+  --wikitext2-count 8 \
+  --c4-count 8 \
+  --min-chars 40 \
+  --max-chars 384 \
+  --offset 128 \
+  --manifest-title "Public Calibration Prompt Manifest" \
+  --claim-boundary "Tiny public text slices used as AutoAWQ calibration prompts; not an evaluation benchmark or leaderboard definition." \
+  --out-json outputs/public_calib_prompt_manifest_2026_06_07.json \
+  --out-md outputs/PUBLIC_CALIB_PROMPT_MANIFEST_2026_06_07.md
+```
+
+The guarded AutoAWQ quantization command uses the generated calibration prompt
+files with `--max-calib-samples 12` and `--max-calib-seq-len 128`, saving the
+local ignored artifact under:
+
+```text
+outputs/official_awq_smoke_2026_06_07/qwen25_0p5b_public_calib_awq_model
+```
+
+Current public-calibrated bundle result:
+
+| slice | prompts | tokens | FP16 PPL | AutoAWQ PPL | ratio | peak VRAM |
+|---|---:|---:|---:|---:|---:|---:|
+| quantization | n/a | n/a | n/a | n/a | n/a | 0.6960 |
+| WikiText2 test eval | 8 | 760 | 24.676 | 29.081 | 1.1785 | 0.6116 |
+| C4 validation eval | 8 | 727 | 32.952 | 38.173 | 1.1584 | 0.6116 |
+
+Aggregate gate:
+
+```bash
+python train_python/gate_official_awq_public_calib.py \
+  --smoke-summary-json outputs/official_awq_public_calib_qwen25_0p5b_summary_2026_06_07.json \
+  --smoke-guard-json outputs/official_awq_public_calib_qwen25_0p5b_gpu_guard_2026_06_07.json \
+  --eval-summary wikitext2=outputs/official_awq_public_calib_qwen25_0p5b_wikitext2_summary_2026_06_07.json \
+  --eval-guard wikitext2=outputs/official_awq_public_calib_qwen25_0p5b_wikitext2_gpu_guard_2026_06_07.json \
+  --eval-summary c4=outputs/official_awq_public_calib_qwen25_0p5b_c4_summary_2026_06_07.json \
+  --eval-guard c4=outputs/official_awq_public_calib_qwen25_0p5b_c4_gpu_guard_2026_06_07.json \
+  --min-eval-slices 2 \
+  --min-total-tokens 512 \
+  --min-awq-blocks 4 \
+  --max-memory-ratio 0.90 \
+  --max-ppl-ratio 2.0 \
+  --out-json outputs/official_awq_public_calib_qwen25_0p5b_bundle_gate_2026_06_07.json \
+  --out-md outputs/OFFICIAL_AWQ_PUBLIC_CALIB_QWEN25_0P5B_BUNDLE_GATE_2026_06_07.md
+```
+
 Valid claim:
 
 - minimal same-prompt FP16-vs-AutoAWQ PPL comparisons completed under guard,
-  including two tiny public text slices.
+  including two tiny public text slices;
+- one public-calibrated AutoAWQ W4 group-128 bundle completed guarded
+  quantization and two tiny public PPL eval slices.
 
 Invalid claim:
 

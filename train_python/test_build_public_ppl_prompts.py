@@ -70,6 +70,29 @@ class BuildPublicPplPromptsTests(unittest.TestCase):
             self.assertEqual(manifest["artifacts"][0]["prompts"], 3)
             self.assertGreater(len(calls), 1)
 
+    def test_build_suite_accepts_custom_title_and_claim_boundary(self) -> None:
+        def fake_loader(dataset: str, config: str | None, split: str, count: int, offset: int) -> list[dict]:
+            del dataset, config, split, offset
+            return [
+                {"text": f"This is public calibration text row {i} with enough content."}
+                for i in range(count)
+            ]
+
+        with tempfile.TemporaryDirectory() as tmp:
+            manifest = builder.build_suite(
+                out_dir=Path(tmp),
+                counts={"wikitext2": 1, "c4": 0},
+                source="datasets-server",
+                loader=fake_loader,
+                min_chars=20,
+                max_chars=80,
+                title="Public Calibration Prompt Manifest",
+                claim_boundary="Calibration prompts only; not an eval benchmark.",
+            )
+
+            self.assertEqual(manifest["title"], "Public Calibration Prompt Manifest")
+            self.assertEqual(manifest["claim_boundary"], "Calibration prompts only; not an eval benchmark.")
+
 
 if __name__ == "__main__":
     unittest.main()

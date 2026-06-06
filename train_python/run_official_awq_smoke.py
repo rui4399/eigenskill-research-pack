@@ -25,6 +25,21 @@ CALIBRATION_TEXTS = [
 ]
 
 
+def load_calibration_texts(paths: list[Path]) -> list[str]:
+    if not paths:
+        return list(CALIBRATION_TEXTS)
+    texts: list[str] = []
+    seen: set[str] = set()
+    for path in paths:
+        for raw_line in path.read_text(encoding="utf-8").splitlines():
+            text = raw_line.strip()
+            if not text or text in seen:
+                continue
+            seen.add(text)
+            texts.append(text)
+    return texts
+
+
 def build_calibration_plan(texts: list[str], tokenizer: Any, max_samples: int, max_seq_len: int) -> dict[str, Any]:
     accepted_lengths: list[int] = []
     skipped_lengths: list[int] = []
@@ -67,6 +82,8 @@ def artifact_summary(path: Path) -> dict[str, Any]:
 def write_markdown(path: Path, payload: dict[str, Any]) -> None:
     artifact = payload.get("artifact", {})
     generation = payload.get("generation_smoke", {})
+    calibration = payload.get("calibration", {})
+    calibration_plan = calibration.get("plan", {}) if isinstance(calibration, dict) else {}
     lines = [
         "# Official AutoAWQ Smoke Summary",
         "",
@@ -76,6 +93,9 @@ def write_markdown(path: Path, payload: dict[str, Any]) -> None:
         f"Package: `{payload['package']['name']} {payload['package']['version']}`",
         f"Quant config: `{payload['quant_config']}`",
         f"Calibration samples: `{payload['calibration']['sample_count']}`",
+        f"Calibration source: `{calibration.get('source')}`",
+        f"Expected AWQ calibration blocks: `{calibration_plan.get('expected_awq_blocks')}`",
+        f"Accepted calibration tokens: `{calibration_plan.get('total_accepted_tokens')}`",
         f"Elapsed seconds: `{payload['elapsed_seconds']:.3f}`",
         "",
         "## Artifact",
@@ -113,6 +133,7 @@ def main() -> None:
     parser.add_argument("--version", default="GEMM")
     parser.add_argument("--max-calib-samples", type=int, default=4)
     parser.add_argument("--max-calib-seq-len", type=int, default=16)
+    parser.add_argument("--calibration-prompts", type=Path, action="append", default=[])
     parser.add_argument("--max-chunk-memory-mib", type=int, default=256)
     parser.add_argument("--device-map", default="cuda:0")
     parser.add_argument("--max-new-tokens", type=int, default=12)
@@ -131,7 +152,8 @@ def main() -> None:
             "version": args.version,
         },
         "calibration": {
-            "sample_count": min(args.max_calib_samples, len(CALIBRATION_TEXTS)),
+            "source": "default" if not args.calibration_prompts else [str(path) for path in args.calibration_prompts],
+            "sample_count": 0,
             "max_calib_seq_len": args.max_calib_seq_len,
             "plan": {},
         },
@@ -144,10 +166,12 @@ def main() -> None:
         from awq import AutoAWQForCausalLM
         from transformers import AutoTokenizer
 
+        calibration_texts = load_calibration_texts(args.calibration_prompts)
+        payload["calibration"]["sample_count"] = min(args.max_calib_samples, len(calibration_texts))
         payload["package"]["version"] = importlib.metadata.version("autoawq")
         tokenizer = AutoTokenizer.from_pretrained(args.model, trust_remote_code=True)
         calibration_plan = build_calibration_plan(
-            CALIBRATION_TEXTS,
+            calibration_texts,
             tokenizer,
             args.max_calib_samples,
             args.max_calib_seq_len,
@@ -167,7 +191,7 @@ def main() -> None:
         model.quantize(
             tokenizer,
             quant_config=payload["quant_config"],
-            calib_data=CALIBRATION_TEXTS[: args.max_calib_samples],
+            calib_data=calibration_texts[: args.max_calib_samples],
             max_calib_samples=args.max_calib_samples,
             max_calib_seq_len=args.max_calib_seq_len,
             n_parallel_calib_samples=1,

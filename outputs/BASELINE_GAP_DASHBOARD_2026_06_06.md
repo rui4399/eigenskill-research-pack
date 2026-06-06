@@ -1,14 +1,14 @@
 # Baseline Gap Dashboard
 
-Date: `2026-06-06T21:28:07+00:00`
+Date: `2026-06-06T21:57:44+00:00`
 Status: **NOT READY** for paper claims that require external baselines
-Items: `13`
+Items: `14`
 
 ## Status Counts
 
 | status | count |
 |---|---:|
-| `covered` | 9 |
+| `covered` | 10 |
 | `missing` | 1 |
 | `partial` | 1 |
 | `proxy_only` | 2 |
@@ -30,7 +30,8 @@ Items: `13`
 | `calibration_split_instability` | calibration_robustness | required | False | **covered** | 1 | 0 | 0 | 0 | n/a | Defines the measured problem setting; not a quality-retention proof by itself. |
 | `official_awq_smoke` | external_ptq_readiness | optional | False | **covered** | 2 | 0 | 0 | 0 | autoawq=yes | Readiness probe only: it may show that AutoAWQ can run locally, but it is not a matched AWQ baseline or quality-retention comparison. |
 | `official_awq_matched_ppl_smoke` | external_ptq_readiness | optional | False | **covered** | 6 | 0 | 0 | 0 | autoawq=yes | Readiness PPL probe only: it may show same-prompt FP16-vs-AutoAWQ comparisons, but it is not a full public-dataset AWQ/GPTQ baseline. |
-| `official_awq_gptq_competitive` | external_ptq | high | True | **partial** | 0 | 0 | 8 | 2 | autoawq=yes, awq=yes, auto_gptq=no, gptqmodel=no | Smoke and proxy artifacts are useful readiness diagnostics, but they do not cover faithful official AWQ/GPTQ baseline claims without matched calibration, budget, PPL, and task comparisons. |
+| `official_awq_public_calibrated_bundle` | external_ptq_readiness | optional | False | **covered** | 4 | 0 | 0 | 0 | autoawq=yes | Partial official-package readiness: it uses public calibration and public eval slices, but it is still one AutoAWQ tiny-slice bundle, not a matched AWQ/GPTQ competitive baseline. |
+| `official_awq_gptq_competitive` | external_ptq | high | True | **partial** | 0 | 0 | 18 | 2 | autoawq=yes, awq=yes, auto_gptq=no, gptqmodel=no | Smoke and proxy artifacts are useful readiness diagnostics, but they do not cover faithful official AWQ/GPTQ baseline claims without matched calibration, budget, PPL, and task comparisons. |
 | `official_rotation_family` | external_rotation | high | True | **proxy_only** | 0 | 0 | 0 | 2 | n/a | Current rotation-family proxy artifacts are useful related-family diagnostics, but they do not cover faithful QuaRot/SpinQuant implementation or activation/KV quality claims. |
 | `official_allocation_family` | external_allocation | high | True | **proxy_only** | 0 | 0 | 0 | 2 | n/a | Current Q-Palette-style proxy artifacts are useful related-family diagnostics, but they do not cover faithful Q-Palette/IMPQ/WINDQuant reproduction claims. |
 | `public_task_schema_smoke` | capability_retention | required | False | **covered** | 3 | 8 | 0 | 0 | n/a | Proves public-schema task ingestion and guarded execution only; not leaderboard-scale retention. |

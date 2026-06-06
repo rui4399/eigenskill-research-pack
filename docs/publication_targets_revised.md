@@ -62,11 +62,12 @@ Current environment evidence:
 outputs/baseline_environment_audit.md
 ```
 
-The current WSL environment can run `autoawq`/`awq` readiness probes, and the
-repository now includes tiny public WikiText2/C4 matched FP16-vs-AutoAWQ PPL
-checks. This is still a reproducibility signal, not a competitive baseline:
-`auto_gptq`/`gptqmodel` and faithful rotation/allocation baselines remain
-paper blockers in `outputs/BASELINE_GAP_DASHBOARD_2026_06_06.md`.
+The current WSL environment can run `autoawq`/`awq`, and the repository now
+includes a public-calibrated AutoAWQ W4 group-128 bundle with tiny public
+WikiText2/C4 matched FP16-vs-AutoAWQ PPL checks. This is still partial
+official-package evidence, not a competitive baseline: `auto_gptq`/`gptqmodel`
+and faithful rotation/allocation baselines remain paper blockers in
+`outputs/BASELINE_GAP_DASHBOARD_2026_06_06.md`.
 
 ### 3. CIKM / DASFAA / KDD Workshop
 
@@ -125,7 +126,7 @@ RTAS / EMSOFT: no real-time or embedded board evaluation
 Highest value work:
 
 ```text
-1. Convert AutoAWQ from readiness probes into a matched calibration/budget baseline.
+1. Scale the public-calibrated AutoAWQ bundle beyond tiny slices.
 2. Increase evaluation slices beyond 64 prompts for the strongest rows.
 3. Add GPTQ/GPTQModel or another faithful public PTQ comparator.
 4. Increase calibration seeds and bootstrap confidence intervals.

@@ -1,0 +1,71 @@
+{
+  "date": "2026-06-06T21:41:59+00:00",
+  "passed": true,
+  "model": "Qwen/Qwen2.5-0.5B-Instruct",
+  "package": {
+    "name": "autoawq",
+    "version": "0.2.9"
+  },
+  "quant_config": {
+    "zero_point": true,
+    "q_group_size": 128,
+    "w_bit": 4,
+    "version": "GEMM"
+  },
+  "calibration": {
+    "source": [
+      "data_eval/public_calib_prompts_2026_06_07/wikitext2_test_ppl_prompts.txt",
+      "data_eval/public_calib_prompts_2026_06_07/c4_validation_ppl_prompts.txt"
+    ],
+    "sample_count": 12,
+    "max_calib_seq_len": 128,
+    "plan": {
+      "accepted_sample_count": 12,
+      "skipped_sample_count": 0,
+      "accepted_token_lengths": [
+        98,
+        83,
+        107,
+        93,
+        77,
+        112,
+        99,
+        84,
+        76,
+        73,
+        73,
+        78
+      ],
+      "skipped_token_lengths": [],
+      "total_accepted_tokens": 1053,
+      "max_seq_len": 128,
+      "expected_awq_blocks": 8,
+      "ok": true
+    }
+  },
+  "artifact": {
+    "path": "outputs/official_awq_smoke_2026_06_07/qwen25_0p5b_public_calib_awq_model",
+    "file_count": 6,
+    "total_bytes": 469809733,
+    "suffix_counts": {
+      ".jinja": 1,
+      ".json": 4,
+      ".safetensors": 1
+    },
+    "sample_files": [
+      "chat_template.jinja",
+      "config.json",
+      "generation_config.json",
+      "model.safetensors",
+      "tokenizer.json",
+      "tokenizer_config.json"
+    ]
+  },
+  "generation_smoke": {
+    "ok": true,
+    "prompt": "Give one short reason calibration robustness matters.",
+    "text": "Give one short reason calibration robustness matters. What does it mean to have robust calibration? Provide an example"
+  },
+  "error": "",
+  "elapsed_seconds": 121.36348819732666
+}

@@ -22,8 +22,9 @@ The current evidence supports:
 - two text sources: WikiText2 and C4;
 - random-repeat comparisons at 4.5 average bits;
 - budget curves at 4.25, 4.50, and 4.75 average bits;
-- minimal AutoAWQ readiness probes on Qwen2.5-0.5B-Instruct, including tiny
-  public WikiText2/C4 matched FP16-vs-AutoAWQ PPL slices;
+- minimal AutoAWQ readiness probes on Qwen2.5-0.5B-Instruct, including a
+  public-calibrated W4 group-128 bundle and tiny public WikiText2/C4 matched
+  FP16-vs-AutoAWQ PPL slices;
 - C++ audits for allocation consensus and split-stability;
 - guarded GPU logs with explicit peak-VRAM records and claim boundaries.
 
@@ -88,8 +89,9 @@ Required additions before that:
 
 - add RTN/uniform and one public baseline beyond random/category;
 - run at least 256 or 512 prompts on WikiText2/C4 for Qwen3 and OLMo2;
-- turn the AutoAWQ readiness probes into a matched calibration/budget baseline,
-  and add GPTQ/GPTQModel or another faithful public PTQ comparator;
+- scale the public-calibrated AutoAWQ bundle beyond tiny slices and add
+  GPTQ/GPTQModel or another faithful public PTQ comparator under the same
+  calibration/evaluation protocol;
 - report calibration-seed variance;
 - include the budget curve figure from `outputs/consensus_budget_curve.svg`;
 - keep all claims explicitly scoped to fake-quant diagnostics.

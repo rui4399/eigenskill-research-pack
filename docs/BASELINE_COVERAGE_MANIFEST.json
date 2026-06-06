@@ -89,6 +89,22 @@
       "claim_boundary": "Readiness PPL probe only: it may show same-prompt FP16-vs-AutoAWQ comparisons, but it is not a full public-dataset AWQ/GPTQ baseline."
     },
     {
+      "id": "official_awq_public_calibrated_bundle",
+      "family": "external_ptq_readiness",
+      "priority": "optional",
+      "paper_blocker": false,
+      "description": "Public-calibration AutoAWQ W4 group-128 bundle with guarded quantization and tiny public WikiText2/C4 matched PPL eval slices.",
+      "required_evidence_globs": [
+        "outputs/**/*official*awq*public*calib*bundle*gate*.json",
+        "outputs/**/*official*awq*public*calib*summary*.json"
+      ],
+      "required_packages": [
+        "autoawq"
+      ],
+      "package_mode": "any",
+      "claim_boundary": "Partial official-package readiness: it uses public calibration and public eval slices, but it is still one AutoAWQ tiny-slice bundle, not a matched AWQ/GPTQ competitive baseline."
+    },
+    {
       "id": "official_awq_gptq_competitive",
       "family": "external_ptq",
       "priority": "high",
@@ -106,7 +122,8 @@
         "outputs/**/*official*awq*smoke*summary*.json",
         "outputs/**/*official*awq*smoke*gate*.json",
         "outputs/**/*official*awq*matched*ppl*summary*.json",
-        "outputs/**/*official*awq*matched*ppl*gate*.json"
+        "outputs/**/*official*awq*matched*ppl*gate*.json",
+        "outputs/**/*official*awq*public*calib*.json"
       ],
       "proxy_evidence_globs": [
         "outputs/**/*awq_gptq_proxy*summary.json"

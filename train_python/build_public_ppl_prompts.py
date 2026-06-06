@@ -106,6 +106,8 @@ def build_suite(
     min_chars: int = 40,
     max_chars: int = 512,
     offset: int = 0,
+    title: str = "Public PPL Prompt Manifest",
+    claim_boundary: str = "Tiny public text slices for matched PPL probes; not leaderboard-scale evaluation.",
 ) -> dict[str, Any]:
     artifacts: list[dict[str, Any]] = []
     for key, spec in DATASETS.items():
@@ -142,18 +144,16 @@ def build_suite(
         )
     return {
         "date": datetime.now(timezone.utc).replace(microsecond=0).isoformat(),
-        "title": "Public PPL Prompt Manifest",
+        "title": title,
         "artifact_count": len(artifacts),
         "artifacts": artifacts,
-        "claim_boundary": (
-            "Tiny public text slices for matched PPL probes; not leaderboard-scale evaluation."
-        ),
+        "claim_boundary": claim_boundary,
     }
 
 
 def write_markdown(path: Path, manifest: dict[str, Any]) -> None:
     lines = [
-        "# Public PPL Prompt Manifest",
+        f"# {manifest['title']}",
         "",
         f"Date: `{manifest['date']}`",
         f"Artifacts: `{manifest['artifact_count']}`",
@@ -180,6 +180,11 @@ def main() -> None:
     parser.add_argument("--min-chars", type=int, default=40)
     parser.add_argument("--max-chars", type=int, default=512)
     parser.add_argument("--offset", type=int, default=0)
+    parser.add_argument("--manifest-title", default="Public PPL Prompt Manifest")
+    parser.add_argument(
+        "--claim-boundary",
+        default="Tiny public text slices for matched PPL probes; not leaderboard-scale evaluation.",
+    )
     parser.add_argument("--out-json", type=Path, default=Path("outputs/public_ppl_prompt_manifest_2026_06_07.json"))
     parser.add_argument("--out-md", type=Path, default=Path("outputs/PUBLIC_PPL_PROMPT_MANIFEST_2026_06_07.md"))
     args = parser.parse_args()
@@ -191,6 +196,8 @@ def main() -> None:
         min_chars=args.min_chars,
         max_chars=args.max_chars,
         offset=args.offset,
+        title=args.manifest_title,
+        claim_boundary=args.claim_boundary,
     )
     args.out_json.parent.mkdir(parents=True, exist_ok=True)
     args.out_json.write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
