@@ -62,10 +62,11 @@ Current environment evidence:
 outputs/baseline_environment_audit.md
 ```
 
-At the time of the audit, `auto_gptq`, `awq`, `llmcompressor`, `optimum`,
-`bitsandbytes`, and `gptqmodel` are unavailable in the active WSL Python
-environment, while `torch` and `transformers` are available. This is a
-reproducibility gap, not a publication claim.
+The current WSL environment can run `autoawq`/`awq` readiness probes, and the
+repository now includes tiny public WikiText2/C4 matched FP16-vs-AutoAWQ PPL
+checks. This is still a reproducibility signal, not a competitive baseline:
+`auto_gptq`/`gptqmodel` and faithful rotation/allocation baselines remain
+paper blockers in `outputs/BASELINE_GAP_DASHBOARD_2026_06_06.md`.
 
 ### 3. CIKM / DASFAA / KDD Workshop
 
@@ -124,9 +125,10 @@ RTAS / EMSOFT: no real-time or embedded board evaluation
 Highest value work:
 
 ```text
-1. Implement or install at least one public quantization baseline.
+1. Convert AutoAWQ from readiness probes into a matched calibration/budget baseline.
 2. Increase evaluation slices beyond 64 prompts for the strongest rows.
-3. Add an interaction-aware swap/search stage initialized from consensus.
-4. Add exact scripts for every table in the draft.
-5. Keep negative results visible; they are central to the consensus argument.
+3. Add GPTQ/GPTQModel or another faithful public PTQ comparator.
+4. Increase calibration seeds and bootstrap confidence intervals.
+5. Add exact scripts for every table in the draft.
+6. Keep negative results visible; they are central to the consensus argument.
 ```

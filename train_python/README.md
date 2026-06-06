@@ -28,6 +28,9 @@ as generalization evidence.
 | aggregate calibration split instability | `build_calibration_instability_benchmark.py` |
 | build cross-model robustness stress gate | `build_calibration_robustness_stress.py` |
 | build single-split transfer boundary gate | `build_consensus_transfer_boundary.py` |
+| build tiny public PPL prompt slices | `build_public_ppl_prompts.py` |
+| run official AutoAWQ readiness smoke | `run_official_awq_smoke.py`, `gate_official_awq_smoke.py` |
+| run matched FP16-vs-AutoAWQ PPL probes | `run_official_awq_matched_ppl.py`, `gate_official_awq_matched_ppl.py` |
 | pack real ESMP mixed-precision artifacts | `pack_qwen3_consensus.py` |
 | verify ESMP package integrity | `verify_esmp_package.py` |
 | tune and gate Triton mixed GEMM | `tune_triton_blocks.py`, `gate_triton_tuning.py` |

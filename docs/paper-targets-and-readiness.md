@@ -17,12 +17,15 @@ consensus sensitivity, with deterministic C++ audit/reporting tools.
 
 The current evidence supports:
 
-- two model families: Qwen3-1.7B and OLMo2-0425-1B-Instruct;
+- small-model fake-quant diagnostics across Qwen3-0.6B, Qwen3-1.7B,
+  OLMo2-0425-1B-Instruct, and SmolLM2-1.7B boundary cases;
 - two text sources: WikiText2 and C4;
 - random-repeat comparisons at 4.5 average bits;
 - budget curves at 4.25, 4.50, and 4.75 average bits;
+- minimal AutoAWQ readiness probes on Qwen2.5-0.5B-Instruct, including tiny
+  public WikiText2/C4 matched FP16-vs-AutoAWQ PPL slices;
 - C++ audits for allocation consensus and split-stability;
-- guarded GPU logs below the 85% VRAM ceiling.
+- guarded GPU logs with explicit peak-VRAM records and claim boundaries.
 
 ## Venues To Consider Later
 
@@ -85,6 +88,8 @@ Required additions before that:
 
 - add RTN/uniform and one public baseline beyond random/category;
 - run at least 256 or 512 prompts on WikiText2/C4 for Qwen3 and OLMo2;
+- turn the AutoAWQ readiness probes into a matched calibration/budget baseline,
+  and add GPTQ/GPTQModel or another faithful public PTQ comparator;
 - report calibration-seed variance;
 - include the budget curve figure from `outputs/consensus_budget_curve.svg`;
 - keep all claims explicitly scoped to fake-quant diagnostics.
