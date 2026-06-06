@@ -1,6 +1,6 @@
 # Evidence Ledger
 
-Date: `2026-06-06T18:54:33+00:00`
+Date: `2026-06-06T19:11:26+00:00`
 Status: **PASS**
 Gates: `21 / 21` passed
 Categories: `allocation comparator, artifact integrity, c++ runtime, calibration robustness, capability retention, decode integration, kernel, paper alignment, ptq comparator, qkv replacement, quality, repo hygiene, rotation comparator, runtime wiring, selected-row, task retention`
@@ -24,7 +24,7 @@ Categories: `allocation comparator, artifact integrity, c++ runtime, calibration
 | `fused_qkv_speed` | qkv replacement | **PASS** | replacements 1; tok/s ratio 1.1300x; TTFT ratio 0.6839x; compression 6.1682x; VRAM 0.4401 | `outputs/real_system_packer_2026-06-05/fused_qkv_generation_gate_2026_06_06.json` |
 | `fused_qkv_quality` | quality | **PASS** | exact 6/6; mean speed 0.8957x; compression 3.9082x; VRAM 0.4359 | `outputs/real_system_packer_2026-06-05/fused_qkv_prompt_suite_gate_2026_06_06.json` |
 | `chat_task_stress` | task retention | **PASS** | regressions 1; fused 45/84; VRAM 0.5469 | `outputs/real_system_packer_2026-06-05/chat_task_stress_v3_84_gate_2026_06_06.json` |
-| `public_task_benchmark` | capability retention | **PASS** | cases 2; tasks 100; passes 4; accuracy 0.0400; VRAM 0.8826 | `outputs/public_task_benchmark_ollama_qwen35_4b_gate_2026_06_06.json` |
+| `public_task_benchmark` | capability retention | **PASS** | cases 2; tasks 100; passes 39; accuracy 0.3900; VRAM 0.8865 | `outputs/public_task_benchmark_ollama_qwen25_abliterate_7b_gate_2026_06_07.json` |
 | `allocation_family_proxy` | allocation comparator | **PASS** | cases 2; records 394; max avg bits 4.4997; target bits 4.5000 | `outputs/q_palette_style_allocation_family_gate_2026_06_06.json` |
 | `robust_lcb_consensus` | allocation comparator | **PASS** | cases 3; high-bit modules 99; consistent selected 80; selected modules 80; max avg bits 4.4997 | `outputs/robust_lcb_consensus_family_gate_2026_06_06.json` |
 | `robust_lcb_quality` | quality | **PASS** | cases 2; wins/uniform 2; wins/mean 0; margin vs uniform 5.6188; margin vs mean -2.8834; VRAM 0.7032 | `outputs/qwen3_0p6b_robust_lcb_quality_gate_2026_06_07.json` |

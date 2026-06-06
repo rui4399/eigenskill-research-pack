@@ -37,7 +37,7 @@ python train_python/build_evidence_ledger.py \
   --gate fused_qkv_speed=outputs/real_system_packer_2026-06-05/fused_qkv_generation_gate_2026_06_06.json \
   --gate fused_qkv_quality=outputs/real_system_packer_2026-06-05/fused_qkv_prompt_suite_gate_2026_06_06.json \
   --gate chat_task_stress=outputs/real_system_packer_2026-06-05/chat_task_stress_v3_84_gate_2026_06_06.json \
-  --gate public_task_benchmark=outputs/public_task_benchmark_ollama_qwen35_4b_gate_2026_06_06.json \
+  --gate public_task_benchmark=outputs/public_task_benchmark_ollama_qwen25_abliterate_7b_gate_2026_06_07.json \
   --gate allocation_family_proxy=outputs/q_palette_style_allocation_family_gate_2026_06_06.json \
   --gate robust_lcb_consensus=outputs/robust_lcb_consensus_family_gate_2026_06_06.json \
   --gate robust_lcb_quality=outputs/qwen3_0p6b_robust_lcb_quality_gate_2026_06_07.json \
@@ -170,19 +170,19 @@ Current gate:
 
 ```bash
 python train_python/gate_public_task_benchmark.py \
-  --case mmlu50=outputs/public_task_benchmark_mmlu_ollama_qwen35_4b_summary.json=outputs/public_task_benchmark_mmlu_ollama_qwen35_4b_gpu_guard_2026_06_06.json \
-  --case gsm8k50=outputs/public_task_benchmark_gsm8k_ollama_qwen35_4b_summary.json=outputs/public_task_benchmark_gsm8k_ollama_qwen35_4b_gpu_guard_2026_06_06.json \
+  --case mmlu50=outputs/public_task_benchmark_mmlu_ollama_qwen25_abliterate_7b_summary.json=outputs/public_task_benchmark_mmlu_ollama_qwen25_abliterate_7b_gpu_guard_2026_06_07.json \
+  --case gsm8k50=outputs/public_task_benchmark_gsm8k_ollama_qwen25_abliterate_7b_summary.json=outputs/public_task_benchmark_gsm8k_ollama_qwen25_abliterate_7b_gpu_guard_2026_06_07.json \
   --min-cases 2 \
   --min-total-tasks 100 \
   --require-formats mmlu,gsm8k \
   --max-memory-ratio 0.90 \
-  --out-json outputs/public_task_benchmark_ollama_qwen35_4b_gate_2026_06_06.json \
-  --out-md outputs/PUBLIC_TASK_BENCHMARK_OLLAMA_QWEN35_4B_GATE_2026_06_06.md
+  --out-json outputs/public_task_benchmark_ollama_qwen25_abliterate_7b_gate_2026_06_07.json \
+  --out-md outputs/PUBLIC_TASK_BENCHMARK_OLLAMA_QWEN25_ABLITERATE_7B_GATE_2026_06_07.md
 ```
 
-Current result: 100 public subset tasks, 4 total passes, mean accuracy `0.0400`,
-mean throughput `83.0283` tok/s, mean TTFT `0.398259` s, and peak guard VRAM
-ratio `0.8826`.
+Current result: 100 public subset tasks, 39 total passes, mean accuracy
+`0.3900`, mean throughput `21.0416` tok/s, mean TTFT `0.817018` s, and peak
+guard VRAM ratio `0.8865`.
 
 Valid claim:
 

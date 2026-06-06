@@ -1,6 +1,6 @@
 # Baseline Gap Dashboard
 
-Date: `2026-06-06T15:33:49+00:00`
+Date: `2026-06-06T19:07:51+00:00`
 Status: **NOT READY** for paper claims that require external baselines
 Items: `11`
 
@@ -27,7 +27,7 @@ Items: `11`
 | `rotation_family` | external_rotation | high | True | **covered** | 2 | 0 | 0 | n/a | QuaRot/SpinQuant-style proxy coverage is acceptable for related-family coverage; faithful official rotation implementations and activation/KV quality claims still require stronger evidence. |
 | `allocation_family` | external_allocation | high | True | **covered** | 2 | 0 | 0 | n/a | Q-Palette-style proxy comparator is covered; faithful official Q-Palette/IMPQ/WINDQuant reproductions are still future work. |
 | `public_task_schema_smoke` | capability_retention | required | False | **covered** | 3 | 8 | 0 | n/a | Proves public-schema task ingestion and guarded execution only; not leaderboard-scale retention. |
-| `public_task_benchmarks` | capability_retention | high | True | **covered** | 4 | 108 | 4 | n/a | A guarded 100-row public MMLU/GSM8K subset is covered; leaderboard-scale retention and fused-model public quality remain missing. |
+| `public_task_benchmarks` | capability_retention | high | True | **covered** | 6 | 208 | 4 | n/a | A guarded 100-row public MMLU/GSM8K subset is covered; leaderboard-scale retention and fused-model public quality remain missing. |
 | `packed_kernel_shape_family` | system_kernel | required | False | **covered** | 1 | 0 | 0 | torch=yes, triton=yes | Kernel-level evidence only; not end-to-end LLM acceleration. |
 | `mobile_redmi_k80_pro` | mobile_system | high | True | **missing** | 0 | 0 | 0 | n/a | No mobile deployment claim until real device logs exist. |
 

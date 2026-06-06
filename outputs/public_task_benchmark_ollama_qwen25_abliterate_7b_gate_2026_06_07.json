@@ -1,0 +1,57 @@
+{
+  "date": "2026-06-06T19:04:48+00:00",
+  "passed": true,
+  "summary": {
+    "case_count": 2,
+    "total_tasks": 100,
+    "total_passes": 39,
+    "mean_accuracy": 0.39,
+    "task_formats": [
+      "gsm8k",
+      "mmlu"
+    ],
+    "max_guard_vram_ratio": 0.8865169917801496,
+    "mean_tokens_per_second": 21.041577369257965,
+    "mean_ttft_seconds": 0.8170176379970507
+  },
+  "cases": [
+    {
+      "label": "mmlu50",
+      "summary_path": "outputs\\public_task_benchmark_mmlu_ollama_qwen25_abliterate_7b_summary.json",
+      "guard_path": "outputs\\public_task_benchmark_mmlu_ollama_qwen25_abliterate_7b_gpu_guard_2026_06_07.json",
+      "model": "huihui_ai/qwen2.5-abliterate:7b-instruct",
+      "task_format": "mmlu",
+      "task_count": 50,
+      "passes": 28,
+      "accuracy": 0.56,
+      "mean_tokens_per_second": 23.392923000266563,
+      "mean_ttft_seconds": 0.8711850659979973,
+      "guard_returncode": 0,
+      "killed_by_guard": false,
+      "killed_by_timeout": false,
+      "guard_max_memory_used_ratio": 0.8865169917801496,
+      "guard_max_memory_used_mib": 7226,
+      "guard_memory_total_mib": 8151
+    },
+    {
+      "label": "gsm8k50",
+      "summary_path": "outputs\\public_task_benchmark_gsm8k_ollama_qwen25_abliterate_7b_summary.json",
+      "guard_path": "outputs\\public_task_benchmark_gsm8k_ollama_qwen25_abliterate_7b_gpu_guard_2026_06_07.json",
+      "model": "huihui_ai/qwen2.5-abliterate:7b-instruct",
+      "task_format": "gsm8k",
+      "task_count": 50,
+      "passes": 11,
+      "accuracy": 0.22,
+      "mean_tokens_per_second": 18.69023173824937,
+      "mean_ttft_seconds": 0.7628502099961042,
+      "guard_returncode": 0,
+      "killed_by_guard": false,
+      "killed_by_timeout": false,
+      "guard_max_memory_used_ratio": 0.8865169917801496,
+      "guard_max_memory_used_mib": 7226,
+      "guard_memory_total_mib": 8151
+    }
+  ],
+  "failures": [],
+  "claim_boundary": "Valid claim: public MMLU/GSM8K subset evaluation ran under guard. Invalid claim: this is leaderboard-scale or SOTA quality evidence."
+}
