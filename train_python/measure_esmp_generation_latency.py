@@ -43,6 +43,12 @@ from eval_esmp_module_reconstruction import (
     resolve_path,
     repo_root,
 )
+from triton_config_selector import (
+    TritonKernelConfig,
+    choose_kernel_config,
+    estimate_periodic_high_every,
+    load_kernel_configs,
+)
 
 try:
     import triton
@@ -132,6 +138,8 @@ class EsmpLinear(_MODULE_BASE):
         block_m: int,
         block_n: int,
         block_k: int,
+        kernel_configs: list[TritonKernelConfig] | None = None,
+        prefer_selector_fp16_win: bool = False,
     ) -> None:
         if torch is None or nn is None:
             raise RuntimeError("EsmpLinear requires torch")
@@ -141,9 +149,14 @@ class EsmpLinear(_MODULE_BASE):
         self.block_m = int(block_m)
         self.block_n = int(block_n)
         self.block_k = int(block_k)
+        self.kernel_configs = kernel_configs or []
+        self.prefer_selector_fp16_win = bool(prefer_selector_fp16_win)
+        self.runtime_config_counts: dict[str, int] = {}
+        self.runtime_config_examples: dict[str, dict[str, Any]] = {}
         self.esmp = read_esmp(Path(esmp_path))
         self.in_features = int(self.esmp.cols)
         self.out_features = int(self.esmp.rows)
+        self.high_every = estimate_periodic_high_every(self.esmp.row_bits)
         if source.bias is not None:
             self.register_buffer("bias", source.bias.detach().to(device=target_device, dtype=target_dtype).clone())
         else:
@@ -159,6 +172,49 @@ class EsmpLinear(_MODULE_BASE):
             if target_device.type != "cuda":
                 raise RuntimeError("triton_grouped runtime requires a CUDA device")
             self._init_triton_buffers(target_device)
+
+    def _runtime_blocks(self, batch: int) -> tuple[int, int, int]:
+        config = choose_kernel_config(
+            self.kernel_configs,
+            rows=self.out_features,
+            cols=self.in_features,
+            batch=batch,
+            high_every=self.high_every,
+            prefer_fp16_win=self.prefer_selector_fp16_win,
+        )
+        if config is None:
+            event = {
+                "selection": "static_cli",
+                "requested_batch": batch,
+                "rows": self.out_features,
+                "cols": self.in_features,
+                "high_every": self.high_every,
+                "block_m": self.block_m,
+                "block_n": self.block_n,
+                "block_k": self.block_k,
+            }
+            self._record_runtime_config(event)
+            return self.block_m, self.block_n, self.block_k
+        event = {"selection": "selector", "requested_batch": batch, **config.as_runtime_dict()}
+        self._record_runtime_config(event)
+        return config.block_m, config.block_n, config.block_k
+
+    def _record_runtime_config(self, event: dict[str, Any]) -> None:
+        key = (
+            f"{event.get('selection')}|shape={event.get('rows')}x{event.get('cols')}"
+            f"|requested_batch={event.get('requested_batch')}|source_batch={event.get('batch')}"
+            f"|block={event.get('block_m')}x{event.get('block_n')}x{event.get('block_k')}"
+        )
+        self.runtime_config_counts[key] = self.runtime_config_counts.get(key, 0) + 1
+        self.runtime_config_examples.setdefault(key, event)
+
+    def runtime_config_summary(self) -> list[dict[str, Any]]:
+        summary = []
+        for key, count in sorted(self.runtime_config_counts.items()):
+            item = dict(self.runtime_config_examples[key])
+            item["count"] = count
+            summary.append(item)
+        return summary
 
     def _init_triton_buffers(self, target_device: torch.device) -> None:
         import numpy as np
@@ -208,9 +264,10 @@ class EsmpLinear(_MODULE_BASE):
         original_shape = tuple(x.shape[:-1])
         flat = x.reshape(-1, self.in_features).contiguous()
         batch = int(flat.shape[0])
+        block_m, block_n, block_k = self._runtime_blocks(batch)
         y = torch.empty((batch, self.out_features), device=x.device, dtype=torch.float32)
         if int(self.triton_low_rows.numel()) > 0:
-            grid4 = (triton.cdiv(int(self.triton_low_rows.numel()), self.block_m), triton.cdiv(batch, self.block_n))
+            grid4 = (triton.cdiv(int(self.triton_low_rows.numel()), block_m), triton.cdiv(batch, block_n))
             _int4_grouped_matmul_kernel[grid4](
                 flat,
                 self.triton_q4,
@@ -222,13 +279,13 @@ class EsmpLinear(_MODULE_BASE):
                 self.in_features,
                 batch,
                 int(self.triton_q4.shape[1]) if self.triton_q4.ndim == 2 else 0,
-                self.block_m,
-                self.block_n,
-                self.block_k,
+                block_m,
+                block_n,
+                block_k,
                 num_warps=4,
             )
         if int(self.triton_high_rows.numel()) > 0:
-            grid8 = (triton.cdiv(int(self.triton_high_rows.numel()), self.block_m), triton.cdiv(batch, self.block_n))
+            grid8 = (triton.cdiv(int(self.triton_high_rows.numel()), block_m), triton.cdiv(batch, block_n))
             _int8_grouped_matmul_kernel[grid8](
                 flat,
                 self.triton_q8,
@@ -239,9 +296,9 @@ class EsmpLinear(_MODULE_BASE):
                 self.out_features,
                 self.in_features,
                 batch,
-                self.block_m,
-                self.block_n,
-                self.block_k,
+                block_m,
+                block_n,
+                block_k,
                 num_warps=4,
             )
         if self.bias is not None:
@@ -358,6 +415,8 @@ def main() -> None:
     parser.add_argument("--block-m", type=int, default=32)
     parser.add_argument("--block-n", type=int, default=16)
     parser.add_argument("--block-k", type=int, default=128)
+    parser.add_argument("--kernel-config-selector", default="", help="Optional JSON output from select_triton_kernel_configs.py.")
+    parser.add_argument("--prefer-selector-fp16-win", action="store_true", help="Prefer FP16-winning selector rows after batch/shape matching.")
     parser.add_argument("--no-esmp", action="store_true", help="Use the same loader path but do not replace modules.")
     parser.add_argument("--out", default="outputs/real_system_packer_2026-06-05/qwen3_esmp_swapped_generation_latency.json")
     args = parser.parse_args()
@@ -377,6 +436,10 @@ def main() -> None:
 
     root = repo_root()
     package_summary = resolve_path(args.package_summary, root)
+    kernel_config_selector = resolve_path(args.kernel_config_selector, root) if args.kernel_config_selector else None
+    kernel_configs = load_kernel_configs(kernel_config_selector) if kernel_config_selector else []
+    if kernel_config_selector and not kernel_configs:
+        raise SystemExit(f"No usable kernel configs in selector: {kernel_config_selector}")
     tokenizer = AutoTokenizer.from_pretrained(args.model, local_files_only=args.local_files_only, trust_remote_code=True)
     model = AutoModelForCausalLM.from_pretrained(
         args.model,
@@ -390,6 +453,7 @@ def main() -> None:
     selected_raw_bytes = 0
     selected_package_bytes = 0
     replaced = []
+    replacement_modules = []
     if not args.no_esmp:
         model_modules = {name: module for name, module in model.named_modules() if isinstance(module, torch.nn.Linear)}
         selected = select_modules(
@@ -419,8 +483,11 @@ def main() -> None:
                 block_m=args.block_m,
                 block_n=args.block_n,
                 block_k=args.block_k,
+                kernel_configs=kernel_configs if runtime == "triton_grouped" else None,
+                prefer_selector_fp16_win=args.prefer_selector_fp16_win,
             )
             replace_module(model, name, replacement)
+            replacement_modules.append(replacement)
             replaced.append(
                 {
                     "module": name,
@@ -444,11 +511,16 @@ def main() -> None:
     if args.device.startswith("cuda") and torch.cuda.is_available():
         torch.cuda.reset_peak_memory_stats()
     metrics = run_generation(model, tokenizer, prompt, args.max_new_tokens, use_chat_template=args.chat_template)
+    for record, replacement in zip(replaced, replacement_modules):
+        if hasattr(replacement, "runtime_config_summary"):
+            record["runtime_config_summary"] = replacement.runtime_config_summary()
     result = {
         "model": args.model,
         "device": str(model.device),
         "dtype": args.dtype,
         "package_summary": str(package_summary),
+        "kernel_config_selector": str(kernel_config_selector) if kernel_config_selector else None,
+        "kernel_config_count": len(kernel_configs),
         "mode": "hf_same_loader" if args.no_esmp else runtime,
         "block_m": args.block_m if runtime == "triton_grouped" else None,
         "block_n": args.block_n if runtime == "triton_grouped" else None,

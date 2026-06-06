@@ -131,6 +131,8 @@ The aggregate table is in
 The deploy-planning selector chooses one measured block config per
 shape/batch group:
 `outputs/real_system_packer_2026-06-05/TRITON_QWEN_SHAPE_KERNEL_CONFIG_SELECTOR_2026_06_06.md`.
+Selector-driven runtime wiring is smoke-tested in
+`outputs/real_system_packer_2026-06-05/SELECTOR_RUNTIME_SMOKE_2026_06_06.md`.
 Gate policy and claim boundaries are in `docs/SYSTEM_EVIDENCE_GATES.md`.
 
 End-to-end smoke metrics are tracked separately from kernel evidence:
@@ -358,6 +360,27 @@ python train_python/select_triton_kernel_configs.py \
   --min-valid-groups 8 \
   --min-fp16-winning-groups 5 \
   --min-best-fp16-speedup 2.00
+```
+
+## Reproduce: Selector-Driven ESMP Generation Smoke
+
+The grouped Triton ESMP runtime can consume the measured selector output and
+choose a block config at each swapped Linear forward based on module shape and
+runtime batch size. The generated JSON records the selected config history for
+auditability.
+
+```bash
+python train_python/measure_esmp_generation_latency.py \
+  --model Qwen/Qwen3-0.6B \
+  --local-files-only \
+  --runtime triton_grouped \
+  --kernel-config-selector outputs/real_system_packer_2026-06-05/triton_qwen_shape_kernel_config_selector_2026_06_06.json \
+  --module-filter self_attn.q_proj \
+  --layers 0,1,2 \
+  --max-modules 3 \
+  --max-new-tokens 16 \
+  --warmup-runs 1 \
+  --out outputs/real_system_packer_2026-06-05/qwen3_esmp_selector_triton_3mod_16tok.json
 ```
 
 ## Reproduce: End-to-End Metric Summary

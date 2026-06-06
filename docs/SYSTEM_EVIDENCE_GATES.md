@@ -87,3 +87,23 @@ python train_python/select_triton_kernel_configs.py \
 
 The current selector passes with 8 valid groups, 6 FP16-winning groups, 7
 row-wise-winning groups, and max selected grouped/FP16 speedup 2.7647x.
+
+## Selector-Driven Runtime Wiring
+
+`train_python/measure_esmp_generation_latency.py` accepts
+`--kernel-config-selector` for the `triton_grouped` runtime. During each swapped
+Linear forward, it matches the module shape and runtime batch size to the
+nearest measured selector row and records the chosen config in
+`replaced_modules[].runtime_config_summary`.
+
+Valid claim:
+
+- measured Triton tuning artifacts can now drive the prototype ESMP generation
+  path instead of remaining an offline report;
+- output JSON exposes which measured block config was used.
+
+Invalid claim:
+
+- selector-driven generation is faster end-to-end;
+- selector coverage generalizes to unmeasured shapes;
+- mobile, Tensor Core production, or CCF-A system claims are established.
