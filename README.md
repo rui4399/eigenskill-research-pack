@@ -261,6 +261,9 @@ module-level evidence, not end-to-end TTFT/tokens-per-second proof.
 
 Format details are in `docs/ESMPQ001_FORMAT.md`.
 
+Latest local smoke report:
+`outputs/real_system_packer_2026-06-05/REAL_SYSTEM_SMOKE_2026_06_06.md`.
+
 ## Paper Direction
 
 The credible submission story is:
