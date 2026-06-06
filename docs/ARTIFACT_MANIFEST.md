@@ -7,7 +7,7 @@ not a new result.
 Current tracked output footprint:
 
 ```text
-outputs/ tracked files:                         1370
+outputs/ tracked files:                         1382
 outputs/real_system_packer_2026-06-05 files:     744
 ```
 
@@ -44,6 +44,9 @@ tracking, but they are not counted in the 22-gate paper-facing ledger.
 |---|---|---|
 | Minimal AutoAWQ package smoke | `outputs/OFFICIAL_AWQ_SMOKE_GATE_2026_06_07.md` | Shows AutoAWQ can quantize and save a tiny local Qwen2.5-0.5B artifact under guard; not a matched AWQ baseline or quality-retention result. |
 | Minimal AutoAWQ matched PPL probe | `outputs/OFFICIAL_AWQ_MATCHED_PPL_GATE_2026_06_07.md` | Shows same-prompt FP16-vs-AutoAWQ PPL can run under guard; not a full public-dataset AWQ/GPTQ baseline. |
+| Tiny public WikiText2 AutoAWQ PPL probe | `outputs/OFFICIAL_AWQ_MATCHED_PPL_QWEN25_0P5B_WIKITEXT2_GATE_2026_06_07.md` | Shows same-slice FP16-vs-AutoAWQ PPL can run on 8 public WikiText2 prompts under guard; not a full baseline. |
+| Tiny public C4 AutoAWQ PPL probe | `outputs/OFFICIAL_AWQ_MATCHED_PPL_QWEN25_0P5B_C4_GATE_2026_06_07.md` | Shows same-slice FP16-vs-AutoAWQ PPL can run on 8 public C4 validation prompts under guard; not a full baseline. |
+| Public PPL prompt manifest | `outputs/PUBLIC_PPL_PROMPT_MANIFEST_2026_06_07.md` | Records the tiny public prompt files used by the readiness probes; not a benchmark definition. |
 
 ## Supporting System Artifacts
 

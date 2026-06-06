@@ -21,7 +21,7 @@ are supported, which are proxies, and which are still blockers.
 | Consensus allocation | passes committed short fake-quant stress gates | robustness diagnostic |
 | Public task coverage | guarded local subset ladder, not leaderboard-scale | capability smoke |
 | Packed runtime | gated ESMP/Triton/C++ prototypes | module-level system evidence |
-| Official PTQ baselines | AutoAWQ smoke and matched PPL probe pass; faithful public AWQ/GPTQ baselines are still blockers | readiness only |
+| Official PTQ baselines | AutoAWQ smoke, four-prompt matched PPL, and tiny public WikiText2/C4 matched PPL probes pass; faithful public AWQ/GPTQ baselines are still blockers | readiness only |
 | Mobile/Redmi evidence | no real TTFT/tokens/s/memory logs yet | no deployment claim |
 
 Current paper-facing ledger:
@@ -34,15 +34,20 @@ Current ledger status: **22 / 22 gates pass**. This means the committed gate
 artifacts are internally consistent; it does **not** mean the paper is ready for
 SOTA or deployment claims.
 
-## Read First
+## Core Evidence Path
 
-1. `docs/PAPER_CLAIM_MATRIX.md` defines allowed and rejected claims.
+Read the repository in this order:
+
+1. `docs/PAPER_CLAIM_MATRIX.md` for the claim firewall.
 2. `outputs/real_system_packer_2026-06-05/EVIDENCE_LEDGER_2026_06_06.md`
-   lists every current gate.
-3. `outputs/BASELINE_GAP_DASHBOARD_2026_06_06.md` shows paper-blocking gaps
-   and separates AutoAWQ smoke/matched-PPL probes from full AWQ/GPTQ baselines.
-4. `docs/SYSTEM_EVIDENCE_GATES.md` is the short gate index.
-5. `docs/SYSTEM_EVIDENCE_RUNBOOK.md` contains the long reproduction commands.
+   for the current 22 paper-facing gates.
+3. `outputs/BASELINE_GAP_DASHBOARD_2026_06_06.md` for missing official
+   baselines and mobile/runtime blockers.
+4. `docs/ARTIFACT_MANIFEST.md` for the curated artifact map.
+
+The many helper scripts and raw `outputs/` files are supporting material. They
+should not be read as independent paper claims unless the claim matrix lists
+the corresponding gate and boundary.
 
 ## Supported Claims
 
@@ -53,6 +58,8 @@ SOTA or deployment claims.
 - Packed artifacts and runtime probes are executable through explicit gates.
 - Proxy comparators are separated from faithful official baselines in the gap
   dashboard.
+- Minimal AutoAWQ matched PPL probes can run under guard on tiny prompt slices,
+  including public WikiText2/C4 text slices; this is readiness evidence only.
 
 ## Non-Claims
 
@@ -80,6 +87,20 @@ The large `outputs/` tree is intentional for the current artifact branch because
 the evidence ledger points to committed JSON/Markdown files. Historical delivery
 notes, private NotebookLM/Obsidian exports, and speculative swarm/acoustic
 concept drafts are not part of the public artifact boundary.
+
+## C++ Scope
+
+The C++ tree is intentionally tiered:
+
+- core system artifacts: ESMPQ001 packing, inspection, selected-row/runtime
+  probes, and kernel checks;
+- algorithm diagnostics: allocation, consensus, split-stability, and policy
+  bypass tools;
+- reporting tools: JSON/Markdown summaries that make experiments auditable but
+  are not systems contributions by themselves.
+
+See `inference_cpp/README.md` before citing C++ percentage or executable count
+as evidence.
 
 ## Quick Checks
 

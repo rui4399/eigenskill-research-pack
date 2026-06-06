@@ -77,7 +77,7 @@
       "family": "external_ptq_readiness",
       "priority": "optional",
       "paper_blocker": false,
-      "description": "Minimal matched FP16-vs-AutoAWQ PPL comparison on the same prompt slice.",
+      "description": "Minimal matched FP16-vs-AutoAWQ PPL comparisons on the same prompt slices, including tiny public WikiText2/C4 slices.",
       "required_evidence_globs": [
         "outputs/**/*official*awq*matched*ppl*summary*.json",
         "outputs/**/*official*awq*matched*ppl*gate*.json"
@@ -86,7 +86,7 @@
         "autoawq"
       ],
       "package_mode": "any",
-      "claim_boundary": "Readiness PPL probe only: it may show a same-prompt FP16-vs-AutoAWQ comparison, but it is not a full public-dataset AWQ/GPTQ baseline."
+      "claim_boundary": "Readiness PPL probe only: it may show same-prompt FP16-vs-AutoAWQ comparisons, but it is not a full public-dataset AWQ/GPTQ baseline."
     },
     {
       "id": "official_awq_gptq_competitive",

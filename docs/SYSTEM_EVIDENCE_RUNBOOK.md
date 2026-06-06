@@ -513,14 +513,42 @@ Current result: 4 prompts, 73 tokens, FP16 PPL `197.532`, AutoAWQ W4 group-128
 PPL `232.863`, PPL ratio `1.1789`, delta NLL `0.1645`, peak guard VRAM ratio
 `0.6057`.
 
+Public-slice prompt builder:
+
+```bash
+python train_python/build_public_ppl_prompts.py \
+  --wikitext2-count 8 \
+  --c4-count 8 \
+  --min-chars 40 \
+  --max-chars 512
+```
+
+The public-slice probes use the same command shape as above, with
+`--prompts data_eval/public_ppl_prompts_2026_06_07/<file>` and `--max-length
+96`. Current guarded results:
+
+| slice | prompts | tokens | FP16 PPL | AutoAWQ PPL | ratio | peak VRAM |
+|---|---:|---:|---:|---:|---:|---:|
+| WikiText2 test | 8 | 760 | 24.676 | 31.351 | 1.2705 | 0.6005 |
+| C4 validation | 8 | 727 | 32.952 | 38.961 | 1.1824 | 0.6005 |
+
+Artifacts:
+
+```text
+outputs/PUBLIC_PPL_PROMPT_MANIFEST_2026_06_07.md
+outputs/OFFICIAL_AWQ_MATCHED_PPL_QWEN25_0P5B_WIKITEXT2_GATE_2026_06_07.md
+outputs/OFFICIAL_AWQ_MATCHED_PPL_QWEN25_0P5B_C4_GATE_2026_06_07.md
+```
+
 Valid claim:
 
-- a minimal same-prompt FP16-vs-AutoAWQ PPL comparison completed under guard.
+- minimal same-prompt FP16-vs-AutoAWQ PPL comparisons completed under guard,
+  including two tiny public text slices.
 
 Invalid claim:
 
 - this is a full WikiText2/C4 baseline, task-retention result, official GPTQ
-  comparison, or SOTA PTQ result.
+  comparison, matched calibration-budget competition, or SOTA PTQ result.
 
 ## Calibration Instability Benchmark Gate
 

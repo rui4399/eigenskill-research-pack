@@ -1,0 +1,116 @@
+{
+  "date": "2026-06-06T21:22:22+00:00",
+  "passed": true,
+  "model": "Qwen/Qwen2.5-0.5B-Instruct",
+  "awq_artifact": "outputs/official_awq_smoke_2026_06_07/qwen25_0p5b_awq_model",
+  "prompt_source": "data_eval/public_ppl_prompts_2026_06_07/c4_validation_ppl_prompts.txt",
+  "prompt_count": 8,
+  "tokens": 727,
+  "package": {
+    "name": "autoawq",
+    "version": "0.2.9"
+  },
+  "fp16": {
+    "prompt_count": 8,
+    "tokens": 727,
+    "mean_nll": 3.4950417478606,
+    "ppl": 32.95166358574747,
+    "per_prompt": [
+      {
+        "tokens": 95,
+        "loss": 2.760082483291626,
+        "ppl": 15.801146225062485
+      },
+      {
+        "tokens": 95,
+        "loss": 3.6945459842681885,
+        "ppl": 40.22730461216894
+      },
+      {
+        "tokens": 95,
+        "loss": 2.7235076427459717,
+        "ppl": 15.233662887426778
+      },
+      {
+        "tokens": 95,
+        "loss": 3.643449544906616,
+        "ppl": 38.22346312181898
+      },
+      {
+        "tokens": 86,
+        "loss": 3.9556849002838135,
+        "ppl": 52.23145503502067
+      },
+      {
+        "tokens": 82,
+        "loss": 4.169395446777344,
+        "ppl": 64.67633999614355
+      },
+      {
+        "tokens": 95,
+        "loss": 2.3554604053497314,
+        "ppl": 10.542981789670836
+      },
+      {
+        "tokens": 84,
+        "loss": 4.964245796203613,
+        "ppl": 143.20050716905425
+      }
+    ]
+  },
+  "awq": {
+    "prompt_count": 8,
+    "tokens": 727,
+    "mean_nll": 3.662557806240643,
+    "ppl": 38.96086988779855,
+    "per_prompt": [
+      {
+        "tokens": 95,
+        "loss": 2.939021587371826,
+        "ppl": 18.89734786038569
+      },
+      {
+        "tokens": 95,
+        "loss": 3.9642155170440674,
+        "ppl": 52.67892745502069
+      },
+      {
+        "tokens": 95,
+        "loss": 2.966226577758789,
+        "ppl": 19.41850694867019
+      },
+      {
+        "tokens": 95,
+        "loss": 3.886080026626587,
+        "ppl": 48.71953244736284
+      },
+      {
+        "tokens": 86,
+        "loss": 4.036991596221924,
+        "ppl": 56.65564311661624
+      },
+      {
+        "tokens": 82,
+        "loss": 4.2687554359436035,
+        "ppl": 71.43267773065071
+      },
+      {
+        "tokens": 95,
+        "loss": 2.477553606033325,
+        "ppl": 11.912087084800389
+      },
+      {
+        "tokens": 84,
+        "loss": 5.0394768714904785,
+        "ppl": 154.38922848987704
+      }
+    ]
+  },
+  "comparison": {
+    "delta_nll_awq_minus_fp16": 0.16751605838004302,
+    "ppl_ratio_awq_vs_fp16": 1.182364276887381
+  },
+  "elapsed_seconds": 23.262532711029053,
+  "failures": [],
+  "claim_boundary": "Valid claim: a minimal matched FP16-vs-AutoAWQ PPL comparison ran on the same prompt slice. Invalid claim: this is a competitive AWQ/GPTQ baseline, leaderboard result, or broad task-retention proof."
+}

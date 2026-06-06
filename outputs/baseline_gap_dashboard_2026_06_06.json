@@ -1,5 +1,5 @@
 {
-  "date": "2026-06-06T21:08:20+00:00",
+  "date": "2026-06-06T21:28:07+00:00",
   "schema_version": 1,
   "passed": false,
   "item_count": 13,
@@ -222,7 +222,7 @@
       "family": "external_ptq_readiness",
       "priority": "optional",
       "paper_blocker": false,
-      "description": "Minimal matched FP16-vs-AutoAWQ PPL comparison on the same prompt slice.",
+      "description": "Minimal matched FP16-vs-AutoAWQ PPL comparisons on the same prompt slices, including tiny public WikiText2/C4 slices.",
       "required_evidence_globs": [
         "outputs/**/*official*awq*matched*ppl*summary*.json",
         "outputs/**/*official*awq*matched*ppl*gate*.json"
@@ -231,13 +231,17 @@
         "autoawq"
       ],
       "package_mode": "any",
-      "claim_boundary": "Readiness PPL probe only: it may show a same-prompt FP16-vs-AutoAWQ comparison, but it is not a full public-dataset AWQ/GPTQ baseline.",
+      "claim_boundary": "Readiness PPL probe only: it may show same-prompt FP16-vs-AutoAWQ comparisons, but it is not a full public-dataset AWQ/GPTQ baseline.",
       "status": "covered",
-      "evidence_count": 2,
+      "evidence_count": 6,
       "evidence_task_count": 0,
       "evidence_matches": [
         "outputs/official_awq_matched_ppl_gate_2026_06_07.json",
-        "outputs/official_awq_matched_ppl_qwen25_0p5b_summary_2026_06_07.json"
+        "outputs/official_awq_matched_ppl_qwen25_0p5b_c4_gate_2026_06_07.json",
+        "outputs/official_awq_matched_ppl_qwen25_0p5b_c4_summary_2026_06_07.json",
+        "outputs/official_awq_matched_ppl_qwen25_0p5b_summary_2026_06_07.json",
+        "outputs/official_awq_matched_ppl_qwen25_0p5b_wikitext2_gate_2026_06_07.json",
+        "outputs/official_awq_matched_ppl_qwen25_0p5b_wikitext2_summary_2026_06_07.json"
       ],
       "evidence_truncated": false,
       "partial_evidence_count": 0,
@@ -291,10 +295,14 @@
       "evidence_task_count": 0,
       "evidence_matches": [],
       "evidence_truncated": false,
-      "partial_evidence_count": 4,
+      "partial_evidence_count": 8,
       "partial_evidence_matches": [
         "outputs/official_awq_matched_ppl_gate_2026_06_07.json",
+        "outputs/official_awq_matched_ppl_qwen25_0p5b_c4_gate_2026_06_07.json",
+        "outputs/official_awq_matched_ppl_qwen25_0p5b_c4_summary_2026_06_07.json",
         "outputs/official_awq_matched_ppl_qwen25_0p5b_summary_2026_06_07.json",
+        "outputs/official_awq_matched_ppl_qwen25_0p5b_wikitext2_gate_2026_06_07.json",
+        "outputs/official_awq_matched_ppl_qwen25_0p5b_wikitext2_summary_2026_06_07.json",
         "outputs/official_awq_smoke_gate_2026_06_07.json",
         "outputs/official_awq_smoke_qwen25_0p5b_summary_2026_06_07.json"
       ],
