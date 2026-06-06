@@ -225,6 +225,71 @@ Invalid claim:
 
 - this establishes full-model quality-preserving quantized generation.
 
+## Fused QKV Prompt-Suite Quality Gate
+
+`train_python/gate_fused_qkv_prompt_suite.py` gates the prompt-suite quality
+audit from `train_python/eval_fused_qkv_prompt_suite.py`, optionally combined
+with deterministic shallow task scoring from `train_python/score_prompt_suite.py`.
+This gate deliberately separates quality preservation from speed. It checks:
+
+- exact/similarity/prefix preservation across the prompt suite;
+- optional rule-scored pass-rate preservation and zero new regressions;
+- replacement compression and median CUDA event latency;
+- QKV cache invariants;
+- GPU guard compliance.
+
+Current gate:
+
+```bash
+python train_python/score_prompt_suite.py \
+  --input-json outputs/real_system_packer_2026-06-05/fused_qkv_prompt_suite_layers17_qkv8_repack.json \
+  --out-json outputs/real_system_packer_2026-06-05/fused_qkv_prompt_suite_layers17_qkv8_repack_scored.json \
+  --out-md outputs/real_system_packer_2026-06-05/FUSED_QKV_PROMPT_SUITE_LAYERS17_QKV8_REPACK_SCORED.md
+
+python train_python/gate_fused_qkv_prompt_suite.py \
+  --prompt-suite-json outputs/real_system_packer_2026-06-05/fused_qkv_prompt_suite_layers17_qkv8_repack.json \
+  --scored-json outputs/real_system_packer_2026-06-05/fused_qkv_prompt_suite_layers17_qkv8_repack_scored.json \
+  --guard-json outputs/real_system_packer_2026-06-05/fused_qkv_prompt_suite_layers17_qkv8_repack_gpu_guard.json \
+  --out-json outputs/real_system_packer_2026-06-05/fused_qkv_prompt_suite_gate_2026_06_06.json \
+  --out-md outputs/real_system_packer_2026-06-05/FUSED_QKV_PROMPT_SUITE_GATE_2026_06_06.md \
+  --min-prompts 6 \
+  --min-exact-matches 6 \
+  --min-exact-match-rate 1.0 \
+  --min-mean-char-edit-similarity 0.99 \
+  --min-median-char-edit-similarity 0.99 \
+  --min-mean-common-prefix-ratio 0.99 \
+  --min-mean-speed-ratio 0.80 \
+  --max-median-ttft-ratio 1.25 \
+  --min-compression-vs-fp32 3.5 \
+  --max-median-replacement-ms 0.25 \
+  --min-wrapper-calls 1152 \
+  --min-fused-compute-calls 384 \
+  --min-cache-hits 768 \
+  --min-cache-misses 384 \
+  --min-scored-prompts 6 \
+  --max-rule-regressions 0 \
+  --min-fused-rule-pass-rate 0.80 \
+  --max-fused-rule-pass-drop 0 \
+  --max-memory-ratio 0.90
+```
+
+The current gate passes on the layers `[1, 7]` QKV8 repack candidate with 6/6
+exact prompt-suite matches, 1.0 mean edit similarity, 0 rule regressions,
+3.9082x compression versus FP32, 1152/384/768/384 wrapper/fused/hit/miss calls,
+0.141008 ms median replacement CUDA event time, and 43.59% peak guard memory.
+It is slower than the baseline on this suite (0.8957x mean tokens/s), so it is
+quality-preservation evidence rather than acceleration evidence.
+
+Valid claim:
+
+- a conservative QKV8 repack candidate preserves the measured prompt-suite
+  outputs and shallow rule scores under the configured gate.
+
+Invalid claim:
+
+- this proves semantic quality preservation across tasks, datasets, or larger
+  prompt distributions.
+
 ## C++ ESMP Runtime Sweep Gate
 
 `train_python/gate_cpp_runtime_sweep.py` gates the C++ ESMP selected-row runtime
@@ -262,6 +327,8 @@ Valid claim:
   bounded additive overhead.
 - fused packed QKV replacement has a formal guarded smoke gate for shallow
   replacement, including cache-invariant checks.
+- fused QKV prompt-suite quality has a formal gate for the conservative
+  layers `[1, 7]` QKV8 repack candidate.
 - C++ ESMP selected-row runtime has a formal sweep gate; it supports
   module-level bypass claims but not full LLM acceleration claims.
 
@@ -270,4 +337,5 @@ Invalid claim:
 - selector-driven generation is faster end-to-end;
 - selector coverage generalizes to unmeasured shapes;
 - fused QKV replacement is quality-preserving across prompts or layers;
+- prompt-suite exact preservation on six prompts is a broad semantic benchmark;
 - mobile, Tensor Core production, or CCF-A system claims are established.

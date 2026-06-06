@@ -1,0 +1,124 @@
+{
+  "source": "outputs\\real_system_packer_2026-06-05\\fused_qkv_prompt_suite_layers17_qkv8_repack.json",
+  "aggregate": {
+    "prompts": 6,
+    "baseline_passes": 5,
+    "fused_passes": 5,
+    "baseline_pass_rate": 0.8333333333333334,
+    "fused_pass_rate": 0.8333333333333334,
+    "preserved_passes": 5,
+    "regressions": 0,
+    "improvements": 0,
+    "rule_count": 2
+  },
+  "rows": [
+    {
+      "id": 0,
+      "prompt": "Explain mixed-precision quantization in one concise paragraph.",
+      "rule": "nonempty_answer",
+      "expected": "non-empty answer",
+      "expected_spec_id": null,
+      "baseline": {
+        "passed": true,
+        "detail": "chars=165"
+      },
+      "fused": {
+        "passed": true,
+        "detail": "chars=165"
+      },
+      "preserved": true,
+      "regressed": false,
+      "improved": false
+    },
+    {
+      "id": 1,
+      "prompt": "Give a short JSON object with fields task, risk, and next_step for model quantization.",
+      "rule": "nonempty_answer",
+      "expected": "non-empty answer",
+      "expected_spec_id": null,
+      "baseline": {
+        "passed": true,
+        "detail": "chars=158"
+      },
+      "fused": {
+        "passed": true,
+        "detail": "chars=158"
+      },
+      "preserved": true,
+      "regressed": false,
+      "improved": false
+    },
+    {
+      "id": 2,
+      "prompt": "Solve briefly: if an INT4 row stores 1024 weights, how many packed bytes are needed?",
+      "rule": "nonempty_answer",
+      "expected": "non-empty answer",
+      "expected_spec_id": null,
+      "baseline": {
+        "passed": true,
+        "detail": "chars=101"
+      },
+      "fused": {
+        "passed": true,
+        "detail": "chars=101"
+      },
+      "preserved": true,
+      "regressed": false,
+      "improved": false
+    },
+    {
+      "id": 3,
+      "prompt": "Write a compact C++ function signature for a mixed INT4/INT8 GEMV kernel.",
+      "rule": "cpp_signature",
+      "expected": "C++ signature",
+      "expected_spec_id": null,
+      "baseline": {
+        "passed": false,
+        "detail": "expected C/C++ function-like signature"
+      },
+      "fused": {
+        "passed": false,
+        "detail": "expected C/C++ function-like signature"
+      },
+      "preserved": false,
+      "regressed": false,
+      "improved": false
+    },
+    {
+      "id": 4,
+      "prompt": "List two reasons calibration data can make quantization unstable.",
+      "rule": "nonempty_answer",
+      "expected": "non-empty answer",
+      "expected_spec_id": null,
+      "baseline": {
+        "passed": true,
+        "detail": "chars=146"
+      },
+      "fused": {
+        "passed": true,
+        "detail": "chars=146"
+      },
+      "preserved": true,
+      "regressed": false,
+      "improved": false
+    },
+    {
+      "id": 5,
+      "prompt": "In one sentence, explain why replacing QKV projections can change generated text.",
+      "rule": "nonempty_answer",
+      "expected": "non-empty answer",
+      "expected_spec_id": null,
+      "baseline": {
+        "passed": true,
+        "detail": "chars=162"
+      },
+      "fused": {
+        "passed": true,
+        "detail": "chars=162"
+      },
+      "preserved": true,
+      "regressed": false,
+      "improved": false
+    }
+  ]
+}

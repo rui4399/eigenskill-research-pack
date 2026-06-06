@@ -35,6 +35,8 @@ Implemented and committed:
 - Executable sidecar and fused-QKV generation gates that validate guarded HF
   generation integration, shallow QKV replacement behavior, and Q/K/V cache
   invariants.
+- A fused-QKV prompt-suite quality gate that separates conservative text/task
+  preservation evidence from acceleration claims.
 - PyTorch fake-quant PPL experiments on small public models and short
   WikiText2/C4 slices.
 - A LoRA training entry point with optional completion-only loss masking for
@@ -152,6 +154,12 @@ gated in
 `outputs/real_system_packer_2026-06-05/FUSED_QKV_GENERATION_GATE_2026_06_06.md`;
 it verifies shallow fused packed QKV replacement inside HF generation, including
 Q/K/V cache reuse, TTFT, throughput, compression, and GPU guard compliance.
+Quality preservation for a conservative replacement candidate is gated in
+`outputs/real_system_packer_2026-06-05/FUSED_QKV_PROMPT_SUITE_GATE_2026_06_06.md`;
+it passes on the layers `[1, 7]` QKV8 repack candidate with 6/6 exact
+prompt-suite matches, 0 rule-score regressions, 3.9082x compression, and
+43.59% peak guard memory. It is a quality gate, not a speed claim: mean
+tokens/s is 0.8957x of the baseline on that suite.
 Gate policy and claim boundaries are in `docs/SYSTEM_EVIDENCE_GATES.md`.
 
 End-to-end smoke metrics are tracked separately from kernel evidence:
@@ -475,7 +483,8 @@ python train_python/benchmark_esmp_linear_runtimes.py \
 The sidecar gate proves that fused selected-row kernels can run on live
 generation activations without replacing dense QKV. The QKV replacement gate is
 stronger: it verifies that selected Q/K/V projections are replaced by the fused
-ESMP runtime and that QKV cache reuse occurred.
+ESMP runtime and that QKV cache reuse occurred. The prompt-suite gate is a
+separate quality-preservation check for a conservative replacement candidate.
 
 ```bash
 python train_python/gate_fused_sidecar_generation.py \
@@ -517,6 +526,37 @@ python train_python/gate_fused_qkv_generation.py \
   --min-tps-ratio-vs-baseline 1.05 \
   --max-ttft-ratio-vs-baseline 1.00 \
   --min-common-prefix-chars 100 \
+  --max-memory-ratio 0.90
+
+python train_python/score_prompt_suite.py \
+  --input-json outputs/real_system_packer_2026-06-05/fused_qkv_prompt_suite_layers17_qkv8_repack.json \
+  --out-json outputs/real_system_packer_2026-06-05/fused_qkv_prompt_suite_layers17_qkv8_repack_scored.json \
+  --out-md outputs/real_system_packer_2026-06-05/FUSED_QKV_PROMPT_SUITE_LAYERS17_QKV8_REPACK_SCORED.md
+
+python train_python/gate_fused_qkv_prompt_suite.py \
+  --prompt-suite-json outputs/real_system_packer_2026-06-05/fused_qkv_prompt_suite_layers17_qkv8_repack.json \
+  --scored-json outputs/real_system_packer_2026-06-05/fused_qkv_prompt_suite_layers17_qkv8_repack_scored.json \
+  --guard-json outputs/real_system_packer_2026-06-05/fused_qkv_prompt_suite_layers17_qkv8_repack_gpu_guard.json \
+  --out-json outputs/real_system_packer_2026-06-05/fused_qkv_prompt_suite_gate_2026_06_06.json \
+  --out-md outputs/real_system_packer_2026-06-05/FUSED_QKV_PROMPT_SUITE_GATE_2026_06_06.md \
+  --min-prompts 6 \
+  --min-exact-matches 6 \
+  --min-exact-match-rate 1.0 \
+  --min-mean-char-edit-similarity 0.99 \
+  --min-median-char-edit-similarity 0.99 \
+  --min-mean-common-prefix-ratio 0.99 \
+  --min-mean-speed-ratio 0.80 \
+  --max-median-ttft-ratio 1.25 \
+  --min-compression-vs-fp32 3.5 \
+  --max-median-replacement-ms 0.25 \
+  --min-wrapper-calls 1152 \
+  --min-fused-compute-calls 384 \
+  --min-cache-hits 768 \
+  --min-cache-misses 384 \
+  --min-scored-prompts 6 \
+  --max-rule-regressions 0 \
+  --min-fused-rule-pass-rate 0.80 \
+  --max-fused-rule-pass-drop 0 \
   --max-memory-ratio 0.90
 ```
 
