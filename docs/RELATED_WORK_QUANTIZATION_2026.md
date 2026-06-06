@@ -22,6 +22,10 @@ competitive with these systems yet.
 - [Mixed-Precision Graph Neural Quantization for Low Bit Large Language Models](https://arxiv.org/abs/2501.18154)
   Relevant because it treats allocation as a graph/dependency problem. It is a
   natural comparator for the claim that sensitivity ranking alone is unstable.
+- [GANQ: GPU-Adaptive Non-Uniform Quantization for Large Language Models](https://arxiv.org/abs/2501.12956)
+  Relevant because it ties non-uniform quantization to hardware-efficient
+  lookup-table mpGEMM. EigenSkill-Q's ESMP/Triton direction should be compared
+  against hardware-aware non-uniform quantization, not only allocation heuristics.
 
 ## Calibration-Free And Low-Calibration PTQ
 
@@ -43,6 +47,11 @@ competitive with these systems yet.
 - [BASE-Q: Bias and Asymmetric Scaling Enhanced Rotational Quantization for Large Language Models](https://arxiv.org/abs/2506.15689)
   Relevant as a newer rotation-family method addressing limitations of pure
   rotation.
+- [ParoQuant: Pairwise Rotation Quantization for Efficient Reasoning LLM Inference](https://arxiv.org/abs/2511.10645)
+  Relevant because it combines optimizable Givens rotations, channel-wise
+  scaling, and kernel co-design for reasoning models. It is a strong warning
+  that rotation methods should be evaluated jointly with runtime overhead, not
+  only proxy sensitivity reduction.
 
 ## KV Cache And Long-Context Quantization
 
@@ -53,6 +62,19 @@ competitive with these systems yet.
   added.
 - [Rotate, Clip, and Partition: Towards W2A4KV4 Quantization](https://aclanthology.org/2025.findings-emnlp.400/)
   Relevant for combined low-bit weight, activation, and KV settings.
+
+## Numeric Formats And Kernel Co-Design
+
+- [Benchmarking Post-Training Quantization of Large Language Models under Microscaling Floating Point Formats](https://arxiv.org/abs/2601.09555)
+  Relevant because it studies PTQ under MXFP formats across multiple algorithms,
+  benchmarks, and model families. EigenSkill-Q currently uses integer fake-quant
+  diagnostics; MXFP4/MXFP8 behavior is a separate baseline family before making
+  claims about modern low-precision formats.
+- [LUT Tensor Core: Lookup Table Enables Efficient Low-Bit LLM Inference Acceleration](https://arxiv.org/abs/2408.06003)
+  Relevant because it frames low-bit inference around mpGEMM and lookup-table
+  hardware/software co-design. It is not a direct software baseline for the
+  current repo, but it helps define what a real systems contribution would need
+  beyond Python fake-quant and module-level microbenchmarks.
 
 ## Positioning Rule For EigenSkill-Q
 
@@ -68,8 +90,12 @@ is a reproducible baseline for studying that instability.
 Required next baselines:
 
 - compare against at least one rotation-family PTQ method (`QuaRot` or
-  `SpinQuant`) when activation/KV claims are made;
+  `SpinQuant`; `ParoQuant` if reasoning/runtime co-design claims are made) when
+  activation/KV claims are made;
 - compare against at least one allocation-family method (`Q-Palette`, `IMPQ`, or
   a practical AWQ/GPTQ-style baseline with explicit bit allocation);
+- add a hardware-aware non-uniform quantization baseline (`GANQ`-style or
+  LUT/mpGEMM-inspired) before claiming kernel-level competitiveness;
+- add MXFP-format diagnostics before claiming relevance to MXFP4/MXFP8 PTQ;
 - add public task benchmarks beyond PPL before claiming capability retention;
 - keep ESMP/Triton runtime claims separate from fake-quant PPL claims.
