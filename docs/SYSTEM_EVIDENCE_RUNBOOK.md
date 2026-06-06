@@ -572,6 +572,47 @@ Current public-calibrated bundle result:
 | WikiText2 test eval | 8 | 760 | 24.676 | 29.081 | 1.1785 | 0.6116 |
 | C4 validation eval | 8 | 727 | 32.952 | 38.173 | 1.1584 | 0.6116 |
 
+Public-calibration GPTQModel smoke:
+
+```bash
+python train_python/run_with_gpu_guard.py \
+  --max-memory-ratio 0.85 \
+  --max-start-memory-ratio 0.75 \
+  --min-disk-free-gb 5 \
+  --disk-check-path . \
+  --poll-seconds 1.0 \
+  --timeout-sec 2400 \
+  --out outputs/official_gptqmodel_public_calib_qwen25_0p5b_gpu_guard_2026_06_07.json \
+  -- \
+  python train_python/run_official_gptqmodel_public_calib.py \
+    --model Qwen/Qwen2.5-0.5B-Instruct \
+    --save-dir outputs/official_gptqmodel_smoke_2026_06_07/qwen25_0p5b_public_calib_gptq_model \
+    --calibration-prompts data_eval/public_calib_prompts_2026_06_07/wikitext2_test_ppl_prompts.txt \
+    --calibration-prompts data_eval/public_calib_prompts_2026_06_07/c4_validation_ppl_prompts.txt \
+    --prompts data_eval/public_ppl_prompts_2026_06_07/wikitext2_test_ppl_prompts.txt \
+    --limit-prompts 4 \
+    --max-calib-samples 4 \
+    --calibration-data-min-length 4 \
+    --max-length 96 \
+    --bits 4 \
+    --group-size 128 \
+    --backend gptq_torch \
+    --device cuda \
+    --local-files-only \
+    --out-json outputs/official_gptqmodel_public_calib_qwen25_0p5b_wikitext2_summary_2026_06_07.json \
+    --out-md outputs/OFFICIAL_GPTQMODEL_PUBLIC_CALIB_QWEN25_0P5B_WIKITEXT2_2026_06_07.md
+```
+
+The GPTQModel script also supports `--reuse-existing-artifact` for
+maintenance-only reload checks. Do not overwrite the formal quantize-save-reload
+evidence with a reuse-only run.
+
+Current GPTQModel public-calibrated smoke result:
+
+| slice | prompts | tokens | FP16 PPL | GPTQModel PPL | ratio | peak VRAM |
+|---|---:|---:|---:|---:|---:|---:|
+| WikiText2 test eval | 4 | 380 | 19.381 | 25.677 | 1.3249 | 0.6234 |
+
 Aggregate gate:
 
 ```bash
@@ -596,7 +637,10 @@ Valid claim:
 - minimal same-prompt FP16-vs-AutoAWQ PPL comparisons completed under guard,
   including two tiny public text slices;
 - one public-calibrated AutoAWQ W4 group-128 bundle completed guarded
-  quantization and two tiny public PPL eval slices.
+  quantization and two tiny public PPL eval slices;
+- one public-calibrated GPTQModel W4 group-128 smoke completed guarded
+  quantization, local artifact save/reload through `gptq_torch`, and a tiny
+  public WikiText2 PPL eval slice.
 
 Invalid claim:
 
