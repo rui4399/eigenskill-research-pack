@@ -1,12 +1,11 @@
 {
-  "date": "2026-06-06T12:30:21+00:00",
+  "date": "2026-06-06T13:25:01+00:00",
   "schema_version": 1,
   "passed": false,
   "item_count": 11,
   "status_counts": {
-    "covered": 6,
-    "missing": 4,
-    "partial": 1
+    "covered": 7,
+    "missing": 4
   },
   "family_counts": {
     "in_repo_allocation": {
@@ -25,8 +24,7 @@
       "missing": 1
     },
     "capability_retention": {
-      "covered": 1,
-      "partial": 1
+      "covered": 2
     },
     "system_kernel": {
       "covered": 1
@@ -39,7 +37,6 @@
     "awq_or_gptq",
     "rotation_family",
     "allocation_family",
-    "public_task_benchmarks",
     "mobile_redmi_k80_pro"
   ],
   "items": [
@@ -313,11 +310,13 @@
       ],
       "required_packages": [],
       "min_total_tasks": 100,
-      "claim_boundary": "Current deterministic stress gate is partial; broad public task retention is still missing.",
-      "status": "partial",
-      "evidence_count": 2,
-      "evidence_task_count": 8,
+      "claim_boundary": "A guarded 100-row public MMLU/GSM8K subset is covered; leaderboard-scale retention and fused-model public quality remain missing.",
+      "status": "covered",
+      "evidence_count": 4,
+      "evidence_task_count": 108,
       "evidence_matches": [
+        "outputs/public_task_benchmark_gsm8k_ollama_qwen35_4b_summary.json",
+        "outputs/public_task_benchmark_mmlu_ollama_qwen35_4b_summary.json",
         "outputs/public_task_smoke_gsm8k_qwen3_0p6b_summary.json",
         "outputs/public_task_smoke_mmlu_qwen3_0p6b_summary.json"
       ],

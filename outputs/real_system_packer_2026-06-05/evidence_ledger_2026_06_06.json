@@ -1,13 +1,14 @@
 {
-  "date": "2026-06-06T12:34:35+00:00",
+  "date": "2026-06-06T13:28:14+00:00",
   "passed": true,
-  "gate_count": 11,
-  "passed_count": 11,
+  "gate_count": 12,
+  "passed_count": 12,
   "failed_count": 0,
   "categories": [
     "artifact integrity",
     "c++ runtime",
     "calibration robustness",
+    "capability retention",
     "decode integration",
     "kernel",
     "qkv replacement",
@@ -24,9 +25,9 @@
       "path": "outputs\\real_system_packer_2026-06-05\\public_repo_hygiene_gate_2026_06_06.json",
       "passed": true,
       "failures": [],
-      "metrics": "tracked files 1562; forbidden files 0; placeholders 0",
+      "metrics": "tracked files 1578; forbidden files 0; placeholders 0",
       "summary": {
-        "tracked_file_count": 1562,
+        "tracked_file_count": 1578,
         "forbidden_file_count": 0,
         "placeholder_count": 0
       }
@@ -370,6 +371,27 @@
         "guard_max_memory_used_ratio": 0.5469267574530733,
         "guard_max_memory_used_mib": 4458,
         "guard_memory_total_mib": 8151
+      }
+    },
+    {
+      "label": "public_task_benchmark",
+      "category": "capability retention",
+      "path": "outputs\\public_task_benchmark_ollama_qwen35_4b_gate_2026_06_06.json",
+      "passed": true,
+      "failures": [],
+      "metrics": "cases 2; tasks 100; passes 4; accuracy 0.0400; VRAM 0.8826",
+      "summary": {
+        "case_count": 2,
+        "total_tasks": 100,
+        "total_passes": 4,
+        "mean_accuracy": 0.04,
+        "task_formats": [
+          "gsm8k",
+          "mmlu"
+        ],
+        "max_guard_vram_ratio": 0.8825910931174089,
+        "mean_tokens_per_second": 83.02829706245475,
+        "mean_ttft_seconds": 0.39825892099761406
       }
     }
   ],

@@ -25,14 +25,15 @@ python train_python/build_evidence_ledger.py \
   --gate fused_qkv_speed=outputs/real_system_packer_2026-06-05/fused_qkv_generation_gate_2026_06_06.json \
   --gate fused_qkv_quality=outputs/real_system_packer_2026-06-05/fused_qkv_prompt_suite_gate_2026_06_06.json \
   --gate chat_task_stress=outputs/real_system_packer_2026-06-05/chat_task_stress_v3_84_gate_2026_06_06.json \
+  --gate public_task_benchmark=outputs/public_task_benchmark_ollama_qwen35_4b_gate_2026_06_06.json \
   --out-json outputs/real_system_packer_2026-06-05/evidence_ledger_2026_06_06.json \
   --out-md outputs/real_system_packer_2026-06-05/EVIDENCE_LEDGER_2026_06_06.md
 ```
 
-The current ledger passes with 11/11 gates across repo hygiene, calibration
+The current ledger passes with 12/12 gates across repo hygiene, calibration
 robustness, artifact integrity, kernel, runtime wiring, selected-row, C++
-runtime, decode integration, QKV replacement, quality, and task-retention
-evidence categories.
+runtime, decode integration, QKV replacement, quality, task-retention, and
+capability-retention evidence categories.
 
 Valid claim:
 
@@ -107,6 +108,39 @@ Valid claim:
 Invalid claim:
 
 - repository hygiene proves experimental correctness.
+
+## Public Task Benchmark Gate
+
+`train_python/gate_public_task_benchmark.py` verifies that real public-task
+subset evaluations ran under GPU guard. It is deliberately a coverage gate, not
+an accuracy or leaderboard gate.
+
+Current gate:
+
+```bash
+python train_python/gate_public_task_benchmark.py \
+  --case mmlu50=outputs/public_task_benchmark_mmlu_ollama_qwen35_4b_summary.json=outputs/public_task_benchmark_mmlu_ollama_qwen35_4b_gpu_guard_2026_06_06.json \
+  --case gsm8k50=outputs/public_task_benchmark_gsm8k_ollama_qwen35_4b_summary.json=outputs/public_task_benchmark_gsm8k_ollama_qwen35_4b_gpu_guard_2026_06_06.json \
+  --min-cases 2 \
+  --min-total-tasks 100 \
+  --require-formats mmlu,gsm8k \
+  --max-memory-ratio 0.90 \
+  --out-json outputs/public_task_benchmark_ollama_qwen35_4b_gate_2026_06_06.json \
+  --out-md outputs/PUBLIC_TASK_BENCHMARK_OLLAMA_QWEN35_4B_GATE_2026_06_06.md
+```
+
+Current result: 100 public subset tasks, 4 total passes, mean accuracy `0.0400`,
+mean throughput `83.0283` tok/s, mean TTFT `0.398259` s, and peak guard VRAM
+ratio `0.8826`.
+
+Valid claim:
+
+- public MMLU/GSM8K subset evaluation is now wired and guarded.
+
+Invalid claim:
+
+- this proves leaderboard-scale quality, fused-retention quality, or SOTA
+  reasoning performance.
 
 ## Baseline Gap Dashboard
 

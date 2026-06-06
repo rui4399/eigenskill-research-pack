@@ -22,6 +22,10 @@ class BuildPublicTaskSmokeTests(unittest.TestCase):
             rows = [json.loads(line) for line in path.read_text(encoding="utf-8").splitlines()]
             self.assertEqual(rows, [{"question": "q", "answer": "a"}])
 
+    def test_artifact_file_retags_smoke_name(self) -> None:
+        self.assertEqual(smoke.artifact_file("gsm8k_test_smoke.jsonl", "smoke"), "gsm8k_test_smoke.jsonl")
+        self.assertEqual(smoke.artifact_file("gsm8k_test_smoke.jsonl", "subset100"), "gsm8k_test_subset100.jsonl")
+
     def test_write_markdown_lists_artifacts(self) -> None:
         manifest = {
             "date": "2026-06-06T00:00:00+00:00",

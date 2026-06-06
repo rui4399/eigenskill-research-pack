@@ -1,0 +1,40 @@
+{
+  "date": "2026-06-06T13:14:52+00:00",
+  "title": "Public Task Benchmark Subset Manifest",
+  "file_tag": "subset100",
+  "source": "datasets-server",
+  "artifact_count": 2,
+  "artifacts": [
+    {
+      "id": "gsm8k",
+      "dataset": "openai/gsm8k",
+      "config": "main",
+      "split": "test",
+      "task_format": "gsm8k",
+      "source": "datasets-server",
+      "path": "data_eval/public_task_benchmark_v1/gsm8k_test_subset100.jsonl",
+      "rows": 50,
+      "columns": [
+        "answer",
+        "question"
+      ]
+    },
+    {
+      "id": "mmlu_abstract_algebra",
+      "dataset": "cais/mmlu",
+      "config": "abstract_algebra",
+      "split": "test",
+      "task_format": "mmlu",
+      "source": "datasets-server",
+      "path": "data_eval/public_task_benchmark_v1/mmlu_abstract_algebra_test_subset100.jsonl",
+      "rows": 50,
+      "columns": [
+        "answer",
+        "choices",
+        "question",
+        "subject"
+      ]
+    }
+  ],
+  "claim_boundary": "Public MMLU/GSM8K 100-row subset fixtures for guarded subset evaluation; not leaderboard-scale evidence."
+}

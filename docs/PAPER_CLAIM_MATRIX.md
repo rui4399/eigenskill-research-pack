@@ -20,6 +20,7 @@ interpretation. Anything outside these rows remains future work.
 | Conservative fused-QKV candidates can preserve a small prompt suite. | Fused QKV prompt-suite quality gate. | `outputs/real_system_packer_2026-06-05/FUSED_QKV_PROMPT_SUITE_GATE_2026_06_06.md` | Six-prompt suite only; not broad benchmark retention. |
 | Current chat-task stress retention is measured rather than hidden. | 84-task stress gate. | `outputs/real_system_packer_2026-06-05/CHAT_TASK_STRESS_V3_84_GATE_2026_06_06.md` | Allows one known regression; does not prove production readiness. |
 | Public-schema task evaluation is wired. | Streamed GSM8K and MMLU abstract-algebra smoke fixtures plus Qwen3-0.6B guarded baseline outputs. | `outputs/PUBLIC_TASK_SMOKE_MANIFEST_2026_06_06.md`, `outputs/PUBLIC_TASK_SMOKE_MMLU_QWEN3_0P6B.md`, `outputs/PUBLIC_TASK_SMOKE_GSM8K_QWEN3_0P6B.md` | Tiny negative smoke only: 0/4 on each slice; not broad task retention. |
+| Public MMLU/GSM8K subset evaluation is guarded at 100 tasks. | Ollama qwen35-4B local API run on 50 MMLU abstract-algebra and 50 GSM8K rows. | `outputs/PUBLIC_TASK_BENCHMARK_OLLAMA_QWEN35_4B_GATE_2026_06_06.md` | Coverage and negative capability evidence only: 4/100 total passes; not leaderboard-scale or fused-retention evidence. |
 | The current paper-facing evidence set passes as a ledger. | Top-level evidence ledger. | `outputs/real_system_packer_2026-06-05/EVIDENCE_LEDGER_2026_06_06.md` | A ledger pass means listed gates passed, not that the paper is top-tier ready. |
 | Missing baseline families are explicitly tracked. | Machine-readable baseline coverage manifest and generated gap dashboard. | `docs/BASELINE_COVERAGE_MANIFEST.json`, `outputs/BASELINE_GAP_DASHBOARD_2026_06_06.md` | Tracks readiness gaps; does not turn missing external baselines into evidence. |
 
@@ -27,7 +28,7 @@ interpretation. Anything outside these rows remains future work.
 
 | claim | status | required next evidence |
 |---|---|---|
-| EigenSkill-Q is a SOTA quantizer. | Rejected. | GPTQ/AWQ/SmoothQuant/QuaRot/SpinQuant comparisons on public benchmarks. |
+| EigenSkill-Q is a SOTA quantizer. | Rejected. | GPTQ/AWQ/SmoothQuant/QuaRot/SpinQuant comparisons on matched public benchmarks. |
 | EigenSkill-Q is competitive with recent mixed-precision allocation papers. | Not yet. | Q-Palette/IMPQ/WINDQuant-style comparisons or faithful reimplementations under matched budgets. |
 | The system has mobile/Redmi K80 Pro latency evidence. | Not yet. | On-device TTFT, tokens/s, peak memory, and thermal/power logs. |
 | The packed runtime is a production Tensor Core LLM runtime. | Not yet. | Fused decode scheduler, stable multi-layer replacement, and broad quality retention. |

@@ -19,6 +19,28 @@ SKIP_SCAN_DIR_NAMES = {".git", ".codegraph", "outputs", "build", "research_pack_
 SKIP_SCAN_DIR_PREFIXES = (".venv",)
 
 
+def resolve_nvidia_smi() -> str:
+    env_path = os.environ.get("NVIDIA_SMI_PATH", "").strip()
+    if env_path and Path(env_path).exists():
+        return env_path
+    found = shutil.which("nvidia-smi")
+    if found:
+        return found
+    if sys.platform.startswith("win"):
+        roots = [
+            Path(os.environ.get("SystemRoot", r"C:\Windows")) / "System32" / "DriverStore" / "FileRepository",
+            Path(r"C:\Windows\System32\DriverStore\FileRepository"),
+        ]
+        candidates: list[Path] = []
+        for root in roots:
+            if root.exists():
+                candidates.extend(root.glob("*/nvidia-smi.exe"))
+        if candidates:
+            newest = max(candidates, key=lambda item: item.stat().st_mtime)
+            return str(newest)
+    return "nvidia-smi"
+
+
 def command_max_length(command: list[str]) -> int | None:
     for i, token in enumerate(command):
         if token == "--max-length" and i + 1 < len(command):
@@ -134,7 +156,7 @@ def cleanup_repo_caches(root: Path, *, dry_run: bool = False) -> dict:
 def query_gpu() -> dict:
     proc = subprocess.run(
         [
-            "nvidia-smi",
+            resolve_nvidia_smi(),
             "--query-gpu=utilization.gpu,memory.used,memory.total",
             "--format=csv,noheader,nounits",
         ],

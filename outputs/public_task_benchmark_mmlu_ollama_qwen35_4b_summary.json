@@ -1,0 +1,1072 @@
+{
+  "model": "huihui-qwen35-4b-pmra:latest",
+  "backend": "ollama",
+  "endpoint": "http://127.0.0.1:11434",
+  "task_file": "data_eval\\public_task_benchmark_v1\\mmlu_abstract_algebra_test_subset100.jsonl",
+  "task_format": "mmlu",
+  "task_count": 50,
+  "chat_template": false,
+  "no_think": true,
+  "max_new_tokens": 8,
+  "baseline": {
+    "aggregate": {
+      "tasks": 50,
+      "passes": 0,
+      "accuracy": 0.0,
+      "mean_tokens_per_second": 83.45362929399047,
+      "mean_ttft_seconds": 0.48865155399544163
+    },
+    "rows": [
+      {
+        "id": "mmlu_0",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Find the degree for the given field extension Q(sqrt(2), sqrt(3), sqrt(18)) over Q.\nA. 0\nB. 4\nC. 2\nD. 6\n/no_think",
+        "answer": "B",
+        "generated_text": "\n\n<think>\n\n</think>\n\nC<|endoftext|>>",
+        "score": {
+          "passed": false,
+          "predicted": null,
+          "expected": "B"
+        },
+        "ttft_seconds": 10.092547799984459,
+        "tokens_per_second": 82.81736390260264,
+        "ollama": {
+          "elapsed_seconds": 10.205966599984095,
+          "eval_count": 8,
+          "eval_duration_seconds": 0.0965981,
+          "prompt_eval_count": 59,
+          "prompt_eval_duration_seconds": 0.0539359
+        }
+      },
+      {
+        "id": "mmlu_1",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Let p = (1, 2, 5, 4)(2, 3) in S_5 . Find the index of <p> in S_5.\nA. 8\nB. 2\nC. 24\nD. 120\n/no_think",
+        "answer": "C",
+        "generated_text": "\n\n<think>\n\n</think>\n\nC<|endoftext|><|endoftext|>",
+        "score": {
+          "passed": false,
+          "predicted": null,
+          "expected": "C"
+        },
+        "ttft_seconds": 0.33345019997796044,
+        "tokens_per_second": 90.78992912711158,
+        "ollama": {
+          "elapsed_seconds": 0.43597570003475994,
+          "eval_count": 8,
+          "eval_duration_seconds": 0.0881155,
+          "prompt_eval_count": 74,
+          "prompt_eval_duration_seconds": 0.0639077
+        }
+      },
+      {
+        "id": "mmlu_2",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Find all zeros in the indicated finite field of the given polynomial with coefficients in that field. x^5 + 3x^3 + x^2 + 2x in Z_5\nA. 0\nB. 1\nC. 0,1\nD. 0,4\n/no_think",
+        "answer": "D",
+        "generated_text": "\n\n<think>\n\n</think>\n\nC<|endoftext|><",
+        "score": {
+          "passed": false,
+          "predicted": null,
+          "expected": "D"
+        },
+        "ttft_seconds": 0.31347319995984435,
+        "tokens_per_second": 90.63101846607002,
+        "ollama": {
+          "elapsed_seconds": 0.4156353999860585,
+          "eval_count": 8,
+          "eval_duration_seconds": 0.08827,
+          "prompt_eval_count": 77,
+          "prompt_eval_duration_seconds": 0.0600562
+        }
+      },
+      {
+        "id": "mmlu_3",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Statement 1 | A factor group of a non-Abelian group is non-Abelian. Statement 2 | If K is a normal subgroup of H and H is a normal subgroup of G, then K is a normal subgroup of G.\nA. True, True\nB. False, False\nC. True, False\nD. False, True\n/no_think",
+        "answer": "B",
+        "generated_text": "\n\n<think>one\nAnswer with only the",
+        "score": {
+          "passed": false,
+          "predicted": null,
+          "expected": "B"
+        },
+        "ttft_seconds": 0.3189332999754697,
+        "tokens_per_second": 91.80607802139541,
+        "ollama": {
+          "elapsed_seconds": 0.41912600002251565,
+          "eval_count": 8,
+          "eval_duration_seconds": 0.0871402,
+          "prompt_eval_count": 88,
+          "prompt_eval_duration_seconds": 0.0724442
+        }
+      },
+      {
+        "id": "mmlu_4",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Find the product of the given polynomials in the given polynomial ring. f(x) = 4x - 5, g(x) = 2x^2 - 4x + 2 in Z_8[x].\nA. 2x^2 + 5\nB. 6x^2 + 4x + 6\nC. 0\nD. x^2 + 1\n/no_think",
+        "answer": "B",
+        "generated_text": "\n\n<think>\n\n</think>\n\nC<|endoftext|>>",
+        "score": {
+          "passed": false,
+          "predicted": null,
+          "expected": "B"
+        },
+        "ttft_seconds": 0.288311300042551,
+        "tokens_per_second": 91.02618368173604,
+        "ollama": {
+          "elapsed_seconds": 0.3879433000111021,
+          "eval_count": 8,
+          "eval_duration_seconds": 0.0878868,
+          "prompt_eval_count": 101,
+          "prompt_eval_duration_seconds": 0.0717688
+        }
+      },
+      {
+        "id": "mmlu_5",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Statement 1 | If a group has an element of order 15 it must have at least 8 elements of order 15. Statement 2 | If a group has more than 8 elements of order 15, it must have at least 16 elements of order 15.\nA. True, True\nB. False, False\nC. True, False\nD. False, True\n/no_think",
+        "answer": "A",
+        "generated_text": "\n\n<think>\n\n</think>\n\nC<|endoftext|><",
+        "score": {
+          "passed": false,
+          "predicted": null,
+          "expected": "A"
+        },
+        "ttft_seconds": 0.318435600027442,
+        "tokens_per_second": 93.90123233629787,
+        "ollama": {
+          "elapsed_seconds": 0.41652050003176555,
+          "eval_count": 8,
+          "eval_duration_seconds": 0.0851959,
+          "prompt_eval_count": 101,
+          "prompt_eval_duration_seconds": 0.0690748
+        }
+      },
+      {
+        "id": "mmlu_6",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Statement 1 | Every homomorphic image of a group G is isomorphic to a factor group of G. Statement 2 | The homomorphic images of a group G are the same (up to isomorphism) as the factor groups of G.\nA. True, True\nB. False, False\nC. True, False\nD. False, True\n/no_think",
+        "answer": "A",
+        "generated_text": "\n\n<think>\n\n</think>\n\nC<|endoftext|><|endoftext|>",
+        "score": {
+          "passed": false,
+          "predicted": null,
+          "expected": "A"
+        },
+        "ttft_seconds": 0.27658309997059405,
+        "tokens_per_second": 92.44354876917193,
+        "ollama": {
+          "elapsed_seconds": 0.3763343999744393,
+          "eval_count": 8,
+          "eval_duration_seconds": 0.0865393,
+          "prompt_eval_count": 89,
+          "prompt_eval_duration_seconds": 0.0647962
+        }
+      },
+      {
+        "id": "mmlu_7",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Statement 1 | A ring homomorphism is one to one if and only if the kernel is {0}. Statement 2 | Q is an ideal in R.\nA. True, True\nB. False, False\nC. True, False\nD. False, True\n/no_think",
+        "answer": "D",
+        "generated_text": "\n\n<think>\n\n</think>\n\nC<|endoftext|><|endoftext|>",
+        "score": {
+          "passed": false,
+          "predicted": null,
+          "expected": "D"
+        },
+        "ttft_seconds": 0.30038909998256713,
+        "tokens_per_second": 90.65566711239036,
+        "ollama": {
+          "elapsed_seconds": 0.402687199995853,
+          "eval_count": 8,
+          "eval_duration_seconds": 0.088246,
+          "prompt_eval_count": 72,
+          "prompt_eval_duration_seconds": 0.0622058
+        }
+      },
+      {
+        "id": "mmlu_8",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Find the degree for the given field extension Q(sqrt(2) + sqrt(3)) over Q.\nA. 0\nB. 4\nC. 2\nD. 6\n/no_think",
+        "answer": "B",
+        "generated_text": "\n\n<think>\n\n</think>\n\nC<|endoftext|>>",
+        "score": {
+          "passed": false,
+          "predicted": null,
+          "expected": "B"
+        },
+        "ttft_seconds": 0.26536550000309944,
+        "tokens_per_second": 93.3187289522523,
+        "ollama": {
+          "elapsed_seconds": 0.36404699995182455,
+          "eval_count": 8,
+          "eval_duration_seconds": 0.0857277,
+          "prompt_eval_count": 55,
+          "prompt_eval_duration_seconds": 0.0496155
+        }
+      },
+      {
+        "id": "mmlu_9",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Find all zeros in the indicated finite field of the given polynomial with coefficients in that field. x^3 + 2x + 2 in Z_7\nA. 1\nB. 2\nC. 2,3\nD. 6\n/no_think",
+        "answer": "C",
+        "generated_text": "\n\n<think>\n\n</think>\n\nC<|endoftext|><",
+        "score": {
+          "passed": false,
+          "predicted": null,
+          "expected": "C"
+        },
+        "ttft_seconds": 0.29848060000222176,
+        "tokens_per_second": 88.25258773134588,
+        "ollama": {
+          "elapsed_seconds": 0.40208659996278584,
+          "eval_count": 8,
+          "eval_duration_seconds": 0.0906489,
+          "prompt_eval_count": 68,
+          "prompt_eval_duration_seconds": 0.0641571
+        }
+      },
+      {
+        "id": "mmlu_10",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Statement 1 | If H is a subgroup of G and a belongs to G then |aH| = |Ha|. Statement 2 | If H is a subgroup of G and a and b belong to G, then aH and Hb are identical or disjoint.\nA. True, True\nB. False, False\nC. True, False\nD. False, True\n/no_think",
+        "answer": "C",
+        "generated_text": "\n\n<think>\n\n</think>\n\nC<|endoftext|><",
+        "score": {
+          "passed": false,
+          "predicted": null,
+          "expected": "C"
+        },
+        "ttft_seconds": 0.29250530002173036,
+        "tokens_per_second": 81.89303950110761,
+        "ollama": {
+          "elapsed_seconds": 0.4020734000368975,
+          "eval_count": 8,
+          "eval_duration_seconds": 0.0976884,
+          "prompt_eval_count": 93,
+          "prompt_eval_duration_seconds": 0.0698309
+        }
+      },
+      {
+        "id": "mmlu_11",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: If A = {1, 2, 3} then relation S = {(1, 1), (2, 2)} is\nA. symmetric only\nB. anti-symmetric only\nC. both symmetric and anti-symmetric\nD. an equivalence relation\n/no_think",
+        "answer": "C",
+        "generated_text": "/\n\n<think>\n\n</think>\n\nC<|endoftext|>",
+        "score": {
+          "passed": false,
+          "predicted": null,
+          "expected": "C"
+        },
+        "ttft_seconds": 0.297910499968566,
+        "tokens_per_second": 81.30998517109145,
+        "ollama": {
+          "elapsed_seconds": 0.40915490000043064,
+          "eval_count": 8,
+          "eval_duration_seconds": 0.0983889,
+          "prompt_eval_count": 70,
+          "prompt_eval_duration_seconds": 0.0673879
+        }
+      },
+      {
+        "id": "mmlu_12",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Find the order of the factor group (Z_11 x Z_15)/(<1, 1>)\nA. 1\nB. 2\nC. 5\nD. 11\n/no_think",
+        "answer": "A",
+        "generated_text": "/\n\n<think>\n\n</think>\n\nC<|endoftext|>",
+        "score": {
+          "passed": false,
+          "predicted": null,
+          "expected": "A"
+        },
+        "ttft_seconds": 0.2676761000184342,
+        "tokens_per_second": 91.65881838034285,
+        "ollama": {
+          "elapsed_seconds": 0.3677517000469379,
+          "eval_count": 8,
+          "eval_duration_seconds": 0.0872802,
+          "prompt_eval_count": 59,
+          "prompt_eval_duration_seconds": 0.0479255
+        }
+      },
+      {
+        "id": "mmlu_13",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: The polynomial x^3 + 2x^2 + 2x + 1 can be factored into linear factors in Z_7[x]. Find this factorization.\nA. (x − 2)(x + 2)(x − 1)\nB. (x + 1)(x + 4)(x − 2)\nC. (x + 1)(x − 4)(x − 2)\nD. (x - 1)(x − 4)(x − 2)\n/no_think",
+        "answer": "C",
+        "generated_text": "\n\n<think>\n\n</think>\n\nC<|endoftext|><",
+        "score": {
+          "passed": false,
+          "predicted": null,
+          "expected": "C"
+        },
+        "ttft_seconds": 0.2964849999989383,
+        "tokens_per_second": 92.7359899103243,
+        "ollama": {
+          "elapsed_seconds": 0.3975038999924436,
+          "eval_count": 8,
+          "eval_duration_seconds": 0.0862664,
+          "prompt_eval_count": 126,
+          "prompt_eval_duration_seconds": 0.0695346
+        }
+      },
+      {
+        "id": "mmlu_14",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Find the maximum possible order for an element of S_n for n = 10.\nA. 6\nB. 12\nC. 30\nD. 105\n/no_think",
+        "answer": "C",
+        "generated_text": "/\n\n<think>\n\n</think>\n\nD<|endoftext|>",
+        "score": {
+          "passed": false,
+          "predicted": null,
+          "expected": "C"
+        },
+        "ttft_seconds": 0.2568563999957405,
+        "tokens_per_second": 81.53730433595,
+        "ollama": {
+          "elapsed_seconds": 0.36849580000853166,
+          "eval_count": 8,
+          "eval_duration_seconds": 0.0981146,
+          "prompt_eval_count": 56,
+          "prompt_eval_duration_seconds": 0.0470216
+        }
+      },
+      {
+        "id": "mmlu_15",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Statement 1 | R is a splitting field of some polynomial over Q. Statement 2 | There is a field with 60 elements.\nA. True, True\nB. False, False\nC. True, False\nD. False, True\n/no_think",
+        "answer": "B",
+        "generated_text": "\n\n<think>\n\n</think>\n\nC<|endoftext|><|endoftext|>",
+        "score": {
+          "passed": false,
+          "predicted": null,
+          "expected": "B"
+        },
+        "ttft_seconds": 0.27305540000088513,
+        "tokens_per_second": 83.90722378266351,
+        "ollama": {
+          "elapsed_seconds": 0.3819487000000663,
+          "eval_count": 8,
+          "eval_duration_seconds": 0.0953434,
+          "prompt_eval_count": 67,
+          "prompt_eval_duration_seconds": 0.0616586
+        }
+      },
+      {
+        "id": "mmlu_16",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: The inverse of -i in the multiplicative group, {1, -1, i , -i} is\nA. 1\nB. -1\nC. i\nD. -i\n/no_think",
+        "answer": "C",
+        "generated_text": "/Answer:\n\nD<|endoftext|>Simple and",
+        "score": {
+          "passed": false,
+          "predicted": "D",
+          "expected": "C"
+        },
+        "ttft_seconds": 0.28863969998201355,
+        "tokens_per_second": 78.27719716753963,
+        "ollama": {
+          "elapsed_seconds": 0.4022830000030808,
+          "eval_count": 8,
+          "eval_duration_seconds": 0.1022009,
+          "prompt_eval_count": 56,
+          "prompt_eval_duration_seconds": 0.0532105
+        }
+      },
+      {
+        "id": "mmlu_17",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Compute the product in the given ring. (2,3)(3,5) in Z_5 x Z_9\nA. (1,1)\nB. (3,1)\nC. (1,6)\nD. (3,6)\n/no_think",
+        "answer": "C",
+        "generated_text": "/\n\n<think>\n\n</think>\n\nD<|endoftext|>",
+        "score": {
+          "passed": false,
+          "predicted": null,
+          "expected": "C"
+        },
+        "ttft_seconds": 0.2452472999575548,
+        "tokens_per_second": 92.40500188275192,
+        "ollama": {
+          "elapsed_seconds": 0.344565799983684,
+          "eval_count": 8,
+          "eval_duration_seconds": 0.0865754,
+          "prompt_eval_count": 71,
+          "prompt_eval_duration_seconds": 0.0572583
+        }
+      },
+      {
+        "id": "mmlu_18",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: The set of all real numbers under the usual multiplication operation is not a group since\nA. multiplication is not a binary operation\nB. multiplication is not associative\nC. identity element does not exist\nD. zero has no inverse\n/no_think",
+        "answer": "D",
+        "generated_text": "/zero has no inverse\n\n<think>\n\n",
+        "score": {
+          "passed": false,
+          "predicted": null,
+          "expected": "D"
+        },
+        "ttft_seconds": 0.28882650000741705,
+        "tokens_per_second": 79.75395903637279,
+        "ollama": {
+          "elapsed_seconds": 0.40105429996037856,
+          "eval_count": 8,
+          "eval_duration_seconds": 0.1003085,
+          "prompt_eval_count": 61,
+          "prompt_eval_duration_seconds": 0.0514493
+        }
+      },
+      {
+        "id": "mmlu_19",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Statement 1| Every group of order p^2 where p is prime is Abelian. Statement 2 | For a fixed prime p a Sylow p-subgroup of a group G is a normal subgroup of G if and only if it is the only Sylow p-subgroup of G.\nA. True, True\nB. False, False\nC. True, False\nD. False, True\n/no_think",
+        "answer": "A",
+        "generated_text": "\n\n<think>\n\n</think>\n\nC<|endoftext|><|endoftext|>",
+        "score": {
+          "passed": false,
+          "predicted": null,
+          "expected": "A"
+        },
+        "ttft_seconds": 0.2998007000423968,
+        "tokens_per_second": 91.4961217081411,
+        "ollama": {
+          "elapsed_seconds": 0.40008940000552684,
+          "eval_count": 8,
+          "eval_duration_seconds": 0.0874354,
+          "prompt_eval_count": 98,
+          "prompt_eval_duration_seconds": 0.0641747
+        }
+      },
+      {
+        "id": "mmlu_20",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Statement 1 | For finite groups G and H, |G + H| = |G||H|. (G + H is the internal direct product.) Statement 2 | If r divides m and s divides n then Z_m + Z_n has a subgroup isomorphic to Z_r + Z_s.\nA. True, True\nB. False, False\nC. True, False\nD. False, True\n/no_think",
+        "answer": "A",
+        "generated_text": "\n\n<think>\n\n</think>\n\nC<|endoftext|><",
+        "score": {
+          "passed": false,
+          "predicted": null,
+          "expected": "A"
+        },
+        "ttft_seconds": 0.31418459996348247,
+        "tokens_per_second": 82.1965380873071,
+        "ollama": {
+          "elapsed_seconds": 0.42325870000058785,
+          "eval_count": 8,
+          "eval_duration_seconds": 0.0973277,
+          "prompt_eval_count": 100,
+          "prompt_eval_duration_seconds": 0.0756277
+        }
+      },
+      {
+        "id": "mmlu_21",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Find the sum of the given polynomials in the given polynomial ring. f(x) = 4x - 5, g(x) = 2x^2 - 4x + 2 in Z_8[x].\nA. 2x^2 + 5\nB. 6x^2 + 4x + 6\nC. 0\nD. x^2 + 1\n/no_think",
+        "answer": "A",
+        "generated_text": "/\n\n<think>\n\n</think>\n\nC<|endoftext|>",
+        "score": {
+          "passed": false,
+          "predicted": null,
+          "expected": "A"
+        },
+        "ttft_seconds": 0.3056786999804899,
+        "tokens_per_second": 85.93501594094546,
+        "ollama": {
+          "elapsed_seconds": 0.41032530000666156,
+          "eval_count": 8,
+          "eval_duration_seconds": 0.0930936,
+          "prompt_eval_count": 101,
+          "prompt_eval_duration_seconds": 0.0754244
+        }
+      },
+      {
+        "id": "mmlu_22",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Statement 1 | Any set of two vectors in R^2 is linearly independent. Statement 2 | If V = span(v1, ... , vk) and {v1, ... , vk} are linearly independent, then dim(V) = k.\nA. True, True\nB. False, False\nC. True, False\nD. False, True\n/no_think",
+        "answer": "D",
+        "generated_text": "_token>\n\n<think>\n\n</think>\n\nD",
+        "score": {
+          "passed": false,
+          "predicted": null,
+          "expected": "D"
+        },
+        "ttft_seconds": 0.27655419998336583,
+        "tokens_per_second": 83.26351340802765,
+        "ollama": {
+          "elapsed_seconds": 0.38653570000315085,
+          "eval_count": 8,
+          "eval_duration_seconds": 0.0960805,
+          "prompt_eval_count": 92,
+          "prompt_eval_duration_seconds": 0.0638051
+        }
+      },
+      {
+        "id": "mmlu_23",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: The set of all nth roots of unity under multiplication of complex numbers form a/an\nA. semi group with identity\nB. commutative semigroups with identity\nC. group\nD. abelian group\n/no_think",
+        "answer": "D",
+        "generated_text": "\n\n<think>\n\n</think>\n\nD<|endoftext|><|endoftext|>",
+        "score": {
+          "passed": false,
+          "predicted": null,
+          "expected": "D"
+        },
+        "ttft_seconds": 0.270162699976936,
+        "tokens_per_second": 80.31910781535038,
+        "ollama": {
+          "elapsed_seconds": 0.3849200999829918,
+          "eval_count": 8,
+          "eval_duration_seconds": 0.0996027,
+          "prompt_eval_count": 58,
+          "prompt_eval_duration_seconds": 0.0487531
+        }
+      },
+      {
+        "id": "mmlu_24",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Statement 1 | Every maximal ideal is a prime ideal. Statement 2 | If I is a maximal ideal of a commutative ring R, then R/I is field.\nA. True, True\nB. False, False\nC. True, False\nD. False, True\n/no_think",
+        "answer": "B",
+        "generated_text": "\n\n<think>one.\nAnswer with only",
+        "score": {
+          "passed": false,
+          "predicted": null,
+          "expected": "B"
+        },
+        "ttft_seconds": 0.30454260000260547,
+        "tokens_per_second": 82.69135554905509,
+        "ollama": {
+          "elapsed_seconds": 0.4149032999994233,
+          "eval_count": 8,
+          "eval_duration_seconds": 0.0967453,
+          "prompt_eval_count": 74,
+          "prompt_eval_duration_seconds": 0.0678567
+        }
+      },
+      {
+        "id": "mmlu_25",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Let G denoted the set of all n x n non-singular matrices with rational numbers as entries. Then under multiplication G is a/an\nA. subgroup\nB. finite abelian group\nC. infinite, non abelian group\nD. ininite, abelian\n/no_think",
+        "answer": "C",
+        "generated_text": "/\n\n<think>\n\n</think>\n\nC<|endoftext|>",
+        "score": {
+          "passed": false,
+          "predicted": null,
+          "expected": "C"
+        },
+        "ttft_seconds": 0.2787884999997914,
+        "tokens_per_second": 78.7444202195985,
+        "ollama": {
+          "elapsed_seconds": 0.3919637999497354,
+          "eval_count": 8,
+          "eval_duration_seconds": 0.1015945,
+          "prompt_eval_count": 70,
+          "prompt_eval_duration_seconds": 0.0650516
+        }
+      },
+      {
+        "id": "mmlu_26",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Statement 1 | Every group of order 42 has a normal subgroup of order 7. Statement 2 | Every group of order 42 has a normal subgroup of order 8.\nA. True, True\nB. False, False\nC. True, False\nD. False, True\n/no_think",
+        "answer": "C",
+        "generated_text": "\n\n<think>\n\n</think>\n\nC<|endoftext|><|endoftext|>",
+        "score": {
+          "passed": false,
+          "predicted": null,
+          "expected": "C"
+        },
+        "ttft_seconds": 0.31384040002012625,
+        "tokens_per_second": 84.73929954494996,
+        "ollama": {
+          "elapsed_seconds": 0.4214159999974072,
+          "eval_count": 8,
+          "eval_duration_seconds": 0.0944072,
+          "prompt_eval_count": 78,
+          "prompt_eval_duration_seconds": 0.0630854
+        }
+      },
+      {
+        "id": "mmlu_27",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Determine whether the polynomial in Z[x] satisfies an Eisenstein criterion for irreducibility over Q. 8x^3 + 6x^2 - 9x + 24\nA. Yes, with p=2.\nB. Yes, with p=3.\nC. Yes, with p=5.\nD. No.\n/no_think",
+        "answer": "B",
+        "generated_text": "\n\n<think>\n\n</think>\n\nD<|endoftext|><|endoftext|>",
+        "score": {
+          "passed": false,
+          "predicted": null,
+          "expected": "B"
+        },
+        "ttft_seconds": 0.28634640004020184,
+        "tokens_per_second": 83.41675008341674,
+        "ollama": {
+          "elapsed_seconds": 0.3950705000315793,
+          "eval_count": 8,
+          "eval_duration_seconds": 0.095904,
+          "prompt_eval_count": 88,
+          "prompt_eval_duration_seconds": 0.0682059
+        }
+      },
+      {
+        "id": "mmlu_28",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Statement 1 | The image of a group of 6 elements under a homomorphism may have 12 elements. Statement 2 | There is a homomorphism of some group of 6 elements into some group of 12 elements.\nA. True, True\nB. False, False\nC. True, False\nD. False, True\n/no_think",
+        "answer": "D",
+        "generated_text": "\n\n<think>\n\n</think>\n\nC<|endoftext|><",
+        "score": {
+          "passed": false,
+          "predicted": null,
+          "expected": "D"
+        },
+        "ttft_seconds": 0.27880099997855723,
+        "tokens_per_second": 81.95629680472888,
+        "ollama": {
+          "elapsed_seconds": 0.3879782999865711,
+          "eval_count": 8,
+          "eval_duration_seconds": 0.097613,
+          "prompt_eval_count": 89,
+          "prompt_eval_duration_seconds": 0.0618173
+        }
+      },
+      {
+        "id": "mmlu_29",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Statement 1 | The homomorphic image of a cyclic group is cyclic. Statement 2 | The homomorphic image of an Abelian group is Abelian.\nA. True, True\nB. False, False\nC. True, False\nD. False, True\n/no_think",
+        "answer": "A",
+        "generated_text": "\n\n<think>\n\n</think>\n\nC<|endoftext|><",
+        "score": {
+          "passed": false,
+          "predicted": null,
+          "expected": "A"
+        },
+        "ttft_seconds": 0.2808725999784656,
+        "tokens_per_second": 78.97233303027701,
+        "ollama": {
+          "elapsed_seconds": 0.39445530000375584,
+          "eval_count": 8,
+          "eval_duration_seconds": 0.1013013,
+          "prompt_eval_count": 70,
+          "prompt_eval_duration_seconds": 0.0624851
+        }
+      },
+      {
+        "id": "mmlu_30",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Statement 1 | If H is a subgroup of a group G and a belongs to G, then aH = Ha. Statement 2 | If H is normal of G and a belongs to G, then ah = ha for all h in H.\nA. True, True\nB. False, False\nC. True, False\nD. False, True\n/no_think",
+        "answer": "B",
+        "generated_text": "\n\n<think>\n\n</think>\n\nC<|endoftext|><",
+        "score": {
+          "passed": false,
+          "predicted": null,
+          "expected": "B"
+        },
+        "ttft_seconds": 0.2746216999948956,
+        "tokens_per_second": 80.4332132867625,
+        "ollama": {
+          "elapsed_seconds": 0.38762320001842454,
+          "eval_count": 8,
+          "eval_duration_seconds": 0.0994614,
+          "prompt_eval_count": 89,
+          "prompt_eval_duration_seconds": 0.0647132
+        }
+      },
+      {
+        "id": "mmlu_31",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: If (G, .) is a group such that (ab)^-1 = a^-1b^-1, for all a, b in G, then G is a/an\nA. commutative semi group\nB. abelian group\nC. non-abelian group\nD. None of these\n/no_think",
+        "answer": "B",
+        "generated_text": "\n\n<think>\n\n</think>\n\nB<|endoftext|><|endoftext|>",
+        "score": {
+          "passed": false,
+          "predicted": null,
+          "expected": "B"
+        },
+        "ttft_seconds": 0.31312100001377985,
+        "tokens_per_second": 81.38674881302514,
+        "ollama": {
+          "elapsed_seconds": 0.42309100000420585,
+          "eval_count": 8,
+          "eval_duration_seconds": 0.0982961,
+          "prompt_eval_count": 79,
+          "prompt_eval_duration_seconds": 0.0750277
+        }
+      },
+      {
+        "id": "mmlu_32",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Statement 1 | In a finite dimensional vector space every linearly independent set of vectors is contained in a basis. Statement 2 | If B_1 and B_2 are bases for the same vector space, then |B_1| = |B_2|.\nA. True, True\nB. False, False\nC. True, False\nD. False, True\n/no_think",
+        "answer": "A",
+        "generated_text": "\n\n<think>\n\n</think>\n\nC<|endoftext|><",
+        "score": {
+          "passed": false,
+          "predicted": null,
+          "expected": "A"
+        },
+        "ttft_seconds": 0.28941019997000694,
+        "tokens_per_second": 81.79783460682337,
+        "ollama": {
+          "elapsed_seconds": 0.40050410002004355,
+          "eval_count": 8,
+          "eval_duration_seconds": 0.0978021,
+          "prompt_eval_count": 93,
+          "prompt_eval_duration_seconds": 0.0690392
+        }
+      },
+      {
+        "id": "mmlu_33",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Some group (G, 0) is known to be abelian. Then which one of the following is TRUE for G?\nA. g = g^-1 for every g in G\nB. g = g^2 for every g in G\nC. (g o h)^2 = g^2 o h^2 for every g,h in G\nD. G is of finite order\n/no_think",
+        "answer": "C",
+        "generated_text": "\n\n<think>\n\n</think>\n\nC<|endoftext|><",
+        "score": {
+          "passed": false,
+          "predicted": null,
+          "expected": "C"
+        },
+        "ttft_seconds": 0.3406185999629088,
+        "tokens_per_second": 76.88980729492047,
+        "ollama": {
+          "elapsed_seconds": 0.4624263999867253,
+          "eval_count": 8,
+          "eval_duration_seconds": 0.104045,
+          "prompt_eval_count": 97,
+          "prompt_eval_duration_seconds": 0.0786798
+        }
+      },
+      {
+        "id": "mmlu_34",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Statement 1 | If T: V -> W is a linear transformation and dim(V ) < dim(W) < 1, then T must be injective. Statement 2 | Let dim(V) = n and suppose that T: V -> V is linear. If T is injective, then it is a bijection.\nA. True, True\nB. False, False\nC. True, False\nD. False, True\n/no_think",
+        "answer": "A",
+        "generated_text": "\n\n<think>\n\n</think>\n\nC<|endoftext|><|endoftext|>",
+        "score": {
+          "passed": false,
+          "predicted": null,
+          "expected": "A"
+        },
+        "ttft_seconds": 0.33873349998611957,
+        "tokens_per_second": 76.58580482107642,
+        "ollama": {
+          "elapsed_seconds": 0.4560639000264928,
+          "eval_count": 8,
+          "eval_duration_seconds": 0.104458,
+          "prompt_eval_count": 105,
+          "prompt_eval_duration_seconds": 0.0799244
+        }
+      },
+      {
+        "id": "mmlu_35",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Find the degree for the given field extension Q(sqrt(2), sqrt(3)) over Q.\nA. 0\nB. 4\nC. 2\nD. 6\n/no_think",
+        "answer": "B",
+        "generated_text": "\n\n<think>\n\n</think>\n\nB<|endoftext|><|endoftext|>",
+        "score": {
+          "passed": false,
+          "predicted": null,
+          "expected": "B"
+        },
+        "ttft_seconds": 0.2819871000247076,
+        "tokens_per_second": 78.05829979265765,
+        "ollama": {
+          "elapsed_seconds": 0.3972135999938473,
+          "eval_count": 8,
+          "eval_duration_seconds": 0.1024875,
+          "prompt_eval_count": 54,
+          "prompt_eval_duration_seconds": 0.0491037
+        }
+      },
+      {
+        "id": "mmlu_36",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Compute the product in the given ring. (20)(-8) in Z_26\nA. 0\nB. 1\nC. 11\nD. 22\n/no_think",
+        "answer": "D",
+        "generated_text": "/\n\n<think>\n\n</think>\n\nD<|endoftext|>",
+        "score": {
+          "passed": false,
+          "predicted": null,
+          "expected": "D"
+        },
+        "ttft_seconds": 0.2804271000204608,
+        "tokens_per_second": 78.73822002411359,
+        "ollama": {
+          "elapsed_seconds": 0.3942333000013605,
+          "eval_count": 8,
+          "eval_duration_seconds": 0.1016025,
+          "prompt_eval_count": 56,
+          "prompt_eval_duration_seconds": 0.0510223
+        }
+      },
+      {
+        "id": "mmlu_37",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Determine whether the polynomial in Z[x] satisfies an Eisenstein criterion for irreducibility over Q. x^2 - 12\nA. Yes, with p=2.\nB. Yes, with p=3.\nC. Yes, with p=5.\nD. No.\n/no_think",
+        "answer": "B",
+        "generated_text": "\n\n<think>\n\n</think>\n\nD. No",
+        "score": {
+          "passed": false,
+          "predicted": "D",
+          "expected": "B"
+        },
+        "ttft_seconds": 0.2753775999881327,
+        "tokens_per_second": 76.28456048173699,
+        "ollama": {
+          "elapsed_seconds": 0.39289940003072843,
+          "eval_count": 8,
+          "eval_duration_seconds": 0.1048705,
+          "prompt_eval_count": 76,
+          "prompt_eval_duration_seconds": 0.0631144
+        }
+      },
+      {
+        "id": "mmlu_38",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Find the generator for the finite field Z_7.\nA. 1\nB. 2\nC. 3\nD. 4\n/no_think",
+        "answer": "C",
+        "generated_text": "\n\n<think>\n\n</think>\n\nB<|endoftext|>no",
+        "score": {
+          "passed": false,
+          "predicted": null,
+          "expected": "C"
+        },
+        "ttft_seconds": 0.300160099985078,
+        "tokens_per_second": 88.82976774346851,
+        "ollama": {
+          "elapsed_seconds": 0.40246239997213706,
+          "eval_count": 8,
+          "eval_duration_seconds": 0.0900599,
+          "prompt_eval_count": 45,
+          "prompt_eval_duration_seconds": 0.0582198
+        }
+      },
+      {
+        "id": "mmlu_39",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Statement 1 | Every permutation is a cycle. Statement 2 | Every cycle is a permutation.\nA. True, True\nB. False, False\nC. True, False\nD. False, True\n/no_think",
+        "answer": "D",
+        "generated_text": "\n\n<think>\n\n</think>\n\nD<|endoftext|><",
+        "score": {
+          "passed": false,
+          "predicted": null,
+          "expected": "D"
+        },
+        "ttft_seconds": 0.2906562999705784,
+        "tokens_per_second": 93.28651904852416,
+        "ollama": {
+          "elapsed_seconds": 0.3882469999953173,
+          "eval_count": 8,
+          "eval_duration_seconds": 0.0857573,
+          "prompt_eval_count": 58,
+          "prompt_eval_duration_seconds": 0.0516904
+        }
+      },
+      {
+        "id": "mmlu_40",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: The set of integers Z with the binary operation \"*\" defined as a*b =a +b+ 1 for a, b in Z, is a group. The identity element of this group is\nA. 0\nB. 1\nC. -1\nD. 12\n/no_think",
+        "answer": "C",
+        "generated_text": "\n\n<think>\n\n</think>\n\nC<|endoftext|><|endoftext|>",
+        "score": {
+          "passed": false,
+          "predicted": null,
+          "expected": "C"
+        },
+        "ttft_seconds": 0.2826301999739371,
+        "tokens_per_second": 76.47313546546808,
+        "ollama": {
+          "elapsed_seconds": 0.39897779998136684,
+          "eval_count": 8,
+          "eval_duration_seconds": 0.1046119,
+          "prompt_eval_count": 74,
+          "prompt_eval_duration_seconds": 0.0642184
+        }
+      },
+      {
+        "id": "mmlu_41",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Find the characteristic of the ring Z_3 x 3Z.\nA. 0\nB. 3\nC. 12\nD. 30\n/no_think",
+        "answer": "A",
+        "generated_text": "/\n\n<think>\n\n</think>\n\nC<|endoftext|>",
+        "score": {
+          "passed": false,
+          "predicted": null,
+          "expected": "A"
+        },
+        "ttft_seconds": 0.2876306000398472,
+        "tokens_per_second": 77.40057895633059,
+        "ollama": {
+          "elapsed_seconds": 0.40370320004876703,
+          "eval_count": 8,
+          "eval_duration_seconds": 0.1033584,
+          "prompt_eval_count": 50,
+          "prompt_eval_duration_seconds": 0.0500667
+        }
+      },
+      {
+        "id": "mmlu_42",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Statement 1 | Some abelian group of order 45 has a subgroup of order 10. Statement 2 | A subgroup H of a group G is a normal subgroup if and only if thenumber of left cosets of H is equal to the number of right cosets of H.\nA. True, True\nB. False, False\nC. True, False\nD. False, True\n/no_think",
+        "answer": "B",
+        "generated_text": "\n\n<think>one\nC\n</think>\n\n",
+        "score": {
+          "passed": false,
+          "predicted": null,
+          "expected": "B"
+        },
+        "ttft_seconds": 0.2996446999604814,
+        "tokens_per_second": 75.21660030368703,
+        "ollama": {
+          "elapsed_seconds": 0.41753729997435585,
+          "eval_count": 8,
+          "eval_duration_seconds": 0.1063595,
+          "prompt_eval_count": 99,
+          "prompt_eval_duration_seconds": 0.0681773
+        }
+      },
+      {
+        "id": "mmlu_43",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Statement 1 | Every integral domain with characteristic 0 is infinite. Statement 2 | Every integral domain with prime characteristic is finite.\nA. True, True\nB. False, False\nC. True, False\nD. False, True\n/no_think",
+        "answer": "C",
+        "generated_text": "\n\n<think>\n\n</think>\n\nC<|endoftext|><",
+        "score": {
+          "passed": false,
+          "predicted": null,
+          "expected": "C"
+        },
+        "ttft_seconds": 0.28411140001844615,
+        "tokens_per_second": 77.96495864933506,
+        "ollama": {
+          "elapsed_seconds": 0.3993154999916442,
+          "eval_count": 8,
+          "eval_duration_seconds": 0.1026102,
+          "prompt_eval_count": 65,
+          "prompt_eval_duration_seconds": 0.0642386
+        }
+      },
+      {
+        "id": "mmlu_44",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Let A and B be sets, f: A -> B and g: B -> A be functions such that for all a \\in A, g(f(a)) = a. Statement 1 | The function f must necessarily be injective. Statement 2 | The function f must necessarily be surjective.\nA. True, True\nB. False, False\nC. True, False\nD. False, True\n/no_think",
+        "answer": "C",
+        "generated_text": "\n\n<think>\n\n</think>\n\nC<|endoftext|><|endoftext|>",
+        "score": {
+          "passed": false,
+          "predicted": null,
+          "expected": "C"
+        },
+        "ttft_seconds": 0.30289009999250993,
+        "tokens_per_second": 78.09426563569221,
+        "ollama": {
+          "elapsed_seconds": 0.4174432999570854,
+          "eval_count": 8,
+          "eval_duration_seconds": 0.1024403,
+          "prompt_eval_count": 100,
+          "prompt_eval_duration_seconds": 0.0659573
+        }
+      },
+      {
+        "id": "mmlu_45",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Statement 1 | For any two groups G and G', there exists a homomorphism of G into G'. Statement 2 | Every homomorphism is a one-to-one map.\nA. True, True\nB. False, False\nC. True, False\nD. False, True\n/no_think",
+        "answer": "C",
+        "generated_text": "\n\n<think>\n\n</think>\n\nC<|endoftext|><|endoftext|>",
+        "score": {
+          "passed": false,
+          "predicted": null,
+          "expected": "C"
+        },
+        "ttft_seconds": 0.3198158000013791,
+        "tokens_per_second": 75.84973030680268,
+        "ollama": {
+          "elapsed_seconds": 0.4376936999615282,
+          "eval_count": 8,
+          "eval_duration_seconds": 0.1054717,
+          "prompt_eval_count": 76,
+          "prompt_eval_duration_seconds": 0.0617718
+        }
+      },
+      {
+        "id": "mmlu_46",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Statement 1 | A homomorphism may have an empty kernel. Statement 2 | It is not possible to have a nontrivial homomorphism of some finite group into some infinite group.\nA. True, True\nB. False, False\nC. True, False\nD. False, True\n/no_think",
+        "answer": "B",
+        "generated_text": "\n\n<think>\n\n</think>\n\nC<|endoftext|><|endoftext|>",
+        "score": {
+          "passed": false,
+          "predicted": null,
+          "expected": "B"
+        },
+        "ttft_seconds": 0.2945931000285782,
+        "tokens_per_second": 79.28980125020193,
+        "ollama": {
+          "elapsed_seconds": 0.4084679000079632,
+          "eval_count": 8,
+          "eval_duration_seconds": 0.1008957,
+          "prompt_eval_count": 78,
+          "prompt_eval_duration_seconds": 0.0642351
+        }
+      },
+      {
+        "id": "mmlu_47",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Find all c in Z_3 such that Z_3[x]/(x^3 + x^2 + c) is a field.\nA. 0\nB. 2\nC. 1\nD. 3\n/no_think",
+        "answer": "B",
+        "generated_text": "/\n\n<think>\n\n</think>\n\nC<|endoftext|>",
+        "score": {
+          "passed": false,
+          "predicted": null,
+          "expected": "B"
+        },
+        "ttft_seconds": 0.29336090001743287,
+        "tokens_per_second": 80.05627956453387,
+        "ollama": {
+          "elapsed_seconds": 0.4053742000251077,
+          "eval_count": 8,
+          "eval_duration_seconds": 0.0999297,
+          "prompt_eval_count": 63,
+          "prompt_eval_duration_seconds": 0.0503587
+        }
+      },
+      {
+        "id": "mmlu_48",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Statement 1 | If a R is an integral domain, then R[x] is an integral domain. Statement 2 | If R is a ring and f(x) and g(x) are in R[x], then deg (f(x)g(x)) = deg f(x) + deg g(x).\nA. True, True\nB. False, False\nC. True, False\nD. False, True\n/no_think",
+        "answer": "C",
+        "generated_text": "\n\n<think>one\nD<|endoftext|>>\n",
+        "score": {
+          "passed": false,
+          "predicted": null,
+          "expected": "C"
+        },
+        "ttft_seconds": 0.2853565999539569,
+        "tokens_per_second": 78.8516052215533,
+        "ollama": {
+          "elapsed_seconds": 0.3984758000005968,
+          "eval_count": 8,
+          "eval_duration_seconds": 0.1014564,
+          "prompt_eval_count": 100,
+          "prompt_eval_duration_seconds": 0.0675866
+        }
+      },
+      {
+        "id": "mmlu_49",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Find the maximum possible order for some element of Z_8 x Z_10 x Z_24.\nA. 8\nB. 120\nC. 240\nD. 24\n/no_think",
+        "answer": "B",
+        "generated_text": "/\n\n<think>\n\n</think>\n\nC<|endoftext|>",
+        "score": {
+          "passed": false,
+          "predicted": null,
+          "expected": "B"
+        },
+        "ttft_seconds": 0.27468680002493784,
+        "tokens_per_second": 78.34212397249408,
+        "ollama": {
+          "elapsed_seconds": 0.38855110004078597,
+          "eval_count": 8,
+          "eval_duration_seconds": 0.1021162,
+          "prompt_eval_count": 62,
+          "prompt_eval_duration_seconds": 0.0512478
+        }
+      }
+    ]
+  }
+}

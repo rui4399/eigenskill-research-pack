@@ -23,6 +23,9 @@ CATEGORIES = {
     "esmp": "artifact integrity",
     "package": "artifact integrity",
     "artifact": "artifact integrity",
+    "task_benchmark": "capability retention",
+    "benchmark": "capability retention",
+    "capability": "capability retention",
     "hygiene": "repo hygiene",
     "public": "repo hygiene",
     "calibration": "calibration robustness",
@@ -118,6 +121,12 @@ def metric_parts(summary: dict[str, Any]) -> list[str]:
         parts.append(f"cases {summary.get('case_count')}")
     if "unstable_case_count" in summary:
         parts.append(f"unstable {summary.get('unstable_case_count')}")
+    if "total_tasks" in summary:
+        parts.append(f"tasks {summary.get('total_tasks')}")
+    if "total_passes" in summary:
+        parts.append(f"passes {summary.get('total_passes')}")
+    if (value := finite_float(summary.get("mean_accuracy"))) is not None:
+        parts.append(f"accuracy {value:.4f}")
     if (value := finite_float(summary.get("mean_score_spearman"))) is not None:
         parts.append(f"mean Spearman {value:.4f}")
     if (value := finite_float(summary.get("mean_positive_jaccard"))) is not None:

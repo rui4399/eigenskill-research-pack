@@ -1,0 +1,57 @@
+{
+  "date": "2026-06-06T13:19:48+00:00",
+  "passed": true,
+  "summary": {
+    "case_count": 2,
+    "total_tasks": 100,
+    "total_passes": 4,
+    "mean_accuracy": 0.04,
+    "task_formats": [
+      "gsm8k",
+      "mmlu"
+    ],
+    "max_guard_vram_ratio": 0.8825910931174089,
+    "mean_tokens_per_second": 83.02829706245475,
+    "mean_ttft_seconds": 0.39825892099761406
+  },
+  "cases": [
+    {
+      "label": "mmlu50",
+      "summary_path": "outputs\\public_task_benchmark_mmlu_ollama_qwen35_4b_summary.json",
+      "guard_path": "outputs\\public_task_benchmark_mmlu_ollama_qwen35_4b_gpu_guard_2026_06_06.json",
+      "model": "huihui-qwen35-4b-pmra:latest",
+      "task_format": "mmlu",
+      "task_count": 50,
+      "passes": 0,
+      "accuracy": 0.0,
+      "mean_tokens_per_second": 83.45362929399047,
+      "mean_ttft_seconds": 0.48865155399544163,
+      "guard_returncode": 0,
+      "killed_by_guard": false,
+      "killed_by_timeout": false,
+      "guard_max_memory_used_ratio": 0.8825910931174089,
+      "guard_max_memory_used_mib": 7194,
+      "guard_memory_total_mib": 8151
+    },
+    {
+      "label": "gsm8k50",
+      "summary_path": "outputs\\public_task_benchmark_gsm8k_ollama_qwen35_4b_summary.json",
+      "guard_path": "outputs\\public_task_benchmark_gsm8k_ollama_qwen35_4b_gpu_guard_2026_06_06.json",
+      "model": "huihui-qwen35-4b-pmra:latest",
+      "task_format": "gsm8k",
+      "task_count": 50,
+      "passes": 4,
+      "accuracy": 0.08,
+      "mean_tokens_per_second": 82.60296483091903,
+      "mean_ttft_seconds": 0.30786628799978644,
+      "guard_returncode": 0,
+      "killed_by_guard": false,
+      "killed_by_timeout": false,
+      "guard_max_memory_used_ratio": 0.8791559317875107,
+      "guard_max_memory_used_mib": 7166,
+      "guard_memory_total_mib": 8151
+    }
+  ],
+  "failures": [],
+  "claim_boundary": "Valid claim: public MMLU/GSM8K subset evaluation ran under guard. Invalid claim: this is leaderboard-scale or SOTA quality evidence."
+}

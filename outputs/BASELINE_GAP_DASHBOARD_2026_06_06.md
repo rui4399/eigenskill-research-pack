@@ -1,6 +1,6 @@
 # Baseline Gap Dashboard
 
-Date: `2026-06-06T12:30:21+00:00`
+Date: `2026-06-06T13:25:01+00:00`
 Status: **NOT READY** for paper claims that require external baselines
 Items: `11`
 
@@ -8,16 +8,14 @@ Items: `11`
 
 | status | count |
 |---|---:|
-| `covered` | 6 |
+| `covered` | 7 |
 | `missing` | 4 |
-| `partial` | 1 |
 
 ## Missing Paper Blockers
 
 - `awq_or_gptq`
 - `rotation_family`
 - `allocation_family`
-- `public_task_benchmarks`
 - `mobile_redmi_k80_pro`
 
 ## Baseline Items
@@ -32,7 +30,7 @@ Items: `11`
 | `rotation_family` | external_rotation | high | True | **missing** | 0 | 0 | 0 | n/a | Required before making activation/KV or outlier-mitigation claims. |
 | `allocation_family` | external_allocation | high | True | **missing** | 0 | 0 | 0 | n/a | Needed before claiming algorithmic novelty in bit allocation. |
 | `public_task_schema_smoke` | capability_retention | required | False | **covered** | 3 | 8 | 0 | n/a | Proves public-schema task ingestion and guarded execution only; not leaderboard-scale retention. |
-| `public_task_benchmarks` | capability_retention | high | True | **partial** | 2 | 8 | 4 | n/a | Current deterministic stress gate is partial; broad public task retention is still missing. |
+| `public_task_benchmarks` | capability_retention | high | True | **covered** | 4 | 108 | 4 | n/a | A guarded 100-row public MMLU/GSM8K subset is covered; leaderboard-scale retention and fused-model public quality remain missing. |
 | `packed_kernel_shape_family` | system_kernel | required | False | **covered** | 1 | 0 | 0 | torch=yes, triton=yes | Kernel-level evidence only; not end-to-end LLM acceleration. |
 | `mobile_redmi_k80_pro` | mobile_system | high | True | **missing** | 0 | 0 | 0 | n/a | No mobile deployment claim until real device logs exist. |
 
