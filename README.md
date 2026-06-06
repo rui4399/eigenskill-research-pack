@@ -128,6 +128,22 @@ The aggregate table is in
 `outputs/real_system_packer_2026-06-05/TRITON_TUNING_SMOKE_2026_06_06.md`.
 Gate policy and claim boundaries are in `docs/SYSTEM_EVIDENCE_GATES.md`.
 
+End-to-end smoke metrics are tracked separately from kernel evidence:
+
+```text
+Qwen3-0.6B, 16 generated tokens, same-loader warm baseline
+same-loader warm baseline:  TTFT 0.0347 s, 25.0523 tok/s, 1173.2993 MiB
+cached ESMP 3-module warm:  TTFT 0.0320 s, 28.8295 tok/s, 1175.2993 MiB
+Triton ESMP 3-module cold:  TTFT 1.9611 s,  4.9957 tok/s, 1169.8462 MiB
+fused QKV 3-layer warm:     TTFT 0.0315 s, 25.8158 tok/s, 1156.4868 MiB
+```
+
+The concise system table is in
+`outputs/real_system_packer_2026-06-05/END_TO_END_SYSTEM_METRICS_2026_06_06.md`.
+Interpretation: cached/fused smoke wiring is viable, while the Triton-swapped
+end-to-end path still needs fusion and scheduling work before it can be claimed
+as runtime acceleration.
+
 ## Negative Evidence Kept On Purpose
 
 The older 8-skill routing run used
@@ -317,6 +333,25 @@ python train_python/gate_triton_tuning.py \
   --min-rowwise-wins 20 \
   --max-rel-l2 0.20 \
   --max-vram-ratio 0.90
+```
+
+## Reproduce: End-to-End Metric Summary
+
+This command summarizes already measured generation JSON artifacts and computes
+ratios against the same-loader warm baseline.
+
+```bash
+python train_python/summarize_system_metrics.py \
+  --baseline same_loader_warm_16tok \
+  --case direct_fp16_cold_16tok=outputs/real_system_packer_2026-06-05/qwen3_fp16_16tok_latency.json \
+  --case same_loader_cold_16tok=outputs/real_system_packer_2026-06-05/qwen3_same_loader_16tok_latency.json \
+  --case same_loader_warm_16tok=outputs/real_system_packer_2026-06-05/qwen3_same_loader_16tok_warm_latency.json \
+  --case cached_3mod_cold_16tok=outputs/real_system_packer_2026-06-05/qwen3_esmp_swapped_3mod_cached_latency.json \
+  --case cached_3mod_warm_16tok=outputs/real_system_packer_2026-06-05/qwen3_esmp_swapped_3mod_cached_warm_latency.json \
+  --case triton_3mod_cold_16tok=outputs/real_system_packer_2026-06-05/qwen3_esmp_swapped_3mod_triton_latency.json \
+  --case fused_qkv_3layer_warm_16tok=outputs/real_system_packer_2026-06-05/qwen3_fused_qkv_generation_3layer_16tok.json \
+  --out-json outputs/real_system_packer_2026-06-05/end_to_end_system_metrics_2026_06_06.json \
+  --out-md outputs/real_system_packer_2026-06-05/END_TO_END_SYSTEM_METRICS_2026_06_06.md
 ```
 
 ## Paper Direction
