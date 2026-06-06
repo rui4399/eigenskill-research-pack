@@ -1,0 +1,76 @@
+{
+  "date": "2026-06-06T16:10:18+00:00",
+  "passed": true,
+  "summary": {
+    "case_count": 3,
+    "max_avg_bits": 4.499670112161865,
+    "target_bits": 4.5,
+    "total_high_bit_modules": 99,
+    "consistent_selected_modules": 80,
+    "selected_modules": 80
+  },
+  "cases": [
+    {
+      "label": "qwen3_0p6b",
+      "path": "outputs\\qwen3_0p6b_robust_lcb_wikitext_c4_consensus_alloc_4to8_group128_summary.json",
+      "model": "Qwen/Qwen3-0.6B",
+      "policy": "robust_lcb",
+      "policy_name": "loss_sensitive_robust_lcb_consensus_4to8",
+      "score_key": "robust_lcb_score_delta_per_cost",
+      "allocation_key": "loss_sensitive_robust_lcb_consensus_4to8",
+      "avg_bits": 4.499670112161865,
+      "budget_avg_bits": 4.5,
+      "bit_hist": {
+        "4": 159,
+        "8": 38
+      },
+      "high_bit_modules": 38,
+      "selected_modules": 30,
+      "robust_field_rows": 30,
+      "consistent_selected_modules": 30,
+      "protected_ratio": 0.3201598349196528
+    },
+    {
+      "label": "qwen3_1p7b",
+      "path": "outputs\\qwen3_1p7b_robust_lcb_wikitext_c4_consensus_alloc_4to8_group128_summary.json",
+      "model": "Qwen/Qwen3-1.7B",
+      "policy": "robust_lcb",
+      "policy_name": "loss_sensitive_robust_lcb_consensus_4to8",
+      "score_key": "robust_lcb_score_delta_per_cost",
+      "allocation_key": "loss_sensitive_robust_lcb_consensus_4to8",
+      "avg_bits": 4.497333536492458,
+      "budget_avg_bits": 4.5,
+      "bit_hist": {
+        "8": 41,
+        "4": 156
+      },
+      "high_bit_modules": 41,
+      "selected_modules": 30,
+      "robust_field_rows": 30,
+      "consistent_selected_modules": 30,
+      "protected_ratio": 0.4018283331536259
+    },
+    {
+      "label": "olmo2_0425_1b",
+      "path": "outputs\\olmo2_0425_1b_robust_lcb_wikitext_c4_consensus_alloc_4to8_group128_summary.json",
+      "model": "allenai/OLMo-2-0425-1B-Instruct",
+      "policy": "robust_lcb",
+      "policy_name": "loss_sensitive_robust_lcb_consensus_4to8",
+      "score_key": "robust_lcb_score_delta_per_cost",
+      "allocation_key": "loss_sensitive_robust_lcb_consensus_4to8",
+      "avg_bits": 4.498360655737705,
+      "budget_avg_bits": 4.5,
+      "bit_hist": {
+        "8": 20,
+        "4": 93
+      },
+      "high_bit_modules": 20,
+      "selected_modules": 20,
+      "robust_field_rows": 20,
+      "consistent_selected_modules": 20,
+      "protected_ratio": 0.33008525319766285
+    }
+  ],
+  "failures": [],
+  "claim_boundary": "Valid claim: robust-LCB consensus allocation artifacts exist across the gated model family, respect the configured average-bit budget, and expose selected-module consistency evidence. Invalid claim: this gate proves downstream PPL, task accuracy, mobile deployment, or SOTA quality."
+}

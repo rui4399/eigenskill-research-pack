@@ -27,13 +27,14 @@ python train_python/build_evidence_ledger.py \
   --gate chat_task_stress=outputs/real_system_packer_2026-06-05/chat_task_stress_v3_84_gate_2026_06_06.json \
   --gate public_task_benchmark=outputs/public_task_benchmark_ollama_qwen35_4b_gate_2026_06_06.json \
   --gate allocation_family_proxy=outputs/q_palette_style_allocation_family_gate_2026_06_06.json \
+  --gate robust_lcb_consensus=outputs/robust_lcb_consensus_family_gate_2026_06_06.json \
   --gate rotation_family_proxy=outputs/quarot_spinquant_rotation_family_gate_2026_06_06.json \
   --gate awq_gptq_proxy=outputs/awq_gptq_proxy_gate_2026_06_06.json \
   --out-json outputs/real_system_packer_2026-06-05/evidence_ledger_2026_06_06.json \
   --out-md outputs/real_system_packer_2026-06-05/EVIDENCE_LEDGER_2026_06_06.md
 ```
 
-The current ledger passes with 15/15 gates across repo hygiene, calibration
+The current ledger passes with 16/16 gates across repo hygiene, calibration
 robustness, artifact integrity, kernel, runtime wiring, selected-row, C++
 runtime, decode integration, QKV replacement, quality, task-retention, and
 capability-retention, allocation-comparator, rotation-comparator, and
@@ -364,6 +365,39 @@ Invalid claim:
 
 - instability alone proves consensus allocation is better. Downstream PPL/task
   gates are still required.
+
+## Robust-LCB Consensus Allocation Gate
+
+`train_python/gate_robust_lcb_consensus.py` verifies that robust lower-confidence
+bound consensus allocation artifacts exist across the current measured model
+family. This gate exists because average-score consensus is too weak as a paper
+claim by itself: the robust-LCB policy discounts one-sided calibration spikes
+and requires selected modules to expose positive cross-split consistency.
+
+Current gate:
+
+```bash
+python train_python/gate_robust_lcb_consensus.py \
+  --case qwen3_0p6b=outputs/qwen3_0p6b_robust_lcb_wikitext_c4_consensus_alloc_4to8_group128_summary.json \
+  --case qwen3_1p7b=outputs/qwen3_1p7b_robust_lcb_wikitext_c4_consensus_alloc_4to8_group128_summary.json \
+  --case olmo2_0425_1b=outputs/olmo2_0425_1b_robust_lcb_wikitext_c4_consensus_alloc_4to8_group128_summary.json \
+  --out-json outputs/robust_lcb_consensus_family_gate_2026_06_06.json \
+  --out-md outputs/ROBUST_LCB_CONSENSUS_FAMILY_GATE_2026_06_06.md
+```
+
+Current result: 3 cases, max average bits `4.4997` under the `4.5` target,
+99 total high-bit modules, and 80/80 selected modules with positive consistency
+evidence.
+
+Valid claim:
+
+- robust-LCB consensus allocation artifacts are executable and budget-respecting
+  across the current three measured model families.
+
+Invalid claim:
+
+- robust-LCB consensus alone proves downstream PPL/task quality, mobile
+  deployment, or SOTA quantization quality.
 
 ## Triton Mixed-GEMM Gate
 

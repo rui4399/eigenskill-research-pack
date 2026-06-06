@@ -14,6 +14,8 @@ CATEGORIES = {
     "quality": "quality",
     "prompt": "quality",
     "allocation": "allocation comparator",
+    "consensus": "allocation comparator",
+    "robust_lcb": "allocation comparator",
     "q_palette": "allocation comparator",
     "impq": "allocation comparator",
     "windquant": "allocation comparator",
@@ -139,6 +141,12 @@ def metric_parts(summary: dict[str, Any]) -> list[str]:
         parts.append(f"accuracy {value:.4f}")
     if "total_records" in summary:
         parts.append(f"records {summary.get('total_records')}")
+    if "total_high_bit_modules" in summary:
+        parts.append(f"high-bit modules {summary.get('total_high_bit_modules')}")
+    if "consistent_selected_modules" in summary:
+        parts.append(f"consistent selected {summary.get('consistent_selected_modules')}")
+    if "selected_modules" in summary:
+        parts.append(f"selected modules {summary.get('selected_modules')}")
     if "total_rotated" in summary:
         parts.append(f"rotated {summary.get('total_rotated')}")
     if "available_package_count" in summary:

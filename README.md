@@ -51,6 +51,10 @@ Implemented and committed:
 - A QuaRot/SpinQuant-style rotation-family proxy gate over measured Qwen3-0.6B
   WikiText2/C4 sensitivity artifacts, kept explicitly separate from faithful
   official rotation implementations.
+- A robust-LCB consensus allocation gate across Qwen3-0.6B, Qwen3-1.7B, and
+  OLMo2-1B measured WikiText2/C4 allocation artifacts. This upgrades the
+  cross-split consensus story from simple averaging toward a lower-confidence
+  bound policy while keeping downstream quality claims separate.
 - A top-level evidence ledger that aggregates the current paper-facing gates
   into one reproducible pass/fail table.
 - A machine-readable baseline coverage manifest and gap dashboard that keep
@@ -233,10 +237,11 @@ GSM8K under the 90% VRAM guard. This proves the public-task path is wired, not
 that capability retention is solved.
 The top-level evidence ledger is
 `outputs/real_system_packer_2026-06-05/EVIDENCE_LEDGER_2026_06_06.md`; it
-currently passes with 11/11 paper-facing gates across repo hygiene, calibration
-robustness, artifact integrity, kernel, runtime wiring, selected-row, C++
-runtime, decode integration, QKV replacement, quality, and task-retention
-categories.
+currently passes with 16/16 paper-facing gates across repo hygiene,
+calibration robustness, artifact integrity, kernel, runtime wiring,
+selected-row, C++ runtime, decode integration, QKV replacement, quality,
+task-retention, capability-retention, allocation-comparator,
+rotation-comparator, and PTQ-comparator categories.
 Gate policy and claim boundaries are in `docs/SYSTEM_EVIDENCE_GATES.md`.
 Related-work positioning is tracked in `docs/RELATED_WORK_QUANTIZATION_2026.md`.
 Baseline and readiness gaps are tracked by
@@ -698,6 +703,7 @@ python train_python/build_evidence_ledger.py \
   --gate chat_task_stress=outputs/real_system_packer_2026-06-05/chat_task_stress_v3_84_gate_2026_06_06.json \
   --gate public_task_benchmark=outputs/public_task_benchmark_ollama_qwen35_4b_gate_2026_06_06.json \
   --gate allocation_family_proxy=outputs/q_palette_style_allocation_family_gate_2026_06_06.json \
+  --gate robust_lcb_consensus=outputs/robust_lcb_consensus_family_gate_2026_06_06.json \
   --gate rotation_family_proxy=outputs/quarot_spinquant_rotation_family_gate_2026_06_06.json \
   --gate awq_gptq_proxy=outputs/awq_gptq_proxy_gate_2026_06_06.json \
   --out-json outputs/real_system_packer_2026-06-05/evidence_ledger_2026_06_06.json \
