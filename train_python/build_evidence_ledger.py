@@ -25,6 +25,8 @@ CATEGORIES = {
     "artifact": "artifact integrity",
     "hygiene": "repo hygiene",
     "public": "repo hygiene",
+    "calibration": "calibration robustness",
+    "instability": "calibration robustness",
 }
 
 
@@ -112,6 +114,16 @@ def metric_parts(summary: dict[str, Any]) -> list[str]:
         parts.append(f"forbidden files {summary.get('forbidden_file_count')}")
     if "placeholder_count" in summary:
         parts.append(f"placeholders {summary.get('placeholder_count')}")
+    if "case_count" in summary:
+        parts.append(f"cases {summary.get('case_count')}")
+    if "unstable_case_count" in summary:
+        parts.append(f"unstable {summary.get('unstable_case_count')}")
+    if (value := finite_float(summary.get("mean_score_spearman"))) is not None:
+        parts.append(f"mean Spearman {value:.4f}")
+    if (value := finite_float(summary.get("mean_positive_jaccard"))) is not None:
+        parts.append(f"mean Jaccard {value:.4f}")
+    if (value := finite_float(summary.get("mean_top20_jaccard"))) is not None:
+        parts.append(f"top20 Jaccard {value:.4f}")
     if (value := finite_float(summary.get("mean_speedup_fused_vs_baseline"))) is not None:
         parts.append(f"mean speed {value:.4f}x")
     if (value := finite_float(summary.get("replacement_compression_vs_fp32"))) is not None:

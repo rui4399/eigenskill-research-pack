@@ -26,9 +26,10 @@ python train_python/build_evidence_ledger.py \
   --out-md outputs/real_system_packer_2026-06-05/EVIDENCE_LEDGER_2026_06_06.md
 ```
 
-The current ledger passes with 10/10 gates across repo hygiene, artifact
-integrity, kernel, runtime wiring, selected-row, C++ runtime, decode
-integration, QKV replacement, quality, and task-retention evidence categories.
+The current ledger passes with 11/11 gates across repo hygiene, calibration
+robustness, artifact integrity, kernel, runtime wiring, selected-row, C++
+runtime, decode integration, QKV replacement, quality, and task-retention
+evidence categories.
 
 Valid claim:
 
@@ -103,6 +104,42 @@ Valid claim:
 Invalid claim:
 
 - repository hygiene proves experimental correctness.
+
+## Calibration Instability Benchmark Gate
+
+`train_python/build_calibration_instability_benchmark.py` aggregates multiple
+WikiText2-vs-C4 module-sensitivity split comparisons into one benchmark table.
+It is the research-problem gate: it checks whether sensitivity rankings are
+unstable across calibration distributions on multiple model families.
+
+Current gate:
+
+```bash
+python train_python/build_calibration_instability_benchmark.py \
+  --case qwen3_0p6b=outputs/qwen3_0p6b_module_loss_sensitivity_limit4_group128.json=outputs/qwen3_0p6b_c4_module_loss_sensitivity_limit4_group128.json \
+  --case qwen3_1p7b=outputs/qwen3_1p7b_module_loss_sensitivity_limit2_group128.json=outputs/qwen3_1p7b_module_loss_sensitivity_c4_limit2_group128.json \
+  --case olmo2_1b=outputs/olmo2_0425_1b_module_loss_sensitivity_limit2_group128.json=outputs/olmo2_0425_1b_module_loss_sensitivity_c4_limit2_group128.json \
+  --top-k 10,20,40 \
+  --min-cases 3 \
+  --min-unstable-cases 3 \
+  --instability-spearman-threshold 0.30 \
+  --instability-jaccard-threshold 0.55 \
+  --out-json outputs/calibration_instability_benchmark_2026_06_06.json \
+  --out-md outputs/CALIBRATION_INSTABILITY_BENCHMARK_2026_06_06.md
+```
+
+Current result: 3/3 unstable cases, mean score/cost Spearman `0.0713`, mean
+positive-set Jaccard `0.4349`, and mean top-20 Jaccard `0.1022`.
+
+Valid claim:
+
+- sensitivity ranking from one small calibration distribution is unstable
+  across the measured model/dataset cases.
+
+Invalid claim:
+
+- instability alone proves consensus allocation is better. Downstream PPL/task
+  gates are still required.
 
 ## Triton Mixed-GEMM Gate
 

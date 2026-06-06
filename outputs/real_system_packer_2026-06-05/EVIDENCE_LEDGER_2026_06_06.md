@@ -1,15 +1,16 @@
 # Evidence Ledger
 
-Date: `2026-06-06T10:54:22+00:00`
+Date: `2026-06-06T11:11:05+00:00`
 Status: **PASS**
-Gates: `10 / 10` passed
-Categories: `artifact integrity, c++ runtime, decode integration, kernel, qkv replacement, quality, repo hygiene, runtime wiring, selected-row, task retention`
+Gates: `11 / 11` passed
+Categories: `artifact integrity, c++ runtime, calibration robustness, decode integration, kernel, qkv replacement, quality, repo hygiene, runtime wiring, selected-row, task retention`
 
 ## Gate Summary
 
 | gate | category | status | key metrics | source |
 |---|---|---|---|---|
 | `public_repo_hygiene` | repo hygiene | **PASS** | tracked files 1534; forbidden files 0; placeholders 0 | `outputs/real_system_packer_2026-06-05/public_repo_hygiene_gate_2026_06_06.json` |
+| `calibration_instability` | calibration robustness | **PASS** | cases 3; unstable 3; mean Spearman 0.0713; mean Jaccard 0.4349; top20 Jaccard 0.1022 | `outputs/calibration_instability_benchmark_2026_06_06.json` |
 | `triton_shape_family` | kernel | **PASS** | configs 96/96; FP16 wins 10; best FP16 2.7647x; VRAM 0.4514 | `outputs/real_system_packer_2026-06-05/triton_qwen_shape_family_gate_2026_06_06.json` |
 | `selector_runtime` | runtime wiring | **PASS** | selector calls 4; VRAM 0.5721 | `outputs/real_system_packer_2026-06-05/selector_runtime_smoke_gate_2026_06_06.json` |
 | `selected_row` | selected-row | **PASS** | ok rows 108; VRAM 0.4369 | `outputs/real_system_packer_2026-06-05/selected_row_benchmark_gate_2026_06_06.json` |

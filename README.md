@@ -114,6 +114,20 @@ Qwen3-1.7B: score/cost Spearman 0.0734, positive-set Jaccard 0.4512
 OLMo2-1B:   score/cost Spearman 0.1845, positive-set Jaccard 0.4512
 ```
 
+The multi-model calibration-instability benchmark now aggregates WikiText2-vs-C4
+sensitivity movement across Qwen3-0.6B, Qwen3-1.7B, and OLMo2-1B:
+
+```text
+Cases:                    3
+Unstable cases:           3
+Mean score/cost Spearman: 0.0713
+Mean positive-set Jaccard: 0.4349
+Mean top-20 Jaccard:      0.1022
+```
+
+The corresponding report is
+`outputs/CALIBRATION_INSTABILITY_BENCHMARK_2026_06_06.md`.
+
 All listed GPU runs stayed below the requested 85% VRAM guard. Example peaks:
 Qwen3-0.6B consensus eval stayed near 60% of an 8 GB GPU; Qwen3-1.7B stayed
 near 62%; OLMo2-1B stayed near 54%.
@@ -173,9 +187,10 @@ stress gate with 45/84 fused passes versus 46/84 baseline passes, one explicit
 JSON-key regression, 0.9746x mean speed, and 54.69% peak guard memory.
 The top-level evidence ledger is
 `outputs/real_system_packer_2026-06-05/EVIDENCE_LEDGER_2026_06_06.md`; it
-currently passes with 10/10 paper-facing gates across repo hygiene, artifact
-integrity, kernel, runtime wiring, selected-row, C++ runtime, decode
-integration, QKV replacement, quality, and task-retention categories.
+currently passes with 11/11 paper-facing gates across repo hygiene, calibration
+robustness, artifact integrity, kernel, runtime wiring, selected-row, C++
+runtime, decode integration, QKV replacement, quality, and task-retention
+categories.
 Gate policy and claim boundaries are in `docs/SYSTEM_EVIDENCE_GATES.md`.
 
 End-to-end smoke metrics are tracked separately from kernel evidence:
