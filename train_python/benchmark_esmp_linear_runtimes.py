@@ -23,6 +23,7 @@ except ModuleNotFoundError:  # pragma: no cover
 
 from eval_esmp_module_reconstruction import DEFAULT_MODEL, DEFAULT_PACKAGE_SUMMARY, load_package_modules, resolve_path, repo_root
 from measure_esmp_generation_latency import EsmpLinear, parse_layers, select_modules
+from triton_config_selector import load_kernel_configs
 
 
 def synchronize() -> None:
@@ -111,14 +112,15 @@ def write_report(path: Path, result: dict[str, Any]) -> None:
             "",
             "## Per-Case Results",
             "",
-            "| module | batch | runtime | latency ms | speedup vs dense | rel-L2 vs dense |",
-            "|---|---:|---|---:|---:|---:|",
+            "| module | batch | runtime | latency ms | speedup vs dense | rel-L2 vs dense | selector calls |",
+            "|---|---:|---|---:|---:|---:|---:|",
         ]
     )
     for row in sorted(ok, key=lambda r: (r["module"], int(r["batch"]), r["runtime"])):
         lines.append(
             f"| `{row['module']}` | {row['batch']} | {row['runtime']} | {row['latency_ms']:.6f} | "
-            f"{float(row.get('speedup_vs_dense', 1.0)):.4f} | {float(row.get('rel_l2_vs_dense', 0.0)):.6f} |"
+            f"{float(row.get('speedup_vs_dense', 1.0)):.4f} | {float(row.get('rel_l2_vs_dense', 0.0)):.6f} | "
+            f"{int(row.get('selector_call_count', 0) or 0)} |"
         )
     failures = [row for row in rows if not row.get("ok")]
     if failures:
@@ -156,6 +158,8 @@ def main() -> None:
     parser.add_argument("--block-m", type=int, default=32)
     parser.add_argument("--block-n", type=int, default=16)
     parser.add_argument("--block-k", type=int, default=128)
+    parser.add_argument("--kernel-config-selector", default="", help="Optional JSON output from select_triton_kernel_configs.py.")
+    parser.add_argument("--prefer-selector-fp16-win", action="store_true", help="Prefer FP16-winning selector rows after batch/shape matching.")
     parser.add_argument("--out-json", default="outputs/real_system_packer_2026-06-05/esmp_linear_runtime_shapes.json")
     parser.add_argument("--out-jsonl", default="outputs/real_system_packer_2026-06-05/esmp_linear_runtime_shapes.jsonl")
     parser.add_argument("--out-csv", default="outputs/real_system_packer_2026-06-05/esmp_linear_runtime_shapes.csv")
@@ -169,6 +173,10 @@ def main() -> None:
 
     root = repo_root()
     package_summary = resolve_path(args.package_summary, root)
+    kernel_config_selector = resolve_path(args.kernel_config_selector, root) if args.kernel_config_selector else None
+    kernel_configs = load_kernel_configs(kernel_config_selector) if kernel_config_selector else []
+    if kernel_config_selector and not kernel_configs:
+        raise SystemExit(f"No usable kernel configs in selector: {kernel_config_selector}")
     dtype = {"float16": torch.float16, "bfloat16": torch.bfloat16, "float32": torch.float32}[args.dtype]
     if args.device == "cuda":
         torch.cuda.reset_peak_memory_stats()
@@ -205,7 +213,18 @@ def main() -> None:
             "dense": source,
             "cached": EsmpLinear(source, item["out"], "cached", torch.device(args.device), dtype, args.block_m, args.block_n, args.block_k),
             "python_on_demand": EsmpLinear(source, item["out"], "python_on_demand", torch.device(args.device), dtype, args.block_m, args.block_n, args.block_k),
-            "triton_grouped": EsmpLinear(source, item["out"], "triton_grouped", torch.device(args.device), dtype, args.block_m, args.block_n, args.block_k),
+            "triton_grouped": EsmpLinear(
+                source,
+                item["out"],
+                "triton_grouped",
+                torch.device(args.device),
+                dtype,
+                args.block_m,
+                args.block_n,
+                args.block_k,
+                kernel_configs=kernel_configs,
+                prefer_selector_fp16_win=args.prefer_selector_fp16_win,
+            ),
         }
         for batch in batches:
             x = torch.randn(batch, int(source.in_features), device=args.device, dtype=dtype)
@@ -228,17 +247,27 @@ def main() -> None:
                 }
                 try:
                     with torch.inference_mode():
+                        if hasattr(module, "clear_runtime_config_summary"):
+                            module.clear_runtime_config_summary()
                         latency = time_ms(lambda: module(x), args.warmup, args.iters)
                         out = module(x)
                     if runtime == "dense":
                         dense_ms = latency
                     speedup = (dense_ms / latency) if dense_ms and latency > 0 else 1.0
+                    runtime_config_summary = module.runtime_config_summary() if hasattr(module, "runtime_config_summary") else []
+                    selector_call_count = sum(
+                        int(event.get("count", 0))
+                        for event in runtime_config_summary
+                        if event.get("selection") == "selector"
+                    )
                     record.update(
                         {
                             "ok": True,
                             "latency_ms": latency,
                             "speedup_vs_dense": speedup,
                             "rel_l2_vs_dense": 0.0 if runtime == "dense" else rel_l2(out, dense_out),
+                            "runtime_config_summary": runtime_config_summary if runtime_config_summary else None,
+                            "selector_call_count": selector_call_count,
                         }
                     )
                 except Exception as exc:  # keep benchmark going across runtimes
@@ -252,6 +281,8 @@ def main() -> None:
         "date": time.strftime("%Y-%m-%d"),
         "model": args.model,
         "package_summary": str(package_summary),
+        "kernel_config_selector": str(kernel_config_selector) if kernel_config_selector else None,
+        "kernel_config_count": len(kernel_configs),
         "module_count": len(selected),
         "modules": [item["module"] for item in selected],
         "batches": batches,

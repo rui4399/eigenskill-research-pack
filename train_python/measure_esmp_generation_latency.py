@@ -216,6 +216,10 @@ class EsmpLinear(_MODULE_BASE):
             summary.append(item)
         return summary
 
+    def clear_runtime_config_summary(self) -> None:
+        self.runtime_config_counts.clear()
+        self.runtime_config_examples.clear()
+
     def _init_triton_buffers(self, target_device: torch.device) -> None:
         import numpy as np
 

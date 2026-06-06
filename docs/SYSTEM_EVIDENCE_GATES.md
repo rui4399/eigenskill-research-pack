@@ -101,6 +101,12 @@ used selector configs under the GPU guard. The current smoke gate passes with 8
 configs loaded, 4 selector calls, 7.6413x selected-module compression vs FP32,
 4 generated tokens, and 57.21% peak guard memory.
 
+`train_python/benchmark_esmp_linear_runtimes.py` also accepts the selector. The
+current 1-module Qwen3-0.6B q_proj benchmark confirms selector calls for batch
+1 and batch 12, but `triton_grouped` remains slower than dense/cached in those
+small-batch cases. Treat this as evidence for the next systems work item:
+fusion, persistent scheduling, or a lower-launch-overhead decode path.
+
 Valid claim:
 
 - measured Triton tuning artifacts can now drive the prototype ESMP generation
@@ -108,6 +114,8 @@ Valid claim:
 - output JSON exposes which measured block config was used.
 - a small selector-driven runtime smoke is automatically gated for selector use,
   compression, generated-token presence, and GPU memory guard compliance.
+- selector-driven module-runtime benchmark records per-case selector calls and
+  currently exposes low-batch kernel overhead rather than speedup.
 
 Invalid claim:
 
