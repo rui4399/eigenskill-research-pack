@@ -13,9 +13,18 @@ from typing import Iterable
 
 
 FORBIDDEN_SUFFIXES = (".docx", ".pdf", ".zip")
+FORBIDDEN_EXACT = (
+    "CODEX_RESUME.md",
+    "outputs/EigenSkill-100-Resource-Links.md",
+    "outputs/EigenSkill-Swarm-LLM-Concept.md",
+    "outputs/real_system_packer_2026-06-05/RESUME_HANDOFF.md",
+)
 FORBIDDEN_PREFIXES = (
     "research_pack_",
     "outputs/paper_delivery_",
+    "outputs/nightly_delivery_",
+    "outputs/notion_ready_update_",
+    "outputs/wake_up_summary_",
     "docs/obsidian_quant_route/",
     "docs/notebooklm_enterprise_sources/",
 )
@@ -51,6 +60,9 @@ def find_forbidden_files(paths: Iterable[str]) -> list[str]:
     for path in paths:
         normalized = normalize_path(path)
         lower = normalized.lower()
+        if normalized in FORBIDDEN_EXACT:
+            bad.append(normalized)
+            continue
         if lower.endswith(FORBIDDEN_SUFFIXES):
             bad.append(normalized)
             continue

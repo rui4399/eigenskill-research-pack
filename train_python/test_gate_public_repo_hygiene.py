@@ -11,13 +11,20 @@ class PublicRepoHygieneTests(unittest.TestCase):
     def test_flags_generated_delivery_files(self) -> None:
         files = [
             "README.md",
+            "CODEX_RESUME.md",
+            "outputs/EigenSkill-100-Resource-Links.md",
+            "outputs/EigenSkill-Swarm-LLM-Concept.md",
+            "outputs/nightly_delivery_2026_06_05.md",
+            "outputs/notion_ready_update_2026_06_05_public_status.md",
+            "outputs/real_system_packer_2026-06-05/RESUME_HANDOFF.md",
+            "outputs/wake_up_summary_2026_06_05.md",
             "outputs/paper_delivery_2026-06-04/report.md",
             "research_pack_2026-06-03/old.md",
             "docs/obsidian_quant_route/00-index.md",
             "paper.docx",
         ]
         bad = hygiene.find_forbidden_files(files)
-        self.assertEqual(len(bad), 4)
+        self.assertEqual(len(bad), 11)
 
     def test_flags_blank_placeholders(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:

@@ -1,9 +1,45 @@
 # Model Artifacts
 
-Large trained model artifacts are intentionally not committed to this GitHub
-repository.
+Large model weights, LoRA adapters, merged checkpoints, and Hugging Face cache
+contents are intentionally not committed to this repository.
 
-Verified local artifacts from the current run:
+## What Is Public
+
+The public artifact boundary contains:
+
+- small prompt fixtures under `data_eval/`;
+- evaluation configs under `data_eval/eval_configs/`;
+- fake-quant PPL summaries, gate JSON, and gate Markdown under `outputs/`;
+- ESMP package metadata and integrity checks for selected packed slices;
+- source code for measurement, allocation, packing, and gate verification.
+
+These files are enough to inspect the committed evidence ledger, but they are
+not a replacement for the original base model checkpoints.
+
+## Referenced Base Models
+
+The current evidence refers to public base models such as:
+
+```text
+Qwen/Qwen3-0.6B
+Qwen/Qwen3-1.7B
+allenai/OLMo-2-0425-1B-Instruct
+HuggingFaceTB/SmolLM2-1.7B-Instruct
+Qwen/Qwen2.5-0.5B-Instruct
+Qwen/Qwen2.5-1.5B-Instruct
+```
+
+Exact local cache state can vary by machine. If a model is gated, unavailable,
+or not cached, treat that as an environment gap rather than a failed quality
+result.
+
+## Historical Local Artifacts
+
+Earlier local runs produced SmolLM2-360M LoRA/merged/INT8 artifacts. They are
+not part of the current paper-facing claim set and should not be cited as the
+main model evidence.
+
+Historical examples that may exist on the original workstation:
 
 ```text
 models/eigenskill-smollm2-360m-lora-v2-fp16
@@ -11,42 +47,14 @@ models/eigenskill-smollm2-360m-merged-v2-fp16
 models/eigenskill-smollm2-360m-int8-v2-dynamic
 ```
 
-Additional public base model used for fake-quant baseline evaluation:
+## Weight Release Policy
 
-```text
-Qwen/Qwen2.5-0.5B-Instruct
-```
+If future trained adapters or packed model artifacts become paper-facing, they
+should be released through one of:
 
-This is downloaded through the Hugging Face cache and is not committed to the
-repository. The committed evidence is the evaluation configuration and JSON
-summaries:
+- Hugging Face model repositories;
+- GitHub Releases with checksums;
+- Git LFS-backed storage if the repository policy allows it.
 
-```text
-data_eval/eval_configs/qwen25_uniform_group128.json
-outputs/qwen25_0p5b_fake_quant_ppl_uniform_group128_wikitext2_128_summary.json
-outputs/qwen25_0p5b_fake_quant_ppl_uniform_group128_c4_en_validation_64_summary.json
-outputs/qwen25_0p5b_fake_quant_ppl_loss_sensitive_group128_wikitext2_128_summary.json
-outputs/qwen25_0p5b_fake_quant_ppl_loss_sensitive_group128_c4_en_validation_64_summary.json
-outputs/qwen25_0p5b_fake_quant_ppl_loss_sensitive_limit8_group128_wikitext2_128_summary.json
-outputs/qwen25_0p5b_fake_quant_ppl_loss_sensitive_limit8_group128_c4_en_validation_64_summary.json
-```
-
-Expected local sizes:
-
-```text
-LoRA adapter v2:       about 243 MiB
-Merged FP16 v2:        about 694 MiB
-Dynamic INT8 CPU v2:   about 529 MiB
-```
-
-The package manifest with exact paths and verification results is available at:
-
-```text
-outputs/eigenskill_v2_package_manifest.json
-```
-
-Recommended next delivery target for model weights:
-
-```text
-Hugging Face model repository or Git LFS-backed private storage
-```
+Until then, this repository should be read as a source-and-evidence pack, not a
+model-weight distribution.

@@ -7,8 +7,8 @@ not a new result.
 Current tracked output footprint:
 
 ```text
-outputs/ tracked files:                         1365
-outputs/real_system_packer_2026-06-05 files:     745
+outputs/ tracked files:                         1346
+outputs/real_system_packer_2026-06-05 files:     744
 ```
 
 ## Paper-Facing Artifacts
@@ -56,6 +56,10 @@ not be cited as current paper evidence without an explicit claim-matrix row.
 - intermediate random-seed summaries that feed a later evidence matrix;
 - raw GPU guard logs when a corresponding gate already summarizes them;
 - speculative material described in `docs/HISTORICAL_ARTIFACTS.md`.
+
+Internal delivery/update notes, wake-up summaries, Notion-ready snippets, and
+the old cross-medium swarm concept draft were removed from the tracked artifact
+tree because they are process state rather than reproducible evidence.
 
 ## Cleanup Policy
 

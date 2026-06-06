@@ -30,6 +30,7 @@ interpretation. Anything outside these rows remains future work.
 | A QuaRot/SpinQuant-style rotation-family proxy is executable. | Measured Qwen3-0.6B WikiText2/C4 sensitivity artifacts produce budgeted rotation/outlier-mitigation proxy summaries. | `outputs/QUAROT_SPINQUANT_ROTATION_FAMILY_GATE_2026_06_06.md` | Proxy comparator-family coverage only; not a faithful official QuaRot/SpinQuant implementation or activation/KV quality proof. |
 | The current paper-facing evidence set passes as a ledger. | Top-level evidence ledger. | `outputs/real_system_packer_2026-06-05/EVIDENCE_LEDGER_2026_06_06.md` | A ledger pass means listed gates passed, not that the paper is top-tier ready. |
 | Missing baseline families are explicitly tracked. | Machine-readable baseline coverage manifest and generated gap dashboard. | `docs/BASELINE_COVERAGE_MANIFEST.json`, `outputs/BASELINE_GAP_DASHBOARD_2026_06_06.md` | Tracks readiness gaps; does not turn missing external baselines into evidence. |
+| The public tree excludes private/process artifacts and speculative concept drafts. | Public hygiene gate rejects generated delivery bundles, root Codex resume files, Notion/wake-up/nightly update snippets, NotebookLM/Obsidian exports, and old swarm/acoustic concept drafts. | `train_python/gate_public_repo_hygiene.py`, `outputs/real_system_packer_2026-06-05/PUBLIC_REPO_HYGIENE_GATE_2026_06_06.md` | Repository hygiene protects presentation quality; it is not experimental evidence. |
 
 ## Rejected Or Not-Yet Claims
 

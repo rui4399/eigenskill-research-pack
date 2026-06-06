@@ -98,7 +98,9 @@ Invalid claim:
 `train_python/gate_public_repo_hygiene.py` protects the public branch from
 drifting back into private workbench state. It fails if tracked files include
 generated delivery bundles (`.docx`, `.pdf`, `.zip`), old `research_pack_*`
-trees, NotebookLM/Obsidian exports, or blank README-style placeholder lines.
+trees, NotebookLM/Obsidian exports, root Codex resume handoff files,
+Notion/wake-up/nightly delivery snippets, old swarm/acoustic concept drafts,
+or blank README-style placeholder lines.
 
 Example:
 
@@ -110,8 +112,8 @@ python train_python/gate_public_repo_hygiene.py \
 
 Valid claim:
 
-- the current public tree excludes generated delivery bundles and private
-  workbench exports.
+- the current public tree excludes generated delivery bundles, private
+  workbench exports, process logs, and speculative concept drafts.
 
 Invalid claim:
 
