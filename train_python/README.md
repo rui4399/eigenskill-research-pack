@@ -26,6 +26,7 @@ as generalization evidence.
 | evaluate fake weight-quant PPL | `eval_weight_quant_ppl.py` |
 | build random/heuristic allocation baselines | `build_baseline_allocations.py` |
 | aggregate calibration split instability | `build_calibration_instability_benchmark.py` |
+| build cross-model robustness stress gate | `build_calibration_robustness_stress.py` |
 | pack real ESMP mixed-precision artifacts | `pack_qwen3_consensus.py` |
 | verify ESMP package integrity | `verify_esmp_package.py` |
 | tune and gate Triton mixed GEMM | `tune_triton_blocks.py`, `gate_triton_tuning.py` |
@@ -73,6 +74,7 @@ Build the current evidence ledger:
 python train_python/build_evidence_ledger.py \
   --gate public_hygiene=outputs/real_system_packer_2026-06-05/public_repo_hygiene_gate_2026_06_06.json \
   --gate calibration_instability=outputs/calibration_instability_benchmark_2026_06_06.json \
+  --gate calibration_robustness_stress=outputs/calibration_robustness_stress_gate_2026_06_07.json \
   --gate esmp_package=outputs/real_system_packer_2026-06-05/esmp_package_verify_qwen3_0p6b_limit8_2026_06_06.json \
   --gate triton_shape_family=outputs/real_system_packer_2026-06-05/triton_qwen_shape_family_gate_2026_06_06.json \
   --gate selector_runtime=outputs/real_system_packer_2026-06-05/selector_runtime_smoke_gate_2026_06_06.json \

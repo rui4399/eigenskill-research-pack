@@ -59,6 +59,25 @@ class BuildEvidenceLedgerTests(unittest.TestCase):
         self.assertIn("margin vs uniform 5.6100", joined)
         self.assertIn("margin vs mean -2.8800", joined)
 
+    def test_calibration_stress_metrics_are_reported(self) -> None:
+        metrics = ledger.metric_parts(
+            {
+                "case_count": 11,
+                "target_wins_vs_uniform": 11,
+                "target_wins_vs_best_random": 11,
+                "target_wins_vs_random_mean": 11,
+                "mean_margin_vs_uniform": 4.29,
+                "worst_margin_vs_best_random": 0.11,
+                "mean_fp16_regret": 4.16,
+            }
+        )
+        joined = "; ".join(metrics)
+        self.assertIn("wins/best-random 11", joined)
+        self.assertIn("wins/random-mean 11", joined)
+        self.assertIn("mean margin/uniform 4.2900", joined)
+        self.assertIn("worst margin/best-random 0.1100", joined)
+        self.assertIn("mean FP16 regret 4.1600", joined)
+
     def test_parse_gate_spec_requires_label(self) -> None:
         label, path = ledger.parse_gate_spec("foo=bar.json")
         self.assertEqual(label, "foo")

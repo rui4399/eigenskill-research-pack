@@ -18,9 +18,11 @@ than uniform or random mixed-precision allocations under the same bit budget?
 ## Current Status
 
 The paper-facing evidence set is indexed by executable gates. The current
-ledger passes **17/17 gates**:
+ledger passes **18/18 gates**:
 
 - calibration split instability across Qwen3-0.6B, Qwen3-1.7B, and OLMo2-1B;
+- calibration-robustness stress evidence across 11 committed fake-quant PPL
+  slices;
 - consensus and robust-LCB allocation artifacts under a 4.5 average-bit budget;
 - guarded Qwen3-0.6B downstream PPL boundary evidence for robust-LCB;
 - Q-Palette, AWQ/GPTQ, and QuaRot/SpinQuant-style proxy comparator coverage;
@@ -92,6 +94,29 @@ Cross-model summaries:
 
 ```text
 outputs/cross_model_quant_evidence_matrix_extended_auto.md
+```
+
+### Calibration Robustness Stress
+
+The stress gate converts the committed PPL summaries into a machine-checkable
+risk table over 11 short fake-quant slices. It measures whether the selected
+target policy beats uniform INT4, the best random mixed-precision seed, and the
+random mean under the same budget.
+
+```text
+cases:                         11
+wins vs uniform INT4:          11 / 11
+wins vs best random seed:      11 / 11
+wins vs random-seed mean:      11 / 11
+mean margin vs uniform:        +4.2942 PPL
+worst margin vs best random:   +0.1120 PPL
+mean FP16 regret:              +4.1683 PPL
+```
+
+Evidence:
+
+```text
+outputs/CALIBRATION_ROBUSTNESS_STRESS_GATE_2026_06_07.md
 ```
 
 ### Robust-LCB Boundary Evidence
@@ -191,6 +216,7 @@ Rebuild the evidence ledger:
 python train_python/build_evidence_ledger.py \
   --gate public_hygiene=outputs/real_system_packer_2026-06-05/public_repo_hygiene_gate_2026_06_06.json \
   --gate calibration_instability=outputs/calibration_instability_benchmark_2026_06_06.json \
+  --gate calibration_robustness_stress=outputs/calibration_robustness_stress_gate_2026_06_07.json \
   --gate esmp_package=outputs/real_system_packer_2026-06-05/esmp_package_verify_qwen3_0p6b_limit8_2026_06_06.json \
   --gate triton_shape_family=outputs/real_system_packer_2026-06-05/triton_qwen_shape_family_gate_2026_06_06.json \
   --gate selector_runtime=outputs/real_system_packer_2026-06-05/selector_runtime_smoke_gate_2026_06_06.json \

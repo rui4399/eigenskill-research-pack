@@ -16,6 +16,7 @@ Current ledger:
 python train_python/build_evidence_ledger.py \
   --gate public_hygiene=outputs/real_system_packer_2026-06-05/public_repo_hygiene_gate_2026_06_06.json \
   --gate calibration_instability=outputs/calibration_instability_benchmark_2026_06_06.json \
+  --gate calibration_robustness_stress=outputs/calibration_robustness_stress_gate_2026_06_07.json \
   --gate esmp_package=outputs/real_system_packer_2026-06-05/esmp_package_verify_qwen3_0p6b_limit8_2026_06_06.json \
   --gate triton_shape_family=outputs/real_system_packer_2026-06-05/triton_qwen_shape_family_gate_2026_06_06.json \
   --gate selector_runtime=outputs/real_system_packer_2026-06-05/selector_runtime_smoke_gate_2026_06_06.json \
@@ -35,7 +36,7 @@ python train_python/build_evidence_ledger.py \
   --out-md outputs/real_system_packer_2026-06-05/EVIDENCE_LEDGER_2026_06_06.md
 ```
 
-The current ledger passes with 17/17 gates across repo hygiene, calibration
+The current ledger passes with 18/18 gates across repo hygiene, calibration
 robustness, artifact integrity, kernel, runtime wiring, selected-row, C++
 runtime, decode integration, QKV replacement, quality, task-retention, and
 capability-retention, allocation-comparator, rotation-comparator, and
@@ -366,6 +367,51 @@ Invalid claim:
 
 - instability alone proves consensus allocation is better. Downstream PPL/task
   gates are still required.
+
+## Calibration Robustness Stress Gate
+
+`train_python/build_calibration_robustness_stress.py` converts committed
+fake-quant PPL summaries into a risk table. Unlike the split-instability gate,
+this gate is method-facing: it checks whether the chosen target policy beats
+uniform INT4, the best random mixed-precision seed, and the random-seed mean
+across the current cross-model short-slice evidence set.
+
+Current gate:
+
+```bash
+python train_python/build_calibration_robustness_stress.py \
+  --case qwen3_0p6b_wikitext2_64=outputs/qwen3_0p6b_lowmem_consensus_random16_ppl_wikitext2_64_len96_summary.json \
+  --case qwen3_0p6b_c4_64=outputs/qwen3_0p6b_lowmem_consensus_random16_ppl_c4_64_summary.json \
+  --case qwen3_1p7b_wikitext2_64=outputs/qwen3_1p7b_wikitext_c4_consensus_random16_ppl_wikitext2_64_summary.json \
+  --case qwen3_1p7b_wikitext2_128=outputs/qwen3_1p7b_wikitext_c4_consensus_random16_ppl_wikitext2_128_summary.json \
+  --case qwen3_1p7b_c4_64=outputs/qwen3_1p7b_wikitext_c4_consensus_random16_ppl_c4_64_summary.json \
+  --case olmo2_1b_wikitext2_64=outputs/olmo2_0425_1b_consensus_vs_random16_ppl_wikitext2_64_summary.json \
+  --case olmo2_1b_c4_64=outputs/olmo2_0425_1b_consensus_vs_random16_ppl_c4_64_summary.json \
+  --case smollm2_1p7b_wikitext2_16=outputs/smollm2_1p7b_full_random16_ppl_wikitext2_16_summary.json \
+  --case smollm2_1p7b_wikitext2_64=outputs/smollm2_1p7b_full_random16_ppl_wikitext2_64_summary.json \
+  --case smollm2_1p7b_wikitext2_128=outputs/smollm2_1p7b_full_random16_ppl_wikitext2_128_summary.json \
+  --case smollm2_1p7b_c4_64=outputs/smollm2_1p7b_full_random16_ppl_c4_64_summary.json \
+  --min-cases 11 \
+  --min-uniform-win-rate 1.0 \
+  --min-best-random-win-rate 1.0 \
+  --min-random-mean-win-rate 1.0 \
+  --out-json outputs/calibration_robustness_stress_gate_2026_06_07.json \
+  --out-md outputs/CALIBRATION_ROBUSTNESS_STRESS_GATE_2026_06_07.md
+```
+
+Current result: 11/11 wins versus uniform INT4, 11/11 wins versus the best
+random seed, 11/11 wins versus the random-seed mean, mean margin `+4.2942` PPL
+versus uniform, and worst margin `+0.1120` PPL versus the best random seed.
+
+Valid claim:
+
+- current target policies pass a cross-model fake-quant short-slice robustness
+  stress gate against uniform and random mixed-precision baselines.
+
+Invalid claim:
+
+- this proves SOTA PTQ, official baseline superiority, downstream task
+  retention, or production runtime quality.
 
 ## Robust-LCB Consensus Allocation Gate
 
