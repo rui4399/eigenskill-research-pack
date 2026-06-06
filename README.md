@@ -30,6 +30,8 @@ Implemented and committed:
   task-eval summaries, and task-accuracy retention comparison.
 - A real ESMPQ001 mixed-precision package format layer shared by the C++
   packer/runtime bench and Python reconstruction/generation tools.
+- A PC-side Triton packed INT4/INT8 mixed-GEMM prototype plus an executable
+  evidence gate for block-tuning results.
 - PyTorch fake-quant PPL experiments on small public models and short
   WikiText2/C4 slices.
 - A LoRA training entry point with optional completion-only loss masking for
@@ -38,7 +40,8 @@ Implemented and committed:
 Not claimed:
 
 - No real board-level latency or energy evidence yet.
-- No packed INT4/INT3 production matmul result yet.
+- No packed INT4/INT3 production matmul result yet. The Triton path is a
+  prototype kernel benchmark, not a production transformer runtime.
 - No GPTQ/AWQ/SmoothQuant/QuaRot/SpinQuant SOTA comparison yet.
 - No proof that spectral/eigen routing survives nonlinear Transformer blocks.
 - No committed model weights or LoRA adapter weights.
@@ -103,6 +106,27 @@ OLMo2-1B:   score/cost Spearman 0.1845, positive-set Jaccard 0.4512
 All listed GPU runs stayed below the requested 85% VRAM guard. Example peaks:
 Qwen3-0.6B consensus eval stayed near 60% of an 8 GB GPU; Qwen3-1.7B stayed
 near 62%; OLMo2-1B stayed near 54%.
+
+The latest packed-kernel smoke moves the systems evidence beyond CPU-only
+microbenchmarks:
+
+```text
+RTX 5070 Laptop GPU, 2048x1024 Linear shape, high_every=16
+Triton configs completed:                 24/24
+Configs faster than torch FP16:            2/24
+Configs faster than row-wise mixed path:  21/24
+Best grouped packed INT4/INT8 speedup:     1.6543x vs torch FP16
+Best grouped speedup vs row-wise path:     3.5292x
+Compression ratio vs FP16 weights:         3.7034x
+Max grouped rel-L2:                        0.1382
+Max observed VRAM ratio:                   0.4514
+```
+
+The evidence gate is executable and passed on the committed smoke sweep:
+`outputs/real_system_packer_2026-06-05/TRITON_TUNING_GATE_2026_06_06.md`.
+The aggregate table is in
+`outputs/real_system_packer_2026-06-05/TRITON_TUNING_SMOKE_2026_06_06.md`.
+Gate policy and claim boundaries are in `docs/SYSTEM_EVIDENCE_GATES.md`.
 
 ## Negative Evidence Kept On Purpose
 
@@ -263,6 +287,37 @@ Format details are in `docs/ESMPQ001_FORMAT.md`.
 
 Latest local smoke report:
 `outputs/real_system_packer_2026-06-05/REAL_SYSTEM_SMOKE_2026_06_06.md`.
+
+## Reproduce: Triton Mixed-GEMM Prototype
+
+This path benchmarks real packed INT4/INT8 storage on a CUDA GPU. It is still a
+kernel-level experiment, not TTFT/tokens-per-second evidence.
+
+```bash
+python train_python/tune_triton_blocks.py \
+  --out-dir outputs/real_system_packer_2026-06-05/gpu_tuning_smoke_2026_06_06 \
+  --max-memory-ratio 0.90 \
+  --iters 30 \
+  --warmup 8 \
+  --rows 2048 \
+  --cols 1024 \
+  --batches 8,16 \
+  --high-every 16 \
+  --block-ms 16,32 \
+  --block-ns 8,16,32 \
+  --block-ks 64,128
+
+python train_python/gate_triton_tuning.py \
+  --input outputs/real_system_packer_2026-06-05/gpu_tuning_smoke_2026_06_06/tuning_results.jsonl \
+  --out-json outputs/real_system_packer_2026-06-05/triton_tuning_gate_2026_06_06.json \
+  --out-md outputs/real_system_packer_2026-06-05/TRITON_TUNING_GATE_2026_06_06.md \
+  --min-valid-configs 24 \
+  --min-fp16-wins 2 \
+  --min-best-fp16-speedup 1.20 \
+  --min-rowwise-wins 20 \
+  --max-rel-l2 0.20 \
+  --max-vram-ratio 0.90
+```
 
 ## Paper Direction
 

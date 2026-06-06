@@ -1,0 +1,42 @@
+# System Evidence Gates
+
+This repository separates exploratory output from evidence that can survive a
+paper review. A result should be treated as paper-facing only when it is backed
+by an executable gate and an explicit claim boundary.
+
+## Triton Mixed-GEMM Gate
+
+The Triton gate consumes `tuning_results.jsonl` from `train_python/tune_triton_blocks.py`.
+It verifies:
+
+- enough valid kernel configurations completed;
+- at least one grouped packed INT4/INT8 config beat torch FP16;
+- grouped execution beat the row-wise dynamic path;
+- grouped relative L2 error stayed below a configured ceiling;
+- the GPU guard stayed below the configured VRAM ratio.
+
+Example:
+
+```bash
+python train_python/gate_triton_tuning.py \
+  --input outputs/real_system_packer_2026-06-05/gpu_tuning_smoke_2026_06_06/tuning_results.jsonl \
+  --out-json outputs/real_system_packer_2026-06-05/triton_tuning_gate_2026_06_06.json \
+  --out-md outputs/real_system_packer_2026-06-05/TRITON_TUNING_GATE_2026_06_06.md \
+  --min-valid-configs 24 \
+  --min-fp16-wins 2 \
+  --min-best-fp16-speedup 1.20 \
+  --min-rowwise-wins 20 \
+  --max-rel-l2 0.20 \
+  --max-vram-ratio 0.90
+```
+
+Passing this gate supports only this narrow claim:
+
+```text
+For the measured shape family, grouped packed INT4/INT8 Triton execution can
+remove row-wise dispatch overhead and can beat torch FP16 in selected tuned
+kernel configurations under the configured VRAM guard.
+```
+
+It does not support claims about end-to-end LLM speedup, mobile latency, Tensor
+Core production readiness, or quantization SOTA.
