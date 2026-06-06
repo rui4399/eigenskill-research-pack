@@ -18,14 +18,8 @@ except ModuleNotFoundError:  # pragma: no cover
     AutoModelForCausalLM = None
     AutoTokenizer = None
 
-from eval_esmp_module_reconstruction import (
-    DEFAULT_MODEL,
-    dequantize_esmp_weight,
-    load_package_modules,
-    read_esmp,
-    repo_root,
-    resolve_path,
-)
+from esmp_format import dequantize_esmp_weight, read_esmp
+from eval_esmp_module_reconstruction import DEFAULT_MODEL, load_package_modules, repo_root, resolve_path
 from measure_module_output_sensitivity import collect_module_inputs, load_prompts
 
 

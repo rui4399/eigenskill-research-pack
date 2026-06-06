@@ -28,6 +28,8 @@ Implemented and committed:
 - C++ utilities for allocation planning, consensus building, split-stability
   audits, random-seed audits, PPL summary merging, GPU-guard summaries,
   task-eval summaries, and task-accuracy retention comparison.
+- A real ESMPQ001 mixed-precision package format layer shared by the C++
+  packer/runtime bench and Python reconstruction/generation tools.
 - PyTorch fake-quant PPL experiments on small public models and short
   WikiText2/C4 slices.
 - A LoRA training entry point with optional completion-only loss masking for
@@ -220,6 +222,44 @@ python train_python/train_lora.py \
 The current CPU low-bit dequant path is not faster than AVX2 FP32 dense GEMV.
 The useful systems signal is selected-row execution and C++ policy gating, not
 a production low-bit dot-product kernel.
+
+## Reproduce: ESMP Packed Runtime Slice
+
+The ESMP path is the concrete system artifact boundary:
+
+```text
+FP32 Linear weight + row bit policy
+  -> mixed_precision_packer
+  -> ESMPQ001 binary package + JSON manifest
+  -> mixed_precision_runtime_bench / Python reconstruction / generation swap checks
+```
+
+Smoke example:
+
+```bash
+./build/cpp-wsl/mixed_precision_packer \
+  --synthetic \
+  --rows 64 \
+  --cols 96 \
+  --default-bits 4 \
+  --sensitive-every 8 \
+  --sensitive-bits 8 \
+  --out build/cpp-wsl/mixed_precision_packer_smoke.esmp \
+  --manifest-out build/cpp-wsl/mixed_precision_packer_smoke.json \
+  --verify
+
+./build/cpp-wsl/mixed_precision_runtime_bench \
+  --input build/cpp-wsl/mixed_precision_packer_smoke.esmp \
+  --iters 5 \
+  --warmup 1 \
+  --active-rows 8
+```
+
+The runtime bench reports package compression, full mixed GEMV latency,
+selected-row latency, and `selected_speedup_vs_full_mixed_gemv`. This is still
+module-level evidence, not end-to-end TTFT/tokens-per-second proof.
+
+Format details are in `docs/ESMPQ001_FORMAT.md`.
 
 ## Paper Direction
 

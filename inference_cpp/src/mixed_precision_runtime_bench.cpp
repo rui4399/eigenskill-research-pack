@@ -1,15 +1,12 @@
+#include "eigenskill/esmp_format.hpp"
 #include "eigenskill/quant_kernels.hpp"
 
 #include <algorithm>
-#include <array>
 #include <chrono>
 #include <cmath>
 #include <cstdint>
-#include <cstring>
-#include <fstream>
 #include <iomanip>
 #include <iostream>
-#include <limits>
 #include <numeric>
 #include <random>
 #include <stdexcept>
@@ -18,25 +15,12 @@
 
 namespace {
 
-constexpr std::array<char, 8> kMagic{{'E', 'S', 'M', 'P', 'Q', '0', '0', '1'}};
-constexpr std::uint32_t kVersion = 1;
-constexpr std::uint32_t kHeaderBytes = 64;
-constexpr std::uint32_t kRowMetaBytes = 24;
-constexpr std::uint32_t kQuantSchemeSignedSymmetricPerRow = 1;
-
 struct Options {
     std::string input;
     int iters = 200;
     int warmup = 20;
     int active_rows = 0;
     std::uint32_t seed = 20260606;
-};
-
-struct EsmpMatrix {
-    eigenskill::PackedMixedBitMatrix matrix;
-    std::vector<int> row_sums;
-    std::uint64_t data_bytes = 0;
-    std::uint64_t file_bytes = 0;
 };
 
 [[noreturn]] void usage_error(const std::string& message) {
@@ -80,113 +64,6 @@ Options parse_args(int argc, char** argv) {
         usage_error("--iters must be positive; --warmup and --active-rows must be non-negative");
     }
     return options;
-}
-
-std::uint32_t read_u32_le(const std::vector<std::uint8_t>& bytes, std::size_t offset) {
-    if (offset + 4 > bytes.size()) {
-        throw std::runtime_error("truncated u32 field");
-    }
-    std::uint32_t value = 0;
-    for (int i = 0; i < 4; ++i) {
-        value |= static_cast<std::uint32_t>(bytes[offset + static_cast<std::size_t>(i)]) << (8 * i);
-    }
-    return value;
-}
-
-std::int32_t read_i32_le(const std::vector<std::uint8_t>& bytes, std::size_t offset) {
-    return static_cast<std::int32_t>(read_u32_le(bytes, offset));
-}
-
-std::uint64_t read_u64_le(const std::vector<std::uint8_t>& bytes, std::size_t offset) {
-    if (offset + 8 > bytes.size()) {
-        throw std::runtime_error("truncated u64 field");
-    }
-    std::uint64_t value = 0;
-    for (int i = 0; i < 8; ++i) {
-        value |= static_cast<std::uint64_t>(bytes[offset + static_cast<std::size_t>(i)]) << (8 * i);
-    }
-    return value;
-}
-
-float read_f32_le(const std::vector<std::uint8_t>& bytes, std::size_t offset) {
-    const std::uint32_t raw = read_u32_le(bytes, offset);
-    float value = 0.0f;
-    std::memcpy(&value, &raw, sizeof(value));
-    return value;
-}
-
-EsmpMatrix read_esmp(const std::string& path) {
-    std::ifstream in(path, std::ios::binary);
-    if (!in) {
-        throw std::runtime_error("failed to open ESMP file: " + path);
-    }
-    in.seekg(0, std::ios::end);
-    const std::streamoff size = in.tellg();
-    in.seekg(0, std::ios::beg);
-    if (size < static_cast<std::streamoff>(kHeaderBytes)) {
-        throw std::runtime_error("ESMP file is smaller than header");
-    }
-    std::vector<std::uint8_t> bytes(static_cast<std::size_t>(size));
-    in.read(reinterpret_cast<char*>(bytes.data()), size);
-    if (!in) {
-        throw std::runtime_error("failed to read ESMP file: " + path);
-    }
-    if (!std::equal(kMagic.begin(), kMagic.end(), reinterpret_cast<const char*>(bytes.data()))) {
-        throw std::runtime_error("bad ESMP magic");
-    }
-    const std::uint32_t version = read_u32_le(bytes, 8);
-    const std::uint32_t header_bytes = read_u32_le(bytes, 12);
-    const std::uint64_t rows_u64 = read_u64_le(bytes, 16);
-    const std::uint64_t cols_u64 = read_u64_le(bytes, 24);
-    const std::uint64_t row_meta_offset = read_u64_le(bytes, 32);
-    const std::uint64_t data_offset = read_u64_le(bytes, 40);
-    const std::uint64_t data_bytes = read_u64_le(bytes, 48);
-    const std::uint32_t quant_scheme = read_u32_le(bytes, 56);
-    if (version != kVersion || header_bytes != kHeaderBytes || quant_scheme != kQuantSchemeSignedSymmetricPerRow) {
-        throw std::runtime_error("unsupported ESMP version/header/quant scheme");
-    }
-    if (rows_u64 == 0 || cols_u64 == 0 || rows_u64 > static_cast<std::uint64_t>(std::numeric_limits<int>::max()) ||
-        cols_u64 > static_cast<std::uint64_t>(std::numeric_limits<int>::max())) {
-        throw std::runtime_error("invalid ESMP dimensions");
-    }
-    const std::uint64_t expected_meta_end = row_meta_offset + rows_u64 * static_cast<std::uint64_t>(kRowMetaBytes);
-    if (row_meta_offset != kHeaderBytes || data_offset != expected_meta_end || data_offset + data_bytes != bytes.size()) {
-        throw std::runtime_error("inconsistent ESMP offsets or payload length");
-    }
-
-    EsmpMatrix loaded;
-    loaded.matrix.rows = static_cast<int>(rows_u64);
-    loaded.matrix.cols = static_cast<int>(cols_u64);
-    loaded.data_bytes = data_bytes;
-    loaded.file_bytes = static_cast<std::uint64_t>(bytes.size());
-    loaded.matrix.row_bits.assign(static_cast<std::size_t>(loaded.matrix.rows), 0);
-    loaded.matrix.row_bit_offsets.assign(static_cast<std::size_t>(loaded.matrix.rows), 0);
-    loaded.matrix.row_scales.assign(static_cast<std::size_t>(loaded.matrix.rows), 1.0f);
-    loaded.row_sums.assign(static_cast<std::size_t>(loaded.matrix.rows), 0);
-
-    std::uint64_t expected_row_bit_offset = 0;
-    for (int row = 0; row < loaded.matrix.rows; ++row) {
-        const std::size_t offset = static_cast<std::size_t>(row_meta_offset) + static_cast<std::size_t>(row) * kRowMetaBytes;
-        const std::uint8_t bits = bytes[offset];
-        if (bits < 2 || bits > 8) {
-            throw std::runtime_error("invalid row bit width in ESMP metadata");
-        }
-        const std::uint64_t row_bit_offset = read_u64_le(bytes, offset + 8);
-        if (row_bit_offset != expected_row_bit_offset) {
-            throw std::runtime_error("non-contiguous row bit offsets in ESMP metadata");
-        }
-        loaded.matrix.row_bits[static_cast<std::size_t>(row)] = bits;
-        loaded.matrix.row_scales[static_cast<std::size_t>(row)] = read_f32_le(bytes, offset + 4);
-        loaded.matrix.row_bit_offsets[static_cast<std::size_t>(row)] = row_bit_offset;
-        loaded.row_sums[static_cast<std::size_t>(row)] = static_cast<int>(read_i32_le(bytes, offset + 16));
-        expected_row_bit_offset += static_cast<std::uint64_t>(bits) * static_cast<std::uint64_t>(loaded.matrix.cols);
-    }
-    const std::uint64_t expected_payload_bytes = (expected_row_bit_offset + 7u) / 8u;
-    if (expected_payload_bytes != data_bytes) {
-        throw std::runtime_error("ESMP payload byte count does not match row bit metadata");
-    }
-    loaded.matrix.bytes.assign(bytes.begin() + static_cast<std::ptrdiff_t>(data_offset), bytes.end());
-    return loaded;
 }
 
 std::vector<float> random_vector(int n, std::uint32_t seed) {
@@ -240,7 +117,7 @@ double time_ms(Fn&& fn, int iters, int warmup) {
 int main(int argc, char** argv) {
     try {
         const Options options = parse_args(argc, argv);
-        const EsmpMatrix loaded = read_esmp(options.input);
+        const eigenskill::EsmpMatrix loaded = eigenskill::read_esmp_matrix(options.input);
         const int rows = loaded.matrix.rows;
         const int cols = loaded.matrix.cols;
         const int active_rows = options.active_rows > 0 ? std::min(options.active_rows, rows) : 0;
@@ -268,6 +145,8 @@ int main(int argc, char** argv) {
                 options.iters,
                 options.warmup);
         }
+        const double selected_speedup_vs_full =
+            selected_ms > 0.0 ? full_ms / selected_ms : -1.0;
 
         const double package_mib = static_cast<double>(loaded.file_bytes) / (1024.0 * 1024.0);
         const double fp32_mib = static_cast<double>(rows) * static_cast<double>(cols) * sizeof(float) / (1024.0 * 1024.0);
@@ -289,7 +168,8 @@ int main(int argc, char** argv) {
         std::cout << "  \"full_mixed_gemv_ms\": " << full_ms << ",\n";
         std::cout << "  \"full_effective_package_mib_per_s\": " << full_effective_mib_s << ",\n";
         std::cout << "  \"active_rows\": " << active_rows << ",\n";
-        std::cout << "  \"selected_mixed_gemv_ms\": " << selected_ms << "\n";
+        std::cout << "  \"selected_mixed_gemv_ms\": " << selected_ms << ",\n";
+        std::cout << "  \"selected_speedup_vs_full_mixed_gemv\": " << selected_speedup_vs_full << "\n";
         std::cout << "}\n";
         return 0;
     } catch (const std::exception& error) {

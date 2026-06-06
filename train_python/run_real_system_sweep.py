@@ -93,13 +93,13 @@ def write_markdown(path: Path, triton_rows: list[dict[str, Any]], cpu_rows: list
             "",
             "## C++ ESMP Runtime",
             "",
-            "| module file | rows | cols | avg bits | compression vs FP32 | full ms | active rows | selected ms |",
-            "|---|---:|---:|---:|---:|---:|---:|---:|",
+            "| module file | rows | cols | avg bits | compression vs FP32 | full ms | active rows | selected ms | selected/full speedup |",
+            "|---|---:|---:|---:|---:|---:|---:|---:|---:|",
         ]
     )
     for row in cpu_rows:
         lines.append(
-            "| {name} | {rows} | {cols} | {bits} | {comp} | {full_ms} | {active_rows} | {selected_ms} |".format(
+            "| {name} | {rows} | {cols} | {bits} | {comp} | {full_ms} | {active_rows} | {selected_ms} | {speedup} |".format(
                 name=Path(str(row.get("input", ""))).name,
                 rows=row.get("rows"),
                 cols=row.get("cols"),
@@ -108,6 +108,7 @@ def write_markdown(path: Path, triton_rows: list[dict[str, Any]], cpu_rows: list
                 full_ms=scalar(row.get("full_mixed_gemv_ms"), 6),
                 active_rows=row.get("active_rows"),
                 selected_ms=scalar(row.get("selected_mixed_gemv_ms"), 6),
+                speedup=scalar(row.get("selected_speedup_vs_full_mixed_gemv")),
             )
         )
 

@@ -14,7 +14,7 @@ else()
   add_compile_options(/O2 /W4)
 endif()
 
-add_library(eigenskill_quant_kernels STATIC src/quant_kernels.cpp)
+add_library(eigenskill_quant_kernels STATIC src/quant_kernels.cpp src/esmp_format.cpp)
 target_include_directories(eigenskill_quant_kernels PUBLIC include)
 
 add_executable(eigenskill_bench src/eigenskill_bench.cpp)

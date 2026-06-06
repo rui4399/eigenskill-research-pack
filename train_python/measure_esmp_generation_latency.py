@@ -33,14 +33,13 @@ except ModuleNotFoundError:  # pragma: no cover
     AutoTokenizer = None
     TextIteratorStreamer = None
 
+from esmp_format import dequantize_esmp_weight, read_esmp
 from eval_esmp_module_reconstruction import (
     DEFAULT_MODEL,
     DEFAULT_PACKAGE_SUMMARY,
-    dequantize_esmp_weight,
     load_package_modules,
     module_layer,
     path_exists_cross,
-    read_esmp,
     resolve_path,
     repo_root,
 )

@@ -1,13 +1,12 @@
+#include "eigenskill/esmp_format.hpp"
 #include "eigenskill/quant_kernels.hpp"
 
 #include <algorithm>
-#include <array>
 #include <cmath>
 #include <cstdint>
 #include <cctype>
 #include <cstddef>
 #include <cstdlib>
-#include <cstring>
 #include <fstream>
 #include <iomanip>
 #include <iostream>
@@ -19,12 +18,6 @@
 #include <vector>
 
 namespace {
-
-constexpr std::array<char, 8> kMagic{{'E', 'S', 'M', 'P', 'Q', '0', '0', '1'}};
-constexpr std::uint32_t kVersion = 1;
-constexpr std::uint32_t kHeaderBytes = 64;
-constexpr std::uint32_t kRowMetaBytes = 24;
-constexpr std::uint32_t kQuantSchemeSignedSymmetricPerRow = 1;
 
 struct Options {
     bool synthetic = false;
@@ -41,14 +34,6 @@ struct Options {
     std::string row_bits_file;
     std::string out = "weights.esmp";
     std::string manifest_out;
-};
-
-struct LoadedPackedFile {
-    int rows = 0;
-    int cols = 0;
-    std::uint64_t data_bytes = 0;
-    eigenskill::PackedMixedBitMatrix matrix;
-    std::vector<int> row_sums;
 };
 
 [[noreturn]] void usage_error(const std::string& message) {
@@ -271,62 +256,6 @@ std::vector<std::uint8_t> build_row_bits(const Options& options) {
     return row_bits;
 }
 
-void write_u32_le(std::ostream& out, std::uint32_t value) {
-    for (int i = 0; i < 4; ++i) {
-        out.put(static_cast<char>((value >> (8 * i)) & 0xffu));
-    }
-}
-
-void write_i32_le(std::ostream& out, std::int32_t value) {
-    write_u32_le(out, static_cast<std::uint32_t>(value));
-}
-
-void write_u64_le(std::ostream& out, std::uint64_t value) {
-    for (int i = 0; i < 8; ++i) {
-        out.put(static_cast<char>((value >> (8 * i)) & 0xffu));
-    }
-}
-
-void write_f32_le(std::ostream& out, float value) {
-    std::uint32_t raw = 0;
-    static_assert(sizeof(raw) == sizeof(value), "float must be 32-bit");
-    std::memcpy(&raw, &value, sizeof(raw));
-    write_u32_le(out, raw);
-}
-
-std::uint32_t read_u32_le(const std::vector<std::uint8_t>& bytes, std::size_t offset) {
-    if (offset + 4 > bytes.size()) {
-        throw std::runtime_error("truncated u32 field");
-    }
-    std::uint32_t value = 0;
-    for (int i = 0; i < 4; ++i) {
-        value |= static_cast<std::uint32_t>(bytes[offset + static_cast<std::size_t>(i)]) << (8 * i);
-    }
-    return value;
-}
-
-std::int32_t read_i32_le(const std::vector<std::uint8_t>& bytes, std::size_t offset) {
-    return static_cast<std::int32_t>(read_u32_le(bytes, offset));
-}
-
-std::uint64_t read_u64_le(const std::vector<std::uint8_t>& bytes, std::size_t offset) {
-    if (offset + 8 > bytes.size()) {
-        throw std::runtime_error("truncated u64 field");
-    }
-    std::uint64_t value = 0;
-    for (int i = 0; i < 8; ++i) {
-        value |= static_cast<std::uint64_t>(bytes[offset + static_cast<std::size_t>(i)]) << (8 * i);
-    }
-    return value;
-}
-
-float read_f32_le(const std::vector<std::uint8_t>& bytes, std::size_t offset) {
-    const std::uint32_t raw = read_u32_le(bytes, offset);
-    float value = 0.0f;
-    std::memcpy(&value, &raw, sizeof(value));
-    return value;
-}
-
 std::vector<int> compute_row_sums(const eigenskill::PackedMixedBitMatrix& packed) {
     std::vector<int> sums(static_cast<std::size_t>(packed.rows), 0);
     for (int row = 0; row < packed.rows; ++row) {
@@ -343,110 +272,6 @@ std::vector<int> compute_row_sums(const eigenskill::PackedMixedBitMatrix& packed
         sums[static_cast<std::size_t>(row)] = sum;
     }
     return sums;
-}
-
-void write_esmp(const std::string& path,
-                const eigenskill::PackedMixedBitMatrix& packed,
-                const std::vector<int>& row_sums) {
-    if (row_sums.size() != static_cast<std::size_t>(packed.rows)) {
-        throw std::runtime_error("row_sums length mismatch");
-    }
-    const std::uint64_t row_meta_offset = kHeaderBytes;
-    const std::uint64_t data_offset =
-        row_meta_offset + static_cast<std::uint64_t>(packed.rows) * static_cast<std::uint64_t>(kRowMetaBytes);
-    std::ofstream out(path, std::ios::binary);
-    if (!out) {
-        throw std::runtime_error("failed to create packed output: " + path);
-    }
-
-    out.write(kMagic.data(), static_cast<std::streamsize>(kMagic.size()));
-    write_u32_le(out, kVersion);
-    write_u32_le(out, kHeaderBytes);
-    write_u64_le(out, static_cast<std::uint64_t>(packed.rows));
-    write_u64_le(out, static_cast<std::uint64_t>(packed.cols));
-    write_u64_le(out, row_meta_offset);
-    write_u64_le(out, data_offset);
-    write_u64_le(out, static_cast<std::uint64_t>(packed.bytes.size()));
-    write_u32_le(out, kQuantSchemeSignedSymmetricPerRow);
-    write_u32_le(out, 0);
-
-    for (int row = 0; row < packed.rows; ++row) {
-        out.put(static_cast<char>(packed.row_bits[static_cast<std::size_t>(row)]));
-        out.put(0);
-        out.put(0);
-        out.put(0);
-        write_f32_le(out, packed.row_scales[static_cast<std::size_t>(row)]);
-        write_u64_le(out, packed.row_bit_offsets[static_cast<std::size_t>(row)]);
-        write_i32_le(out, static_cast<std::int32_t>(row_sums[static_cast<std::size_t>(row)]));
-        write_u32_le(out, 0);
-    }
-    out.write(reinterpret_cast<const char*>(packed.bytes.data()), static_cast<std::streamsize>(packed.bytes.size()));
-    if (!out) {
-        throw std::runtime_error("failed while writing packed output: " + path);
-    }
-}
-
-LoadedPackedFile read_esmp(const std::string& path) {
-    std::ifstream in(path, std::ios::binary);
-    if (!in) {
-        throw std::runtime_error("failed to open packed file: " + path);
-    }
-    in.seekg(0, std::ios::end);
-    const std::streamoff file_size = in.tellg();
-    in.seekg(0, std::ios::beg);
-    if (file_size < static_cast<std::streamoff>(kHeaderBytes)) {
-        throw std::runtime_error("packed file is smaller than ESMP header");
-    }
-    std::vector<std::uint8_t> bytes(static_cast<std::size_t>(file_size));
-    in.read(reinterpret_cast<char*>(bytes.data()), file_size);
-    if (!in) {
-        throw std::runtime_error("failed to read packed file: " + path);
-    }
-
-    if (!std::equal(kMagic.begin(), kMagic.end(), reinterpret_cast<const char*>(bytes.data()))) {
-        throw std::runtime_error("bad ESMP magic");
-    }
-    const std::uint32_t version = read_u32_le(bytes, 8);
-    const std::uint32_t header_bytes = read_u32_le(bytes, 12);
-    if (version != kVersion || header_bytes != kHeaderBytes) {
-        throw std::runtime_error("unsupported ESMP version/header");
-    }
-
-    LoadedPackedFile loaded;
-    loaded.rows = static_cast<int>(read_u64_le(bytes, 16));
-    loaded.cols = static_cast<int>(read_u64_le(bytes, 24));
-    const std::uint64_t row_meta_offset = read_u64_le(bytes, 32);
-    const std::uint64_t data_offset = read_u64_le(bytes, 40);
-    loaded.data_bytes = read_u64_le(bytes, 48);
-    const std::uint32_t quant_scheme = read_u32_le(bytes, 56);
-    if (loaded.rows <= 0 || loaded.cols <= 0 || quant_scheme != kQuantSchemeSignedSymmetricPerRow) {
-        throw std::runtime_error("invalid ESMP dimensions or quant scheme");
-    }
-    const std::uint64_t expected_meta_end =
-        row_meta_offset + static_cast<std::uint64_t>(loaded.rows) * static_cast<std::uint64_t>(kRowMetaBytes);
-    if (row_meta_offset != kHeaderBytes || data_offset != expected_meta_end ||
-        data_offset + loaded.data_bytes != static_cast<std::uint64_t>(bytes.size())) {
-        throw std::runtime_error("inconsistent ESMP offsets");
-    }
-
-    loaded.matrix.rows = loaded.rows;
-    loaded.matrix.cols = loaded.cols;
-    loaded.matrix.row_bits.assign(static_cast<std::size_t>(loaded.rows), 0);
-    loaded.matrix.row_scales.assign(static_cast<std::size_t>(loaded.rows), 1.0f);
-    loaded.matrix.row_bit_offsets.assign(static_cast<std::size_t>(loaded.rows), 0);
-    loaded.row_sums.assign(static_cast<std::size_t>(loaded.rows), 0);
-    for (int row = 0; row < loaded.rows; ++row) {
-        const std::size_t offset =
-            static_cast<std::size_t>(row_meta_offset) + static_cast<std::size_t>(row) * kRowMetaBytes;
-        loaded.matrix.row_bits[static_cast<std::size_t>(row)] = bytes[offset];
-        loaded.matrix.row_scales[static_cast<std::size_t>(row)] = read_f32_le(bytes, offset + 4);
-        loaded.matrix.row_bit_offsets[static_cast<std::size_t>(row)] = read_u64_le(bytes, offset + 8);
-        loaded.row_sums[static_cast<std::size_t>(row)] = static_cast<int>(read_i32_le(bytes, offset + 16));
-    }
-    loaded.matrix.bytes.assign(
-        bytes.begin() + static_cast<std::ptrdiff_t>(data_offset),
-        bytes.end());
-    return loaded;
 }
 
 double average_bits(const std::vector<std::uint8_t>& row_bits) {
@@ -494,14 +319,17 @@ void write_manifest(const std::string& path,
     }
     const std::size_t f32_bytes =
         static_cast<std::size_t>(packed.rows) * static_cast<std::size_t>(packed.cols) * sizeof(float);
-    const std::size_t row_meta_bytes = static_cast<std::size_t>(packed.rows) * kRowMetaBytes;
-    const std::size_t total_package_bytes = kHeaderBytes + row_meta_bytes + packed.bytes.size();
+    const std::size_t row_meta_bytes = static_cast<std::size_t>(packed.rows) * eigenskill::kEsmpRowMetaBytes;
+    const std::size_t total_package_bytes =
+        static_cast<std::size_t>(eigenskill::esmp_total_package_bytes(
+            packed.rows,
+            static_cast<std::uint64_t>(packed.bytes.size())));
     const std::map<int, int> hist = histogram(packed.row_bits);
 
     out << std::fixed << std::setprecision(6);
     out << "{\n";
-    out << "  \"format\": \"ESMPQ001\",\n";
-    out << "  \"version\": " << kVersion << ",\n";
+    out << "  \"format\": \"" << eigenskill::kEsmpFormat << "\",\n";
+    out << "  \"version\": " << eigenskill::kEsmpVersion << ",\n";
     out << "  \"quantization\": \"signed_symmetric_per_row_mixed_lowbit\",\n";
     out << "  \"rows\": " << packed.rows << ",\n";
     out << "  \"cols\": " << packed.cols << ",\n";
@@ -547,13 +375,13 @@ int main(int argc, char** argv) {
             eigenskill::pack_mixed_lowbit_per_row(weights.data(), options.rows, options.cols, row_bits.data());
         const std::vector<int> row_sums = compute_row_sums(packed);
 
-        write_esmp(options.out, packed, row_sums);
+        eigenskill::write_esmp_matrix(options.out, packed, row_sums);
 
         double rel_l2 = -1.0;
         bool verify_ok = !options.verify;
         if (options.verify) {
-            LoadedPackedFile loaded = read_esmp(options.out);
-            if (loaded.rows != packed.rows || loaded.cols != packed.cols || loaded.matrix.bytes != packed.bytes ||
+            eigenskill::EsmpMatrix loaded = eigenskill::read_esmp_matrix(options.out);
+            if (loaded.matrix.rows != packed.rows || loaded.matrix.cols != packed.cols || loaded.matrix.bytes != packed.bytes ||
                 loaded.matrix.row_bits != packed.row_bits || loaded.matrix.row_bit_offsets != packed.row_bit_offsets ||
                 loaded.row_sums != row_sums) {
                 throw std::runtime_error("reload verification failed: metadata or payload mismatch");
@@ -567,8 +395,9 @@ int main(int argc, char** argv) {
         const std::size_t raw_bytes =
             static_cast<std::size_t>(options.rows) * static_cast<std::size_t>(options.cols) * sizeof(float);
         const std::size_t package_bytes =
-            static_cast<std::size_t>(kHeaderBytes) +
-            static_cast<std::size_t>(options.rows) * static_cast<std::size_t>(kRowMetaBytes) + packed.bytes.size();
+            static_cast<std::size_t>(eigenskill::esmp_total_package_bytes(
+                options.rows,
+                static_cast<std::uint64_t>(packed.bytes.size())));
         std::cout << std::fixed << std::setprecision(6);
         std::cout << "{\n";
         std::cout << "  \"ok\": true,\n";
