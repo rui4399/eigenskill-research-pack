@@ -43,6 +43,9 @@ Implemented and committed:
   regression budget instead of hiding output drift.
 - A top-level evidence ledger that aggregates the current paper-facing gates
   into one reproducible pass/fail table.
+- A machine-readable baseline coverage manifest and gap dashboard that keep
+  missing external PTQ, rotation, allocation, mobile, and task-retention
+  evidence visible instead of turning it into accidental claims.
 - PyTorch fake-quant PPL experiments on small public models and short
   WikiText2/C4 slices.
 - A LoRA training entry point with optional completion-only loss masking for
@@ -192,6 +195,10 @@ robustness, artifact integrity, kernel, runtime wiring, selected-row, C++
 runtime, decode integration, QKV replacement, quality, and task-retention
 categories.
 Gate policy and claim boundaries are in `docs/SYSTEM_EVIDENCE_GATES.md`.
+Related-work positioning is tracked in `docs/RELATED_WORK_QUANTIZATION_2026.md`.
+Baseline and readiness gaps are tracked by
+`docs/BASELINE_COVERAGE_MANIFEST.json` and
+`outputs/BASELINE_GAP_DASHBOARD_2026_06_06.md`.
 
 End-to-end smoke metrics are tracked separately from kernel evidence:
 

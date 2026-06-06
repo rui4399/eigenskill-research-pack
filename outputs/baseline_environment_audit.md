@@ -1,7 +1,7 @@
 # Baseline Environment Audit
 
 This audit records whether public quantization baseline packages are
-available in the current WSL Python environment. It does not install
+available in the current Python environment. It does not install
 packages or mutate the environment.
 
 ## Python
@@ -30,6 +30,7 @@ packages or mutate the environment.
 | `gptqmodel` | False | `` |
 | `transformers` | True | `5.8.1` |
 | `torch` | True | `2.12.0+cu130` |
+| `triton` | True | `3.7.0` |
 
 ## NVIDIA-SMI
 

@@ -23,6 +23,10 @@ PLACEHOLDER_PATTERNS = (
     re.compile(r"^\s*(Base model|Skills|Key v2 metrics|Useful commands|Build on Windows|Run):\s*$", re.IGNORECASE),
     re.compile(r"\b(TODO|TBD|FIXME)\b", re.IGNORECASE),
 )
+STALE_CLAIM_PATTERNS = (
+    re.compile(r"\bcurrent strongest package is v2\b", re.IGNORECASE),
+    re.compile(r"\bcurrent strongest result is v2\b", re.IGNORECASE),
+)
 
 
 def normalize_path(path: str) -> str:
@@ -57,7 +61,7 @@ def find_forbidden_files(paths: Iterable[str]) -> list[str]:
 
 def should_scan_text(path: str) -> bool:
     normalized = normalize_path(path)
-    if normalized == "README.md":
+    if normalized.endswith("README.md"):
         return True
     if normalized.startswith("docs/") and normalized.endswith(".md"):
         return True
@@ -81,6 +85,8 @@ def find_placeholders(root: Path, paths: Iterable[str]) -> list[dict[str, object
             continue
         for lineno, line in enumerate(lines, start=1):
             if any(pattern.search(line) for pattern in PLACEHOLDER_PATTERNS):
+                findings.append({"path": normalized, "line": lineno, "text": line.strip()})
+            if any(pattern.search(line) for pattern in STALE_CLAIM_PATTERNS):
                 findings.append({"path": normalized, "line": lineno, "text": line.strip()})
     return findings
 

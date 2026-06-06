@@ -1,0 +1,358 @@
+{
+  "date": "2026-06-06T11:34:54+00:00",
+  "schema_version": 1,
+  "passed": false,
+  "item_count": 10,
+  "status_counts": {
+    "covered": 5,
+    "missing": 4,
+    "partial": 1
+  },
+  "family_counts": {
+    "in_repo_allocation": {
+      "covered": 3
+    },
+    "calibration_robustness": {
+      "covered": 1
+    },
+    "external_ptq": {
+      "missing": 1
+    },
+    "external_rotation": {
+      "missing": 1
+    },
+    "external_allocation": {
+      "missing": 1
+    },
+    "capability_retention": {
+      "partial": 1
+    },
+    "system_kernel": {
+      "covered": 1
+    },
+    "mobile_system": {
+      "missing": 1
+    }
+  },
+  "paper_blocker_missing": [
+    "awq_or_gptq",
+    "rotation_family",
+    "allocation_family",
+    "public_task_benchmarks",
+    "mobile_redmi_k80_pro"
+  ],
+  "items": [
+    {
+      "id": "random_budget_allocation",
+      "family": "in_repo_allocation",
+      "priority": "required",
+      "paper_blocker": false,
+      "description": "Budget-matched random mixed-precision allocation seeds.",
+      "required_evidence_globs": [
+        "outputs/**/*random16*summary.json",
+        "outputs/**/*random8*summary.json",
+        "outputs/**/*evidence_matrix.json"
+      ],
+      "required_packages": [],
+      "claim_boundary": "Useful sanity baseline only; beating random does not prove method novelty.",
+      "status": "covered",
+      "evidence_count": 49,
+      "evidence_matches": [
+        "outputs/olmo2_0425_1b_consensus_vs_random16_evidence_matrix.json",
+        "outputs/olmo2_0425_1b_consensus_vs_random16_ppl_c4_64_summary.json",
+        "outputs/olmo2_0425_1b_consensus_vs_random16_ppl_wikitext2_64_summary.json",
+        "outputs/olmo2_0425_1b_cpp_allocation_planner_random16_4p5_summary.json",
+        "outputs/olmo2_0425_1b_cpp_allocation_planner_random8_4p5_summary.json",
+        "outputs/olmo2_0425_1b_cpp_random16_ppl_c4_64_summary.json",
+        "outputs/olmo2_0425_1b_cpp_random16_ppl_wikitext2_64_summary.json",
+        "outputs/olmo2_0425_1b_cpp_random8_ppl_c4_64_summary.json",
+        "outputs/olmo2_0425_1b_cpp_random8_ppl_wikitext2_64_summary.json",
+        "outputs/qwen3_0p6b_cpp_allocation_planner_random16_4p5_summary.json",
+        "outputs/qwen3_0p6b_cpp_random16_ppl_c4_64_summary.json",
+        "outputs/qwen3_0p6b_cpp_random16_ppl_wikitext2_64_summary.json",
+        "outputs/qwen3_0p6b_default8_c4_loss_sensitive_evidence_matrix.json",
+        "outputs/qwen3_0p6b_lowmem_consensus_random16_evidence_matrix.json",
+        "outputs/qwen3_0p6b_lowmem_consensus_random16_gpu_guard_summary.json",
+        "outputs/qwen3_0p6b_lowmem_consensus_random16_ppl_c4_64_summary.json",
+        "outputs/qwen3_0p6b_lowmem_consensus_random16_ppl_wikitext2_64_len96_summary.json",
+        "outputs/qwen3_0p6b_lowmem_cpp_allocation_planner_random16_4p5_summary.json",
+        "outputs/qwen3_0p6b_lowmem_cpp_random16_gpu_guard_summary.json",
+        "outputs/qwen3_0p6b_lowmem_cpp_random16_ppl_c4_64_summary.json"
+      ],
+      "evidence_truncated": true,
+      "partial_evidence_count": 0,
+      "partial_evidence_matches": [],
+      "partial_evidence_truncated": false,
+      "package_ok": true,
+      "package_summary": []
+    },
+    {
+      "id": "heuristic_structural_allocation",
+      "family": "in_repo_allocation",
+      "priority": "required",
+      "paper_blocker": false,
+      "description": "Structural category or small-first allocation heuristics.",
+      "required_evidence_globs": [
+        "outputs/**/*category*summary.json",
+        "outputs/**/*baseline_allocations*_summary.json"
+      ],
+      "required_packages": [],
+      "claim_boundary": "Heuristic ablation, not an external SOTA comparator.",
+      "status": "covered",
+      "evidence_count": 1,
+      "evidence_matches": [
+        "outputs/qwen25_1p5b_baseline_allocations_4to8_limit8_group128_summary.json"
+      ],
+      "evidence_truncated": false,
+      "partial_evidence_count": 0,
+      "partial_evidence_matches": [],
+      "partial_evidence_truncated": false,
+      "package_ok": true,
+      "package_summary": []
+    },
+    {
+      "id": "consensus_vs_random_ppl",
+      "family": "in_repo_allocation",
+      "priority": "required",
+      "paper_blocker": false,
+      "description": "Consensus allocation compared with budget-matched random seeds on WikiText2/C4 slices.",
+      "required_evidence_globs": [
+        "outputs/**/*consensus_vs_random16*_summary.json",
+        "outputs/**/*consensus_evidence_matrix.json",
+        "outputs/cross_model_quant_evidence_matrix_extended_auto.json"
+      ],
+      "required_packages": [],
+      "claim_boundary": "Short-slice fake-quant PPL evidence only.",
+      "status": "covered",
+      "evidence_count": 3,
+      "evidence_matches": [
+        "outputs/cross_model_quant_evidence_matrix_extended_auto.json",
+        "outputs/olmo2_0425_1b_consensus_vs_random16_ppl_c4_64_summary.json",
+        "outputs/olmo2_0425_1b_consensus_vs_random16_ppl_wikitext2_64_summary.json"
+      ],
+      "evidence_truncated": false,
+      "partial_evidence_count": 0,
+      "partial_evidence_matches": [],
+      "partial_evidence_truncated": false,
+      "package_ok": true,
+      "package_summary": []
+    },
+    {
+      "id": "calibration_split_instability",
+      "family": "calibration_robustness",
+      "priority": "required",
+      "paper_blocker": false,
+      "description": "WikiText2-vs-C4 sensitivity ranking instability across public small model families.",
+      "required_evidence_globs": [
+        "outputs/calibration_instability_benchmark_2026_06_06.json"
+      ],
+      "required_packages": [],
+      "claim_boundary": "Defines the measured problem setting; not a quality-retention proof by itself.",
+      "status": "covered",
+      "evidence_count": 1,
+      "evidence_matches": [
+        "outputs/calibration_instability_benchmark_2026_06_06.json"
+      ],
+      "evidence_truncated": false,
+      "partial_evidence_count": 0,
+      "partial_evidence_matches": [],
+      "partial_evidence_truncated": false,
+      "package_ok": true,
+      "package_summary": []
+    },
+    {
+      "id": "awq_or_gptq",
+      "family": "external_ptq",
+      "priority": "high",
+      "paper_blocker": true,
+      "description": "At least one practical public PTQ baseline such as AWQ or GPTQ.",
+      "required_evidence_globs": [
+        "outputs/**/*awq*summary.json",
+        "outputs/**/*gptq*summary.json"
+      ],
+      "required_packages": [
+        "awq",
+        "auto_gptq",
+        "gptqmodel",
+        "optimum"
+      ],
+      "package_mode": "any",
+      "claim_boundary": "Needed before claiming competitiveness against common PTQ practice.",
+      "status": "missing",
+      "evidence_count": 0,
+      "evidence_matches": [],
+      "evidence_truncated": false,
+      "partial_evidence_count": 0,
+      "partial_evidence_matches": [],
+      "partial_evidence_truncated": false,
+      "package_ok": false,
+      "package_summary": [
+        {
+          "name": "awq",
+          "available": false,
+          "version": ""
+        },
+        {
+          "name": "auto_gptq",
+          "available": false,
+          "version": ""
+        },
+        {
+          "name": "gptqmodel",
+          "available": false,
+          "version": ""
+        },
+        {
+          "name": "optimum",
+          "available": false,
+          "version": ""
+        }
+      ]
+    },
+    {
+      "id": "rotation_family",
+      "family": "external_rotation",
+      "priority": "high",
+      "paper_blocker": true,
+      "description": "Rotation/outlier mitigation baseline family such as QuaRot or SpinQuant.",
+      "required_evidence_globs": [
+        "outputs/**/*quarot*summary.json",
+        "outputs/**/*spinquant*summary.json",
+        "outputs/**/*rotation*baseline*summary.json"
+      ],
+      "required_packages": [],
+      "claim_boundary": "Required before making activation/KV or outlier-mitigation claims.",
+      "status": "missing",
+      "evidence_count": 0,
+      "evidence_matches": [],
+      "evidence_truncated": false,
+      "partial_evidence_count": 0,
+      "partial_evidence_matches": [],
+      "partial_evidence_truncated": false,
+      "package_ok": true,
+      "package_summary": []
+    },
+    {
+      "id": "allocation_family",
+      "family": "external_allocation",
+      "priority": "high",
+      "paper_blocker": true,
+      "description": "Recent mixed-precision allocation comparator such as Q-Palette, IMPQ, or WINDQuant.",
+      "required_evidence_globs": [
+        "outputs/**/*q_palette*summary.json",
+        "outputs/**/*impq*summary.json",
+        "outputs/**/*windquant*summary.json"
+      ],
+      "required_packages": [],
+      "claim_boundary": "Needed before claiming algorithmic novelty in bit allocation.",
+      "status": "missing",
+      "evidence_count": 0,
+      "evidence_matches": [],
+      "evidence_truncated": false,
+      "partial_evidence_count": 0,
+      "partial_evidence_matches": [],
+      "partial_evidence_truncated": false,
+      "package_ok": true,
+      "package_summary": []
+    },
+    {
+      "id": "public_task_benchmarks",
+      "family": "capability_retention",
+      "priority": "high",
+      "paper_blocker": true,
+      "description": "Task retention beyond PPL, for example MMLU/GSM8K/IFEval/HumanEval/BBH subsets.",
+      "partial_evidence_globs": [
+        "outputs/real_system_packer_2026-06-05/chat_task_stress_v3_84_gate_2026_06_06.json"
+      ],
+      "required_evidence_globs": [
+        "outputs/**/*mmlu*summary.json",
+        "outputs/**/*gsm8k*summary.json",
+        "outputs/**/*ifeval*summary.json",
+        "outputs/**/*humaneval*summary.json",
+        "outputs/**/*bbh*summary.json"
+      ],
+      "required_packages": [],
+      "claim_boundary": "Current deterministic stress gate is partial; broad public task retention is still missing.",
+      "status": "partial",
+      "evidence_count": 0,
+      "evidence_matches": [],
+      "evidence_truncated": false,
+      "partial_evidence_count": 1,
+      "partial_evidence_matches": [
+        "outputs/real_system_packer_2026-06-05/chat_task_stress_v3_84_gate_2026_06_06.json"
+      ],
+      "partial_evidence_truncated": false,
+      "package_ok": true,
+      "package_summary": []
+    },
+    {
+      "id": "packed_kernel_shape_family",
+      "family": "system_kernel",
+      "priority": "required",
+      "paper_blocker": false,
+      "description": "Measured packed INT4/INT8 kernel evidence on Qwen-like Linear shapes.",
+      "required_evidence_globs": [
+        "outputs/real_system_packer_2026-06-05/triton_qwen_shape_family_gate_2026_06_06.json"
+      ],
+      "required_packages": [
+        "torch",
+        "triton"
+      ],
+      "package_mode": "all",
+      "claim_boundary": "Kernel-level evidence only; not end-to-end LLM acceleration.",
+      "status": "covered",
+      "evidence_count": 1,
+      "evidence_matches": [
+        "outputs/real_system_packer_2026-06-05/triton_qwen_shape_family_gate_2026_06_06.json"
+      ],
+      "evidence_truncated": false,
+      "partial_evidence_count": 0,
+      "partial_evidence_matches": [],
+      "partial_evidence_truncated": false,
+      "package_ok": true,
+      "package_summary": [
+        {
+          "name": "torch",
+          "available": true,
+          "version": "2.12.0+cu130"
+        },
+        {
+          "name": "triton",
+          "available": true,
+          "version": "3.7.0"
+        }
+      ]
+    },
+    {
+      "id": "mobile_redmi_k80_pro",
+      "family": "mobile_system",
+      "priority": "high",
+      "paper_blocker": true,
+      "description": "On-device Redmi K80 Pro TTFT, tokens/s, peak memory, and thermal or power logs.",
+      "required_evidence_globs": [
+        "outputs/**/*redmi*k80*summary.json",
+        "outputs/**/*mobile*ttft*summary.json",
+        "mobile/redmi_k80_pro/**/*_report.md"
+      ],
+      "required_packages": [],
+      "claim_boundary": "No mobile deployment claim until real device logs exist.",
+      "status": "missing",
+      "evidence_count": 0,
+      "evidence_matches": [],
+      "evidence_truncated": false,
+      "partial_evidence_count": 0,
+      "partial_evidence_matches": [],
+      "partial_evidence_truncated": false,
+      "package_ok": true,
+      "package_summary": []
+    }
+  ],
+  "interpretation": {
+    "covered": "At least one committed artifact matched the manifest evidence pattern and required packages are available or not needed.",
+    "partial": "Only a narrower substitute artifact exists; this should remain a paper-blocking gap when the item is marked as a blocker.",
+    "package_only": "A required package family is available, but no committed comparison artifact exists yet.",
+    "evidence_without_package_audit": "A committed artifact exists, but the package audit does not show the expected package family.",
+    "partial_without_package_audit": "A narrower substitute artifact exists, but the package audit does not show the expected package family.",
+    "missing": "No committed artifact and no package-only readiness signal."
+  }
+}

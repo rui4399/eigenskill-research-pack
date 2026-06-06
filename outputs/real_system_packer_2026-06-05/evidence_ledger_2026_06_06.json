@@ -1,5 +1,5 @@
 {
-  "date": "2026-06-06T11:11:05+00:00",
+  "date": "2026-06-06T11:35:27+00:00",
   "passed": true,
   "gate_count": 11,
   "passed_count": 11,
@@ -19,14 +19,14 @@
   ],
   "entries": [
     {
-      "label": "public_repo_hygiene",
+      "label": "public_hygiene",
       "category": "repo hygiene",
       "path": "outputs\\real_system_packer_2026-06-05\\public_repo_hygiene_gate_2026_06_06.json",
       "passed": true,
       "failures": [],
-      "metrics": "tracked files 1534; forbidden files 0; placeholders 0",
+      "metrics": "tracked files 1549; forbidden files 0; placeholders 0",
       "summary": {
-        "tracked_file_count": 1534,
+        "tracked_file_count": 1549,
         "forbidden_file_count": 0,
         "placeholder_count": 0
       }
@@ -48,6 +48,21 @@
         "mean_top20_jaccard": 0.10219994430520746,
         "instability_spearman_threshold": 0.3,
         "instability_jaccard_threshold": 0.55
+      }
+    },
+    {
+      "label": "esmp_package",
+      "category": "artifact integrity",
+      "path": "outputs\\real_system_packer_2026-06-05\\esmp_package_verify_qwen3_0p6b_limit8_2026_06_06.json",
+      "passed": true,
+      "failures": [],
+      "metrics": "checked modules 8/8; missing files 0; failed modules 0; checked compression 6.2797x",
+      "summary": {
+        "checked_module_count": 8,
+        "requested_module_count": 8,
+        "missing_file_count": 0,
+        "failed_module_count": 0,
+        "compression_ratio_vs_fp32_checked": 6.279659106281282
       }
     },
     {
@@ -202,21 +217,6 @@
         "max_selected_speedup_vs_full": 56.488774123917764,
         "median_selected_ms": 0.20562000000000002,
         "median_compression_vs_fp32": 7.641346
-      }
-    },
-    {
-      "label": "esmp_package",
-      "category": "artifact integrity",
-      "path": "outputs\\real_system_packer_2026-06-05\\esmp_package_verify_qwen3_0p6b_limit8_2026_06_06.json",
-      "passed": true,
-      "failures": [],
-      "metrics": "checked modules 8/8; missing files 0; failed modules 0; checked compression 6.2797x",
-      "summary": {
-        "checked_module_count": 8,
-        "requested_module_count": 8,
-        "missing_file_count": 0,
-        "failed_module_count": 0,
-        "compression_ratio_vs_fp32_checked": 6.279659106281282
       }
     },
     {

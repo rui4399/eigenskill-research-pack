@@ -1,365 +1,128 @@
-# EigenSkill Multi-Skill Training Pipeline
+# Python Experiment And Evidence Tools
 
-This folder contains the first trainable EigenSkill model-package pipeline.
+This directory contains the Python side of the current EigenSkill-Q research
+pack. Treat these scripts as reproducibility and diagnostic tools for
+calibration robustness, packed-artifact validation, and guarded prototype
+runtime experiments.
 
-The first release targets 8 narrow, low-entropy skills:
-
-```text
-intent_routing
-json_repair
-field_extraction
-command_normalization
-sensor_event_triage
-packet_encode
-safety_gate
-unit_time_normalize
-```
-
-The intended base model is:
+The current paper-facing route is:
 
 ```text
-HuggingFaceTB/SmolLM2-360M-Instruct
+calibration split instability -> consensus sensitivity allocation ->
+fake-quant PPL/task diagnostics -> ESMP/Triton/C++ gated systems evidence
 ```
 
-The default training format is LoRA/adapter fine-tuning. The default exported
-precision is high precision:
+The older SmolLM2 multi-skill routing package is historical proof-of-concept
+material only. Its v2 split had severe train/eval overlap and must not be used
+as generalization evidence.
 
-```text
-adapter: fp32/fp16 safe tensors depending on trainer
-merged model: fp16
-optional quantized model: int8 dynamic CPU export
-```
+## Core Entry Points
 
-No INT4, 1-bit, or 1.58-bit quantization is used in the first model package.
+| purpose | script |
+|---|---|
+| measure per-module loss sensitivity | `measure_module_quant_sensitivity.py` |
+| build consensus allocations | `build_consensus_allocation.py` |
+| build Lagrangian sensitivity allocations | `allocator.py` |
+| evaluate fake weight-quant PPL | `eval_weight_quant_ppl.py` |
+| build random/heuristic allocation baselines | `build_baseline_allocations.py` |
+| aggregate calibration split instability | `build_calibration_instability_benchmark.py` |
+| pack real ESMP mixed-precision artifacts | `pack_qwen3_consensus.py` |
+| verify ESMP package integrity | `verify_esmp_package.py` |
+| tune and gate Triton mixed GEMM | `tune_triton_blocks.py`, `gate_triton_tuning.py` |
+| measure prototype generation paths | `measure_esmp_generation_latency.py` |
+| build the paper-facing evidence ledger | `build_evidence_ledger.py` |
+| gate public repo hygiene | `gate_public_repo_hygiene.py` |
+| audit external baseline package availability | `audit_baseline_environment.py` |
+| build baseline/readiness gap dashboard | `build_baseline_gap_dashboard.py` |
 
-## WSL Setup
+## Short Reproducibility Checks
+
+Run unit tests:
 
 ```bash
-cd /mnt/c/Users/18042/Documents/Codex/2026-06-01/chatgpt-context-request-algorithm-system-co
-python3 -m venv .venv-wsl
-source .venv-wsl/bin/activate
-python -m pip install -U pip wheel setuptools
-python -m pip install --index-url https://download.pytorch.org/whl/cu128 torch
-python -m pip install transformers datasets peft accelerate trl safetensors pyyaml scikit-learn tqdm
+python -m unittest discover -s train_python -p "test_*.py"
 ```
 
-## Generate Data
+Gate public repository hygiene:
 
 ```bash
-source .venv-wsl/bin/activate
-python train_python/generate_skill_data.py --out data_eval/eigenskill_v0 --train-per-skill 600 --eval-per-skill 120
+python train_python/gate_public_repo_hygiene.py \
+  --out-json outputs/real_system_packer_2026-06-05/public_repo_hygiene_gate_2026_06_06.json \
+  --out-md outputs/real_system_packer_2026-06-05/PUBLIC_REPO_HYGIENE_GATE_2026_06_06.md
 ```
 
-For a fast smoke test:
+Build the calibration-instability benchmark:
 
 ```bash
-python train_python/generate_skill_data.py --out data_eval/eigenskill_smoke --train-per-skill 16 --eval-per-skill 4
+python train_python/build_calibration_instability_benchmark.py \
+  --case qwen3_0p6b=outputs/qwen3_0p6b_module_loss_sensitivity_limit4_group128.json=outputs/qwen3_0p6b_c4_module_loss_sensitivity_limit4_group128.json \
+  --case qwen3_1p7b=outputs/qwen3_1p7b_module_loss_sensitivity_limit2_group128.json=outputs/qwen3_1p7b_module_loss_sensitivity_c4_limit2_group128.json \
+  --case olmo2_1b=outputs/olmo2_0425_1b_module_loss_sensitivity_limit2_group128.json=outputs/olmo2_0425_1b_module_loss_sensitivity_c4_limit2_group128.json \
+  --top-k 10,20,40 \
+  --min-cases 3 \
+  --min-unstable-cases 3 \
+  --instability-spearman-threshold 0.30 \
+  --instability-jaccard-threshold 0.55 \
+  --out-json outputs/calibration_instability_benchmark_2026_06_06.json \
+  --out-md outputs/CALIBRATION_INSTABILITY_BENCHMARK_2026_06_06.md
 ```
 
-## Train LoRA Skill Model
+Build the current evidence ledger:
 
 ```bash
-source .venv-wsl/bin/activate
-python train_python/train_lora.py \
-  --model HuggingFaceTB/SmolLM2-360M-Instruct \
-  --data data_eval/eigenskill_v0/train.jsonl \
-  --eval-data data_eval/eigenskill_v0/eval.jsonl \
-  --out models/eigenskill-smollm2-360m-lora-fp16 \
-  --epochs 2 \
-  --batch-size 2 \
-  --grad-accum 8 \
-  --lr 2e-4 \
-  --max-length 384
+python train_python/build_evidence_ledger.py \
+  --gate public_hygiene=outputs/real_system_packer_2026-06-05/public_repo_hygiene_gate_2026_06_06.json \
+  --gate calibration_instability=outputs/calibration_instability_benchmark_2026_06_06.json \
+  --gate esmp_package=outputs/real_system_packer_2026-06-05/esmp_package_verify_qwen3_0p6b_limit8_2026_06_06.json \
+  --gate triton_shape_family=outputs/real_system_packer_2026-06-05/triton_qwen_shape_family_gate_2026_06_06.json \
+  --gate selector_runtime=outputs/real_system_packer_2026-06-05/selector_runtime_smoke_gate_2026_06_06.json \
+  --gate selected_row=outputs/real_system_packer_2026-06-05/selected_row_benchmark_gate_2026_06_06.json \
+  --gate cpp_runtime=outputs/real_system_packer_2026-06-05/cpp_runtime_sweep_gate_2026_06_06.json \
+  --gate fused_sidecar=outputs/real_system_packer_2026-06-05/fused_sidecar_generation_gate_2026_06_06.json \
+  --gate fused_qkv_speed=outputs/real_system_packer_2026-06-05/fused_qkv_generation_gate_2026_06_06.json \
+  --gate fused_qkv_quality=outputs/real_system_packer_2026-06-05/fused_qkv_prompt_suite_gate_2026_06_06.json \
+  --gate chat_task_stress=outputs/real_system_packer_2026-06-05/chat_task_stress_v3_84_gate_2026_06_06.json \
+  --out-json outputs/real_system_packer_2026-06-05/evidence_ledger_2026_06_06.json \
+  --out-md outputs/real_system_packer_2026-06-05/EVIDENCE_LEDGER_2026_06_06.md
 ```
 
-With an 8GB laptop GPU, keep batch size low and use gradient accumulation.
-
-## Evaluate
+Build the baseline/readiness gap dashboard:
 
 ```bash
-python train_python/eval_skills.py \
-  --model HuggingFaceTB/SmolLM2-360M-Instruct \
-  --adapter models/eigenskill-smollm2-360m-lora-fp16 \
-  --data data_eval/eigenskill_v0/eval.jsonl \
-  --out outputs/eigenskill_eval.json
+python train_python/build_baseline_gap_dashboard.py \
+  --manifest docs/BASELINE_COVERAGE_MANIFEST.json \
+  --baseline-audit outputs/baseline_environment_audit.json \
+  --out-json outputs/baseline_gap_dashboard_2026_06_06.json \
+  --out-md outputs/BASELINE_GAP_DASHBOARD_2026_06_06.md
 ```
 
-## v2 Hybrid Runtime
+## GPU Guard
 
-The current strongest package is v2:
-
-```text
-models/eigenskill-smollm2-360m-lora-v2-fp16
-models/eigenskill-smollm2-360m-merged-v2-fp16
-models/eigenskill-smollm2-360m-int8-v2-dynamic
-```
-
-The v2 pure-model eval is:
-
-```text
-1391/1440 exact = 96.60%
-```
-
-The v2 hybrid runtime eval is:
-
-```text
-1439/1440 exact = 99.93%
-```
-
-The hybrid runtime routes `unit_time_normalize` through a deterministic bypass
-micro-kernel and sends the other skills to the merged FP16 model.
-
-Run a bypass-only request:
+Longer model runs should go through `run_with_gpu_guard.py`. The local working
+policy is to keep peak VRAM below the configured guard threshold:
 
 ```bash
-python3 train_python/run_hybrid_skill.py \
-  --skill unit_time_normalize \
-  --input "750克是多少千克，只输出JSON" \
-  --deterministic-only
-```
-
-Run a model-backed request:
-
-```bash
-python3 train_python/run_hybrid_skill.py \
-  --skill intent_routing \
-  --input "打开客厅灯" \
-  --max-new-tokens 8
-```
-
-Recheck the hybrid eval without reloading the model:
-
-```bash
-python3 train_python/hybrid_eval_skills.py \
-  --model-eval outputs/eigenskill_v2_eval.json \
-  --data data_eval/eigenskill_v2/eval.jsonl \
-  --out outputs/eigenskill_v2_hybrid_eval_recheck.json
-```
-
-Verify the full v2 package manifest:
-
-```bash
-python3 train_python/verify_v2_package.py
-```
-
-This writes:
-
-```text
-outputs/eigenskill_v2_package_manifest.json
-```
-
-## Quant Diagnostic Reproduction
-
-The Qwen3-0.6B low-memory allocation path is the shortest current reproduction
-for the newer-model track. It measures all 197 Linear modules, builds a
-loss-sensitive {4,8} allocation, evaluates it on built-in diagnostic prompts
-and C4-64, then emits C++ evidence/guard summaries:
-
-```bash
-python3 train_python/run_with_gpu_guard.py \
+python train_python/run_with_gpu_guard.py \
   --max-memory-ratio 0.85 \
   --poll-seconds 0.5 \
-  --out outputs/qwen3_0p6b_sensitivity_lowmem_gpu_guard_limit4_group128.json \
+  --out outputs/example_gpu_guard.json \
   -- \
-  python3 train_python/measure_module_quant_sensitivity.py \
-    --model Qwen/Qwen3-0.6B \
-    --limit-prompts 4 \
-    --max-length 128 \
-    --device cuda \
-    --dtype float16 \
-    --probe-bits 4 \
-    --group-size 128 \
-    --base-bits 4 \
-    --high-bits 8 \
-    --budget-avg-bits 4.5 \
-    --lowmem-row-chunk 32 \
-    --out-json outputs/qwen3_0p6b_module_loss_sensitivity_limit4_group128.json \
-    --out-md outputs/qwen3_0p6b_module_loss_sensitivity_limit4_group128_report.md \
-    --out-allocation outputs/qwen3_0p6b_loss_sensitive_alloc_4to8_limit4_group128_summary.json
-
-python3 train_python/run_with_gpu_guard.py \
-  --max-memory-ratio 0.85 \
-  --poll-seconds 0.5 \
-  --out outputs/qwen3_0p6b_loss_sensitive_eval_gpu_guard_default8.json \
-  -- \
-  python3 train_python/eval_weight_quant_ppl.py \
-    --model Qwen/Qwen3-0.6B \
-    --limit-prompts 64 \
-    --max-length 128 \
-    --device cuda \
-    --dtype float16 \
-    --allocation outputs/qwen3_0p6b_loss_sensitive_alloc_4to8_limit4_group128_summary.json \
-    --allocation-method loss_sensitive_4to8 \
-    --group-size 128 \
-    --reuse-model \
-    --out outputs/qwen3_0p6b_loss_sensitive_vs_uniform_ppl_default8_summary.json
-
-python3 train_python/run_with_gpu_guard.py \
-  --max-memory-ratio 0.85 \
-  --poll-seconds 0.5 \
-  --out outputs/qwen3_0p6b_loss_sensitive_eval_gpu_guard_c4_64.json \
-  -- \
-  python3 train_python/eval_weight_quant_ppl.py \
-    --model Qwen/Qwen3-0.6B \
-    --prompts data_eval/text_prompts/c4_en_validation_64.txt \
-    --limit-prompts 64 \
-    --max-length 128 \
-    --device cuda \
-    --dtype float16 \
-    --allocation outputs/qwen3_0p6b_loss_sensitive_alloc_4to8_limit4_group128_summary.json \
-    --allocation-method loss_sensitive_4to8 \
-    --group-size 128 \
-    --reuse-model \
-    --out outputs/qwen3_0p6b_loss_sensitive_vs_uniform_ppl_c4_64_summary.json
-
-./build/cpp-wsl/quant_evidence_matrix \
-  --input outputs/qwen3_0p6b_loss_sensitive_vs_uniform_ppl_default8_summary.json \
-  --dataset default_prompts_8 \
-  --input outputs/qwen3_0p6b_loss_sensitive_vs_uniform_ppl_c4_64_summary.json \
-  --dataset c4_64 \
-  --target allocation_loss_sensitive_4to8 \
-  --emit markdown \
-  > outputs/qwen3_0p6b_default8_c4_loss_sensitive_evidence_matrix.md
-
-./build/cpp-wsl/gpu_guard_summary \
-  --input qwen3_sensitivity=outputs/qwen3_0p6b_sensitivity_lowmem_gpu_guard_limit4_group128.json \
-  --input qwen3_default8_eval=outputs/qwen3_0p6b_loss_sensitive_eval_gpu_guard_default8.json \
-  --input qwen3_c4_eval=outputs/qwen3_0p6b_loss_sensitive_eval_gpu_guard_c4_64.json \
-  --input qwen3_wikitext2_64_true_guard_fail=outputs/qwen3_0p6b_loss_sensitive_eval_gpu_guard_wikitext2_64_true.json \
-  --emit markdown \
-  > outputs/qwen3_0p6b_lowmem_gpu_guard_summary.md
+  python train_python/eval_weight_quant_ppl.py --help
 ```
 
-Committed headline:
+## Claim Boundaries
 
-```text
-Qwen3-0.6B sensitivity: 197/197 Linear modules, {4:153, 8:44}, 40.61% GPU memory
-Built-in diagnostic prompts: FP16 285.9696, INT4 287.3424, loss-sensitive 225.0283
-WikiText2-64 max_length=96: FP16 33.9865, INT4 54.6542, loss-sensitive 49.5352
-C4-64: FP16 36.1380, INT4 52.9352, loss-sensitive 47.5872
-True WikiText2-64 max_length=128 rerun: killed by guard at 85.06%, not used as valid evidence
-```
+Valid claims from this directory are narrow:
 
-The OLMo2 consensus repair check is the current most useful guarded GPU
-reproduction path. It reruns the C4/WikiText2 64-prompt fake-quant evaluator
-with the same random16 pool and regenerates the C++ evidence matrix:
+- measured calibration split instability on the committed small-model cases;
+- consensus allocation as a reproducible robustness baseline;
+- fake-quant PPL/task diagnostics under explicit prompt slices;
+- ESMP package integrity and prototype Triton/C++ runtime gates.
 
-```bash
-bash train_python/run_olmo2_consensus_repair.sh
-```
+Invalid claims:
 
-It uses:
-
-```text
-train_python/run_with_gpu_guard.py --max-memory-ratio 0.85
-```
-
-Expected headline from the committed run:
-
-```text
-WikiText2-64 consensus PPL 21.0349 vs best random16 21.4637
-C4-64        consensus PPL 35.4726 vs best random16 35.5846
-```
-
-The SmolLM2-1.7B full-module audit reruns the latest 169-Linear-module
-loss-sensitive allocation against a budget-matched random16 pool. The allocation
-file is already committed, so the shortest reproduction path is the evaluator
-plus the C++ evidence matrix:
-
-```bash
-python3 train_python/run_with_gpu_guard.py \
-  --max-memory-ratio 0.85 \
-  --out outputs/smollm2_1p7b_full_random16_ppl_wikitext2_128_guard.json \
-  -- \
-  python3 train_python/eval_weight_quant_ppl.py \
-    --model HuggingFaceTB/SmolLM2-1.7B-Instruct \
-    --prompts data_eval/text_prompts/wikitext2_validation_128.txt \
-    --limit-prompts 128 \
-    --max-length 128 \
-    --device cuda \
-    --dtype float16 \
-    --group-size 128 \
-    --config-json data_eval/eval_configs/smollm2_1p7b_full_random16_compare.json \
-    --reuse-model \
-    --out outputs/smollm2_1p7b_full_random16_ppl_wikitext2_128_summary.json
-
-./build/cpp-wsl/quant_evidence_matrix \
-  --input outputs/smollm2_1p7b_full_random16_ppl_wikitext2_128_summary.json \
-  --dataset wikitext2_128_full \
-  --target loss_sensitive_full \
-  --emit markdown \
-  > outputs/smollm2_1p7b_full_random16_wikitext2_128_evidence_matrix.md
-```
-
-Expected headline from the committed run:
-
-```text
-WikiText2-128 loss_sensitive_full PPL 15.3641 vs best random16 16.2050
-C4-64        loss_sensitive_full PPL 21.4269 vs best random16 22.5529
-```
-
-The bounded interaction-aware swap search checks whether one-out/one-in module
-swaps can improve the full-module allocation using global PPL feedback. The
-script reuses one loaded model and restores CPU-captured Linear weights between
-trials to stay under the GPU guard.
-
-```bash
-python3 train_python/run_with_gpu_guard.py \
-  --max-memory-ratio 0.85 \
-  --out outputs/smollm2_1p7b_full_swap_search_c4_64_guard.json \
-  -- \
-  python3 train_python/search_allocation_swaps.py \
-    --model HuggingFaceTB/SmolLM2-1.7B-Instruct \
-    --prompts data_eval/text_prompts/c4_en_validation_64.txt \
-    --limit-prompts 64 \
-    --max-length 128 \
-    --device cuda \
-    --dtype float16 \
-    --group-size 128 \
-    --base-allocation outputs/smollm2_1p7b_loss_sensitive_alloc_full_4to8_limit8_group128_summary.json \
-    --base-method loss_sensitive_4to8 \
-    --max-swaps 4 \
-    --out-pool 8 \
-    --in-pool 12 \
-    --out-json outputs/smollm2_1p7b_full_swap_search_c4_64_summary.json \
-    --out-md outputs/smollm2_1p7b_full_swap_search_c4_64_report.md \
-    --out-allocation outputs/smollm2_1p7b_loss_sensitive_full_swap_search_c4_64_4to8_group128_summary.json
-
-./build/cpp-wsl/quant_swap_search_summary \
-  --summary outputs/smollm2_1p7b_full_swap_search_c4_64_summary.json \
-  --guard outputs/smollm2_1p7b_full_swap_search_c4_64_guard.json \
-  --label smollm2_1p7b_c4_64 \
-  --emit markdown \
-  > outputs/smollm2_1p7b_full_swap_search_c4_64_cpp_summary.md
-```
-
-Expected headline from the committed run:
-
-```text
-WikiText2-32: base 15.1207 PPL, best 15.1207 PPL, 4 swaps, 84.87% GPU memory
-WikiText2-64: base 14.8877 PPL, best 14.8376 PPL, 8 swaps, 76.91% GPU memory
-C4-64:        base 21.4269 PPL, best 21.4269 PPL, 4 swaps, 76.81% GPU memory
-```
-
-Transfer check for the WikiText2-64 swap allocation:
-
-```text
-WikiText2-128: loss_sensitive_full 15.3641 -> swap_search_wikitext2_64 15.3127
-C4-64:         loss_sensitive_full 21.4269 -> swap_search_wikitext2_64 21.4356
-```
-
-This is same-family improvement with a small C4 regression, not a universal
-cross-dataset allocation result.
-
-Scope reminder: these are PyTorch fake-quant diagnostics, not packed runtime
-or board-level latency measurements.
-
-## Export High-Precision Model
-
-```bash
-python train_python/export_model.py \
-  --model HuggingFaceTB/SmolLM2-360M-Instruct \
-  --adapter models/eigenskill-smollm2-360m-lora-fp16 \
-  --out models/eigenskill-smollm2-360m-merged-fp16 \
-  --precision fp16
-```
+- no SOTA quantizer claim;
+- no mobile/Redmi latency claim;
+- no board-level power claim;
+- no full Tensor Core transformer-runtime claim;
+- no eigen-routing proof through nonlinear Transformer blocks.

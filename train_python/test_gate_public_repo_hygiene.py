@@ -28,6 +28,17 @@ class PublicRepoHygieneTests(unittest.TestCase):
             self.assertEqual(len(findings), 2)
             self.assertEqual(findings[0]["line"], 2)
 
+    def test_scans_nested_readmes_and_stale_v2_claims(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            nested = root / "train_python"
+            nested.mkdir()
+            readme = nested / "README.md"
+            readme.write_text("# x\nThe current strongest package is v2:\n", encoding="utf-8")
+            findings = hygiene.find_placeholders(root, ["train_python/README.md"])
+            self.assertEqual(len(findings), 1)
+            self.assertEqual(findings[0]["path"], "train_python/README.md")
+
     def test_clean_report_passes(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)

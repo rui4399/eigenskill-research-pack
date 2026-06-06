@@ -20,12 +20,14 @@ interpretation. Anything outside these rows remains future work.
 | Conservative fused-QKV candidates can preserve a small prompt suite. | Fused QKV prompt-suite quality gate. | `outputs/real_system_packer_2026-06-05/FUSED_QKV_PROMPT_SUITE_GATE_2026_06_06.md` | Six-prompt suite only; not broad benchmark retention. |
 | Current chat-task stress retention is measured rather than hidden. | 84-task stress gate. | `outputs/real_system_packer_2026-06-05/CHAT_TASK_STRESS_V3_84_GATE_2026_06_06.md` | Allows one known regression; does not prove production readiness. |
 | The current paper-facing evidence set passes as a ledger. | Top-level evidence ledger. | `outputs/real_system_packer_2026-06-05/EVIDENCE_LEDGER_2026_06_06.md` | A ledger pass means listed gates passed, not that the paper is top-tier ready. |
+| Missing baseline families are explicitly tracked. | Machine-readable baseline coverage manifest and generated gap dashboard. | `docs/BASELINE_COVERAGE_MANIFEST.json`, `outputs/BASELINE_GAP_DASHBOARD_2026_06_06.md` | Tracks readiness gaps; does not turn missing external baselines into evidence. |
 
 ## Rejected Or Not-Yet Claims
 
 | claim | status | required next evidence |
 |---|---|---|
 | EigenSkill-Q is a SOTA quantizer. | Rejected. | GPTQ/AWQ/SmoothQuant/QuaRot/SpinQuant comparisons on public benchmarks. |
+| EigenSkill-Q is competitive with recent mixed-precision allocation papers. | Not yet. | Q-Palette/IMPQ/WINDQuant-style comparisons or faithful reimplementations under matched budgets. |
 | The system has mobile/Redmi K80 Pro latency evidence. | Not yet. | On-device TTFT, tokens/s, peak memory, and thermal/power logs. |
 | The packed runtime is a production Tensor Core LLM runtime. | Not yet. | Fused decode scheduler, stable multi-layer replacement, and broad quality retention. |
 | Spectral/eigen routing survives nonlinear Transformer blocks. | Not yet. | Mathematical proof or controlled nonlinear-layer experiments. |

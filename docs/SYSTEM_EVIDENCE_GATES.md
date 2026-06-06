@@ -105,6 +105,36 @@ Invalid claim:
 
 - repository hygiene proves experimental correctness.
 
+## Baseline Gap Dashboard
+
+`train_python/build_baseline_gap_dashboard.py` reads
+`docs/BASELINE_COVERAGE_MANIFEST.json`, committed evidence artifacts, and the
+baseline package audit to produce a reviewer-facing gap index. This is not a
+success gate. It is a guard against accidentally claiming missing comparisons.
+
+Example:
+
+```bash
+python train_python/audit_baseline_environment.py
+
+python train_python/build_baseline_gap_dashboard.py \
+  --manifest docs/BASELINE_COVERAGE_MANIFEST.json \
+  --baseline-audit outputs/baseline_environment_audit.json \
+  --out-json outputs/baseline_gap_dashboard_2026_06_06.json \
+  --out-md outputs/BASELINE_GAP_DASHBOARD_2026_06_06.md
+```
+
+Valid claim:
+
+- the repository explicitly tracks whether reviewer-critical baseline families
+  have committed evidence.
+
+Invalid claim:
+
+- a dashboard row marked `missing`, `partial`, `package_only`,
+  `evidence_without_package_audit`, or `partial_without_package_audit` supports
+  paper-facing competitiveness.
+
 ## Calibration Instability Benchmark Gate
 
 `train_python/build_calibration_instability_benchmark.py` aggregates multiple

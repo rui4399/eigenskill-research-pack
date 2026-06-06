@@ -19,6 +19,7 @@ PACKAGES = [
     "gptqmodel",
     "transformers",
     "torch",
+    "triton",
 ]
 
 
@@ -77,7 +78,7 @@ def markdown_report(data: dict) -> str:
         "# Baseline Environment Audit",
         "",
         "This audit records whether public quantization baseline packages are",
-        "available in the current WSL Python environment. It does not install",
+        "available in the current Python environment. It does not install",
         "packages or mutate the environment.",
         "",
         "## Python",
