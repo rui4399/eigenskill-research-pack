@@ -173,9 +173,9 @@ stress gate with 45/84 fused passes versus 46/84 baseline passes, one explicit
 JSON-key regression, 0.9746x mean speed, and 54.69% peak guard memory.
 The top-level evidence ledger is
 `outputs/real_system_packer_2026-06-05/EVIDENCE_LEDGER_2026_06_06.md`; it
-currently passes with 9/9 paper-facing gates across artifact integrity, kernel,
-runtime wiring, selected-row, C++ runtime, decode integration, QKV replacement,
-quality, and task-retention categories.
+currently passes with 10/10 paper-facing gates across repo hygiene, artifact
+integrity, kernel, runtime wiring, selected-row, C++ runtime, decode
+integration, QKV replacement, quality, and task-retention categories.
 Gate policy and claim boundaries are in `docs/SYSTEM_EVIDENCE_GATES.md`.
 
 End-to-end smoke metrics are tracked separately from kernel evidence:
@@ -237,10 +237,11 @@ data_eval/eigenskill_quant_v1/ no-leak quant-policy train/eval/test split
 data_eval/eval_configs/        fake-quant allocation/evaluation configs
 outputs/                       selected reports, summaries, and figures
 docs/                          scope, claim matrix, and paper-readiness notes
-research_pack_2026-06-03/      historical drafts; not current public claims
 ```
 
 Large model files are intentionally ignored. See `MODEL_ARTIFACTS.md`.
+Generated delivery bundles and old private-workbench exports are intentionally
+excluded from the public tree; see `docs/HISTORICAL_ARTIFACTS.md`.
 
 ## Reproduce: Policy Data And Python Bypass
 

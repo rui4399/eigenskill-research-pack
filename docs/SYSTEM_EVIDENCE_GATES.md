@@ -26,9 +26,9 @@ python train_python/build_evidence_ledger.py \
   --out-md outputs/real_system_packer_2026-06-05/EVIDENCE_LEDGER_2026_06_06.md
 ```
 
-The current ledger passes with 9/9 gates across artifact integrity, kernel,
-runtime wiring, selected-row, C++ runtime, decode integration, QKV replacement,
-quality, and task-retention evidence categories.
+The current ledger passes with 10/10 gates across repo hygiene, artifact
+integrity, kernel, runtime wiring, selected-row, C++ runtime, decode
+integration, QKV replacement, quality, and task-retention evidence categories.
 
 Valid claim:
 
@@ -79,6 +79,30 @@ Valid claim:
 Invalid claim:
 
 - package integrity proves the quantized model is accurate or fast.
+
+## Public Repository Hygiene Gate
+
+`train_python/gate_public_repo_hygiene.py` protects the public branch from
+drifting back into private workbench state. It fails if tracked files include
+generated delivery bundles (`.docx`, `.pdf`, `.zip`), old `research_pack_*`
+trees, NotebookLM/Obsidian exports, or blank README-style placeholder lines.
+
+Example:
+
+```bash
+python train_python/gate_public_repo_hygiene.py \
+  --out-json outputs/real_system_packer_2026-06-05/public_repo_hygiene_gate_2026_06_06.json \
+  --out-md outputs/real_system_packer_2026-06-05/PUBLIC_REPO_HYGIENE_GATE_2026_06_06.md
+```
+
+Valid claim:
+
+- the current public tree excludes generated delivery bundles and private
+  workbench exports.
+
+Invalid claim:
+
+- repository hygiene proves experimental correctness.
 
 ## Triton Mixed-GEMM Gate
 
