@@ -133,6 +133,8 @@ shape/batch group:
 `outputs/real_system_packer_2026-06-05/TRITON_QWEN_SHAPE_KERNEL_CONFIG_SELECTOR_2026_06_06.md`.
 Selector-driven runtime wiring is smoke-tested in
 `outputs/real_system_packer_2026-06-05/SELECTOR_RUNTIME_SMOKE_2026_06_06.md`.
+The corresponding automated gate is
+`outputs/real_system_packer_2026-06-05/SELECTOR_RUNTIME_SMOKE_GATE_2026_06_06.md`.
 Gate policy and claim boundaries are in `docs/SYSTEM_EVIDENCE_GATES.md`.
 
 End-to-end smoke metrics are tracked separately from kernel evidence:
@@ -381,6 +383,18 @@ python train_python/measure_esmp_generation_latency.py \
   --max-new-tokens 16 \
   --warmup-runs 1 \
   --out outputs/real_system_packer_2026-06-05/qwen3_esmp_selector_triton_3mod_16tok.json
+
+python train_python/gate_selector_runtime_smoke.py \
+  --generation-json outputs/real_system_packer_2026-06-05/qwen3_esmp_selector_triton_1mod_4tok.json \
+  --guard-json outputs/real_system_packer_2026-06-05/selector_runtime_smoke_guard_2026_06_06.json \
+  --out-json outputs/real_system_packer_2026-06-05/selector_runtime_smoke_gate_2026_06_06.json \
+  --out-md outputs/real_system_packer_2026-06-05/SELECTOR_RUNTIME_SMOKE_GATE_2026_06_06.md \
+  --min-kernel-configs 8 \
+  --min-replaced-modules 1 \
+  --min-selector-calls 2 \
+  --min-compression-vs-fp32 7.0 \
+  --min-generated-tokens 4 \
+  --max-memory-ratio 0.90
 ```
 
 ## Reproduce: End-to-End Metric Summary

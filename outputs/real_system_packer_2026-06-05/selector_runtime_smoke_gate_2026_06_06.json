@@ -1,0 +1,64 @@
+{
+  "passed": true,
+  "failures": [],
+  "summary": {
+    "mode": "triton_grouped",
+    "kernel_config_count": 8,
+    "replaced_module_count": 1,
+    "selector_event_count": 2,
+    "selector_call_count": 4,
+    "selected_compression_vs_fp32": 7.641345537223809,
+    "ttft_seconds": 2.426987022000006,
+    "tokens_per_second": 1.423312288141764,
+    "generated_tokens": 4,
+    "guard_max_memory_used_ratio": 0.5720770457612563,
+    "guard_max_memory_used_mib": 4663,
+    "guard_memory_total_mib": 8151
+  },
+  "selector_events": [
+    {
+      "selection": "selector",
+      "requested_batch": 12,
+      "rows": 2048,
+      "cols": 1024,
+      "batch": 16,
+      "high_every": 16,
+      "block_m": 16,
+      "block_n": 8,
+      "block_k": 128,
+      "status": "fp16_win",
+      "speedup_vs_fp16": 1.654255104449623,
+      "speedup_vs_rowwise": 3.1601531995535987,
+      "rel_l2": 0.13734383881092072,
+      "source": "/mnt/c/Users/18042/Documents/Codex/2026-06-01/chatgpt-context-request-algorithm-system-co/github_publish/eigenskill-research-pack/outputs/real_system_packer_2026-06-05/triton_qwen_shape_kernel_config_selector_2026_06_06.json",
+      "count": 1,
+      "module": "model.layers.0.self_attn.q_proj"
+    },
+    {
+      "selection": "selector",
+      "requested_batch": 1,
+      "rows": 2048,
+      "cols": 1024,
+      "batch": 8,
+      "high_every": 16,
+      "block_m": 32,
+      "block_n": 8,
+      "block_k": 128,
+      "status": "fp16_win",
+      "speedup_vs_fp16": 1.3194047030851739,
+      "speedup_vs_rowwise": 1.609713301149583,
+      "rel_l2": 0.13818664848804474,
+      "source": "/mnt/c/Users/18042/Documents/Codex/2026-06-01/chatgpt-context-request-algorithm-system-co/github_publish/eigenskill-research-pack/outputs/real_system_packer_2026-06-05/triton_qwen_shape_kernel_config_selector_2026_06_06.json",
+      "count": 3,
+      "module": "model.layers.0.self_attn.q_proj"
+    }
+  ],
+  "thresholds": {
+    "min_kernel_configs": 8,
+    "min_replaced_modules": 1,
+    "min_selector_calls": 2,
+    "min_compression_vs_fp32": 7.0,
+    "min_generated_tokens": 4,
+    "max_memory_ratio": 0.9
+  }
+}

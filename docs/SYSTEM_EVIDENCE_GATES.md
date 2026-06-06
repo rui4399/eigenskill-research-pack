@@ -96,11 +96,18 @@ Linear forward, it matches the module shape and runtime batch size to the
 nearest measured selector row and records the chosen config in
 `replaced_modules[].runtime_config_summary`.
 
+`train_python/gate_selector_runtime_smoke.py` verifies that this wiring actually
+used selector configs under the GPU guard. The current smoke gate passes with 8
+configs loaded, 4 selector calls, 7.6413x selected-module compression vs FP32,
+4 generated tokens, and 57.21% peak guard memory.
+
 Valid claim:
 
 - measured Triton tuning artifacts can now drive the prototype ESMP generation
   path instead of remaining an offline report;
 - output JSON exposes which measured block config was used.
+- a small selector-driven runtime smoke is automatically gated for selector use,
+  compression, generated-token presence, and GPU memory guard compliance.
 
 Invalid claim:
 
