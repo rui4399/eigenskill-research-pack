@@ -26,9 +26,9 @@ python train_python/build_evidence_ledger.py \
   --out-md outputs/real_system_packer_2026-06-05/EVIDENCE_LEDGER_2026_06_06.md
 ```
 
-The current ledger passes with 8/8 gates across kernel, runtime wiring,
-selected-row, C++ runtime, decode integration, QKV replacement, quality, and
-task-retention evidence categories.
+The current ledger passes with 9/9 gates across artifact integrity, kernel,
+runtime wiring, selected-row, C++ runtime, decode integration, QKV replacement,
+quality, and task-retention evidence categories.
 
 Valid claim:
 
@@ -37,6 +37,48 @@ Valid claim:
 Invalid claim:
 
 - the ledger itself proves SOTA, mobile deployment, or full paper readiness.
+
+## ESMP Artifact Integrity Gate
+
+`mixed_precision_packer` writes an ESMPQ001 binary package plus a per-module
+manifest. `train_python/verify_esmp_package.py` verifies that the pack summary,
+the manifest, and the binary header agree before a packed model slice is used as
+paper-facing evidence.
+
+Example:
+
+```bash
+python train_python/verify_esmp_package.py \
+  --summary outputs/real_system_packer_2026-06-05/qwen3_0p6b_full_esmp/pack_summary.json \
+  --limit-modules 8 \
+  --min-checked 8 \
+  --max-missing 0 \
+  --min-compression-vs-fp32 6.0 \
+  --out-json outputs/real_system_packer_2026-06-05/esmp_package_verify_qwen3_0p6b_limit8_2026_06_06.json \
+  --out-md outputs/real_system_packer_2026-06-05/ESMP_PACKAGE_VERIFY_QWEN3_0P6B_LIMIT8_2026_06_06.md
+```
+
+The C++ binary inspector gives a lower-level package check:
+
+```bash
+./build/cpp-wsl/esmp_inspect \
+  --input build/cpp-wsl/mixed_precision_packer_smoke.esmp \
+  --expect-rows 64 \
+  --expect-cols 96 \
+  --max-avg-bits 4.6 \
+  --min-compression-vs-fp32 4.0 \
+  --require-bits 4,8 \
+  --verify-row-sums
+```
+
+Valid claim:
+
+- ESMP package metadata and manifests can be independently checked without
+  trusting README prose.
+
+Invalid claim:
+
+- package integrity proves the quantized model is accurate or fast.
 
 ## Triton Mixed-GEMM Gate
 

@@ -30,6 +30,8 @@ Implemented and committed:
   task-eval summaries, and task-accuracy retention comparison.
 - A real ESMPQ001 mixed-precision package format layer shared by the C++
   packer/runtime bench and Python reconstruction/generation tools.
+- C++ and Python artifact-integrity checks for ESMP package headers,
+  per-module manifests, and pack-summary consistency.
 - A PC-side Triton packed INT4/INT8 mixed-GEMM prototype plus an executable
   evidence gate for block-tuning results.
 - Executable sidecar and fused-QKV generation gates that validate guarded HF
@@ -171,9 +173,9 @@ stress gate with 45/84 fused passes versus 46/84 baseline passes, one explicit
 JSON-key regression, 0.9746x mean speed, and 54.69% peak guard memory.
 The top-level evidence ledger is
 `outputs/real_system_packer_2026-06-05/EVIDENCE_LEDGER_2026_06_06.md`; it
-currently passes with 8/8 paper-facing gates across kernel, runtime wiring,
-selected-row, C++ runtime, decode integration, QKV replacement, quality, and
-task-retention categories.
+currently passes with 9/9 paper-facing gates across artifact integrity, kernel,
+runtime wiring, selected-row, C++ runtime, decode integration, QKV replacement,
+quality, and task-retention categories.
 Gate policy and claim boundaries are in `docs/SYSTEM_EVIDENCE_GATES.md`.
 
 End-to-end smoke metrics are tracked separately from kernel evidence:
@@ -234,7 +236,7 @@ inference_cpp/include/         reusable quant-kernel API headers
 data_eval/eigenskill_quant_v1/ no-leak quant-policy train/eval/test split
 data_eval/eval_configs/        fake-quant allocation/evaluation configs
 outputs/                       selected reports, summaries, and figures
-docs/                          scope, claim boundaries, and paper-readiness notes
+docs/                          scope, claim matrix, and paper-readiness notes
 research_pack_2026-06-03/      historical drafts; not current public claims
 ```
 
@@ -346,6 +348,15 @@ Smoke example:
   --iters 5 \
   --warmup 1 \
   --active-rows 8
+
+./build/cpp-wsl/esmp_inspect \
+  --input build/cpp-wsl/mixed_precision_packer_smoke.esmp \
+  --expect-rows 64 \
+  --expect-cols 96 \
+  --max-avg-bits 4.6 \
+  --min-compression-vs-fp32 4.0 \
+  --require-bits 4,8 \
+  --verify-row-sums
 ```
 
 The runtime bench reports package compression, full mixed GEMV latency,
@@ -353,6 +364,21 @@ selected-row latency, and `selected_speedup_vs_full_mixed_gemv`. This is still
 module-level evidence, not end-to-end TTFT/tokens-per-second proof.
 
 Format details are in `docs/ESMPQ001_FORMAT.md`.
+Paper-facing claim boundaries are in `docs/PAPER_CLAIM_MATRIX.md`.
+
+For real packed model slices, verify that `pack_summary.json`, per-module
+manifest JSON, and ESMP binary headers agree:
+
+```bash
+python train_python/verify_esmp_package.py \
+  --summary outputs/real_system_packer_2026-06-05/qwen3_0p6b_full_esmp/pack_summary.json \
+  --limit-modules 8 \
+  --min-checked 8 \
+  --max-missing 0 \
+  --min-compression-vs-fp32 6.0 \
+  --out-json outputs/real_system_packer_2026-06-05/esmp_package_verify_qwen3_0p6b_limit8_2026_06_06.json \
+  --out-md outputs/real_system_packer_2026-06-05/ESMP_PACKAGE_VERIFY_QWEN3_0P6B_LIMIT8_2026_06_06.md
+```
 
 Latest local smoke report:
 `outputs/real_system_packer_2026-06-05/REAL_SYSTEM_SMOKE_2026_06_06.md`.

@@ -84,3 +84,38 @@ w[row, col] = q[row, col] * row_scale[row]
 
 Both readers validate magic, version, dimensions, offsets, bit-width range,
 contiguous row bit offsets, and payload byte count.
+
+## Artifact Integrity Checks
+
+The format is now checked through two runnable tools:
+
+```bash
+./build/cpp-wsl/esmp_inspect \
+  --input build/cpp-wsl/mixed_precision_packer_smoke.esmp \
+  --expect-rows 64 \
+  --expect-cols 96 \
+  --min-compression-vs-fp32 4.0 \
+  --require-bits 4,8 \
+  --verify-row-sums
+```
+
+`esmp_inspect` reads the binary package directly and emits JSON with dimensions,
+bit histogram, payload bytes, file bytes, compression ratio, and optional row-sum
+verification.
+
+```bash
+python train_python/verify_esmp_package.py \
+  --summary outputs/real_system_packer_2026-06-05/qwen3_0p6b_full_esmp/pack_summary.json \
+  --limit-modules 8 \
+  --min-checked 8 \
+  --max-missing 0
+```
+
+`verify_esmp_package.py` verifies three layers agree for each packed module:
+
+- `pack_summary.json`;
+- per-module manifest JSON emitted by `mixed_precision_packer`;
+- the ESMP binary header and row metadata parsed by `train_python/esmp_format.py`.
+
+This is an artifact-integrity check. It does not measure model quality or
+latency.

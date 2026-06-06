@@ -20,6 +20,9 @@ CATEGORIES = {
     "sidecar": "decode integration",
     "qkv": "qkv replacement",
     "chat": "task retention",
+    "esmp": "artifact integrity",
+    "package": "artifact integrity",
+    "artifact": "artifact integrity",
 }
 
 
@@ -95,12 +98,20 @@ def metric_parts(summary: dict[str, Any]) -> list[str]:
         parts.append(f"regressions {summary.get('regressions')}")
     if "fused_passes" in summary and "tasks" in summary:
         parts.append(f"fused {summary.get('fused_passes')}/{summary.get('tasks')}")
+    if "checked_module_count" in summary:
+        parts.append(f"checked modules {summary.get('checked_module_count')}/{summary.get('requested_module_count')}")
+    if "missing_file_count" in summary:
+        parts.append(f"missing files {summary.get('missing_file_count')}")
+    if "failed_module_count" in summary:
+        parts.append(f"failed modules {summary.get('failed_module_count')}")
     if (value := finite_float(summary.get("mean_speedup_fused_vs_baseline"))) is not None:
         parts.append(f"mean speed {value:.4f}x")
     if (value := finite_float(summary.get("replacement_compression_vs_fp32"))) is not None:
         parts.append(f"compression {value:.4f}x")
     if (value := finite_float(summary.get("median_compression_vs_fp32"))) is not None:
         parts.append(f"compression {value:.4f}x")
+    if (value := finite_float(summary.get("compression_ratio_vs_fp32_checked"))) is not None:
+        parts.append(f"checked compression {value:.4f}x")
     if (value := finite_float(summary.get("guard_max_memory_used_ratio"))) is not None:
         parts.append(f"VRAM {value:.4f}")
     if (value := finite_float(summary.get("max_guard_vram_ratio"))) is not None:

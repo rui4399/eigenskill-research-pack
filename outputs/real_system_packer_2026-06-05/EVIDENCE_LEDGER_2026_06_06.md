@@ -1,9 +1,9 @@
 # Evidence Ledger
 
-Date: `2026-06-06T10:29:16+00:00`
+Date: `2026-06-06T10:45:12+00:00`
 Status: **PASS**
-Gates: `8 / 8` passed
-Categories: `c++ runtime, decode integration, kernel, qkv replacement, quality, runtime wiring, selected-row, task retention`
+Gates: `9 / 9` passed
+Categories: `artifact integrity, c++ runtime, decode integration, kernel, qkv replacement, quality, runtime wiring, selected-row, task retention`
 
 ## Gate Summary
 
@@ -13,6 +13,7 @@ Categories: `c++ runtime, decode integration, kernel, qkv replacement, quality, 
 | `selector_runtime` | runtime wiring | **PASS** | selector calls 4; VRAM 0.5721 | `outputs/real_system_packer_2026-06-05/selector_runtime_smoke_gate_2026_06_06.json` |
 | `selected_row` | selected-row | **PASS** | ok rows 108; VRAM 0.4369 | `outputs/real_system_packer_2026-06-05/selected_row_benchmark_gate_2026_06_06.json` |
 | `cpp_runtime` | c++ runtime | **PASS** | ok rows 42; wins/full 42; median selected 16.8259x; compression 7.6413x | `outputs/real_system_packer_2026-06-05/cpp_runtime_sweep_gate_2026_06_06.json` |
+| `esmp_package` | artifact integrity | **PASS** | checked modules 8/8; missing files 0; failed modules 0; checked compression 6.2797x | `outputs/real_system_packer_2026-06-05/esmp_package_verify_qwen3_0p6b_limit8_2026_06_06.json` |
 | `fused_sidecar` | decode integration | **PASS** | sidecar calls 48; tok/s ratio 0.8080x; VRAM 0.4396 | `outputs/real_system_packer_2026-06-05/fused_sidecar_generation_gate_2026_06_06.json` |
 | `fused_qkv_speed` | qkv replacement | **PASS** | replacements 1; tok/s ratio 1.1300x; TTFT ratio 0.6839x; compression 6.1682x; VRAM 0.4401 | `outputs/real_system_packer_2026-06-05/fused_qkv_generation_gate_2026_06_06.json` |
 | `fused_qkv_quality` | quality | **PASS** | exact 6/6; mean speed 0.8957x; compression 3.9082x; VRAM 0.4359 | `outputs/real_system_packer_2026-06-05/fused_qkv_prompt_suite_gate_2026_06_06.json` |

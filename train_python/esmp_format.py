@@ -7,9 +7,12 @@ from pathlib import Path
 
 try:
     import numpy as np
-    import torch
 except ModuleNotFoundError:  # pragma: no cover - checked by callers at runtime
     np = None
+
+try:
+    import torch
+except ModuleNotFoundError:  # pragma: no cover - checked by callers at runtime
     torch = None
 
 

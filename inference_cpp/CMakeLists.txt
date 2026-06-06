@@ -40,10 +40,12 @@ add_executable(quant_task_eval_summary src/quant_task_eval_summary.cpp)
 add_executable(quant_task_compare src/quant_task_compare.cpp)
 add_executable(mixed_precision_packer src/mixed_precision_packer.cpp)
 add_executable(mixed_precision_runtime_bench src/mixed_precision_runtime_bench.cpp)
+add_executable(esmp_inspect src/esmp_inspect.cpp)
 target_link_libraries(quant_kernel_bench PRIVATE eigenskill_quant_kernels)
 target_link_libraries(quant_kernel_verify PRIVATE eigenskill_quant_kernels)
 target_link_libraries(mixed_precision_packer PRIVATE eigenskill_quant_kernels)
 target_link_libraries(mixed_precision_runtime_bench PRIVATE eigenskill_quant_kernels)
+target_link_libraries(esmp_inspect PRIVATE eigenskill_quant_kernels)
 
 if(BUILD_TESTING)
   add_test(
@@ -279,6 +281,21 @@ if(BUILD_TESTING)
     mixed_precision_runtime_bench_text_fixture
     PROPERTIES FIXTURES_REQUIRED mixed_precision_packer_text_fixture_file
   )
+  add_test(
+    NAME esmp_inspect_smoke
+    COMMAND esmp_inspect
+      --input ${CMAKE_CURRENT_BINARY_DIR}/mixed_precision_packer_smoke.esmp
+      --expect-rows 64
+      --expect-cols 96
+      --max-avg-bits 4.6
+      --min-compression-vs-fp32 4.0
+      --require-bits 4,8
+      --verify-row-sums
+  )
+  set_tests_properties(
+    esmp_inspect_smoke
+    PROPERTIES FIXTURES_REQUIRED mixed_precision_packer_smoke_file
+  )
 endif()
 
 if(NOT MSVC AND (CMAKE_SYSTEM_PROCESSOR MATCHES "x86_64|AMD64|amd64"))
@@ -287,4 +304,5 @@ if(NOT MSVC AND (CMAKE_SYSTEM_PROCESSOR MATCHES "x86_64|AMD64|amd64"))
   target_compile_options(quant_kernel_verify PRIVATE -mavx2)
   target_compile_options(mixed_precision_packer PRIVATE -mavx2)
   target_compile_options(mixed_precision_runtime_bench PRIVATE -mavx2)
+  target_compile_options(esmp_inspect PRIVATE -mavx2)
 endif()
