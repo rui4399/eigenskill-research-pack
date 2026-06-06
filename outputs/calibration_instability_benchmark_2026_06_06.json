@@ -1,5 +1,5 @@
 {
-  "date": "2026-06-06T11:06:37+00:00",
+  "date": "2026-06-06T15:43:15+00:00",
   "passed": true,
   "summary": {
     "case_count": 3,
@@ -11,6 +11,62 @@
     "mean_top20_jaccard": 0.10219994430520746,
     "instability_spearman_threshold": 0.3,
     "instability_jaccard_threshold": 0.55
+  },
+  "statistical_summary": {
+    "score_spearman_mean_ci": {
+      "count": 3,
+      "mean": 0.07129043833856386,
+      "low": -0.04401365635747403,
+      "high": 0.1844652271749704,
+      "iterations": 2000,
+      "alpha": 0.05,
+      "seed": 20260606
+    },
+    "positive_jaccard_mean_ci": {
+      "count": 3,
+      "mean": 0.4349352960985231,
+      "low": 0.40236686390532544,
+      "high": 0.45121951219512196,
+      "iterations": 2000,
+      "alpha": 0.05,
+      "seed": 20260607
+    },
+    "topk_jaccard_mean_ci": {
+      "count": 3,
+      "mean": 0.10219994430520746,
+      "low": 0.05263157894736842,
+      "high": 0.14285714285714285,
+      "iterations": 2000,
+      "alpha": 0.05,
+      "seed": 20260608
+    },
+    "topk_overlap_vs_random": [
+      {
+        "label": "qwen3_0p6b",
+        "k": 20,
+        "observed_jaccard": 0.05263157894736842,
+        "random_expected_jaccard": 0.053475935828877004,
+        "observed_to_random_expected_ratio": 0.9842105263157894
+      },
+      {
+        "label": "qwen3_1p7b",
+        "k": 20,
+        "observed_jaccard": 0.14285714285714285,
+        "random_expected_jaccard": 0.053475935828877004,
+        "observed_to_random_expected_ratio": 2.6714285714285713
+      },
+      {
+        "label": "olmo2_1b",
+        "k": 20,
+        "observed_jaccard": 0.1111111111111111,
+        "random_expected_jaccard": 0.09708737864077671,
+        "observed_to_random_expected_ratio": 1.1444444444444442
+      }
+    ],
+    "mean_topk_observed_jaccard": 0.10219994430520746,
+    "mean_topk_random_expected_jaccard": 0.06801308343284357,
+    "mean_topk_observed_to_random_expected_ratio": 1.6000278473962684,
+    "interpretation": "Bootstrap confidence intervals quantify case-level uncertainty. The random top-k baseline uses the expected intersection of two independent top-k sets with the same sizes."
   },
   "failures": [],
   "entries": [

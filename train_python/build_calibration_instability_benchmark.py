@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import random
 from dataclasses import dataclass
 from datetime import datetime, timezone
 from pathlib import Path
@@ -58,11 +59,110 @@ def mean(values: list[float]) -> float:
     return sum(values) / max(len(values), 1)
 
 
+def percentile(sorted_values: list[float], q: float) -> float | None:
+    if not sorted_values:
+        return None
+    if len(sorted_values) == 1:
+        return sorted_values[0]
+    pos = min(max(q, 0.0), 1.0) * (len(sorted_values) - 1)
+    lo = int(pos)
+    hi = min(lo + 1, len(sorted_values) - 1)
+    weight = pos - lo
+    return sorted_values[lo] * (1.0 - weight) + sorted_values[hi] * weight
+
+
+def bootstrap_mean_ci(values: list[float], *, iterations: int = 2000, seed: int = 20260606, alpha: float = 0.05) -> dict[str, Any]:
+    clean = [float(value) for value in values if finite(value) is not None]
+    if not clean:
+        return {"count": 0, "mean": None, "low": None, "high": None, "iterations": iterations, "alpha": alpha}
+    rng = random.Random(seed)
+    estimates: list[float] = []
+    for _idx in range(iterations):
+        sample = [clean[rng.randrange(len(clean))] for _item in clean]
+        estimates.append(mean(sample))
+    estimates.sort()
+    return {
+        "count": len(clean),
+        "mean": mean(clean),
+        "low": percentile(estimates, alpha / 2.0),
+        "high": percentile(estimates, 1.0 - alpha / 2.0),
+        "iterations": iterations,
+        "alpha": alpha,
+        "seed": seed,
+    }
+
+
+def random_topk_expected_jaccard(*, shared_modules: int, left_count: int, right_count: int) -> float:
+    if shared_modules <= 0 or left_count <= 0 or right_count <= 0:
+        return 0.0
+    left = min(left_count, shared_modules)
+    right = min(right_count, shared_modules)
+    expected_overlap = (left * right) / shared_modules
+    expected_union = left + right - expected_overlap
+    return expected_overlap / expected_union if expected_union > 0.0 else 0.0
+
+
 def top_jaccard(result: dict[str, Any], k: int) -> float | None:
     for row in result.get("top_overlap", []):
         if int(row.get("k", -1)) == k:
             return finite(row.get("jaccard"))
     return None
+
+
+def preferred_top_overlap(result: dict[str, Any], preferred_k: int = 20) -> dict[str, Any] | None:
+    rows = [row for row in result.get("top_overlap", []) if isinstance(row, dict)]
+    if not rows:
+        return None
+    for row in rows:
+        if int(row.get("k", -1)) == preferred_k:
+            return row
+    return max(rows, key=lambda row: int(row.get("k", 0)))
+
+
+def top_overlap_vs_random(entry: dict[str, Any], *, preferred_k: int = 20) -> dict[str, Any] | None:
+    row = preferred_top_overlap(entry.get("result", {}), preferred_k=preferred_k)
+    if row is None:
+        return None
+    observed = finite(row.get("jaccard"))
+    expected = random_topk_expected_jaccard(
+        shared_modules=int(entry.get("shared_modules", 0) or 0),
+        left_count=int(row.get("left_count", 0) or 0),
+        right_count=int(row.get("right_count", 0) or 0),
+    )
+    ratio = observed / expected if observed is not None and expected > 0.0 else None
+    return {
+        "label": entry.get("label", ""),
+        "k": int(row.get("k", 0) or 0),
+        "observed_jaccard": observed,
+        "random_expected_jaccard": expected,
+        "observed_to_random_expected_ratio": ratio,
+    }
+
+
+def build_statistical_summary(entries: list[dict[str, Any]], *, bootstrap_iterations: int = 2000, seed: int = 20260606) -> dict[str, Any]:
+    spearman_values = [entry["score_spearman"] for entry in entries if entry["score_spearman"] is not None]
+    jaccard_values = [entry["positive_jaccard"] for entry in entries if entry["positive_jaccard"] is not None]
+    top_rows = [row for entry in entries if (row := top_overlap_vs_random(entry)) is not None]
+    observed_top = [row["observed_jaccard"] for row in top_rows if row["observed_jaccard"] is not None]
+    expected_top = [row["random_expected_jaccard"] for row in top_rows if row["random_expected_jaccard"] is not None]
+    ratio_top = [
+        row["observed_to_random_expected_ratio"]
+        for row in top_rows
+        if row["observed_to_random_expected_ratio"] is not None
+    ]
+    return {
+        "score_spearman_mean_ci": bootstrap_mean_ci(spearman_values, iterations=bootstrap_iterations, seed=seed),
+        "positive_jaccard_mean_ci": bootstrap_mean_ci(jaccard_values, iterations=bootstrap_iterations, seed=seed + 1),
+        "topk_jaccard_mean_ci": bootstrap_mean_ci(observed_top, iterations=bootstrap_iterations, seed=seed + 2),
+        "topk_overlap_vs_random": top_rows,
+        "mean_topk_observed_jaccard": mean(observed_top),
+        "mean_topk_random_expected_jaccard": mean(expected_top),
+        "mean_topk_observed_to_random_expected_ratio": mean(ratio_top),
+        "interpretation": (
+            "Bootstrap confidence intervals quantify case-level uncertainty. "
+            "The random top-k baseline uses the expected intersection of two independent top-k sets with the same sizes."
+        ),
+    }
 
 
 def build_benchmark(
@@ -111,6 +211,7 @@ def build_benchmark(
     if unstable_count < min_unstable_cases:
         failures.append(f"unstable case count below threshold: {unstable_count} < {min_unstable_cases}")
 
+    statistical_summary = build_statistical_summary(entries)
     return {
         "date": datetime.now(timezone.utc).replace(microsecond=0).isoformat(),
         "passed": not failures,
@@ -125,14 +226,21 @@ def build_benchmark(
             "instability_spearman_threshold": instability_spearman_threshold,
             "instability_jaccard_threshold": instability_jaccard_threshold,
         },
+        "statistical_summary": statistical_summary,
         "failures": failures,
         "entries": entries,
     }
 
 
+def fmt(value: Any, digits: int = 4) -> str:
+    number = finite(value)
+    return "n/a" if number is None else f"{number:.{digits}f}"
+
+
 def write_markdown(path: Path, report: dict[str, Any]) -> None:
     status = "PASS" if report["passed"] else "FAIL"
     summary = report["summary"]
+    stats = report.get("statistical_summary", {})
     lines = [
         "# Calibration Split Instability Benchmark",
         "",
@@ -155,8 +263,36 @@ def write_markdown(path: Path, report: dict[str, Any]) -> None:
     for entry in report["entries"]:
         top20 = entry["top20_jaccard"]
         lines.append(
-            f"| `{entry['label']}` | {entry['shared_modules']} | {entry['score_spearman']:.4f} | "
-            f"{entry['positive_jaccard']:.4f} | {top20:.4f} | {entry['unstable']} |"
+            f"| `{entry['label']}` | {entry['shared_modules']} | {fmt(entry['score_spearman'])} | "
+            f"{fmt(entry['positive_jaccard'])} | {fmt(top20)} | {entry['unstable']} |"
+        )
+    ci = stats.get("score_spearman_mean_ci", {})
+    jaccard_ci = stats.get("positive_jaccard_mean_ci", {})
+    topk_ci = stats.get("topk_jaccard_mean_ci", {})
+    lines.extend(
+        [
+            "",
+            "## Statistical Robustness",
+            "",
+            "| statistic | mean | 95% CI low | 95% CI high |",
+            "|---|---:|---:|---:|",
+            f"| score/cost Spearman | {fmt(ci.get('mean'))} | {fmt(ci.get('low'))} | {fmt(ci.get('high'))} |",
+            f"| positive-set Jaccard | {fmt(jaccard_ci.get('mean'))} | {fmt(jaccard_ci.get('low'))} | {fmt(jaccard_ci.get('high'))} |",
+            f"| selected top-k Jaccard | {fmt(topk_ci.get('mean'))} | {fmt(topk_ci.get('low'))} | {fmt(topk_ci.get('high'))} |",
+            "",
+            f"- mean selected top-k random-expected Jaccard: `{fmt(stats.get('mean_topk_random_expected_jaccard'))}`",
+            f"- mean observed/random-expected top-k ratio: `{fmt(stats.get('mean_topk_observed_to_random_expected_ratio'))}`",
+            "",
+            "### Top-K Overlap vs Random Expectation",
+            "",
+            "| case | k | observed Jaccard | random expected Jaccard | observed/expected |",
+            "|---|---:|---:|---:|---:|",
+        ]
+    )
+    for row in stats.get("topk_overlap_vs_random", []):
+        lines.append(
+            f"| `{row['label']}` | {row['k']} | {fmt(row['observed_jaccard'])} | "
+            f"{fmt(row['random_expected_jaccard'])} | {fmt(row['observed_to_random_expected_ratio'])} |"
         )
     lines.extend(
         [

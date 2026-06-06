@@ -47,6 +47,8 @@ class CalibrationInstabilityBenchmarkTests(unittest.TestCase):
             self.assertTrue(report["passed"])
             self.assertEqual(report["summary"]["case_count"], 3)
             self.assertEqual(report["summary"]["unstable_case_count"], 2)
+            self.assertIn("statistical_summary", report)
+            self.assertIn("score_spearman_mean_ci", report["statistical_summary"])
 
     def test_gate_fails_when_too_few_unstable_cases(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
@@ -58,6 +60,17 @@ class CalibrationInstabilityBenchmarkTests(unittest.TestCase):
             report = cib.build_benchmark(cases, min_cases=2, min_unstable_cases=1)
             self.assertFalse(report["passed"])
             self.assertIn("unstable case count", report["failures"][0])
+
+    def test_bootstrap_ci_is_deterministic_and_contains_mean(self) -> None:
+        first = cib.bootstrap_mean_ci([0.0, 0.5, 1.0], iterations=200, seed=7)
+        second = cib.bootstrap_mean_ci([0.0, 0.5, 1.0], iterations=200, seed=7)
+        self.assertEqual(first, second)
+        self.assertLessEqual(first["low"], first["mean"])
+        self.assertGreaterEqual(first["high"], first["mean"])
+
+    def test_random_topk_expected_jaccard_uses_overlap_expectation(self) -> None:
+        expected = cib.random_topk_expected_jaccard(shared_modules=100, left_count=10, right_count=10)
+        self.assertAlmostEqual(expected, 1.0 / 19.0)
 
 
 if __name__ == "__main__":
