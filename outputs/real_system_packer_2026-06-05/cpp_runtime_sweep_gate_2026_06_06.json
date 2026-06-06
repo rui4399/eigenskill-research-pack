@@ -1,0 +1,74 @@
+{
+  "passed": true,
+  "failures": [],
+  "summary": {
+    "total_rows": 42,
+    "ok_rows": 42,
+    "failed_rows": 0,
+    "wins_vs_full": 42,
+    "median_selected_speedup_vs_full": 16.825873838812655,
+    "min_selected_speedup_vs_full": 12.760684518086894,
+    "max_selected_speedup_vs_full": 56.488774123917764,
+    "median_selected_ms": 0.20562000000000002,
+    "median_compression_vs_fp32": 7.641346
+  },
+  "by_family": [
+    {
+      "family": "attention",
+      "count": 24,
+      "median_selected_speedup_vs_full": 16.39176609673416,
+      "min_selected_speedup_vs_full": 14.980342637076602,
+      "median_selected_ms": 0.20562000000000002,
+      "median_full_ms": 5.520702,
+      "median_compression_vs_fp32": 7.6409
+    },
+    {
+      "family": "mlp",
+      "count": 18,
+      "median_selected_speedup_vs_full": 46.343749945880084,
+      "min_selected_speedup_vs_full": 12.760684518086894,
+      "median_selected_ms": 0.2078045,
+      "median_full_ms": 9.231019,
+      "median_compression_vs_fp32": 7.641494
+    }
+  ],
+  "by_layer_bucket": [
+    {
+      "layer_bucket": "early",
+      "count": 14,
+      "median_selected_speedup_vs_full": 17.52497035049198,
+      "min_selected_speedup_vs_full": 12.760684518086894,
+      "median_selected_ms": 0.269351,
+      "median_full_ms": 6.3678045,
+      "median_compression_vs_fp32": 7.641123
+    },
+    {
+      "layer_bucket": "late",
+      "count": 14,
+      "median_selected_speedup_vs_full": 16.825873838812655,
+      "min_selected_speedup_vs_full": 14.927159398991561,
+      "median_selected_ms": 0.2543175,
+      "median_full_ms": 7.431746,
+      "median_compression_vs_fp32": 7.64142
+    },
+    {
+      "layer_bucket": "middle",
+      "count": 14,
+      "median_selected_speedup_vs_full": 17.070333208424422,
+      "min_selected_speedup_vs_full": 15.507864362283966,
+      "median_selected_ms": 0.188833,
+      "median_full_ms": 6.373200499999999,
+      "median_compression_vs_fp32": 7.641494
+    }
+  ],
+  "thresholds": {
+    "min_ok_rows": 42,
+    "max_failed_rows": 0,
+    "min_wins_vs_full": 42,
+    "min_min_speedup_vs_full": 10.0,
+    "min_median_speedup_vs_full": 15.0,
+    "min_best_speedup_vs_full": 45.0,
+    "max_median_selected_ms": 0.25,
+    "min_median_compression_vs_fp32": 7.0
+  }
+}

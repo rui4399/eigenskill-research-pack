@@ -125,6 +125,27 @@ selected-row cached path can win on the current environment (`1.1767x` vs dense
 full), while `triton_selected` remains launch-bound (`0.5668x` vs dense full).
 Use this as a constraint for kernel/runtime work, not as an acceleration claim.
 
+## C++ ESMP Runtime Sweep Gate
+
+`train_python/gate_cpp_runtime_sweep.py` gates the C++ ESMP selected-row runtime
+sweep. The current gate uses
+`outputs/real_system_packer_2026-06-05/esmp_runtime_stratified_sweep.jsonl` and
+passes with:
+
+- 42 successful module runs and 0 failures;
+- 42/42 selected-row wins over full mixed GEMV;
+- min selected/full speedup: 12.7607x;
+- median selected/full speedup: 16.8259x;
+- best selected/full speedup: 56.4888x;
+- median selected-row latency: 0.205620 ms;
+- median compression vs FP32: 7.6413x.
+
+A fresh C++ q_proj focus bench was also run against the current binary and
+package, giving 29.1892x selected/full speedup for 64 active rows. This is the
+strongest current systems evidence for deterministic routed/bypass execution,
+but it is still module-level evidence rather than end-to-end generation
+latency.
+
 Valid claim:
 
 - measured Triton tuning artifacts can now drive the prototype ESMP generation
@@ -137,6 +158,8 @@ Valid claim:
 - selected-row routing has a formal gate for module-level evidence, while the
   focused current-environment smoke keeps the low-batch Triton limitation
   explicit.
+- C++ ESMP selected-row runtime has a formal sweep gate; it supports
+  module-level bypass claims but not full LLM acceleration claims.
 
 Invalid claim:
 

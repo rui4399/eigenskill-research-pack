@@ -338,6 +338,23 @@ python train_python/gate_selected_row_benchmark.py \
   --max-memory-ratio 0.90
 ```
 
+C++ runtime sweep gate:
+
+```bash
+python train_python/gate_cpp_runtime_sweep.py \
+  --input-jsonl outputs/real_system_packer_2026-06-05/esmp_runtime_stratified_sweep.jsonl \
+  --out-json outputs/real_system_packer_2026-06-05/cpp_runtime_sweep_gate_2026_06_06.json \
+  --out-md outputs/real_system_packer_2026-06-05/CPP_RUNTIME_SWEEP_GATE_2026_06_06.md \
+  --min-ok-rows 42 \
+  --max-failed-rows 0 \
+  --min-wins-vs-full 42 \
+  --min-min-speedup-vs-full 10.0 \
+  --min-median-speedup-vs-full 15.0 \
+  --min-best-speedup-vs-full 45.0 \
+  --max-median-selected-ms 0.25 \
+  --min-median-compression-vs-fp32 7.0
+```
+
 ## Reproduce: Triton Mixed-GEMM Prototype
 
 This path benchmarks real packed INT4/INT8 storage on a CUDA GPU. It is still a
