@@ -1,0 +1,395 @@
+{
+  "date": "2026-06-06T06:29:34+00:00",
+  "reports": [
+    {
+      "label": "qonly_layers17",
+      "tasks": 84,
+      "baseline_passes": 46,
+      "fused_passes": 45,
+      "pass_delta": -1,
+      "baseline_tps": 22.73924938529951,
+      "fused_tps": 21.08269755832734,
+      "speedup": 0.9271501095351415,
+      "type_summary": {
+        "all_of": {
+          "tasks": 12,
+          "baseline_passes": 9,
+          "fused_passes": 9,
+          "regressions": 0,
+          "fixes": 0,
+          "both_pass": 9,
+          "both_fail": 3
+        },
+        "contains_all": {
+          "tasks": 12,
+          "baseline_passes": 0,
+          "fused_passes": 0,
+          "regressions": 0,
+          "fixes": 0,
+          "both_pass": 0,
+          "both_fail": 12
+        },
+        "contains_none": {
+          "tasks": 12,
+          "baseline_passes": 12,
+          "fused_passes": 12,
+          "regressions": 0,
+          "fixes": 0,
+          "both_pass": 12,
+          "both_fail": 0
+        },
+        "json_keys": {
+          "tasks": 12,
+          "baseline_passes": 7,
+          "fused_passes": 7,
+          "regressions": 0,
+          "fixes": 0,
+          "both_pass": 7,
+          "both_fail": 5
+        },
+        "mcq": {
+          "tasks": 12,
+          "baseline_passes": 10,
+          "fused_passes": 9,
+          "regressions": 1,
+          "fixes": 0,
+          "both_pass": 9,
+          "both_fail": 2
+        },
+        "number": {
+          "tasks": 12,
+          "baseline_passes": 3,
+          "fused_passes": 3,
+          "regressions": 0,
+          "fixes": 0,
+          "both_pass": 3,
+          "both_fail": 9
+        },
+        "sentence_count": {
+          "tasks": 6,
+          "baseline_passes": 4,
+          "fused_passes": 4,
+          "regressions": 0,
+          "fixes": 0,
+          "both_pass": 4,
+          "both_fail": 2
+        },
+        "word_count": {
+          "tasks": 6,
+          "baseline_passes": 1,
+          "fused_passes": 1,
+          "regressions": 0,
+          "fixes": 0,
+          "both_pass": 1,
+          "both_fail": 5
+        }
+      },
+      "regressions": [
+        {
+          "id": "stress_mcq_extra_000",
+          "type": "mcq",
+          "kind": "regression",
+          "expected": "A",
+          "baseline_text": "<think> </think> A. ESMP binaries",
+          "fused_text": "<think> </think> B. README text",
+          "baseline_score": {
+            "passed": true,
+            "predicted": "A",
+            "expected": "A"
+          },
+          "fused_score": {
+            "passed": false,
+            "predicted": "B",
+            "expected": "A"
+          }
+        }
+      ],
+      "fixes": [],
+      "path": "C:\\Users\\18042\\Documents\\Codex\\2026-06-01\\chatgpt-context-request-algorithm-system-co\\github_publish\\eigenskill-research-pack\\outputs\\real_system_packer_2026-06-05\\chat_task_stress_v3_84_qwen3_0p6b_no_think_layers17_qonly_32tok.json"
+    },
+    {
+      "label": "vonly_layers17",
+      "tasks": 84,
+      "baseline_passes": 46,
+      "fused_passes": 43,
+      "pass_delta": -3,
+      "baseline_tps": 21.921536068620515,
+      "fused_tps": 21.16008624861932,
+      "speedup": 0.9652647598408411,
+      "type_summary": {
+        "all_of": {
+          "tasks": 12,
+          "baseline_passes": 9,
+          "fused_passes": 9,
+          "regressions": 0,
+          "fixes": 0,
+          "both_pass": 9,
+          "both_fail": 3
+        },
+        "contains_all": {
+          "tasks": 12,
+          "baseline_passes": 0,
+          "fused_passes": 0,
+          "regressions": 0,
+          "fixes": 0,
+          "both_pass": 0,
+          "both_fail": 12
+        },
+        "contains_none": {
+          "tasks": 12,
+          "baseline_passes": 12,
+          "fused_passes": 12,
+          "regressions": 0,
+          "fixes": 0,
+          "both_pass": 12,
+          "both_fail": 0
+        },
+        "json_keys": {
+          "tasks": 12,
+          "baseline_passes": 7,
+          "fused_passes": 5,
+          "regressions": 2,
+          "fixes": 0,
+          "both_pass": 5,
+          "both_fail": 5
+        },
+        "mcq": {
+          "tasks": 12,
+          "baseline_passes": 10,
+          "fused_passes": 9,
+          "regressions": 1,
+          "fixes": 0,
+          "both_pass": 9,
+          "both_fail": 2
+        },
+        "number": {
+          "tasks": 12,
+          "baseline_passes": 3,
+          "fused_passes": 3,
+          "regressions": 0,
+          "fixes": 0,
+          "both_pass": 3,
+          "both_fail": 9
+        },
+        "sentence_count": {
+          "tasks": 6,
+          "baseline_passes": 4,
+          "fused_passes": 4,
+          "regressions": 0,
+          "fixes": 0,
+          "both_pass": 4,
+          "both_fail": 2
+        },
+        "word_count": {
+          "tasks": 6,
+          "baseline_passes": 1,
+          "fused_passes": 1,
+          "regressions": 0,
+          "fixes": 0,
+          "both_pass": 1,
+          "both_fail": 5
+        }
+      },
+      "regressions": [
+        {
+          "id": "stress_json_keys_001",
+          "type": "json_keys",
+          "kind": "regression",
+          "expected": [
+            "risk",
+            "evidence"
+          ],
+          "baseline_text": "<think> </think> ```json { \"risk\": \"calibration_split_instability\", \"evidence\": \"calibration_split_instability\" }",
+          "fused_text": "<think> </think> ```json { \"risk\": \"calibration_split_inconsistency\", \"evidence\": \"calibration_split_inconsistency",
+          "baseline_score": {
+            "passed": true,
+            "found": [
+              "evidence",
+              "risk"
+            ],
+            "expected": [
+              "evidence",
+              "risk"
+            ]
+          },
+          "fused_score": {
+            "passed": false,
+            "found": [],
+            "expected": [
+              "evidence",
+              "risk"
+            ]
+          }
+        },
+        {
+          "id": "stress_json_keys_extra_004",
+          "type": "json_keys",
+          "kind": "regression",
+          "expected": [
+            "benchmark",
+            "caveat"
+          ],
+          "baseline_text": "<think> </think> ```json {\"benchmark\": \"minified\", \"caveat\": \"only\"} ```",
+          "fused_text": "<think> </think> ```json {\"benchmark\": \"caveat\"} ```",
+          "baseline_score": {
+            "passed": true,
+            "found": [
+              "benchmark",
+              "caveat"
+            ],
+            "expected": [
+              "benchmark",
+              "caveat"
+            ]
+          },
+          "fused_score": {
+            "passed": false,
+            "found": [],
+            "expected": [
+              "benchmark",
+              "caveat"
+            ]
+          }
+        },
+        {
+          "id": "stress_mcq_extra_003",
+          "type": "mcq",
+          "kind": "regression",
+          "expected": "A",
+          "baseline_text": "<think> </think> A. Q only",
+          "fused_text": "<think> </think> D. Full QKV",
+          "baseline_score": {
+            "passed": true,
+            "predicted": "A",
+            "expected": "A"
+          },
+          "fused_score": {
+            "passed": false,
+            "predicted": "D",
+            "expected": "A"
+          }
+        }
+      ],
+      "fixes": [],
+      "path": "C:\\Users\\18042\\Documents\\Codex\\2026-06-01\\chatgpt-context-request-algorithm-system-co\\github_publish\\eigenskill-research-pack\\outputs\\real_system_packer_2026-06-05\\chat_task_stress_v3_84_qwen3_0p6b_no_think_layers17_vonly_32tok.json"
+    },
+    {
+      "label": "konly_layers17",
+      "tasks": 84,
+      "baseline_passes": 46,
+      "fused_passes": 45,
+      "pass_delta": -1,
+      "baseline_tps": 22.201971418791125,
+      "fused_tps": 21.6376569235248,
+      "speedup": 0.9745826852660163,
+      "type_summary": {
+        "all_of": {
+          "tasks": 12,
+          "baseline_passes": 9,
+          "fused_passes": 9,
+          "regressions": 0,
+          "fixes": 0,
+          "both_pass": 9,
+          "both_fail": 3
+        },
+        "contains_all": {
+          "tasks": 12,
+          "baseline_passes": 0,
+          "fused_passes": 0,
+          "regressions": 0,
+          "fixes": 0,
+          "both_pass": 0,
+          "both_fail": 12
+        },
+        "contains_none": {
+          "tasks": 12,
+          "baseline_passes": 12,
+          "fused_passes": 12,
+          "regressions": 0,
+          "fixes": 0,
+          "both_pass": 12,
+          "both_fail": 0
+        },
+        "json_keys": {
+          "tasks": 12,
+          "baseline_passes": 7,
+          "fused_passes": 6,
+          "regressions": 1,
+          "fixes": 0,
+          "both_pass": 6,
+          "both_fail": 5
+        },
+        "mcq": {
+          "tasks": 12,
+          "baseline_passes": 10,
+          "fused_passes": 10,
+          "regressions": 0,
+          "fixes": 0,
+          "both_pass": 10,
+          "both_fail": 2
+        },
+        "number": {
+          "tasks": 12,
+          "baseline_passes": 3,
+          "fused_passes": 3,
+          "regressions": 0,
+          "fixes": 0,
+          "both_pass": 3,
+          "both_fail": 9
+        },
+        "sentence_count": {
+          "tasks": 6,
+          "baseline_passes": 4,
+          "fused_passes": 4,
+          "regressions": 0,
+          "fixes": 0,
+          "both_pass": 4,
+          "both_fail": 2
+        },
+        "word_count": {
+          "tasks": 6,
+          "baseline_passes": 1,
+          "fused_passes": 1,
+          "regressions": 0,
+          "fixes": 0,
+          "both_pass": 1,
+          "both_fail": 5
+        }
+      },
+      "regressions": [
+        {
+          "id": "stress_json_keys_001",
+          "type": "json_keys",
+          "kind": "regression",
+          "expected": [
+            "risk",
+            "evidence"
+          ],
+          "baseline_text": "<think> </think> ```json { \"risk\": \"calibration_split_instability\", \"evidence\": \"calibration_split_instability\" }",
+          "fused_text": "<think> </think> ```json { \"risk\": \"calibration_split_inconsistency\", \"evidence\": \"calibration_split_inconsistency",
+          "baseline_score": {
+            "passed": true,
+            "found": [
+              "evidence",
+              "risk"
+            ],
+            "expected": [
+              "evidence",
+              "risk"
+            ]
+          },
+          "fused_score": {
+            "passed": false,
+            "found": [],
+            "expected": [
+              "evidence",
+              "risk"
+            ]
+          }
+        }
+      ],
+      "fixes": [],
+      "path": "C:\\Users\\18042\\Documents\\Codex\\2026-06-01\\chatgpt-context-request-algorithm-system-co\\github_publish\\eigenskill-research-pack\\outputs\\real_system_packer_2026-06-05\\chat_task_stress_v3_84_qwen3_0p6b_no_think_layers17_konly_32tok.json"
+    }
+  ]
+}

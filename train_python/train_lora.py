@@ -4,13 +4,42 @@ from pathlib import Path
 import torch
 from datasets import load_dataset
 from peft import LoraConfig, get_peft_model
-from transformers import AutoModelForCausalLM, AutoTokenizer, TrainingArguments
+from transformers import AutoModelForCausalLM, AutoTokenizer, DataCollatorForSeq2Seq, Trainer, TrainingArguments
 from trl import SFTTrainer
 
 
 def add_completion(example):
     example["completion"] = " " + example["response"]
+    example["text"] = example["prompt"] + example["completion"]
     return example
+
+
+def tokenize_completion_only(example, tokenizer, max_length):
+    prompt = example.get("prompt") or example.get("input") or ""
+    eos = tokenizer.eos_token or ""
+    completion = " " + example["response"] + eos
+
+    prompt_ids = tokenizer(prompt, add_special_tokens=False)["input_ids"]
+    completion_ids = tokenizer(completion, add_special_tokens=False)["input_ids"]
+    if not completion_ids and tokenizer.eos_token_id is not None:
+        completion_ids = [tokenizer.eos_token_id]
+    if not completion_ids:
+        raise ValueError("completion tokenization produced no tokens and tokenizer has no eos_token_id")
+
+    if len(completion_ids) >= max_length:
+        input_ids = completion_ids[-max_length:]
+        labels = list(input_ids)
+    else:
+        prompt_budget = max_length - len(completion_ids)
+        kept_prompt = prompt_ids[-prompt_budget:]
+        input_ids = kept_prompt + completion_ids
+        labels = [-100] * len(kept_prompt) + list(completion_ids)
+
+    return {
+        "input_ids": input_ids,
+        "attention_mask": [1] * len(input_ids),
+        "labels": labels,
+    }
 
 
 def main():
@@ -27,6 +56,11 @@ def main():
     parser.add_argument("--lora-r", type=int, default=16)
     parser.add_argument("--lora-alpha", type=int, default=32)
     parser.add_argument("--no-gradient-checkpointing", action="store_true")
+    parser.add_argument(
+        "--completion-only-loss",
+        action="store_true",
+        help="Mask prompt tokens with -100 labels so LoRA learns only the JSON response tokens.",
+    )
     parser.add_argument("--seed", type=int, default=42)
     args = parser.parse_args()
 
@@ -43,6 +77,7 @@ def main():
         torch_dtype=dtype,
         device_map="auto" if torch.cuda.is_available() else None,
     )
+    model.config.pad_token_id = tokenizer.pad_token_id
     model.config.use_cache = False
     if not args.no_gradient_checkpointing:
         model.gradient_checkpointing_enable()
@@ -92,12 +127,30 @@ def main():
         report_to=[],
     )
 
-    trainer = SFTTrainer(
-        model=model,
-        args=train_args,
-        train_dataset=dataset["train"],
-        eval_dataset=dataset["eval"],
-    )
+    if args.completion_only_loss:
+        tokenized = dataset.map(
+            lambda example: tokenize_completion_only(example, tokenizer, args.max_length),
+            remove_columns=dataset["train"].column_names,
+        )
+        trainer = Trainer(
+            model=model,
+            args=train_args,
+            train_dataset=tokenized["train"],
+            eval_dataset=tokenized["eval"],
+            data_collator=DataCollatorForSeq2Seq(
+                tokenizer=tokenizer,
+                model=model,
+                label_pad_token_id=-100,
+                pad_to_multiple_of=8 if torch.cuda.is_available() else None,
+            ),
+        )
+    else:
+        trainer = SFTTrainer(
+            model=model,
+            args=train_args,
+            train_dataset=dataset["train"],
+            eval_dataset=dataset["eval"],
+        )
     trainer.train()
     trainer.save_model(str(out))
     tokenizer.save_pretrained(str(out))

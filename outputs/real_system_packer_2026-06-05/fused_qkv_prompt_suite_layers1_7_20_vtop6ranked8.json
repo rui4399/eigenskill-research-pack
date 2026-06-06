@@ -1,0 +1,234 @@
+{
+  "date": "2026-06-05T23:01:51Z",
+  "model": "Qwen/Qwen3-0.6B",
+  "device": "cuda",
+  "dtype": "float16",
+  "package_summary": "/mnt/c/Users/18042/Documents/Codex/2026-06-01/chatgpt-context-request-algorithm-system-co/github_publish/eigenskill-research-pack/outputs/real_system_packer_2026-06-05/qwen3_0p6b_layers17_layer20_v_top6ranked8_guard/pack_summary.json",
+  "layers": [
+    1,
+    7,
+    20
+  ],
+  "suffixes": [
+    "q_proj",
+    "k_proj",
+    "v_proj"
+  ],
+  "dense_roles": [],
+  "max_new_tokens": 32,
+  "sync_mode": "end",
+  "prompts": [
+    "Explain mixed-precision quantization in one concise paragraph.",
+    "Give a short JSON object with fields task, risk, and next_step for model quantization.",
+    "Solve briefly: if an INT4 row stores 1024 weights, how many packed bytes are needed?",
+    "Write a compact C++ function signature for a mixed INT4/INT8 GEMV kernel.",
+    "List two reasons calibration data can make quantization unstable.",
+    "In one sentence, explain why replacing QKV projections can change generated text."
+  ],
+  "rows": [
+    {
+      "id": 0,
+      "prompt": "Explain mixed-precision quantization in one concise paragraph.",
+      "baseline": {
+        "prompt_tokens": 12,
+        "generated_tokens_text_retokenized": 32,
+        "ttft_seconds": 0.03558951200000138,
+        "elapsed_seconds": 1.3699483720000103,
+        "tokens_per_second": 23.35854449265316,
+        "generated_text": " Also, explain the difference between mixed-precision and single-precision. | Also, explain the difference between mixed-precision and floating-point. | Also, explain"
+      },
+      "fused": {
+        "prompt_tokens": 12,
+        "generated_tokens_text_retokenized": 32,
+        "ttft_seconds": 0.987717454999995,
+        "elapsed_seconds": 2.412466346000002,
+        "tokens_per_second": 13.264433741452065,
+        "generated_text": " Also, explain the difference between mixed-precision and single-precision. Please provide an example of a scenario where mixed-precision is used. Additionally, explain what"
+      },
+      "comparison": {
+        "exact_match": false,
+        "baseline_chars": 166,
+        "fused_chars": 173,
+        "common_prefix_chars": 76,
+        "common_prefix_ratio": 0.4578313253012048,
+        "char_edit_distance": 64,
+        "char_edit_similarity": 0.630057803468208
+      }
+    },
+    {
+      "id": 1,
+      "prompt": "Give a short JSON object with fields task, risk, and next_step for model quantization.",
+      "baseline": {
+        "prompt_tokens": 19,
+        "generated_tokens_text_retokenized": 32,
+        "ttft_seconds": 0.0425286690000064,
+        "elapsed_seconds": 1.6094016300000078,
+        "tokens_per_second": 19.883166142934655,
+        "generated_text": " The task is to implement a model quantization strategy that reduces the model's computational complexity. The model is a simple neural network with 1000 nodes"
+      },
+      "fused": {
+        "prompt_tokens": 19,
+        "generated_tokens_text_retokenized": 32,
+        "ttft_seconds": 0.31379767800001446,
+        "elapsed_seconds": 1.563083376999998,
+        "tokens_per_second": 20.472356414804377,
+        "generated_text": " The task is to implement a model quantization strategy that reduces the model's computational complexity. The model is a deep neural network. The next step is to implement"
+      },
+      "comparison": {
+        "exact_match": false,
+        "baseline_chars": 159,
+        "fused_chars": 172,
+        "common_prefix_chars": 122,
+        "common_prefix_ratio": 0.7672955974842768,
+        "char_edit_distance": 31,
+        "char_edit_similarity": 0.8197674418604651
+      }
+    },
+    {
+      "id": 2,
+      "prompt": "Solve briefly: if an INT4 row stores 1024 weights, how many packed bytes are needed?",
+      "baseline": {
+        "prompt_tokens": 24,
+        "generated_tokens_text_retokenized": 32,
+        "ttft_seconds": 0.09219373099998052,
+        "elapsed_seconds": 1.447307238999997,
+        "tokens_per_second": 22.11002552720602,
+        "generated_text": " (Assume that the row is a 4-bit wide row, and that the row is a 4-bit wide row, and that the row is a"
+      },
+      "fused": {
+        "prompt_tokens": 24,
+        "generated_tokens_text_retokenized": 32,
+        "ttft_seconds": 0.3258111859999815,
+        "elapsed_seconds": 1.954511200999974,
+        "tokens_per_second": 16.37237995035692,
+        "generated_text": " (Assume that the row is a 4-bit wide row, and that the row is a 4-bit wide row, and that the row is a"
+      },
+      "comparison": {
+        "exact_match": true,
+        "baseline_chars": 102,
+        "fused_chars": 102,
+        "common_prefix_chars": 102,
+        "common_prefix_ratio": 1.0,
+        "char_edit_distance": 0,
+        "char_edit_similarity": 1.0
+      }
+    },
+    {
+      "id": 3,
+      "prompt": "Write a compact C++ function signature for a mixed INT4/INT8 GEMV kernel.",
+      "baseline": {
+        "prompt_tokens": 20,
+        "generated_tokens_text_retokenized": 32,
+        "ttft_seconds": 0.03590471499998671,
+        "elapsed_seconds": 1.2458335720000093,
+        "tokens_per_second": 25.685613808454793,
+        "generated_text": " The function should be able to handle both INT4 and INT8 data types, and should be able to handle both 16 and 32-bit data"
+      },
+      "fused": {
+        "prompt_tokens": 20,
+        "generated_tokens_text_retokenized": 32,
+        "ttft_seconds": 0.34511216999999306,
+        "elapsed_seconds": 1.701147039999995,
+        "tokens_per_second": 18.810837186655007,
+        "generated_text": " The function should be able to handle both INT4 and INT8 data types, and should be able to handle both 16 and 32-bit data"
+      },
+      "comparison": {
+        "exact_match": true,
+        "baseline_chars": 122,
+        "fused_chars": 122,
+        "common_prefix_chars": 122,
+        "common_prefix_ratio": 1.0,
+        "char_edit_distance": 0,
+        "char_edit_similarity": 1.0
+      }
+    },
+    {
+      "id": 4,
+      "prompt": "List two reasons calibration data can make quantization unstable.",
+      "baseline": {
+        "prompt_tokens": 11,
+        "generated_tokens_text_retokenized": 32,
+        "ttft_seconds": 0.03194224599999984,
+        "elapsed_seconds": 1.423552132000026,
+        "tokens_per_second": 22.47898006730632,
+        "generated_text": " Explain each reason.\nAnswer:\nThe main idea is that **calibration data** can affect the **quantization process** by introducing **inconsistencies**"
+      },
+      "fused": {
+        "prompt_tokens": 11,
+        "generated_tokens_text_retokenized": 32,
+        "ttft_seconds": 0.31721496000000116,
+        "elapsed_seconds": 1.524008452000004,
+        "tokens_per_second": 20.997258878719077,
+        "generated_text": " Explain each reason.\nAnswer:\nThe main idea is to explain why calibration data can affect the quantization process. \n\nQuantization is the process of converting a continuous"
+      },
+      "comparison": {
+        "exact_match": false,
+        "baseline_chars": 147,
+        "fused_chars": 172,
+        "common_prefix_chars": 48,
+        "common_prefix_ratio": 0.32653061224489793,
+        "char_edit_distance": 63,
+        "char_edit_similarity": 0.6337209302325582
+      }
+    },
+    {
+      "id": 5,
+      "prompt": "In one sentence, explain why replacing QKV projections can change generated text.",
+      "baseline": {
+        "prompt_tokens": 15,
+        "generated_tokens_text_retokenized": 32,
+        "ttft_seconds": 0.030219798000018727,
+        "elapsed_seconds": 1.3977988110000013,
+        "tokens_per_second": 22.893137229889927,
+        "generated_text": " QKV is a key part of the transformer architecture. The key part is the attention mechanism. The attention mechanism is a way of finding the most relevant parts of"
+      },
+      "fused": {
+        "prompt_tokens": 15,
+        "generated_tokens_text_retokenized": 32,
+        "ttft_seconds": 0.3104287900000031,
+        "elapsed_seconds": 1.744722147999994,
+        "tokens_per_second": 18.341029278892442,
+        "generated_text": " QKV is a key part of the transformer architecture, but it's not used in the standard transformer model. So, what is the purpose of QKV in"
+      },
+      "comparison": {
+        "exact_match": false,
+        "baseline_chars": 163,
+        "fused_chars": 138,
+        "common_prefix_chars": 50,
+        "common_prefix_ratio": 0.3067484662576687,
+        "char_edit_distance": 84,
+        "char_edit_similarity": 0.48466257668711654
+      }
+    }
+  ],
+  "aggregate": {
+    "prompts": 6,
+    "exact_matches": 2,
+    "exact_match_rate": 0.3333333333333333,
+    "mean_char_edit_similarity": 0.7613681253747246,
+    "median_char_edit_similarity": 0.7267441860465116,
+    "mean_common_prefix_ratio": 0.6430676668813413,
+    "median_common_prefix_ratio": 0.6125634613927408,
+    "mean_baseline_tokens_per_second": 22.73491121140748,
+    "mean_fused_tokens_per_second": 18.043049241813314,
+    "mean_speedup_fused_vs_baseline": 0.7936274337750668,
+    "median_baseline_ttft_seconds": 0.03574711349999404,
+    "median_fused_ttft_seconds": 0.3215130729999913
+  },
+  "replacement_raw_fp32_bytes": 50331648,
+  "replacement_package_bytes": 12747328,
+  "replacement_compression_vs_fp32": 3.9484076976759366,
+  "replacement_dense_role_calls": 0,
+  "replacement_wrapper_calls": 1728,
+  "replacement_fused_compute_calls": 576,
+  "replacement_cache_hits": 1152,
+  "replacement_cache_misses": 576,
+  "replacement_cuda_event_ms": {
+    "sum": 2688.7725473511964,
+    "mean": 4.668007894706938,
+    "median": 0.15971200168132782,
+    "p90": 0.280799999833107,
+    "max": 593.1608276367188
+  },
+  "peak_gpu_memory_mib": 1164.42431640625
+}

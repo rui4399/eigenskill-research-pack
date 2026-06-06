@@ -1,0 +1,1053 @@
+{
+  "model": "Qwen/Qwen3-0.6B",
+  "task_file": "data_eval/ifeval_deterministic_v2.jsonl",
+  "task_format": "ifeval",
+  "task_count": 8,
+  "chat_template": true,
+  "no_think": true,
+  "max_new_tokens": 64,
+  "baseline": {
+    "aggregate": {
+      "tasks": 8,
+      "passes": 2,
+      "accuracy": 0.25,
+      "mean_tokens_per_second": 24.23744352159766,
+      "mean_ttft_seconds": 0.2273213183749998
+    },
+    "rows": [
+      {
+        "id": "ifeval_v2_json_only",
+        "type": "all_of",
+        "prompt": "Return JSON only: include keys risk and next_step describing a quantization rowguard that overfits prompts.\n/no_think",
+        "answer": [
+          {
+            "type": "json_valid",
+            "answer": true
+          },
+          {
+            "type": "contains_all",
+            "answer": [
+              "risk",
+              "next_step"
+            ]
+          }
+        ],
+        "generated_text": "<think>\n\n</think>\n\n```json\n{\n  \"risk\": \"The quantization rowguard introduces a mechanism to prevent overfitting by limiting the number of parameters and reducing the complexity of the model during training.\",\n  \"next_step\": \"Implement a quantization strategy that balances between reducing model size and maintaining performance, ensuring",
+        "score": {
+          "passed": false,
+          "sub_scores": [
+            {
+              "passed": false,
+              "parsed_type": null
+            },
+            {
+              "passed": true,
+              "missing": [],
+              "expected": [
+                "risk",
+                "next_step"
+              ]
+            }
+          ],
+          "expected": [
+            {
+              "type": "json_valid",
+              "answer": true
+            },
+            {
+              "type": "contains_all",
+              "answer": [
+                "risk",
+                "next_step"
+              ]
+            }
+          ]
+        },
+        "ttft_seconds": 1.2728226459999998,
+        "tokens_per_second": 16.10010723468877
+      },
+      {
+        "id": "ifeval_v2_forbidden_speed_claim",
+        "type": "all_of",
+        "prompt": "Write one sentence about packed weight compression. Do not use the word faster.\n/no_think",
+        "answer": [
+          {
+            "type": "contains_all",
+            "answer": [
+              "compression",
+              "latency"
+            ]
+          },
+          {
+            "type": "contains_none",
+            "answer": [
+              "faster"
+            ]
+          },
+          {
+            "type": "sentence_count",
+            "answer": {
+              "count": 1
+            }
+          }
+        ],
+        "generated_text": "<think>\n\n</think>\n\nPacked weight compression is a method used to reduce the weight of objects by compressing them into a compact form.",
+        "score": {
+          "passed": false,
+          "sub_scores": [
+            {
+              "passed": false,
+              "missing": [
+                "latency"
+              ],
+              "expected": [
+                "compression",
+                "latency"
+              ]
+            },
+            {
+              "passed": true,
+              "present": [],
+              "expected_absent": [
+                "faster"
+              ]
+            },
+            {
+              "passed": true,
+              "found": 1,
+              "expected": 1
+            }
+          ],
+          "expected": [
+            {
+              "type": "contains_all",
+              "answer": [
+                "compression",
+                "latency"
+              ]
+            },
+            {
+              "type": "contains_none",
+              "answer": [
+                "faster"
+              ]
+            },
+            {
+              "type": "sentence_count",
+              "answer": {
+                "count": 1
+              }
+            }
+          ]
+        },
+        "ttft_seconds": 0.06708345399999871,
+        "tokens_per_second": 27.25435640496839
+      },
+      {
+        "id": "ifeval_v2_exact_sentence_count",
+        "type": "all_of",
+        "prompt": "Explain why held-out prompts matter for rowguard claims in exactly two sentences.\n/no_think",
+        "answer": [
+          {
+            "type": "contains_all",
+            "answer": [
+              "held-out",
+              "rowguard"
+            ]
+          },
+          {
+            "type": "sentence_count",
+            "answer": {
+              "count": 2
+            }
+          }
+        ],
+        "generated_text": "<think>\n\n</think>\n\nheld-out prompts matter for rowguard claims because they provide context and background information that helps the model understand the specific requirements or constraints of the task, which is crucial for accurate and relevant responses. This ensures that the generated content aligns with the intended purpose and avoids potential misunderstandings.",
+        "score": {
+          "passed": true,
+          "sub_scores": [
+            {
+              "passed": true,
+              "missing": [],
+              "expected": [
+                "held-out",
+                "rowguard"
+              ]
+            },
+            {
+              "passed": true,
+              "found": 2,
+              "expected": 2
+            }
+          ],
+          "expected": [
+            {
+              "type": "contains_all",
+              "answer": [
+                "held-out",
+                "rowguard"
+              ]
+            },
+            {
+              "type": "sentence_count",
+              "answer": {
+                "count": 2
+              }
+            }
+          ]
+        },
+        "ttft_seconds": 0.09388226700000146,
+        "tokens_per_second": 26.684239388691342
+      },
+      {
+        "id": "ifeval_v2_word_count",
+        "type": "all_of",
+        "prompt": "Answer with exactly four words naming deployment metrics for edge LLMs.\n/no_think",
+        "answer": [
+          {
+            "type": "contains_all",
+            "answer": [
+              "TTFT",
+              "throughput",
+              "memory"
+            ]
+          },
+          {
+            "type": "word_count",
+            "answer": {
+              "count": 4
+            }
+          }
+        ],
+        "generated_text": "<think>\n\n</think>\n\nedge deployment metrics",
+        "score": {
+          "passed": false,
+          "sub_scores": [
+            {
+              "passed": false,
+              "missing": [
+                "ttft",
+                "throughput",
+                "memory"
+              ],
+              "expected": [
+                "ttft",
+                "throughput",
+                "memory"
+              ]
+            },
+            {
+              "passed": false,
+              "found": 3,
+              "expected": 4
+            }
+          ],
+          "expected": [
+            {
+              "type": "contains_all",
+              "answer": [
+                "TTFT",
+                "throughput",
+                "memory"
+              ]
+            },
+            {
+              "type": "word_count",
+              "answer": {
+                "count": 4
+              }
+            }
+          ]
+        },
+        "ttft_seconds": 0.06334809699999866,
+        "tokens_per_second": 27.05347205709681
+      },
+      {
+        "id": "ifeval_v2_forbidden_sota",
+        "type": "all_of",
+        "prompt": "State a cautious conclusion about the current ESMP fused runtime in one sentence. Do not use the word SOTA.\n/no_think",
+        "answer": [
+          {
+            "type": "contains_all",
+            "answer": [
+              "runtime",
+              "speedup"
+            ]
+          },
+          {
+            "type": "contains_none",
+            "answer": [
+              "SOTA"
+            ]
+          },
+          {
+            "type": "sentence_count",
+            "answer": {
+              "count": 1
+            }
+          }
+        ],
+        "generated_text": "<think>\n\n</think>\n\nThe current ESMP fused runtime is a cautious and optimized approach to managing execution, balancing performance and resource usage effectively.",
+        "score": {
+          "passed": false,
+          "sub_scores": [
+            {
+              "passed": false,
+              "missing": [
+                "speedup"
+              ],
+              "expected": [
+                "runtime",
+                "speedup"
+              ]
+            },
+            {
+              "passed": true,
+              "present": [],
+              "expected_absent": [
+                "sota"
+              ]
+            },
+            {
+              "passed": true,
+              "found": 1,
+              "expected": 1
+            }
+          ],
+          "expected": [
+            {
+              "type": "contains_all",
+              "answer": [
+                "runtime",
+                "speedup"
+              ]
+            },
+            {
+              "type": "contains_none",
+              "answer": [
+                "SOTA"
+              ]
+            },
+            {
+              "type": "sentence_count",
+              "answer": {
+                "count": 1
+              }
+            }
+          ]
+        },
+        "ttft_seconds": 0.06897327999999803,
+        "tokens_per_second": 30.16156956286006
+      },
+      {
+        "id": "ifeval_v2_json_metric_value",
+        "type": "all_of",
+        "prompt": "Return JSON only with keys metric and value. Use metric for TTFT and value for a placeholder string.\n/no_think",
+        "answer": [
+          {
+            "type": "json_valid",
+            "answer": true
+          },
+          {
+            "type": "contains_all",
+            "answer": [
+              "metric",
+              "value",
+              "TTFT"
+            ]
+          }
+        ],
+        "generated_text": "<think>\n\n</think>\n\n```json\n{\n  \"metric\": \"TTFT\",\n  \"value\": \"placeholder string\"\n}\n```",
+        "score": {
+          "passed": false,
+          "sub_scores": [
+            {
+              "passed": false,
+              "parsed_type": null
+            },
+            {
+              "passed": true,
+              "missing": [],
+              "expected": [
+                "metric",
+                "value",
+                "ttft"
+              ]
+            }
+          ],
+          "expected": [
+            {
+              "type": "json_valid",
+              "answer": true
+            },
+            {
+              "type": "contains_all",
+              "answer": [
+                "metric",
+                "value",
+                "TTFT"
+              ]
+            }
+          ]
+        },
+        "ttft_seconds": 0.08973236900000003,
+        "tokens_per_second": 25.628535218014008
+      },
+      {
+        "id": "ifeval_v2_single_sentence_caveat",
+        "type": "all_of",
+        "prompt": "Write exactly one sentence saying perplexity alone is insufficient without task accuracy.\n/no_think",
+        "answer": [
+          {
+            "type": "contains_all",
+            "answer": [
+              "perplexity",
+              "task accuracy"
+            ]
+          },
+          {
+            "type": "sentence_count",
+            "answer": {
+              "count": 1
+            }
+          }
+        ],
+        "generated_text": "<think>\n\n</think>\n\nPerplexity alone is insufficient without task accuracy.",
+        "score": {
+          "passed": true,
+          "sub_scores": [
+            {
+              "passed": true,
+              "missing": [],
+              "expected": [
+                "perplexity",
+                "task accuracy"
+              ]
+            },
+            {
+              "passed": true,
+              "found": 1,
+              "expected": 1
+            }
+          ],
+          "expected": [
+            {
+              "type": "contains_all",
+              "answer": [
+                "perplexity",
+                "task accuracy"
+              ]
+            },
+            {
+              "type": "sentence_count",
+              "answer": {
+                "count": 1
+              }
+            }
+          ]
+        },
+        "ttft_seconds": 0.06731864200000004,
+        "tokens_per_second": 23.179128578839972
+      },
+      {
+        "id": "ifeval_v2_forbid_generalizes",
+        "type": "all_of",
+        "prompt": "Write one sentence about rowguard evidence. Do not say it generalizes.\n/no_think",
+        "answer": [
+          {
+            "type": "contains_all",
+            "answer": [
+              "evidence",
+              "prompt"
+            ]
+          },
+          {
+            "type": "contains_none",
+            "answer": [
+              "generalizes"
+            ]
+          },
+          {
+            "type": "sentence_count",
+            "answer": {
+              "count": 1
+            }
+          }
+        ],
+        "generated_text": "<think>\n\n</think>\n\nThe rowguard evidence provides critical insights into the incident's progression and potential outcomes.",
+        "score": {
+          "passed": false,
+          "sub_scores": [
+            {
+              "passed": false,
+              "missing": [
+                "prompt"
+              ],
+              "expected": [
+                "evidence",
+                "prompt"
+              ]
+            },
+            {
+              "passed": true,
+              "present": [],
+              "expected_absent": [
+                "generalizes"
+              ]
+            },
+            {
+              "passed": true,
+              "found": 1,
+              "expected": 1
+            }
+          ],
+          "expected": [
+            {
+              "type": "contains_all",
+              "answer": [
+                "evidence",
+                "prompt"
+              ]
+            },
+            {
+              "type": "contains_none",
+              "answer": [
+                "generalizes"
+              ]
+            },
+            {
+              "type": "sentence_count",
+              "answer": {
+                "count": 1
+              }
+            }
+          ]
+        },
+        "ttft_seconds": 0.09540979200000166,
+        "tokens_per_second": 17.838139727621925
+      }
+    ]
+  },
+  "fused": {
+    "aggregate": {
+      "tasks": 8,
+      "passes": 2,
+      "accuracy": 0.25,
+      "mean_tokens_per_second": 26.35110655165576,
+      "mean_ttft_seconds": 0.15075683937500006
+    },
+    "rows": [
+      {
+        "id": "ifeval_v2_json_only",
+        "type": "all_of",
+        "prompt": "Return JSON only: include keys risk and next_step describing a quantization rowguard that overfits prompts.\n/no_think",
+        "answer": [
+          {
+            "type": "json_valid",
+            "answer": true
+          },
+          {
+            "type": "contains_all",
+            "answer": [
+              "risk",
+              "next_step"
+            ]
+          }
+        ],
+        "generated_text": "<think>\n\n</think>\n\n```json\n{\n  \"risk\": \"The quantization rowguard introduces a risk of overfitting prompts by limiting the number of parameters and reducing the model's ability to generalize.\",\n  \"next_step\": \"Implement a more robust quantization strategy, such as using mixed-precision training or introducing",
+        "score": {
+          "passed": false,
+          "sub_scores": [
+            {
+              "passed": false,
+              "parsed_type": null
+            },
+            {
+              "passed": true,
+              "missing": [],
+              "expected": [
+                "risk",
+                "next_step"
+              ]
+            }
+          ],
+          "expected": [
+            {
+              "type": "json_valid",
+              "answer": true
+            },
+            {
+              "type": "contains_all",
+              "answer": [
+                "risk",
+                "next_step"
+              ]
+            }
+          ]
+        },
+        "ttft_seconds": 0.7220720709999995,
+        "tokens_per_second": 22.219855823007528
+      },
+      {
+        "id": "ifeval_v2_forbidden_speed_claim",
+        "type": "all_of",
+        "prompt": "Write one sentence about packed weight compression. Do not use the word faster.\n/no_think",
+        "answer": [
+          {
+            "type": "contains_all",
+            "answer": [
+              "compression",
+              "latency"
+            ]
+          },
+          {
+            "type": "contains_none",
+            "answer": [
+              "faster"
+            ]
+          },
+          {
+            "type": "sentence_count",
+            "answer": {
+              "count": 1
+            }
+          }
+        ],
+        "generated_text": "<think>\n\n</think>\n\nPacked weight compression is a method used to reduce the weight of a product by compressing it into smaller, more compact units.",
+        "score": {
+          "passed": false,
+          "sub_scores": [
+            {
+              "passed": false,
+              "missing": [
+                "latency"
+              ],
+              "expected": [
+                "compression",
+                "latency"
+              ]
+            },
+            {
+              "passed": true,
+              "present": [],
+              "expected_absent": [
+                "faster"
+              ]
+            },
+            {
+              "passed": true,
+              "found": 1,
+              "expected": 1
+            }
+          ],
+          "expected": [
+            {
+              "type": "contains_all",
+              "answer": [
+                "compression",
+                "latency"
+              ]
+            },
+            {
+              "type": "contains_none",
+              "answer": [
+                "faster"
+              ]
+            },
+            {
+              "type": "sentence_count",
+              "answer": {
+                "count": 1
+              }
+            }
+          ]
+        },
+        "ttft_seconds": 0.07107071799999787,
+        "tokens_per_second": 29.49154030546002
+      },
+      {
+        "id": "ifeval_v2_exact_sentence_count",
+        "type": "all_of",
+        "prompt": "Explain why held-out prompts matter for rowguard claims in exactly two sentences.\n/no_think",
+        "answer": [
+          {
+            "type": "contains_all",
+            "answer": [
+              "held-out",
+              "rowguard"
+            ]
+          },
+          {
+            "type": "sentence_count",
+            "answer": {
+              "count": 2
+            }
+          }
+        ],
+        "generated_text": "<think>\n\n</think>\n\nheld-out prompts matter for rowguard claims because they provide context and background information that helps the model understand the specific requirements or constraints of the task, which is crucial for accurate and relevant responses. This ensures that the model's generated content aligns with the intended purpose and avoids potential misunderstandings.",
+        "score": {
+          "passed": true,
+          "sub_scores": [
+            {
+              "passed": true,
+              "missing": [],
+              "expected": [
+                "held-out",
+                "rowguard"
+              ]
+            },
+            {
+              "passed": true,
+              "found": 2,
+              "expected": 2
+            }
+          ],
+          "expected": [
+            {
+              "type": "contains_all",
+              "answer": [
+                "held-out",
+                "rowguard"
+              ]
+            },
+            {
+              "type": "sentence_count",
+              "answer": {
+                "count": 2
+              }
+            }
+          ]
+        },
+        "ttft_seconds": 0.06957502199999865,
+        "tokens_per_second": 26.71335529242947
+      },
+      {
+        "id": "ifeval_v2_word_count",
+        "type": "all_of",
+        "prompt": "Answer with exactly four words naming deployment metrics for edge LLMs.\n/no_think",
+        "answer": [
+          {
+            "type": "contains_all",
+            "answer": [
+              "TTFT",
+              "throughput",
+              "memory"
+            ]
+          },
+          {
+            "type": "word_count",
+            "answer": {
+              "count": 4
+            }
+          }
+        ],
+        "generated_text": "<think>\n\n</think>\n\nedge deployment metrics",
+        "score": {
+          "passed": false,
+          "sub_scores": [
+            {
+              "passed": false,
+              "missing": [
+                "ttft",
+                "throughput",
+                "memory"
+              ],
+              "expected": [
+                "ttft",
+                "throughput",
+                "memory"
+              ]
+            },
+            {
+              "passed": false,
+              "found": 3,
+              "expected": 4
+            }
+          ],
+          "expected": [
+            {
+              "type": "contains_all",
+              "answer": [
+                "TTFT",
+                "throughput",
+                "memory"
+              ]
+            },
+            {
+              "type": "word_count",
+              "answer": {
+                "count": 4
+              }
+            }
+          ]
+        },
+        "ttft_seconds": 0.06885634400000384,
+        "tokens_per_second": 22.50013148916118
+      },
+      {
+        "id": "ifeval_v2_forbidden_sota",
+        "type": "all_of",
+        "prompt": "State a cautious conclusion about the current ESMP fused runtime in one sentence. Do not use the word SOTA.\n/no_think",
+        "answer": [
+          {
+            "type": "contains_all",
+            "answer": [
+              "runtime",
+              "speedup"
+            ]
+          },
+          {
+            "type": "contains_none",
+            "answer": [
+              "SOTA"
+            ]
+          },
+          {
+            "type": "sentence_count",
+            "answer": {
+              "count": 1
+            }
+          }
+        ],
+        "generated_text": "<think>\n\n</think>\n\nThe current ESMP fused runtime is a cautious and optimized approach to managing complex execution scenarios.",
+        "score": {
+          "passed": false,
+          "sub_scores": [
+            {
+              "passed": false,
+              "missing": [
+                "speedup"
+              ],
+              "expected": [
+                "runtime",
+                "speedup"
+              ]
+            },
+            {
+              "passed": true,
+              "present": [],
+              "expected_absent": [
+                "sota"
+              ]
+            },
+            {
+              "passed": true,
+              "found": 1,
+              "expected": 1
+            }
+          ],
+          "expected": [
+            {
+              "type": "contains_all",
+              "answer": [
+                "runtime",
+                "speedup"
+              ]
+            },
+            {
+              "type": "contains_none",
+              "answer": [
+                "SOTA"
+              ]
+            },
+            {
+              "type": "sentence_count",
+              "answer": {
+                "count": 1
+              }
+            }
+          ]
+        },
+        "ttft_seconds": 0.07630804699999771,
+        "tokens_per_second": 28.66501239142896
+      },
+      {
+        "id": "ifeval_v2_json_metric_value",
+        "type": "all_of",
+        "prompt": "Return JSON only with keys metric and value. Use metric for TTFT and value for a placeholder string.\n/no_think",
+        "answer": [
+          {
+            "type": "json_valid",
+            "answer": true
+          },
+          {
+            "type": "contains_all",
+            "answer": [
+              "metric",
+              "value",
+              "TTFT"
+            ]
+          }
+        ],
+        "generated_text": "<think>\n\n</think>\n\n```json\n{\n  \"metric\": \"TTFT\",\n  \"value\": \"placeholder\"\n}\n```",
+        "score": {
+          "passed": false,
+          "sub_scores": [
+            {
+              "passed": false,
+              "parsed_type": null
+            },
+            {
+              "passed": true,
+              "missing": [],
+              "expected": [
+                "metric",
+                "value",
+                "ttft"
+              ]
+            }
+          ],
+          "expected": [
+            {
+              "type": "json_valid",
+              "answer": true
+            },
+            {
+              "type": "contains_all",
+              "answer": [
+                "metric",
+                "value",
+                "TTFT"
+              ]
+            }
+          ]
+        },
+        "ttft_seconds": 0.06287166999999982,
+        "tokens_per_second": 26.695905702654617
+      },
+      {
+        "id": "ifeval_v2_single_sentence_caveat",
+        "type": "all_of",
+        "prompt": "Write exactly one sentence saying perplexity alone is insufficient without task accuracy.\n/no_think",
+        "answer": [
+          {
+            "type": "contains_all",
+            "answer": [
+              "perplexity",
+              "task accuracy"
+            ]
+          },
+          {
+            "type": "sentence_count",
+            "answer": {
+              "count": 1
+            }
+          }
+        ],
+        "generated_text": "<think>\n\n</think>\n\nPerplexity alone is insufficient without task accuracy.",
+        "score": {
+          "passed": true,
+          "sub_scores": [
+            {
+              "passed": true,
+              "missing": [],
+              "expected": [
+                "perplexity",
+                "task accuracy"
+              ]
+            },
+            {
+              "passed": true,
+              "found": 1,
+              "expected": 1
+            }
+          ],
+          "expected": [
+            {
+              "type": "contains_all",
+              "answer": [
+                "perplexity",
+                "task accuracy"
+              ]
+            },
+            {
+              "type": "sentence_count",
+              "answer": {
+                "count": 1
+              }
+            }
+          ]
+        },
+        "ttft_seconds": 0.06991035000000068,
+        "tokens_per_second": 29.32133180504959
+      },
+      {
+        "id": "ifeval_v2_forbid_generalizes",
+        "type": "all_of",
+        "prompt": "Write one sentence about rowguard evidence. Do not say it generalizes.\n/no_think",
+        "answer": [
+          {
+            "type": "contains_all",
+            "answer": [
+              "evidence",
+              "prompt"
+            ]
+          },
+          {
+            "type": "contains_none",
+            "answer": [
+              "generalizes"
+            ]
+          },
+          {
+            "type": "sentence_count",
+            "answer": {
+              "count": 1
+            }
+          }
+        ],
+        "generated_text": "<think>\n\n</think>\n\nRowguard evidence is used to determine the accuracy of a claim by analyzing the physical and structural characteristics of the object in question.",
+        "score": {
+          "passed": false,
+          "sub_scores": [
+            {
+              "passed": false,
+              "missing": [
+                "prompt"
+              ],
+              "expected": [
+                "evidence",
+                "prompt"
+              ]
+            },
+            {
+              "passed": true,
+              "present": [],
+              "expected_absent": [
+                "generalizes"
+              ]
+            },
+            {
+              "passed": true,
+              "found": 1,
+              "expected": 1
+            }
+          ],
+          "expected": [
+            {
+              "type": "contains_all",
+              "answer": [
+                "evidence",
+                "prompt"
+              ]
+            },
+            {
+              "type": "contains_none",
+              "answer": [
+                "generalizes"
+              ]
+            },
+            {
+              "type": "sentence_count",
+              "answer": {
+                "count": 1
+              }
+            }
+          ]
+        },
+        "ttft_seconds": 0.06539049300000244,
+        "tokens_per_second": 25.201719604054738
+      }
+    ]
+  }
+}

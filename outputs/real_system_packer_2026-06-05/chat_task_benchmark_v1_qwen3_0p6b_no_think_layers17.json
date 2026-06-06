@@ -1,0 +1,496 @@
+{
+  "model": "Qwen/Qwen3-0.6B",
+  "task_file": "data_eval/chat_task_benchmark_v1.jsonl",
+  "task_count": 12,
+  "chat_template": true,
+  "no_think": true,
+  "max_new_tokens": 32,
+  "baseline": {
+    "aggregate": {
+      "tasks": 12,
+      "passes": 3,
+      "accuracy": 0.25,
+      "mean_tokens_per_second": 22.867615986371586,
+      "mean_ttft_seconds": 0.1743164410833297
+    },
+    "rows": [
+      {
+        "id": "mmlu_style_memory_metric",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter. In an edge-LLM deployment paper, which metric directly reports peak device memory? A. BLEU B. peak GPU memory C. ROUGE D. WikiText2 perplexity\n/no_think",
+        "answer": "B",
+        "generated_text": "<think>\n\n</think>\n\nB. peak GPU memory",
+        "score": {
+          "passed": false,
+          "predicted": null,
+          "expected": "B"
+        },
+        "ttft_seconds": 1.103951498000015,
+        "tokens_per_second": 6.392063745472221
+      },
+      {
+        "id": "mmlu_style_math_benchmark",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter. Which common benchmark is primarily a grade-school math word-problem benchmark? A. GSM8K B. HumanEval C. IFEval D. WikiText2\n/no_think",
+        "answer": "A",
+        "generated_text": "<think>\n\n</think>\n\nB. HumanEval",
+        "score": {
+          "passed": false,
+          "predicted": null,
+          "expected": "A"
+        },
+        "ttft_seconds": 0.17194051500001706,
+        "tokens_per_second": 16.506563455306896
+      },
+      {
+        "id": "mmlu_style_calibration_instability",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter. If a mixed-precision policy ranks important modules differently on WikiText2 and C4 calibration splits, what issue is being measured? A. tokenization speed B. calibration split instability C. CUDA occupancy D. tokenizer vocabulary size\n/no_think",
+        "answer": "B",
+        "generated_text": "<think>\n\n</think>\n\nB. calibration split instability",
+        "score": {
+          "passed": false,
+          "predicted": null,
+          "expected": "B"
+        },
+        "ttft_seconds": 0.06569530000001578,
+        "tokens_per_second": 18.35409011659876
+      },
+      {
+        "id": "gsm8k_style_int4_bytes",
+        "type": "number",
+        "prompt": "Answer with only the final number. A row stores 8192 signed 4-bit weights. Two weights fit in one byte. How many packed bytes are needed?\n/no_think",
+        "answer": "4096",
+        "generated_text": "<think>\n\n</think>\n\nTwo weights fit in one byte. A row stores 8192 signed 4-bit weights.  \nSo, the number of packed",
+        "score": {
+          "passed": false,
+          "predicted": [
+            "8192",
+            "4"
+          ],
+          "expected": "4096"
+        },
+        "ttft_seconds": 0.06424174399995763,
+        "tokens_per_second": 19.995734060106628
+      },
+      {
+        "id": "gsm8k_style_average_bits",
+        "type": "number",
+        "prompt": "Answer with only the final number. A matrix stores 75 percent of rows at 4 bits and 25 percent at 8 bits. What is the average bit width?\n/no_think",
+        "answer": "5",
+        "generated_text": "<think>\n\n</think>\n\nThe average bit width is calculated by taking the weighted average of the bit widths of the rows:\n\n$$\n\\text{Average bit width}",
+        "score": {
+          "passed": false,
+          "predicted": [],
+          "expected": "5"
+        },
+        "ttft_seconds": 0.06149650100002191,
+        "tokens_per_second": 29.47269126004492
+      },
+      {
+        "id": "gsm8k_style_selected_rows_bytes",
+        "type": "number",
+        "prompt": "Answer with only the final number. A selected-row kernel reads 64 rows, each with 4096 signed 4-bit weights. Two weights fit in one byte. How many packed bytes are read?\n/no_think",
+        "answer": "131072",
+        "generated_text": "<think>\n\n</think>\n\nEach row has 4096 signed 4-bit weights, and two weights fit in one byte. \n\nSo, the number of",
+        "score": {
+          "passed": false,
+          "predicted": [
+            "4096",
+            "4"
+          ],
+          "expected": "131072"
+        },
+        "ttft_seconds": 0.06558503899998414,
+        "tokens_per_second": 25.843133481614608
+      },
+      {
+        "id": "ifeval_style_risk_json",
+        "type": "json_keys",
+        "prompt": "Return minified JSON only with keys risk and next_step. The content should describe a rowguard that passes exact-match prompts but has high hidden-state drift.\n/no_think",
+        "answer": [
+          "risk",
+          "next_step"
+        ],
+        "generated_text": "<think>\n\n</think>\n\n```json\n{\n  \"risk\": \"rowguard\",\n  \"next_step\": \"high hidden-state drift\"\n}\n```",
+        "score": {
+          "passed": true,
+          "found": [
+            "next_step",
+            "risk"
+          ],
+          "expected": [
+            "next_step",
+            "risk"
+          ]
+        },
+        "ttft_seconds": 0.07878180000000157,
+        "tokens_per_second": 23.760388185096886
+      },
+      {
+        "id": "ifeval_style_metric_json",
+        "type": "json_keys",
+        "prompt": "Return minified JSON only with keys metric and value. Use metric to name TTFT and value to give a placeholder numeric string.\n/no_think",
+        "answer": [
+          "metric",
+          "value"
+        ],
+        "generated_text": "<think>\n\n</think>\n\n```json\n{\"metric\": \"TTFT\", \"value\": \"placeholder\"}\n```",
+        "score": {
+          "passed": true,
+          "found": [
+            "metric",
+            "value"
+          ],
+          "expected": [
+            "metric",
+            "value"
+          ]
+        },
+        "ttft_seconds": 0.07282134899998027,
+        "tokens_per_second": 28.10282347234103
+      },
+      {
+        "id": "ifeval_style_ppl_caveat",
+        "type": "contains_all",
+        "prompt": "In one sentence, explain why perplexity alone is not enough evidence for a quantized instruction model.\n/no_think",
+        "answer": [
+          "perplexity",
+          "task",
+          "accuracy"
+        ],
+        "generated_text": "<think>\n\n</think>\n\nPerplexity alone is not sufficient evidence for a quantized instruction model because it measures the model's ability to generalize and predict, but does",
+        "score": {
+          "passed": false,
+          "missing": [
+            "task",
+            "accuracy"
+          ],
+          "expected": [
+            "perplexity",
+            "task",
+            "accuracy"
+          ]
+        },
+        "ttft_seconds": 0.10130877999995391,
+        "tokens_per_second": 31.36485980122817
+      },
+      {
+        "id": "ifeval_style_compression_caveat",
+        "type": "contains_all",
+        "prompt": "Write one concise caveat: packed weight compression is not the same as latency speedup.\n/no_think",
+        "answer": [
+          "compression",
+          "latency",
+          "speedup"
+        ],
+        "generated_text": "<think>\n\n</think>\n\n**Caveat:** Packed weight compression is not the same as latency speedup.",
+        "score": {
+          "passed": true,
+          "missing": [],
+          "expected": [
+            "compression",
+            "latency",
+            "speedup"
+          ]
+        },
+        "ttft_seconds": 0.0851154489999999,
+        "tokens_per_second": 21.349697356200934
+      },
+      {
+        "id": "ifeval_style_rowguard_generalization",
+        "type": "contains_all",
+        "prompt": "State one requirement before claiming a rowguard generalizes across prompts.\n/no_think",
+        "answer": [
+          "held",
+          "out",
+          "prompt"
+        ],
+        "generated_text": "<think>\n\n</think>\n\nOne requirement before claiming a rowguard generalizes across prompts is that the rowguard must be **compatible with the specific prompt**. This means",
+        "score": {
+          "passed": false,
+          "missing": [
+            "held",
+            "out"
+          ],
+          "expected": [
+            "held",
+            "out",
+            "prompt"
+          ]
+        },
+        "ttft_seconds": 0.10791641200000868,
+        "tokens_per_second": 27.425072631834407
+      },
+      {
+        "id": "ifeval_style_deployment_metrics",
+        "type": "contains_all",
+        "prompt": "Name three physical deployment metrics for an edge LLM: include TTFT, throughput, and memory.\n/no_think",
+        "answer": [
+          "ttft",
+          "throughput",
+          "memory"
+        ],
+        "generated_text": "<think>\n\n</think>\n\nThree physical deployment metrics for an edge LLM are:\n\n1. **TTFT (Total Time to First Token)** – Measures the time it",
+        "score": {
+          "passed": false,
+          "missing": [
+            "throughput",
+            "memory"
+          ],
+          "expected": [
+            "ttft",
+            "throughput",
+            "memory"
+          ]
+        },
+        "ttft_seconds": 0.11294290600000068,
+        "tokens_per_second": 25.844274270613575
+      }
+    ]
+  },
+  "fused": {
+    "aggregate": {
+      "tasks": 12,
+      "passes": 3,
+      "accuracy": 0.25,
+      "mean_tokens_per_second": 19.40659510976833,
+      "mean_ttft_seconds": 0.24787965250000354
+    },
+    "rows": [
+      {
+        "id": "mmlu_style_memory_metric",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter. In an edge-LLM deployment paper, which metric directly reports peak device memory? A. BLEU B. peak GPU memory C. ROUGE D. WikiText2 perplexity\n/no_think",
+        "answer": "B",
+        "generated_text": "<think>\n\n</think>\n\nB. peak GPU memory",
+        "score": {
+          "passed": false,
+          "predicted": null,
+          "expected": "B"
+        },
+        "ttft_seconds": 0.8765929060000417,
+        "tokens_per_second": 7.870987256567126
+      },
+      {
+        "id": "mmlu_style_math_benchmark",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter. Which common benchmark is primarily a grade-school math word-problem benchmark? A. GSM8K B. HumanEval C. IFEval D. WikiText2\n/no_think",
+        "answer": "A",
+        "generated_text": "<think>\n\n</think>\n\nB. HumanEval",
+        "score": {
+          "passed": false,
+          "predicted": null,
+          "expected": "A"
+        },
+        "ttft_seconds": 0.24939516299997422,
+        "tokens_per_second": 16.05872550659711
+      },
+      {
+        "id": "mmlu_style_calibration_instability",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter. If a mixed-precision policy ranks important modules differently on WikiText2 and C4 calibration splits, what issue is being measured? A. tokenization speed B. calibration split instability C. CUDA occupancy D. tokenizer vocabulary size\n/no_think",
+        "answer": "B",
+        "generated_text": "<think>\n\n</think>\n\nB. calibration split instability",
+        "score": {
+          "passed": false,
+          "predicted": null,
+          "expected": "B"
+        },
+        "ttft_seconds": 0.19306513399999403,
+        "tokens_per_second": 17.116180581052877
+      },
+      {
+        "id": "gsm8k_style_int4_bytes",
+        "type": "number",
+        "prompt": "Answer with only the final number. A row stores 8192 signed 4-bit weights. Two weights fit in one byte. How many packed bytes are needed?\n/no_think",
+        "answer": "4096",
+        "generated_text": "<think>\n\n</think>\n\nTwo weights fit in one byte. A row stores 8192 signed 4-bit weights.  \nSo, the number of packed",
+        "score": {
+          "passed": false,
+          "predicted": [
+            "8192",
+            "4"
+          ],
+          "expected": "4096"
+        },
+        "ttft_seconds": 0.24798756500001673,
+        "tokens_per_second": 21.307579529593475
+      },
+      {
+        "id": "gsm8k_style_average_bits",
+        "type": "number",
+        "prompt": "Answer with only the final number. A matrix stores 75 percent of rows at 4 bits and 25 percent at 8 bits. What is the average bit width?\n/no_think",
+        "answer": "5",
+        "generated_text": "<think>\n\n</think>\n\nThe average bit width is calculated by taking the weighted average of the bit widths of the rows:\n\n$$\n\\text{Average bit width}",
+        "score": {
+          "passed": false,
+          "predicted": [],
+          "expected": "5"
+        },
+        "ttft_seconds": 0.1774236960000053,
+        "tokens_per_second": 24.382159191015255
+      },
+      {
+        "id": "gsm8k_style_selected_rows_bytes",
+        "type": "number",
+        "prompt": "Answer with only the final number. A selected-row kernel reads 64 rows, each with 4096 signed 4-bit weights. Two weights fit in one byte. How many packed bytes are read?\n/no_think",
+        "answer": "131072",
+        "generated_text": "<think>\n\n</think>\n\nEach row has 4096 signed 4-bit weights, and two weights fit in one byte. \n\nSo, the number of",
+        "score": {
+          "passed": false,
+          "predicted": [
+            "4096",
+            "4"
+          ],
+          "expected": "131072"
+        },
+        "ttft_seconds": 0.1855182159999913,
+        "tokens_per_second": 22.089522560131154
+      },
+      {
+        "id": "ifeval_style_risk_json",
+        "type": "json_keys",
+        "prompt": "Return minified JSON only with keys risk and next_step. The content should describe a rowguard that passes exact-match prompts but has high hidden-state drift.\n/no_think",
+        "answer": [
+          "risk",
+          "next_step"
+        ],
+        "generated_text": "<think>\n\n</think>\n\n```json\n{\n  \"risk\": \"rowguard\",\n  \"next_step\": \"high hidden-state drift\"\n}\n```",
+        "score": {
+          "passed": true,
+          "found": [
+            "next_step",
+            "risk"
+          ],
+          "expected": [
+            "next_step",
+            "risk"
+          ]
+        },
+        "ttft_seconds": 0.20664253000001054,
+        "tokens_per_second": 21.915748995940476
+      },
+      {
+        "id": "ifeval_style_metric_json",
+        "type": "json_keys",
+        "prompt": "Return minified JSON only with keys metric and value. Use metric to name TTFT and value to give a placeholder numeric string.\n/no_think",
+        "answer": [
+          "metric",
+          "value"
+        ],
+        "generated_text": "<think>\n\n</think>\n\n```json\n{\"metric\": \"TTFT\", \"value\": \"placeholder\"}\n```",
+        "score": {
+          "passed": true,
+          "found": [
+            "metric",
+            "value"
+          ],
+          "expected": [
+            "metric",
+            "value"
+          ]
+        },
+        "ttft_seconds": 0.249801237999975,
+        "tokens_per_second": 17.85541914113624
+      },
+      {
+        "id": "ifeval_style_ppl_caveat",
+        "type": "contains_all",
+        "prompt": "In one sentence, explain why perplexity alone is not enough evidence for a quantized instruction model.\n/no_think",
+        "answer": [
+          "perplexity",
+          "task",
+          "accuracy"
+        ],
+        "generated_text": "<think>\n\n</think>\n\nPerplexity alone is not sufficient evidence for a quantized instruction model because it measures the model's ability to generalize and predict, but does",
+        "score": {
+          "passed": false,
+          "missing": [
+            "task",
+            "accuracy"
+          ],
+          "expected": [
+            "perplexity",
+            "task",
+            "accuracy"
+          ]
+        },
+        "ttft_seconds": 0.1949782359999972,
+        "tokens_per_second": 21.924625951921666
+      },
+      {
+        "id": "ifeval_style_compression_caveat",
+        "type": "contains_all",
+        "prompt": "Write one concise caveat: packed weight compression is not the same as latency speedup.\n/no_think",
+        "answer": [
+          "compression",
+          "latency",
+          "speedup"
+        ],
+        "generated_text": "<think>\n\n</think>\n\n**Caveat:** Packed weight compression is not the same as latency speedup.",
+        "score": {
+          "passed": true,
+          "missing": [],
+          "expected": [
+            "compression",
+            "latency",
+            "speedup"
+          ]
+        },
+        "ttft_seconds": 0.11304240599997684,
+        "tokens_per_second": 20.14136594884075
+      },
+      {
+        "id": "ifeval_style_rowguard_generalization",
+        "type": "contains_all",
+        "prompt": "State one requirement before claiming a rowguard generalizes across prompts.\n/no_think",
+        "answer": [
+          "held",
+          "out",
+          "prompt"
+        ],
+        "generated_text": "<think>\n\n</think>\n\nOne requirement before claiming a rowguard generalizes across prompts is that the rowguard must be **compatible with the specific prompt**. This means",
+        "score": {
+          "passed": false,
+          "missing": [
+            "held",
+            "out"
+          ],
+          "expected": [
+            "held",
+            "out",
+            "prompt"
+          ]
+        },
+        "ttft_seconds": 0.16625299400004678,
+        "tokens_per_second": 20.243236505049165
+      },
+      {
+        "id": "ifeval_style_deployment_metrics",
+        "type": "contains_all",
+        "prompt": "Name three physical deployment metrics for an edge LLM: include TTFT, throughput, and memory.\n/no_think",
+        "answer": [
+          "ttft",
+          "throughput",
+          "memory"
+        ],
+        "generated_text": "<think>\n\n</think>\n\nThree physical deployment metrics for an edge LLM are:\n\n1. **TTFT (Total Time to First Token)** – Measures the time it",
+        "score": {
+          "passed": false,
+          "missing": [
+            "throughput",
+            "memory"
+          ],
+          "expected": [
+            "ttft",
+            "throughput",
+            "memory"
+          ]
+        },
+        "ttft_seconds": 0.11385574600001291,
+        "tokens_per_second": 21.973590149374633
+      }
+    ]
+  }
+}

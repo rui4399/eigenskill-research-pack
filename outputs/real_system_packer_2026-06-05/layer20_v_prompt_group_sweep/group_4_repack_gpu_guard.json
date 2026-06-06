@@ -1,0 +1,71 @@
+{
+  "command": [
+    "python3",
+    "train_python/repack_qkv_precision_guard.py",
+    "--model",
+    "Qwen/Qwen3-0.6B",
+    "--base-summary",
+    "outputs/real_system_packer_2026-06-05/qwen3_0p6b_layers017_qkv8_guard/pack_summary.json",
+    "--row-overrides",
+    "model.layers.20.self_attn.v_proj:512:640=8",
+    "--out-dir",
+    "/mnt/c/Users/18042/Documents/Codex/2026-06-01/chatgpt-context-request-algorithm-system-co/github_publish/eigenskill-research-pack/outputs/real_system_packer_2026-06-05/layer20_v_prompt_group_sweep/group_4_8bit_package",
+    "--verify",
+    "--local-files-only"
+  ],
+  "returncode": 0,
+  "killed_by_guard": false,
+  "max_memory_used_mib": 2194,
+  "memory_total_mib": 8151,
+  "max_memory_used_ratio": 0.2691694270641639,
+  "max_utilization_gpu_pct": 6,
+  "start_state": {
+    "utilization_gpu_pct": 5,
+    "memory_used_mib": 2194,
+    "memory_total_mib": 8151,
+    "memory_used_ratio": 0.2691694270641639
+  },
+  "end_state": {
+    "utilization_gpu_pct": 5,
+    "memory_used_mib": 2193,
+    "memory_total_mib": 8151,
+    "memory_used_ratio": 0.26904674273095325
+  },
+  "samples": [
+    {
+      "utilization_gpu_pct": 5,
+      "memory_used_mib": 2194,
+      "memory_total_mib": 8151,
+      "memory_used_ratio": 0.2691694270641639,
+      "t_seconds": 1780701410.0587168
+    },
+    {
+      "utilization_gpu_pct": 5,
+      "memory_used_mib": 2194,
+      "memory_total_mib": 8151,
+      "memory_used_ratio": 0.2691694270641639,
+      "t_seconds": 1780701412.1298592
+    },
+    {
+      "utilization_gpu_pct": 6,
+      "memory_used_mib": 2193,
+      "memory_total_mib": 8151,
+      "memory_used_ratio": 0.26904674273095325,
+      "t_seconds": 1780701414.238367
+    },
+    {
+      "utilization_gpu_pct": 5,
+      "memory_used_mib": 2193,
+      "memory_total_mib": 8151,
+      "memory_used_ratio": 0.26904674273095325,
+      "t_seconds": 1780701416.3271756
+    },
+    {
+      "utilization_gpu_pct": 5,
+      "memory_used_mib": 2193,
+      "memory_total_mib": 8151,
+      "memory_used_ratio": 0.26904674273095325,
+      "t_seconds": 1780701418.4004438
+    }
+  ]
+}

@@ -17,6 +17,7 @@ struct PackedInt4Matrix {
     int cols = 0;
     std::vector<std::uint8_t> bytes;
     std::vector<float> row_scales;
+    std::vector<int> row_sums;
 };
 
 struct PackedLowBitMatrix {
@@ -52,6 +53,19 @@ void scalar_skill_bypass(const float* x, float* y, int n, float lambda);
 PackedInt4Matrix pack_int4_per_row(const float* w, int rows, int cols);
 std::int8_t unpack_signed_nibble(std::uint8_t byte, bool high);
 void int4_dequant_gemv(const PackedInt4Matrix& packed, const float* x, float* y);
+void int4_selected_rows_gemv(
+    const PackedInt4Matrix& packed,
+    const float* x,
+    const int* rows,
+    int active_rows,
+    float* y);
+void int4_maddubs_gemv(const PackedInt4Matrix& packed, const float* x, float* y);
+void int4_maddubs_selected_rows_gemv(
+    const PackedInt4Matrix& packed,
+    const float* x,
+    const int* rows,
+    int active_rows,
+    float* y);
 
 PackedLowBitMatrix pack_lowbit_per_row(const float* w, int rows, int cols, int bits);
 std::int8_t unpack_signed_bits(const std::uint8_t* bytes, std::size_t bit_offset, int bits);

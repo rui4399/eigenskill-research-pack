@@ -18,6 +18,9 @@ models/
 *.bin
 *.gguf
 *.onnx
+*.esmp
+*.f32
+*.raw
 
 # Local tooling/cache
 .codegraph/
@@ -26,3 +29,15 @@ Thumbs.db
 
 # Logs that are not selected evidence artifacts.
 *.log.tmp
+
+# Generated packed-runtime directories. Keep selected top-level reports/JSON,
+# but do not publish binary package trees or raw tuning sweeps.
+outputs/real_system_packer_2026-06-05/**/*_package/
+outputs/real_system_packer_2026-06-05/qwen3_*/
+outputs/real_system_packer_2026-06-05/qwen3_esmp/
+outputs/real_system_packer_2026-06-05/sweeps/
+outputs/real_system_packer_2026-06-05/triton_tuning*/
+outputs/real_system_packer_2026-06-05/fused_block_sweep/
+outputs/real_system_packer_2026-06-05/layer20_v_prompt_group_*_sweep/
+outputs/real_system_packer_2026-06-05/layer20_v_prompt_group_sevengroup_focus/
+outputs/real_system_packer_2026-06-05/neon_mixed_decode_x86_smoke

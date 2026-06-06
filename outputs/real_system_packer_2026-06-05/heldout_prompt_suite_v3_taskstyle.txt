@@ -1,0 +1,27 @@
+# Larger task-style held-out prompt suite for proxy-filtered ESMP QKV policies.
+# Generated after the proxy-augmented selector. Avoids reusing v1/v2 wording.
+
+Explain in two sentences why calibration prompts can bias a mixed-precision row search.
+Write minified JSON with keys hypothesis, proxy, and risk for a quantized runtime experiment.
+Compute the packed byte count for 8192 signed 4-bit values. Answer with only the number and unit.
+Give a C++ function signature for loading a row-wise mixed-bit weight file into memory.
+State two reasons a selected-row kernel can be fast in a microbenchmark but not in full decoding.
+In one sentence, explain why KV-cache drift may reveal quantization damage before exact text changes.
+List three ablations needed before claiming a rowguard generalizes across prompt splits.
+Compare prompt exact match and logit relative L2 as evaluation signals in one concise paragraph.
+Name two physical deployment metrics for an edge LLM besides tokens per second.
+Write a conservative paper-title subtitle for a study about calibration split instability.
+Describe how a dense fallback for layer 0 could improve QKV replacement quality.
+Give one failure case where increasing a row group from INT4 to INT8 does not improve generation.
+Write a short README caveat saying that packed memory compression is not the same as latency speedup.
+Explain in one paragraph why local reconstruction error may fail to rank attention rows for generation.
+Return a YAML snippet with fields model, policy, prompt_splits, and allowed_claim.
+What is the average bit width if 75 percent of rows use 4-bit and 25 percent use 8-bit?
+Give two examples of task-style benchmarks that are stronger than perplexity for quantized LLMs.
+Write a one-line warning against tuning precision policies on the test prompts.
+Explain why a proxy selector should penalize large hidden-state drift even when exact output matches.
+Draft three bullet points for an experiment plan that separates speed evidence from quality evidence.
+State one reason grouped Triton kernels may lose to dense GEMM on tiny batch-one shapes.
+Write a compact JSON object describing a failed rowguard with keys symptom and next_test.
+In exactly one sentence, define prompt-split instability for precision-policy search.
+Give a short recommendation for choosing between baseline, full-V8, and rowguard candidates.

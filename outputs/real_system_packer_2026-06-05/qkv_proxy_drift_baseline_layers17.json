@@ -1,0 +1,957 @@
+{
+  "date": "2026-06-06T01:37:08+00:00",
+  "candidate_label": "baseline_layers17",
+  "model": "Qwen/Qwen3-0.6B",
+  "dtype": "float16",
+  "device": "cuda",
+  "package_summary": "/mnt/c/Users/18042/Documents/Codex/2026-06-01/chatgpt-context-request-algorithm-system-co/github_publish/eigenskill-research-pack/outputs/real_system_packer_2026-06-05/qwen3_0p6b_layers017_qkv8_guard/pack_summary.json",
+  "prompt_file": "outputs/real_system_packer_2026-06-05/heldout_prompt_suite_v2.txt",
+  "layers": [
+    1,
+    7
+  ],
+  "suffixes": [
+    "q_proj",
+    "k_proj",
+    "v_proj"
+  ],
+  "dense_roles": [],
+  "max_length": 96,
+  "replacement_compression_vs_fp32": 3.9082221393961984,
+  "replacement_cuda_event_ms": {
+    "sum": 588.4346956387162,
+    "mean": 24.518112318279844,
+    "median": 0.26584000885486603,
+    "p90": 4.497455978393555,
+    "max": 555.5301513671875
+  },
+  "peak_gpu_memory_mib": 1171.955078125,
+  "aggregate": {
+    "prompts": 12,
+    "final_hidden_rel_l2": {
+      "mean": 0.003705349257372537,
+      "median": 0.0036458024431735153,
+      "max": 0.005022932066285772
+    },
+    "last_logits_rel_l2": {
+      "mean": 0.003827428565650689,
+      "median": 0.003602596473098546,
+      "max": 0.005210031597431046
+    },
+    "kv_mean_rel_l2": {
+      "mean": 0.007134991146759254,
+      "median": 0.007114452382331264,
+      "max": 0.007366016551250157
+    },
+    "kv_max_rel_l2": {
+      "mean": 0.013253630708122549,
+      "median": 0.013180652131276081,
+      "max": 0.013952414442825032
+    },
+    "final_hidden_normalized_mse": {
+      "mean": 1.407680141399985e-05,
+      "median": 1.3302912005557777e-05,
+      "max": 2.5229899413225028e-05
+    },
+    "last_logits_normalized_mse": {
+      "mean": 1.5341303367783478e-05,
+      "median": 1.3029804064725328e-05,
+      "max": 2.714476986716706e-05
+    },
+    "kv_mean_normalized_mse": {
+      "mean": 7.099029396392092e-05,
+      "median": 7.00657897636465e-05,
+      "max": 7.653420571479456e-05
+    }
+  },
+  "rows": [
+    {
+      "id": 0,
+      "prompt": "Explain calibration-set sensitivity in mixed-bit LLM quantization using exactly two sentences.",
+      "input_length": 17,
+      "final_hidden_rel_l2": 0.004269113148005774,
+      "final_hidden_normalized_mse": 1.8225358341233445e-05,
+      "last_logits_rel_l2": 0.004429858048568792,
+      "last_logits_normalized_mse": 1.962389829953879e-05,
+      "kv_mean_rel_l2": 0.00695028850741951,
+      "kv_max_rel_l2": 0.01277994625644086,
+      "kv_mean_normalized_mse": 6.736856332485048e-05,
+      "kv_errors": [
+        {
+          "layer": 1,
+          "kind": "key",
+          "name": "layer1_key",
+          "shape": [
+            1,
+            8,
+            17,
+            128
+          ],
+          "rel_l2": 0.002088585012794273,
+          "normalized_mse": 4.36219053340418e-06,
+          "reference_l2": 1417.46044921875,
+          "diff_l2": 2.960486650466919
+        },
+        {
+          "layer": 1,
+          "kind": "value",
+          "name": "layer1_value",
+          "shape": [
+            1,
+            8,
+            17,
+            128
+          ],
+          "rel_l2": 0.0094794606470586,
+          "normalized_mse": 8.986034207472544e-05,
+          "reference_l2": 14.085746765136719,
+          "diff_l2": 0.1335252821445465
+        },
+        {
+          "layer": 7,
+          "kind": "key",
+          "name": "layer7_key",
+          "shape": [
+            1,
+            8,
+            17,
+            128
+          ],
+          "rel_l2": 0.0034531621133843064,
+          "normalized_mse": 1.1924335928875433e-05,
+          "reference_l2": 611.3134765625,
+          "diff_l2": 2.11096453666687
+        },
+        {
+          "layer": 7,
+          "kind": "value",
+          "name": "layer7_value",
+          "shape": [
+            1,
+            8,
+            17,
+            128
+          ],
+          "rel_l2": 0.01277994625644086,
+          "normalized_mse": 0.0001633273847623969,
+          "reference_l2": 66.29815673828125,
+          "diff_l2": 0.8472868800163269
+        }
+      ]
+    },
+    {
+      "id": 1,
+      "prompt": "Produce minified JSON with keys policy, evidence, and caveat for a precision-routing experiment.",
+      "input_length": 19,
+      "final_hidden_rel_l2": 0.0043498629961108305,
+      "final_hidden_normalized_mse": 1.8921342276397353e-05,
+      "last_logits_rel_l2": 0.005210031597431046,
+      "last_logits_normalized_mse": 2.714476986716706e-05,
+      "kv_mean_rel_l2": 0.007366016551250157,
+      "kv_max_rel_l2": 0.013952414442825032,
+      "kv_mean_normalized_mse": 7.653420571479456e-05,
+      "kv_errors": [
+        {
+          "layer": 1,
+          "kind": "key",
+          "name": "layer1_key",
+          "shape": [
+            1,
+            8,
+            19,
+            128
+          ],
+          "rel_l2": 0.002271539712690133,
+          "normalized_mse": 5.159898029421347e-06,
+          "reference_l2": 1509.131103515625,
+          "diff_l2": 3.428051233291626
+        },
+        {
+          "layer": 1,
+          "kind": "value",
+          "name": "layer1_value",
+          "shape": [
+            1,
+            8,
+            19,
+            128
+          ],
+          "rel_l2": 0.009674228649717427,
+          "normalized_mse": 9.359085426797166e-05,
+          "reference_l2": 14.095019340515137,
+          "diff_l2": 0.13635843992233276
+        },
+        {
+          "layer": 7,
+          "kind": "key",
+          "name": "layer7_key",
+          "shape": [
+            1,
+            8,
+            19,
+            128
+          ],
+          "rel_l2": 0.003565883399768037,
+          "normalized_mse": 1.2715543208152792e-05,
+          "reference_l2": 645.6026611328125,
+          "diff_l2": 2.3021438121795654
+        },
+        {
+          "layer": 7,
+          "kind": "value",
+          "name": "layer7_value",
+          "shape": [
+            1,
+            8,
+            19,
+            128
+          ],
+          "rel_l2": 0.013952414442825032,
+          "normalized_mse": 0.00019467052735363242,
+          "reference_l2": 65.12464141845703,
+          "diff_l2": 0.9086459875106812
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "How many bytes store 4096 four-bit signed weights when packed densely? Give only the number and unit.",
+      "input_length": 24,
+      "final_hidden_rel_l2": 0.0037799866741549874,
+      "final_hidden_normalized_mse": 1.428832756324134e-05,
+      "last_logits_rel_l2": 0.004831544106560298,
+      "last_logits_normalized_mse": 2.334429269945909e-05,
+      "kv_mean_rel_l2": 0.0070555917170724005,
+      "kv_max_rel_l2": 0.013193061852526885,
+      "kv_mean_normalized_mse": 6.939468745506325e-05,
+      "kv_errors": [
+        {
+          "layer": 1,
+          "kind": "key",
+          "name": "layer1_key",
+          "shape": [
+            1,
+            8,
+            24,
+            128
+          ],
+          "rel_l2": 0.0022187373717595786,
+          "normalized_mse": 4.922803495799555e-06,
+          "reference_l2": 1728.48291015625,
+          "diff_l2": 3.835049629211426
+        },
+        {
+          "layer": 1,
+          "kind": "value",
+          "name": "layer1_value",
+          "shape": [
+            1,
+            8,
+            24,
+            128
+          ],
+          "rel_l2": 0.009281292574176645,
+          "normalized_mse": 8.614264276082845e-05,
+          "reference_l2": 16.23601722717285,
+          "diff_l2": 0.1506912261247635
+        },
+        {
+          "layer": 7,
+          "kind": "key",
+          "name": "layer7_key",
+          "shape": [
+            1,
+            8,
+            24,
+            128
+          ],
+          "rel_l2": 0.0035292750698264945,
+          "normalized_mse": 1.2455796062833056e-05,
+          "reference_l2": 740.9505004882812,
+          "diff_l2": 2.615018129348755
+        },
+        {
+          "layer": 7,
+          "kind": "value",
+          "name": "layer7_value",
+          "shape": [
+            1,
+            8,
+            24,
+            128
+          ],
+          "rel_l2": 0.013193061852526885,
+          "normalized_mse": 0.0001740575075007919,
+          "reference_l2": 75.59526824951172,
+          "diff_l2": 0.9973330497741699
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Write a C++ declaration for a function that multiplies selected quantized output rows by a dense activation vector.",
+      "input_length": 22,
+      "final_hidden_rel_l2": 0.0029780077158509735,
+      "final_hidden_normalized_mse": 8.86854282824812e-06,
+      "last_logits_rel_l2": 0.003376925141639788,
+      "last_logits_normalized_mse": 1.1403757027969268e-05,
+      "kv_mean_rel_l2": 0.00700762998447155,
+      "kv_max_rel_l2": 0.012956357617351972,
+      "kv_mean_normalized_mse": 6.863496657052127e-05,
+      "kv_errors": [
+        {
+          "layer": 1,
+          "kind": "key",
+          "name": "layer1_key",
+          "shape": [
+            1,
+            8,
+            22,
+            128
+          ],
+          "rel_l2": 0.002138251833903762,
+          "normalized_mse": 4.572126439264907e-06,
+          "reference_l2": 1634.9061279296875,
+          "diff_l2": 3.4958410263061523
+        },
+        {
+          "layer": 1,
+          "kind": "value",
+          "name": "layer1_value",
+          "shape": [
+            1,
+            8,
+            22,
+            128
+          ],
+          "rel_l2": 0.00950364122272757,
+          "normalized_mse": 9.031943933251851e-05,
+          "reference_l2": 15.371819496154785,
+          "diff_l2": 0.14608825743198395
+        },
+        {
+          "layer": 7,
+          "kind": "key",
+          "name": "layer7_key",
+          "shape": [
+            1,
+            8,
+            22,
+            128
+          ],
+          "rel_l2": 0.0034322692639028956,
+          "normalized_mse": 1.1780488278493022e-05,
+          "reference_l2": 676.40087890625,
+          "diff_l2": 2.321589946746826
+        },
+        {
+          "layer": 7,
+          "kind": "value",
+          "name": "layer7_value",
+          "shape": [
+            1,
+            8,
+            22,
+            128
+          ],
+          "rel_l2": 0.012956357617351972,
+          "normalized_mse": 0.00016786781223180865,
+          "reference_l2": 73.12377166748047,
+          "diff_l2": 0.9474177360534668
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "Give two distinct ways a row-level precision search can overfit a tiny generation prompt suite.",
+      "input_length": 18,
+      "final_hidden_rel_l2": 0.005022932066285772,
+      "final_hidden_normalized_mse": 2.5229899413225028e-05,
+      "last_logits_rel_l2": 0.004395725616957343,
+      "last_logits_normalized_mse": 1.932262873171702e-05,
+      "kv_mean_rel_l2": 0.007102648636424613,
+      "kv_max_rel_l2": 0.0129834373554015,
+      "kv_mean_normalized_mse": 6.969259521045534e-05,
+      "kv_errors": [
+        {
+          "layer": 1,
+          "kind": "key",
+          "name": "layer1_key",
+          "shape": [
+            1,
+            8,
+            18,
+            128
+          ],
+          "rel_l2": 0.0021880938922951123,
+          "normalized_mse": 4.787764350565456e-06,
+          "reference_l2": 1477.7567138671875,
+          "diff_l2": 3.2334704399108887
+        },
+        {
+          "layer": 1,
+          "kind": "value",
+          "name": "layer1_value",
+          "shape": [
+            1,
+            8,
+            18,
+            128
+          ],
+          "rel_l2": 0.009600789610805776,
+          "normalized_mse": 9.217535516592017e-05,
+          "reference_l2": 14.26131820678711,
+          "diff_l2": 0.13691991567611694
+        },
+        {
+          "layer": 7,
+          "kind": "key",
+          "name": "layer7_key",
+          "shape": [
+            1,
+            8,
+            18,
+            128
+          ],
+          "rel_l2": 0.003638273687196063,
+          "normalized_mse": 1.3237040107332219e-05,
+          "reference_l2": 629.1790771484375,
+          "diff_l2": 2.289125680923462
+        },
+        {
+          "layer": 7,
+          "kind": "value",
+          "name": "layer7_value",
+          "shape": [
+            1,
+            8,
+            18,
+            128
+          ],
+          "rel_l2": 0.0129834373554015,
+          "normalized_mse": 0.00016857022121800352,
+          "reference_l2": 70.12480926513672,
+          "diff_l2": 0.9104610681533813
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "prompt": "In one sentence, explain why INT8 protection of an attention value projection may still reduce exact-match fidelity.",
+      "input_length": 21,
+      "final_hidden_rel_l2": 0.0035408484467506084,
+      "final_hidden_normalized_mse": 1.2537628397869485e-05,
+      "last_logits_rel_l2": 0.002952454634948002,
+      "last_logits_normalized_mse": 8.717118430528976e-06,
+      "kv_mean_rel_l2": 0.007086574970929259,
+      "kv_max_rel_l2": 0.013168242410025278,
+      "kv_mean_normalized_mse": 6.957094391885166e-05,
+      "kv_errors": [
+        {
+          "layer": 1,
+          "kind": "key",
+          "name": "layer1_key",
+          "shape": [
+            1,
+            8,
+            21,
+            128
+          ],
+          "rel_l2": 0.0022584981826848597,
+          "normalized_mse": 5.100822954907143e-06,
+          "reference_l2": 1587.7471923828125,
+          "diff_l2": 3.5859241485595703
+        },
+        {
+          "layer": 1,
+          "kind": "value",
+          "name": "layer1_value",
+          "shape": [
+            1,
+            8,
+            21,
+            128
+          ],
+          "rel_l2": 0.009316537399882854,
+          "normalized_mse": 8.679807343709059e-05,
+          "reference_l2": 15.76567554473877,
+          "diff_l2": 0.14688150584697723
+        },
+        {
+          "layer": 7,
+          "kind": "key",
+          "name": "layer7_key",
+          "shape": [
+            1,
+            8,
+            21,
+            128
+          ],
+          "rel_l2": 0.003603021891124045,
+          "normalized_mse": 1.2981790492574995e-05,
+          "reference_l2": 674.880615234375,
+          "diff_l2": 2.431609630584717
+        },
+        {
+          "layer": 7,
+          "kind": "value",
+          "name": "layer7_value",
+          "shape": [
+            1,
+            8,
+            21,
+            128
+          ],
+          "rel_l2": 0.013168242410025278,
+          "normalized_mse": 0.00017340308879083393,
+          "reference_l2": 74.39689636230469,
+          "diff_l2": 0.979676365852356
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "prompt": "Draft a four-step ablation plan for testing whether a precision guard transfers across prompt splits.",
+      "input_length": 18,
+      "final_hidden_rel_l2": 0.003937898865342762,
+      "final_hidden_normalized_mse": 1.5507069762753204e-05,
+      "last_logits_rel_l2": 0.0031140040764149283,
+      "last_logits_normalized_mse": 9.697109645312171e-06,
+      "kv_mean_rel_l2": 0.007126256128237916,
+      "kv_max_rel_l2": 0.013515647493177605,
+      "kv_mean_normalized_mse": 7.210180602412019e-05,
+      "kv_errors": [
+        {
+          "layer": 1,
+          "kind": "key",
+          "name": "layer1_key",
+          "shape": [
+            1,
+            8,
+            18,
+            128
+          ],
+          "rel_l2": 0.0020468965734322343,
+          "normalized_mse": 4.1897905270822445e-06,
+          "reference_l2": 1462.7752685546875,
+          "diff_l2": 2.994149684906006
+        },
+        {
+          "layer": 1,
+          "kind": "value",
+          "name": "layer1_value",
+          "shape": [
+            1,
+            8,
+            18,
+            128
+          ],
+          "rel_l2": 0.009453691157836565,
+          "normalized_mse": 8.937250329688134e-05,
+          "reference_l2": 14.195452690124512,
+          "diff_l2": 0.13419942557811737
+        },
+        {
+          "layer": 7,
+          "kind": "key",
+          "name": "layer7_key",
+          "shape": [
+            1,
+            8,
+            18,
+            128
+          ],
+          "rel_l2": 0.003488789288505258,
+          "normalized_mse": 1.2171672297153845e-05,
+          "reference_l2": 618.8084106445312,
+          "diff_l2": 2.1588921546936035
+        },
+        {
+          "layer": 7,
+          "kind": "value",
+          "name": "layer7_value",
+          "shape": [
+            1,
+            8,
+            18,
+            128
+          ],
+          "rel_l2": 0.013515647493177605,
+          "normalized_mse": 0.00018267325797536332,
+          "reference_l2": 64.47203826904297,
+          "diff_l2": 0.8713813424110413
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "prompt": "Compare activation reconstruction error and generated-text prefix match in one compact paragraph.",
+      "input_length": 14,
+      "final_hidden_rel_l2": 0.003750756439596422,
+      "final_hidden_normalized_mse": 1.4068195613246068e-05,
+      "last_logits_rel_l2": 0.004819005813807629,
+      "last_logits_normalized_mse": 2.322319070720484e-05,
+      "kv_mean_rel_l2": 0.007255617691232104,
+      "kv_max_rel_l2": 0.013648703918554146,
+      "kv_mean_normalized_mse": 7.437056070535084e-05,
+      "kv_errors": [
+        {
+          "layer": 1,
+          "kind": "key",
+          "name": "layer1_key",
+          "shape": [
+            1,
+            8,
+            14,
+            128
+          ],
+          "rel_l2": 0.0021378396095386326,
+          "normalized_mse": 4.570359624480477e-06,
+          "reference_l2": 1310.6318359375,
+          "diff_l2": 2.8019206523895264
+        },
+        {
+          "layer": 1,
+          "kind": "value",
+          "name": "layer1_value",
+          "shape": [
+            1,
+            8,
+            14,
+            128
+          ],
+          "rel_l2": 0.009702547049369521,
+          "normalized_mse": 9.413960829339551e-05,
+          "reference_l2": 12.449771881103516,
+          "diff_l2": 0.12079449743032455
+        },
+        {
+          "layer": 7,
+          "kind": "key",
+          "name": "layer7_key",
+          "shape": [
+            1,
+            8,
+            14,
+            128
+          ],
+          "rel_l2": 0.003533380187466119,
+          "normalized_mse": 1.2484790408920977e-05,
+          "reference_l2": 559.0121459960938,
+          "diff_l2": 1.9752024412155151
+        },
+        {
+          "layer": 7,
+          "kind": "value",
+          "name": "layer7_value",
+          "shape": [
+            1,
+            8,
+            14,
+            128
+          ],
+          "rel_l2": 0.013648703918554146,
+          "normalized_mse": 0.00018628748449460637,
+          "reference_l2": 56.92820358276367,
+          "diff_l2": 0.7769961953163147
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "prompt": "Name two deployment metrics for an edge LLM runtime besides model size and perplexity.",
+      "input_length": 17,
+      "final_hidden_rel_l2": 0.003279922962371738,
+      "final_hidden_normalized_mse": 1.0757903650383973e-05,
+      "last_logits_rel_l2": 0.0030725780591521618,
+      "last_logits_normalized_mse": 9.440852226058594e-06,
+      "kv_mean_rel_l2": 0.007187491234153655,
+      "kv_max_rel_l2": 0.013047503765107668,
+      "kv_mean_normalized_mse": 7.09057694745536e-05,
+      "kv_errors": [
+        {
+          "layer": 1,
+          "kind": "key",
+          "name": "layer1_key",
+          "shape": [
+            1,
+            8,
+            17,
+            128
+          ],
+          "rel_l2": 0.00238125289592034,
+          "normalized_mse": 5.670370614446323e-06,
+          "reference_l2": 1428.83837890625,
+          "diff_l2": 3.402425527572632
+        },
+        {
+          "layer": 1,
+          "kind": "value",
+          "name": "layer1_value",
+          "shape": [
+            1,
+            8,
+            17,
+            128
+          ],
+          "rel_l2": 0.009741791826681116,
+          "normalized_mse": 9.490273118156527e-05,
+          "reference_l2": 13.4974946975708,
+          "diff_l2": 0.13148978352546692
+        },
+        {
+          "layer": 7,
+          "kind": "key",
+          "name": "layer7_key",
+          "shape": [
+            1,
+            8,
+            17,
+            128
+          ],
+          "rel_l2": 0.0035794164489054933,
+          "normalized_mse": 1.2812235048237976e-05,
+          "reference_l2": 592.9659423828125,
+          "diff_l2": 2.122472047805786
+        },
+        {
+          "layer": 7,
+          "kind": "value",
+          "name": "layer7_value",
+          "shape": [
+            1,
+            8,
+            17,
+            128
+          ],
+          "rel_l2": 0.013047503765107668,
+          "normalized_mse": 0.00017023774105396483,
+          "reference_l2": 62.68741226196289,
+          "diff_l2": 0.8179142475128174
+        }
+      ]
+    },
+    {
+      "id": 9,
+      "prompt": "Write a cautious README sentence explaining that a packed kernel benchmark is not an end-to-end acceleration claim.",
+      "input_length": 20,
+      "final_hidden_rel_l2": 0.003026882173867966,
+      "final_hidden_normalized_mse": 9.162023300404296e-06,
+      "last_logits_rel_l2": 0.0031986869438548056,
+      "last_logits_normalized_mse": 1.0231798573119567e-05,
+      "kv_mean_rel_l2": 0.0071366799630259055,
+      "kv_max_rel_l2": 0.013304991441455024,
+      "kv_mean_normalized_mse": 7.043898431683765e-05,
+      "kv_errors": [
+        {
+          "layer": 1,
+          "kind": "key",
+          "name": "layer1_key",
+          "shape": [
+            1,
+            8,
+            20,
+            128
+          ],
+          "rel_l2": 0.002410370285401392,
+          "normalized_mse": 5.809894197613882e-06,
+          "reference_l2": 1548.551025390625,
+          "diff_l2": 3.732581377029419
+        },
+        {
+          "layer": 1,
+          "kind": "value",
+          "name": "layer1_value",
+          "shape": [
+            1,
+            8,
+            20,
+            128
+          ],
+          "rel_l2": 0.009296696417029515,
+          "normalized_mse": 8.64287458734676e-05,
+          "reference_l2": 15.123701095581055,
+          "diff_l2": 0.14060045778751373
+        },
+        {
+          "layer": 7,
+          "kind": "key",
+          "name": "layer7_key",
+          "shape": [
+            1,
+            8,
+            20,
+            128
+          ],
+          "rel_l2": 0.003534661708217692,
+          "normalized_mse": 1.2493845417139022e-05,
+          "reference_l2": 644.5941772460938,
+          "diff_l2": 2.2784223556518555
+        },
+        {
+          "layer": 7,
+          "kind": "value",
+          "name": "layer7_value",
+          "shape": [
+            1,
+            8,
+            20,
+            128
+          ],
+          "rel_l2": 0.013304991441455024,
+          "normalized_mse": 0.00017702345177913009,
+          "reference_l2": 71.09870147705078,
+          "diff_l2": 0.9459676146507263
+        }
+      ]
+    },
+    {
+      "id": 10,
+      "prompt": "Describe how hidden-state drift could be used as a cheap proxy for selecting sensitive rows.",
+      "input_length": 17,
+      "final_hidden_rel_l2": 0.003418969993770702,
+      "final_hidden_normalized_mse": 1.1689373168237499e-05,
+      "last_logits_rel_l2": 0.002700060943916169,
+      "last_logits_normalized_mse": 7.290373103844985e-06,
+      "kv_mean_rel_l2": 0.0073121636331039816,
+      "kv_max_rel_l2": 0.01386778653822985,
+      "kv_mean_normalized_mse": 7.57178649244291e-05,
+      "kv_errors": [
+        {
+          "layer": 1,
+          "kind": "key",
+          "name": "layer1_key",
+          "shape": [
+            1,
+            8,
+            17,
+            128
+          ],
+          "rel_l2": 0.002144557189447501,
+          "normalized_mse": 4.599133669096931e-06,
+          "reference_l2": 1420.6336669921875,
+          "diff_l2": 3.0466301441192627
+        },
+        {
+          "layer": 1,
+          "kind": "value",
+          "name": "layer1_value",
+          "shape": [
+            1,
+            8,
+            17,
+            128
+          ],
+          "rel_l2": 0.009647689515076217,
+          "normalized_mse": 9.30780936532271e-05,
+          "reference_l2": 14.091543197631836,
+          "diff_l2": 0.13595083355903625
+        },
+        {
+          "layer": 7,
+          "kind": "key",
+          "name": "layer7_key",
+          "shape": [
+            1,
+            8,
+            17,
+            128
+          ],
+          "rel_l2": 0.003588621289662359,
+          "normalized_mse": 1.2878220972616662e-05,
+          "reference_l2": 612.3831176757812,
+          "diff_l2": 2.197611093521118
+        },
+        {
+          "layer": 7,
+          "kind": "value",
+          "name": "layer7_value",
+          "shape": [
+            1,
+            8,
+            17,
+            128
+          ],
+          "rel_l2": 0.01386778653822985,
+          "normalized_mse": 0.0001923160114027757,
+          "reference_l2": 64.21269226074219,
+          "diff_l2": 0.8904879093170166
+        }
+      ]
+    },
+    {
+      "id": 11,
+      "prompt": "State one reason an early transformer layer may need a different quantization policy than middle layers.",
+      "input_length": 18,
+      "final_hidden_rel_l2": 0.0031090096063619093,
+      "final_hidden_normalized_mse": 9.665952652758391e-06,
+      "last_logits_rel_l2": 0.0038282678045573047,
+      "last_logits_normalized_mse": 1.4655851101481387e-05,
+      "kv_mean_rel_l2": 0.007032934743789998,
+      "kv_max_rel_l2": 0.012625475406374764,
+      "kv_mean_normalized_mse": 6.71525799272232e-05,
+      "kv_errors": [
+        {
+          "layer": 1,
+          "kind": "key",
+          "name": "layer1_key",
+          "shape": [
+            1,
+            8,
+            18,
+            128
+          ],
+          "rel_l2": 0.002348680977042138,
+          "normalized_mse": 5.516304284452148e-06,
+          "reference_l2": 1453.54296875,
+          "diff_l2": 3.4139087200164795
+        },
+        {
+          "layer": 1,
+          "kind": "value",
+          "name": "layer1_value",
+          "shape": [
+            1,
+            8,
+            18,
+            128
+          ],
+          "rel_l2": 0.00950536529883927,
+          "normalized_mse": 9.035217452865066e-05,
+          "reference_l2": 14.546855926513672,
+          "diff_l2": 0.1382731795310974
+        },
+        {
+          "layer": 7,
+          "kind": "key",
+          "name": "layer7_key",
+          "shape": [
+            1,
+            8,
+            18,
+            128
+          ],
+          "rel_l2": 0.00365221729290382,
+          "normalized_mse": 1.3338724866115931e-05,
+          "reference_l2": 616.8746337890625,
+          "diff_l2": 2.252960205078125
+        },
+        {
+          "layer": 7,
+          "kind": "value",
+          "name": "layer7_value",
+          "shape": [
+            1,
+            8,
+            18,
+            128
+          ],
+          "rel_l2": 0.012625475406374764,
+          "normalized_mse": 0.00015940311602967406,
+          "reference_l2": 70.94989013671875,
+          "diff_l2": 0.895776093006134
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,130 @@
+{
+  "date": "2026-06-05T21:29:49Z",
+  "model": "Qwen/Qwen3-0.6B",
+  "device": "cuda:0",
+  "dtype": "float16",
+  "package_summary": "/mnt/c/Users/18042/Documents/Codex/2026-06-01/chatgpt-context-request-algorithm-system-co/github_publish/eigenskill-research-pack/outputs/real_system_packer_2026-06-05/qwen3_0p6b_full_esmp/pack_summary.json",
+  "mode": "hf_generation_with_fused_esmp_qkv_replacement",
+  "layers": [
+    0,
+    1,
+    7
+  ],
+  "suffixes": [
+    "q_proj",
+    "k_proj",
+    "v_proj"
+  ],
+  "block_m": 32,
+  "block_n": 16,
+  "block_k": 64,
+  "sync_mode": "end",
+  "max_new_tokens": 64,
+  "warmup_runs": 1,
+  "warmup_metrics": [
+    {
+      "prompt_tokens": 12,
+      "generated_tokens_text_retokenized": 64,
+      "ttft_seconds": 1.5369653049999954,
+      "elapsed_seconds": 4.138814514999979,
+      "tokens_per_second": 15.463365117728724,
+      "generated_text": " Also, explain why it's important to use mixed-precision in neural networks, and what are the benefits of using mixed-precision in neural networks? Additionally, explain what is the role of the quantization layer in a neural network, and what are the different types of quantization techniques used in neural networks? Finally,"
+    }
+  ],
+  "replacement_count": 3,
+  "replacements": [
+    {
+      "modules": [
+        "model.layers.0.self_attn.q_proj",
+        "model.layers.0.self_attn.k_proj",
+        "model.layers.0.self_attn.v_proj"
+      ],
+      "raw_fp32_bytes": 16777216,
+      "package_bytes": 2719936,
+      "compression_vs_fp32": 6.1682392526882985,
+      "wrapper_calls": 192,
+      "fused_compute_calls": 64,
+      "cache_hits": 128,
+      "cache_misses": 64,
+      "input_shapes": [
+        "1x12x1024",
+        "1x1x1024"
+      ],
+      "cuda_event_ms": {
+        "sum": 13.037056049332023,
+        "mean": 0.20370400077081285,
+        "median": 0.19204800575971603,
+        "p90": 0.28029759526252745,
+        "max": 0.6085439920425415
+      }
+    },
+    {
+      "modules": [
+        "model.layers.1.self_attn.q_proj",
+        "model.layers.1.self_attn.k_proj",
+        "model.layers.1.self_attn.v_proj"
+      ],
+      "raw_fp32_bytes": 16777216,
+      "package_bytes": 2195648,
+      "compression_vs_fp32": 7.641122802926517,
+      "wrapper_calls": 192,
+      "fused_compute_calls": 64,
+      "cache_hits": 128,
+      "cache_misses": 64,
+      "input_shapes": [
+        "1x12x1024",
+        "1x1x1024"
+      ],
+      "cuda_event_ms": {
+        "sum": 7.438335994258523,
+        "mean": 0.11622399991028942,
+        "median": 0.11031999811530113,
+        "p90": 0.17120320349931717,
+        "max": 0.2194879949092865
+      }
+    },
+    {
+      "modules": [
+        "model.layers.7.self_attn.q_proj",
+        "model.layers.7.self_attn.k_proj",
+        "model.layers.7.self_attn.v_proj"
+      ],
+      "raw_fp32_bytes": 16777216,
+      "package_bytes": 2195648,
+      "compression_vs_fp32": 7.641122802926517,
+      "wrapper_calls": 192,
+      "fused_compute_calls": 64,
+      "cache_hits": 128,
+      "cache_misses": 64,
+      "input_shapes": [
+        "1x12x1024",
+        "1x1x1024"
+      ],
+      "cuda_event_ms": {
+        "sum": 8.804320000112057,
+        "mean": 0.1375675000017509,
+        "median": 0.12732800096273422,
+        "p90": 0.18831679522991182,
+        "max": 0.6128640174865723
+      }
+    }
+  ],
+  "replacement_raw_fp32_bytes": 50331648,
+  "replacement_package_bytes": 7111232,
+  "replacement_compression_vs_fp32": 7.077767677949475,
+  "replacement_cuda_event_ms": {
+    "sum": 29.279712043702602,
+    "mean": 0.1524985002276177,
+    "median": 0.1420000046491623,
+    "p90": 0.22847360074520112,
+    "max": 0.6128640174865723
+  },
+  "peak_gpu_memory_mib": 1161.73876953125,
+  "prompt_tokens": 12,
+  "generated_tokens_text_retokenized": 64,
+  "ttft_seconds": 0.03254543299999568,
+  "elapsed_seconds": 2.4126209709999955,
+  "tokens_per_second": 26.527167246446073,
+  "generated_text": " Also, explain why it's important to use mixed-precision in neural networks, and what are the benefits of using mixed-precision in neural networks? Additionally, explain what is the role of the quantization layer in a neural network, and what are the different types of quantization techniques used in neural networks? Finally,",
+  "interpretation_guardrail": "This replaces selected QKV projections with an approximate packed ESMP fused runtime. It is a controlled smoke, not a production-quality fused transformer runtime."
+}

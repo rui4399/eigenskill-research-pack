@@ -1,0 +1,130 @@
+{
+  "date": "2026-06-05T21:29:05Z",
+  "model": "Qwen/Qwen3-0.6B",
+  "device": "cuda:0",
+  "dtype": "float16",
+  "package_summary": "/mnt/c/Users/18042/Documents/Codex/2026-06-01/chatgpt-context-request-algorithm-system-co/github_publish/eigenskill-research-pack/outputs/real_system_packer_2026-06-05/qwen3_0p6b_full_esmp/pack_summary.json",
+  "mode": "hf_generation_with_fused_esmp_qkv_replacement",
+  "layers": [
+    0,
+    1,
+    7
+  ],
+  "suffixes": [
+    "q_proj",
+    "k_proj",
+    "v_proj"
+  ],
+  "block_m": 32,
+  "block_n": 16,
+  "block_k": 64,
+  "sync_mode": "end",
+  "max_new_tokens": 16,
+  "warmup_runs": 1,
+  "warmup_metrics": [
+    {
+      "prompt_tokens": 12,
+      "generated_tokens_text_retokenized": 16,
+      "ttft_seconds": 1.5924009980000164,
+      "elapsed_seconds": 2.6858193630000073,
+      "tokens_per_second": 5.957213735375083,
+      "generated_text": " Also, explain why it's important to use mixed-precision in neural networks,"
+    }
+  ],
+  "replacement_count": 3,
+  "replacements": [
+    {
+      "modules": [
+        "model.layers.0.self_attn.q_proj",
+        "model.layers.0.self_attn.k_proj",
+        "model.layers.0.self_attn.v_proj"
+      ],
+      "raw_fp32_bytes": 16777216,
+      "package_bytes": 2719936,
+      "compression_vs_fp32": 6.1682392526882985,
+      "wrapper_calls": 48,
+      "fused_compute_calls": 16,
+      "cache_hits": 32,
+      "cache_misses": 16,
+      "input_shapes": [
+        "1x12x1024",
+        "1x1x1024"
+      ],
+      "cuda_event_ms": {
+        "sum": 3.207647994160652,
+        "mean": 0.20047799963504076,
+        "median": 0.19315199553966522,
+        "p90": 0.24620800465345383,
+        "max": 0.2556479871273041
+      }
+    },
+    {
+      "modules": [
+        "model.layers.1.self_attn.q_proj",
+        "model.layers.1.self_attn.k_proj",
+        "model.layers.1.self_attn.v_proj"
+      ],
+      "raw_fp32_bytes": 16777216,
+      "package_bytes": 2195648,
+      "compression_vs_fp32": 7.641122802926517,
+      "wrapper_calls": 48,
+      "fused_compute_calls": 16,
+      "cache_hits": 32,
+      "cache_misses": 16,
+      "input_shapes": [
+        "1x12x1024",
+        "1x1x1024"
+      ],
+      "cuda_event_ms": {
+        "sum": 1.9066559802740812,
+        "mean": 0.11916599876713008,
+        "median": 0.11486399918794632,
+        "p90": 0.1799359992146492,
+        "max": 0.31327998638153076
+      }
+    },
+    {
+      "modules": [
+        "model.layers.7.self_attn.q_proj",
+        "model.layers.7.self_attn.k_proj",
+        "model.layers.7.self_attn.v_proj"
+      ],
+      "raw_fp32_bytes": 16777216,
+      "package_bytes": 2195648,
+      "compression_vs_fp32": 7.641122802926517,
+      "wrapper_calls": 48,
+      "fused_compute_calls": 16,
+      "cache_hits": 32,
+      "cache_misses": 16,
+      "input_shapes": [
+        "1x12x1024",
+        "1x1x1024"
+      ],
+      "cuda_event_ms": {
+        "sum": 2.8235840126872063,
+        "mean": 0.1764740007929504,
+        "median": 0.1459999978542328,
+        "p90": 0.23024000227451324,
+        "max": 0.5749120116233826
+      }
+    }
+  ],
+  "replacement_raw_fp32_bytes": 50331648,
+  "replacement_package_bytes": 7111232,
+  "replacement_compression_vs_fp32": 7.077767677949475,
+  "replacement_cuda_event_ms": {
+    "sum": 7.93788798712194,
+    "mean": 0.16537266639837375,
+    "median": 0.1483839973807335,
+    "p90": 0.2423232033848763,
+    "max": 0.5749120116233826
+  },
+  "peak_gpu_memory_mib": 1156.48681640625,
+  "prompt_tokens": 12,
+  "generated_tokens_text_retokenized": 16,
+  "ttft_seconds": 0.03147117000000321,
+  "elapsed_seconds": 0.6197744840000041,
+  "tokens_per_second": 25.815841750593744,
+  "generated_text": " Also, explain why it's important to use mixed-precision in neural networks,",
+  "interpretation_guardrail": "This replaces selected QKV projections with an approximate packed ESMP fused runtime. It is a controlled smoke, not a production-quality fused transformer runtime."
+}

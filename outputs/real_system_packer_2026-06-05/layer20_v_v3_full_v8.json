@@ -1,0 +1,774 @@
+{
+  "date": "2026-06-06T01:56:40Z",
+  "model": "Qwen/Qwen3-0.6B",
+  "device": "cuda",
+  "dtype": "float16",
+  "package_summary": "/mnt/c/Users/18042/Documents/Codex/2026-06-01/chatgpt-context-request-algorithm-system-co/github_publish/eigenskill-research-pack/outputs/real_system_packer_2026-06-05/qwen3_0p6b_layers1_7_13_20_27_qkv8_guard/pack_summary.json",
+  "layers": [
+    1,
+    7,
+    20
+  ],
+  "suffixes": [
+    "q_proj",
+    "k_proj",
+    "v_proj"
+  ],
+  "dense_roles": [],
+  "max_new_tokens": 32,
+  "sync_mode": "end",
+  "prompts": [
+    "Explain in two sentences why calibration prompts can bias a mixed-precision row search.",
+    "Write minified JSON with keys hypothesis, proxy, and risk for a quantized runtime experiment.",
+    "Compute the packed byte count for 8192 signed 4-bit values. Answer with only the number and unit.",
+    "Give a C++ function signature for loading a row-wise mixed-bit weight file into memory.",
+    "State two reasons a selected-row kernel can be fast in a microbenchmark but not in full decoding.",
+    "In one sentence, explain why KV-cache drift may reveal quantization damage before exact text changes.",
+    "List three ablations needed before claiming a rowguard generalizes across prompt splits.",
+    "Compare prompt exact match and logit relative L2 as evaluation signals in one concise paragraph.",
+    "Name two physical deployment metrics for an edge LLM besides tokens per second.",
+    "Write a conservative paper-title subtitle for a study about calibration split instability.",
+    "Describe how a dense fallback for layer 0 could improve QKV replacement quality.",
+    "Give one failure case where increasing a row group from INT4 to INT8 does not improve generation.",
+    "Write a short README caveat saying that packed memory compression is not the same as latency speedup.",
+    "Explain in one paragraph why local reconstruction error may fail to rank attention rows for generation.",
+    "Return a YAML snippet with fields model, policy, prompt_splits, and allowed_claim.",
+    "What is the average bit width if 75 percent of rows use 4-bit and 25 percent use 8-bit?",
+    "Give two examples of task-style benchmarks that are stronger than perplexity for quantized LLMs.",
+    "Write a one-line warning against tuning precision policies on the test prompts.",
+    "Explain why a proxy selector should penalize large hidden-state drift even when exact output matches.",
+    "Draft three bullet points for an experiment plan that separates speed evidence from quality evidence.",
+    "State one reason grouped Triton kernels may lose to dense GEMM on tiny batch-one shapes.",
+    "Write a compact JSON object describing a failed rowguard with keys symptom and next_test.",
+    "In exactly one sentence, define prompt-split instability for precision-policy search.",
+    "Give a short recommendation for choosing between baseline, full-V8, and rowguard candidates."
+  ],
+  "rows": [
+    {
+      "id": 0,
+      "prompt": "Explain in two sentences why calibration prompts can bias a mixed-precision row search.",
+      "baseline": {
+        "prompt_tokens": 17,
+        "generated_tokens_text_retokenized": 32,
+        "ttft_seconds": 0.03683483400000398,
+        "elapsed_seconds": 1.0512050829999993,
+        "tokens_per_second": 30.441253107981805,
+        "generated_text": " Also, explain in two sentences why calibration prompts can bias a mixed-precision row search in a different way.\nAnswer:\n\nCalibration prompts can bias a mixed-"
+      },
+      "fused": {
+        "prompt_tokens": 17,
+        "generated_tokens_text_retokenized": 32,
+        "ttft_seconds": 0.3754946690000054,
+        "elapsed_seconds": 1.8773247820000023,
+        "tokens_per_second": 17.045532188580015,
+        "generated_text": " Also, explain in two sentences why calibration prompts can bias a mixed-precision row search in a different way.\nAnswer:\n\nCalibration prompts can bias a mixed-"
+      },
+      "comparison": {
+        "exact_match": true,
+        "baseline_chars": 160,
+        "fused_chars": 160,
+        "common_prefix_chars": 160,
+        "common_prefix_ratio": 1.0,
+        "char_edit_distance": 0,
+        "char_edit_similarity": 1.0
+      }
+    },
+    {
+      "id": 1,
+      "prompt": "Write minified JSON with keys hypothesis, proxy, and risk for a quantized runtime experiment.",
+      "baseline": {
+        "prompt_tokens": 19,
+        "generated_tokens_text_retokenized": 32,
+        "ttft_seconds": 0.08063358700000833,
+        "elapsed_seconds": 1.0991927660000016,
+        "tokens_per_second": 29.11227310606223,
+        "generated_text": " The JSON should have a key for each of the three variables and the values should be the number of times each variable was used in the experiment. The values should"
+      },
+      "fused": {
+        "prompt_tokens": 19,
+        "generated_tokens_text_retokenized": 32,
+        "ttft_seconds": 0.0327470390000002,
+        "elapsed_seconds": 1.1490375000000057,
+        "tokens_per_second": 27.849395689870732,
+        "generated_text": " The JSON should have a key for each of the three variables and the values should be the number of times each variable was used in the experiment. The values should"
+      },
+      "comparison": {
+        "exact_match": true,
+        "baseline_chars": 164,
+        "fused_chars": 164,
+        "common_prefix_chars": 164,
+        "common_prefix_ratio": 1.0,
+        "char_edit_distance": 0,
+        "char_edit_similarity": 1.0
+      }
+    },
+    {
+      "id": 2,
+      "prompt": "Compute the packed byte count for 8192 signed 4-bit values. Answer with only the number and unit.",
+      "baseline": {
+        "prompt_tokens": 25,
+        "generated_tokens_text_retokenized": 32,
+        "ttft_seconds": 0.05541856300000347,
+        "elapsed_seconds": 1.5444111110000023,
+        "tokens_per_second": 20.719871653396797,
+        "generated_text": " The answer should be in the format: \"packed byte count: 128 bytes\".\n\nTo compute the packed byte count, you need to calculate the number"
+      },
+      "fused": {
+        "prompt_tokens": 25,
+        "generated_tokens_text_retokenized": 32,
+        "ttft_seconds": 0.03392441900000165,
+        "elapsed_seconds": 1.1040583839999982,
+        "tokens_per_second": 28.983974456191486,
+        "generated_text": " The answer should be in the format: \"packed byte count: 128 bytes\".\n\nTo compute the packed byte count, you need to calculate the number"
+      },
+      "comparison": {
+        "exact_match": true,
+        "baseline_chars": 136,
+        "fused_chars": 136,
+        "common_prefix_chars": 136,
+        "common_prefix_ratio": 1.0,
+        "char_edit_distance": 0,
+        "char_edit_similarity": 1.0
+      }
+    },
+    {
+      "id": 3,
+      "prompt": "Give a C++ function signature for loading a row-wise mixed-bit weight file into memory.",
+      "baseline": {
+        "prompt_tokens": 18,
+        "generated_tokens_text_retokenized": 32,
+        "ttft_seconds": 0.04756117700000573,
+        "elapsed_seconds": 1.2685355800000053,
+        "tokens_per_second": 25.22593808523673,
+        "generated_text": " The function should be named load, and it should take a single parameter of type vector<vector<int>>. The function should return a vector of integers representing the row"
+      },
+      "fused": {
+        "prompt_tokens": 18,
+        "generated_tokens_text_retokenized": 32,
+        "ttft_seconds": 0.035624440999981744,
+        "elapsed_seconds": 1.3777823789999957,
+        "tokens_per_second": 23.225728887043708,
+        "generated_text": " The function should be named loadRowMixedWeight, and it should take the following parameters: - input file name (string) - number of rows (int)"
+      },
+      "comparison": {
+        "exact_match": false,
+        "baseline_chars": 171,
+        "fused_chars": 144,
+        "common_prefix_chars": 34,
+        "common_prefix_ratio": 0.19883040935672514,
+        "char_edit_distance": 102,
+        "char_edit_similarity": 0.4035087719298246
+      }
+    },
+    {
+      "id": 4,
+      "prompt": "State two reasons a selected-row kernel can be fast in a microbenchmark but not in full decoding.",
+      "baseline": {
+        "prompt_tokens": 20,
+        "generated_tokens_text_retokenized": 32,
+        "ttft_seconds": 0.03336002999999721,
+        "elapsed_seconds": 1.5735738690000005,
+        "tokens_per_second": 20.335874044690296,
+        "generated_text": " Why is this important for the performance of the system?\n\n**A.** The kernel has a large number of rows and columns.  \n**B.** The"
+      },
+      "fused": {
+        "prompt_tokens": 20,
+        "generated_tokens_text_retokenized": 32,
+        "ttft_seconds": 0.031656472999998186,
+        "elapsed_seconds": 1.3138041200000146,
+        "tokens_per_second": 24.356751141867058,
+        "generated_text": " Why is this important for the performance of the system?\n\n**A.** The kernel has a large number of rows and columns.  \n**B.** The"
+      },
+      "comparison": {
+        "exact_match": true,
+        "baseline_chars": 129,
+        "fused_chars": 129,
+        "common_prefix_chars": 129,
+        "common_prefix_ratio": 1.0,
+        "char_edit_distance": 0,
+        "char_edit_similarity": 1.0
+      }
+    },
+    {
+      "id": 5,
+      "prompt": "In one sentence, explain why KV-cache drift may reveal quantization damage before exact text changes.",
+      "baseline": {
+        "prompt_tokens": 19,
+        "generated_tokens_text_retokenized": 32,
+        "ttft_seconds": 0.04707463200000461,
+        "elapsed_seconds": 1.5004672369999952,
+        "tokens_per_second": 21.32669025415055,
+        "generated_text": " Also, explain why the same sentence can be used to describe both the KV cache and the text cache in a different context.\nAnswer:\n\nKV cache drift is a"
+      },
+      "fused": {
+        "prompt_tokens": 19,
+        "generated_tokens_text_retokenized": 32,
+        "ttft_seconds": 0.04611814800000502,
+        "elapsed_seconds": 1.145040186000017,
+        "tokens_per_second": 27.94661741242986,
+        "generated_text": " Also, explain why the same sentence can be used to describe both the KV cache and the text cache in a different context.\nAnswer:\n\nKV cache drift is a"
+      },
+      "comparison": {
+        "exact_match": true,
+        "baseline_chars": 150,
+        "fused_chars": 150,
+        "common_prefix_chars": 150,
+        "common_prefix_ratio": 1.0,
+        "char_edit_distance": 0,
+        "char_edit_similarity": 1.0
+      }
+    },
+    {
+      "id": 6,
+      "prompt": "List three ablations needed before claiming a rowguard generalizes across prompt splits.",
+      "baseline": {
+        "prompt_tokens": 16,
+        "generated_tokens_text_retokenized": 32,
+        "ttft_seconds": 0.037647637000006284,
+        "elapsed_seconds": 1.3234977179999987,
+        "tokens_per_second": 24.178356762380176,
+        "generated_text": " What are the reasons for the need for these ablations? What are the benefits of using a rowguard generalizes across prompt splits? What are the potential risks"
+      },
+      "fused": {
+        "prompt_tokens": 16,
+        "generated_tokens_text_retokenized": 32,
+        "ttft_seconds": 0.044466414999988046,
+        "elapsed_seconds": 1.1803706579999869,
+        "tokens_per_second": 27.110128316998843,
+        "generated_text": " What are the reasons for the need for these ablations? What are the benefits of using a rowguard generalizes across prompt splits? What are the potential risks"
+      },
+      "comparison": {
+        "exact_match": true,
+        "baseline_chars": 160,
+        "fused_chars": 160,
+        "common_prefix_chars": 160,
+        "common_prefix_ratio": 1.0,
+        "char_edit_distance": 0,
+        "char_edit_similarity": 1.0
+      }
+    },
+    {
+      "id": 7,
+      "prompt": "Compare prompt exact match and logit relative L2 as evaluation signals in one concise paragraph.",
+      "baseline": {
+        "prompt_tokens": 18,
+        "generated_tokens_text_retokenized": 32,
+        "ttft_seconds": 0.09188365400000009,
+        "elapsed_seconds": 1.546151549000001,
+        "tokens_per_second": 20.696548162239676,
+        "generated_text": " Also, provide a sample of the output for the user. The user is a researcher in the field of machine learning, and the output should be in a formal"
+      },
+      "fused": {
+        "prompt_tokens": 18,
+        "generated_tokens_text_retokenized": 32,
+        "ttft_seconds": 0.03607254399997828,
+        "elapsed_seconds": 1.1423566400000027,
+        "tokens_per_second": 28.012267692513195,
+        "generated_text": " Also, provide a sample of the output for the user. The user is a researcher in the field of machine learning, and the output should be in a formal"
+      },
+      "comparison": {
+        "exact_match": true,
+        "baseline_chars": 147,
+        "fused_chars": 147,
+        "common_prefix_chars": 147,
+        "common_prefix_ratio": 1.0,
+        "char_edit_distance": 0,
+        "char_edit_similarity": 1.0
+      }
+    },
+    {
+      "id": 8,
+      "prompt": "Name two physical deployment metrics for an edge LLM besides tokens per second.",
+      "baseline": {
+        "prompt_tokens": 15,
+        "generated_tokens_text_retokenized": 32,
+        "ttft_seconds": 0.03341620199999795,
+        "elapsed_seconds": 1.2319030019999957,
+        "tokens_per_second": 25.976071125768804,
+        "generated_text": " Also, explain what each metric means in terms of the system's performance and the user's experience.\nAnswer:\nThe two physical deployment metrics for an edge LLM"
+      },
+      "fused": {
+        "prompt_tokens": 15,
+        "generated_tokens_text_retokenized": 32,
+        "ttft_seconds": 0.037077435999975705,
+        "elapsed_seconds": 1.1258542409999848,
+        "tokens_per_second": 28.422862245096283,
+        "generated_text": " Also, explain what each metric means in terms of the system's performance and the user's experience.\nAnswer:\nThe two physical deployment metrics for an edge LLM"
+      },
+      "comparison": {
+        "exact_match": true,
+        "baseline_chars": 161,
+        "fused_chars": 161,
+        "common_prefix_chars": 161,
+        "common_prefix_ratio": 1.0,
+        "char_edit_distance": 0,
+        "char_edit_similarity": 1.0
+      }
+    },
+    {
+      "id": 9,
+      "prompt": "Write a conservative paper-title subtitle for a study about calibration split instability.",
+      "baseline": {
+        "prompt_tokens": 14,
+        "generated_tokens_text_retokenized": 32,
+        "ttft_seconds": 0.06283744099999922,
+        "elapsed_seconds": 1.082567305000012,
+        "tokens_per_second": 29.55936305502931,
+        "generated_text": " The title should be in English, and the subtitle should be in English. The title should be a bit more than 100 words, and the subtitle"
+      },
+      "fused": {
+        "prompt_tokens": 14,
+        "generated_tokens_text_retokenized": 32,
+        "ttft_seconds": 0.05921046900002125,
+        "elapsed_seconds": 1.1747646480000071,
+        "tokens_per_second": 27.239498613172266,
+        "generated_text": " The title should be in English, and the subtitle should be in English. The title should be a bit more than 100 words, and the subtitle"
+      },
+      "comparison": {
+        "exact_match": true,
+        "baseline_chars": 135,
+        "fused_chars": 135,
+        "common_prefix_chars": 135,
+        "common_prefix_ratio": 1.0,
+        "char_edit_distance": 0,
+        "char_edit_similarity": 1.0
+      }
+    },
+    {
+      "id": 10,
+      "prompt": "Describe how a dense fallback for layer 0 could improve QKV replacement quality.",
+      "baseline": {
+        "prompt_tokens": 16,
+        "generated_tokens_text_retokenized": 32,
+        "ttft_seconds": 0.05448496900000066,
+        "elapsed_seconds": 1.2294739029999988,
+        "tokens_per_second": 26.02739262860143,
+        "generated_text": " What are the benefits of using a dense fallback for layer 0 in the context of the QKV replacement strategy? Additionally, what are the potential issues with using"
+      },
+      "fused": {
+        "prompt_tokens": 16,
+        "generated_tokens_text_retokenized": 32,
+        "ttft_seconds": 0.0744562679999774,
+        "elapsed_seconds": 1.4645722729999875,
+        "tokens_per_second": 21.849382642245523,
+        "generated_text": " What are the benefits of using a dense fallback for layer 0 in the context of the QKV replacement strategy? Additionally, what are the potential issues with using"
+      },
+      "comparison": {
+        "exact_match": true,
+        "baseline_chars": 163,
+        "fused_chars": 163,
+        "common_prefix_chars": 163,
+        "common_prefix_ratio": 1.0,
+        "char_edit_distance": 0,
+        "char_edit_similarity": 1.0
+      }
+    },
+    {
+      "id": 11,
+      "prompt": "Give one failure case where increasing a row group from INT4 to INT8 does not improve generation.",
+      "baseline": {
+        "prompt_tokens": 20,
+        "generated_tokens_text_retokenized": 32,
+        "ttft_seconds": 0.03232018500000322,
+        "elapsed_seconds": 1.0705229369999927,
+        "tokens_per_second": 29.891933086156957,
+        "generated_text": " What is the reason for this failure case?\n\nAnswer: The failure case is the case where a row group is created with a size of 1000"
+      },
+      "fused": {
+        "prompt_tokens": 20,
+        "generated_tokens_text_retokenized": 32,
+        "ttft_seconds": 0.034365747000009605,
+        "elapsed_seconds": 1.0651080970000066,
+        "tokens_per_second": 30.04389891517255,
+        "generated_text": " What is the reason for this failure case? What is the solution?\n\n**A.** A row group with 10000 rows and 1"
+      },
+      "comparison": {
+        "exact_match": false,
+        "baseline_chars": 129,
+        "fused_chars": 106,
+        "common_prefix_chars": 42,
+        "common_prefix_ratio": 0.32558139534883723,
+        "char_edit_distance": 63,
+        "char_edit_similarity": 0.5116279069767442
+      }
+    },
+    {
+      "id": 12,
+      "prompt": "Write a short README caveat saying that packed memory compression is not the same as latency speedup.",
+      "baseline": {
+        "prompt_tokens": 19,
+        "generated_tokens_text_retokenized": 32,
+        "ttft_seconds": 0.03653861200000108,
+        "elapsed_seconds": 1.0722341130000075,
+        "tokens_per_second": 29.84422861763565,
+        "generated_text": " Also, explain why it's important to use a memory management system that supports memory compression. Also, explain what a memory compression is and how it works. Also"
+      },
+      "fused": {
+        "prompt_tokens": 19,
+        "generated_tokens_text_retokenized": 32,
+        "ttft_seconds": 0.03434124999998289,
+        "elapsed_seconds": 1.2952392649999922,
+        "tokens_per_second": 24.705860040461477,
+        "generated_text": " Also, explain why it's important to use a memory management system that supports memory compression. Also, explain what a memory compression is and how it works. Also"
+      },
+      "comparison": {
+        "exact_match": true,
+        "baseline_chars": 167,
+        "fused_chars": 167,
+        "common_prefix_chars": 167,
+        "common_prefix_ratio": 1.0,
+        "char_edit_distance": 0,
+        "char_edit_similarity": 1.0
+      }
+    },
+    {
+      "id": 13,
+      "prompt": "Explain in one paragraph why local reconstruction error may fail to rank attention rows for generation.",
+      "baseline": {
+        "prompt_tokens": 18,
+        "generated_tokens_text_retokenized": 32,
+        "ttft_seconds": 0.02830657900000233,
+        "elapsed_seconds": 1.3689528379999985,
+        "tokens_per_second": 23.37553136363054,
+        "generated_text": " \n\nThe answer should be in one paragraph, and the answer should be in the form of a sentence. \n\nThe answer should be in the form of a sentence"
+      },
+      "fused": {
+        "prompt_tokens": 18,
+        "generated_tokens_text_retokenized": 32,
+        "ttft_seconds": 0.04402127800000244,
+        "elapsed_seconds": 1.2459997169999895,
+        "tokens_per_second": 25.682188818667502,
+        "generated_text": " \n\nThe answer should be in one paragraph, and the answer should be in the form of a sentence. \n\nThe answer should be in the form of a sentence"
+      },
+      "comparison": {
+        "exact_match": true,
+        "baseline_chars": 142,
+        "fused_chars": 142,
+        "common_prefix_chars": 142,
+        "common_prefix_ratio": 1.0,
+        "char_edit_distance": 0,
+        "char_edit_similarity": 1.0
+      }
+    },
+    {
+      "id": 14,
+      "prompt": "Return a YAML snippet with fields model, policy, prompt_splits, and allowed_claim.",
+      "baseline": {
+        "prompt_tokens": 17,
+        "generated_tokens_text_retokenized": 32,
+        "ttft_seconds": 0.02834678399999291,
+        "elapsed_seconds": 1.1342178390000015,
+        "tokens_per_second": 28.21327517491105,
+        "generated_text": " The model is a specific model, like \"llama-2-70b\", and the policy is a specific policy, like \"strict\". The prompt"
+      },
+      "fused": {
+        "prompt_tokens": 17,
+        "generated_tokens_text_retokenized": 32,
+        "ttft_seconds": 0.036031927000010455,
+        "elapsed_seconds": 1.2120240620000118,
+        "tokens_per_second": 26.402116099242665,
+        "generated_text": " The model is a specific model, like \"llama-2-70b\", and the policy is a specific policy, like \"strict\". The prompt"
+      },
+      "comparison": {
+        "exact_match": true,
+        "baseline_chars": 114,
+        "fused_chars": 114,
+        "common_prefix_chars": 114,
+        "common_prefix_ratio": 1.0,
+        "char_edit_distance": 0,
+        "char_edit_similarity": 1.0
+      }
+    },
+    {
+      "id": 15,
+      "prompt": "What is the average bit width if 75 percent of rows use 4-bit and 25 percent use 8-bit?",
+      "baseline": {
+        "prompt_tokens": 27,
+        "generated_tokens_text_retokenized": 32,
+        "ttft_seconds": 0.05272454800000048,
+        "elapsed_seconds": 1.5937403350000068,
+        "tokens_per_second": 20.0785531351943,
+        "generated_text": " Also, what is the average bit width if 80 percent of rows use 4-bit and 20 percent use 8-bit?\n\nTo find the"
+      },
+      "fused": {
+        "prompt_tokens": 27,
+        "generated_tokens_text_retokenized": 32,
+        "ttft_seconds": 0.03290913600000067,
+        "elapsed_seconds": 1.3773451769999951,
+        "tokens_per_second": 23.23310128380412,
+        "generated_text": " Also, what is the average bit width if 80 percent of rows use 4-bit and 20 percent use 8-bit?\n\nTo find the"
+      },
+      "comparison": {
+        "exact_match": true,
+        "baseline_chars": 107,
+        "fused_chars": 107,
+        "common_prefix_chars": 107,
+        "common_prefix_ratio": 1.0,
+        "char_edit_distance": 0,
+        "char_edit_similarity": 1.0
+      }
+    },
+    {
+      "id": 16,
+      "prompt": "Give two examples of task-style benchmarks that are stronger than perplexity for quantized LLMs.",
+      "baseline": {
+        "prompt_tokens": 20,
+        "generated_tokens_text_retokenized": 32,
+        "ttft_seconds": 0.03546913899999993,
+        "elapsed_seconds": 1.0356851340000048,
+        "tokens_per_second": 30.897421377875887,
+        "generated_text": " What are the differences between these benchmarks and perplexity? What are the implications for the design of the model?\nAnswer:\n\nWhen designing a model for quantized language"
+      },
+      "fused": {
+        "prompt_tokens": 20,
+        "generated_tokens_text_retokenized": 32,
+        "ttft_seconds": 0.032694068000012066,
+        "elapsed_seconds": 1.0644367740000007,
+        "tokens_per_second": 30.062847114675108,
+        "generated_text": " What are the differences between these benchmarks and perplexity? What are the implications for the design of the model?\nAnswer:\n\nTask-style benchmarks are stronger than perplexity"
+      },
+      "comparison": {
+        "exact_match": false,
+        "baseline_chars": 176,
+        "fused_chars": 181,
+        "common_prefix_chars": 131,
+        "common_prefix_ratio": 0.7443181818181818,
+        "char_edit_distance": 43,
+        "char_edit_similarity": 0.7624309392265194
+      }
+    },
+    {
+      "id": 17,
+      "prompt": "Write a one-line warning against tuning precision policies on the test prompts.",
+      "baseline": {
+        "prompt_tokens": 14,
+        "generated_tokens_text_retokenized": 32,
+        "ttft_seconds": 0.03473042299999918,
+        "elapsed_seconds": 1.0326684039999918,
+        "tokens_per_second": 30.987681889026067,
+        "generated_text": " \n\nThe policy is to use a single prompt for all tasks, and the prompt is not a single sentence. \n\nThe user is a developer who wants to use"
+      },
+      "fused": {
+        "prompt_tokens": 14,
+        "generated_tokens_text_retokenized": 32,
+        "ttft_seconds": 0.03447430500000337,
+        "elapsed_seconds": 1.3232949129999838,
+        "tokens_per_second": 24.182062279264873,
+        "generated_text": " \n\nThe user is a content creator who wants to use the AI to generate content for a product. The product is a smart home device. The AI is a"
+      },
+      "comparison": {
+        "exact_match": false,
+        "baseline_chars": 138,
+        "fused_chars": 139,
+        "common_prefix_chars": 7,
+        "common_prefix_ratio": 0.050724637681159424,
+        "char_edit_distance": 102,
+        "char_edit_similarity": 0.26618705035971224
+      }
+    },
+    {
+      "id": 18,
+      "prompt": "Explain why a proxy selector should penalize large hidden-state drift even when exact output matches.",
+      "baseline": {
+        "prompt_tokens": 19,
+        "generated_tokens_text_retokenized": 32,
+        "ttft_seconds": 0.0695331730000106,
+        "elapsed_seconds": 1.455602925000008,
+        "tokens_per_second": 21.98401737891522,
+        "generated_text": " How to implement this in practice?\n\nAs a result of the above, the model can be trained to avoid overfitting to the exact output, even when the"
+      },
+      "fused": {
+        "prompt_tokens": 19,
+        "generated_tokens_text_retokenized": 32,
+        "ttft_seconds": 0.03935848899999428,
+        "elapsed_seconds": 1.1987515399999893,
+        "tokens_per_second": 26.6944391162161,
+        "generated_text": " How to implement this in practice?\n\nAs a result of the above, the model can be trained to avoid overfitting to the exact output, even when the"
+      },
+      "comparison": {
+        "exact_match": true,
+        "baseline_chars": 143,
+        "fused_chars": 143,
+        "common_prefix_chars": 143,
+        "common_prefix_ratio": 1.0,
+        "char_edit_distance": 0,
+        "char_edit_similarity": 1.0
+      }
+    },
+    {
+      "id": 19,
+      "prompt": "Draft three bullet points for an experiment plan that separates speed evidence from quality evidence.",
+      "baseline": {
+        "prompt_tokens": 16,
+        "generated_tokens_text_retokenized": 32,
+        "ttft_seconds": 0.03939340500001265,
+        "elapsed_seconds": 1.2346650890000035,
+        "tokens_per_second": 25.917959684045062,
+        "generated_text": " The experiment should include a control group and a treatment group. The experiment should be conducted in a lab setting. The experiment should be a single experiment. The experiment"
+      },
+      "fused": {
+        "prompt_tokens": 16,
+        "generated_tokens_text_retokenized": 32,
+        "ttft_seconds": 0.03662749200000803,
+        "elapsed_seconds": 1.079625262999997,
+        "tokens_per_second": 29.63991404858418,
+        "generated_text": " The experiment should include a control group and a treatment group. The experiment should be conducted in a lab setting. The experiment should be a single experiment. The experiment"
+      },
+      "comparison": {
+        "exact_match": true,
+        "baseline_chars": 183,
+        "fused_chars": 183,
+        "common_prefix_chars": 183,
+        "common_prefix_ratio": 1.0,
+        "char_edit_distance": 0,
+        "char_edit_similarity": 1.0
+      }
+    },
+    {
+      "id": 20,
+      "prompt": "State one reason grouped Triton kernels may lose to dense GEMM on tiny batch-one shapes.",
+      "baseline": {
+        "prompt_tokens": 20,
+        "generated_tokens_text_retokenized": 32,
+        "ttft_seconds": 0.04181507199999146,
+        "elapsed_seconds": 1.6081878439999997,
+        "tokens_per_second": 19.89817303954202,
+        "generated_text": " What is the purpose of the GEMM in the context of the training of neural networks? What is the purpose of the GEMM in the context of"
+      },
+      "fused": {
+        "prompt_tokens": 20,
+        "generated_tokens_text_retokenized": 32,
+        "ttft_seconds": 0.04611355199998002,
+        "elapsed_seconds": 1.236452985999989,
+        "tokens_per_second": 25.880482608176,
+        "generated_text": " What is the purpose of the GEMM in the context of the training of neural networks? What is the purpose of the GEMM in the context of"
+      },
+      "comparison": {
+        "exact_match": true,
+        "baseline_chars": 133,
+        "fused_chars": 133,
+        "common_prefix_chars": 133,
+        "common_prefix_ratio": 1.0,
+        "char_edit_distance": 0,
+        "char_edit_similarity": 1.0
+      }
+    },
+    {
+      "id": 21,
+      "prompt": "Write a compact JSON object describing a failed rowguard with keys symptom and next_test.",
+      "baseline": {
+        "prompt_tokens": 17,
+        "generated_tokens_text_retokenized": 32,
+        "ttft_seconds": 0.032987044999998716,
+        "elapsed_seconds": 1.469782324999997,
+        "tokens_per_second": 21.771931432091527,
+        "generated_text": " The symptom should be a string that describes the symptom of the rowguard failure. The next_test should be a string that describes the next step to take to fix"
+      },
+      "fused": {
+        "prompt_tokens": 17,
+        "generated_tokens_text_retokenized": 32,
+        "ttft_seconds": 0.03398533500001122,
+        "elapsed_seconds": 1.2304542610000055,
+        "tokens_per_second": 26.006655439587977,
+        "generated_text": " The symptom should be a string that describes the symptom of the rowguard failure. The next_test should be a string that describes the next step to take to fix"
+      },
+      "comparison": {
+        "exact_match": true,
+        "baseline_chars": 160,
+        "fused_chars": 160,
+        "common_prefix_chars": 160,
+        "common_prefix_ratio": 1.0,
+        "char_edit_distance": 0,
+        "char_edit_similarity": 1.0
+      }
+    },
+    {
+      "id": 22,
+      "prompt": "In exactly one sentence, define prompt-split instability for precision-policy search.",
+      "baseline": {
+        "prompt_tokens": 14,
+        "generated_tokens_text_retokenized": 32,
+        "ttft_seconds": 0.04577379500000234,
+        "elapsed_seconds": 1.3003137190000018,
+        "tokens_per_second": 24.609445807131376,
+        "generated_text": " \n\nThe prompt-split instability is a phenomenon where the model's performance on a single task is significantly affected by the split of the input into multiple tasks, leading to"
+      },
+      "fused": {
+        "prompt_tokens": 14,
+        "generated_tokens_text_retokenized": 32,
+        "ttft_seconds": 0.05457469099999912,
+        "elapsed_seconds": 1.2780665940000233,
+        "tokens_per_second": 25.037818960472272,
+        "generated_text": " \n\nThe prompt-split instability is a phenomenon where the model's performance on one task is inconsistent with its performance on another task due to the model's inability to handle"
+      },
+      "comparison": {
+        "exact_match": false,
+        "baseline_chars": 178,
+        "fused_chars": 181,
+        "common_prefix_chars": 81,
+        "common_prefix_ratio": 0.4550561797752809,
+        "char_edit_distance": 77,
+        "char_edit_similarity": 0.574585635359116
+      }
+    },
+    {
+      "id": 23,
+      "prompt": "Give a short recommendation for choosing between baseline, full-V8, and rowguard candidates.",
+      "baseline": {
+        "prompt_tokens": 18,
+        "generated_tokens_text_retokenized": 32,
+        "ttft_seconds": 0.04023505700000385,
+        "elapsed_seconds": 1.2993223329999921,
+        "tokens_per_second": 24.628222872237966,
+        "generated_text": " What is the difference between rowguard and full-V8? What is the difference between baseline and full-V8? What is the difference between baseline and rowguard"
+      },
+      "fused": {
+        "prompt_tokens": 18,
+        "generated_tokens_text_retokenized": 32,
+        "ttft_seconds": 0.02957151500001487,
+        "elapsed_seconds": 1.2922923099999934,
+        "tokens_per_second": 24.762199505776028,
+        "generated_text": " What is the difference between rowguard and full-V8? What is the difference between baseline and full-V8? What is the difference between baseline and rowguard"
+      },
+      "comparison": {
+        "exact_match": true,
+        "baseline_chars": 159,
+        "fused_chars": 159,
+        "common_prefix_chars": 159,
+        "common_prefix_ratio": 1.0,
+        "char_edit_distance": 0,
+        "char_edit_similarity": 1.0
+      }
+    }
+  ],
+  "aggregate": {
+    "prompts": 24,
+    "exact_matches": 19,
+    "exact_match_rate": 0.7916666666666666,
+    "mean_char_edit_similarity": 0.8965975126604965,
+    "median_char_edit_similarity": 1.0,
+    "mean_common_prefix_ratio": 0.8656046168325077,
+    "median_common_prefix_ratio": 1.0,
+    "mean_baseline_tokens_per_second": 25.237416951830475,
+    "mean_fused_tokens_per_second": 26.015655146504574,
+    "mean_speedup_fused_vs_baseline": 1.0308366817475612,
+    "median_baseline_ttft_seconds": 0.03981423100000825,
+    "median_fused_ttft_seconds": 0.03605223549999437
+  },
+  "replacement_raw_fp32_bytes": 50331648,
+  "replacement_package_bytes": 12878400,
+  "replacement_compression_vs_fp32": 3.9082221393961984,
+  "replacement_dense_role_calls": 0,
+  "replacement_wrapper_calls": 6912,
+  "replacement_fused_compute_calls": 2304,
+  "replacement_cache_hits": 4608,
+  "replacement_cache_misses": 2304,
+  "replacement_cuda_event_ms": {
+    "sum": 684.4585940595716,
+    "mean": 0.29707404256057796,
+    "median": 0.1494079977273941,
+    "p90": 0.21652480214834216,
+    "max": 312.26873779296875
+  },
+  "peak_gpu_memory_mib": 1164.87744140625
+}

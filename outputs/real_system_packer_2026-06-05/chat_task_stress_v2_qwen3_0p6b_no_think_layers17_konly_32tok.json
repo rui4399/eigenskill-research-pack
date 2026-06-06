@@ -1,0 +1,2168 @@
+{
+  "model": "Qwen/Qwen3-0.6B",
+  "task_file": "data_eval/chat_task_stress_v2.jsonl",
+  "task_format": "native",
+  "task_count": 42,
+  "chat_template": true,
+  "no_think": true,
+  "max_new_tokens": 32,
+  "baseline": {
+    "aggregate": {
+      "tasks": 42,
+      "passes": 22,
+      "accuracy": 0.5238095238095238,
+      "mean_tokens_per_second": 22.591944003784327,
+      "mean_ttft_seconds": 0.12081466911904959
+    },
+    "rows": [
+      {
+        "id": "stress_mcq_000",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter. Which metric reports first-token response delay? A. TTFT B. BLEU C. ROUGE D. F1\n/no_think",
+        "answer": "A",
+        "generated_text": "<think>\n\n</think>\n\nA. TTFT",
+        "score": {
+          "passed": true,
+          "predicted": "A",
+          "expected": "A"
+        },
+        "ttft_seconds": 1.3393506500000285,
+        "tokens_per_second": 4.771106499656459
+      },
+      {
+        "id": "stress_mcq_001",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter. Which artifact stores two signed 4-bit weights in one byte? A. Packed INT4 weights B. FP32 activations C. Tokenizer merges D. KV cache\n/no_think",
+        "answer": "A",
+        "generated_text": "<think>\n\n</think>\n\nA. Packed INT4 weights",
+        "score": {
+          "passed": true,
+          "predicted": "A",
+          "expected": "A"
+        },
+        "ttft_seconds": 0.12249709499997152,
+        "tokens_per_second": 18.131443876007232
+      },
+      {
+        "id": "stress_mcq_002",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter. Which split is commonly used for web-text calibration? A. C4 B. GSM8K C. HumanEval D. MBPP\n/no_think",
+        "answer": "A",
+        "generated_text": "<think>\n\n</think>\n\nA. C4",
+        "score": {
+          "passed": true,
+          "predicted": "A",
+          "expected": "A"
+        },
+        "ttft_seconds": 0.09636668599995346,
+        "tokens_per_second": 19.9639963301002
+      },
+      {
+        "id": "stress_mcq_003",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter. What does a quality-preserving role policy selector reject first? A. Pass-count regression B. Lower file size C. Shorter README D. More commits\n/no_think",
+        "answer": "A",
+        "generated_text": "<think>\n\n</think>\n\nA. Pass-count regression",
+        "score": {
+          "passed": true,
+          "predicted": "A",
+          "expected": "A"
+        },
+        "ttft_seconds": 0.07855725100000654,
+        "tokens_per_second": 18.788182283445696
+      },
+      {
+        "id": "stress_mcq_004",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter. Which projection role is the current conservative candidate in this repo? A. V only B. Q only C. K only D. Full QKV\n/no_think",
+        "answer": "A",
+        "generated_text": "<think>\n\n</think>\n\nD. Full QKV",
+        "score": {
+          "passed": false,
+          "predicted": "D",
+          "expected": "A"
+        },
+        "ttft_seconds": 0.10560818599998356,
+        "tokens_per_second": 19.256295219357504
+      },
+      {
+        "id": "stress_mcq_005",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter. Which benchmark style checks instruction constraints? A. IFEval B. WikiText2 C. C4 D. PTB\n/no_think",
+        "answer": "A",
+        "generated_text": "<think>\n\n</think>\n\nA. IFEval",
+        "score": {
+          "passed": true,
+          "predicted": "A",
+          "expected": "A"
+        },
+        "ttft_seconds": 0.07250585600002069,
+        "tokens_per_second": 25.44258025622405
+      },
+      {
+        "id": "stress_number_000",
+        "type": "number",
+        "prompt": "Answer with only the final number. A row has 8192 signed 4-bit weights. Two weights fit in one byte. How many bytes are needed?\n/no_think",
+        "answer": "4096",
+        "generated_text": "<think>\n\n</think>\n\nWe are given that there are 8192 signed 4-bit weights, and each byte can hold two such weights.\n\n- ",
+        "score": {
+          "passed": false,
+          "predicted": [
+            "8192",
+            "4"
+          ],
+          "expected": "4096"
+        },
+        "ttft_seconds": 0.0618093740000063,
+        "tokens_per_second": 23.239108007274805
+      },
+      {
+        "id": "stress_number_001",
+        "type": "number",
+        "prompt": "Answer with only the final number. A selected-row kernel reads 32 rows, each row has 4096 signed 4-bit weights. How many packed bytes are read?\n/no_think",
+        "answer": "65536",
+        "generated_text": "<think>\n\n</think>\n\nEach row has 4096 signed 4-bit weights, so each row is 4096 bytes. Since the kernel",
+        "score": {
+          "passed": false,
+          "predicted": [
+            "4096",
+            "4",
+            "4096"
+          ],
+          "expected": "65536"
+        },
+        "ttft_seconds": 0.0707739810000021,
+        "tokens_per_second": 22.17458067460849
+      },
+      {
+        "id": "stress_number_002",
+        "type": "number",
+        "prompt": "Answer with only the final number. A matrix has 80 percent 4-bit rows and 20 percent 8-bit rows. What is the average bit width?\n/no_think",
+        "answer": "4.8",
+        "generated_text": "<think>\n\n</think>\n\nThe average bit width is calculated by multiplying the percentage of 4-bit rows by 4 and the percentage of 8-bit rows by ",
+        "score": {
+          "passed": false,
+          "predicted": [
+            "4",
+            "4",
+            "8"
+          ],
+          "expected": "4.8"
+        },
+        "ttft_seconds": 0.1198648339999977,
+        "tokens_per_second": 25.978646862576873
+      },
+      {
+        "id": "stress_number_003",
+        "type": "number",
+        "prompt": "Answer with only the final number. A policy keeps 3 of 24 layers dense. How many layers are packed?\n/no_think",
+        "answer": "21",
+        "generated_text": "<think>\n\n</think>\n\nThe number of layers packed is $ 3 \\times 24 = \\boxed{72} $.",
+        "score": {
+          "passed": false,
+          "predicted": [
+            "3",
+            "24",
+            "72"
+          ],
+          "expected": "21"
+        },
+        "ttft_seconds": 0.1108116300000006,
+        "tokens_per_second": 23.909023971515303
+      },
+      {
+        "id": "stress_number_004",
+        "type": "number",
+        "prompt": "Answer with only the final number. A benchmark has 48 prompts and runs baseline plus fused once. How many generations are measured?\n/no_think",
+        "answer": "96",
+        "generated_text": "<think>\n\n</think>\n\n48",
+        "score": {
+          "passed": false,
+          "predicted": [
+            "48"
+          ],
+          "expected": "96"
+        },
+        "ttft_seconds": 0.07314269800002648,
+        "tokens_per_second": 23.839400064647638
+      },
+      {
+        "id": "stress_number_005",
+        "type": "number",
+        "prompt": "Answer with only the final number. A GPU has 8151 MiB total memory. A 90 percent guard allows at most how many MiB if rounded down?\n/no_think",
+        "answer": "7335",
+        "generated_text": "<think>\n\n</think>\n\nThe total memory is 8151 MiB. A 90% guard allows at most:\n\n$$\n0.9 \\",
+        "score": {
+          "passed": false,
+          "predicted": [
+            "8151",
+            "90",
+            "0.9"
+          ],
+          "expected": "7335"
+        },
+        "ttft_seconds": 0.07106294999999818,
+        "tokens_per_second": 27.677452322758736
+      },
+      {
+        "id": "stress_json_keys_000",
+        "type": "json_keys",
+        "prompt": "Return minified JSON only with keys metric and value. Use metric for TTFT.\n/no_think",
+        "answer": [
+          "metric",
+          "value"
+        ],
+        "generated_text": "<think>\n\n</think>\n\n```json\n{\"metric\": \"TTFT\"}\n```",
+        "score": {
+          "passed": false,
+          "found": [],
+          "expected": [
+            "metric",
+            "value"
+          ]
+        },
+        "ttft_seconds": 0.08095178600001418,
+        "tokens_per_second": 21.086547537148068
+      },
+      {
+        "id": "stress_json_keys_001",
+        "type": "json_keys",
+        "prompt": "Return minified JSON only with keys risk and evidence. Describe calibration split instability.\n/no_think",
+        "answer": [
+          "risk",
+          "evidence"
+        ],
+        "generated_text": "<think>\n\n</think>\n\n```json\n{\n  \"risk\": \"calibration_split_instability\",\n  \"evidence\": \"calibration_split_instability\"\n}\n",
+        "score": {
+          "passed": true,
+          "found": [
+            "evidence",
+            "risk"
+          ],
+          "expected": [
+            "evidence",
+            "risk"
+          ]
+        },
+        "ttft_seconds": 0.07038441000003104,
+        "tokens_per_second": 24.53964323306499
+      },
+      {
+        "id": "stress_json_keys_002",
+        "type": "json_keys",
+        "prompt": "Return minified JSON only with keys policy and decision. The policy should be V-only.\n/no_think",
+        "answer": [
+          "policy",
+          "decision"
+        ],
+        "generated_text": "<think>\n\n</think>\n\n```json\n{\"policy\": \"V-only\", \"decision\": \"V-only\"}\n```",
+        "score": {
+          "passed": true,
+          "found": [
+            "decision",
+            "policy"
+          ],
+          "expected": [
+            "decision",
+            "policy"
+          ]
+        },
+        "ttft_seconds": 0.08617079599997624,
+        "tokens_per_second": 22.85397599652886
+      },
+      {
+        "id": "stress_json_keys_003",
+        "type": "json_keys",
+        "prompt": "Return minified JSON only with keys memory_mb and tokens_per_second.\n/no_think",
+        "answer": [
+          "memory_mb",
+          "tokens_per_second"
+        ],
+        "generated_text": "<think>\n\n</think>\n\n```json\n{\"memory_mb\": \"0\", \"tokens_per_second\": \"0\"}\n```",
+        "score": {
+          "passed": true,
+          "found": [
+            "memory_mb",
+            "tokens_per_second"
+          ],
+          "expected": [
+            "memory_mb",
+            "tokens_per_second"
+          ]
+        },
+        "ttft_seconds": 0.0777567769999905,
+        "tokens_per_second": 24.466357443183135
+      },
+      {
+        "id": "stress_json_keys_004",
+        "type": "json_keys",
+        "prompt": "Return minified JSON only with keys layer and role.\n/no_think",
+        "answer": [
+          "layer",
+          "role"
+        ],
+        "generated_text": "<think>\n\n</think>\n\n```json\n{\"layer\": \"minified\", \"role\": \"only\"}\n```",
+        "score": {
+          "passed": true,
+          "found": [
+            "layer",
+            "role"
+          ],
+          "expected": [
+            "layer",
+            "role"
+          ]
+        },
+        "ttft_seconds": 0.10107647600000291,
+        "tokens_per_second": 24.554799359068586
+      },
+      {
+        "id": "stress_json_keys_005",
+        "type": "json_keys",
+        "prompt": "Return minified JSON only with keys dataset and pass_count.\n/no_think",
+        "answer": [
+          "dataset",
+          "pass_count"
+        ],
+        "generated_text": "<think>\n\n</think>\n\n```json\n{\"dataset\": \"pass_count\"}\n```",
+        "score": {
+          "passed": false,
+          "found": [],
+          "expected": [
+            "dataset",
+            "pass_count"
+          ]
+        },
+        "ttft_seconds": 0.1249999359999947,
+        "tokens_per_second": 20.5323645722048
+      },
+      {
+        "id": "stress_contains_all_000",
+        "type": "contains_all",
+        "prompt": "In one sentence, state why PPL alone is incomplete for instruction models.\n/no_think",
+        "answer": [
+          "perplexity",
+          "task",
+          "accuracy"
+        ],
+        "generated_text": "<think>\n\n</think>\n\nPPL alone is incomplete for instruction models because it lacks the ability to understand and generate complex, context-aware, and multi-modal tasks.",
+        "score": {
+          "passed": false,
+          "missing": [
+            "perplexity",
+            "accuracy"
+          ],
+          "expected": [
+            "perplexity",
+            "task",
+            "accuracy"
+          ]
+        },
+        "ttft_seconds": 0.06265446200001179,
+        "tokens_per_second": 27.249865594433754
+      },
+      {
+        "id": "stress_contains_all_001",
+        "type": "contains_all",
+        "prompt": "Name three physical deployment metrics for edge LLM inference.\n/no_think",
+        "answer": [
+          "ttft",
+          "throughput",
+          "memory"
+        ],
+        "generated_text": "<think>\n\n</think>\n\nThree physical deployment metrics for edge LLM inference are:\n\n1. **Latency**: The time it takes for the model to process and respond",
+        "score": {
+          "passed": false,
+          "missing": [
+            "ttft",
+            "throughput",
+            "memory"
+          ],
+          "expected": [
+            "ttft",
+            "throughput",
+            "memory"
+          ]
+        },
+        "ttft_seconds": 0.08376296400001593,
+        "tokens_per_second": 25.855564591464386
+      },
+      {
+        "id": "stress_contains_all_002",
+        "type": "contains_all",
+        "prompt": "State the core reason calibration robustness matters.\n/no_think",
+        "answer": [
+          "calibration",
+          "split",
+          "instability"
+        ],
+        "generated_text": "<think>\n\n</think>\n\nCalibration robustness is crucial because it ensures that the system's performance remains stable and accurate even in the presence of environmental or operational variations.",
+        "score": {
+          "passed": false,
+          "missing": [
+            "split",
+            "instability"
+          ],
+          "expected": [
+            "calibration",
+            "split",
+            "instability"
+          ]
+        },
+        "ttft_seconds": 0.07686556100003372,
+        "tokens_per_second": 24.719923880432866
+      },
+      {
+        "id": "stress_contains_all_003",
+        "type": "contains_all",
+        "prompt": "Write a caveat about packed compression and real runtime.\n/no_think",
+        "answer": [
+          "compression",
+          "latency",
+          "speedup"
+        ],
+        "generated_text": "<think>\n\n</think>\n\n**Caveat: Packed Compression and Real Runtime**\n\nIt is important to note that **packed compression** and **real runtime** are",
+        "score": {
+          "passed": false,
+          "missing": [
+            "latency",
+            "speedup"
+          ],
+          "expected": [
+            "compression",
+            "latency",
+            "speedup"
+          ]
+        },
+        "ttft_seconds": 0.07580528400001185,
+        "tokens_per_second": 25.79343406195426
+      },
+      {
+        "id": "stress_contains_all_004",
+        "type": "contains_all",
+        "prompt": "Describe what a deterministic stress slice should avoid.\n/no_think",
+        "answer": [
+          "download",
+          "leakage",
+          "random"
+        ],
+        "generated_text": "<think>\n\n</think>\n\nA deterministic stress slice should avoid **inconsistencies, ambiguities, and non-physical assumptions** that could lead to incorrect or misleading",
+        "score": {
+          "passed": false,
+          "missing": [
+            "download",
+            "leakage",
+            "random"
+          ],
+          "expected": [
+            "download",
+            "leakage",
+            "random"
+          ]
+        },
+        "ttft_seconds": 0.11504028800004562,
+        "tokens_per_second": 19.115427488002506
+      },
+      {
+        "id": "stress_contains_all_005",
+        "type": "contains_all",
+        "prompt": "State what must be measured before claiming phone deployment.\n/no_think",
+        "answer": [
+          "device",
+          "ttft",
+          "tokens"
+        ],
+        "generated_text": "<think>\n\n</think>\n\nBefore claiming phone deployment, the following must be measured:\n\n1. **Phone Model and Specifications**: Ensure the phone meets the required specifications and is",
+        "score": {
+          "passed": false,
+          "missing": [
+            "device",
+            "ttft",
+            "tokens"
+          ],
+          "expected": [
+            "device",
+            "ttft",
+            "tokens"
+          ]
+        },
+        "ttft_seconds": 0.0704041990000519,
+        "tokens_per_second": 23.115892181363858
+      },
+      {
+        "id": "stress_contains_none_000",
+        "type": "contains_none",
+        "prompt": "Describe a conservative result without using the word SOTA.\n/no_think",
+        "answer": [
+          "sota"
+        ],
+        "generated_text": "<think>\n\n</think>\n\nA conservative result is one that prioritizes stability, fairness, and long-term sustainability over short-term gains. It often involves making decisions that preserve",
+        "score": {
+          "passed": true,
+          "present": [],
+          "expected_absent": [
+            "sota"
+          ]
+        },
+        "ttft_seconds": 0.06876119199995401,
+        "tokens_per_second": 21.61556932063292
+      },
+      {
+        "id": "stress_contains_none_001",
+        "type": "contains_none",
+        "prompt": "Describe a local diagnostic without using the word official.\n/no_think",
+        "answer": [
+          "official"
+        ],
+        "generated_text": "<think>\n\n</think>\n\nA local diagnostic is a person who checks and evaluates a person's health, often based on their symptoms and medical history. They may use tests",
+        "score": {
+          "passed": true,
+          "present": [],
+          "expected_absent": [
+            "official"
+          ]
+        },
+        "ttft_seconds": 0.09178649299997232,
+        "tokens_per_second": 22.959873317119577
+      },
+      {
+        "id": "stress_contains_none_002",
+        "type": "contains_none",
+        "prompt": "Describe a packed kernel experiment without using the word proven.\n/no_think",
+        "answer": [
+          "proven"
+        ],
+        "generated_text": "<think>\n\n</think>\n\nA packed kernel experiment is a type of computational experiment where a large number of cores (or processors) are used simultaneously to perform complex tasks.",
+        "score": {
+          "passed": true,
+          "present": [],
+          "expected_absent": [
+            "proven"
+          ]
+        },
+        "ttft_seconds": 0.13160659900000837,
+        "tokens_per_second": 20.13667092067458
+      },
+      {
+        "id": "stress_contains_none_003",
+        "type": "contains_none",
+        "prompt": "Describe a negative result without using the word failure.\n/no_think",
+        "answer": [
+          "failure"
+        ],
+        "generated_text": "<think>\n\n</think>\n\nA negative result could be something that doesn't meet expectations, such as a low score, a negative outcome, or a situation that doesn't",
+        "score": {
+          "passed": true,
+          "present": [],
+          "expected_absent": [
+            "failure"
+          ]
+        },
+        "ttft_seconds": 0.08776715400000512,
+        "tokens_per_second": 26.005549216874684
+      },
+      {
+        "id": "stress_contains_none_004",
+        "type": "contains_none",
+        "prompt": "Describe C-drive cleanup without using the word delete.\n/no_think",
+        "answer": [
+          "delete"
+        ],
+        "generated_text": "<think>\n\n</think>\n\nA C-drive cleanup involves removing or clearing out unnecessary files, data, or programs that are no longer needed. This process helps maintain the drive",
+        "score": {
+          "passed": true,
+          "present": [],
+          "expected_absent": [
+            "delete"
+          ]
+        },
+        "ttft_seconds": 0.08033035400001154,
+        "tokens_per_second": 26.61388408224857
+      },
+      {
+        "id": "stress_contains_none_005",
+        "type": "contains_none",
+        "prompt": "Describe a benchmark slice without using the word universal.\n/no_think",
+        "answer": [
+          "universal"
+        ],
+        "generated_text": "<think>\n\n</think>\n\nA benchmark slice is a specific, standardized piece of data or information used to evaluate or compare different aspects of a system, process, or outcome",
+        "score": {
+          "passed": true,
+          "present": [],
+          "expected_absent": [
+            "universal"
+          ]
+        },
+        "ttft_seconds": 0.08946897199996329,
+        "tokens_per_second": 26.29470017269337
+      },
+      {
+        "id": "stress_sentence_count_000",
+        "type": "sentence_count",
+        "prompt": "Explain the role-policy selector in exactly one sentence.\n/no_think",
+        "answer": {
+          "count": 1
+        },
+        "generated_text": "<think>\n\n</think>\n\nThe role-policy selector is a mechanism that selects the most appropriate role and policy pair based on the context and requirements of the task.",
+        "score": {
+          "passed": true,
+          "found": 1,
+          "expected": 1
+        },
+        "ttft_seconds": 0.1303883180000298,
+        "tokens_per_second": 22.42589330479209
+      },
+      {
+        "id": "stress_sentence_count_001",
+        "type": "sentence_count",
+        "prompt": "Explain why layer20 expansion is risky in exactly two sentences.\n/no_think",
+        "answer": {
+          "count": 2
+        },
+        "generated_text": "<think>\n\n</think>\n\nLayer 20 expansion can be risky due to its high demand and limited capacity, which may lead to overexposure and potential system failures",
+        "score": {
+          "passed": false,
+          "found": 1,
+          "expected": 2
+        },
+        "ttft_seconds": 0.09835751400004256,
+        "tokens_per_second": 24.981572596692825
+      },
+      {
+        "id": "stress_sentence_count_002",
+        "type": "sentence_count",
+        "prompt": "Explain why a disk guard is useful in exactly one sentence.\n/no_think",
+        "answer": {
+          "count": 1
+        },
+        "generated_text": "<think>\n\n</think>\n\nA disk guard is useful in exactly one sentence.",
+        "score": {
+          "passed": true,
+          "found": 1,
+          "expected": 1
+        },
+        "ttft_seconds": 0.0700896289999946,
+        "tokens_per_second": 22.46131233881779
+      },
+      {
+        "id": "stress_word_count_000",
+        "type": "word_count",
+        "prompt": "Answer in exactly three words: name latency, memory, throughput.\n/no_think",
+        "answer": {
+          "count": 3
+        },
+        "generated_text": "<think>\n\n</think>\n\nSpeed, Memory, and Latency.",
+        "score": {
+          "passed": false,
+          "found": 4,
+          "expected": 3
+        },
+        "ttft_seconds": 0.07854936500001486,
+        "tokens_per_second": 18.874970917012032
+      },
+      {
+        "id": "stress_word_count_001",
+        "type": "word_count",
+        "prompt": "Answer in exactly four words: summarize robust calibration evidence.\n/no_think",
+        "answer": {
+          "count": 4
+        },
+        "generated_text": "<think>\n\n</think>\n\nRobust calibration evidence supports accurate model predictions.",
+        "score": {
+          "passed": false,
+          "found": 7,
+          "expected": 4
+        },
+        "ttft_seconds": 0.10566632999996273,
+        "tokens_per_second": 20.548514165472362
+      },
+      {
+        "id": "stress_word_count_002",
+        "type": "word_count",
+        "prompt": "Answer in exactly five words: summarize conservative V-only policy.\n/no_think",
+        "answer": {
+          "count": 5
+        },
+        "generated_text": "<think>\n\n</think>\n\nA conservative V-only policy.",
+        "score": {
+          "passed": false,
+          "found": 4,
+          "expected": 5
+        },
+        "ttft_seconds": 0.06681383499994809,
+        "tokens_per_second": 23.389456630785443
+      },
+      {
+        "id": "stress_all_of_000",
+        "type": "all_of",
+        "prompt": "Return one JSON object that includes risk and next_step, and do not use the word unsafe.\n/no_think",
+        "answer": [
+          {
+            "type": "json_keys",
+            "answer": [
+              "risk",
+              "next_step"
+            ]
+          },
+          {
+            "type": "contains_none",
+            "answer": [
+              "unsafe"
+            ]
+          }
+        ],
+        "generated_text": "<think>\n\n</think>\n\n```json\n{\n  \"risk\": \"low\",\n  \"next_step\": \"review the data further\"\n}\n```",
+        "score": {
+          "passed": true,
+          "sub_scores": [
+            {
+              "passed": true,
+              "found": [
+                "next_step",
+                "risk"
+              ],
+              "expected": [
+                "next_step",
+                "risk"
+              ]
+            },
+            {
+              "passed": true,
+              "present": [],
+              "expected_absent": [
+                "unsafe"
+              ]
+            }
+          ],
+          "expected": [
+            {
+              "type": "json_keys",
+              "answer": [
+                "risk",
+                "next_step"
+              ]
+            },
+            {
+              "type": "contains_none",
+              "answer": [
+                "unsafe"
+              ]
+            }
+          ]
+        },
+        "ttft_seconds": 0.07363081500000135,
+        "tokens_per_second": 24.673859080139103
+      },
+      {
+        "id": "stress_all_of_001",
+        "type": "all_of",
+        "prompt": "Write one sentence that mentions calibration and memory, and do not use the word universal.\n/no_think",
+        "answer": [
+          {
+            "type": "sentence_count",
+            "answer": {
+              "count": 1
+            }
+          },
+          {
+            "type": "contains_all",
+            "answer": [
+              "calibration",
+              "memory"
+            ]
+          },
+          {
+            "type": "contains_none",
+            "answer": [
+              "universal"
+            ]
+          }
+        ],
+        "generated_text": "<think>\n\n</think>\n\nCalibration ensures accurate memory, helping to maintain precise data storage and retrieval.",
+        "score": {
+          "passed": true,
+          "sub_scores": [
+            {
+              "passed": true,
+              "found": 1,
+              "expected": 1
+            },
+            {
+              "passed": true,
+              "missing": [],
+              "expected": [
+                "calibration",
+                "memory"
+              ]
+            },
+            {
+              "passed": true,
+              "present": [],
+              "expected_absent": [
+                "universal"
+              ]
+            }
+          ],
+          "expected": [
+            {
+              "type": "sentence_count",
+              "answer": {
+                "count": 1
+              }
+            },
+            {
+              "type": "contains_all",
+              "answer": [
+                "calibration",
+                "memory"
+              ]
+            },
+            {
+              "type": "contains_none",
+              "answer": [
+                "universal"
+              ]
+            }
+          ]
+        },
+        "ttft_seconds": 0.15753681199998937,
+        "tokens_per_second": 20.485425864256023
+      },
+      {
+        "id": "stress_all_of_002",
+        "type": "all_of",
+        "prompt": "Return one JSON object with keys policy and speedup, and do not use the word SOTA.\n/no_think",
+        "answer": [
+          {
+            "type": "json_keys",
+            "answer": [
+              "policy",
+              "speedup"
+            ]
+          },
+          {
+            "type": "contains_none",
+            "answer": [
+              "sota"
+            ]
+          }
+        ],
+        "generated_text": "<think>\n\n</think>\n\n```json\n{\n  \"policy\": \"speedup\",\n  \"speedup\": \"increase\"\n}\n```",
+        "score": {
+          "passed": true,
+          "sub_scores": [
+            {
+              "passed": true,
+              "found": [
+                "policy",
+                "speedup"
+              ],
+              "expected": [
+                "policy",
+                "speedup"
+              ]
+            },
+            {
+              "passed": true,
+              "present": [],
+              "expected_absent": [
+                "sota"
+              ]
+            }
+          ],
+          "expected": [
+            {
+              "type": "json_keys",
+              "answer": [
+                "policy",
+                "speedup"
+              ]
+            },
+            {
+              "type": "contains_none",
+              "answer": [
+                "sota"
+              ]
+            }
+          ]
+        },
+        "ttft_seconds": 0.12349688399996239,
+        "tokens_per_second": 22.434253510107002
+      },
+      {
+        "id": "stress_all_of_003",
+        "type": "all_of",
+        "prompt": "Write exactly four words that include ttft and memory.\n/no_think",
+        "answer": [
+          {
+            "type": "word_count",
+            "answer": {
+              "count": 4
+            }
+          },
+          {
+            "type": "contains_all",
+            "answer": [
+              "ttft",
+              "memory"
+            ]
+          }
+        ],
+        "generated_text": "<think>\n\n</think>\n\n1. **Ttft Memory**  \n2. **Ttft Memory**  \n3. **Ttft Memory**  \n4",
+        "score": {
+          "passed": false,
+          "sub_scores": [
+            {
+              "passed": false,
+              "found": 10,
+              "expected": 4
+            },
+            {
+              "passed": true,
+              "missing": [],
+              "expected": [
+                "ttft",
+                "memory"
+              ]
+            }
+          ],
+          "expected": [
+            {
+              "type": "word_count",
+              "answer": {
+                "count": 4
+              }
+            },
+            {
+              "type": "contains_all",
+              "answer": [
+                "ttft",
+                "memory"
+              ]
+            }
+          ]
+        },
+        "ttft_seconds": 0.05959185400001843,
+        "tokens_per_second": 27.181194422903612
+      },
+      {
+        "id": "stress_all_of_004",
+        "type": "all_of",
+        "prompt": "Return one JSON object with keys layer and verdict, and do not use the word proven.\n/no_think",
+        "answer": [
+          {
+            "type": "json_keys",
+            "answer": [
+              "layer",
+              "verdict"
+            ]
+          },
+          {
+            "type": "contains_none",
+            "answer": [
+              "proven"
+            ]
+          }
+        ],
+        "generated_text": "<think>\n\n</think>\n\n```json\n{\n  \"layer\": \"layer\",\n  \"verdict\": \"verdict\"\n}\n```",
+        "score": {
+          "passed": true,
+          "sub_scores": [
+            {
+              "passed": true,
+              "found": [
+                "layer",
+                "verdict"
+              ],
+              "expected": [
+                "layer",
+                "verdict"
+              ]
+            },
+            {
+              "passed": true,
+              "present": [],
+              "expected_absent": [
+                "proven"
+              ]
+            }
+          ],
+          "expected": [
+            {
+              "type": "json_keys",
+              "answer": [
+                "layer",
+                "verdict"
+              ]
+            },
+            {
+              "type": "contains_none",
+              "answer": [
+                "proven"
+              ]
+            }
+          ]
+        },
+        "ttft_seconds": 0.1112064800000212,
+        "tokens_per_second": 21.60376859064091
+      },
+      {
+        "id": "stress_all_of_005",
+        "type": "all_of",
+        "prompt": "Write one sentence that mentions held out prompt and avoids the word official.\n/no_think",
+        "answer": [
+          {
+            "type": "sentence_count",
+            "answer": {
+              "count": 1
+            }
+          },
+          {
+            "type": "contains_all",
+            "answer": [
+              "held",
+              "out",
+              "prompt"
+            ]
+          },
+          {
+            "type": "contains_none",
+            "answer": [
+              "official"
+            ]
+          }
+        ],
+        "generated_text": "<think>\n\n</think>\n\nThe prompt was held out for the user to review.",
+        "score": {
+          "passed": true,
+          "sub_scores": [
+            {
+              "passed": true,
+              "found": 1,
+              "expected": 1
+            },
+            {
+              "passed": true,
+              "missing": [],
+              "expected": [
+                "held",
+                "out",
+                "prompt"
+              ]
+            },
+            {
+              "passed": true,
+              "present": [],
+              "expected_absent": [
+                "official"
+              ]
+            }
+          ],
+          "expected": [
+            {
+              "type": "sentence_count",
+              "answer": {
+                "count": 1
+              }
+            },
+            {
+              "type": "contains_all",
+              "answer": [
+                "held",
+                "out",
+                "prompt"
+              ]
+            },
+            {
+              "type": "contains_none",
+              "answer": [
+                "official"
+              ]
+            }
+          ]
+        },
+        "ttft_seconds": 0.10094337300000689,
+        "tokens_per_second": 19.119567400055725
+      }
+    ]
+  },
+  "fused": {
+    "aggregate": {
+      "tasks": 42,
+      "passes": 21,
+      "accuracy": 0.5,
+      "mean_tokens_per_second": 22.655809156898542,
+      "mean_ttft_seconds": 0.10804649640475834
+    },
+    "rows": [
+      {
+        "id": "stress_mcq_000",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter. Which metric reports first-token response delay? A. TTFT B. BLEU C. ROUGE D. F1\n/no_think",
+        "answer": "A",
+        "generated_text": "<think>\n\n</think>\n\nA. TTFT",
+        "score": {
+          "passed": true,
+          "predicted": "A",
+          "expected": "A"
+        },
+        "ttft_seconds": 0.6609147899999925,
+        "tokens_per_second": 8.379051989617015
+      },
+      {
+        "id": "stress_mcq_001",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter. Which artifact stores two signed 4-bit weights in one byte? A. Packed INT4 weights B. FP32 activations C. Tokenizer merges D. KV cache\n/no_think",
+        "answer": "A",
+        "generated_text": "<think>\n\n</think>\n\nA. Packed INT4 weights",
+        "score": {
+          "passed": true,
+          "predicted": "A",
+          "expected": "A"
+        },
+        "ttft_seconds": 0.07224152900005265,
+        "tokens_per_second": 19.068674198888843
+      },
+      {
+        "id": "stress_mcq_002",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter. Which split is commonly used for web-text calibration? A. C4 B. GSM8K C. HumanEval D. MBPP\n/no_think",
+        "answer": "A",
+        "generated_text": "<think>\n\n</think>\n\nA. C4",
+        "score": {
+          "passed": true,
+          "predicted": "A",
+          "expected": "A"
+        },
+        "ttft_seconds": 0.07820231899995633,
+        "tokens_per_second": 25.753340084273354
+      },
+      {
+        "id": "stress_mcq_003",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter. What does a quality-preserving role policy selector reject first? A. Pass-count regression B. Lower file size C. Shorter README D. More commits\n/no_think",
+        "answer": "A",
+        "generated_text": "<think>\n\n</think>\n\nA. Pass-count regression",
+        "score": {
+          "passed": true,
+          "predicted": "A",
+          "expected": "A"
+        },
+        "ttft_seconds": 0.06364664500000572,
+        "tokens_per_second": 21.316306108019837
+      },
+      {
+        "id": "stress_mcq_004",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter. Which projection role is the current conservative candidate in this repo? A. V only B. Q only C. K only D. Full QKV\n/no_think",
+        "answer": "A",
+        "generated_text": "<think>\n\n</think>\n\nD. Full QKV",
+        "score": {
+          "passed": false,
+          "predicted": "D",
+          "expected": "A"
+        },
+        "ttft_seconds": 0.11742310099998576,
+        "tokens_per_second": 19.816662448250412
+      },
+      {
+        "id": "stress_mcq_005",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter. Which benchmark style checks instruction constraints? A. IFEval B. WikiText2 C. C4 D. PTB\n/no_think",
+        "answer": "A",
+        "generated_text": "<think>\n\n</think>\n\nA. IFEval",
+        "score": {
+          "passed": true,
+          "predicted": "A",
+          "expected": "A"
+        },
+        "ttft_seconds": 0.1279061260000276,
+        "tokens_per_second": 21.44527591988736
+      },
+      {
+        "id": "stress_number_000",
+        "type": "number",
+        "prompt": "Answer with only the final number. A row has 8192 signed 4-bit weights. Two weights fit in one byte. How many bytes are needed?\n/no_think",
+        "answer": "4096",
+        "generated_text": "<think>\n\n</think>\n\nWe are given that there are 8192 signed 4-bit weights. Each byte can hold two weights.\n\n- 81",
+        "score": {
+          "passed": false,
+          "predicted": [
+            "8192",
+            "4",
+            "81"
+          ],
+          "expected": "4096"
+        },
+        "ttft_seconds": 0.11030913700000156,
+        "tokens_per_second": 23.950515217795058
+      },
+      {
+        "id": "stress_number_001",
+        "type": "number",
+        "prompt": "Answer with only the final number. A selected-row kernel reads 32 rows, each row has 4096 signed 4-bit weights. How many packed bytes are read?\n/no_think",
+        "answer": "65536",
+        "generated_text": "<think>\n\n</think>\n\nThe number of packed bytes read is:\n\n$$\n\\frac{32 \\times 4096}{8} = 1",
+        "score": {
+          "passed": false,
+          "predicted": [
+            "32",
+            "4096",
+            "8",
+            "1"
+          ],
+          "expected": "65536"
+        },
+        "ttft_seconds": 0.07253908399997044,
+        "tokens_per_second": 22.37547564632432
+      },
+      {
+        "id": "stress_number_002",
+        "type": "number",
+        "prompt": "Answer with only the final number. A matrix has 80 percent 4-bit rows and 20 percent 8-bit rows. What is the average bit width?\n/no_think",
+        "answer": "4.8",
+        "generated_text": "<think>\n\n</think>\n\nThe average bit width is calculated by taking the weighted average of the bit widths of the rows. \n\n- 80% of the rows",
+        "score": {
+          "passed": false,
+          "predicted": [
+            "80"
+          ],
+          "expected": "4.8"
+        },
+        "ttft_seconds": 0.07425382799999625,
+        "tokens_per_second": 28.376796658370008
+      },
+      {
+        "id": "stress_number_003",
+        "type": "number",
+        "prompt": "Answer with only the final number. A policy keeps 3 of 24 layers dense. How many layers are packed?\n/no_think",
+        "answer": "21",
+        "generated_text": "<think>\n\n</think>\n\nThe number of layers packed is $ 3 \\times 24 = \\boxed{72} $.",
+        "score": {
+          "passed": false,
+          "predicted": [
+            "3",
+            "24",
+            "72"
+          ],
+          "expected": "21"
+        },
+        "ttft_seconds": 0.12632925600001954,
+        "tokens_per_second": 18.48672967830025
+      },
+      {
+        "id": "stress_number_004",
+        "type": "number",
+        "prompt": "Answer with only the final number. A benchmark has 48 prompts and runs baseline plus fused once. How many generations are measured?\n/no_think",
+        "answer": "96",
+        "generated_text": "<think>\n\n</think>\n\n48",
+        "score": {
+          "passed": false,
+          "predicted": [
+            "48"
+          ],
+          "expected": "96"
+        },
+        "ttft_seconds": 0.08569790600000715,
+        "tokens_per_second": 19.287918467707353
+      },
+      {
+        "id": "stress_number_005",
+        "type": "number",
+        "prompt": "Answer with only the final number. A GPU has 8151 MiB total memory. A 90 percent guard allows at most how many MiB if rounded down?\n/no_think",
+        "answer": "7335",
+        "generated_text": "<think>\n\n</think>\n\nThe total memory is 8151 MiB. A 90% guard allows at most:\n\n$$\n0.9 \\",
+        "score": {
+          "passed": false,
+          "predicted": [
+            "8151",
+            "90",
+            "0.9"
+          ],
+          "expected": "7335"
+        },
+        "ttft_seconds": 0.15887884599999325,
+        "tokens_per_second": 18.551020217270057
+      },
+      {
+        "id": "stress_json_keys_000",
+        "type": "json_keys",
+        "prompt": "Return minified JSON only with keys metric and value. Use metric for TTFT.\n/no_think",
+        "answer": [
+          "metric",
+          "value"
+        ],
+        "generated_text": "<think>\n\n</think>\n\n```json\n{\"metric\": \"TTFT\"}\n```",
+        "score": {
+          "passed": false,
+          "found": [],
+          "expected": [
+            "metric",
+            "value"
+          ]
+        },
+        "ttft_seconds": 0.09110512400002335,
+        "tokens_per_second": 27.414920189428106
+      },
+      {
+        "id": "stress_json_keys_001",
+        "type": "json_keys",
+        "prompt": "Return minified JSON only with keys risk and evidence. Describe calibration split instability.\n/no_think",
+        "answer": [
+          "risk",
+          "evidence"
+        ],
+        "generated_text": "<think>\n\n</think>\n\n```json\n{\n  \"risk\": \"calibration_split_inconsistency\",\n  \"evidence\": \"calibration_split_inconsistency",
+        "score": {
+          "passed": false,
+          "found": [],
+          "expected": [
+            "evidence",
+            "risk"
+          ]
+        },
+        "ttft_seconds": 0.08445187600000281,
+        "tokens_per_second": 22.173523774615244
+      },
+      {
+        "id": "stress_json_keys_002",
+        "type": "json_keys",
+        "prompt": "Return minified JSON only with keys policy and decision. The policy should be V-only.\n/no_think",
+        "answer": [
+          "policy",
+          "decision"
+        ],
+        "generated_text": "<think>\n\n</think>\n\n```json\n{\"policy\": \"V-only\", \"decision\": \"V-only\"}\n```",
+        "score": {
+          "passed": true,
+          "found": [
+            "decision",
+            "policy"
+          ],
+          "expected": [
+            "decision",
+            "policy"
+          ]
+        },
+        "ttft_seconds": 0.12226805699998522,
+        "tokens_per_second": 21.346764334504822
+      },
+      {
+        "id": "stress_json_keys_003",
+        "type": "json_keys",
+        "prompt": "Return minified JSON only with keys memory_mb and tokens_per_second.\n/no_think",
+        "answer": [
+          "memory_mb",
+          "tokens_per_second"
+        ],
+        "generated_text": "<think>\n\n</think>\n\n```json\n{\"memory_mb\": \"0\", \"tokens_per_second\": \"0\"}\n```",
+        "score": {
+          "passed": true,
+          "found": [
+            "memory_mb",
+            "tokens_per_second"
+          ],
+          "expected": [
+            "memory_mb",
+            "tokens_per_second"
+          ]
+        },
+        "ttft_seconds": 0.10304718700001558,
+        "tokens_per_second": 19.219202067229094
+      },
+      {
+        "id": "stress_json_keys_004",
+        "type": "json_keys",
+        "prompt": "Return minified JSON only with keys layer and role.\n/no_think",
+        "answer": [
+          "layer",
+          "role"
+        ],
+        "generated_text": "<think>\n\n</think>\n\n```json\n{\"layer\": \"minified\", \"role\": \"only\"}\n```",
+        "score": {
+          "passed": true,
+          "found": [
+            "layer",
+            "role"
+          ],
+          "expected": [
+            "layer",
+            "role"
+          ]
+        },
+        "ttft_seconds": 0.07679786199997807,
+        "tokens_per_second": 22.308866057219184
+      },
+      {
+        "id": "stress_json_keys_005",
+        "type": "json_keys",
+        "prompt": "Return minified JSON only with keys dataset and pass_count.\n/no_think",
+        "answer": [
+          "dataset",
+          "pass_count"
+        ],
+        "generated_text": "<think>\n\n</think>\n\n```json\n{\"dataset\": \"pass_count\"}\n```",
+        "score": {
+          "passed": false,
+          "found": [],
+          "expected": [
+            "dataset",
+            "pass_count"
+          ]
+        },
+        "ttft_seconds": 0.07289306299998088,
+        "tokens_per_second": 25.050620875128782
+      },
+      {
+        "id": "stress_contains_all_000",
+        "type": "contains_all",
+        "prompt": "In one sentence, state why PPL alone is incomplete for instruction models.\n/no_think",
+        "answer": [
+          "perplexity",
+          "task",
+          "accuracy"
+        ],
+        "generated_text": "<think>\n\n</think>\n\nPPL alone is incomplete for instruction models because it lacks the ability to understand and generate complex, context-aware, and multi-modal tasks.",
+        "score": {
+          "passed": false,
+          "missing": [
+            "perplexity",
+            "accuracy"
+          ],
+          "expected": [
+            "perplexity",
+            "task",
+            "accuracy"
+          ]
+        },
+        "ttft_seconds": 0.08695775299997877,
+        "tokens_per_second": 27.78789212231835
+      },
+      {
+        "id": "stress_contains_all_001",
+        "type": "contains_all",
+        "prompt": "Name three physical deployment metrics for edge LLM inference.\n/no_think",
+        "answer": [
+          "ttft",
+          "throughput",
+          "memory"
+        ],
+        "generated_text": "<think>\n\n</think>\n\nThree physical deployment metrics for edge LLM inference are:\n\n1. **Latency**: The time it takes for the model to respond to a",
+        "score": {
+          "passed": false,
+          "missing": [
+            "ttft",
+            "throughput",
+            "memory"
+          ],
+          "expected": [
+            "ttft",
+            "throughput",
+            "memory"
+          ]
+        },
+        "ttft_seconds": 0.06372693200000867,
+        "tokens_per_second": 24.79974277458782
+      },
+      {
+        "id": "stress_contains_all_002",
+        "type": "contains_all",
+        "prompt": "State the core reason calibration robustness matters.\n/no_think",
+        "answer": [
+          "calibration",
+          "split",
+          "instability"
+        ],
+        "generated_text": "<think>\n\n</think>\n\nCalibration robustness is crucial because it ensures that the system's performance remains stable and accurate even in the presence of environmental or operational variations.",
+        "score": {
+          "passed": false,
+          "missing": [
+            "split",
+            "instability"
+          ],
+          "expected": [
+            "calibration",
+            "split",
+            "instability"
+          ]
+        },
+        "ttft_seconds": 0.07884015799999133,
+        "tokens_per_second": 22.866109066830898
+      },
+      {
+        "id": "stress_contains_all_003",
+        "type": "contains_all",
+        "prompt": "Write a caveat about packed compression and real runtime.\n/no_think",
+        "answer": [
+          "compression",
+          "latency",
+          "speedup"
+        ],
+        "generated_text": "<think>\n\n</think>\n\n**Caveat:**  \nPacked compression and real runtime are not standard terms in the context of software development or system programming. These terms",
+        "score": {
+          "passed": false,
+          "missing": [
+            "latency",
+            "speedup"
+          ],
+          "expected": [
+            "compression",
+            "latency",
+            "speedup"
+          ]
+        },
+        "ttft_seconds": 0.08714883699997245,
+        "tokens_per_second": 22.546375581806746
+      },
+      {
+        "id": "stress_contains_all_004",
+        "type": "contains_all",
+        "prompt": "Describe what a deterministic stress slice should avoid.\n/no_think",
+        "answer": [
+          "download",
+          "leakage",
+          "random"
+        ],
+        "generated_text": "<think>\n\n</think>\n\nA deterministic stress slice should avoid **inconsistencies, ambiguities, and non-physical assumptions** that could lead to incorrect or misleading",
+        "score": {
+          "passed": false,
+          "missing": [
+            "download",
+            "leakage",
+            "random"
+          ],
+          "expected": [
+            "download",
+            "leakage",
+            "random"
+          ]
+        },
+        "ttft_seconds": 0.12050882099998717,
+        "tokens_per_second": 23.093332938399215
+      },
+      {
+        "id": "stress_contains_all_005",
+        "type": "contains_all",
+        "prompt": "State what must be measured before claiming phone deployment.\n/no_think",
+        "answer": [
+          "device",
+          "ttft",
+          "tokens"
+        ],
+        "generated_text": "<think>\n\n</think>\n\nBefore claiming phone deployment, the following must be measured:\n\n1. **Phone Model and Specifications**: The model and specifications of the phone are essential",
+        "score": {
+          "passed": false,
+          "missing": [
+            "device",
+            "ttft",
+            "tokens"
+          ],
+          "expected": [
+            "device",
+            "ttft",
+            "tokens"
+          ]
+        },
+        "ttft_seconds": 0.073616439000034,
+        "tokens_per_second": 26.381312105060704
+      },
+      {
+        "id": "stress_contains_none_000",
+        "type": "contains_none",
+        "prompt": "Describe a conservative result without using the word SOTA.\n/no_think",
+        "answer": [
+          "sota"
+        ],
+        "generated_text": "<think>\n\n</think>\n\nA conservative result is one that prioritizes stability, long-term planning, and adherence to established principles, often avoiding changes that could disrupt the current",
+        "score": {
+          "passed": true,
+          "present": [],
+          "expected_absent": [
+            "sota"
+          ]
+        },
+        "ttft_seconds": 0.1348925789999953,
+        "tokens_per_second": 23.452038471741353
+      },
+      {
+        "id": "stress_contains_none_001",
+        "type": "contains_none",
+        "prompt": "Describe a local diagnostic without using the word official.\n/no_think",
+        "answer": [
+          "official"
+        ],
+        "generated_text": "<think>\n\n</think>\n\nA local diagnostic is a person who checks and evaluates a person's health, often based on their symptoms and medical history. They may use tests",
+        "score": {
+          "passed": true,
+          "present": [],
+          "expected_absent": [
+            "official"
+          ]
+        },
+        "ttft_seconds": 0.08253776300000482,
+        "tokens_per_second": 20.364213707608126
+      },
+      {
+        "id": "stress_contains_none_002",
+        "type": "contains_none",
+        "prompt": "Describe a packed kernel experiment without using the word proven.\n/no_think",
+        "answer": [
+          "proven"
+        ],
+        "generated_text": "<think>\n\n</think>\n\nA packed kernel experiment is a type of computational experiment where a large number of cores are used to perform complex tasks in parallel. This approach allows",
+        "score": {
+          "passed": true,
+          "present": [],
+          "expected_absent": [
+            "proven"
+          ]
+        },
+        "ttft_seconds": 0.12523288900001717,
+        "tokens_per_second": 25.735847722224584
+      },
+      {
+        "id": "stress_contains_none_003",
+        "type": "contains_none",
+        "prompt": "Describe a negative result without using the word failure.\n/no_think",
+        "answer": [
+          "failure"
+        ],
+        "generated_text": "<think>\n\n</think>\n\nA negative result could be something that doesn't meet expectations, such as a low score, a negative outcome, or a situation that doesn't",
+        "score": {
+          "passed": true,
+          "present": [],
+          "expected_absent": [
+            "failure"
+          ]
+        },
+        "ttft_seconds": 0.08155293999999458,
+        "tokens_per_second": 24.569202980706226
+      },
+      {
+        "id": "stress_contains_none_004",
+        "type": "contains_none",
+        "prompt": "Describe C-drive cleanup without using the word delete.\n/no_think",
+        "answer": [
+          "delete"
+        ],
+        "generated_text": "<think>\n\n</think>\n\nA C-drive cleanup involves removing or clearing out unnecessary files, data, or system settings that may be causing performance issues or preventing the drive from",
+        "score": {
+          "passed": true,
+          "present": [],
+          "expected_absent": [
+            "delete"
+          ]
+        },
+        "ttft_seconds": 0.07728759399998353,
+        "tokens_per_second": 29.279514601425962
+      },
+      {
+        "id": "stress_contains_none_005",
+        "type": "contains_none",
+        "prompt": "Describe a benchmark slice without using the word universal.\n/no_think",
+        "answer": [
+          "universal"
+        ],
+        "generated_text": "<think>\n\n</think>\n\nA benchmark slice is a specific, standardized piece of data or information used to evaluate or compare different aspects of a system, process, or project",
+        "score": {
+          "passed": true,
+          "present": [],
+          "expected_absent": [
+            "universal"
+          ]
+        },
+        "ttft_seconds": 0.06855647099996531,
+        "tokens_per_second": 27.46295405838699
+      },
+      {
+        "id": "stress_sentence_count_000",
+        "type": "sentence_count",
+        "prompt": "Explain the role-policy selector in exactly one sentence.\n/no_think",
+        "answer": {
+          "count": 1
+        },
+        "generated_text": "<think>\n\n</think>\n\nThe role-policy selector is a mechanism that determines which role or policy to apply based on the context or input provided.",
+        "score": {
+          "passed": true,
+          "found": 1,
+          "expected": 1
+        },
+        "ttft_seconds": 0.0702153169999633,
+        "tokens_per_second": 27.429504261601362
+      },
+      {
+        "id": "stress_sentence_count_001",
+        "type": "sentence_count",
+        "prompt": "Explain why layer20 expansion is risky in exactly two sentences.\n/no_think",
+        "answer": {
+          "count": 2
+        },
+        "generated_text": "<think>\n\n</think>\n\nLayer 20 expansion can be risky due to its high demand for infrastructure and resources, which may strain existing network capabilities and lead to potential",
+        "score": {
+          "passed": false,
+          "found": 1,
+          "expected": 2
+        },
+        "ttft_seconds": 0.06807341400002542,
+        "tokens_per_second": 26.947213432026757
+      },
+      {
+        "id": "stress_sentence_count_002",
+        "type": "sentence_count",
+        "prompt": "Explain why a disk guard is useful in exactly one sentence.\n/no_think",
+        "answer": {
+          "count": 1
+        },
+        "generated_text": "<think>\n\n</think>\n\nA disk guard is useful in exactly one sentence.",
+        "score": {
+          "passed": true,
+          "found": 1,
+          "expected": 1
+        },
+        "ttft_seconds": 0.09109324299998889,
+        "tokens_per_second": 17.30500392779074
+      },
+      {
+        "id": "stress_word_count_000",
+        "type": "word_count",
+        "prompt": "Answer in exactly three words: name latency, memory, throughput.\n/no_think",
+        "answer": {
+          "count": 3
+        },
+        "generated_text": "<think>\n\n</think>\n\nSpeed, Memory, and Latency.",
+        "score": {
+          "passed": false,
+          "found": 4,
+          "expected": 3
+        },
+        "ttft_seconds": 0.15927318899997545,
+        "tokens_per_second": 22.367159343737125
+      },
+      {
+        "id": "stress_word_count_001",
+        "type": "word_count",
+        "prompt": "Answer in exactly four words: summarize robust calibration evidence.\n/no_think",
+        "answer": {
+          "count": 4
+        },
+        "generated_text": "<think>\n\n</think>\n\nRobust calibration evidence supports accurate model predictions.",
+        "score": {
+          "passed": false,
+          "found": 7,
+          "expected": 4
+        },
+        "ttft_seconds": 0.06940992599999163,
+        "tokens_per_second": 25.109549730203025
+      },
+      {
+        "id": "stress_word_count_002",
+        "type": "word_count",
+        "prompt": "Answer in exactly five words: summarize conservative V-only policy.\n/no_think",
+        "answer": {
+          "count": 5
+        },
+        "generated_text": "<think>\n\n</think>\n\nA conservative V-only policy.",
+        "score": {
+          "passed": false,
+          "found": 4,
+          "expected": 5
+        },
+        "ttft_seconds": 0.1522002719999591,
+        "tokens_per_second": 16.617749799773218
+      },
+      {
+        "id": "stress_all_of_000",
+        "type": "all_of",
+        "prompt": "Return one JSON object that includes risk and next_step, and do not use the word unsafe.\n/no_think",
+        "answer": [
+          {
+            "type": "json_keys",
+            "answer": [
+              "risk",
+              "next_step"
+            ]
+          },
+          {
+            "type": "contains_none",
+            "answer": [
+              "unsafe"
+            ]
+          }
+        ],
+        "generated_text": "<think>\n\n</think>\n\n```json\n{\n  \"risk\": \"low\",\n  \"next_step\": \"analyze further\"\n}\n```",
+        "score": {
+          "passed": true,
+          "sub_scores": [
+            {
+              "passed": true,
+              "found": [
+                "next_step",
+                "risk"
+              ],
+              "expected": [
+                "next_step",
+                "risk"
+              ]
+            },
+            {
+              "passed": true,
+              "present": [],
+              "expected_absent": [
+                "unsafe"
+              ]
+            }
+          ],
+          "expected": [
+            {
+              "type": "json_keys",
+              "answer": [
+                "risk",
+                "next_step"
+              ]
+            },
+            {
+              "type": "contains_none",
+              "answer": [
+                "unsafe"
+              ]
+            }
+          ]
+        },
+        "ttft_seconds": 0.0856642029999648,
+        "tokens_per_second": 26.994651880827476
+      },
+      {
+        "id": "stress_all_of_001",
+        "type": "all_of",
+        "prompt": "Write one sentence that mentions calibration and memory, and do not use the word universal.\n/no_think",
+        "answer": [
+          {
+            "type": "sentence_count",
+            "answer": {
+              "count": 1
+            }
+          },
+          {
+            "type": "contains_all",
+            "answer": [
+              "calibration",
+              "memory"
+            ]
+          },
+          {
+            "type": "contains_none",
+            "answer": [
+              "universal"
+            ]
+          }
+        ],
+        "generated_text": "<think>\n\n</think>\n\nCalibration ensures accurate memory, and memory is essential for maintaining proper calibration.",
+        "score": {
+          "passed": true,
+          "sub_scores": [
+            {
+              "passed": true,
+              "found": 1,
+              "expected": 1
+            },
+            {
+              "passed": true,
+              "missing": [],
+              "expected": [
+                "calibration",
+                "memory"
+              ]
+            },
+            {
+              "passed": true,
+              "present": [],
+              "expected_absent": [
+                "universal"
+              ]
+            }
+          ],
+          "expected": [
+            {
+              "type": "sentence_count",
+              "answer": {
+                "count": 1
+              }
+            },
+            {
+              "type": "contains_all",
+              "answer": [
+                "calibration",
+                "memory"
+              ]
+            },
+            {
+              "type": "contains_none",
+              "answer": [
+                "universal"
+              ]
+            }
+          ]
+        },
+        "ttft_seconds": 0.11365982099999883,
+        "tokens_per_second": 20.240162804966825
+      },
+      {
+        "id": "stress_all_of_002",
+        "type": "all_of",
+        "prompt": "Return one JSON object with keys policy and speedup, and do not use the word SOTA.\n/no_think",
+        "answer": [
+          {
+            "type": "json_keys",
+            "answer": [
+              "policy",
+              "speedup"
+            ]
+          },
+          {
+            "type": "contains_none",
+            "answer": [
+              "sota"
+            ]
+          }
+        ],
+        "generated_text": "<think>\n\n</think>\n\n```json\n{\n  \"policy\": \"speedup\",\n  \"speedup\": \"increase\"\n}\n```",
+        "score": {
+          "passed": true,
+          "sub_scores": [
+            {
+              "passed": true,
+              "found": [
+                "policy",
+                "speedup"
+              ],
+              "expected": [
+                "policy",
+                "speedup"
+              ]
+            },
+            {
+              "passed": true,
+              "present": [],
+              "expected_absent": [
+                "sota"
+              ]
+            }
+          ],
+          "expected": [
+            {
+              "type": "json_keys",
+              "answer": [
+                "policy",
+                "speedup"
+              ]
+            },
+            {
+              "type": "contains_none",
+              "answer": [
+                "sota"
+              ]
+            }
+          ]
+        },
+        "ttft_seconds": 0.09509228199999598,
+        "tokens_per_second": 23.23526174099154
+      },
+      {
+        "id": "stress_all_of_003",
+        "type": "all_of",
+        "prompt": "Write exactly four words that include ttft and memory.\n/no_think",
+        "answer": [
+          {
+            "type": "word_count",
+            "answer": {
+              "count": 4
+            }
+          },
+          {
+            "type": "contains_all",
+            "answer": [
+              "ttft",
+              "memory"
+            ]
+          }
+        ],
+        "generated_text": "<think>\n\n</think>\n\n1. **Ttft Memory**  \n2. **Ttft Memory**  \n3. **Ttft Memory**  \n4",
+        "score": {
+          "passed": false,
+          "sub_scores": [
+            {
+              "passed": false,
+              "found": 10,
+              "expected": 4
+            },
+            {
+              "passed": true,
+              "missing": [],
+              "expected": [
+                "ttft",
+                "memory"
+              ]
+            }
+          ],
+          "expected": [
+            {
+              "type": "word_count",
+              "answer": {
+                "count": 4
+              }
+            },
+            {
+              "type": "contains_all",
+              "answer": [
+                "ttft",
+                "memory"
+              ]
+            }
+          ]
+        },
+        "ttft_seconds": 0.10339935800004696,
+        "tokens_per_second": 18.580208563549217
+      },
+      {
+        "id": "stress_all_of_004",
+        "type": "all_of",
+        "prompt": "Return one JSON object with keys layer and verdict, and do not use the word proven.\n/no_think",
+        "answer": [
+          {
+            "type": "json_keys",
+            "answer": [
+              "layer",
+              "verdict"
+            ]
+          },
+          {
+            "type": "contains_none",
+            "answer": [
+              "proven"
+            ]
+          }
+        ],
+        "generated_text": "<think>\n\n</think>\n\n```json\n{\n  \"layer\": \"layer\",\n  \"verdict\": \"verdict\"\n}\n```",
+        "score": {
+          "passed": true,
+          "sub_scores": [
+            {
+              "passed": true,
+              "found": [
+                "layer",
+                "verdict"
+              ],
+              "expected": [
+                "layer",
+                "verdict"
+              ]
+            },
+            {
+              "passed": true,
+              "present": [],
+              "expected_absent": [
+                "proven"
+              ]
+            }
+          ],
+          "expected": [
+            {
+              "type": "json_keys",
+              "answer": [
+                "layer",
+                "verdict"
+              ]
+            },
+            {
+              "type": "contains_none",
+              "answer": [
+                "proven"
+              ]
+            }
+          ]
+        },
+        "ttft_seconds": 0.08268302300001551,
+        "tokens_per_second": 23.517877895042048
+      },
+      {
+        "id": "stress_all_of_005",
+        "type": "all_of",
+        "prompt": "Write one sentence that mentions held out prompt and avoids the word official.\n/no_think",
+        "answer": [
+          {
+            "type": "sentence_count",
+            "answer": {
+              "count": 1
+            }
+          },
+          {
+            "type": "contains_all",
+            "answer": [
+              "held",
+              "out",
+              "prompt"
+            ]
+          },
+          {
+            "type": "contains_none",
+            "answer": [
+              "official"
+            ]
+          }
+        ],
+        "generated_text": "<think>\n\n</think>\n\nThe prompt was held out for the user to review.",
+        "score": {
+          "passed": true,
+          "sub_scores": [
+            {
+              "passed": true,
+              "found": 1,
+              "expected": 1
+            },
+            {
+              "passed": true,
+              "missing": [],
+              "expected": [
+                "held",
+                "out",
+                "prompt"
+              ]
+            },
+            {
+              "passed": true,
+              "present": [],
+              "expected_absent": [
+                "official"
+              ]
+            }
+          ],
+          "expected": [
+            {
+              "type": "sentence_count",
+              "answer": {
+                "count": 1
+              }
+            },
+            {
+              "type": "contains_all",
+              "answer": [
+                "held",
+                "out",
+                "prompt"
+              ]
+            },
+            {
+              "type": "contains_none",
+              "answer": [
+                "official"
+              ]
+            }
+          ]
+        },
+        "ttft_seconds": 0.06742388899999696,
+        "tokens_per_second": 20.539441145303336
+      }
+    ]
+  }
+}

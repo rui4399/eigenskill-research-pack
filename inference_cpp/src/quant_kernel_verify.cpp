@@ -100,6 +100,8 @@ int main(int argc, char** argv) {
         std::vector<float> dense(options.dim, 0.0f);
         std::vector<float> dense_avx2(options.dim, 0.0f);
         std::vector<float> int4_out(options.dim, 0.0f);
+        std::vector<float> int4_reference(options.dim, 0.0f);
+        std::vector<float> int4_maddubs(options.dim, 0.0f);
         std::vector<float> int3_out(options.dim, 0.0f);
         std::vector<float> mixed_out(options.dim, 0.0f);
         std::vector<float> selected(options.active_rows, 0.0f);
@@ -113,6 +115,14 @@ int main(int argc, char** argv) {
         eigenskill::dense_gemv(matrix, x.data(), dense.data());
         eigenskill::dense_gemv_avx2(matrix, x.data(), dense_avx2.data());
         eigenskill::int4_dequant_gemv(int4, x.data(), int4_out.data());
+        eigenskill::int4_maddubs_gemv(int4, x.data(), int4_maddubs.data());
+        eigenskill::PackedLowBitMatrix int4_as_lowbit;
+        int4_as_lowbit.rows = int4.rows;
+        int4_as_lowbit.cols = int4.cols;
+        int4_as_lowbit.bits = 4;
+        int4_as_lowbit.bytes = int4.bytes;
+        int4_as_lowbit.row_scales = int4.row_scales;
+        eigenskill::lowbit_dequant_gemv(int4_as_lowbit, x.data(), int4_reference.data());
         eigenskill::lowbit_dequant_gemv(int3, x.data(), int3_out.data());
         eigenskill::mixed_lowbit_dequant_gemv(mixed, x.data(), mixed_out.data());
         eigenskill::selected_rows_gemv(matrix, x.data(), rows.data(), options.active_rows, selected.data());
@@ -131,6 +141,8 @@ int main(int argc, char** argv) {
         const double selected_err = eigenskill::rel_l2_error(selected.data(), selected_ref.data(), options.active_rows);
         const double selected_avx2_err = eigenskill::rel_l2_error(selected_avx2.data(), selected_ref.data(), options.active_rows);
         const double int4_err = eigenskill::rel_l2_error(int4_out.data(), dense.data(), options.dim);
+        const double int4_fastpath_err = eigenskill::rel_l2_error(int4_out.data(), int4_reference.data(), options.dim);
+        const double int4_maddubs_err = eigenskill::rel_l2_error(int4_maddubs.data(), dense.data(), options.dim);
         const double int3_err = eigenskill::rel_l2_error(int3_out.data(), dense.data(), options.dim);
         const double mixed_err = eigenskill::rel_l2_error(mixed_out.data(), dense.data(), options.dim);
         const double mixed_selected_err =
@@ -141,11 +153,14 @@ int main(int argc, char** argv) {
         const bool selected_ok = selected_err <= options.tolerance;
         const bool selected_avx2_ok = selected_avx2_err <= options.tolerance;
         const bool int4_ok = std::isfinite(int4_err);
+        const bool int4_fastpath_ok = int4_fastpath_err <= options.tolerance;
+        const bool int4_maddubs_ok = std::isfinite(int4_maddubs_err) && int4_maddubs_err < 0.5;
         const bool int3_ok = std::isfinite(int3_err);
         const bool mixed_ok = std::isfinite(mixed_err);
         const bool mixed_selected_ok = mixed_selected_err <= options.tolerance;
         const bool bypass_ok = bypass_err <= options.tolerance;
-        const bool ok = dense_avx2_ok && selected_ok && selected_avx2_ok && int4_ok && int3_ok &&
+        const bool ok = dense_avx2_ok && selected_ok && selected_avx2_ok && int4_ok && int4_fastpath_ok &&
+                        int4_maddubs_ok && int3_ok &&
                         mixed_ok && mixed_selected_ok && bypass_ok;
 
         std::cout << std::scientific << std::setprecision(9);
@@ -163,6 +178,8 @@ int main(int argc, char** argv) {
         std::cout << "    \"selected_rel_l2\": " << selected_err << ",\n";
         std::cout << "    \"selected_avx2_rel_l2\": " << selected_avx2_err << ",\n";
         std::cout << "    \"int4_rel_l2\": " << int4_err << ",\n";
+        std::cout << "    \"int4_fastpath_vs_generic_rel_l2\": " << int4_fastpath_err << ",\n";
+        std::cout << "    \"int4_maddubs_rel_l2\": " << int4_maddubs_err << ",\n";
         std::cout << "    \"int3_rel_l2\": " << int3_err << ",\n";
         std::cout << "    \"mixed_rel_l2\": " << mixed_err << ",\n";
         std::cout << "    \"mixed_selected_rel_l2\": " << mixed_selected_err << ",\n";
@@ -180,6 +197,12 @@ int main(int argc, char** argv) {
         std::cout << ",\n";
         std::cout << "    \"int4_finite\": ";
         print_bool(std::cout, int4_ok);
+        std::cout << ",\n";
+        std::cout << "    \"int4_fastpath_matches_generic\": ";
+        print_bool(std::cout, int4_fastpath_ok);
+        std::cout << ",\n";
+        std::cout << "    \"int4_maddubs_finite\": ";
+        print_bool(std::cout, int4_maddubs_ok);
         std::cout << ",\n";
         std::cout << "    \"int3_finite\": ";
         print_bool(std::cout, int3_ok);

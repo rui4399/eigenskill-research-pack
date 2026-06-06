@@ -38,8 +38,12 @@ add_executable(quant_swap_search_summary src/quant_swap_search_summary.cpp)
 add_executable(quant_transfer_matrix src/quant_transfer_matrix.cpp)
 add_executable(quant_task_eval_summary src/quant_task_eval_summary.cpp)
 add_executable(quant_task_compare src/quant_task_compare.cpp)
+add_executable(mixed_precision_packer src/mixed_precision_packer.cpp)
+add_executable(mixed_precision_runtime_bench src/mixed_precision_runtime_bench.cpp)
 target_link_libraries(quant_kernel_bench PRIVATE eigenskill_quant_kernels)
 target_link_libraries(quant_kernel_verify PRIVATE eigenskill_quant_kernels)
+target_link_libraries(mixed_precision_packer PRIVATE eigenskill_quant_kernels)
+target_link_libraries(mixed_precision_runtime_bench PRIVATE eigenskill_quant_kernels)
 
 if(BUILD_TESTING)
   add_test(
@@ -213,10 +217,74 @@ if(BUILD_TESTING)
       --baseline fp16
       --emit json
   )
+  add_test(
+    NAME quant_policy_bypass_eval_exact
+    COMMAND quant_policy_bypass
+      --data ${CMAKE_CURRENT_SOURCE_DIR}/../data_eval/eigenskill_quant_v1/eval.jsonl
+      --min-decision-exact 1.0
+  )
+  add_test(
+    NAME mixed_precision_packer_smoke
+    COMMAND mixed_precision_packer
+      --synthetic
+      --rows 64
+      --cols 96
+      --default-bits 4
+      --sensitive-every 8
+      --sensitive-bits 8
+      --out ${CMAKE_CURRENT_BINARY_DIR}/mixed_precision_packer_smoke.esmp
+      --manifest-out ${CMAKE_CURRENT_BINARY_DIR}/mixed_precision_packer_smoke.json
+      --verify
+  )
+  set_tests_properties(
+    mixed_precision_packer_smoke
+    PROPERTIES FIXTURES_SETUP mixed_precision_packer_smoke_file
+  )
+  add_test(
+    NAME mixed_precision_packer_text_fixture
+    COMMAND mixed_precision_packer
+      --weights-text ${CMAKE_CURRENT_SOURCE_DIR}/testdata/mixed_precision_weights_fixture.txt
+      --row-bits-file ${CMAKE_CURRENT_SOURCE_DIR}/testdata/mixed_precision_row_bits_fixture.txt
+      --rows 4
+      --cols 8
+      --out ${CMAKE_CURRENT_BINARY_DIR}/mixed_precision_packer_text_fixture.esmp
+      --manifest-out ${CMAKE_CURRENT_BINARY_DIR}/mixed_precision_packer_text_fixture.json
+      --verify
+  )
+  set_tests_properties(
+    mixed_precision_packer_text_fixture
+    PROPERTIES FIXTURES_SETUP mixed_precision_packer_text_fixture_file
+  )
+  add_test(
+    NAME mixed_precision_runtime_bench_smoke
+    COMMAND mixed_precision_runtime_bench
+      --input ${CMAKE_CURRENT_BINARY_DIR}/mixed_precision_packer_smoke.esmp
+      --iters 3
+      --warmup 1
+      --active-rows 8
+  )
+  set_tests_properties(
+    mixed_precision_runtime_bench_smoke
+    PROPERTIES FIXTURES_REQUIRED mixed_precision_packer_smoke_file
+  )
+  add_test(
+    NAME mixed_precision_runtime_bench_text_fixture
+    COMMAND mixed_precision_runtime_bench
+      --input ${CMAKE_CURRENT_BINARY_DIR}/mixed_precision_packer_text_fixture.esmp
+      --iters 3
+      --warmup 1
+      --active-rows 2
+  )
+  set_tests_properties(
+    mixed_precision_runtime_bench_text_fixture
+    PROPERTIES FIXTURES_REQUIRED mixed_precision_packer_text_fixture_file
+  )
 endif()
 
 if(NOT MSVC AND (CMAKE_SYSTEM_PROCESSOR MATCHES "x86_64|AMD64|amd64"))
   target_compile_options(eigenskill_quant_kernels PRIVATE -mavx2)
   target_compile_options(quant_kernel_bench PRIVATE -mavx2)
   target_compile_options(quant_kernel_verify PRIVATE -mavx2)
+  target_compile_options(mixed_precision_packer PRIVATE -mavx2)
+  target_compile_options(mixed_precision_runtime_bench PRIVATE -mavx2)
 endif()

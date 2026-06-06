@@ -1,0 +1,5 @@
+batch,bits,block_k,block_m,block_n,cols,dense_full_ms,dense_selected_ms,high_rows,latency_ms,low_rows,model,module,ok,rel_l2_vs_dense_selected,rows,runtime,selected_rows,speedup_vs_dense_full,speedup_vs_dense_selected
+1,4,,,,1024,0.025015600004962835,0.021495000004279063,0,0.025015600004962835,16,Qwen/Qwen3-0.6B,model.layers.0.self_attn.q_proj,True,0.0,2048,dense_full,16,1.0,0.8592638193772958
+1,4,,,,1024,0.025015600004962835,0.021495000004279063,0,0.021495000004279063,16,Qwen/Qwen3-0.6B,model.layers.0.self_attn.q_proj,True,0.0,2048,dense_selected,16,1.1637869271915755,1.0
+1,4,,,,1024,0.025015600004962835,0.021495000004279063,0,0.036779999999225765,16,Qwen/Qwen3-0.6B,model.layers.0.self_attn.q_proj,True,0.10455290973186493,2048,cached_selected,16,0.680141381334677,0.5844208810421844
+1,4,128,32,16,1024,0.025015600004962835,0.021495000004279063,0,0.050832800002353906,16,Qwen/Qwen3-0.6B,model.layers.0.self_attn.q_proj,True,0.10455290973186493,2048,triton_selected,16,0.49211532718647094,0.42285689561235457

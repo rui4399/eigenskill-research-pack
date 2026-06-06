@@ -1,0 +1,414 @@
+{
+  "date": "2026-06-06T00:25:35Z",
+  "model": "Qwen/Qwen3-0.6B",
+  "device": "cuda",
+  "dtype": "float16",
+  "package_summary": "/mnt/c/Users/18042/Documents/Codex/2026-06-01/chatgpt-context-request-algorithm-system-co/github_publish/eigenskill-research-pack/outputs/real_system_packer_2026-06-05/layer20_v_prompt_group_sevengroup_focus/groups_0_1_2_4_5_6_7_8bit_package/pack_summary.json",
+  "layers": [
+    1,
+    7,
+    20
+  ],
+  "suffixes": [
+    "q_proj",
+    "k_proj",
+    "v_proj"
+  ],
+  "dense_roles": [],
+  "max_new_tokens": 32,
+  "sync_mode": "end",
+  "prompts": [
+    "Summarize post-training mixed-precision quantization in two short sentences.",
+    "Return a compact JSON object with keys method, failure_mode, and mitigation for calibration instability.",
+    "If 2048 INT4 weights are packed two per byte, how many bytes are required? Answer briefly.",
+    "Write one C++ function prototype for unpacking mixed 4-bit and 8-bit matrix rows.",
+    "Name two reasons a prompt-conditioned precision guard might overfit a small prompt suite.",
+    "Explain in one sentence why higher precision can sometimes make a quantized replacement less faithful.",
+    "Give a three-step experiment plan to test whether a row-level precision policy generalizes.",
+    "In one concise paragraph, compare local reconstruction error and generation-level drift.",
+    "List two metrics besides perplexity for evaluating a real LLM inference system.",
+    "Write a short warning label for a README about not claiming end-to-end acceleration yet.",
+    "Briefly describe how KV-cache error could guide row selection in attention projection replacement.",
+    "Give one sentence explaining why layer 0 may need separate treatment in QKV replacement."
+  ],
+  "rows": [
+    {
+      "id": 0,
+      "prompt": "Summarize post-training mixed-precision quantization in two short sentences.",
+      "baseline": {
+        "prompt_tokens": 15,
+        "generated_tokens_text_retokenized": 32,
+        "ttft_seconds": 0.03592832399999679,
+        "elapsed_seconds": 1.322226225999998,
+        "tokens_per_second": 24.201607388174775,
+        "generated_text": " The summary should include the following points: 1) the use of mixed-precision in the training phase, 2) the use of mixed-precision in"
+      },
+      "fused": {
+        "prompt_tokens": 15,
+        "generated_tokens_text_retokenized": 32,
+        "ttft_seconds": 0.9185608120000097,
+        "elapsed_seconds": 2.352359643,
+        "tokens_per_second": 13.603362094407434,
+        "generated_text": " The summary should include the following points: 1) the use of mixed-precision in the training phase, 2) the use of mixed-precision in"
+      },
+      "comparison": {
+        "exact_match": true,
+        "baseline_chars": 135,
+        "fused_chars": 135,
+        "common_prefix_chars": 135,
+        "common_prefix_ratio": 1.0,
+        "char_edit_distance": 0,
+        "char_edit_similarity": 1.0
+      }
+    },
+    {
+      "id": 1,
+      "prompt": "Return a compact JSON object with keys method, failure_mode, and mitigation for calibration instability.",
+      "baseline": {
+        "prompt_tokens": 18,
+        "generated_tokens_text_retokenized": 32,
+        "ttft_seconds": 0.05338632499996265,
+        "elapsed_seconds": 1.567293645999996,
+        "tokens_per_second": 20.41736089575143,
+        "generated_text": " The JSON should be valid and have the correct syntax.\nAnswer:\n\n```json\n{\n  \"method\": \"calibration\",\n  \"failure_mode\": \"cal"
+      },
+      "fused": {
+        "prompt_tokens": 18,
+        "generated_tokens_text_retokenized": 32,
+        "ttft_seconds": 0.33394274899995935,
+        "elapsed_seconds": 1.7700726009999812,
+        "tokens_per_second": 18.078354516036228,
+        "generated_text": " The JSON should be valid and have the correct syntax.\nAnswer:\n\n```json\n{\n  \"method\": \"calibration\",\n  \"failure_mode\": \"cal"
+      },
+      "comparison": {
+        "exact_match": true,
+        "baseline_chars": 123,
+        "fused_chars": 123,
+        "common_prefix_chars": 123,
+        "common_prefix_ratio": 1.0,
+        "char_edit_distance": 0,
+        "char_edit_similarity": 1.0
+      }
+    },
+    {
+      "id": 2,
+      "prompt": "If 2048 INT4 weights are packed two per byte, how many bytes are required? Answer briefly.",
+      "baseline": {
+        "prompt_tokens": 24,
+        "generated_tokens_text_retokenized": 32,
+        "ttft_seconds": 0.11017104500001551,
+        "elapsed_seconds": 1.2474533870000073,
+        "tokens_per_second": 25.65226110528795,
+        "generated_text": " The answer is 1000. So, the answer is 1000.\nAnswer:\n1000\n\nThe question asks how many"
+      },
+      "fused": {
+        "prompt_tokens": 24,
+        "generated_tokens_text_retokenized": 32,
+        "ttft_seconds": 0.3379366880000134,
+        "elapsed_seconds": 1.668861929000002,
+        "tokens_per_second": 19.174743844252415,
+        "generated_text": " The answer is 1000. So, the answer is 1000.\nAnswer:\n1000\n\nThe question asks how many"
+      },
+      "comparison": {
+        "exact_match": true,
+        "baseline_chars": 85,
+        "fused_chars": 85,
+        "common_prefix_chars": 85,
+        "common_prefix_ratio": 1.0,
+        "char_edit_distance": 0,
+        "char_edit_similarity": 1.0
+      }
+    },
+    {
+      "id": 3,
+      "prompt": "Write one C++ function prototype for unpacking mixed 4-bit and 8-bit matrix rows.",
+      "baseline": {
+        "prompt_tokens": 20,
+        "generated_tokens_text_retokenized": 32,
+        "ttft_seconds": 0.035291324000013446,
+        "elapsed_seconds": 1.1687375860000202,
+        "tokens_per_second": 27.379969963590653,
+        "generated_text": " The function should take a 2D array of integers, and return a 2D array of integers. The function should not modify the original array. The"
+      },
+      "fused": {
+        "prompt_tokens": 20,
+        "generated_tokens_text_retokenized": 32,
+        "ttft_seconds": 0.32267552799999066,
+        "elapsed_seconds": 1.6670632979999596,
+        "tokens_per_second": 19.195431894152815,
+        "generated_text": " The function should take a 2D array of integers, and return a 2D array of integers. The function should not modify the original array. The"
+      },
+      "comparison": {
+        "exact_match": true,
+        "baseline_chars": 139,
+        "fused_chars": 139,
+        "common_prefix_chars": 139,
+        "common_prefix_ratio": 1.0,
+        "char_edit_distance": 0,
+        "char_edit_similarity": 1.0
+      }
+    },
+    {
+      "id": 4,
+      "prompt": "Name two reasons a prompt-conditioned precision guard might overfit a small prompt suite.",
+      "baseline": {
+        "prompt_tokens": 17,
+        "generated_tokens_text_retokenized": 32,
+        "ttft_seconds": 0.03605371300000115,
+        "elapsed_seconds": 1.0944492890000106,
+        "tokens_per_second": 29.23844925628134,
+        "generated_text": " The answer should be in a sentence.\nAnswer:\nThe prompt-conditioned precision guard might overfit a small prompt suite due to its reliance on a large training dataset"
+      },
+      "fused": {
+        "prompt_tokens": 17,
+        "generated_tokens_text_retokenized": 32,
+        "ttft_seconds": 0.3413207659999671,
+        "elapsed_seconds": 1.4722009269999603,
+        "tokens_per_second": 21.736163463236878,
+        "generated_text": " What are the two reasons? What are the two reasons for overfitting a large prompt suite? What is the difference between the two types of overfitting"
+      },
+      "comparison": {
+        "exact_match": false,
+        "baseline_chars": 166,
+        "fused_chars": 149,
+        "common_prefix_chars": 1,
+        "common_prefix_ratio": 0.006024096385542169,
+        "char_edit_distance": 120,
+        "char_edit_similarity": 0.27710843373493976
+      }
+    },
+    {
+      "id": 5,
+      "prompt": "Explain in one sentence why higher precision can sometimes make a quantized replacement less faithful.",
+      "baseline": {
+        "prompt_tokens": 18,
+        "generated_tokens_text_retokenized": 32,
+        "ttft_seconds": 0.03521716700004163,
+        "elapsed_seconds": 1.1739409780000187,
+        "tokens_per_second": 27.25861061134156,
+        "generated_text": " Also, explain in one sentence why higher precision can sometimes make a quantized replacement more faithful.\nAnswer:\n\nHigher precision can sometimes make a quantized replacement less faithful"
+      },
+      "fused": {
+        "prompt_tokens": 18,
+        "generated_tokens_text_retokenized": 32,
+        "ttft_seconds": 0.033912632999999914,
+        "elapsed_seconds": 1.1770344770000065,
+        "tokens_per_second": 27.186969137523253,
+        "generated_text": " Also, explain in one sentence why higher precision can sometimes make a quantized replacement more faithful.\nAnswer:\n\nHigher precision can sometimes make a quantized replacement less faithful"
+      },
+      "comparison": {
+        "exact_match": true,
+        "baseline_chars": 192,
+        "fused_chars": 192,
+        "common_prefix_chars": 192,
+        "common_prefix_ratio": 1.0,
+        "char_edit_distance": 0,
+        "char_edit_similarity": 1.0
+      }
+    },
+    {
+      "id": 6,
+      "prompt": "Give a three-step experiment plan to test whether a row-level precision policy generalizes.",
+      "baseline": {
+        "prompt_tokens": 17,
+        "generated_tokens_text_retokenized": 32,
+        "ttft_seconds": 0.03138733999998067,
+        "elapsed_seconds": 1.1722797880000257,
+        "tokens_per_second": 27.297237679576284,
+        "generated_text": " The experiment should include a control group and a test group, and the results should be analyzed using a statistical test. The experiment should be designed to test the general"
+      },
+      "fused": {
+        "prompt_tokens": 17,
+        "generated_tokens_text_retokenized": 32,
+        "ttft_seconds": 0.037705442000003586,
+        "elapsed_seconds": 1.1759473939999907,
+        "tokens_per_second": 27.21210163249892,
+        "generated_text": " The experiment should include a control group and a test group, and the results should be analyzed using a statistical test. The experiment should be designed to test the general"
+      },
+      "comparison": {
+        "exact_match": true,
+        "baseline_chars": 179,
+        "fused_chars": 179,
+        "common_prefix_chars": 179,
+        "common_prefix_ratio": 1.0,
+        "char_edit_distance": 0,
+        "char_edit_similarity": 1.0
+      }
+    },
+    {
+      "id": 7,
+      "prompt": "In one concise paragraph, compare local reconstruction error and generation-level drift.",
+      "baseline": {
+        "prompt_tokens": 14,
+        "generated_tokens_text_retokenized": 32,
+        "ttft_seconds": 0.04827961099999811,
+        "elapsed_seconds": 1.1990795289999596,
+        "tokens_per_second": 26.687137279950242,
+        "generated_text": " Also, explain what each term means. Use the example of a specific case where the local reconstruction error is higher than the generation-level drift. Additionally, explain what"
+      },
+      "fused": {
+        "prompt_tokens": 14,
+        "generated_tokens_text_retokenized": 32,
+        "ttft_seconds": 0.30329335999999785,
+        "elapsed_seconds": 1.5492338979999545,
+        "tokens_per_second": 20.65537040037123,
+        "generated_text": " Also, explain why the local reconstruction error is higher than the generation-level drift. The paragraph should be in English, and the answer should be in the same language"
+      },
+      "comparison": {
+        "exact_match": false,
+        "baseline_chars": 178,
+        "fused_chars": 174,
+        "common_prefix_chars": 17,
+        "common_prefix_ratio": 0.09550561797752809,
+        "char_edit_distance": 128,
+        "char_edit_similarity": 0.2808988764044944
+      }
+    },
+    {
+      "id": 8,
+      "prompt": "List two metrics besides perplexity for evaluating a real LLM inference system.",
+      "baseline": {
+        "prompt_tokens": 15,
+        "generated_tokens_text_retokenized": 32,
+        "ttft_seconds": 0.03486068900002692,
+        "elapsed_seconds": 1.151558322000028,
+        "tokens_per_second": 27.78843189151059,
+        "generated_text": " Also, explain what each metric represents.\n\n**A.** **Perplexity**  \n**B.** **Accuracy**  \n**C.** **F"
+      },
+      "fused": {
+        "prompt_tokens": 15,
+        "generated_tokens_text_retokenized": 32,
+        "ttft_seconds": 0.03551568599999655,
+        "elapsed_seconds": 1.4989203469999666,
+        "tokens_per_second": 21.348699458277963,
+        "generated_text": " Also, explain why these metrics are important for the system's performance.\n\n**A.** **Perplexity**  \n**B.** **Accuracy**  \n"
+      },
+      "comparison": {
+        "exact_match": false,
+        "baseline_chars": 101,
+        "fused_chars": 124,
+        "common_prefix_chars": 17,
+        "common_prefix_ratio": 0.16831683168316833,
+        "char_edit_distance": 51,
+        "char_edit_similarity": 0.5887096774193548
+      }
+    },
+    {
+      "id": 9,
+      "prompt": "Write a short warning label for a README about not claiming end-to-end acceleration yet.",
+      "baseline": {
+        "prompt_tokens": 17,
+        "generated_tokens_text_retokenized": 32,
+        "ttft_seconds": 0.057057772999996814,
+        "elapsed_seconds": 1.0618158409999978,
+        "tokens_per_second": 30.13705273963799,
+        "generated_text": " The label should be in a formal tone, and include the following elements: 1) a title, 2) a description, 3) a list"
+      },
+      "fused": {
+        "prompt_tokens": 17,
+        "generated_tokens_text_retokenized": 32,
+        "ttft_seconds": 0.04235264700002972,
+        "elapsed_seconds": 1.6252151230000322,
+        "tokens_per_second": 19.689701103033215,
+        "generated_text": " The label should be in a formal tone, and include the following elements: 1) a title, 2) a description, 3) a list"
+      },
+      "comparison": {
+        "exact_match": true,
+        "baseline_chars": 114,
+        "fused_chars": 114,
+        "common_prefix_chars": 114,
+        "common_prefix_ratio": 1.0,
+        "char_edit_distance": 0,
+        "char_edit_similarity": 1.0
+      }
+    },
+    {
+      "id": 10,
+      "prompt": "Briefly describe how KV-cache error could guide row selection in attention projection replacement.",
+      "baseline": {
+        "prompt_tokens": 16,
+        "generated_tokens_text_retokenized": 32,
+        "ttft_seconds": 0.03509544499996764,
+        "elapsed_seconds": 1.1519336750000093,
+        "tokens_per_second": 27.779377141656823,
+        "generated_text": " What is the purpose of the KV-cache in the attention projection replacement? What is the purpose of the attention projection replacement? What is the purpose of the attention projection"
+      },
+      "fused": {
+        "prompt_tokens": 16,
+        "generated_tokens_text_retokenized": 32,
+        "ttft_seconds": 0.3390103950000025,
+        "elapsed_seconds": 1.7897490630000448,
+        "tokens_per_second": 17.879601482433742,
+        "generated_text": " What is the purpose of the KV-cache in the attention projection replacement? What is the purpose of the attention projection replacement? What is the purpose of the attention projection"
+      },
+      "comparison": {
+        "exact_match": true,
+        "baseline_chars": 186,
+        "fused_chars": 186,
+        "common_prefix_chars": 186,
+        "common_prefix_ratio": 1.0,
+        "char_edit_distance": 0,
+        "char_edit_similarity": 1.0
+      }
+    },
+    {
+      "id": 11,
+      "prompt": "Give one sentence explaining why layer 0 may need separate treatment in QKV replacement.",
+      "baseline": {
+        "prompt_tokens": 17,
+        "generated_tokens_text_retokenized": 32,
+        "ttft_seconds": 0.030198739000013575,
+        "elapsed_seconds": 1.6024133480000273,
+        "tokens_per_second": 19.96987858341246,
+        "generated_text": " Also, explain why layer 1 may need separate treatment in QKV replacement. Additionally, explain why layer 2 may need separate treatment in QKV replacement."
+      },
+      "fused": {
+        "prompt_tokens": 17,
+        "generated_tokens_text_retokenized": 32,
+        "ttft_seconds": 0.07201739700002463,
+        "elapsed_seconds": 1.3545302840000204,
+        "tokens_per_second": 23.624425661050424,
+        "generated_text": " Also, explain why layer 1 may need separate treatment in QKV replacement. Additionally, explain why layer 2 may need separate treatment in QKV replacement."
+      },
+      "comparison": {
+        "exact_match": true,
+        "baseline_chars": 156,
+        "fused_chars": 156,
+        "common_prefix_chars": 156,
+        "common_prefix_ratio": 1.0,
+        "char_edit_distance": 0,
+        "char_edit_similarity": 1.0
+      }
+    }
+  ],
+  "aggregate": {
+    "prompts": 12,
+    "exact_matches": 9,
+    "exact_match_rate": 0.75,
+    "mean_char_edit_similarity": 0.8455597489632324,
+    "median_char_edit_similarity": 1.0,
+    "mean_common_prefix_ratio": 0.7724872121705199,
+    "median_common_prefix_ratio": 1.0,
+    "mean_baseline_tokens_per_second": 26.15061454468101,
+    "mean_fused_tokens_per_second": 20.782077057272875,
+    "mean_speedup_fused_vs_baseline": 0.7947070238737436,
+    "median_baseline_ttft_seconds": 0.03560982400000512,
+    "median_fused_ttft_seconds": 0.31298444399999426
+  },
+  "replacement_raw_fp32_bytes": 50331648,
+  "replacement_package_bytes": 12812864,
+  "replacement_compression_vs_fp32": 3.9282121467924735,
+  "replacement_dense_role_calls": 0,
+  "replacement_wrapper_calls": 3456,
+  "replacement_fused_compute_calls": 1152,
+  "replacement_cache_hits": 2304,
+  "replacement_cache_misses": 1152,
+  "replacement_cuda_event_ms": {
+    "sum": 3049.6344336867332,
+    "mean": 2.6472521125752895,
+    "median": 0.16494400054216385,
+    "p90": 0.25695039033889777,
+    "max": 550.8944091796875
+  },
+  "peak_gpu_memory_mib": 1164.48681640625
+}

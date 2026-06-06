@@ -1,0 +1,64 @@
+{
+  "command": [
+    "python3",
+    "train_python/repack_qkv_precision_guard.py",
+    "--model",
+    "Qwen/Qwen3-0.6B",
+    "--base-summary",
+    "outputs/real_system_packer_2026-06-05/qwen3_0p6b_layers017_qkv8_guard/pack_summary.json",
+    "--row-overrides",
+    "model.layers.20.self_attn.v_proj:640:768=8",
+    "--out-dir",
+    "/mnt/c/Users/18042/Documents/Codex/2026-06-01/chatgpt-context-request-algorithm-system-co/github_publish/eigenskill-research-pack/outputs/real_system_packer_2026-06-05/layer20_v_prompt_group_sweep/group_5_8bit_package",
+    "--verify",
+    "--local-files-only"
+  ],
+  "returncode": 0,
+  "killed_by_guard": false,
+  "max_memory_used_mib": 2193,
+  "memory_total_mib": 8151,
+  "max_memory_used_ratio": 0.26904674273095325,
+  "max_utilization_gpu_pct": 5,
+  "start_state": {
+    "utilization_gpu_pct": 5,
+    "memory_used_mib": 2193,
+    "memory_total_mib": 8151,
+    "memory_used_ratio": 0.26904674273095325
+  },
+  "end_state": {
+    "utilization_gpu_pct": 5,
+    "memory_used_mib": 2193,
+    "memory_total_mib": 8151,
+    "memory_used_ratio": 0.26904674273095325
+  },
+  "samples": [
+    {
+      "utilization_gpu_pct": 5,
+      "memory_used_mib": 2193,
+      "memory_total_mib": 8151,
+      "memory_used_ratio": 0.26904674273095325,
+      "t_seconds": 1780701450.0179236
+    },
+    {
+      "utilization_gpu_pct": 5,
+      "memory_used_mib": 2193,
+      "memory_total_mib": 8151,
+      "memory_used_ratio": 0.26904674273095325,
+      "t_seconds": 1780701452.0899458
+    },
+    {
+      "utilization_gpu_pct": 5,
+      "memory_used_mib": 2193,
+      "memory_total_mib": 8151,
+      "memory_used_ratio": 0.26904674273095325,
+      "t_seconds": 1780701454.217502
+    },
+    {
+      "utilization_gpu_pct": 5,
+      "memory_used_mib": 2193,
+      "memory_total_mib": 8151,
+      "memory_used_ratio": 0.26904674273095325,
+      "t_seconds": 1780701456.3100333
+    }
+  ]
+}

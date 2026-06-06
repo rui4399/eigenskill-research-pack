@@ -1,0 +1,448 @@
+{
+  "source": "outputs/real_system_packer_2026-06-05/layer20_v_v3_chat_baseline_layers17.json",
+  "aggregate": {
+    "prompts": 24,
+    "baseline_passes": 15,
+    "fused_passes": 15,
+    "baseline_pass_rate": 0.625,
+    "fused_pass_rate": 0.625,
+    "preserved_passes": 15,
+    "regressions": 0,
+    "improvements": 0,
+    "rule_count": 8
+  },
+  "rows": [
+    {
+      "id": 0,
+      "prompt": "Explain in two sentences why calibration prompts can bias a mixed-precision row search.",
+      "rule": "sentence_count_2",
+      "expected": "2 sentences",
+      "expected_spec_id": 0,
+      "baseline": {
+        "passed": false,
+        "detail": "sentence_count=3, expected=2"
+      },
+      "fused": {
+        "passed": false,
+        "detail": "sentence_count=3, expected=2"
+      },
+      "preserved": false,
+      "regressed": false,
+      "improved": false
+    },
+    {
+      "id": 1,
+      "prompt": "Write minified JSON with keys hypothesis, proxy, and risk for a quantized runtime experiment.",
+      "rule": "json_keys",
+      "expected": "hypothesis,proxy,risk",
+      "expected_spec_id": 1,
+      "baseline": {
+        "passed": false,
+        "detail": "missing JSON keys ['hypothesis', 'proxy', 'risk']"
+      },
+      "fused": {
+        "passed": false,
+        "detail": "missing JSON keys ['hypothesis', 'proxy', 'risk']"
+      },
+      "preserved": false,
+      "regressed": false,
+      "improved": false
+    },
+    {
+      "id": 2,
+      "prompt": "Compute the packed byte count for 8192 signed 4-bit values. Answer with only the number and unit.",
+      "rule": "byte_count_8192_int4",
+      "expected": "4096 bytes",
+      "expected_spec_id": 2,
+      "baseline": {
+        "passed": false,
+        "detail": "expected 4096 bytes"
+      },
+      "fused": {
+        "passed": false,
+        "detail": "expected 4096 bytes"
+      },
+      "preserved": false,
+      "regressed": false,
+      "improved": false
+    },
+    {
+      "id": 3,
+      "prompt": "Give a C++ function signature for loading a row-wise mixed-bit weight file into memory.",
+      "rule": "cpp_signature",
+      "expected": "C++ signature",
+      "expected_spec_id": 3,
+      "baseline": {
+        "passed": false,
+        "detail": "expected C/C++ function-like signature"
+      },
+      "fused": {
+        "passed": false,
+        "detail": "expected C/C++ function-like signature"
+      },
+      "preserved": false,
+      "regressed": false,
+      "improved": false
+    },
+    {
+      "id": 4,
+      "prompt": "State two reasons a selected-row kernel can be fast in a microbenchmark but not in full decoding.",
+      "rule": "keyword_min_hits",
+      "expected": "selected,row,kernel,microbenchmark,decoding",
+      "expected_spec_id": 4,
+      "baseline": {
+        "passed": true,
+        "detail": "hits=['selected', 'row', 'kernel', 'microbenchmark', 'decoding'], expected at least 4"
+      },
+      "fused": {
+        "passed": true,
+        "detail": "hits=['selected', 'row', 'kernel', 'microbenchmark', 'decoding'], expected at least 4"
+      },
+      "preserved": true,
+      "regressed": false,
+      "improved": false
+    },
+    {
+      "id": 5,
+      "prompt": "In one sentence, explain why KV-cache drift may reveal quantization damage before exact text changes.",
+      "rule": "keyword_min_hits",
+      "expected": "kv,cache,drift,quantization,exact",
+      "expected_spec_id": 5,
+      "baseline": {
+        "passed": true,
+        "detail": "hits=['kv', 'cache', 'drift', 'quantization', 'exact'], expected at least 3"
+      },
+      "fused": {
+        "passed": true,
+        "detail": "hits=['kv', 'cache', 'drift', 'quantization', 'exact'], expected at least 3"
+      },
+      "preserved": true,
+      "regressed": false,
+      "improved": false
+    },
+    {
+      "id": 6,
+      "prompt": "List three ablations needed before claiming a rowguard generalizes across prompt splits.",
+      "rule": "keyword_min_hits",
+      "expected": "ablation,rowguard,generalize,prompt,split",
+      "expected_spec_id": 6,
+      "baseline": {
+        "passed": true,
+        "detail": "hits=['ablation', 'rowguard', 'generalize', 'prompt', 'split'], expected at least 3"
+      },
+      "fused": {
+        "passed": true,
+        "detail": "hits=['ablation', 'rowguard', 'generalize', 'prompt', 'split'], expected at least 3"
+      },
+      "preserved": true,
+      "regressed": false,
+      "improved": false
+    },
+    {
+      "id": 7,
+      "prompt": "Compare prompt exact match and logit relative L2 as evaluation signals in one concise paragraph.",
+      "rule": "keyword_min_hits",
+      "expected": "exact,logit,l2,evaluation,signal",
+      "expected_spec_id": 7,
+      "baseline": {
+        "passed": true,
+        "detail": "hits=['exact', 'logit', 'l2', 'evaluation', 'signal'], expected at least 3"
+      },
+      "fused": {
+        "passed": true,
+        "detail": "hits=['exact', 'logit', 'l2', 'evaluation', 'signal'], expected at least 3"
+      },
+      "preserved": true,
+      "regressed": false,
+      "improved": false
+    },
+    {
+      "id": 8,
+      "prompt": "Name two physical deployment metrics for an edge LLM besides tokens per second.",
+      "rule": "keyword_min_hits",
+      "expected": "latency,memory,power,energy,ttft",
+      "expected_spec_id": 8,
+      "baseline": {
+        "passed": false,
+        "detail": "hits=[], expected at least 2"
+      },
+      "fused": {
+        "passed": false,
+        "detail": "hits=[], expected at least 2"
+      },
+      "preserved": false,
+      "regressed": false,
+      "improved": false
+    },
+    {
+      "id": 9,
+      "prompt": "Write a conservative paper-title subtitle for a study about calibration split instability.",
+      "rule": "keyword_min_hits",
+      "expected": "calibration,split,instability,study",
+      "expected_spec_id": 9,
+      "baseline": {
+        "passed": true,
+        "detail": "hits=['calibration', 'split', 'instability', 'study'], expected at least 3"
+      },
+      "fused": {
+        "passed": true,
+        "detail": "hits=['calibration', 'split', 'instability', 'study'], expected at least 3"
+      },
+      "preserved": true,
+      "regressed": false,
+      "improved": false
+    },
+    {
+      "id": 10,
+      "prompt": "Describe how a dense fallback for layer 0 could improve QKV replacement quality.",
+      "rule": "keyword_min_hits",
+      "expected": "dense,fallback,layer,qkv,quality",
+      "expected_spec_id": 10,
+      "baseline": {
+        "passed": true,
+        "detail": "hits=['dense', 'fallback', 'layer', 'qkv', 'quality'], expected at least 4"
+      },
+      "fused": {
+        "passed": true,
+        "detail": "hits=['dense', 'fallback', 'layer', 'qkv', 'quality'], expected at least 4"
+      },
+      "preserved": true,
+      "regressed": false,
+      "improved": false
+    },
+    {
+      "id": 11,
+      "prompt": "Give one failure case where increasing a row group from INT4 to INT8 does not improve generation.",
+      "rule": "keyword_min_hits",
+      "expected": "failure,int4,int8,row,generation",
+      "expected_spec_id": 11,
+      "baseline": {
+        "passed": true,
+        "detail": "hits=['failure', 'int4', 'int8', 'row', 'generation'], expected at least 3"
+      },
+      "fused": {
+        "passed": true,
+        "detail": "hits=['failure', 'int4', 'int8', 'row', 'generation'], expected at least 3"
+      },
+      "preserved": true,
+      "regressed": false,
+      "improved": false
+    },
+    {
+      "id": 12,
+      "prompt": "Write a short README caveat saying that packed memory compression is not the same as latency speedup.",
+      "rule": "keyword_min_hits",
+      "expected": "packed,memory,compression,latency,speedup",
+      "expected_spec_id": 12,
+      "baseline": {
+        "passed": true,
+        "detail": "hits=['packed', 'memory', 'compression', 'latency', 'speedup'], expected at least 4"
+      },
+      "fused": {
+        "passed": true,
+        "detail": "hits=['packed', 'memory', 'compression', 'latency', 'speedup'], expected at least 4"
+      },
+      "preserved": true,
+      "regressed": false,
+      "improved": false
+    },
+    {
+      "id": 13,
+      "prompt": "Explain in one paragraph why local reconstruction error may fail to rank attention rows for generation.",
+      "rule": "keyword_min_hits",
+      "expected": "reconstruction,error,rank,attention,generation",
+      "expected_spec_id": 13,
+      "baseline": {
+        "passed": true,
+        "detail": "hits=['reconstruction', 'error', 'rank', 'attention', 'generation'], expected at least 4"
+      },
+      "fused": {
+        "passed": true,
+        "detail": "hits=['reconstruction', 'error', 'rank', 'attention', 'generation'], expected at least 4"
+      },
+      "preserved": true,
+      "regressed": false,
+      "improved": false
+    },
+    {
+      "id": 14,
+      "prompt": "Return a YAML snippet with fields model, policy, prompt_splits, and allowed_claim.",
+      "rule": "yaml_fields",
+      "expected": "model,policy,prompt_splits,allowed_claim",
+      "expected_spec_id": 14,
+      "baseline": {
+        "passed": false,
+        "detail": "missing YAML fields ['allowed_claim', 'model', 'policy', 'prompt_splits']"
+      },
+      "fused": {
+        "passed": false,
+        "detail": "missing YAML fields ['allowed_claim', 'model', 'policy', 'prompt_splits']"
+      },
+      "preserved": false,
+      "regressed": false,
+      "improved": false
+    },
+    {
+      "id": 15,
+      "prompt": "What is the average bit width if 75 percent of rows use 4-bit and 25 percent use 8-bit?",
+      "rule": "average_bits_75p4_25p8",
+      "expected": "5 bits",
+      "expected_spec_id": 15,
+      "baseline": {
+        "passed": false,
+        "detail": "expected 5 bits"
+      },
+      "fused": {
+        "passed": false,
+        "detail": "expected 5 bits"
+      },
+      "preserved": false,
+      "regressed": false,
+      "improved": false
+    },
+    {
+      "id": 16,
+      "prompt": "Give two examples of task-style benchmarks that are stronger than perplexity for quantized LLMs.",
+      "rule": "keyword_min_hits",
+      "expected": "mmlu,gsm8k,humaneval,ifeval,bbh,gpqa",
+      "expected_spec_id": 16,
+      "baseline": {
+        "passed": false,
+        "detail": "hits=[], expected at least 2"
+      },
+      "fused": {
+        "passed": false,
+        "detail": "hits=[], expected at least 2"
+      },
+      "preserved": false,
+      "regressed": false,
+      "improved": false
+    },
+    {
+      "id": 17,
+      "prompt": "Write a one-line warning against tuning precision policies on the test prompts.",
+      "rule": "keyword_min_hits",
+      "expected": "warning,tuning,precision,test,prompt",
+      "expected_spec_id": 17,
+      "baseline": {
+        "passed": true,
+        "detail": "hits=['warning', 'tuning', 'precision', 'test', 'prompt'], expected at least 3"
+      },
+      "fused": {
+        "passed": true,
+        "detail": "hits=['warning', 'tuning', 'precision', 'test', 'prompt'], expected at least 3"
+      },
+      "preserved": true,
+      "regressed": false,
+      "improved": false
+    },
+    {
+      "id": 18,
+      "prompt": "Explain why a proxy selector should penalize large hidden-state drift even when exact output matches.",
+      "rule": "keyword_min_hits",
+      "expected": "proxy,penalize,hidden,drift,exact",
+      "expected_spec_id": 18,
+      "baseline": {
+        "passed": true,
+        "detail": "hits=['proxy', 'penalize', 'hidden', 'drift', 'exact'], expected at least 4"
+      },
+      "fused": {
+        "passed": true,
+        "detail": "hits=['proxy', 'penalize', 'hidden', 'drift', 'exact'], expected at least 4"
+      },
+      "preserved": true,
+      "regressed": false,
+      "improved": false
+    },
+    {
+      "id": 19,
+      "prompt": "Draft three bullet points for an experiment plan that separates speed evidence from quality evidence.",
+      "rule": "keyword_min_hits",
+      "expected": "speed,quality,evidence,experiment,plan",
+      "expected_spec_id": 19,
+      "baseline": {
+        "passed": true,
+        "detail": "hits=['speed', 'quality', 'evidence', 'experiment', 'plan'], expected at least 4"
+      },
+      "fused": {
+        "passed": true,
+        "detail": "hits=['speed', 'quality', 'evidence', 'experiment', 'plan'], expected at least 4"
+      },
+      "preserved": true,
+      "regressed": false,
+      "improved": false
+    },
+    {
+      "id": 20,
+      "prompt": "State one reason grouped Triton kernels may lose to dense GEMM on tiny batch-one shapes.",
+      "rule": "keyword_min_hits",
+      "expected": "triton,dense,gemm,batch,shape",
+      "expected_spec_id": 20,
+      "baseline": {
+        "passed": true,
+        "detail": "hits=['triton', 'dense', 'gemm', 'batch', 'shape'], expected at least 3"
+      },
+      "fused": {
+        "passed": true,
+        "detail": "hits=['triton', 'dense', 'gemm', 'batch', 'shape'], expected at least 3"
+      },
+      "preserved": true,
+      "regressed": false,
+      "improved": false
+    },
+    {
+      "id": 21,
+      "prompt": "Write a compact JSON object describing a failed rowguard with keys symptom and next_test.",
+      "rule": "json_keys",
+      "expected": "symptom,next_test",
+      "expected_spec_id": 21,
+      "baseline": {
+        "passed": false,
+        "detail": "missing JSON keys ['next_test', 'symptom']"
+      },
+      "fused": {
+        "passed": false,
+        "detail": "missing JSON keys ['next_test', 'symptom']"
+      },
+      "preserved": false,
+      "regressed": false,
+      "improved": false
+    },
+    {
+      "id": 22,
+      "prompt": "In exactly one sentence, define prompt-split instability for precision-policy search.",
+      "rule": "contains_all",
+      "expected": "prompt,split,instability",
+      "expected_spec_id": 22,
+      "baseline": {
+        "passed": true,
+        "detail": "missing=[]"
+      },
+      "fused": {
+        "passed": true,
+        "detail": "missing=[]"
+      },
+      "preserved": true,
+      "regressed": false,
+      "improved": false
+    },
+    {
+      "id": 23,
+      "prompt": "Give a short recommendation for choosing between baseline, full-V8, and rowguard candidates.",
+      "rule": "keyword_min_hits",
+      "expected": "baseline,full,rowguard,candidate",
+      "expected_spec_id": 23,
+      "baseline": {
+        "passed": true,
+        "detail": "hits=['baseline', 'full', 'rowguard', 'candidate'], expected at least 3"
+      },
+      "fused": {
+        "passed": true,
+        "detail": "hits=['baseline', 'full', 'rowguard', 'candidate'], expected at least 3"
+      },
+      "preserved": true,
+      "regressed": false,
+      "improved": false
+    }
+  ]
+}

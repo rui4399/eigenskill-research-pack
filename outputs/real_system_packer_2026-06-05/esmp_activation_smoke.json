@@ -1,0 +1,113 @@
+{
+  "date": "2026-06-06",
+  "model": "Qwen/Qwen3-0.6B",
+  "package_summary": "/mnt/c/Users/18042/Documents/Codex/2026-06-01/chatgpt-context-request-algorithm-system-co/github_publish/eigenskill-research-pack/outputs/real_system_packer_2026-06-05/qwen3_esmp/pack_summary.json",
+  "prompt_count": 2,
+  "max_length": 64,
+  "device": "cuda",
+  "dtype": "float16",
+  "sample_rows_per_module": 32,
+  "row_count_min": 32,
+  "row_count_max": 32,
+  "selected_modules": [
+    "model.layers.0.self_attn.q_proj",
+    "model.layers.0.self_attn.k_proj",
+    "model.layers.0.self_attn.v_proj"
+  ],
+  "summary": {
+    "modules_requested": 3,
+    "modules_ok": 3,
+    "modules_failed": 0,
+    "median_output_rel_l2": 0.0761532684635043,
+    "mean_output_rel_l2": 0.06045067290686113,
+    "p90_output_rel_l2": 0.09164269005867733,
+    "median_normalized_output_mse": 0.00579932029767456,
+    "mean_normalized_output_mse": 0.005005406115021063,
+    "median_weight_rel_l2": 0.15082626448565165,
+    "mean_weight_rel_l2": 0.10868118332848453,
+    "median_compression_vs_fp32": 7.6409000816136174,
+    "mean_compression_vs_fp32": 6.396803164217402,
+    "families": {
+      "attention": {
+        "count": 3,
+        "median_output_rel_l2": 0.0761532684635043,
+        "median_compression_vs_fp32": 7.6409000816136174
+      }
+    }
+  },
+  "records": [
+    {
+      "module": "model.layers.0.self_attn.q_proj",
+      "family": "attention",
+      "layer": 0,
+      "rows": 2048,
+      "cols": 1024,
+      "assigned_bits": 4,
+      "avg_row_bits": 4.0,
+      "row_bits_histogram": {
+        "4": 2048
+      },
+      "sample_rows": 32,
+      "raw_fp32_bytes": 8388608,
+      "package_bytes": 1097792,
+      "compression_vs_fp32": 7.641345537223809,
+      "weight_rel_l2": 0.16685477992600667,
+      "weight_max_abs": 0.0459333136677742,
+      "output_mse": 0.0011467277072370052,
+      "output_signal": 0.1256946325302124,
+      "normalized_output_mse": 0.009123123908742672,
+      "output_rel_l2": 0.09551504545747058,
+      "output_max_abs": 0.5224251747131348,
+      "packer_verify_gemv_rel_l2": 0.164884
+    },
+    {
+      "module": "model.layers.0.self_attn.k_proj",
+      "family": "attention",
+      "layer": 0,
+      "rows": 1024,
+      "cols": 1024,
+      "assigned_bits": 4,
+      "avg_row_bits": 4.0,
+      "row_bits_histogram": {
+        "4": 1024
+      },
+      "sample_rows": 32,
+      "raw_fp32_bytes": 4194304,
+      "package_bytes": 548928,
+      "compression_vs_fp32": 7.6409000816136174,
+      "weight_rel_l2": 0.15082626448565165,
+      "weight_max_abs": 0.0309361033141613,
+      "output_mse": 0.0009316285722889006,
+      "output_signal": 0.16064444184303284,
+      "normalized_output_mse": 0.00579932029767456,
+      "output_rel_l2": 0.0761532684635043,
+      "output_max_abs": 0.31901097297668457,
+      "packer_verify_gemv_rel_l2": 0.154907
+    },
+    {
+      "module": "model.layers.0.self_attn.v_proj",
+      "family": "attention",
+      "layer": 0,
+      "rows": 1024,
+      "cols": 1024,
+      "assigned_bits": 8,
+      "avg_row_bits": 8.0,
+      "row_bits_histogram": {
+        "8": 1024
+      },
+      "sample_rows": 32,
+      "raw_fp32_bytes": 4194304,
+      "package_bytes": 1073216,
+      "compression_vs_fp32": 3.9081638738147775,
+      "weight_rel_l2": 0.008362505573795238,
+      "weight_max_abs": 0.00067901611328125,
+      "output_mse": 2.1772215177406906e-06,
+      "output_signal": 0.023217718116939068,
+      "normalized_output_mse": 9.377413864596125e-05,
+      "output_rel_l2": 0.009683704799608528,
+      "output_max_abs": 0.00839969515800476,
+      "packer_verify_gemv_rel_l2": 0.008774
+    }
+  ],
+  "peak_cuda_memory_mib": 1185.45263671875
+}

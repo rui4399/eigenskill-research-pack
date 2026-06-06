@@ -1,0 +1,75 @@
+{
+  "date": "2026-06-05T21:06:41Z",
+  "model": "Qwen/Qwen3-0.6B",
+  "device": "cuda:0",
+  "dtype": "float16",
+  "package_summary": "/mnt/c/Users/18042/Documents/Codex/2026-06-01/chatgpt-context-request-algorithm-system-co/github_publish/eigenskill-research-pack/outputs/real_system_packer_2026-06-05/qwen3_0p6b_full_esmp/pack_summary.json",
+  "mode": "hf_generation_with_fused_selected_row_esmp_sidecar",
+  "layers": [
+    0
+  ],
+  "suffixes": [
+    "q_proj",
+    "k_proj",
+    "v_proj"
+  ],
+  "selected_rows_per_module": 64,
+  "block_m": 32,
+  "block_n": 16,
+  "block_k": 64,
+  "max_new_tokens": 16,
+  "warmup_runs": 1,
+  "warmup_metrics": [
+    {
+      "prompt_tokens": 12,
+      "generated_tokens_text_retokenized": 16,
+      "ttft_seconds": 1.383901693000002,
+      "elapsed_seconds": 2.1208870300000022,
+      "tokens_per_second": 7.544013317861623,
+      "generated_text": " Also, explain the difference between mixed-precision and single-precision. | Also"
+    }
+  ],
+  "sidecars": [
+    {
+      "layer": 0,
+      "modules": [
+        "model.layers.0.self_attn.q_proj",
+        "model.layers.0.self_attn.k_proj",
+        "model.layers.0.self_attn.v_proj"
+      ],
+      "selected_rows_per_module": 64,
+      "selected_rows_total": 192,
+      "low_rows_total": 128,
+      "high_rows_total": 64,
+      "calls": 16,
+      "input_shapes": [
+        "1x12x1024",
+        "1x1x1024"
+      ],
+      "cuda_event_ms": {
+        "sum": 4.69001604616642,
+        "mean": 0.29312600288540125,
+        "median": 0.2606080025434494,
+        "p90": 0.42187200486660004,
+        "max": 0.4899519979953766
+      },
+      "errors": []
+    }
+  ],
+  "sidecar_call_count": 16,
+  "sidecar_cuda_event_ms": {
+    "sum": 4.69001604616642,
+    "mean": 0.29312600288540125,
+    "median": 0.2606080025434494,
+    "p90": 0.42187200486660004,
+    "max": 0.4899519979953766
+  },
+  "peak_gpu_memory_mib": 1173.4306640625,
+  "prompt_tokens": 12,
+  "generated_tokens_text_retokenized": 16,
+  "ttft_seconds": 0.041236404999999365,
+  "elapsed_seconds": 0.6032449070000006,
+  "tokens_per_second": 26.523224339463816,
+  "generated_text": " Also, explain the difference between mixed-precision and single-precision. | Also",
+  "interpretation_guardrail": "Sidecar kernels execute on real generation activations but do not replace the transformer's dense QKV computation; this measures integration overhead, not end-to-end LLM acceleration."
+}

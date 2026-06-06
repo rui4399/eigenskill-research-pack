@@ -1,0 +1,245 @@
+{
+  "model": "Qwen/Qwen3-0.6B",
+  "task_file": "data_eval/chat_task_benchmark_v1.jsonl",
+  "task_count": 12,
+  "chat_template": true,
+  "max_new_tokens": 32,
+  "baseline": {
+    "aggregate": {
+      "tasks": 12,
+      "passes": 2,
+      "accuracy": 0.16666666666666666,
+      "mean_tokens_per_second": 22.703089034677046,
+      "mean_ttft_seconds": 0.1711907620833332
+    },
+    "rows": [
+      {
+        "id": "mmlu_style_memory_metric",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter. In an edge-LLM deployment paper, which metric directly reports peak device memory? A. BLEU B. peak GPU memory C. ROUGE D. WikiText2 perplexity",
+        "answer": "B",
+        "generated_text": "<think>\nOkay, so I need to figure out which metric directly reports peak device memory in an edge-LLM deployment paper. The options are BLEU,",
+        "score": {
+          "passed": false,
+          "predicted": null,
+          "expected": "B"
+        },
+        "ttft_seconds": 1.1088726800000046,
+        "tokens_per_second": 13.682899084802147
+      },
+      {
+        "id": "mmlu_style_math_benchmark",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter. Which common benchmark is primarily a grade-school math word-problem benchmark? A. GSM8K B. HumanEval C. IFEval D. WikiText2",
+        "answer": "A",
+        "generated_text": "<think>\nOkay, let's see. The question is asking which common benchmark is primarily a grade-school math word-problem benchmark. The options are GSM8K",
+        "score": {
+          "passed": false,
+          "predicted": null,
+          "expected": "A"
+        },
+        "ttft_seconds": 0.07550840199999698,
+        "tokens_per_second": 25.57169890070294
+      },
+      {
+        "id": "mmlu_style_calibration_instability",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter. If a mixed-precision policy ranks important modules differently on WikiText2 and C4 calibration splits, what issue is being measured? A. tokenization speed B. calibration split instability C. CUDA occupancy D. tokenizer vocabulary size",
+        "answer": "B",
+        "generated_text": "<think>\nOkay, let's try to figure out this question. The question is about a mixed-precision policy that ranks important modules differently on WikiText2 and",
+        "score": {
+          "passed": false,
+          "predicted": null,
+          "expected": "B"
+        },
+        "ttft_seconds": 0.06904159799999832,
+        "tokens_per_second": 25.800525835518325
+      },
+      {
+        "id": "gsm8k_style_int4_bytes",
+        "type": "number",
+        "prompt": "Answer with only the final number. A row stores 8192 signed 4-bit weights. Two weights fit in one byte. How many packed bytes are needed?",
+        "answer": "4096",
+        "generated_text": "<think>\nOkay, let's see. The question is about how many packed bytes are needed for a row that stores 8192 signed 4-bit",
+        "score": {
+          "passed": false,
+          "predicted": [
+            "8192",
+            "4"
+          ],
+          "expected": "4096"
+        },
+        "ttft_seconds": 0.13495022399999357,
+        "tokens_per_second": 23.29810383853351
+      },
+      {
+        "id": "gsm8k_style_average_bits",
+        "type": "number",
+        "prompt": "Answer with only the final number. A matrix stores 75 percent of rows at 4 bits and 25 percent at 8 bits. What is the average bit width?",
+        "answer": "5",
+        "generated_text": "<think>\nOkay, so I need to figure out the average bit width for this matrix. Let me start by understanding the problem. The matrix stores 75",
+        "score": {
+          "passed": false,
+          "predicted": [
+            "75"
+          ],
+          "expected": "5"
+        },
+        "ttft_seconds": 0.082256557000008,
+        "tokens_per_second": 23.5339618485767
+      },
+      {
+        "id": "gsm8k_style_selected_rows_bytes",
+        "type": "number",
+        "prompt": "Answer with only the final number. A selected-row kernel reads 64 rows, each with 4096 signed 4-bit weights. Two weights fit in one byte. How many packed bytes are read?",
+        "answer": "131072",
+        "generated_text": "<think>\nOkay, let's see. The problem says that a selected-row kernel reads 64 rows, each with 4096 signed 4",
+        "score": {
+          "passed": false,
+          "predicted": [
+            "64",
+            "4096",
+            "4"
+          ],
+          "expected": "131072"
+        },
+        "ttft_seconds": 0.0696244660000076,
+        "tokens_per_second": 20.03703832759387
+      },
+      {
+        "id": "ifeval_style_risk_json",
+        "type": "json_keys",
+        "prompt": "Return minified JSON only with keys risk and next_step. The content should describe a rowguard that passes exact-match prompts but has high hidden-state drift.",
+        "answer": [
+          "risk",
+          "next_step"
+        ],
+        "generated_text": "<think>\nOkay, let's tackle this query. The user wants a minified JSON with only the keys 'risk' and 'next_step', describing a row",
+        "score": {
+          "passed": false,
+          "found": [],
+          "expected": [
+            "next_step",
+            "risk"
+          ]
+        },
+        "ttft_seconds": 0.07506444199999862,
+        "tokens_per_second": 23.300333049790915
+      },
+      {
+        "id": "ifeval_style_metric_json",
+        "type": "json_keys",
+        "prompt": "Return minified JSON only with keys metric and value. Use metric to name TTFT and value to give a placeholder numeric string.",
+        "answer": [
+          "metric",
+          "value"
+        ],
+        "generated_text": "<think>\nOkay, let's see. The user wants me to return minified JSON with only the keys 'metric' and 'value'. The 'metric'",
+        "score": {
+          "passed": false,
+          "found": [],
+          "expected": [
+            "metric",
+            "value"
+          ]
+        },
+        "ttft_seconds": 0.06222003499999573,
+        "tokens_per_second": 24.974591124149946
+      },
+      {
+        "id": "ifeval_style_ppl_caveat",
+        "type": "contains_all",
+        "prompt": "In one sentence, explain why perplexity alone is not enough evidence for a quantized instruction model.",
+        "answer": [
+          "perplexity",
+          "task",
+          "accuracy"
+        ],
+        "generated_text": "<think>\nOkay, so the user is asking why perplexity alone isn't enough evidence for a quantized instruction model. Let me start by recalling what perplexity",
+        "score": {
+          "passed": false,
+          "missing": [
+            "task",
+            "accuracy"
+          ],
+          "expected": [
+            "perplexity",
+            "task",
+            "accuracy"
+          ]
+        },
+        "ttft_seconds": 0.10784405500000105,
+        "tokens_per_second": 17.998215663648402
+      },
+      {
+        "id": "ifeval_style_compression_caveat",
+        "type": "contains_all",
+        "prompt": "Write one concise caveat: packed weight compression is not the same as latency speedup.",
+        "answer": [
+          "compression",
+          "latency",
+          "speedup"
+        ],
+        "generated_text": "<think>\nOkay, the user wants a concise caveat that explains the difference between packed weight compression and latency speedup. Let me start by understanding what each term means",
+        "score": {
+          "passed": true,
+          "missing": [],
+          "expected": [
+            "compression",
+            "latency",
+            "speedup"
+          ]
+        },
+        "ttft_seconds": 0.1263656689999948,
+        "tokens_per_second": 24.266037192315476
+      },
+      {
+        "id": "ifeval_style_rowguard_generalization",
+        "type": "contains_all",
+        "prompt": "State one requirement before claiming a rowguard generalizes across prompts.",
+        "answer": [
+          "held",
+          "out",
+          "prompt"
+        ],
+        "generated_text": "<think>\nOkay, the user is asking for one requirement before claiming a rowguard generalizes across prompts. Let me start by recalling what a rowguard is.",
+        "score": {
+          "passed": false,
+          "missing": [
+            "held",
+            "out"
+          ],
+          "expected": [
+            "held",
+            "out",
+            "prompt"
+          ]
+        },
+        "ttft_seconds": 0.0746318180000003,
+        "tokens_per_second": 28.58193005740382
+      },
+      {
+        "id": "ifeval_style_deployment_metrics",
+        "type": "contains_all",
+        "prompt": "Name three physical deployment metrics for an edge LLM: include TTFT, throughput, and memory.",
+        "answer": [
+          "ttft",
+          "throughput",
+          "memory"
+        ],
+        "generated_text": "<think>\nOkay, the user is asking for three physical deployment metrics for an edge LLM, including TTFT, throughput, and memory. Let me start by",
+        "score": {
+          "passed": true,
+          "missing": [],
+          "expected": [
+            "ttft",
+            "throughput",
+            "memory"
+          ]
+        },
+        "ttft_seconds": 0.06790919899999892,
+        "tokens_per_second": 21.39173349308851
+      }
+    ]
+  }
+}

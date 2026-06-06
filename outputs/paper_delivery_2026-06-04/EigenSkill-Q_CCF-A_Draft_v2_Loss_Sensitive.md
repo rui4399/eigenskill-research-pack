@@ -61,10 +61,21 @@ Use learned models to recognize and adapt policy context.
 Use verifiable kernels to execute low-entropy numerical decisions.
 ```
 
+This separation is not only an architectural preference. In the no-leak
+`quant-v1` policy split, the first small-model LoRA smoke run on
+`HuggingFaceTB/SmolLM2-360M-Instruct` achieved `0.0%` exact decision matching
+when asked to generate strict numerical quantization-policy JSON. In contrast,
+the deterministic C++ policy executor reaches `100%` decision exact on both the
+eval and test splits for the same low-entropy policy rules. This failure mode is
+the practical motivation for EigenSkill-Q: semantic models may route and
+explain, but bit allocation, outlier detection, residual-rank selection, and
+KV-cache policy decisions should be executed by auditable numerical kernels
+when exactness matters.
+
 The first EigenSkill draft overreached by connecting this idea to speculative
-edge/swarm/eigen-routing claims. This v2 draft narrows the contribution to a
-publishable machine-learning problem: **loss-sensitive constrained
-mixed-precision allocation with verifiable policy execution**.
+edge and eigen-routing claims. This v2 draft narrows the contribution to a
+publishable machine-learning problem: **loss-sensitive constrained mixed-
+precision allocation with verifiable policy execution**.
 
 ## 2. Problem Formulation
 
@@ -421,7 +432,8 @@ This draft is not yet a CCF-A submission. The current limitations are explicit:
 - the learned contextual bandit/RL component is formulated but not trained;
 - the interaction-aware policy improvement is only a bounded one-step search;
 - edge-board and NPU measurements remain future work;
-- spectral/eigen-routing and swarm/acoustic concepts are out of scope.
+- spectral/eigen-routing remains out of scope until supported by a toy proof
+  and trained-layer evidence.
 
 ## 8. Next Experiments Required For A Serious Submission
 
@@ -445,7 +457,7 @@ This draft is not yet a CCF-A submission. The current limitations are explicit:
 
 ## 9. Recommended Venue Framing
 
-The best near-term framing is not NeurIPS/MLSys and not speculative edge swarm.
+The best near-term framing is not NeurIPS/MLSys and not speculative edge claims.
 The credible route is:
 
 - **ICML:** if the loss-sensitive/RL formulation is strengthened with theory and

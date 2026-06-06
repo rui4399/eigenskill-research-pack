@@ -32,18 +32,24 @@ struct Result {
     double dense_ms = 0.0;
     double dense_avx2_ms = 0.0;
     double int4_ms = 0.0;
+    double int4_maddubs_ms = 0.0;
     double int3_ms = 0.0;
     double mixed_ms = 0.0;
     double selected_ms = 0.0;
     double selected_avx2_ms = 0.0;
+    double int4_selected_ms = 0.0;
+    double int4_maddubs_selected_ms = 0.0;
     double mixed_selected_ms = 0.0;
     double scalar_ms = 0.0;
     double dense_avx2_rel_l2 = 0.0;
     double int4_rel_l2 = 0.0;
+    double int4_maddubs_rel_l2 = 0.0;
     double int3_rel_l2 = 0.0;
     double mixed_rel_l2 = 0.0;
     double selected_rel_l2 = 0.0;
     double selected_avx2_rel_l2 = 0.0;
+    double int4_selected_rel_l2 = 0.0;
+    double int4_maddubs_selected_rel_l2 = 0.0;
     double mixed_selected_rel_l2 = 0.0;
 };
 
@@ -167,11 +173,16 @@ Result benchmark_case(int d, int active_rows, const Options& options) {
     std::vector<float> y_dense(static_cast<std::size_t>(d), 0.0f);
     std::vector<float> y_dense_avx2(static_cast<std::size_t>(d), 0.0f);
     std::vector<float> y_int4(static_cast<std::size_t>(d), 0.0f);
+    std::vector<float> y_int4_maddubs(static_cast<std::size_t>(d), 0.0f);
     std::vector<float> y_int3(static_cast<std::size_t>(d), 0.0f);
     std::vector<float> y_mixed(static_cast<std::size_t>(d), 0.0f);
     std::vector<float> y_selected(static_cast<std::size_t>(active_rows), 0.0f);
     std::vector<float> y_selected_avx2(static_cast<std::size_t>(active_rows), 0.0f);
     std::vector<float> y_selected_ref(static_cast<std::size_t>(active_rows), 0.0f);
+    std::vector<float> y_int4_selected(static_cast<std::size_t>(active_rows), 0.0f);
+    std::vector<float> y_int4_selected_ref(static_cast<std::size_t>(active_rows), 0.0f);
+    std::vector<float> y_int4_maddubs_selected(static_cast<std::size_t>(active_rows), 0.0f);
+    std::vector<float> y_int4_maddubs_selected_ref(static_cast<std::size_t>(active_rows), 0.0f);
     std::vector<float> y_mixed_selected(static_cast<std::size_t>(active_rows), 0.0f);
     std::vector<float> y_mixed_selected_ref(static_cast<std::size_t>(active_rows), 0.0f);
     std::vector<float> y_scalar(static_cast<std::size_t>(d), 0.0f);
@@ -179,14 +190,22 @@ Result benchmark_case(int d, int active_rows, const Options& options) {
     eigenskill::dense_gemv(matrix, x.data(), y_dense.data());
     eigenskill::dense_gemv_avx2(matrix, x.data(), y_dense_avx2.data());
     eigenskill::int4_dequant_gemv(packed_int4, x.data(), y_int4.data());
+    eigenskill::int4_maddubs_gemv(packed_int4, x.data(), y_int4_maddubs.data());
     eigenskill::lowbit_dequant_gemv(packed_int3, x.data(), y_int3.data());
     eigenskill::mixed_lowbit_dequant_gemv(packed_mixed, x.data(), y_mixed.data());
     eigenskill::selected_rows_gemv(matrix, x.data(), rows.data(), active_rows, y_selected.data());
     eigenskill::selected_rows_gemv_avx2(matrix, x.data(), rows.data(), active_rows, y_selected_avx2.data());
+    eigenskill::int4_selected_rows_gemv(packed_int4, x.data(), rows.data(), active_rows, y_int4_selected.data());
+    eigenskill::int4_maddubs_selected_rows_gemv(
+        packed_int4, x.data(), rows.data(), active_rows, y_int4_maddubs_selected.data());
     eigenskill::mixed_lowbit_selected_rows_gemv(
         packed_mixed, x.data(), rows.data(), active_rows, y_mixed_selected.data());
     for (int i = 0; i < active_rows; ++i) {
         y_selected_ref[static_cast<std::size_t>(i)] = y_dense[static_cast<std::size_t>(rows[static_cast<std::size_t>(i)])];
+        y_int4_selected_ref[static_cast<std::size_t>(i)] =
+            y_int4[static_cast<std::size_t>(rows[static_cast<std::size_t>(i)])];
+        y_int4_maddubs_selected_ref[static_cast<std::size_t>(i)] =
+            y_int4_maddubs[static_cast<std::size_t>(rows[static_cast<std::size_t>(i)])];
         y_mixed_selected_ref[static_cast<std::size_t>(i)] =
             y_mixed[static_cast<std::size_t>(rows[static_cast<std::size_t>(i)])];
     }
@@ -197,16 +216,26 @@ Result benchmark_case(int d, int active_rows, const Options& options) {
     result.active_rows = active_rows;
     result.dense_avx2_rel_l2 = eigenskill::rel_l2_error(y_dense_avx2.data(), y_dense.data(), d);
     result.int4_rel_l2 = eigenskill::rel_l2_error(y_int4.data(), y_dense.data(), d);
+    result.int4_maddubs_rel_l2 = eigenskill::rel_l2_error(y_int4_maddubs.data(), y_dense.data(), d);
     result.int3_rel_l2 = eigenskill::rel_l2_error(y_int3.data(), y_dense.data(), d);
     result.mixed_rel_l2 = eigenskill::rel_l2_error(y_mixed.data(), y_dense.data(), d);
     result.selected_rel_l2 = eigenskill::rel_l2_error(y_selected.data(), y_selected_ref.data(), active_rows);
     result.selected_avx2_rel_l2 = eigenskill::rel_l2_error(y_selected_avx2.data(), y_selected_ref.data(), active_rows);
+    result.int4_selected_rel_l2 =
+        eigenskill::rel_l2_error(y_int4_selected.data(), y_int4_selected_ref.data(), active_rows);
+    result.int4_maddubs_selected_rel_l2 =
+        eigenskill::rel_l2_error(y_int4_maddubs_selected.data(), y_int4_maddubs_selected_ref.data(), active_rows);
     result.mixed_selected_rel_l2 =
         eigenskill::rel_l2_error(y_mixed_selected.data(), y_mixed_selected_ref.data(), active_rows);
 
     result.dense_ms = time_ms([&]() { eigenskill::dense_gemv(matrix, x.data(), y_dense.data()); }, y_dense, options.warmup, options.iters);
     result.dense_avx2_ms = time_ms([&]() { eigenskill::dense_gemv_avx2(matrix, x.data(), y_dense_avx2.data()); }, y_dense_avx2, options.warmup, options.iters);
     result.int4_ms = time_ms([&]() { eigenskill::int4_dequant_gemv(packed_int4, x.data(), y_int4.data()); }, y_int4, options.warmup, options.iters);
+    result.int4_maddubs_ms =
+        time_ms([&]() { eigenskill::int4_maddubs_gemv(packed_int4, x.data(), y_int4_maddubs.data()); },
+                y_int4_maddubs,
+                options.warmup,
+                options.iters);
     result.int3_ms = time_ms([&]() { eigenskill::lowbit_dequant_gemv(packed_int3, x.data(), y_int3.data()); }, y_int3, options.warmup, options.iters);
     result.mixed_ms =
         time_ms([&]() { eigenskill::mixed_lowbit_dequant_gemv(packed_mixed, x.data(), y_mixed.data()); },
@@ -215,6 +244,19 @@ Result benchmark_case(int d, int active_rows, const Options& options) {
                 options.iters);
     result.selected_ms = time_ms([&]() { eigenskill::selected_rows_gemv(matrix, x.data(), rows.data(), active_rows, y_selected.data()); }, y_selected, options.warmup, options.iters);
     result.selected_avx2_ms = time_ms([&]() { eigenskill::selected_rows_gemv_avx2(matrix, x.data(), rows.data(), active_rows, y_selected_avx2.data()); }, y_selected_avx2, options.warmup, options.iters);
+    result.int4_selected_ms =
+        time_ms([&]() { eigenskill::int4_selected_rows_gemv(packed_int4, x.data(), rows.data(), active_rows, y_int4_selected.data()); },
+                y_int4_selected,
+                options.warmup,
+                options.iters);
+    result.int4_maddubs_selected_ms =
+        time_ms([&]() {
+            eigenskill::int4_maddubs_selected_rows_gemv(
+                packed_int4, x.data(), rows.data(), active_rows, y_int4_maddubs_selected.data());
+        },
+                y_int4_maddubs_selected,
+                options.warmup,
+                options.iters);
     result.mixed_selected_ms =
         time_ms([&]() {
             eigenskill::mixed_lowbit_selected_rows_gemv(
@@ -233,26 +275,35 @@ void print_header() {
               << std::setw(12) << "dense_ms"
               << std::setw(12) << "davx_ms"
               << std::setw(12) << "int4_ms"
+              << std::setw(12) << "i4mad_ms"
               << std::setw(12) << "int3_ms"
               << std::setw(12) << "mix_ms"
               << std::setw(12) << "sel_ms"
               << std::setw(12) << "selavx_ms"
+              << std::setw(12) << "i4sel_ms"
+              << std::setw(12) << "i4mads_ms"
               << std::setw(12) << "mixsel_ms"
               << std::setw(12) << "scalar_ms"
               << std::setw(12) << "davx_x"
               << std::setw(12) << "int4_x"
+              << std::setw(12) << "i4mad_x"
               << std::setw(12) << "int3_x"
               << std::setw(12) << "mix_x"
               << std::setw(12) << "sel_x"
               << std::setw(12) << "selavx_x"
+              << std::setw(12) << "i4sel_x"
+              << std::setw(12) << "i4mads_x"
               << std::setw(12) << "mixsel_x"
               << std::setw(12) << "scalar_x"
               << std::setw(13) << "davx_err"
               << std::setw(13) << "int4_err"
+              << std::setw(13) << "i4mad_err"
               << std::setw(13) << "int3_err"
               << std::setw(13) << "mix_err"
               << std::setw(13) << "sel_err"
               << std::setw(13) << "selavx_err"
+              << std::setw(13) << "i4sel_err"
+              << std::setw(13) << "i4mads_err"
               << std::setw(13) << "mixsel_err"
               << '\n';
 }
@@ -263,26 +314,35 @@ void print_result(const Result& r) {
               << std::setw(12) << std::fixed << std::setprecision(6) << r.dense_ms
               << std::setw(12) << std::fixed << std::setprecision(6) << r.dense_avx2_ms
               << std::setw(12) << std::fixed << std::setprecision(6) << r.int4_ms
+              << std::setw(12) << std::fixed << std::setprecision(6) << r.int4_maddubs_ms
               << std::setw(12) << std::fixed << std::setprecision(6) << r.int3_ms
               << std::setw(12) << std::fixed << std::setprecision(6) << r.mixed_ms
               << std::setw(12) << std::fixed << std::setprecision(6) << r.selected_ms
               << std::setw(12) << std::fixed << std::setprecision(6) << r.selected_avx2_ms
+              << std::setw(12) << std::fixed << std::setprecision(6) << r.int4_selected_ms
+              << std::setw(12) << std::fixed << std::setprecision(6) << r.int4_maddubs_selected_ms
               << std::setw(12) << std::fixed << std::setprecision(6) << r.mixed_selected_ms
               << std::setw(12) << std::fixed << std::setprecision(6) << r.scalar_ms
               << std::setw(12) << std::fixed << std::setprecision(2) << r.dense_ms / r.dense_avx2_ms
               << std::setw(12) << std::fixed << std::setprecision(2) << r.dense_ms / r.int4_ms
+              << std::setw(12) << std::fixed << std::setprecision(2) << r.dense_ms / r.int4_maddubs_ms
               << std::setw(12) << std::fixed << std::setprecision(2) << r.dense_ms / r.int3_ms
               << std::setw(12) << std::fixed << std::setprecision(2) << r.dense_ms / r.mixed_ms
               << std::setw(12) << std::fixed << std::setprecision(2) << r.dense_ms / r.selected_ms
               << std::setw(12) << std::fixed << std::setprecision(2) << r.dense_ms / r.selected_avx2_ms
+              << std::setw(12) << std::fixed << std::setprecision(2) << r.dense_ms / r.int4_selected_ms
+              << std::setw(12) << std::fixed << std::setprecision(2) << r.dense_ms / r.int4_maddubs_selected_ms
               << std::setw(12) << std::fixed << std::setprecision(2) << r.dense_ms / r.mixed_selected_ms
               << std::setw(12) << std::fixed << std::setprecision(2) << r.dense_ms / r.scalar_ms
               << std::setw(13) << std::scientific << std::setprecision(3) << r.dense_avx2_rel_l2
               << std::setw(13) << std::scientific << std::setprecision(3) << r.int4_rel_l2
+              << std::setw(13) << std::scientific << std::setprecision(3) << r.int4_maddubs_rel_l2
               << std::setw(13) << std::scientific << std::setprecision(3) << r.int3_rel_l2
               << std::setw(13) << std::scientific << std::setprecision(3) << r.mixed_rel_l2
               << std::setw(13) << std::scientific << std::setprecision(3) << r.selected_rel_l2
               << std::setw(13) << std::scientific << std::setprecision(3) << r.selected_avx2_rel_l2
+              << std::setw(13) << std::scientific << std::setprecision(3) << r.int4_selected_rel_l2
+              << std::setw(13) << std::scientific << std::setprecision(3) << r.int4_maddubs_selected_rel_l2
               << std::setw(13) << std::scientific << std::setprecision(3) << r.mixed_selected_rel_l2
               << '\n';
 }
@@ -293,7 +353,7 @@ int main(int argc, char** argv) {
     try {
         const Options options = parse_args(argc, argv);
         std::cout << "EigenSkill-Q C++ quant kernel benchmark\n";
-        std::cout << "paths: fp32 GEMV, AVX2 fp32 GEMV when available, packed INT4/INT3/mixed-bit dequant GEMV, selected-row GEMV, scalar bypass\n";
+        std::cout << "paths: fp32 GEMV, AVX2 fp32 GEMV when available, packed INT4/INT3/mixed-bit dequant GEMV, INT4 maddubs GEMV, selected-row GEMV, scalar bypass\n";
         std::cout << "avx2=" << (eigenskill::has_avx2() ? "enabled" : "disabled") << "\n";
         std::cout << "iters=" << options.iters << " warmup=" << options.warmup << " seed=" << options.seed << "\n\n";
 

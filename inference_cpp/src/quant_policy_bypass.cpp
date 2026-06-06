@@ -2,11 +2,11 @@
 #include <cctype>
 #include <chrono>
 #include <cmath>
+#include <cstdlib>
 #include <fstream>
 #include <iomanip>
 #include <iostream>
 #include <map>
-#include <regex>
 #include <sstream>
 #include <stdexcept>
 #include <string>
@@ -49,50 +49,121 @@ std::string upper(std::string s) {
     return s;
 }
 
-bool regex_find(const std::string& text, const std::string& pattern, std::string& out) {
-    std::smatch match;
-    if (std::regex_search(text, match, std::regex(pattern, std::regex::icase))) {
-        out = match[1].str();
-        return true;
+bool starts_with_ci(const std::string& text, std::size_t pos, const std::string& needle) {
+    if (pos + needle.size() > text.size()) return false;
+    for (std::size_t i = 0; i < needle.size(); ++i) {
+        char a = static_cast<char>(std::tolower(static_cast<unsigned char>(text[pos + i])));
+        char b = static_cast<char>(std::tolower(static_cast<unsigned char>(needle[i])));
+        if (a != b) return false;
+    }
+    return true;
+}
+
+bool is_word_char(char c) {
+    return std::isalnum(static_cast<unsigned char>(c)) || c == '_';
+}
+
+bool contains_word_ci(const std::string& text, const std::string& word) {
+    for (std::size_t pos = 0; pos + word.size() <= text.size(); ++pos) {
+        if (!starts_with_ci(text, pos, word)) continue;
+        bool left = pos > 0 && is_word_char(text[pos - 1]);
+        bool right = pos + word.size() < text.size() && is_word_char(text[pos + word.size()]);
+        if (!left && !right) return true;
     }
     return false;
 }
 
-double first_double(const std::string& text, const std::vector<std::string>& patterns) {
-    std::string out;
-    for (const auto& pattern : patterns) {
-        if (regex_find(text, pattern, out)) return std::stod(out);
+bool parse_number_at(const std::string& text, std::size_t pos, double& value, std::size_t& end_pos) {
+    if (pos >= text.size()) return false;
+    const char* begin = text.c_str() + pos;
+    char* end = nullptr;
+    value = std::strtod(begin, &end);
+    if (end == begin) return false;
+    end_pos = static_cast<std::size_t>(end - text.c_str());
+    return true;
+}
+
+bool scan_next_number(const std::string& text, std::size_t pos, double& value, std::size_t& end_pos) {
+    for (std::size_t i = pos; i < text.size(); ++i) {
+        char c = text[i];
+        bool number_start = std::isdigit(static_cast<unsigned char>(c)) || c == '+' || c == '-' ||
+                            (c == '.' && i + 1 < text.size() && std::isdigit(static_cast<unsigned char>(text[i + 1])));
+        if (!number_start) continue;
+        if (parse_number_at(text, i, value, end_pos)) return true;
+    }
+    return false;
+}
+
+std::size_t find_ci(const std::string& text, const std::string& needle, std::size_t start = 0) {
+    for (std::size_t pos = start; pos + needle.size() <= text.size(); ++pos) {
+        if (starts_with_ci(text, pos, needle)) return pos;
+    }
+    return std::string::npos;
+}
+
+double first_labeled_double(const std::string& text, const std::vector<std::string>& labels) {
+    for (const auto& label : labels) {
+        std::size_t pos = find_ci(text, label);
+        if (pos == std::string::npos) continue;
+        double value = 0.0;
+        std::size_t end_pos = 0;
+        if (scan_next_number(text, pos + label.size(), value, end_pos)) return value;
     }
     throw std::runtime_error("numeric field not found");
 }
 
-int first_int(const std::string& text, const std::vector<std::string>& patterns) {
-    std::string out;
-    for (const auto& pattern : patterns) {
-        if (regex_find(text, pattern, out)) return std::stoi(out);
-    }
-    throw std::runtime_error("integer field not found");
+int first_labeled_int(const std::string& text, const std::vector<std::string>& labels) {
+    return static_cast<int>(std::llround(first_labeled_double(text, labels)));
 }
 
 std::string parse_budget(const std::string& text) {
-    std::string out;
-    if (regex_find(text, "\\b(tight|medium|relaxed)\\b", out)) return lower(out);
+    if (contains_word_ci(text, "tight")) return "tight";
+    if (contains_word_ci(text, "medium")) return "medium";
+    if (contains_word_ci(text, "relaxed")) return "relaxed";
     throw std::runtime_error("budget not found");
 }
 
 std::string parse_format(const std::string& text) {
-    std::string out;
-    if (regex_find(text, "\\b(INT4|INT3|MXFP4|NVFP4)\\b", out)) return upper(out);
+    if (contains_word_ci(text, "INT4")) return "INT4";
+    if (contains_word_ci(text, "INT3")) return "INT3";
+    if (contains_word_ci(text, "MXFP4")) return "MXFP4";
+    if (contains_word_ci(text, "NVFP4")) return "NVFP4";
     throw std::runtime_error("format not found");
 }
 
-std::vector<double> floats_without_layer(std::string text) {
-    text = std::regex_replace(text, std::regex("layer_\\d+", std::regex::icase), "layer");
-    text = std::regex_replace(text, std::regex("\\b(?:INT4|INT3|MXFP4|NVFP4)\\b", std::regex::icase), "FORMAT");
+std::vector<double> floats_without_layer(const std::string& text) {
     std::vector<double> out;
-    std::regex number("[-+]?\\d+(?:\\.\\d+)?");
-    for (auto it = std::sregex_iterator(text.begin(), text.end(), number); it != std::sregex_iterator(); ++it) {
-        out.push_back(std::stod(it->str()));
+    for (std::size_t i = 0; i < text.size();) {
+        if (starts_with_ci(text, i, "layer_")) {
+            i += 6;
+            while (i < text.size() && std::isdigit(static_cast<unsigned char>(text[i]))) ++i;
+            continue;
+        }
+        if (starts_with_ci(text, i, "INT")) {
+            i += 3;
+            while (i < text.size() && std::isdigit(static_cast<unsigned char>(text[i]))) ++i;
+            continue;
+        }
+        if (starts_with_ci(text, i, "MXFP") || starts_with_ci(text, i, "NVFP")) {
+            i += 4;
+            while (i < text.size() && std::isdigit(static_cast<unsigned char>(text[i]))) ++i;
+            continue;
+        }
+        char c = text[i];
+        bool number_start = std::isdigit(static_cast<unsigned char>(c)) || c == '+' || c == '-' ||
+                            (c == '.' && i + 1 < text.size() && std::isdigit(static_cast<unsigned char>(text[i + 1])));
+        if (number_start) {
+            double value = 0.0;
+            std::size_t end_pos = 0;
+            if (!parse_number_at(text, i, value, end_pos)) {
+                ++i;
+                continue;
+            }
+            out.push_back(value);
+            i = end_pos;
+        } else {
+            ++i;
+        }
     }
     return out;
 }
@@ -176,9 +247,9 @@ Policy choose_kv(int ctx, double ks, double vs) {
 Policy predict(const std::string& skill, const std::string& text) {
     auto nums = floats_without_layer(text);
     if (skill == "outlier_detect") {
-        double mx = first_double(text, {"\\bmax\\s*[=:]?\\s*([-+]?\\d+(?:\\.\\d+)?)", "\\bpeak\\s+([-+]?\\d+(?:\\.\\d+)?)", "\\bchannel_peak\\s*[=:]\\s*([-+]?\\d+(?:\\.\\d+)?)"});
-        double p99 = first_double(text, {"\\bp99\\s*[=:]?\\s*([-+]?\\d+(?:\\.\\d+)?)", "\\btail_p99\\s*[=:]\\s*([-+]?\\d+(?:\\.\\d+)?)"});
-        double kurt = first_double(text, {"\\bkurtosis\\s*[=:]?\\s*([-+]?\\d+(?:\\.\\d+)?)", "\\bkurt\\s*[=:]\\s*([-+]?\\d+(?:\\.\\d+)?)"});
+        double mx = first_labeled_double(text, {"channel_peak", "max", "peak"});
+        double p99 = first_labeled_double(text, {"tail_p99", "p99"});
+        double kurt = first_labeled_double(text, {"kurtosis", "kurt"});
         return choose_outlier(mx, p99, kurt);
     }
     if (skill == "bit_allocate") {
@@ -194,19 +265,40 @@ Policy predict(const std::string& skill, const std::string& text) {
         return choose_residual(nums[0], nums[1], nums[2]);
     }
     if (skill == "kv_policy") {
-        int ctx = first_int(text, {"\\bctx\\s*[=:]\\s*(\\d+)", "\\bcontext\\s+(\\d+)", "\\blength\\s+(\\d+)", "\\bctx\\s+(\\d+)"});
-        double ks = first_double(text, {"\\bK\\s*[=:]\\s*([-+]?\\d+(?:\\.\\d+)?)", "\\bK\\s+sensitivity\\s+([-+]?\\d+(?:\\.\\d+)?)", "\\bkey_sens\\s*[=:]\\s*([-+]?\\d+(?:\\.\\d+)?)", "\\bkey\\s+sens\\s+([-+]?\\d+(?:\\.\\d+)?)"});
-        double vs = first_double(text, {"\\bV\\s*[=:]\\s*([-+]?\\d+(?:\\.\\d+)?)", "\\bV\\s+sensitivity\\s+([-+]?\\d+(?:\\.\\d+)?)", "\\bvalue_sens\\s*[=:]\\s*([-+]?\\d+(?:\\.\\d+)?)", "\\bvalue\\s+sens\\s+([-+]?\\d+(?:\\.\\d+)?)"});
+        int ctx = first_labeled_int(text, {"ctx", "context", "length"});
+        double ks = first_labeled_double(text, {"key_sens", "key sens", "K sensitivity", "K="});
+        double vs = first_labeled_double(text, {"value_sens", "value sens", "V sensitivity", "V="});
         return choose_kv(ctx, ks, vs);
     }
     throw std::runtime_error("unknown skill: " + skill);
 }
 
 std::string json_string_value(const std::string& line, const std::string& key) {
-    std::regex pattern("\"" + key + "\"\\s*:\\s*\"((?:\\\\.|[^\"\\\\])*)\"");
-    std::smatch match;
-    if (!std::regex_search(line, match, pattern)) throw std::runtime_error("missing key: " + key);
-    std::string raw = match[1].str();
+    std::string needle = "\"" + key + "\"";
+    std::size_t pos = line.find(needle);
+    if (pos == std::string::npos) throw std::runtime_error("missing key: " + key);
+    pos = line.find(':', pos + needle.size());
+    if (pos == std::string::npos) throw std::runtime_error("missing key separator: " + key);
+    ++pos;
+    while (pos < line.size() && std::isspace(static_cast<unsigned char>(line[pos]))) ++pos;
+    if (pos >= line.size() || line[pos] != '"') throw std::runtime_error("key is not a string: " + key);
+    ++pos;
+    std::string raw;
+    bool escaped = false;
+    for (; pos < line.size(); ++pos) {
+        char c = line[pos];
+        if (escaped) {
+            raw.push_back('\\');
+            raw.push_back(c);
+            escaped = false;
+        } else if (c == '\\') {
+            escaped = true;
+        } else if (c == '"') {
+            break;
+        } else {
+            raw.push_back(c);
+        }
+    }
     std::string out;
     for (std::size_t i = 0; i < raw.size(); ++i) {
         if (raw[i] == '\\' && i + 1 < raw.size()) {
@@ -221,14 +313,41 @@ std::string json_string_value(const std::string& line, const std::string& key) {
     return out;
 }
 
-bool field_equals(const std::string& response, const std::string& key, const std::string& value) {
-    std::string pattern;
-    if (value == "true" || value == "false" || (!value.empty() && std::all_of(value.begin(), value.end(), ::isdigit))) {
-        pattern = "\"" + key + "\"\\s*:\\s*" + value + "\\b";
-    } else {
-        pattern = "\"" + key + "\"\\s*:\\s*\"" + value + "\"";
+std::string json_scalar_value(const std::string& line, const std::string& key) {
+    std::string needle = "\"" + key + "\"";
+    std::size_t pos = line.find(needle);
+    if (pos == std::string::npos) return "";
+    pos = line.find(':', pos + needle.size());
+    if (pos == std::string::npos) return "";
+    ++pos;
+    while (pos < line.size() && std::isspace(static_cast<unsigned char>(line[pos]))) ++pos;
+    if (pos >= line.size()) return "";
+    if (line[pos] == '"') {
+        ++pos;
+        std::string out;
+        bool escaped = false;
+        for (; pos < line.size(); ++pos) {
+            char c = line[pos];
+            if (escaped) {
+                out.push_back(c);
+                escaped = false;
+            } else if (c == '\\') {
+                escaped = true;
+            } else if (c == '"') {
+                break;
+            } else {
+                out.push_back(c);
+            }
+        }
+        return out;
     }
-    return std::regex_search(response, std::regex(pattern));
+    std::size_t start = pos;
+    while (pos < line.size() && line[pos] != ',' && line[pos] != '}') ++pos;
+    return trim(line.substr(start, pos - start));
+}
+
+bool field_equals(const std::string& response, const std::string& key, const std::string& value) {
+    return json_scalar_value(response, key) == value;
 }
 
 bool decision_exact(const std::string& skill, const Policy& pred, const std::string& response) {
@@ -267,18 +386,20 @@ std::string policy_json(const Policy& p) {
 }
 
 void usage() {
-    std::cerr << "usage: quant_policy_bypass --data <jsonl> [--out <json>] [--limit N]\n";
+    std::cerr << "usage: quant_policy_bypass --data <jsonl> [--out <json>] [--limit N] [--min-decision-exact X]\n";
 }
 
 int main(int argc, char** argv) {
     std::string data_path;
     std::string out_path;
     int limit = 0;
+    double min_decision_exact = -1.0;
     for (int i = 1; i < argc; ++i) {
         std::string arg = argv[i];
         if (arg == "--data" && i + 1 < argc) data_path = argv[++i];
         else if (arg == "--out" && i + 1 < argc) out_path = argv[++i];
         else if (arg == "--limit" && i + 1 < argc) limit = std::stoi(argv[++i]);
+        else if (arg == "--min-decision-exact" && i + 1 < argc) min_decision_exact = std::stod(argv[++i]);
         else if (arg == "--help" || arg == "-h") { usage(); return 0; }
         else { usage(); return 2; }
     }
@@ -339,9 +460,10 @@ int main(int argc, char** argv) {
              << ", \"parse_error\": " << (s.parse_error / n) << "}";
     }
     double n = std::max(overall.n, 1);
+    double overall_decision_exact = overall.decision_exact / n;
     json << ",\n    \"_overall\": {\"n\": " << overall.n
          << ", \"policy_fields_exact\": " << (overall.policy_fields_exact / n)
-         << ", \"decision_exact\": " << (overall.decision_exact / n)
+         << ", \"decision_exact\": " << overall_decision_exact
          << ", \"parse_error\": " << (overall.parse_error / n) << "}\n";
     json << "  }\n";
     json << "}\n";
@@ -354,6 +476,11 @@ int main(int argc, char** argv) {
             return 1;
         }
         out << json.str();
+    }
+    if (min_decision_exact >= 0.0 && overall_decision_exact + 1.0e-12 < min_decision_exact) {
+        std::cerr << "decision_exact " << overall_decision_exact
+                  << " below required " << min_decision_exact << "\n";
+        return 1;
     }
     return 0;
 }

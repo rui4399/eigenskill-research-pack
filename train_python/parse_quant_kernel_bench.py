@@ -108,6 +108,46 @@ def parse_rows(text: str) -> list[dict]:
                     "mixed_selected_rel_l2": float(parts[25]),
                 }
             )
+        elif len(parts) == 35:
+            rows.append(
+                {
+                    "d": int(parts[0]),
+                    "active_rows": int(parts[1]),
+                    "dense_ms": float(parts[2]),
+                    "dense_avx2_ms": float(parts[3]),
+                    "int4_ms": float(parts[4]),
+                    "int4_maddubs_ms": float(parts[5]),
+                    "int3_ms": float(parts[6]),
+                    "mixed_ms": float(parts[7]),
+                    "selected_ms": float(parts[8]),
+                    "selected_avx2_ms": float(parts[9]),
+                    "int4_selected_ms": float(parts[10]),
+                    "int4_maddubs_selected_ms": float(parts[11]),
+                    "mixed_selected_ms": float(parts[12]),
+                    "scalar_ms": float(parts[13]),
+                    "dense_avx2_speedup": float(parts[14]),
+                    "int4_speedup": float(parts[15]),
+                    "int4_maddubs_speedup": float(parts[16]),
+                    "int3_speedup": float(parts[17]),
+                    "mixed_speedup": float(parts[18]),
+                    "selected_speedup": float(parts[19]),
+                    "selected_avx2_speedup": float(parts[20]),
+                    "int4_selected_speedup": float(parts[21]),
+                    "int4_maddubs_selected_speedup": float(parts[22]),
+                    "mixed_selected_speedup": float(parts[23]),
+                    "scalar_speedup": float(parts[24]),
+                    "dense_avx2_rel_l2": float(parts[25]),
+                    "int4_rel_l2": float(parts[26]),
+                    "int4_maddubs_rel_l2": float(parts[27]),
+                    "int3_rel_l2": float(parts[28]),
+                    "mixed_rel_l2": float(parts[29]),
+                    "selected_rel_l2": float(parts[30]),
+                    "selected_avx2_rel_l2": float(parts[31]),
+                    "int4_selected_rel_l2": float(parts[32]),
+                    "int4_maddubs_selected_rel_l2": float(parts[33]),
+                    "mixed_selected_rel_l2": float(parts[34]),
+                }
+            )
     return rows
 
 
@@ -117,6 +157,9 @@ def summarize(rows: list[dict]) -> dict:
     best_dense_avx2 = max(rows, key=lambda row: row.get("dense_avx2_speedup", 1.0))
     best_scalar = max(rows, key=lambda row: row["scalar_speedup"])
     int4_faster = [row for row in rows if row["int4_speedup"] > 1.0]
+    int4_maddubs_faster = [row for row in rows if row.get("int4_maddubs_speedup", 0.0) > 1.0]
+    int4_selected_faster = [row for row in rows if row.get("int4_selected_speedup", 0.0) > 1.0]
+    int4_maddubs_selected_faster = [row for row in rows if row.get("int4_maddubs_selected_speedup", 0.0) > 1.0]
     mixed_faster = [row for row in rows if row.get("mixed_speedup", 0.0) > 1.0]
     mixed_selected_faster = [row for row in rows if row.get("mixed_selected_speedup", 0.0) > 1.0]
     summary = {
@@ -127,6 +170,9 @@ def summarize(rows: list[dict]) -> dict:
         "best_scalar_speedup": best_scalar,
         "int4_faster_than_dense_cases": len(int4_faster),
         "int4_all_cases_slower_than_dense": len(int4_faster) == 0,
+        "int4_maddubs_faster_than_dense_cases": len(int4_maddubs_faster),
+        "int4_selected_faster_than_dense_cases": len(int4_selected_faster),
+        "int4_maddubs_selected_faster_than_dense_cases": len(int4_maddubs_selected_faster),
         "mixed_faster_than_dense_cases": len(mixed_faster),
         "mixed_selected_faster_than_dense_cases": len(mixed_selected_faster),
         "max_int4_rel_l2": max(row["int4_rel_l2"] for row in rows),
@@ -142,6 +188,13 @@ def summarize(rows: list[dict]) -> dict:
         summary["best_mixed_selected_speedup"] = best_mixed_selected
         summary["max_mixed_rel_l2"] = max(row["mixed_rel_l2"] for row in rows)
         summary["max_mixed_selected_rel_l2"] = max(row["mixed_selected_rel_l2"] for row in rows)
+    if "int4_maddubs_rel_l2" in rows[0]:
+        summary["best_int4_maddubs_speedup"] = max(rows, key=lambda row: row["int4_maddubs_speedup"])
+        summary["best_int4_selected_speedup"] = max(rows, key=lambda row: row["int4_selected_speedup"])
+        summary["best_int4_maddubs_selected_speedup"] = max(rows, key=lambda row: row["int4_maddubs_selected_speedup"])
+        summary["max_int4_maddubs_rel_l2"] = max(row["int4_maddubs_rel_l2"] for row in rows)
+        summary["max_int4_selected_rel_l2"] = max(row["int4_selected_rel_l2"] for row in rows)
+        summary["max_int4_maddubs_selected_rel_l2"] = max(row["int4_maddubs_selected_rel_l2"] for row in rows)
     return summary
 
 

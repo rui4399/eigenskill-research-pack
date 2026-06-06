@@ -1,0 +1,414 @@
+{
+  "date": "2026-06-06T01:19:03Z",
+  "model": "Qwen/Qwen3-0.6B",
+  "device": "cuda",
+  "dtype": "float16",
+  "package_summary": "/mnt/c/Users/18042/Documents/Codex/2026-06-01/chatgpt-context-request-algorithm-system-co/github_publish/eigenskill-research-pack/outputs/real_system_packer_2026-06-05/layer20_v_prompt_group_sixgroup_sweep/groups_0_1_2_4_5_6_8bit_package/pack_summary.json",
+  "layers": [
+    1,
+    7,
+    20
+  ],
+  "suffixes": [
+    "q_proj",
+    "k_proj",
+    "v_proj"
+  ],
+  "dense_roles": [],
+  "max_new_tokens": 32,
+  "sync_mode": "end",
+  "prompts": [
+    "Explain calibration-set sensitivity in mixed-bit LLM quantization using exactly two sentences.",
+    "Produce minified JSON with keys policy, evidence, and caveat for a precision-routing experiment.",
+    "How many bytes store 4096 four-bit signed weights when packed densely? Give only the number and unit.",
+    "Write a C++ declaration for a function that multiplies selected quantized output rows by a dense activation vector.",
+    "Give two distinct ways a row-level precision search can overfit a tiny generation prompt suite.",
+    "In one sentence, explain why INT8 protection of an attention value projection may still reduce exact-match fidelity.",
+    "Draft a four-step ablation plan for testing whether a precision guard transfers across prompt splits.",
+    "Compare activation reconstruction error and generated-text prefix match in one compact paragraph.",
+    "Name two deployment metrics for an edge LLM runtime besides model size and perplexity.",
+    "Write a cautious README sentence explaining that a packed kernel benchmark is not an end-to-end acceleration claim.",
+    "Describe how hidden-state drift could be used as a cheap proxy for selecting sensitive rows.",
+    "State one reason an early transformer layer may need a different quantization policy than middle layers."
+  ],
+  "rows": [
+    {
+      "id": 0,
+      "prompt": "Explain calibration-set sensitivity in mixed-bit LLM quantization using exactly two sentences.",
+      "baseline": {
+        "prompt_tokens": 17,
+        "generated_tokens_text_retokenized": 32,
+        "ttft_seconds": 0.02856998999999405,
+        "elapsed_seconds": 1.4998137400000076,
+        "tokens_per_second": 21.33598269342421,
+        "generated_text": " Also, explain the role of the calibration set in the process of quantization. Additionally, explain the difference between the calibration set and the training set in the context"
+      },
+      "fused": {
+        "prompt_tokens": 17,
+        "generated_tokens_text_retokenized": 32,
+        "ttft_seconds": 0.6125786169999969,
+        "elapsed_seconds": 2.114239385000019,
+        "tokens_per_second": 15.135466791051059,
+        "generated_text": " Also, explain the role of the calibration set in the quantization process. Additionally, explain the difference between the calibration set and the training set in the context of"
+      },
+      "comparison": {
+        "exact_match": false,
+        "baseline_chars": 179,
+        "fused_chars": 179,
+        "common_prefix_chars": 54,
+        "common_prefix_ratio": 0.3016759776536313,
+        "char_edit_distance": 22,
+        "char_edit_similarity": 0.8770949720670391
+      }
+    },
+    {
+      "id": 1,
+      "prompt": "Produce minified JSON with keys policy, evidence, and caveat for a precision-routing experiment.",
+      "baseline": {
+        "prompt_tokens": 19,
+        "generated_tokens_text_retokenized": 32,
+        "ttft_seconds": 0.05158836600000427,
+        "elapsed_seconds": 1.3430839600000013,
+        "tokens_per_second": 23.82576291060759,
+        "generated_text": " The JSON should have a key-value pair for each of the three keys, and the values should be the corresponding values from the original data. The JSON should also"
+      },
+      "fused": {
+        "prompt_tokens": 19,
+        "generated_tokens_text_retokenized": 32,
+        "ttft_seconds": 0.3846087570000236,
+        "elapsed_seconds": 1.8173465860000135,
+        "tokens_per_second": 17.608088763317358,
+        "generated_text": " The JSON should have a key-value pair for each of the three keys, and the values should be the corresponding values from the original data. The JSON should also"
+      },
+      "comparison": {
+        "exact_match": true,
+        "baseline_chars": 161,
+        "fused_chars": 161,
+        "common_prefix_chars": 161,
+        "common_prefix_ratio": 1.0,
+        "char_edit_distance": 0,
+        "char_edit_similarity": 1.0
+      }
+    },
+    {
+      "id": 2,
+      "prompt": "How many bytes store 4096 four-bit signed weights when packed densely? Give only the number and unit.",
+      "baseline": {
+        "prompt_tokens": 24,
+        "generated_tokens_text_retokenized": 32,
+        "ttft_seconds": 0.041026881999982834,
+        "elapsed_seconds": 1.2207086580000066,
+        "tokens_per_second": 26.21428118026818,
+        "generated_text": " The weights are 1, 2, 3, 4, 5, 6, 7, 8, 9, 1"
+      },
+      "fused": {
+        "prompt_tokens": 24,
+        "generated_tokens_text_retokenized": 32,
+        "ttft_seconds": 0.049560616999997364,
+        "elapsed_seconds": 1.2646744889999866,
+        "tokens_per_second": 25.3029536677879,
+        "generated_text": " The weights are 1, 2, 3, 4, 5, 6, 7, 8, 9, 1"
+      },
+      "comparison": {
+        "exact_match": true,
+        "baseline_chars": 45,
+        "fused_chars": 45,
+        "common_prefix_chars": 45,
+        "common_prefix_ratio": 1.0,
+        "char_edit_distance": 0,
+        "char_edit_similarity": 1.0
+      }
+    },
+    {
+      "id": 3,
+      "prompt": "Write a C++ declaration for a function that multiplies selected quantized output rows by a dense activation vector.",
+      "baseline": {
+        "prompt_tokens": 22,
+        "generated_tokens_text_retokenized": 32,
+        "ttft_seconds": 0.03721757399998182,
+        "elapsed_seconds": 1.218990104999989,
+        "tokens_per_second": 26.25123852010291,
+        "generated_text": " The function should be named `multiply` and have parameters `input` and `output`, each of which is a 2D array of size 10"
+      },
+      "fused": {
+        "prompt_tokens": 22,
+        "generated_tokens_text_retokenized": 32,
+        "ttft_seconds": 0.3184114329999943,
+        "elapsed_seconds": 1.699238307999991,
+        "tokens_per_second": 18.83196715219074,
+        "generated_text": " The function should be named `multiply_quantized`, and the parameters should be `input`, `output`, and `activation` with the appropriate data types. The"
+      },
+      "comparison": {
+        "exact_match": false,
+        "baseline_chars": 121,
+        "fused_chars": 153,
+        "common_prefix_chars": 39,
+        "common_prefix_ratio": 0.32231404958677684,
+        "char_edit_distance": 66,
+        "char_edit_similarity": 0.5686274509803921
+      }
+    },
+    {
+      "id": 4,
+      "prompt": "Give two distinct ways a row-level precision search can overfit a tiny generation prompt suite.",
+      "baseline": {
+        "prompt_tokens": 18,
+        "generated_tokens_text_retokenized": 32,
+        "ttft_seconds": 0.03836100300000567,
+        "elapsed_seconds": 1.3398658410000053,
+        "tokens_per_second": 23.88298814761699,
+        "generated_text": " One of the ways is to use a **search engine**. The other is to use a **search engine**. Also, provide a brief explanation of each"
+      },
+      "fused": {
+        "prompt_tokens": 18,
+        "generated_tokens_text_retokenized": 32,
+        "ttft_seconds": 0.05282547299998441,
+        "elapsed_seconds": 1.4928233509999984,
+        "tokens_per_second": 21.4358919148499,
+        "generated_text": " One of the ways is to use a **search engine**. The other is to use a **search engine**. Also, provide a brief explanation of each"
+      },
+      "comparison": {
+        "exact_match": true,
+        "baseline_chars": 130,
+        "fused_chars": 130,
+        "common_prefix_chars": 130,
+        "common_prefix_ratio": 1.0,
+        "char_edit_distance": 0,
+        "char_edit_similarity": 1.0
+      }
+    },
+    {
+      "id": 5,
+      "prompt": "In one sentence, explain why INT8 protection of an attention value projection may still reduce exact-match fidelity.",
+      "baseline": {
+        "prompt_tokens": 21,
+        "generated_tokens_text_retokenized": 32,
+        "ttft_seconds": 0.0722381809999888,
+        "elapsed_seconds": 1.3526498219999894,
+        "tokens_per_second": 23.65726848112523,
+        "generated_text": " What is the relationship between the attention value projection and the attention value in the model's output? What is the relationship between the attention value projection and the attention value"
+      },
+      "fused": {
+        "prompt_tokens": 21,
+        "generated_tokens_text_retokenized": 32,
+        "ttft_seconds": 0.31478036100000395,
+        "elapsed_seconds": 1.5714855629999818,
+        "tokens_per_second": 20.3628978550154,
+        "generated_text": " What is the relationship between the attention value projection and the attention value in the model's output? What is the relationship between the attention value projection and the attention value"
+      },
+      "comparison": {
+        "exact_match": true,
+        "baseline_chars": 199,
+        "fused_chars": 199,
+        "common_prefix_chars": 199,
+        "common_prefix_ratio": 1.0,
+        "char_edit_distance": 0,
+        "char_edit_similarity": 1.0
+      }
+    },
+    {
+      "id": 6,
+      "prompt": "Draft a four-step ablation plan for testing whether a precision guard transfers across prompt splits.",
+      "baseline": {
+        "prompt_tokens": 18,
+        "generated_tokens_text_retokenized": 32,
+        "ttft_seconds": 0.03450601399998732,
+        "elapsed_seconds": 1.2596174260000055,
+        "tokens_per_second": 25.404538981028562,
+        "generated_text": " The ablation plan should include the following: 1) the baseline, 2) the first ablation, 3) the second ablation, "
+      },
+      "fused": {
+        "prompt_tokens": 18,
+        "generated_tokens_text_retokenized": 32,
+        "ttft_seconds": 0.049497250000001713,
+        "elapsed_seconds": 1.4958096419999833,
+        "tokens_per_second": 21.39309648867764,
+        "generated_text": " The ablation plan should include the following: 1) the baseline, 2) the first ablation, 3) the second ablation, "
+      },
+      "comparison": {
+        "exact_match": true,
+        "baseline_chars": 113,
+        "fused_chars": 113,
+        "common_prefix_chars": 113,
+        "common_prefix_ratio": 1.0,
+        "char_edit_distance": 0,
+        "char_edit_similarity": 1.0
+      }
+    },
+    {
+      "id": 7,
+      "prompt": "Compare activation reconstruction error and generated-text prefix match in one compact paragraph.",
+      "baseline": {
+        "prompt_tokens": 14,
+        "generated_tokens_text_retokenized": 32,
+        "ttft_seconds": 0.03758133599998814,
+        "elapsed_seconds": 1.2381943340000134,
+        "tokens_per_second": 25.844085311409327,
+        "generated_text": " The answer is in Chinese. The answer is in Chinese. The answer is in Chinese. The answer is in Chinese. The answer is in Chinese. The answer"
+      },
+      "fused": {
+        "prompt_tokens": 14,
+        "generated_tokens_text_retokenized": 32,
+        "ttft_seconds": 0.04365354899999829,
+        "elapsed_seconds": 1.5706337029999702,
+        "tokens_per_second": 20.373942020267858,
+        "generated_text": " The answer is in Chinese. The answer is in Chinese. The answer is in Chinese. The answer is in Chinese. The answer is in Chinese. The answer"
+      },
+      "comparison": {
+        "exact_match": true,
+        "baseline_chars": 141,
+        "fused_chars": 141,
+        "common_prefix_chars": 141,
+        "common_prefix_ratio": 1.0,
+        "char_edit_distance": 0,
+        "char_edit_similarity": 1.0
+      }
+    },
+    {
+      "id": 8,
+      "prompt": "Name two deployment metrics for an edge LLM runtime besides model size and perplexity.",
+      "baseline": {
+        "prompt_tokens": 17,
+        "generated_tokens_text_retokenized": 32,
+        "ttft_seconds": 0.036325045000012324,
+        "elapsed_seconds": 1.420095186999987,
+        "tokens_per_second": 22.533700763820907,
+        "generated_text": " Also, explain what each metric means.\nAnswer:\nThe question asks for **two deployment metrics** for an **edge LLM runtime** besides model size and perplex"
+      },
+      "fused": {
+        "prompt_tokens": 17,
+        "generated_tokens_text_retokenized": 32,
+        "ttft_seconds": 0.03853654199997436,
+        "elapsed_seconds": 1.3232924949999756,
+        "tokens_per_second": 24.182106466190298,
+        "generated_text": " Also, explain why they are important for the deployment.\n\n**A.** **Model size and perplexity**  \n**B.** **Model size and accuracy"
+      },
+      "comparison": {
+        "exact_match": false,
+        "baseline_chars": 154,
+        "fused_chars": 130,
+        "common_prefix_chars": 17,
+        "common_prefix_ratio": 0.11038961038961038,
+        "char_edit_distance": 91,
+        "char_edit_similarity": 0.40909090909090906
+      }
+    },
+    {
+      "id": 9,
+      "prompt": "Write a cautious README sentence explaining that a packed kernel benchmark is not an end-to-end acceleration claim.",
+      "baseline": {
+        "prompt_tokens": 20,
+        "generated_tokens_text_retokenized": 32,
+        "ttft_seconds": 0.036860745000012685,
+        "elapsed_seconds": 1.1908243440000206,
+        "tokens_per_second": 26.872141270232085,
+        "generated_text": " Also, provide a list of 10 key points that should be included in the README for the project. The README should be in English, and the sentence"
+      },
+      "fused": {
+        "prompt_tokens": 20,
+        "generated_tokens_text_retokenized": 32,
+        "ttft_seconds": 0.05668174900000622,
+        "elapsed_seconds": 1.5932947659999854,
+        "tokens_per_second": 20.084168154482153,
+        "generated_text": " Also, provide a list of 10 key points that should be included in the README for the project. The README should be in English, and the sentence"
+      },
+      "comparison": {
+        "exact_match": true,
+        "baseline_chars": 143,
+        "fused_chars": 143,
+        "common_prefix_chars": 143,
+        "common_prefix_ratio": 1.0,
+        "char_edit_distance": 0,
+        "char_edit_similarity": 1.0
+      }
+    },
+    {
+      "id": 10,
+      "prompt": "Describe how hidden-state drift could be used as a cheap proxy for selecting sensitive rows.",
+      "baseline": {
+        "prompt_tokens": 17,
+        "generated_tokens_text_retokenized": 32,
+        "ttft_seconds": 0.031933600000002116,
+        "elapsed_seconds": 1.8867112629999951,
+        "tokens_per_second": 16.960729830550697,
+        "generated_text": " Additionally, what are the implications of this approach on the data processing pipeline and the data storage system? Also, what are the potential risks and challenges associated with this"
+      },
+      "fused": {
+        "prompt_tokens": 17,
+        "generated_tokens_text_retokenized": 32,
+        "ttft_seconds": 0.053616775000023154,
+        "elapsed_seconds": 1.2905585970000288,
+        "tokens_per_second": 24.79546459524246,
+        "generated_text": " Additionally, what are the implications of this approach on the data processing pipeline and the data storage system? Also, what are the potential risks and challenges associated with this"
+      },
+      "comparison": {
+        "exact_match": true,
+        "baseline_chars": 189,
+        "fused_chars": 189,
+        "common_prefix_chars": 189,
+        "common_prefix_ratio": 1.0,
+        "char_edit_distance": 0,
+        "char_edit_similarity": 1.0
+      }
+    },
+    {
+      "id": 11,
+      "prompt": "State one reason an early transformer layer may need a different quantization policy than middle layers.",
+      "baseline": {
+        "prompt_tokens": 18,
+        "generated_tokens_text_retokenized": 32,
+        "ttft_seconds": 0.07977380500000208,
+        "elapsed_seconds": 1.758242784999993,
+        "tokens_per_second": 18.19998937177503,
+        "generated_text": " What is the difference between the quantization policy and the quantization method? What is the difference between the quantization method and the quantization strategy?\nAnswer:\n"
+      },
+      "fused": {
+        "prompt_tokens": 18,
+        "generated_tokens_text_retokenized": 32,
+        "ttft_seconds": 0.03646771500001478,
+        "elapsed_seconds": 1.2924409070000138,
+        "tokens_per_second": 24.75935249858171,
+        "generated_text": " What is the difference between the quantization policy and the quantization method? What is the difference between the quantization method and the quantization strategy?\nAnswer:\n"
+      },
+      "comparison": {
+        "exact_match": true,
+        "baseline_chars": 179,
+        "fused_chars": 179,
+        "common_prefix_chars": 179,
+        "common_prefix_ratio": 1.0,
+        "char_edit_distance": 0,
+        "char_edit_similarity": 1.0
+      }
+    }
+  ],
+  "aggregate": {
+    "prompts": 12,
+    "exact_matches": 9,
+    "exact_match_rate": 0.75,
+    "mean_char_edit_similarity": 0.9045677776781951,
+    "median_char_edit_similarity": 1.0,
+    "mean_common_prefix_ratio": 0.8111983031358349,
+    "median_common_prefix_ratio": 1.0,
+    "mean_baseline_tokens_per_second": 23.415225621830142,
+    "mean_fused_tokens_per_second": 21.18878303063787,
+    "mean_speedup_fused_vs_baseline": 0.9049147496099057,
+    "median_baseline_ttft_seconds": 0.03739945499998498,
+    "median_fused_ttft_seconds": 0.05322112400000378
+  },
+  "replacement_raw_fp32_bytes": 50331648,
+  "replacement_package_bytes": 12747328,
+  "replacement_compression_vs_fp32": 3.9484076976759366,
+  "replacement_dense_role_calls": 0,
+  "replacement_wrapper_calls": 3456,
+  "replacement_fused_compute_calls": 1152,
+  "replacement_cache_hits": 2304,
+  "replacement_cache_misses": 1152,
+  "replacement_cuda_event_ms": {
+    "sum": 1745.0610914416611,
+    "mean": 1.5148099752097752,
+    "median": 0.17134399712085724,
+    "p90": 0.26311680078506483,
+    "max": 570.94775390625
+  },
+  "peak_gpu_memory_mib": 1164.42431640625
+}
