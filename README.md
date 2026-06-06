@@ -39,6 +39,8 @@ Implemented and committed:
   preservation evidence from acceleration claims.
 - A deterministic 84-task chat stress-retention gate that records the remaining
   regression budget instead of hiding output drift.
+- A top-level evidence ledger that aggregates the current paper-facing gates
+  into one reproducible pass/fail table.
 - PyTorch fake-quant PPL experiments on small public models and short
   WikiText2/C4 slices.
 - A LoRA training entry point with optional completion-only loss masking for
@@ -167,6 +169,11 @@ Task-retention stress evidence is gated in
 The current K-only layers `[1, 7]` candidate passes the configured 84-task
 stress gate with 45/84 fused passes versus 46/84 baseline passes, one explicit
 JSON-key regression, 0.9746x mean speed, and 54.69% peak guard memory.
+The top-level evidence ledger is
+`outputs/real_system_packer_2026-06-05/EVIDENCE_LEDGER_2026_06_06.md`; it
+currently passes with 8/8 paper-facing gates across kernel, runtime wiring,
+selected-row, C++ runtime, decode integration, QKV replacement, quality, and
+task-retention categories.
 Gate policy and claim boundaries are in `docs/SYSTEM_EVIDENCE_GATES.md`.
 
 End-to-end smoke metrics are tracked separately from kernel evidence:
@@ -584,6 +591,18 @@ python train_python/gate_chat_task_regression_analysis.py \
   --max-regressions-per-type 1 \
   --min-speedup 0.95 \
   --max-memory-ratio 0.90
+
+python train_python/build_evidence_ledger.py \
+  --gate triton_shape_family=outputs/real_system_packer_2026-06-05/triton_qwen_shape_family_gate_2026_06_06.json \
+  --gate selector_runtime=outputs/real_system_packer_2026-06-05/selector_runtime_smoke_gate_2026_06_06.json \
+  --gate selected_row=outputs/real_system_packer_2026-06-05/selected_row_benchmark_gate_2026_06_06.json \
+  --gate cpp_runtime=outputs/real_system_packer_2026-06-05/cpp_runtime_sweep_gate_2026_06_06.json \
+  --gate fused_sidecar=outputs/real_system_packer_2026-06-05/fused_sidecar_generation_gate_2026_06_06.json \
+  --gate fused_qkv_speed=outputs/real_system_packer_2026-06-05/fused_qkv_generation_gate_2026_06_06.json \
+  --gate fused_qkv_quality=outputs/real_system_packer_2026-06-05/fused_qkv_prompt_suite_gate_2026_06_06.json \
+  --gate chat_task_stress=outputs/real_system_packer_2026-06-05/chat_task_stress_v3_84_gate_2026_06_06.json \
+  --out-json outputs/real_system_packer_2026-06-05/evidence_ledger_2026_06_06.json \
+  --out-md outputs/real_system_packer_2026-06-05/EVIDENCE_LEDGER_2026_06_06.md
 ```
 
 ## Reproduce: End-to-End Metric Summary

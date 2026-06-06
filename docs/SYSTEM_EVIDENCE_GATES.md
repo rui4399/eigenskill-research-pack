@@ -4,6 +4,40 @@ This repository separates exploratory output from evidence that can survive a
 paper review. A result should be treated as paper-facing only when it is backed
 by an executable gate and an explicit claim boundary.
 
+## Evidence Ledger
+
+`train_python/build_evidence_ledger.py` is the top-level evidence index. It
+loads individual gate JSON files, verifies that every listed gate passed, and
+writes one paper-facing ledger table.
+
+Current ledger:
+
+```bash
+python train_python/build_evidence_ledger.py \
+  --gate triton_shape_family=outputs/real_system_packer_2026-06-05/triton_qwen_shape_family_gate_2026_06_06.json \
+  --gate selector_runtime=outputs/real_system_packer_2026-06-05/selector_runtime_smoke_gate_2026_06_06.json \
+  --gate selected_row=outputs/real_system_packer_2026-06-05/selected_row_benchmark_gate_2026_06_06.json \
+  --gate cpp_runtime=outputs/real_system_packer_2026-06-05/cpp_runtime_sweep_gate_2026_06_06.json \
+  --gate fused_sidecar=outputs/real_system_packer_2026-06-05/fused_sidecar_generation_gate_2026_06_06.json \
+  --gate fused_qkv_speed=outputs/real_system_packer_2026-06-05/fused_qkv_generation_gate_2026_06_06.json \
+  --gate fused_qkv_quality=outputs/real_system_packer_2026-06-05/fused_qkv_prompt_suite_gate_2026_06_06.json \
+  --gate chat_task_stress=outputs/real_system_packer_2026-06-05/chat_task_stress_v3_84_gate_2026_06_06.json \
+  --out-json outputs/real_system_packer_2026-06-05/evidence_ledger_2026_06_06.json \
+  --out-md outputs/real_system_packer_2026-06-05/EVIDENCE_LEDGER_2026_06_06.md
+```
+
+The current ledger passes with 8/8 gates across kernel, runtime wiring,
+selected-row, C++ runtime, decode integration, QKV replacement, quality, and
+task-retention evidence categories.
+
+Valid claim:
+
+- the listed paper-facing evidence is backed by executable gate JSON artifacts.
+
+Invalid claim:
+
+- the ledger itself proves SOTA, mobile deployment, or full paper readiness.
+
 ## Triton Mixed-GEMM Gate
 
 The Triton gate consumes `tuning_results.jsonl` from `train_python/tune_triton_blocks.py`.
