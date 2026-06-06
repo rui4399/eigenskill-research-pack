@@ -22,7 +22,7 @@ fake-quant loss sensitivity on multiple calibration views, allocates a fixed
 `{4,8}`-bit budget through cross-split consensus sensitivity, and records every
 paper-facing result through executable evidence gates. Across Qwen3-0.6B,
 Qwen3-1.7B, OLMo2-0425-1B-Instruct, and SmolLM2-1.7B short-slice diagnostics,
-the current evidence ledger passes 21/21 gates. The calibration-instability
+the current evidence ledger passes 22/22 gates. The calibration-instability
 gate finds 3/3 unstable model/dataset cases with mean score/cost Spearman
 0.0713 and mean top-20 Jaccard 0.1022. The robustness stress gate reports
 11/11 wins versus uniform INT4, best random seed, and random-seed mean under the
@@ -32,10 +32,11 @@ policy on 4/4 Qwen3 transfer slices while allowing bounded regret versus the
 best single split. Finally, an interaction-aware swap gate shows 5
 locally-negative-but-globally-improved swap trials, demonstrating that additive
 module ranking misses measurable global interactions. The current system
-evidence is deliberately gated and prototype-level: ESMP packaging, Triton shape
-tuning, selected-row execution, shallow fused-QKV generation, and C++ audit
-tools are executable, but the repository does not claim a production LLM
-runtime.
+evidence is deliberately gated and prototype-level: public-task coverage now
+includes a two-model guarded Ollama ladder over 200 MMLU/GSM8K subset rows,
+while ESMP packaging, Triton shape tuning, selected-row execution, shallow
+fused-QKV generation, and C++ audit tools are executable. The repository does
+not claim a production LLM runtime.
 
 ## 1. Introduction
 
@@ -71,7 +72,7 @@ offers three narrower contributions:
    consensus allocator that protects modules that are consistently sensitive or
    have high average sensitivity under a fixed `{4,8}` budget.
 3. **Gated evidence discipline.** We convert scattered fake-quant, runtime,
-   task-smoke, paper-alignment, and repository-hygiene outputs into 21 executable gates, each
+   task-smoke, paper-alignment, and repository-hygiene outputs into 22 executable gates, each
    with an explicit claim boundary.
 
 The paper is intentionally conservative. It keeps negative results visible:
@@ -201,7 +202,7 @@ future allocator.
 ## 6. Evidence Gates
 
 Every paper-facing claim is indexed by a gate JSON and a Markdown report. The
-current ledger passes 21/21 gates. The most important gates are:
+current ledger passes 22/22 gates. The most important gates are:
 
 | Gate | Evidence | Valid claim | Non-claim |
 |---|---|---|---|
@@ -209,6 +210,7 @@ current ledger passes 21/21 gates. The most important gates are:
 | Robustness stress | 11 short fake-quant PPL slices | Target policies beat uniform and random baselines on committed slices. | Not SOTA PTQ or task retention. |
 | Consensus transfer boundary | 4 paired Qwen3 slices | Consensus avoids the worse single-split policy with bounded best-single regret. | Consensus always beats the best single split. |
 | Interaction swap boundary | 16 SmolLM2-1.7B swap trials | Global feedback exposes local-proxy failures. | Global optimality or broad transfer. |
+| Public task model ladder | 2 local Ollama models over 200 MMLU/GSM8K subset rows | Public-task evidence is reported without hiding the weaker 4B case. | Leaderboard quality, monotonic scaling, or fused quantized retention. |
 | Packed-system gates | ESMP, Triton, selected-row, sidecar, QKV smoke | Prototype components are executable and audited. | Production Tensor Core/mobile runtime. |
 | Paper evidence alignment | Paper draft, required evidence paths, claim-risk scan | The draft cites committed evidence and avoids unsafe non-negated claims. | Peer-review acceptance or complete baseline coverage. |
 
@@ -331,8 +333,8 @@ benchmarks, and real packed inference measurements.
    quality.
 2. Official GPTQ, AWQ, SmoothQuant, QuaRot, and SpinQuant baselines are not yet
    faithfully reproduced.
-3. Public task evidence is currently negative smoke coverage, not capability
-   retention.
+3. Public task evidence is limited local subset coverage, not leaderboard-scale
+   capability retention or fused quantized retention.
 4. System evidence is prototype/module-level; no Redmi K80 Pro or board-level
    TTFT, tokens/s, memory, energy, or thermal logs are complete.
 5. The bit set is limited to `{4,8}` in the main allocation diagnostics.
@@ -361,6 +363,7 @@ outputs/CALIBRATION_INSTABILITY_BENCHMARK_2026_06_06.md
 outputs/CALIBRATION_ROBUSTNESS_STRESS_GATE_2026_06_07.md
 outputs/CONSENSUS_TRANSFER_BOUNDARY_GATE_2026_06_07.md
 outputs/INTERACTION_SWAP_BOUNDARY_GATE_2026_06_07.md
+outputs/PUBLIC_TASK_MODEL_LADDER_GATE_2026_06_07.md
 outputs/BASELINE_GAP_DASHBOARD_2026_06_06.md
 docs/PAPER_CLAIM_MATRIX.md
 docs/SYSTEM_EVIDENCE_GATES.md

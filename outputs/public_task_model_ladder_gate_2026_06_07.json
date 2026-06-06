@@ -1,0 +1,59 @@
+{
+  "date": "2026-06-06T19:57:34+00:00",
+  "passed": true,
+  "summary": {
+    "model_count": 2,
+    "distinct_model_count": 2,
+    "total_tasks": 200,
+    "total_passes": 43,
+    "mean_accuracy": 0.215,
+    "best_label": "qwen25_7b",
+    "best_model": "huihui_ai/qwen2.5-abliterate:7b-instruct",
+    "best_total_passes": 39,
+    "best_accuracy": 0.39,
+    "worst_label": "qwen35_4b",
+    "worst_model": "huihui-qwen35-4b-pmra:latest",
+    "worst_accuracy": 0.04,
+    "best_minus_worst_passes": 35,
+    "best_minus_worst_accuracy": 0.35000000000000003,
+    "max_guard_vram_ratio": 0.8865169917801496,
+    "mean_tokens_per_second": 52.03493721585636,
+    "mean_ttft_seconds": 0.6076382794973324
+  },
+  "cases": [
+    {
+      "label": "qwen35_4b",
+      "path": "outputs\\public_task_benchmark_ollama_qwen35_4b_gate_2026_06_06.json",
+      "source_passed": true,
+      "model": "huihui-qwen35-4b-pmra:latest",
+      "task_count": 100,
+      "passes": 4,
+      "accuracy": 0.04,
+      "task_formats": [
+        "gsm8k",
+        "mmlu"
+      ],
+      "max_guard_vram_ratio": 0.8825910931174089,
+      "mean_tokens_per_second": 83.02829706245475,
+      "mean_ttft_seconds": 0.39825892099761406
+    },
+    {
+      "label": "qwen25_7b",
+      "path": "outputs\\public_task_benchmark_ollama_qwen25_abliterate_7b_gate_2026_06_07.json",
+      "source_passed": true,
+      "model": "huihui_ai/qwen2.5-abliterate:7b-instruct",
+      "task_count": 100,
+      "passes": 39,
+      "accuracy": 0.39,
+      "task_formats": [
+        "gsm8k",
+        "mmlu"
+      ],
+      "max_guard_vram_ratio": 0.8865169917801496,
+      "mean_tokens_per_second": 21.041577369257965,
+      "mean_ttft_seconds": 0.8170176379970507
+    }
+  ],
+  "failures": [],
+  "claim_boundary": "Valid claim: public-task evidence is reported as a guarded multi-model ladder. Invalid claim: this proves monotonic scaling, fused quantized retention, SOTA quality, or leaderboard performance."
+}

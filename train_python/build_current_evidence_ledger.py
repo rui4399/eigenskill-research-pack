@@ -36,6 +36,7 @@ CURRENT_GATE_SPECS: tuple[tuple[str, str], ...] = (
     ("fused_qkv_quality", "outputs/real_system_packer_2026-06-05/fused_qkv_prompt_suite_gate_2026_06_06.json"),
     ("chat_task_stress", "outputs/real_system_packer_2026-06-05/chat_task_stress_v3_84_gate_2026_06_06.json"),
     ("public_task_benchmark", "outputs/public_task_benchmark_ollama_qwen25_abliterate_7b_gate_2026_06_07.json"),
+    ("public_task_model_ladder", "outputs/public_task_model_ladder_gate_2026_06_07.json"),
     ("allocation_family_proxy", "outputs/q_palette_style_allocation_family_gate_2026_06_06.json"),
     ("robust_lcb_consensus", "outputs/robust_lcb_consensus_family_gate_2026_06_06.json"),
     ("robust_lcb_quality", "outputs/qwen3_0p6b_robust_lcb_quality_gate_2026_06_07.json"),
@@ -68,7 +69,7 @@ def build_current_ledger(repo_root: Path, out_json: Path, out_md: Path) -> dict:
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="Build the current 21-gate paper-facing evidence ledger.")
+    parser = argparse.ArgumentParser(description="Build the current paper-facing evidence ledger.")
     parser.add_argument("--repo-root", type=Path, default=repo_root_from_script())
     parser.add_argument("--out-json", type=Path, default=DEFAULT_OUT_JSON)
     parser.add_argument("--out-md", type=Path, default=DEFAULT_OUT_MD)

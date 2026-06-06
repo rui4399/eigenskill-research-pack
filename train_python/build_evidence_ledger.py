@@ -11,6 +11,7 @@ from typing import Any
 
 
 CATEGORIES = {
+    "task_model_ladder": "capability retention",
     "quality": "quality",
     "prompt": "quality",
     "allocation": "allocation comparator",
@@ -159,6 +160,12 @@ def metric_parts(summary: dict[str, Any]) -> list[str]:
         parts.append(f"ledger gates {summary.get('ledger_gate_count')}")
     if "case_count" in summary:
         parts.append(f"cases {summary.get('case_count')}")
+    if "model_count" in summary:
+        parts.append(f"models {summary.get('model_count')}")
+    if "best_total_passes" in summary:
+        parts.append(f"best passes {summary.get('best_total_passes')}")
+    if (value := finite_float(summary.get("best_accuracy"))) is not None:
+        parts.append(f"best accuracy {value:.4f}")
     if "slice_count" in summary:
         parts.append(f"slices {summary.get('slice_count')}")
     if "unstable_case_count" in summary:

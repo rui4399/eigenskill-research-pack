@@ -86,17 +86,17 @@ class PaperEvidenceAlignmentTests(unittest.TestCase):
             ledger = root / "ledger.json"
             ledger.write_text(json.dumps({"gate_count": 20}), encoding="utf-8")
             paper = root / "paper.md"
-            paper.write_text("The current evidence ledger passes 21/21 gates.\n", encoding="utf-8")
+            paper.write_text("The current evidence ledger passes 22/22 gates.\n", encoding="utf-8")
             report = gate.build_report(
                 root,
                 Path("paper.md"),
                 required_references=(),
                 ledger_json=Path("ledger.json"),
-                expected_gate_count=21,
+                expected_gate_count=22,
             )
 
         self.assertTrue(report["passed"])
-        self.assertEqual(report["summary"]["ledger_gate_count"], 21)
+        self.assertEqual(report["summary"]["ledger_gate_count"], 22)
 
 
 if __name__ == "__main__":

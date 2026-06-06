@@ -7,7 +7,7 @@ by an executable gate and an explicit claim boundary.
 ## Evidence Ledger
 
 `train_python/build_current_evidence_ledger.py` is the stable public entry
-point for the current paper-facing gate set. It fixes the 21 gate paths in one
+point for the current paper-facing gate set. It fixes the 22 gate paths in one
 manifest, rebuilds the ledger, and avoids copying a long `--gate` list across
 README files and paper appendices.
 
@@ -18,7 +18,7 @@ python train_python/build_current_evidence_ledger.py
 ```
 
 `train_python/build_evidence_ledger.py` is the lower-level builder for custom
-or future gate manifests. The expanded form of the current 21-gate ledger is:
+or future gate manifests. The expanded form of the current 22-gate ledger is:
 
 ```bash
 python train_python/build_evidence_ledger.py \
@@ -38,6 +38,7 @@ python train_python/build_evidence_ledger.py \
   --gate fused_qkv_quality=outputs/real_system_packer_2026-06-05/fused_qkv_prompt_suite_gate_2026_06_06.json \
   --gate chat_task_stress=outputs/real_system_packer_2026-06-05/chat_task_stress_v3_84_gate_2026_06_06.json \
   --gate public_task_benchmark=outputs/public_task_benchmark_ollama_qwen25_abliterate_7b_gate_2026_06_07.json \
+  --gate public_task_model_ladder=outputs/public_task_model_ladder_gate_2026_06_07.json \
   --gate allocation_family_proxy=outputs/q_palette_style_allocation_family_gate_2026_06_06.json \
   --gate robust_lcb_consensus=outputs/robust_lcb_consensus_family_gate_2026_06_06.json \
   --gate robust_lcb_quality=outputs/qwen3_0p6b_robust_lcb_quality_gate_2026_06_07.json \
@@ -47,10 +48,10 @@ python train_python/build_evidence_ledger.py \
   --out-md outputs/real_system_packer_2026-06-05/EVIDENCE_LEDGER_2026_06_06.md
 ```
 
-The current ledger passes with 21/21 gates across repo hygiene, calibration
+The current ledger passes with 22/22 gates across repo hygiene, calibration
 robustness, artifact integrity, kernel, runtime wiring, selected-row, C++
 runtime, decode integration, QKV replacement, quality, task-retention, and
-capability-retention, allocation-comparator, rotation-comparator, and
+capability-retention/model-ladder, allocation-comparator, rotation-comparator, and
 PTQ-comparator, and paper-alignment evidence categories.
 
 Valid claim:
@@ -141,14 +142,14 @@ Current gate:
 ```bash
 python train_python/gate_paper_evidence_alignment.py \
   --paper paper_drafts/eigenskill_q_iclr_ccfa_draft_en_2026_06_07.md \
-  --expected-gate-count 21 \
+  --expected-gate-count 22 \
   --out-json outputs/paper_evidence_alignment_gate_2026_06_07.json \
   --out-md outputs/PAPER_EVIDENCE_ALIGNMENT_GATE_2026_06_07.md
 ```
 
-Current result: 8/8 required evidence references present, 33 referenced repo
+Current result: 9/9 required evidence references present, 14 referenced repo
 paths found and 0 missing, 0 stale forbidden tokens, 0 unsafe non-negated claim
-lines, and the paper mentions the current 21-gate ledger.
+lines, and the paper mentions the current 22-gate ledger.
 
 Valid claim:
 
@@ -192,6 +193,43 @@ Invalid claim:
 
 - this proves leaderboard-scale quality, fused-retention quality, or SOTA
   reasoning performance.
+
+## Public Task Model Ladder Gate
+
+`train_python/gate_public_task_model_ladder.py` combines already-passing
+public-task gates into a compact multi-model ladder. This keeps the stronger 7B
+subset result next to the weaker local 4B result, so the public artifact is less
+vulnerable to single-model cherry-picking.
+
+Current gate:
+
+```bash
+python train_python/gate_public_task_model_ladder.py \
+  --case qwen35_4b=outputs/public_task_benchmark_ollama_qwen35_4b_gate_2026_06_06.json \
+  --case qwen25_7b=outputs/public_task_benchmark_ollama_qwen25_abliterate_7b_gate_2026_06_07.json \
+  --min-models 2 \
+  --min-tasks-per-model 100 \
+  --require-formats mmlu,gsm8k \
+  --max-memory-ratio 0.90 \
+  --min-best-total-passes 30 \
+  --min-best-accuracy 0.30 \
+  --out-json outputs/public_task_model_ladder_gate_2026_06_07.json \
+  --out-md outputs/PUBLIC_TASK_MODEL_LADDER_GATE_2026_06_07.md
+```
+
+Current result: 2 local Ollama models, 200 total public-task rows, 43 total
+passes, best case Qwen2.5-abliterate-7B with 39/100, retained weaker 4B case
+with 4/100, and peak guard VRAM ratio `0.8865`.
+
+Valid claim:
+
+- public-task coverage is reported as a guarded two-model ladder rather than a
+  single isolated result.
+
+Invalid claim:
+
+- this proves monotonic scaling, fused quantized retention, leaderboard-scale
+  quality, or SOTA reasoning performance.
 
 ## Allocation Family Proxy Gate
 
