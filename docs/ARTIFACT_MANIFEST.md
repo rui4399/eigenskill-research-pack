@@ -31,7 +31,8 @@ paper claims.
 | Public task model ladder gate | `outputs/PUBLIC_TASK_MODEL_LADDER_GATE_2026_06_07.md` |
 | Baseline/readiness gap dashboard | `outputs/BASELINE_GAP_DASHBOARD_2026_06_06.md` |
 | Claim matrix | `docs/PAPER_CLAIM_MATRIX.md` |
-| System gate command book | `docs/SYSTEM_EVIDENCE_GATES.md` |
+| System gate index | `docs/SYSTEM_EVIDENCE_GATES.md` |
+| System gate command runbook | `docs/SYSTEM_EVIDENCE_RUNBOOK.md` |
 | Current ICLR/CCF-A style draft | `paper_drafts/eigenskill_q_iclr_ccfa_draft_en_2026_06_07.md` |
 
 ## Supporting System Artifacts

@@ -27,7 +27,8 @@ Read the repository in this order:
 2. `outputs/real_system_packer_2026-06-05/EVIDENCE_LEDGER_2026_06_06.md`
    for the current gate set.
 3. `docs/ARTIFACT_MANIFEST.md` for the shortest artifact map.
-4. `paper_drafts/eigenskill_q_iclr_ccfa_draft_en_2026_06_07.md` only after
+4. `docs/SYSTEM_EVIDENCE_GATES.md` for the short gate index.
+5. `paper_drafts/eigenskill_q_iclr_ccfa_draft_en_2026_06_07.md` only after
    checking the evidence boundary.
 
 The strongest supported findings are:
@@ -113,6 +114,7 @@ For detailed gate commands and claim boundaries, see:
 
 ```text
 docs/SYSTEM_EVIDENCE_GATES.md
+docs/SYSTEM_EVIDENCE_RUNBOOK.md
 ```
 
 ## Model Weights
