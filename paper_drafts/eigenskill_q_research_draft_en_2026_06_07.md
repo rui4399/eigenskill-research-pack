@@ -200,34 +200,44 @@ Let an LLM contain linear modules indexed by `i in {1, ..., n}`. Module `i` has
 weight `W_i` and storage cost `c_i`. Given a bit set `{4, 8}` and an average-bit
 budget `B`, the allocation problem is:
 
-```text
-b_i in {4, 8}
-sum_i c_i b_i <= B * sum_i c_i
-```
+\[
+b_i \in \{4,8\},
+\qquad
+\sum_{i=1}^{n} c_i b_i
+\le
+B\sum_{i=1}^{n}c_i.
+\]
 
 For a calibration split `D`, define the full-precision negative log-likelihood:
 
-```text
-L(W; D)
-```
+\[
+L(W;D).
+\]
 
 and the one-module fake-quant loss:
 
-```text
-L(W_{-i}, Q4(W_i); D).
-```
+\[
+L\!\left(W_{-i}, Q_4(W_i);D\right).
+\]
 
 The positive module sensitivity is:
 
-```text
-delta_i(D) = max(L(W_{-i}, Q4(W_i); D) - L(W; D), 0).
-```
+\[
+\delta_i(D)
+=
+\max\!\left\{
+  L\!\left(W_{-i}, Q_4(W_i);D\right)-L(W;D),
+  0
+\right\}.
+\]
 
 A cost-normalized ranking score is:
 
-```text
-r_i(D) = delta_i(D) / c_i.
-```
+\[
+r_i(D)
+=
+\frac{\delta_i(D)}{c_i}.
+\]
 
 Single-split allocation ranks modules by `r_i(D)` and promotes the highest
 scoring modules to 8-bit until the budget is exhausted. Calibration split
@@ -331,6 +341,37 @@ captures the failure mode relevant to mixed-precision allocation: rank
 inversions become more likely when the calibration split is small, when
 per-module loss increments have high variance, or when many modules have small
 pairwise margins near the high-bit allocation threshold.
+
+The proof sketch is a direct concentration argument. Let
+\(\varepsilon_i(D)=\widehat{r}_i(D)-r_i^\star\). A pairwise sign inversion can
+occur only if the normalized estimation errors close the population margin:
+
+\[
+\mathcal{E}_{ij}
+\subseteq
+\left\{
+  |\varepsilon_i(D)|+|\varepsilon_j(D)|
+  \ge \Delta_{ij}
+\right\}.
+\tag{6a}
+\]
+
+By the union bound,
+
+\[
+\Pr(\mathcal{E}_{ij})
+\le
+\Pr\!\left(|\varepsilon_i(D)|\ge \frac{\Delta_{ij}}{2}\right)
++
+\Pr\!\left(|\varepsilon_j(D)|\ge \frac{\Delta_{ij}}{2}\right).
+\tag{6b}
+\]
+
+Since
+\(\operatorname{Var}[\widehat{r}_i(D)]\le\sigma_i^2/(m c_i^2)\), applying
+Chebyshev to both terms gives Eq. (6). Thus the useful system intuition is not
+that the bound is tight, but that the error term scales like estimator
+variance divided by squared rank margin.
 
 The rank-inversion gate uses a plug-in version of this bound. For each
 calibration size, it treats the deterministic prompt-seed sensitivity estimates
@@ -555,7 +596,21 @@ sample \(D_a\). The reported mean and nonparametric confidence interval are
 \]
 
 where \(\overline{z}^{(q),*}\) denotes a bootstrap resample mean over the 15
-seed-pair scores.
+seed-pair scores. Concretely, for bootstrap draw \(b\), draw indices
+\(\pi_b(1),\ldots,\pi_b(15)\) with replacement from the 15 observed seed pairs
+and compute
+
+\[
+\overline{z}^{(q),*}_b
+=
+\frac{1}{15}\sum_{\ell=1}^{15} z_{\pi_b(\ell)}^{(q)}.
+\tag{11a}
+\]
+
+The interval in Eq. (11) is the percentile interval over
+\(\{\overline{z}^{(q),*}_b\}_{b=1}^{B_{\mathrm{boot}}}\). It is used as an
+uncertainty disclosure for the measured prompt pool, not as an independent-pair
+guarantee.
 
 | Metric | Value |
 |---|---:|
@@ -625,9 +680,33 @@ G_q(8,2)
 \]
 
 The bootstrap confidence interval in the table is computed from resampled
-copies of \(G_q(8,2)\). A positive lower endpoint is treated as evidence that
-the measured \(n=8\) seed-pair distribution dominates \(n=2\) in this fixed
-prompt-pool setting.
+copies of \(G_q(8,2)\). For bootstrap draw \(b\),
+
+\[
+G^{*}_{q,b}(8,2)
+=
+\frac{1}{|\mathcal{Z}^{(q),*}_{8,b}|}
+  \sum_{z\in\mathcal{Z}^{(q),*}_{8,b}}z
+-
+\frac{1}{|\mathcal{Z}^{(q),*}_{2,b}|}
+  \sum_{z\in\mathcal{Z}^{(q),*}_{2,b}}z,
+\tag{12a}
+\]
+
+and the reported gain interval is
+
+\[
+\mathrm{CI}_{0.95}\!\left(G_q\right)
+=
+\left[
+  Q_{0.025}\!\left(\{G^{*}_{q,b}\}_{b=1}^{B_{\mathrm{boot}}}\right),
+  Q_{0.975}\!\left(\{G^{*}_{q,b}\}_{b=1}^{B_{\mathrm{boot}}}\right)
+\right].
+\tag{12b}
+\]
+
+A positive lower endpoint is treated as evidence that the measured \(n=8\)
+seed-pair distribution dominates \(n=2\) in this fixed prompt-pool setting.
 
 | Metric | n=2 mean | n=8 mean | Mean gain | Bootstrap 95% gain CI | P(n=8 pair > n=2 pair) |
 |---|---:|---:|---:|---:|---:|
@@ -680,6 +759,19 @@ p^{\mathrm{Holm}}_{(k)}
 \right\}.
 \tag{15}
 \]
+
+Equivalently, under family-wise error level \(\alpha\), the ordered hypotheses
+are rejected step-down while
+
+\[
+p_{(k)}
+\le
+\frac{\alpha}{3-k+1}.
+\tag{15a}
+\]
+
+We report adjusted p-values rather than only binary rejection decisions so the
+gate remains auditable when additional metrics are added later.
 
 | Metric | Observed gain | Dominance | Raw p | Holm-adjusted p | Extreme null samples |
 |---|---:|---:|---:|---:|---:|
