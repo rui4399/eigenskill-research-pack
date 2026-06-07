@@ -54,6 +54,9 @@ In compressed form, the supported claims are:
   matched baseline pack covering public-calibration PPL, subset50 task
   execution, and PC-side runtime/VRAM, with the explicit negative result that
   the quantized local paths are slower than FP16;
+- the same official PTQ variants now have true 100-row matched MMLU/GSM8K
+  subset execution and PC-side runtime gates, with max task drop 0.03 versus
+  FP16 and the same negative local-speed boundary;
 - the same FP16/AutoAWQ/GPTQModel Qwen2.5-0.5B variants have deterministic
   IFEval-style instruction-following execution and runtime smoke gates, kept as
   execution-path evidence because the FP16 baseline is 0/8;
@@ -121,7 +124,7 @@ The next paper-strengthening steps are:
 1. faithful public quantization baselines under matched budgets;
 2. larger WikiText2/C4 slices and broader calibration-seed sweeps beyond the
    current n=2/4/8 Qwen2.5-0.5B curve;
-3. downstream task-retention evaluation beyond tiny smoke gates;
+3. downstream task-retention evaluation beyond 50/100-row local subset gates;
 4. interaction-aware/global-feedback allocation checks;
 5. real packed-runtime or on-device TTFT/tokens/s/peak-memory measurements.
 

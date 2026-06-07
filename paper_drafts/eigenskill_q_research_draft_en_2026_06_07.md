@@ -22,7 +22,7 @@ fake-quant loss sensitivity on multiple calibration views, allocates a fixed
 `{4,8}`-bit budget through cross-split consensus sensitivity, and records every
 paper-facing result through executable evidence gates. Across Qwen3-0.6B,
 Qwen3-1.7B, OLMo2-0425-1B-Instruct, and SmolLM2-1.7B short-slice diagnostics,
-the current evidence ledger passes 33/33 gates. The calibration-instability
+the current evidence ledger passes 35/35 gates. The calibration-instability
 gate finds 3/3 unstable model/dataset cases with mean score/cost Spearman
 0.0713 and mean top-20 Jaccard 0.1022. A Qwen2.5 perturbation matrix further
 separates calibration sample-size and model-scale effects: within-model
@@ -55,6 +55,9 @@ executions and a separate PC-side runtime profile; because FP16 is 0/8, this is
 reported only as execution-path evidence.
 For AutoAWQ and GPTQModel, a matched local baseline pack ties public-calibration
 PPL, subset50 task execution, and subset50 runtime into one cited evidence unit;
+the later true subset100 gate adds 600 matched public MMLU/GSM8K executions
+with a paired PC-side runtime profile while preserving the same local-only
+boundary;
 it records lower guarded VRAM than FP16 but slower local tokens/s. We also add
 aligned expanded public PPL gates for the public-calibrated W4/G128
 Qwen2.5-0.5B AutoAWQ and GPTQModel artifacts, each evaluating 16 WikiText2 plus
@@ -291,7 +294,7 @@ future allocator.
 ## 7. Evidence Gates
 
 Every paper-facing claim is indexed by a gate JSON and a Markdown report. The
-current ledger passes 33/33 gates. The most important gates are:
+current ledger passes 35/35 gates. The most important gates are:
 
 | Gate | Evidence | Valid claim | Non-claim |
 |---|---|---|---|
@@ -308,6 +311,8 @@ current ledger passes 33/33 gates. The most important gates are:
 | Official PTQ runtime profile | FP16/AutoAWQ/GPTQModel Qwen2.5-0.5B PC-side runtime profile; see `outputs/OFFICIAL_PTQ_RUNTIME_PROFILE_2026_06_07.md`. | TTFT, tokens/s, and peak guarded VRAM are reported for the same task-smoke path. | Not mobile deployment, not production runtime speedup, not energy savings, and not AWQ/GPTQ competitiveness. |
 | Official PTQ matched subset50 | FP16/AutoAWQ/GPTQModel Qwen2.5-0.5B on 300 guarded public subset executions; see `outputs/OFFICIAL_PTQ_TASK_SUBSET50_MATRIX_2026_06_07.md`. | Official-package artifacts run the same 50-row MMLU and 50-row GSM8K subsets; MMLU is 13/50 for FP16, 11/50 for AutoAWQ, and 13/50 for GPTQModel. | Leaderboard-scale task retention, reasoning quality, or AWQ/GPTQ competitiveness. |
 | Official PTQ subset50 runtime | PC-side subset50 runtime profile; see `outputs/OFFICIAL_PTQ_SUBSET50_RUNTIME_PROFILE_2026_06_07.md`. | TTFT, tokens/s, and guarded VRAM are reported for the 300-task subset path. | Not mobile deployment, not production runtime speedup, and not energy savings. |
+| Official PTQ matched subset100 | FP16/AutoAWQ/GPTQModel Qwen2.5-0.5B on 600 guarded public subset executions; see `outputs/OFFICIAL_PTQ_TASK_SUBSET100_MATRIX_2026_06_07.md`. | Official-package artifacts run the regenerated true 100-row MMLU and 100-row GSM8K subsets; MMLU is 25/100 for FP16, 23/100 for AutoAWQ, and 22/100 for GPTQModel, with max drop 0.03. | Leaderboard-scale task retention, broad reasoning quality, large-model evidence, or AWQ/GPTQ competitiveness. |
+| Official PTQ subset100 runtime | PC-side subset100 runtime profile; see `outputs/OFFICIAL_PTQ_SUBSET100_RUNTIME_PROFILE_2026_06_07.md`. | TTFT, tokens/s, and guarded VRAM are reported for the 600-task subset path; quantized variants reduce guarded VRAM but are slower than FP16 locally. | Not mobile deployment, not production runtime speedup, and not energy savings. |
 | Official PTQ deterministic IFEval-style execution | FP16/AutoAWQ/GPTQModel Qwen2.5-0.5B on 24 guarded deterministic instruction-following executions; see `outputs/OFFICIAL_PTQ_TASK_IFEVAL_V2_MATRIX_2026_06_07.md`. | Official-package artifacts run the same JSON/keyword/length-constrained IFEval-style fixture; FP16 is 0/8, AutoAWQ is 1/8, and GPTQModel is 1/8. | Broad IFEval retention, instruction-following superiority, or AWQ/GPTQ competitiveness. |
 | Official PTQ IFEval-style runtime | PC-side runtime profile for the deterministic IFEval-style fixture; see `outputs/OFFICIAL_PTQ_RUNTIME_IFEVAL_V2_PROFILE_2026_06_07.md`. | TTFT, tokens/s, and guarded VRAM are reported for the 24-execution instruction-smoke path. | Not mobile deployment, not production runtime speedup, and not energy savings. |
 | Official PTQ matched baseline pack | AutoAWQ/GPTQModel Qwen2.5-0.5B public-calibration PPL, subset50 task, and subset50 runtime evidence; see `outputs/OFFICIAL_PTQ_MATCHED_BASELINE_PACK_QWEN25_0P5B_2026_06_07.md`. | A local matched 0.5B baseline package reports 4 16-prompt PPL slices, 5714 PPL tokens, 300 task executions, 300 runtime executions, max PPL ratio 1.2570, max task drop 0.0400, max VRAM ratio 0.9010, and max quantized tokens/s ratio 0.3315 versus FP16. | Not leaderboard-scale evidence, not large-model AWQ/GPTQ competitiveness, not production runtime, not mobile deployment, not energy evidence, and not SOTA PTQ. |

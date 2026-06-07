@@ -10,7 +10,7 @@ by an executable gate and an explicit claim boundary.
 ## Evidence Ledger
 
 `train_python/build_current_evidence_ledger.py` is the stable public entry
-point for the current paper-facing gate set. It fixes the 33 gate paths in one
+point for the current paper-facing gate set. It fixes the 35 gate paths in one
 manifest, rebuilds the ledger, and avoids copying a long `--gate` list across
 README files and paper appendices.
 
@@ -21,7 +21,7 @@ python train_python/build_current_evidence_ledger.py
 ```
 
 `train_python/build_evidence_ledger.py` is the lower-level builder for custom
-or future gate manifests. The expanded form of the current 33-gate ledger is:
+or future gate manifests. The expanded form of the current 35-gate ledger is:
 
 ```bash
 python train_python/build_evidence_ledger.py \
@@ -49,6 +49,8 @@ python train_python/build_evidence_ledger.py \
   --gate official_ptq_runtime_profile=outputs/official_ptq_runtime_profile_2026_06_07.json \
   --gate official_ptq_task_subset50=outputs/official_ptq_task_subset50_matrix_2026_06_07.json \
   --gate official_ptq_subset50_runtime_profile=outputs/official_ptq_subset50_runtime_profile_2026_06_07.json \
+  --gate official_ptq_task_subset100=outputs/official_ptq_task_subset100_matrix_2026_06_07.json \
+  --gate official_ptq_subset100_runtime_profile=outputs/official_ptq_subset100_runtime_profile_2026_06_07.json \
   --gate official_ptq_ifeval_v2=outputs/official_ptq_task_ifeval_v2_matrix_2026_06_07.json \
   --gate official_ptq_ifeval_v2_runtime_profile=outputs/official_ptq_runtime_ifeval_v2_profile_2026_06_07.json \
   --gate official_ptq_matched_baseline_pack=outputs/official_ptq_matched_baseline_pack_qwen25_0p5b_2026_06_07.json \
@@ -62,11 +64,11 @@ python train_python/build_evidence_ledger.py \
   --out-md outputs/real_system_packer_2026-06-05/EVIDENCE_LEDGER_2026_06_06.md
 ```
 
-The current ledger passes with 33/33 gates across repo hygiene, calibration
+The current ledger passes with 35/35 gates across repo hygiene, calibration
 robustness, artifact integrity, kernel, runtime wiring, selected-row, C++
 runtime, decode integration, QKV replacement, quality, task-retention, runtime profile, and
 capability-retention/model-ladder, allocation-comparator, rotation-comparator, and
-matched PTQ baseline, deterministic IFEval-style PTQ execution, expanded AutoAWQ public PPL, PTQ-comparator, and
+matched PTQ baseline, true subset100 official PTQ task/runtime evidence, deterministic IFEval-style PTQ execution, expanded AutoAWQ public PPL, PTQ-comparator, and
 paper-alignment evidence categories.
 
 Valid claim:
@@ -157,14 +159,14 @@ Current gate:
 ```bash
 python train_python/gate_paper_evidence_alignment.py \
   --paper paper_drafts/eigenskill_q_research_draft_en_2026_06_07.md \
-  --expected-gate-count 33 \
+  --expected-gate-count 35 \
   --out-json outputs/paper_evidence_alignment_gate_2026_06_07.json \
   --out-md outputs/PAPER_EVIDENCE_ALIGNMENT_GATE_2026_06_07.md
 ```
 
-Current result: 22/22 required evidence references present, referenced repo
+Current result: 24/24 required evidence references present, referenced repo
 paths found and 0 missing, 0 stale forbidden tokens, 0 unsafe non-negated claim
-lines, and the paper mentions the current 33-gate ledger.
+lines, and the paper mentions the current 35-gate ledger.
 
 Valid claim:
 
@@ -375,6 +377,75 @@ Valid claim:
 
 - FP16, AutoAWQ, and GPTQModel Qwen2.5-0.5B variants have PC-side TTFT,
   tokens/s, and peak VRAM measurements on the same guarded subset50 path.
+
+Invalid claim:
+
+- this proves Redmi/mobile deployment, production runtime speedup, energy
+  improvement, or official AWQ/GPTQ competitiveness.
+
+## Official PTQ Matched Task Subset100 Matrix
+
+The same task gate also summarizes the regenerated true 100-row public subset
+fixtures. These files are produced by `build_public_task_smoke.py` with
+`--gsm8k-count 100 --mmlu-count 100 --file-tag subset100`; the resulting JSONL
+fixtures contain 100 rows each.
+
+Current gate:
+
+```bash
+python train_python/gate_official_ptq_task_retention.py \
+  --matrix-title "Official PTQ Matched Task Subset100 Matrix" \
+  --evidence-label "100-row matched public MMLU/GSM8K subsets" \
+  --case fp16:mmlu=outputs/official_ptq_task_fp16_mmlu_subset100_summary_2026_06_07.json=outputs/official_ptq_task_fp16_mmlu_subset100_gpu_guard_2026_06_07.json \
+  --case fp16:gsm8k=outputs/official_ptq_task_fp16_gsm8k_subset100_summary_2026_06_07.json=outputs/official_ptq_task_fp16_gsm8k_subset100_gpu_guard_2026_06_07.json \
+  --case autoawq:mmlu=outputs/official_ptq_task_awq_mmlu_subset100_summary_2026_06_07.json=outputs/official_ptq_task_awq_mmlu_subset100_gpu_guard_2026_06_07.json \
+  --case autoawq:gsm8k=outputs/official_ptq_task_awq_gsm8k_subset100_summary_2026_06_07.json=outputs/official_ptq_task_awq_gsm8k_subset100_gpu_guard_2026_06_07.json \
+  --case gptqmodel:mmlu=outputs/official_ptq_task_gptqmodel_mmlu_subset100_summary_2026_06_07.json=outputs/official_ptq_task_gptqmodel_mmlu_subset100_gpu_guard_2026_06_07.json \
+  --case gptqmodel:gsm8k=outputs/official_ptq_task_gptqmodel_gsm8k_subset100_summary_2026_06_07.json=outputs/official_ptq_task_gptqmodel_gsm8k_subset100_gpu_guard_2026_06_07.json \
+  --min-tasks-per-case 100 \
+  --max-memory-ratio 0.85 \
+  --max-accuracy-drop 0.25 \
+  --out-json outputs/official_ptq_task_subset100_matrix_2026_06_07.json \
+  --out-md outputs/OFFICIAL_PTQ_TASK_SUBSET100_MATRIX_2026_06_07.md
+```
+
+Current result: 6 cases, 3 variants, 2 task formats, 600 total task executions,
+75 total passes, max accuracy drop versus FP16 `0.03`, no zero-accuracy FP16
+baseline format, and peak guard VRAM ratio `0.5210`. MMLU is 25/100 for FP16,
+23/100 for AutoAWQ, and 22/100 for GPTQModel; GSM8K is 2/100 for FP16, 1/100
+for AutoAWQ, and 2/100 for GPTQModel.
+
+Valid claim:
+
+- FP16, AutoAWQ, and GPTQModel Qwen2.5-0.5B variants can all be loaded and
+  evaluated on the same true 100-row public MMLU and 100-row public GSM8K
+  subsets under GPU guard.
+
+Invalid claim:
+
+- this proves leaderboard-scale task retention, reasoning quality, official
+  AWQ/GPTQ competitiveness, or production inference performance.
+
+## Official PTQ Subset100 Runtime Profile Gate
+
+Current gate:
+
+```bash
+python train_python/gate_official_ptq_runtime_profile.py \
+  --matrix-json outputs/official_ptq_task_subset100_matrix_2026_06_07.json \
+  --out-json outputs/official_ptq_subset100_runtime_profile_2026_06_07.json \
+  --out-md outputs/OFFICIAL_PTQ_SUBSET100_RUNTIME_PROFILE_2026_06_07.md
+```
+
+Current result: 3 variants, 6 cases, 600 tasks, mean `14.8764` tokens/s, mean
+TTFT `0.251615` s, peak guarded VRAM ratio `0.5210`, and peak guarded VRAM
+`4247` MiB. AutoAWQ and GPTQModel reduce guarded VRAM versus FP16 on this local
+Transformers/GPTQModel path, but both are slower than FP16.
+
+Valid claim:
+
+- FP16, AutoAWQ, and GPTQModel Qwen2.5-0.5B variants have PC-side TTFT,
+  tokens/s, and peak VRAM measurements on the same guarded subset100 path.
 
 Invalid claim:
 
@@ -692,7 +763,7 @@ Invalid claim:
 `train_python/run_official_awq_smoke.py` is a minimal package-readiness probe.
 It exists to verify that AutoAWQ can execute, save local quantized artifacts,
 and run one short generation smoke under the GPU guard. It is intentionally not
-part of the 33-gate paper-facing ledger.
+part of the 35-gate paper-facing ledger.
 
 Example WSL/GPU command:
 

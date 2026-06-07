@@ -17,7 +17,7 @@ def write_gate(repo_root: Path, relative: str) -> None:
 
 class BuildCurrentEvidenceLedgerTests(unittest.TestCase):
     def test_current_manifest_has_expected_gate_count(self) -> None:
-        self.assertEqual(len(current.CURRENT_GATE_SPECS), 33)
+        self.assertEqual(len(current.CURRENT_GATE_SPECS), 35)
 
     def test_build_current_ledger_keeps_relative_sources(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
@@ -29,7 +29,7 @@ class BuildCurrentEvidenceLedgerTests(unittest.TestCase):
                 result = current.build_current_ledger(repo_root, Path("ledger.json"), Path("ledger.md"))
 
             self.assertTrue(result["passed"])
-            self.assertEqual(result["gate_count"], 33)
+            self.assertEqual(result["gate_count"], 35)
             self.assertEqual(
                 result["entries"][0]["path"].replace("\\", "/"),
                 current.CURRENT_GATE_SPECS[0][1],

@@ -44,6 +44,8 @@ CURRENT_GATE_SPECS: tuple[tuple[str, str], ...] = (
     ("official_ptq_runtime_profile", "outputs/official_ptq_runtime_profile_2026_06_07.json"),
     ("official_ptq_task_subset50", "outputs/official_ptq_task_subset50_matrix_2026_06_07.json"),
     ("official_ptq_subset50_runtime_profile", "outputs/official_ptq_subset50_runtime_profile_2026_06_07.json"),
+    ("official_ptq_task_subset100", "outputs/official_ptq_task_subset100_matrix_2026_06_07.json"),
+    ("official_ptq_subset100_runtime_profile", "outputs/official_ptq_subset100_runtime_profile_2026_06_07.json"),
     ("official_ptq_ifeval_v2", "outputs/official_ptq_task_ifeval_v2_matrix_2026_06_07.json"),
     ("official_ptq_ifeval_v2_runtime_profile", "outputs/official_ptq_runtime_ifeval_v2_profile_2026_06_07.json"),
     ("official_ptq_matched_baseline_pack", "outputs/official_ptq_matched_baseline_pack_qwen25_0p5b_2026_06_07.json"),

@@ -41,6 +41,9 @@ The current evidence supports:
 - a local matched AutoAWQ/GPTQModel Qwen2.5-0.5B W4/G128 baseline pack that
   ties public-calibration PPL, subset50 MMLU/GSM8K execution, and PC-side
   runtime/VRAM into one explicit claim boundary;
+- a true 100-row matched official PTQ subset gate over the same
+  FP16/AutoAWQ/GPTQModel Qwen2.5-0.5B variants, covering 600 public MMLU/GSM8K
+  executions with max drop 0.03 versus FP16 and a paired PC-side runtime profile;
 - deterministic IFEval-style execution and runtime smoke gates for the same
   FP16/AutoAWQ/GPTQModel Qwen2.5-0.5B variants, treated as execution-path
   evidence because the FP16 baseline is 0/8;
@@ -73,7 +76,7 @@ Current AAAI-facing critical path:
    measured seed/bootstrap artifacts.
 2. Real quantization: expand the AutoAWQ/GPTQModel matched pack beyond the
    0.5B readiness setting and report negative runtime results honestly.
-3. Downstream tasks: move from subset50 and deterministic IFEval-style
+3. Downstream tasks: move from subset50/subset100 and deterministic IFEval-style
    execution evidence toward stronger MMLU/GSM8K/IFEval retention on actual
    quantized variants.
 4. Scale: add at least one representative 3B/7B row if the 8GB local GPU can
@@ -107,7 +110,8 @@ The blockers are concrete:
 2. Larger evaluation: more WikiText2/C4 prompts and broader calibration-seed sweeps.
 3. Downstream retention: larger MMLU/GSM8K/IFEval or similar task slices on the
    actual quantized/fused variants; current IFEval-style evidence is only an
-   8-row deterministic execution smoke.
+   8-row deterministic execution smoke, and current public PTQ task evidence is
+   still local 50/100-row subset coverage rather than leaderboard-scale.
 4. Statistical robustness: the first n=2/4/8 CSI curve is now gated, but larger
    n grids, more prompt pools, and consensus-vs-single-split confidence
    intervals are still needed.

@@ -2,11 +2,11 @@
 
 > CCF 风格论文初稿，2026-06-05。本文按正式学术论文结构组织，写法参考经典系统/模型论文的“问题清晰化、方法简洁化、实验证据驱动”范式，但不复用其原文表述。当前稿件是技术报告级草案，尚未满足正式投稿所需的完整基线、硬件与统计显著性要求。
 >
-> 状态更新，2026-06-07：本中文稿保留为中文读者版/历史草稿，不是当前投稿主稿。当前更接近投稿骨架的版本是 `paper_drafts/eigenskill_q_research_draft_en_2026_06_07.md`，它已纳入 33-gate evidence ledger、calibration robustness stress、sensitivity perturbation matrix、calibration seed stability、CSI-vs-n calibration-size curve、consensus transfer boundary、interaction-aware swap boundary、public-task model ladder、official PTQ task-execution smoke、official PTQ matched subset50/runtime profile、official PTQ deterministic IFEval-style execution/runtime profile、official PTQ matched baseline pack、AutoAWQ/GPTQModel aligned 16-prompt public PPL gates、official PTQ readiness matrix 和 paper-evidence alignment gate。若两者不一致，以新版英文稿和 `docs/PAPER_CLAIM_MATRIX.md` 为准。
+> 状态更新，2026-06-07：本中文稿保留为中文读者版/历史草稿，不是当前投稿主稿。当前更接近投稿骨架的版本是 `paper_drafts/eigenskill_q_research_draft_en_2026_06_07.md`，它已纳入 35-gate evidence ledger、calibration robustness stress、sensitivity perturbation matrix、calibration seed stability、CSI-vs-n calibration-size curve、consensus transfer boundary、interaction-aware swap boundary、public-task model ladder、official PTQ task-execution smoke、official PTQ matched subset50/subset100 runtime profile、official PTQ deterministic IFEval-style execution/runtime profile、official PTQ matched baseline pack、AutoAWQ/GPTQModel aligned 16-prompt public PPL gates、official PTQ readiness matrix 和 paper-evidence alignment gate。若两者不一致，以新版英文稿和 `docs/PAPER_CLAIM_MATRIX.md` 为准。
 
 ## 摘要
 
-大语言模型在资源受限环境中的部署受到显存、访存带宽和推理路径共同限制。后训练量化是降低成本的重要路径，但统一低比特量化往往在关键模块引入过大误差，而混合精度分配又依赖少量校准样本估计模块敏感度，容易受到校准分割噪声影响。本文将问题收敛为：在很小校准预算下，模块敏感度排序到底有多不稳定，以及跨分割一致性是否能降低错误位宽分配的风险。EigenSkill-Q 当前是一份可复现实验工件，而不是生产级量化器。它分别在 WikiText2/C4 等校准视图上估计线性模块的低比特损失增量，在固定平均位宽预算下构建 consensus allocation，并通过 claim matrix 与 evidence ledger 约束每一条可公开声明。当前英文主稿对应 30 个通过的 evidence gates，覆盖校准不稳定性、prompt-seed 稳定性、随机基线压力、跨分割迁移、交互式 swap 边界、Q-Palette 风格拉格朗日分配代理、AutoAWQ/GPTQModel Qwen2.5-0.5B W4/G128 对齐 16-prompt public PPL readiness，以及 PC 侧 subset50 runtime/VRAM 负结果。实验表明，跨数据集一致性能够把“有用但不稳定”的敏感度信号转化为更稳健的短切片 fake-quant 分配依据；同时，官方 PTQ readiness 结果只说明本地基线包可执行，并不支持 SOTA、生产 runtime、移动端部署或端到端加速声明。
+大语言模型在资源受限环境中的部署受到显存、访存带宽和推理路径共同限制。后训练量化是降低成本的重要路径，但统一低比特量化往往在关键模块引入过大误差，而混合精度分配又依赖少量校准样本估计模块敏感度，容易受到校准分割噪声影响。本文将问题收敛为：在很小校准预算下，模块敏感度排序到底有多不稳定，以及跨分割一致性是否能降低错误位宽分配的风险。EigenSkill-Q 当前是一份可复现实验工件，而不是生产级量化器。它分别在 WikiText2/C4 等校准视图上估计线性模块的低比特损失增量，在固定平均位宽预算下构建 consensus allocation，并通过 claim matrix 与 evidence ledger 约束每一条可公开声明。当前英文主稿对应 35 个通过的 evidence gates，覆盖校准不稳定性、prompt-seed 稳定性、随机基线压力、跨分割迁移、交互式 swap 边界、Q-Palette 风格拉格朗日分配代理、AutoAWQ/GPTQModel Qwen2.5-0.5B W4/G128 对齐 16-prompt public PPL readiness，以及 PC 侧 subset50/subset100 runtime/VRAM 负结果。实验表明，跨数据集一致性能够把“有用但不稳定”的敏感度信号转化为更稳健的短切片 fake-quant 分配依据；同时，官方 PTQ readiness 结果只说明本地基线包可执行，并不支持 SOTA、生产 runtime、移动端部署或端到端加速声明。
 
 **关键词**：大语言模型；后训练量化；混合精度；校准稳定性；模型压缩；C++ 审计工具
 
@@ -150,7 +150,7 @@ EigenSkill-Q 当前实现中，模型加载和 fake quant PPL 评估仍由 Pytho
 
 评估数据为 WikiText2 与 C4 的公开文本短切片。本文报告的主要 PPL 来自 PyTorch fake quant 诊断，不代表 packed INT4 runtime 的真实延迟或显存收益。
 
-官方 PTQ readiness 另行覆盖 `Qwen/Qwen2.5-0.5B-Instruct` 上的 AutoAWQ 与 GPTQModel W4/G128 本地包。该部分用于说明公开校准、加载、短 PPL、subset50 任务执行和 PC 侧 runtime/VRAM 路径已经接通；它仍不是完整 AWQ/GPTQ 竞争基线。
+官方 PTQ readiness 另行覆盖 `Qwen/Qwen2.5-0.5B-Instruct` 上的 AutoAWQ 与 GPTQModel W4/G128 本地包。该部分用于说明公开校准、加载、短 PPL、subset50/subset100 任务执行和 PC 侧 runtime/VRAM 路径已经接通；它仍不是完整 AWQ/GPTQ 竞争基线。
 
 ### 4.2 评价指标
 
@@ -265,7 +265,7 @@ Qwen3-1.7B 和 OLMo2 的相关 guarded runs 也低于 85%，其中 Qwen3 peaked 
 
 当前仓库已把 AutoAWQ 与 GPTQModel 的 Qwen2.5-0.5B W4/G128 本地包纳入统一 readiness matrix。两者均使用公开校准提示，均扩展到 WikiText2/C4 各 16 个 public PPL prompts；两个包合计覆盖 5714 个 PPL eval tokens，最大 package-vs-FP16 PPL ratio 为 1.2570。
 
-同一 matched baseline pack 还合并了 300 次 subset50 public task executions 与 PC 侧 runtime/VRAM profile。随后新增的 deterministic IFEval-style gate 覆盖 FP16、AutoAWQ、GPTQModel 三种 Qwen2.5-0.5B 变体共 24 次指令格式执行，并记录单独 runtime profile；由于 FP16 baseline 为 0/8，这部分只能作为执行路径证据，而不是任务保持率证据。这个结果最重要的含义是边界清晰：量化包在本地 Transformers/GPTQModel 路径下降低了部分 guarded VRAM，但 tokens/s 慢于 FP16。因此它是 readiness 与负结果记录，不是加速结果。
+同一 matched baseline pack 还合并了 300 次 subset50 public task executions 与 PC 侧 runtime/VRAM profile；新补充的 true subset100 gate 进一步覆盖 600 次 matched public MMLU/GSM8K executions，最大相对 FP16 drop 为 0.03。随后新增的 deterministic IFEval-style gate 覆盖 FP16、AutoAWQ、GPTQModel 三种 Qwen2.5-0.5B 变体共 24 次指令格式执行，并记录单独 runtime profile；由于 FP16 baseline 为 0/8，这部分只能作为执行路径证据，而不是任务保持率证据。这个结果最重要的含义是边界清晰：量化包在本地 Transformers/GPTQModel 路径下降低了部分 guarded VRAM，但 tokens/s 慢于 FP16。因此它是 readiness 与负结果记录，不是加速结果。
 
 ## 6 讨论
 
@@ -285,7 +285,7 @@ EigenSkill-Q 当前是 fake-quant 诊断框架，而不是 GPTQ/AWQ/SmoothQuant/
 
 1. 当前评估仍是 PyTorch fake quant，不能支持真实延迟、显存占用或能耗结论。
 2. 数据切片较短，PPL 结果应视为诊断信号，而非完整 benchmark。
-3. 尚未完整纳入 GPTQ、AWQ、SmoothQuant、QuaRot、SpinQuant 等公开强基线；现有 AutoAWQ/GPTQModel 证据仅覆盖 Qwen2.5-0.5B 的 public-calibrated readiness、16-prompt PPL、subset50 任务执行与 PC 侧 runtime/VRAM 观测。
+3. 尚未完整纳入 GPTQ、AWQ、SmoothQuant、QuaRot、SpinQuant 等公开强基线；现有 AutoAWQ/GPTQModel 证据仅覆盖 Qwen2.5-0.5B 的 public-calibrated readiness、16-prompt PPL、subset50/subset100 任务执行与 PC 侧 runtime/VRAM 观测。
 4. 当前只覆盖少数模型家族，尚不足以证明跨架构普适性。
 5. 位宽集合仅为 `{4,8}`，未覆盖 INT3、INT2、FP4、NF4、MXFP4 等格式。
 6. C++ 工具主要负责 allocation/report/audit，模型执行仍依赖 Python/PyTorch。
