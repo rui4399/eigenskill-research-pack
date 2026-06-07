@@ -35,6 +35,9 @@ PLACEHOLDER_PATTERNS = (
 STALE_CLAIM_PATTERNS = (
     re.compile(r"\bcurrent strongest package is v2\b", re.IGNORECASE),
     re.compile(r"\bcurrent strongest result is v2\b", re.IGNORECASE),
+    re.compile(r"eigenskill_q_iclr_ccfa_draft_en_2026_06_07", re.IGNORECASE),
+    re.compile(r"\bICLR/CCF-A-style\b", re.IGNORECASE),
+    re.compile(r'README\s+"Main Evidence"\s+table', re.IGNORECASE),
 )
 
 

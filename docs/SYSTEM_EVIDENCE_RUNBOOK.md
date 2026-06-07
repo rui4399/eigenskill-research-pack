@@ -144,7 +144,7 @@ Current gate:
 
 ```bash
 python train_python/gate_paper_evidence_alignment.py \
-  --paper paper_drafts/eigenskill_q_iclr_ccfa_draft_en_2026_06_07.md \
+  --paper paper_drafts/eigenskill_q_research_draft_en_2026_06_07.md \
   --expected-gate-count 22 \
   --out-json outputs/paper_evidence_alignment_gate_2026_06_07.json \
   --out-md outputs/PAPER_EVIDENCE_ALIGNMENT_GATE_2026_06_07.md
@@ -161,8 +161,8 @@ Valid claim:
 
 Invalid claim:
 
-- this proves the paper is accepted, complete, or sufficient for ICLR/CCF-A
-  submission.
+- this proves the paper is accepted, complete, or sufficient for any target
+  venue.
 
 ## Public Task Benchmark Gate
 

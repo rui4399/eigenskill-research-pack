@@ -34,7 +34,7 @@ paper claims.
 | Claim matrix | `docs/PAPER_CLAIM_MATRIX.md` |
 | System gate index | `docs/SYSTEM_EVIDENCE_GATES.md` |
 | System gate command runbook | `docs/SYSTEM_EVIDENCE_RUNBOOK.md` |
-| Current ICLR/CCF-A style draft | `paper_drafts/eigenskill_q_iclr_ccfa_draft_en_2026_06_07.md` |
+| Current research draft | `paper_drafts/eigenskill_q_research_draft_en_2026_06_07.md` |
 
 ## Non-Ledger Readiness Probes
 

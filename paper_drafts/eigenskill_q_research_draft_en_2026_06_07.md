@@ -2,7 +2,7 @@
 
 **Consensus Sensitivity Allocation with Gated Packed-System Evidence**
 
-> ICLR/CCF-A-style research draft, 2026-06-07. This is a paper draft grounded in
+> Research draft, 2026-06-07. This is a paper-format draft grounded in
 > the current repository evidence ledger. It is not a submission-ready claim.
 > It does not claim state-of-the-art quantization or official PTQ baseline
 > superiority. It does not claim production runtime readiness or hardware

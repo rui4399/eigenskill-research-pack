@@ -1,11 +1,11 @@
 # Paper Evidence Alignment Gate
 
-Date: `2026-06-07T00:46:33+00:00`
+Date: `2026-06-07T00:57:24+00:00`
 Status: **PASS**
 
 ## Summary
 
-- paper: `paper_drafts\eigenskill_q_iclr_ccfa_draft_en_2026_06_07.md`
+- paper: `paper_drafts\eigenskill_q_research_draft_en_2026_06_07.md`
 - required evidence references: `9`
 - missing required references: `0`
 - referenced repo paths: `15`

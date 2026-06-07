@@ -46,6 +46,25 @@ class PublicRepoHygieneTests(unittest.TestCase):
             self.assertEqual(len(findings), 1)
             self.assertEqual(findings[0]["path"], "train_python/README.md")
 
+    def test_flags_stale_public_positioning_references(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            docs = root / "docs"
+            docs.mkdir()
+            note = docs / "PAPER_CLAIM_MATRIX.md"
+            note.write_text(
+                "\n".join(
+                    [
+                        "# Claims",
+                        "Use README \"Main Evidence\" table for the result.",
+                        "The current draft is eigenskill_q_iclr_ccfa_draft_en_2026_06_07.",
+                    ]
+                ),
+                encoding="utf-8",
+            )
+            findings = hygiene.find_placeholders(root, ["docs/PAPER_CLAIM_MATRIX.md"])
+            self.assertEqual(len(findings), 2)
+
     def test_clean_report_passes(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)

@@ -9,9 +9,10 @@ reduce worst-split allocation risk under the same bit budget?
 ```
 
 This repository is intentionally **not** presented as a new production
-quantizer, a SOTA PTQ method, or a completed mobile runtime. The public tree is
-organized around evidence boundaries so that a reviewer can tell which claims
-are supported, which are proxies, and which are still blockers.
+quantizer, a SOTA PTQ method, or a completed mobile runtime. Treat the public
+tree as a curated evidence artifact, not as a lab notebook: claims should be
+read through the gate ledger and claim matrix, while raw `outputs/` files are
+supporting material unless explicitly referenced by a gate.
 
 ## Status Snapshot
 
@@ -36,7 +37,9 @@ SOTA or deployment claims.
 
 ## Core Evidence Path
 
-Read the repository in this order:
+Read the repository in this order. Do not start by browsing the raw `outputs/`
+directory; it contains committed gate inputs, intermediate summaries, and
+historical artifacts.
 
 1. `docs/README.md` for the documentation map.
 2. `docs/PAPER_CLAIM_MATRIX.md` for the claim firewall.
@@ -46,9 +49,8 @@ Read the repository in this order:
    baselines and mobile/runtime blockers.
 5. `docs/ARTIFACT_MANIFEST.md` for the curated artifact map.
 
-The many helper scripts and raw `outputs/` files are supporting material. They
-should not be read as independent paper claims unless the claim matrix lists
-the corresponding gate and boundary.
+If a result is not listed in `docs/PAPER_CLAIM_MATRIX.md`, it is not a
+paper-facing claim.
 
 ## Supported Claims
 
@@ -99,6 +101,10 @@ Do not treat the number of Markdown reports, C++ files, or output artifacts as a
 research contribution. The paper-facing contribution is the gated evidence set
 and its claim boundaries.
 
+The original EigenSkill idea included broader spectral-routing, edge-runtime,
+and swarm-system directions. Those ideas are outside this public artifact unless
+a gate and claim-matrix row explicitly bring them back with evidence.
+
 ## C++ Scope
 
 The C++ tree is intentionally tiered:
@@ -129,10 +135,10 @@ python train_python/gate_public_repo_hygiene.py \
   --out-md outputs/real_system_packer_2026-06-05/PUBLIC_REPO_HYGIENE_GATE_2026_06_06.md
 ```
 
-For the full ledger rebuild command, see:
+Rebuild the current paper-facing ledger:
 
 ```bash
-python train_python/build_current_evidence_ledger.py
+python train_python/build_current_evidence_ledger.py --expected-gate-count 22
 ```
 
 For detailed gate commands and claim boundaries, see:
@@ -165,8 +171,8 @@ This is narrower than the original EigenSkill vision, but it is reviewable:
 it defines a measurable instability problem, gives a conservative allocation
 response, and keeps system claims behind executable gates.
 
-Current paper draft:
+Current research draft:
 
 ```text
-paper_drafts/eigenskill_q_iclr_ccfa_draft_en_2026_06_07.md
+paper_drafts/eigenskill_q_research_draft_en_2026_06_07.md
 ```
