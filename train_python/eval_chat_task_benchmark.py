@@ -169,12 +169,15 @@ def load_tasks(path: Path, task_format: str = "native") -> list[dict[str, Any]]:
     return tasks
 
 
-def apply_task_limit(tasks: list[dict[str, Any]], limit: int) -> list[dict[str, Any]]:
+def apply_task_limit(tasks: list[dict[str, Any]], limit: int, offset: int = 0) -> list[dict[str, Any]]:
+    if offset < 0:
+        raise ValueError("task offset must be >= 0")
     if limit < 0:
         raise ValueError("task limit must be >= 0")
+    selected = tasks[offset:]
     if limit == 0:
-        return tasks
-    return tasks[:limit]
+        return selected
+    return selected[:limit]
 
 
 def format_task_prompt(prompt: str, *, no_think: bool = False) -> str:
@@ -464,6 +467,7 @@ def main() -> None:
     parser.add_argument("--max-new-tokens", type=int, default=32)
     parser.add_argument("--max-seq-len", type=int, default=512)
     parser.add_argument("--limit", type=int, default=0, help="Evaluate only the first N tasks; 0 means all tasks.")
+    parser.add_argument("--offset", type=int, default=0, help="Skip the first N tasks before applying --limit.")
     parser.add_argument("--chat-template", action="store_true")
     parser.add_argument("--no-think", action="store_true", help="Append /no_think once to each task prompt.")
     parser.add_argument("--local-files-only", action="store_true")
@@ -490,7 +494,7 @@ def main() -> None:
         raise SystemExit("CUDA requested but torch.cuda.is_available() is false")
 
     dtype = {"float16": torch.float16, "bfloat16": torch.bfloat16, "float32": torch.float32}[args.dtype]
-    tasks = apply_task_limit(load_tasks(Path(args.tasks_jsonl), task_format=args.task_format), args.limit)
+    tasks = apply_task_limit(load_tasks(Path(args.tasks_jsonl), task_format=args.task_format), args.limit, args.offset)
     tokenizer = AutoTokenizer.from_pretrained(args.model, local_files_only=args.local_files_only, trust_remote_code=True)
     model = load_causal_lm(args, dtype)
     model.eval()
@@ -507,6 +511,7 @@ def main() -> None:
         "task_format": args.task_format,
         "task_count": len(tasks),
         "task_limit": args.limit,
+        "task_offset": args.offset,
         "chat_template": args.chat_template,
         "no_think": args.no_think,
         "max_new_tokens": args.max_new_tokens,

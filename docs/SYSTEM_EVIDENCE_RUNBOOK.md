@@ -78,11 +78,11 @@ python train_python/build_evidence_ledger.py \
   --out-md outputs/real_system_packer_2026-06-05/EVIDENCE_LEDGER_2026_06_06.md
 ```
 
-The current ledger passes with 49/49 gates across repo hygiene, calibration
+The current ledger passes with 52/52 gates across repo hygiene, calibration
 robustness, CSI trend significance, CSI null permutation, rank-inversion theory, artifact integrity, kernel, runtime wiring, selected-row, C++
 runtime, decode integration, QKV replacement, quality, task-retention, runtime profile, and
 capability-retention/model-ladder, allocation-comparator, rotation-comparator, and
-matched PTQ baseline, true subset100 official PTQ task/runtime evidence, deterministic IFEval-style PTQ execution, expanded AutoAWQ public PPL, Qwen2.5-1.5B GPTQModel task-execution subset evidence, Qwen2.5-1.5B FP16/AutoAWQ/GPTQModel subset100 plus GSM8K200/MMLU100 task/runtime/statistical-interval evidence, full-GSM8K local 7B public-task coverage, PTQ-comparator, and
+matched PTQ baseline, true subset100 official PTQ task/runtime evidence, deterministic IFEval-style PTQ execution, expanded AutoAWQ public PPL, Qwen2.5-1.5B GPTQModel task-execution subset evidence, Qwen2.5-1.5B FP16/AutoAWQ/GPTQModel subset100 plus GSM8K200/MMLU100 plus sharded GSM8K500 task/runtime/statistical-interval evidence, full-GSM8K local 7B public-task coverage, PTQ-comparator, and
 paper-alignment evidence categories, plus extended W4A8 attention/MLP real-activation reconstruction.
 
 Valid claim:
@@ -239,7 +239,7 @@ Current gate:
 ```bash
 python train_python/gate_paper_evidence_alignment.py \
   --paper paper_drafts/eigenskill_q_research_draft_en_2026_06_07.md \
-  --expected-gate-count 49 \
+  --expected-gate-count 52 \
   --out-json outputs/paper_evidence_alignment_gate_2026_06_08.json \
   --out-md outputs/PAPER_EVIDENCE_ALIGNMENT_GATE_2026_06_08.md
 ```
@@ -778,6 +778,34 @@ reports FP16 at 5.0148 tok/s and 0.453859 s mean TTFT under HF offload, AutoAWQ
 at 12.9601 tok/s and 0.187606 s mean TTFT, GPTQModel at 10.5705 tok/s and
 0.234437 s mean TTFT, and peak guarded VRAM falling from 6761 MiB to 6024 MiB
 for AutoAWQ and 5516 MiB for GPTQModel.
+
+Sharded GSM8K500 extension:
+
+```bash
+# The first 200 GSM8K rows are reused from TASK_TAG=gsm8k200_mmlu100.
+# The second shard uses eval_chat_task_benchmark.py --offset 200 --limit 300
+# on data_eval/public_task_benchmark_v1/gsm8k_test_gsm8kfull.jsonl for
+# FP16, AutoAWQ, and GPTQModel under the same 90% GPU guard.
+
+python train_python/merge_chat_task_shards.py \
+  --shard outputs/official_ptq_task_fp16_qwen25_1p5b_gsm8k_gsm8k200_mmlu100_summary_2026_06_08.json=outputs/official_ptq_task_fp16_qwen25_1p5b_gsm8k_gsm8k200_mmlu100_gpu_guard_2026_06_08.json \
+  --shard outputs/official_ptq_task_fp16_qwen25_1p5b_gsm8k_gsm8kfull_shard0200_0499_summary_2026_06_08.json=outputs/official_ptq_task_fp16_qwen25_1p5b_gsm8k_gsm8kfull_shard0200_0499_gpu_guard_2026_06_08.json \
+  --out-json outputs/official_ptq_task_fp16_qwen25_1p5b_gsm8k_gsm8kfull_500_summary_2026_06_08.json \
+  --out-md outputs/OFFICIAL_PTQ_TASK_FP16_QWEN25_1P5B_GSM8K_GSM8KFULL_500_2026_06_08.md \
+  --out-guard-json outputs/official_ptq_task_fp16_qwen25_1p5b_gsm8k_gsm8kfull_500_gpu_guard_2026_06_08.json
+```
+
+The same merge command is repeated for AutoAWQ and GPTQModel, then gated with
+`gate_official_ptq_task_retention.py`, `gate_official_ptq_runtime_profile.py`,
+and `gate_official_ptq_task_statistics.py`.
+
+Current GSM8K500 result: 1500 guarded task executions across FP16, AutoAWQ, and
+GPTQModel. FP16 gets 43/500, AutoAWQ gets 46/500, and GPTQModel gets 40/500.
+The task gate records max measured drop `0.0060` versus FP16 and peak guard VRAM
+ratio `0.8295`. The paired statistics gate reports minimum bootstrap lower
+bound `-0.034` under 10,000 samples. This is a larger single-task local
+retention slice, not full GSM8K quantized retention or leaderboard-scale
+evidence.
 The statistical gate reports paired bootstrap candidate-minus-FP16 deltas:
 AutoAWQ GSM8K `+0.0150` with CI `[-0.0350, +0.0650]`, AutoAWQ MMLU `+0.0100`
 with CI `[-0.1000, +0.1200]`, GPTQModel GSM8K `+0.0050` with CI `[-0.0400,

@@ -1,0 +1,112 @@
+{
+  "date": "2026-06-07T20:57:18+00:00",
+  "passed": true,
+  "matrix_title": "Qwen2.5-1.5B FP16 vs AutoAWQ vs GPTQModel GSM8K500 task matrix",
+  "evidence_label": "matched Qwen2.5-1.5B local GSM8K500 task evidence for FP16, AutoAWQ, and GPTQModel",
+  "summary": {
+    "case_count": 3,
+    "variant_count": 3,
+    "format_count": 1,
+    "variants": [
+      "autoawq",
+      "fp16",
+      "gptqmodel"
+    ],
+    "task_formats": [
+      "gsm8k"
+    ],
+    "baseline_variant": "fp16",
+    "total_tasks": 1500,
+    "total_passes": 129,
+    "mean_accuracy": 0.086,
+    "max_accuracy_drop_vs_fp16": 0.0059999999999999915,
+    "baseline_zero_accuracy_formats": [],
+    "max_guard_vram_ratio": 0.8294687768371979,
+    "mean_tokens_per_second": 9.871861978425738,
+    "mean_ttft_seconds": 0.31483456164666634
+  },
+  "cases": [
+    {
+      "variant": "fp16",
+      "task_format": "gsm8k",
+      "summary_path": "outputs\\official_ptq_task_fp16_qwen25_1p5b_gsm8k_gsm8kfull_500_summary_2026_06_08.json",
+      "guard_path": "outputs\\official_ptq_task_fp16_qwen25_1p5b_gsm8k_gsm8kfull_500_gpu_guard_2026_06_08.json",
+      "model": "Qwen/Qwen2.5-1.5B-Instruct",
+      "tasks": 500,
+      "passes": 43,
+      "accuracy": 0.086,
+      "mean_tokens_per_second": 5.104150755302451,
+      "mean_ttft_seconds": 0.4908828226320003,
+      "guard_returncode": 0,
+      "killed_by_guard": false,
+      "killed_by_timeout": false,
+      "guard_max_memory_used_ratio": 0.8294687768371979,
+      "guard_max_memory_used_mib": 6761,
+      "guard_memory_total_mib": 8151
+    },
+    {
+      "variant": "autoawq",
+      "task_format": "gsm8k",
+      "summary_path": "outputs\\official_ptq_task_awq_qwen25_1p5b_gsm8k_gsm8kfull_500_summary_2026_06_08.json",
+      "guard_path": "outputs\\official_ptq_task_awq_qwen25_1p5b_gsm8k_gsm8kfull_500_gpu_guard_2026_06_08.json",
+      "model": "/home/rui/eigenskill_artifacts/qwen25_1p5b_awq_model_2026_06_07",
+      "tasks": 500,
+      "passes": 46,
+      "accuracy": 0.092,
+      "mean_tokens_per_second": 13.73596530463154,
+      "mean_ttft_seconds": 0.19728952116799933,
+      "guard_returncode": 0,
+      "killed_by_guard": false,
+      "killed_by_timeout": false,
+      "guard_max_memory_used_ratio": 0.7390504232609496,
+      "guard_max_memory_used_mib": 6024,
+      "guard_memory_total_mib": 8151
+    },
+    {
+      "variant": "gptqmodel",
+      "task_format": "gsm8k",
+      "summary_path": "outputs\\official_ptq_task_gptqmodel_qwen25_1p5b_gsm8k_gsm8kfull_500_summary_2026_06_08.json",
+      "guard_path": "outputs\\official_ptq_task_gptqmodel_qwen25_1p5b_gsm8k_gsm8kfull_500_gpu_guard_2026_06_08.json",
+      "model": "/home/rui/eigenskill_artifacts/qwen25_1p5b_gptq_model_smoke4_2026_06_08",
+      "tasks": 500,
+      "passes": 40,
+      "accuracy": 0.08,
+      "mean_tokens_per_second": 10.775469875343221,
+      "mean_ttft_seconds": 0.2563313411399994,
+      "guard_returncode": 0,
+      "killed_by_guard": false,
+      "killed_by_timeout": false,
+      "guard_max_memory_used_ratio": 0.6784443626548889,
+      "guard_max_memory_used_mib": 5530,
+      "guard_memory_total_mib": 8151
+    }
+  ],
+  "comparisons": [
+    {
+      "variant": "autoawq",
+      "task_format": "gsm8k",
+      "baseline_variant": "fp16",
+      "baseline_accuracy": 0.086,
+      "accuracy": 0.092,
+      "accuracy_drop_vs_baseline": -0.006000000000000005,
+      "baseline_passes": 43,
+      "passes": 46,
+      "baseline_tasks": 500,
+      "tasks": 500
+    },
+    {
+      "variant": "gptqmodel",
+      "task_format": "gsm8k",
+      "baseline_variant": "fp16",
+      "baseline_accuracy": 0.086,
+      "accuracy": 0.08,
+      "accuracy_drop_vs_baseline": 0.0059999999999999915,
+      "baseline_passes": 43,
+      "passes": 40,
+      "baseline_tasks": 500,
+      "tasks": 500
+    }
+  ],
+  "failures": [],
+  "claim_boundary": "Valid claim: FP16 and official-package quantized artifacts are loadable and evaluated on the same matched Qwen2.5-1.5B local GSM8K500 task evidence for FP16, AutoAWQ, and GPTQModel under GPU guard. Formats with zero FP16 accuracy are execution-only evidence. Invalid claim: this is leaderboard-scale task retention, SOTA PTQ quality, or a production inference benchmark."
+}

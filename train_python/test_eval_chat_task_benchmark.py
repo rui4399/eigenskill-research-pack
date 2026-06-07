@@ -57,8 +57,12 @@ class EvalChatTaskBenchmarkTests(unittest.TestCase):
         tasks = [{"id": str(i)} for i in range(5)]
         self.assertEqual(len(bench.apply_task_limit(tasks, 0)), 5)
         self.assertEqual([task["id"] for task in bench.apply_task_limit(tasks, 2)], ["0", "1"])
+        self.assertEqual([task["id"] for task in bench.apply_task_limit(tasks, 2, offset=2)], ["2", "3"])
+        self.assertEqual([task["id"] for task in bench.apply_task_limit(tasks, 0, offset=3)], ["3", "4"])
         with self.assertRaises(ValueError):
             bench.apply_task_limit(tasks, -1)
+        with self.assertRaises(ValueError):
+            bench.apply_task_limit(tasks, 1, offset=-1)
 
     def test_load_mmlu_style_jsonl(self) -> None:
         row = {
