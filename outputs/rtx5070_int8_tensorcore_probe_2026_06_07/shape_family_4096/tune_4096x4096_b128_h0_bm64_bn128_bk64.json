@@ -1,0 +1,85 @@
+{
+  "rows": 4096,
+  "cols": 4096,
+  "batch": 128,
+  "high_every": 0,
+  "low_rows": 4096,
+  "high_rows": 0,
+  "rowwise_mixed_ms": 3.6834781833333587,
+  "grouped_mixed_ms": 0.18947798333333785,
+  "int4_contiguous_ms": 0.14836546666667041,
+  "int4_unpacked_i8_ms": 0.13095735000003828,
+  "int4_packed_x_i8_ms": 0.09056531666669088,
+  "int4_unpacked_i8_x_i8_ms": 0.07848233333334065,
+  "torch_fp16_ms": 0.11683030000000372,
+  "rowwise_mixed_ms_samples": [
+    3.6834781833333587,
+    3.632403783333338,
+    3.876916183333338
+  ],
+  "grouped_mixed_ms_samples": [
+    0.17449418333335132,
+    0.18947798333333785,
+    0.19635745000001018
+  ],
+  "int4_contiguous_ms_samples": [
+    0.14836546666667041,
+    0.13457133333331464,
+    0.15173685000000603
+  ],
+  "int4_unpacked_i8_ms_samples": [
+    0.1320637833333175,
+    0.12336575000002625,
+    0.13095735000003828
+  ],
+  "int4_packed_x_i8_ms_samples": [
+    0.07946736666664123,
+    0.09261154999998429,
+    0.09056531666669088
+  ],
+  "int4_unpacked_i8_x_i8_ms_samples": [
+    0.034505483333369114,
+    0.07848233333334065,
+    0.08379159999994575
+  ],
+  "torch_fp16_ms_samples": [
+    0.11328388333335937,
+    0.11707809999996026,
+    0.11683030000000372
+  ],
+  "timing_repeats": 3,
+  "interleaved_timing": true,
+  "rowwise_speedup_vs_torch_fp16": 0.03171738617283686,
+  "grouped_speedup_vs_torch_fp16": 0.6165903707897862,
+  "int4_contiguous_speedup_vs_torch_fp16": 0.7874494154524779,
+  "int4_unpacked_i8_speedup_vs_torch_fp16": 0.8921248024640814,
+  "int4_packed_x_i8_speedup_vs_torch_fp16": 1.2900114999870902,
+  "int4_unpacked_i8_x_i8_speedup_vs_torch_fp16": 1.4886190947430993,
+  "int4_contiguous_speedup_vs_grouped": 1.2771030051018144,
+  "int4_unpacked_i8_speedup_vs_packed_contiguous": 1.132929665014045,
+  "int4_packed_x_i8_speedup_vs_packed_w4a16": 1.638215070927234,
+  "int4_unpacked_i8_x_i8_speedup_vs_w4_as_i8_w4a16": 1.6686220253393682,
+  "grouped_speedup_vs_rowwise": 19.440138207789687,
+  "rowwise_rel_l2": 0.1571779102087021,
+  "grouped_rel_l2": 0.15717759728431702,
+  "int4_contiguous_rel_l2": 0.15717759728431702,
+  "int4_unpacked_i8_rel_l2": 0.15717843174934387,
+  "int4_packed_x_i8_rel_l2": 0.1574273705482483,
+  "int4_unpacked_i8_x_i8_rel_l2": 0.1574273705482483,
+  "grouped_vs_rowwise_rel_l2": 0.00020609897910617292,
+  "int4_contiguous_vs_grouped_rel_l2": 0.0,
+  "int4_unpacked_i8_vs_packed_contiguous_rel_l2": 0.000256809318671003,
+  "int4_packed_x_i8_vs_w4a16_rel_l2": 0.00868027564138174,
+  "int4_unpacked_i8_x_i8_vs_packed_x_i8_rel_l2": 0.0,
+  "block_m": 64,
+  "block_n": 128,
+  "block_k": 64,
+  "mixed_payload_bytes": 8425472,
+  "int4_unpacked_i8_payload_bytes": 16793600,
+  "activation_i8_payload_bytes": 524800,
+  "fp16_weight_bytes": 33554432,
+  "compression_ratio_vs_fp16": 3.982498784637822,
+  "int4_unpacked_i8_compression_ratio_vs_fp16": 1.9980487804878049,
+  "device": "NVIDIA GeForce RTX 5070 Laptop GPU",
+  "max_memory_allocated_mib": 233.08203125
+}

@@ -71,6 +71,27 @@ halves the static compression benefit. Therefore, the next milestone is a
 quality-aware packed-W4/W4A8 path and a larger shape family gate, not another
 W4A16 block-size sweep.
 
+## Shape-Family Follow-up
+
+A bounded follow-up sweep keeps rows=4096, cols=4096, all rows INT4, and tests
+two batches (128 and 512) with eight BM/BN/BK configurations. It is intentionally
+small, but it checks whether the delayed-dequantization result is a single
+timing accident.
+
+Summary over 8 successful guarded runs:
+
+| metric | min | max |
+|---|---:|---:|
+| packed W4 x INT8 activation speed vs torch FP16 | 1.2900x | 1.7268x |
+| W4-as-I8 x INT8 activation speed vs torch FP16 | 1.4886x | 3.1372x |
+| packed W4 x INT8 activation speed vs packed W4A16 | 1.6382x | 2.5382x |
+| guard peak VRAM ratio | 0.6134 | 0.6219 |
+
+Artifacts:
+
+- `outputs/rtx5070_int8_tensorcore_probe_2026_06_07/shape_family_4096/TRITON_BLOCK_TUNING_SUMMARY.md`
+- `outputs/rtx5070_int8_tensorcore_probe_2026_06_07/shape_family_4096/tuning_results.jsonl`
+
 ## Artifacts
 
 - `outputs/rtx5070_int8_tensorcore_probe_2026_06_07/final_interleaved_b512/b512_bm64_bn128_bk64.json`
@@ -78,10 +99,11 @@ W4A16 block-size sweep.
 
 ## Claim Boundary
 
-Valid claim: on the local RTX 5070, a single 4096 x 4096, batch-512
-interleaved Triton diagnostic shows that packed W4 weights with per-batch INT8
-activations and delayed dequantization reach `1.6976x` torch FP16 latency while
-retaining about `3.9825x` weight-payload compression.
+Valid claim: on the local RTX 5070, a bounded 4096 x 4096, batch-128/512
+Triton shape-family probe shows that packed W4 weights with per-batch INT8
+activations and delayed dequantization beat torch FP16 in all eight measured
+configurations, with speedups from `1.2900x` to `1.7268x` while retaining about
+`3.9825x` weight-payload compression.
 
 Invalid claim: this proves end-to-end LLM acceleration, production runtime
 readiness, mobile performance, energy savings, model-quality preservation under

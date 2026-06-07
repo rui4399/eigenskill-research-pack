@@ -807,6 +807,11 @@ only retains about 1.9980x weight-payload compression. This is a W4A8-style
 kernel diagnostic rather than an end-to-end model claim: it introduces
 activation quantization, and the current evidence does not yet show downstream
 quality retention, TTFT/tokens/s wins, mobile performance, or energy savings.
+A bounded 4096 x 4096 shape-family follow-up over batch 128/512 and eight
+BM/BN/BK configurations keeps this conclusion directionally stable: packed W4
+x INT8 activation beats torch FP16 in all eight measured configurations
+(1.2900x--1.7268x), while W4-as-I8 x INT8 reaches 1.4886x--3.1372x at lower
+static compression.
 
 ## 9. Discussion
 
