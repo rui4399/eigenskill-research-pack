@@ -55,6 +55,7 @@ paper claims.
 | Qwen2.5-1.5B GSM8K200/MMLU100 statistics gate | `outputs/OFFICIAL_PTQ_TASK_QWEN25_1P5B_GSM8K200_MMLU100_STATISTICS_2026_06_08.md` |
 | Expanded GPTQModel public PPL gate | `outputs/OFFICIAL_GPTQMODEL_PUBLIC_CALIB_QWEN25_0P5B_BUDGET8_16_GATE_2026_06_07.md` |
 | Qwen2.5-1.5B GPTQModel public PPL gate | `outputs/OFFICIAL_GPTQMODEL_PUBLIC_CALIB_QWEN25_1P5B_16_GATE_2026_06_08.md` |
+| Qwen2.5-1.5B GPTQModel task-execution smoke | `outputs/OFFICIAL_GPTQMODEL_TASK_EXECUTION_QWEN25_1P5B_20_MATRIX_2026_06_08.md` |
 | W4A8 real-activation reconstruction gate | `outputs/w4a8_activation_reconstruction_2026_06_08/W4A8_ACTIVATION_RECONSTRUCTION_GATE.md` |
 | W4A8 extended attention/MLP reconstruction gate | `outputs/w4a8_activation_reconstruction_extended_2026_06_08/W4A8_ACTIVATION_RECONSTRUCTION_EXTENDED_GATE.md` |
 | Baseline/readiness gap dashboard | `outputs/BASELINE_GAP_DASHBOARD_2026_06_06.md` |
@@ -66,7 +67,7 @@ paper claims.
 ## Non-Ledger Readiness Probes
 
 These artifacts are useful for environment readiness and reviewer-risk
-tracking, but they are not counted in the 47-gate paper-facing ledger.
+tracking, but they are not counted in the 48-gate paper-facing ledger.
 
 | Purpose | Artifact | Boundary |
 |---|---|---|
@@ -138,4 +139,4 @@ one of the following is true:
 
 Future cleanup should reduce `outputs/` by moving scratch and raw intermediate
 files out of the main branch, but not at the cost of breaking the current
-46-gate reproducibility story.
+48-gate reproducibility story.

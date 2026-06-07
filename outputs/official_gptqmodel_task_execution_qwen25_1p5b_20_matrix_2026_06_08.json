@@ -1,0 +1,68 @@
+{
+  "date": "2026-06-07T18:48:32+00:00",
+  "passed": true,
+  "matrix_title": "Official GPTQModel Task-Execution Smoke Matrix",
+  "evidence_label": "GPTQModel Qwen2.5-1.5B MMLU20/GSM8K20 task-execution smokes",
+  "summary": {
+    "case_count": 2,
+    "variant_count": 1,
+    "format_count": 2,
+    "variants": [
+      "gptqmodel"
+    ],
+    "task_formats": [
+      "gsm8k",
+      "mmlu"
+    ],
+    "baseline_variant": "gptqmodel",
+    "total_tasks": 40,
+    "total_passes": 8,
+    "mean_accuracy": 0.19999999999999998,
+    "max_accuracy_drop_vs_fp16": 0.0,
+    "baseline_zero_accuracy_formats": [],
+    "max_guard_vram_ratio": 0.6671574039995093,
+    "mean_tokens_per_second": 10.068490125116808,
+    "mean_ttft_seconds": 0.35270804869999955
+  },
+  "cases": [
+    {
+      "variant": "gptqmodel",
+      "task_format": "mmlu",
+      "summary_path": "outputs\\official_ptq_task_gptqmodel_qwen25_1p5b_mmlu20_summary_2026_06_08.json",
+      "guard_path": "outputs\\official_ptq_task_gptqmodel_qwen25_1p5b_mmlu20_gpu_guard_2026_06_08.json",
+      "model": "/home/rui/eigenskill_artifacts/qwen25_1p5b_gptq_model_smoke4_2026_06_08",
+      "tasks": 20,
+      "passes": 7,
+      "accuracy": 0.35,
+      "mean_tokens_per_second": 8.94033512032144,
+      "mean_ttft_seconds": 0.3159168284499991,
+      "guard_returncode": 0,
+      "killed_by_guard": false,
+      "killed_by_timeout": false,
+      "guard_max_memory_used_ratio": 0.6671574039995093,
+      "guard_max_memory_used_mib": 5438,
+      "guard_memory_total_mib": 8151
+    },
+    {
+      "variant": "gptqmodel",
+      "task_format": "gsm8k",
+      "summary_path": "outputs\\official_ptq_task_gptqmodel_qwen25_1p5b_gsm8k20_summary_2026_06_08.json",
+      "guard_path": "outputs\\official_ptq_task_gptqmodel_qwen25_1p5b_gsm8k20_gpu_guard_2026_06_08.json",
+      "model": "/home/rui/eigenskill_artifacts/qwen25_1p5b_gptq_model_smoke4_2026_06_08",
+      "tasks": 20,
+      "passes": 1,
+      "accuracy": 0.05,
+      "mean_tokens_per_second": 11.196645129912177,
+      "mean_ttft_seconds": 0.38949926895000003,
+      "guard_returncode": 0,
+      "killed_by_guard": false,
+      "killed_by_timeout": false,
+      "guard_max_memory_used_ratio": 0.6671574039995093,
+      "guard_max_memory_used_mib": 5438,
+      "guard_memory_total_mib": 8151
+    }
+  ],
+  "comparisons": [],
+  "failures": [],
+  "claim_boundary": "Valid claim: FP16 and official-package quantized artifacts are loadable and evaluated on the same GPTQModel Qwen2.5-1.5B MMLU20/GSM8K20 task-execution smokes under GPU guard. Formats with zero FP16 accuracy are execution-only evidence. Invalid claim: this is leaderboard-scale task retention, SOTA PTQ quality, or a production inference benchmark."
+}

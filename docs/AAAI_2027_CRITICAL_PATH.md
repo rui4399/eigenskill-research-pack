@@ -109,9 +109,9 @@ Anything else stays in future work.
 1. Extend the new Qwen2.5-1.5B GSM8K200/MMLU100 gate beyond the first paired
    bootstrap CI row and, if runtime allows, full GSM8K before claiming broad
    task retention.
-2. Move beyond the new native Qwen2.5-1.5B GPTQModel 16+16 public PPL gate:
-   add either a matched task row or another native baseline family before
-   treating baseline confrontation as paper-ready.
+2. Expand the new native Qwen2.5-1.5B GPTQModel MMLU20/GSM8K20 task-execution
+   smoke into either a matched FP16/AutoAWQ/GPTQModel task row or a larger
+   GPTQModel slice before treating baseline confrontation as paper-ready.
 3. Attempt one 3B/7B row only after checking disk headroom.
 4. Add a downstream proxy for W4A8 activation quantization before using the
    extended attention/MLP drift audit in any quality argument.

@@ -10,7 +10,7 @@ by an executable gate and an explicit claim boundary.
 ## Evidence Ledger
 
 `train_python/build_current_evidence_ledger.py` is the stable public entry
-point for the current paper-facing gate set. It fixes the 46 gate paths in one
+point for the current paper-facing gate set. It fixes the 48 gate paths in one
 manifest, rebuilds the ledger, and avoids copying a long `--gate` list across
 README files and paper appendices.
 
@@ -21,7 +21,7 @@ python train_python/build_current_evidence_ledger.py
 ```
 
 `train_python/build_evidence_ledger.py` is the lower-level builder for custom
-or future gate manifests. The expanded form of the current 46-gate ledger is:
+or future gate manifests. The expanded form of the current 48-gate ledger is:
 
 ```bash
 python train_python/build_evidence_ledger.py \
@@ -62,6 +62,7 @@ python train_python/build_evidence_ledger.py \
   --gate official_awq_public_calib_16_eval=outputs/official_awq_public_calib_qwen25_0p5b_bundle_16_gate_2026_06_07.json \
   --gate official_awq_public_calib_1p5b_16_eval=outputs/official_awq_public_calib_qwen25_1p5b_bundle_16_gate_2026_06_07.json \
   --gate official_gptqmodel_public_calib_1p5b_16_eval=outputs/official_gptqmodel_public_calib_qwen25_1p5b_16_gate_2026_06_08.json \
+  --gate official_gptqmodel_task_execution_qwen25_1p5b_20=outputs/official_gptqmodel_task_execution_qwen25_1p5b_20_matrix_2026_06_08.json \
   --gate official_ptq_task_qwen25_1p5b_subset100=outputs/official_ptq_task_qwen25_1p5b_subset100_matrix_2026_06_07.json \
   --gate official_ptq_qwen25_1p5b_subset100_runtime_profile=outputs/official_ptq_qwen25_1p5b_subset100_runtime_profile_2026_06_07.json \
   --gate official_ptq_task_qwen25_1p5b_gsm8k200_mmlu100=outputs/official_ptq_task_qwen25_1p5b_gsm8k200_mmlu100_matrix_2026_06_08.json \
@@ -76,11 +77,11 @@ python train_python/build_evidence_ledger.py \
   --out-md outputs/real_system_packer_2026-06-05/EVIDENCE_LEDGER_2026_06_06.md
 ```
 
-The current ledger passes with 47/47 gates across repo hygiene, calibration
+The current ledger passes with 48/48 gates across repo hygiene, calibration
 robustness, CSI trend significance, CSI null permutation, rank-inversion theory, artifact integrity, kernel, runtime wiring, selected-row, C++
 runtime, decode integration, QKV replacement, quality, task-retention, runtime profile, and
 capability-retention/model-ladder, allocation-comparator, rotation-comparator, and
-matched PTQ baseline, true subset100 official PTQ task/runtime evidence, deterministic IFEval-style PTQ execution, expanded AutoAWQ public PPL, Qwen2.5-1.5B subset100 plus GSM8K200/MMLU100 task/runtime/statistical-interval evidence, PTQ-comparator, and
+matched PTQ baseline, true subset100 official PTQ task/runtime evidence, deterministic IFEval-style PTQ execution, expanded AutoAWQ public PPL, Qwen2.5-1.5B GPTQModel task-execution smoke, Qwen2.5-1.5B subset100 plus GSM8K200/MMLU100 task/runtime/statistical-interval evidence, PTQ-comparator, and
 paper-alignment evidence categories, plus extended W4A8 attention/MLP real-activation reconstruction.
 
 Valid claim:
@@ -237,7 +238,7 @@ Current gate:
 ```bash
 python train_python/gate_paper_evidence_alignment.py \
   --paper paper_drafts/eigenskill_q_research_draft_en_2026_06_07.md \
-  --expected-gate-count 47 \
+  --expected-gate-count 48 \
   --out-json outputs/paper_evidence_alignment_gate_2026_06_08.json \
   --out-md outputs/PAPER_EVIDENCE_ALIGNMENT_GATE_2026_06_08.md
 ```
@@ -245,7 +246,7 @@ python train_python/gate_paper_evidence_alignment.py \
 Current result: the generated alignment artifact records all configured required
 evidence references present, referenced repo paths found, 0 stale forbidden
 tokens, 0 unsafe non-negated claim lines, and the paper mentions the current
-46-gate ledger.
+48-gate ledger.
 
 Valid claim:
 
@@ -1006,7 +1007,7 @@ Invalid claim:
 `train_python/run_official_awq_smoke.py` is a minimal package-readiness probe.
 It exists to verify that AutoAWQ can execute, save local quantized artifacts,
 and run one short generation smoke under the GPU guard. It is intentionally not
-part of the 46-gate paper-facing ledger.
+part of the 48-gate paper-facing ledger.
 
 Example WSL/GPU command:
 
@@ -1414,6 +1415,30 @@ Current Qwen2.5-1.5B GPTQModel scale-up results:
 | smoke | 4 | 380 | 14.1567 | 16.3179 | 1.1527 | false | 0.8543 |
 | WikiText2 16 | 16 | 1413 | 16.9841 | 19.2981 | 1.1363 | true | 0.7698 |
 | C4 16 | 16 | 1444 | 21.4055 | 23.3815 | 1.0923 | true | 0.8266 |
+
+Qwen2.5-1.5B GPTQModel task-execution smoke gate:
+
+```bash
+python train_python/gate_official_ptq_task_retention.py \
+  --baseline-variant gptqmodel \
+  --required-variant gptqmodel \
+  --required-format mmlu \
+  --required-format gsm8k \
+  --min-tasks-per-case 20 \
+  --max-memory-ratio 0.90 \
+  --max-accuracy-drop 1.0 \
+  --matrix-title "Official GPTQModel Task-Execution Smoke Matrix" \
+  --evidence-label "GPTQModel Qwen2.5-1.5B MMLU20/GSM8K20 task-execution smokes" \
+  --case gptqmodel:mmlu=outputs/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu20_summary_2026_06_08.json=outputs/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu20_gpu_guard_2026_06_08.json \
+  --case gptqmodel:gsm8k=outputs/official_ptq_task_gptqmodel_qwen25_1p5b_gsm8k20_summary_2026_06_08.json=outputs/official_ptq_task_gptqmodel_qwen25_1p5b_gsm8k20_gpu_guard_2026_06_08.json \
+  --out-json outputs/official_gptqmodel_task_execution_qwen25_1p5b_20_matrix_2026_06_08.json \
+  --out-md outputs/OFFICIAL_GPTQMODEL_TASK_EXECUTION_QWEN25_1P5B_20_MATRIX_2026_06_08.md
+```
+
+Current task-execution smoke result: 40 guarded public task executions, MMLU
+7/20, GSM8K 1/20, mean `10.0685` tokens/s, mean TTFT `0.352708` s, and peak
+guard VRAM ratio `0.6672`. This is a native-package execution check only; it is
+not a matched FP16/AWQ comparison or leaderboard-scale retention result.
 
 Official PTQ readiness matrix:
 

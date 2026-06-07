@@ -387,6 +387,20 @@ def load_causal_lm(args: argparse.Namespace, dtype: Any):
             device_map=device_map,
             max_seq_len=args.max_seq_len,
         )
+    if args.loader == "gptqmodel":
+        from gptqmodel import GPTQModel
+
+        device = "cuda:0" if str(args.device) == "cuda" else str(args.device)
+        loaded = GPTQModel.from_quantized(
+            args.model,
+            device=device,
+            backend=args.gptq_backend,
+            trust_remote_code=True,
+        )
+        inner = getattr(loaded, "model", None)
+        if not hasattr(loaded, "generate") and hasattr(inner, "generate"):
+            return inner
+        return loaded
     raise ValueError(f"unsupported loader: {args.loader}")
 
 
@@ -439,9 +453,10 @@ def main() -> None:
     parser.add_argument("--tasks-jsonl", required=True)
     parser.add_argument("--task-format", choices=["native", "mmlu", "gsm8k", "ifeval"], default="native")
     parser.add_argument("--model", default="Qwen/Qwen3-0.6B")
-    parser.add_argument("--loader", choices=["hf", "autoawq"], default="hf")
+    parser.add_argument("--loader", choices=["hf", "autoawq", "gptqmodel"], default="hf")
     parser.add_argument("--device", default="cuda")
     parser.add_argument("--dtype", choices=["float16", "bfloat16", "float32"], default="float16")
+    parser.add_argument("--gptq-backend", default="gptq_torch")
     parser.add_argument("--hf-device-map", default="", help="Optional HF device_map, e.g. auto for CPU/GPU offload.")
     parser.add_argument("--hf-max-gpu-memory-mib", type=int, default=0)
     parser.add_argument("--hf-max-cpu-memory", default="64GiB")

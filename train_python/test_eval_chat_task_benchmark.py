@@ -201,6 +201,41 @@ class EvalChatTaskBenchmarkTests(unittest.TestCase):
         self.assertEqual(FakeAutoModelForCausalLM.called_kwargs["offload_folder"], "/tmp/hf-offload")
         self.assertTrue(FakeAutoModelForCausalLM.called_kwargs["low_cpu_mem_usage"])
 
+    def test_load_causal_lm_loads_gptqmodel_artifact(self) -> None:
+        class InnerModel:
+            def generate(self, **kwargs: object) -> None:
+                return None
+
+        class Wrapper:
+            model = InnerModel()
+
+        class FakeGPTQModel:
+            called_model = ""
+            called_kwargs = {}
+
+            @classmethod
+            def from_quantized(cls, model: str, **kwargs: object) -> object:
+                cls.called_model = model
+                cls.called_kwargs = dict(kwargs)
+                return Wrapper()
+
+        fake_gptqmodel = types.SimpleNamespace(GPTQModel=FakeGPTQModel)
+        args = Namespace(
+            loader="gptqmodel",
+            model="/tmp/qwen25-1p5b-gptq",
+            device="cuda",
+            gptq_backend="gptq_torch",
+        )
+
+        with mock.patch.dict(sys.modules, {"gptqmodel": fake_gptqmodel}):
+            loaded = bench.load_causal_lm(args, "float16")
+
+        self.assertIs(loaded, Wrapper.model)
+        self.assertEqual(FakeGPTQModel.called_model, args.model)
+        self.assertEqual(FakeGPTQModel.called_kwargs["device"], "cuda:0")
+        self.assertEqual(FakeGPTQModel.called_kwargs["backend"], "gptq_torch")
+        self.assertTrue(FakeGPTQModel.called_kwargs["trust_remote_code"])
+
 
 if __name__ == "__main__":
     unittest.main()
