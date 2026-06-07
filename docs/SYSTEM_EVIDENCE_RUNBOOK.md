@@ -613,6 +613,20 @@ Current GPTQModel public-calibrated smoke result:
 |---|---:|---:|---:|---:|---:|---:|
 | WikiText2 test eval | 4 | 380 | 19.381 | 25.677 | 1.3249 | 0.6234 |
 
+GPTQModel readiness gate:
+
+```bash
+python train_python/gate_official_gptqmodel_public_calib.py \
+  --summary-json outputs/official_gptqmodel_public_calib_qwen25_0p5b_wikitext2_summary_2026_06_07.json \
+  --guard-json outputs/official_gptqmodel_public_calib_qwen25_0p5b_gpu_guard_2026_06_07.json \
+  --min-tokens 128 \
+  --min-calibration-texts 4 \
+  --max-memory-ratio 0.85 \
+  --max-ppl-ratio 2.0 \
+  --out-json outputs/official_gptqmodel_public_calib_qwen25_0p5b_gate_2026_06_07.json \
+  --out-md outputs/OFFICIAL_GPTQMODEL_PUBLIC_CALIB_QWEN25_0P5B_GATE_2026_06_07.md
+```
+
 Aggregate gate:
 
 ```bash

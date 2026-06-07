@@ -1,5 +1,5 @@
 {
-  "date": "2026-06-06T23:41:49+00:00",
+  "date": "2026-06-07T00:03:14+00:00",
   "schema_version": 1,
   "passed": false,
   "item_count": 15,
@@ -306,6 +306,7 @@
       "paper_blocker": false,
       "description": "Public-calibration GPTQModel W4 group-128 smoke with guarded quantization, saved local artifact, reload through a conservative torch backend, and a tiny public WikiText2 matched PPL diagnostic.",
       "required_evidence_globs": [
+        "outputs/**/*official*gptqmodel*public*calib*gate*.json",
         "outputs/**/*official*gptqmodel*public*calib*summary*.json",
         "outputs/**/*official*gptqmodel*public*calib*gpu_guard*.json"
       ],
@@ -315,9 +316,10 @@
       "package_mode": "any",
       "claim_boundary": "Partial official-package readiness: it proves GPTQModel can quantize, save, reload, and evaluate a tiny public slice locally, but it is not a full GPTQ/AWQ competitive baseline or task-retention result.",
       "status": "covered",
-      "evidence_count": 2,
+      "evidence_count": 3,
       "evidence_task_count": 0,
       "evidence_matches": [
+        "outputs/official_gptqmodel_public_calib_qwen25_0p5b_gate_2026_06_07.json",
         "outputs/official_gptqmodel_public_calib_qwen25_0p5b_gpu_guard_2026_06_07.json",
         "outputs/official_gptqmodel_public_calib_qwen25_0p5b_wikitext2_summary_2026_06_07.json"
       ],
@@ -357,6 +359,7 @@
         "outputs/**/*official*awq*matched*ppl*summary*.json",
         "outputs/**/*official*awq*matched*ppl*gate*.json",
         "outputs/**/*official*awq*public*calib*.json",
+        "outputs/**/*official*gptqmodel*public*calib*gate*.json",
         "outputs/**/*official*gptqmodel*public*calib*.json"
       ],
       "proxy_evidence_globs": [
@@ -375,7 +378,7 @@
       "evidence_task_count": 0,
       "evidence_matches": [],
       "evidence_truncated": false,
-      "partial_evidence_count": 20,
+      "partial_evidence_count": 21,
       "partial_evidence_matches": [
         "outputs/official_awq_matched_ppl_gate_2026_06_07.json",
         "outputs/official_awq_matched_ppl_qwen25_0p5b_c4_gate_2026_06_07.json",
@@ -395,10 +398,10 @@
         "outputs/official_awq_public_calib_qwen25_0p5b_wikitext2_summary_2026_06_07.json",
         "outputs/official_awq_smoke_gate_2026_06_07.json",
         "outputs/official_awq_smoke_qwen25_0p5b_summary_2026_06_07.json",
-        "outputs/official_gptqmodel_public_calib_qwen25_0p5b_gpu_guard_2026_06_07.json",
-        "outputs/official_gptqmodel_public_calib_qwen25_0p5b_wikitext2_summary_2026_06_07.json"
+        "outputs/official_gptqmodel_public_calib_qwen25_0p5b_gate_2026_06_07.json",
+        "outputs/official_gptqmodel_public_calib_qwen25_0p5b_gpu_guard_2026_06_07.json"
       ],
-      "partial_evidence_truncated": false,
+      "partial_evidence_truncated": true,
       "proxy_evidence_count": 2,
       "proxy_evidence_matches": [
         "outputs/awq_gptq_proxy_qwen3_0p6b_c4_group128_summary.json",
