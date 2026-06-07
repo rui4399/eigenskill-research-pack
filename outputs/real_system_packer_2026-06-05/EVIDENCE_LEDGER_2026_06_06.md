@@ -1,6 +1,6 @@
 # Evidence Ledger
 
-Date: `2026-06-07T14:33:17+00:00`
+Date: `2026-06-07T14:50:27+00:00`
 Status: **PASS**
 Gates: `41 / 41` passed
 Categories: `allocation comparator, artifact integrity, c++ runtime, calibration robustness, capability retention, decode integration, kernel, matched PTQ baseline, official PTQ readiness, paper alignment, ptq comparator, qkv replacement, quality, repo hygiene, rotation comparator, runtime profile, runtime wiring, selected-row, task execution smoke, task execution subset, task retention, theory`
@@ -9,7 +9,7 @@ Categories: `allocation comparator, artifact integrity, c++ runtime, calibration
 
 | gate | category | status | key metrics | source |
 |---|---|---|---|---|
-| `public_hygiene` | repo hygiene | **PASS** | tracked files 2012; forbidden files 0; placeholders 0 | `outputs/real_system_packer_2026-06-05/public_repo_hygiene_gate_2026_06_06.json` |
+| `public_hygiene` | repo hygiene | **PASS** | tracked files 2028; forbidden files 0; placeholders 0 | `outputs/real_system_packer_2026-06-05/public_repo_hygiene_gate_2026_06_06.json` |
 | `calibration_instability` | calibration robustness | **PASS** | cases 3; unstable 3; min rho -0.0440; mean Spearman 0.0713; mean Jaccard 0.4349; top20 Jaccard 0.1022 | `outputs/calibration_instability_benchmark_2026_06_06.json` |
 | `sensitivity_perturbation_matrix` | calibration robustness | **PASS** | cases 3; sample-size rho 0.6356; model-scale rho 0.1273; separation 0.5082 | `outputs/sensitivity_perturbation_matrix_qwen25_2026_06_07.json` |
 | `calibration_seed_stability` | calibration robustness | **PASS** | cases 6; prompt selections 6; finite pairs 15; min rho 0.2284; mean rho CI [0.3557, 0.5174]; min top20 0.3793; mean top20 CI [0.4200, 0.5292]; mean Spearman 0.4324; mean Jaccard 0.5734; mean Jaccard CI [0.5375, 0.6120]; top20 Jaccard 0.4672 | `outputs/calibration_seed_stability_qwen25_0p5b_2026_06_07.json` |

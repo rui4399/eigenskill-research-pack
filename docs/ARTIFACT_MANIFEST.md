@@ -75,6 +75,7 @@ tracking, but they are not counted in the 41-gate paper-facing ledger.
 | Expanded GPTQModel public PPL gate | `outputs/OFFICIAL_GPTQMODEL_PUBLIC_CALIB_QWEN25_0P5B_BUDGET8_16_GATE_2026_06_07.md` | Shows the saved GPTQModel artifact can be reloaded and evaluated on the same 16-prompt WikiText2/C4 public slices as AutoAWQ; not GPTQ/AWQ competitive coverage. |
 | Official PTQ readiness matrix | `outputs/OFFICIAL_PTQ_READINESS_MATRIX_QWEN25_0P5B_2026_06_07.md` | Shows AutoAWQ and GPTQModel readiness probes are aligned on model, W4/G128 shape, WikiText2/C4 eval labels, and 2857-token public eval budget per package; not a faithful AWQ/GPTQ competition. |
 | Public calibration prompt manifest | `outputs/PUBLIC_CALIB_PROMPT_MANIFEST_2026_06_07.md` | Records the tiny public calibration prompt files; not an evaluation benchmark. |
+| RTX 5070 Triton mixed-GEMM kernel baseline | `outputs/TRITON_MIXED_GEMM_RTX5070_BASELINE_2026_06_07.md` | Records current grouped INT4/INT8 Triton kernel latency, compression, and guard memory on RTX 5070; negative speedup baseline for future fused-kernel work, not an acceleration claim. |
 
 ## Supporting System Artifacts
 
