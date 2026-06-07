@@ -181,6 +181,14 @@ def metric_parts(summary: dict[str, Any]) -> list[str]:
         parts.append(f"top20 gain {value:.4f}")
     if (value := finite_float(summary.get("mean_positive_jaccard_gain"))) is not None:
         parts.append(f"positive gain {value:.4f}")
+    if (value := finite_float(summary.get("min_full_range_gain_low"))) is not None:
+        parts.append(f"min gain CI low {value:.4f}")
+    if (value := finite_float(summary.get("min_full_range_dominance_probability"))) is not None:
+        parts.append(f"min dominance {value:.4f}")
+    if "all_full_range_gain_ci_positive" in summary:
+        parts.append(f"gain CI positive {summary.get('all_full_range_gain_ci_positive')}")
+    if "all_full_range_dominance_high" in summary:
+        parts.append(f"dominance high {summary.get('all_full_range_dominance_high')}")
     if (value := finite_float(summary.get("mean_empirical_inversion_rate_initial"))) is not None:
         parts.append(f"mean inversion init {value:.4f}")
     if (value := finite_float(summary.get("mean_empirical_inversion_rate_final"))) is not None:

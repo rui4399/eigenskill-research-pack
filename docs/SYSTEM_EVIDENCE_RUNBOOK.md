@@ -10,7 +10,7 @@ by an executable gate and an explicit claim boundary.
 ## Evidence Ledger
 
 `train_python/build_current_evidence_ledger.py` is the stable public entry
-point for the current paper-facing gate set. It fixes the 36 gate paths in one
+point for the current paper-facing gate set. It fixes the 37 gate paths in one
 manifest, rebuilds the ledger, and avoids copying a long `--gate` list across
 README files and paper appendices.
 
@@ -21,7 +21,7 @@ python train_python/build_current_evidence_ledger.py
 ```
 
 `train_python/build_evidence_ledger.py` is the lower-level builder for custom
-or future gate manifests. The expanded form of the current 36-gate ledger is:
+or future gate manifests. The expanded form of the current 37-gate ledger is:
 
 ```bash
 python train_python/build_evidence_ledger.py \
@@ -30,6 +30,7 @@ python train_python/build_evidence_ledger.py \
   --gate sensitivity_perturbation_matrix=outputs/sensitivity_perturbation_matrix_qwen25_2026_06_07.json \
   --gate calibration_seed_stability=outputs/calibration_seed_stability_qwen25_0p5b_2026_06_07.json \
   --gate csi_vs_n_curve=outputs/csi_vs_n_curve_qwen25_0p5b_2026_06_07.json \
+  --gate csi_trend_significance=outputs/csi_trend_significance_qwen25_0p5b_2026_06_07.json \
   --gate rank_inversion_theory=outputs/rank_inversion_theory_qwen25_0p5b_2026_06_07.json \
   --gate calibration_robustness_stress=outputs/calibration_robustness_stress_gate_2026_06_07.json \
   --gate consensus_transfer_boundary=outputs/consensus_transfer_boundary_gate_2026_06_07.json \
@@ -65,8 +66,8 @@ python train_python/build_evidence_ledger.py \
   --out-md outputs/real_system_packer_2026-06-05/EVIDENCE_LEDGER_2026_06_06.md
 ```
 
-The current ledger passes with 36/36 gates across repo hygiene, calibration
-robustness, rank-inversion theory, artifact integrity, kernel, runtime wiring, selected-row, C++
+The current ledger passes with 37/37 gates across repo hygiene, calibration
+robustness, CSI trend significance, rank-inversion theory, artifact integrity, kernel, runtime wiring, selected-row, C++
 runtime, decode integration, QKV replacement, quality, task-retention, runtime profile, and
 capability-retention/model-ladder, allocation-comparator, rotation-comparator, and
 matched PTQ baseline, true subset100 official PTQ task/runtime evidence, deterministic IFEval-style PTQ execution, expanded AutoAWQ public PPL, PTQ-comparator, and
@@ -160,14 +161,14 @@ Current gate:
 ```bash
 python train_python/gate_paper_evidence_alignment.py \
   --paper paper_drafts/eigenskill_q_research_draft_en_2026_06_07.md \
-  --expected-gate-count 36 \
+  --expected-gate-count 37 \
   --out-json outputs/paper_evidence_alignment_gate_2026_06_07.json \
   --out-md outputs/PAPER_EVIDENCE_ALIGNMENT_GATE_2026_06_07.md
 ```
 
 Current result: 25/25 required evidence references present, referenced repo
 paths found and 0 missing, 0 stale forbidden tokens, 0 unsafe non-negated claim
-lines, and the paper mentions the current 36-gate ledger.
+lines, and the paper mentions the current 37-gate ledger.
 
 Valid claim:
 
@@ -764,7 +765,7 @@ Invalid claim:
 `train_python/run_official_awq_smoke.py` is a minimal package-readiness probe.
 It exists to verify that AutoAWQ can execute, save local quantized artifacts,
 and run one short generation smoke under the GPU guard. It is intentionally not
-part of the 36-gate paper-facing ledger.
+part of the 37-gate paper-facing ledger.
 
 Example WSL/GPU command:
 
@@ -1310,6 +1311,42 @@ Valid claim:
 
 - in this fixed Qwen2.5-0.5B public-prompt setting, increasing calibration
   prompt count from 2 to 8 improves measured sensitivity-ranking stability.
+
+Invalid claim:
+
+- this proves a universal scaling law, downstream task retention, large-model
+  behavior, deployment speed, or SOTA quantization.
+
+## CSI Trend Significance Gate
+
+`train_python/gate_csi_trend_significance.py` adds a statistical check on top
+of the CSI-vs-n curve. It consumes the same n=2/4/8 seed-stability gates, then
+compares the n=8 seed-pair metric distribution against the n=2 distribution
+with independent bootstrap mean-gain confidence intervals and random pair
+dominance probabilities.
+
+Current gate:
+
+```bash
+python train_python/gate_csi_trend_significance.py \
+  --case 2=outputs/calibration_seed_stability_qwen25_0p5b_n2_2026_06_07.json \
+  --case 4=outputs/calibration_seed_stability_qwen25_0p5b_2026_06_07.json \
+  --case 8=outputs/calibration_seed_stability_qwen25_0p5b_n8_2026_06_07.json \
+  --bootstrap-samples 5000 \
+  --min-full-range-gain-low 0.0 \
+  --min-full-range-dominance-probability 0.90 \
+  --out-json outputs/csi_trend_significance_qwen25_0p5b_2026_06_07.json \
+  --out-md outputs/CSI_TREND_SIGNIFICANCE_QWEN25_0P5B_2026_06_07.md
+```
+
+Current result: the n=8-vs-n=2 full-range bootstrap gain 95% CI is positive
+for all three audited metrics. The minimum lower CI bound is `0.1352`, and the
+minimum random seed-pair dominance probability is `0.9422`.
+
+Valid claim:
+
+- in this fixed Qwen2.5-0.5B public-prompt setting, the measured n=8 stability
+  distribution statistically dominates the measured n=2 distribution.
 
 Invalid claim:
 

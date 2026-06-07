@@ -119,6 +119,26 @@ class BuildEvidenceLedgerTests(unittest.TestCase):
         self.assertIn("mean inversion decreasing True", joined)
         self.assertEqual(ledger.infer_category("rank_inversion_theory"), "theory")
 
+    def test_csi_trend_significance_metrics_are_reported(self) -> None:
+        metrics = ledger.metric_parts(
+            {
+                "point_count": 3,
+                "min_n": 2,
+                "max_n": 8,
+                "min_full_range_gain_low": 0.1351,
+                "min_full_range_dominance_probability": 0.9422,
+                "all_full_range_gain_ci_positive": True,
+                "all_full_range_dominance_high": True,
+            }
+        )
+        joined = "; ".join(metrics)
+        self.assertIn("points 3", joined)
+        self.assertIn("n 2->8", joined)
+        self.assertIn("min gain CI low 0.1351", joined)
+        self.assertIn("min dominance 0.9422", joined)
+        self.assertIn("gain CI positive True", joined)
+        self.assertEqual(ledger.infer_category("csi_trend_significance"), "calibration robustness")
+
     def test_allocation_family_metrics_are_reported(self) -> None:
         metrics = ledger.metric_parts(
             {
