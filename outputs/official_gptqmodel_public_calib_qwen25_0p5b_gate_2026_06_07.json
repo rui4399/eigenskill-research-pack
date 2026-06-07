@@ -1,5 +1,5 @@
 {
-  "date": "2026-06-07T00:03:10+00:00",
+  "date": "2026-06-07T00:15:05+00:00",
   "passed": true,
   "summary": {
     "model": "Qwen/Qwen2.5-0.5B-Instruct",
@@ -17,15 +17,43 @@
     "artifact_file_count": 8,
     "artifact_total_bytes": 470821016,
     "artifact_reused": false,
+    "eval_slice_count": 2,
+    "total_eval_tokens": 760,
     "prompt_count": 4,
-    "tokens": 380,
+    "tokens": 760,
     "fp16_ppl": 19.381306842675034,
     "gptq_ppl": 25.677339366092017,
     "ppl_ratio_gptq_vs_fp16": 1.3248507737132547,
     "delta_nll_gptq_minus_fp16": 0.2812998294830322,
     "guard_max_memory_used_ratio": 0.6233590970433076,
-    "guard_max_memory_used_mib": 5081
+    "guard_max_memory_used_mib": 5081,
+    "evals": [
+      {
+        "label": "wikitext2",
+        "prompt_count": 4,
+        "tokens": 380,
+        "artifact_reused": false,
+        "fp16_ppl": 19.381306842675034,
+        "gptq_ppl": 25.677339366092017,
+        "ppl_ratio_gptq_vs_fp16": 1.3248507737132547,
+        "delta_nll_gptq_minus_fp16": 0.2812998294830322,
+        "guard_max_memory_used_ratio": 0.6233590970433076,
+        "guard_max_memory_used_mib": 5081
+      },
+      {
+        "label": "c4",
+        "prompt_count": 4,
+        "tokens": 380,
+        "artifact_reused": true,
+        "fp16_ppl": 24.665275734471876,
+        "gptq_ppl": 31.39774008540991,
+        "ppl_ratio_gptq_vs_fp16": 1.272953135550349,
+        "delta_nll_gptq_minus_fp16": 0.24133950471878052,
+        "guard_max_memory_used_ratio": 0.6314562630352104,
+        "guard_max_memory_used_mib": 5147
+      }
+    ]
   },
   "failures": [],
-  "claim_boundary": "Valid claim: one public-calibration GPTQModel W4 group-128 smoke ran under guard, saved/reloaded a local artifact, and produced a tiny matched FP16-vs-GPTQ PPL diagnostic. Invalid claim: this is a complete official AWQ/GPTQ competitive baseline, SOTA PTQ result, task-retention proof, or production runtime."
+  "claim_boundary": "Valid claim: one fresh public-calibration GPTQModel W4 group-128 smoke ran under guard, saved/reloaded a local artifact, and produced tiny labeled FP16-vs-GPTQ PPL diagnostics. Invalid claim: this is a complete official AWQ/GPTQ competitive baseline, SOTA PTQ result, task-retention proof, or production runtime."
 }

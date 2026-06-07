@@ -1,7 +1,10 @@
 from __future__ import annotations
 
 import argparse
+import json
+import tempfile
 import unittest
+from pathlib import Path
 
 import gate_official_gptqmodel_public_calib as gate
 
@@ -13,6 +16,8 @@ def args(**overrides):
         "max_memory_ratio": 0.85,
         "max_ppl_ratio": 5.0,
         "require_fresh_quantization": True,
+        "min_eval_slices": 1,
+        "min_total_tokens": 128,
     }
     values.update(overrides)
     return argparse.Namespace(**values)
@@ -56,6 +61,65 @@ class GateOfficialGptqModelPublicCalibTests(unittest.TestCase):
         self.assertTrue(result["passed"])
         self.assertEqual(result["summary"]["tokens"], 380)
         self.assertEqual(result["summary"]["package"], "gptqmodel")
+
+    def test_passes_two_eval_slices_with_one_fresh_quantization(self) -> None:
+        c4_summary = summary(
+            prompt_count=4,
+            tokens=360,
+            artifact_reused=True,
+            fp16={"ppl": 31.0, "mean_nll": 3.43},
+            gptq={"ppl": 40.0, "mean_nll": 3.69},
+            comparison={"ppl_ratio_gptq_vs_fp16": 1.29, "delta_nll_gptq_minus_fp16": 0.26},
+        )
+
+        result = gate.build_result(
+            summary=summary(),
+            guard=guard(),
+            evals=[("wikitext2", summary(), guard()), ("c4", c4_summary, guard(max_memory_used_ratio=0.54))],
+            args=args(min_eval_slices=2, min_total_tokens=700),
+        )
+
+        self.assertTrue(result["passed"])
+        self.assertEqual(result["summary"]["eval_slice_count"], 2)
+        self.assertEqual(result["summary"]["total_eval_tokens"], 740)
+
+    def test_loads_labeled_eval_pairs_from_paths(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            wiki_summary = root / "wiki_summary.json"
+            wiki_guard = root / "wiki_guard.json"
+            c4_summary = root / "c4_summary.json"
+            c4_guard = root / "c4_guard.json"
+            wiki_summary.write_text(json.dumps(summary(tokens=380)), encoding="utf-8")
+            wiki_guard.write_text(json.dumps(guard(max_memory_used_ratio=0.62)), encoding="utf-8")
+            c4_summary.write_text(json.dumps(summary(tokens=360, artifact_reused=True)), encoding="utf-8")
+            c4_guard.write_text(json.dumps(guard(max_memory_used_ratio=0.54)), encoding="utf-8")
+
+            evals = gate.load_eval_pairs(
+                summaries=[("wikitext2", wiki_summary), ("c4", c4_summary)],
+                guards=[("wikitext2", wiki_guard), ("c4", c4_guard)],
+            )
+
+        self.assertEqual([label for label, _, _ in evals], ["wikitext2", "c4"])
+        self.assertEqual(evals[1][1]["tokens"], 360)
+        self.assertEqual(evals[1][2]["max_memory_used_ratio"], 0.54)
+
+    def test_write_markdown_renders_eval_slice_table(self) -> None:
+        result = gate.build_result(
+            summary=summary(),
+            guard=guard(),
+            evals=[("wikitext2", summary(), guard()), ("c4", summary(tokens=360, artifact_reused=True), guard())],
+            args=args(min_eval_slices=2, min_total_tokens=700),
+        )
+
+        with tempfile.TemporaryDirectory() as tmp:
+            out = Path(tmp) / "gate.md"
+            gate.write_markdown(out, result)
+            text = out.read_text(encoding="utf-8")
+
+        self.assertIn("## Evaluation Slices", text)
+        self.assertIn("| `wikitext2` |", text)
+        self.assertIn("| `c4` |", text)
 
     def test_fails_when_formal_run_reuses_artifact(self) -> None:
         result = gate.build_result(summary=summary(artifact_reused=True), guard=guard(), args=args())

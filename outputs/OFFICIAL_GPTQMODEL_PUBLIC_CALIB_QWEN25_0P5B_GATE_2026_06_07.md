@@ -1,6 +1,6 @@
 # Official GPTQModel Public-Calibration Gate
 
-Date: `2026-06-07T00:03:10+00:00`
+Date: `2026-06-07T00:15:05+00:00`
 Status: **PASS**
 
 ## Summary
@@ -13,9 +13,16 @@ Status: **PASS**
 - artifact files: `8`
 - artifact bytes: `470821016`
 - artifact reused: `False`
-- prompts: `4`
-- tokens: `380`
+- eval slices: `2`
+- total eval tokens: `760`
 - peak VRAM ratio: `0.6233590970433076`
+
+## Evaluation Slices
+
+| slice | prompts | tokens | FP16 PPL | GPTQ PPL | ratio | artifact reused | peak VRAM |
+|---|---:|---:|---:|---:|---:|---|---:|
+| `wikitext2` | 4 | 380 | 19.381307 | 25.677339 | 1.324851 | `False` | 0.623359 |
+| `c4` | 4 | 380 | 24.665276 | 31.397740 | 1.272953 | `True` | 0.631456 |
 
 ## Metrics
 
@@ -35,4 +42,4 @@ Status: **PASS**
 
 ## Claim Boundary
 
-- Valid claim: one public-calibration GPTQModel W4 group-128 smoke ran under guard, saved/reloaded a local artifact, and produced a tiny matched FP16-vs-GPTQ PPL diagnostic. Invalid claim: this is a complete official AWQ/GPTQ competitive baseline, SOTA PTQ result, task-retention proof, or production runtime.
+- Valid claim: one fresh public-calibration GPTQModel W4 group-128 smoke ran under guard, saved/reloaded a local artifact, and produced tiny labeled FP16-vs-GPTQ PPL diagnostics. Invalid claim: this is a complete official AWQ/GPTQ competitive baseline, SOTA PTQ result, task-retention proof, or production runtime.

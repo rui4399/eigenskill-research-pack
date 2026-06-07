@@ -1,0 +1,106 @@
+{
+  "date": "2026-06-07T00:14:40+00:00",
+  "passed": true,
+  "model": "Qwen/Qwen2.5-0.5B-Instruct",
+  "gptq_artifact": "outputs/official_gptqmodel_smoke_2026_06_07/qwen25_0p5b_public_calib_gptq_model",
+  "calibration_source": [
+    "data_eval/public_calib_prompts_2026_06_07/wikitext2_test_ppl_prompts.txt",
+    "data_eval/public_calib_prompts_2026_06_07/c4_validation_ppl_prompts.txt"
+  ],
+  "calibration_count": 4,
+  "quant_config": {
+    "bits": 4,
+    "group_size": 128
+  },
+  "prompt_count": 4,
+  "tokens": 380,
+  "package": {
+    "name": "gptqmodel",
+    "version": "7.0.0"
+  },
+  "artifact": {
+    "path": "outputs/official_gptqmodel_smoke_2026_06_07/qwen25_0p5b_public_calib_gptq_model",
+    "file_count": 8,
+    "total_bytes": 470821016,
+    "suffix_counts": {
+      ".jinja": 1,
+      ".json": 5,
+      ".safetensors": 1,
+      ".csv": 1
+    },
+    "sample_files": [
+      "chat_template.jinja",
+      "config.json",
+      "generation_config.json",
+      "model.safetensors",
+      "quantize_config.json",
+      "quant_log.csv",
+      "tokenizer.json",
+      "tokenizer_config.json"
+    ]
+  },
+  "artifact_reused": true,
+  "fp16": {
+    "prompt_count": 4,
+    "tokens": 380,
+    "mean_nll": 3.2053964138031006,
+    "ppl": 24.665275734471876,
+    "per_prompt": [
+      {
+        "tokens": 95,
+        "loss": 2.760082483291626,
+        "ppl": 15.801146225062485
+      },
+      {
+        "tokens": 95,
+        "loss": 3.6945459842681885,
+        "ppl": 40.22730461216894
+      },
+      {
+        "tokens": 95,
+        "loss": 2.7235076427459717,
+        "ppl": 15.233662887426778
+      },
+      {
+        "tokens": 95,
+        "loss": 3.643449544906616,
+        "ppl": 38.22346312181898
+      }
+    ]
+  },
+  "gptq": {
+    "prompt_count": 4,
+    "tokens": 380,
+    "mean_nll": 3.446735918521881,
+    "ppl": 31.39774008540991,
+    "per_prompt": [
+      {
+        "tokens": 95,
+        "loss": 2.983980894088745,
+        "ppl": 19.76634796639034
+      },
+      {
+        "tokens": 95,
+        "loss": 4.100831508636475,
+        "ppl": 60.39048193324638
+      },
+      {
+        "tokens": 95,
+        "loss": 2.9971134662628174,
+        "ppl": 20.027642939895525
+      },
+      {
+        "tokens": 95,
+        "loss": 3.7050178050994873,
+        "ppl": 40.65077110145892
+      }
+    ]
+  },
+  "comparison": {
+    "delta_nll_gptq_minus_fp16": 0.24133950471878052,
+    "ppl_ratio_gptq_vs_fp16": 1.272953135550349
+  },
+  "elapsed_seconds": 32.033026456832886,
+  "failures": [],
+  "claim_boundary": "Valid claim: GPTQModel ran a public-calibration W4 group-128 smoke and produced a matched tiny-slice FP16-vs-GPTQ PPL diagnostic. Invalid claim: this is a complete GPTQ/AWQ competitive baseline, SOTA PTQ result, task-retention proof, or production runtime."
+}

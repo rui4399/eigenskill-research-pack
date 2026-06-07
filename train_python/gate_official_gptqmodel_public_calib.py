@@ -42,19 +42,76 @@ def guard_failures(guard: dict[str, Any], max_memory_ratio: float) -> list[str]:
     return failures
 
 
-def build_result(*, summary: dict[str, Any], guard: dict[str, Any], args: argparse.Namespace) -> dict[str, Any]:
+def parse_labeled_path(raw: str) -> tuple[str, Path]:
+    if "=" not in raw:
+        raise argparse.ArgumentTypeError("expected label=path")
+    label, path = raw.split("=", 1)
+    label = label.strip()
+    if not label:
+        raise argparse.ArgumentTypeError("label cannot be empty")
+    return label, Path(path)
+
+
+def load_eval_pairs(
+    *,
+    summaries: list[tuple[str, Path]],
+    guards: list[tuple[str, Path]],
+) -> list[tuple[str, dict[str, Any], dict[str, Any]]]:
+    guard_by_label = dict(guards)
+    summary_labels = [label for label, _ in summaries]
+    guard_labels = list(guard_by_label)
+    if set(summary_labels) != set(guard_labels):
+        raise ValueError(f"eval summary labels {summary_labels} do not match guard labels {guard_labels}")
+    return [(label, load_json(summary_path), load_json(guard_by_label[label])) for label, summary_path in summaries]
+
+
+def eval_failures(label: str, summary: dict[str, Any], guard: dict[str, Any], args: argparse.Namespace) -> tuple[list[str], dict[str, Any]]:
     failures: list[str] = []
-    package = summary.get("package", {}) if isinstance(summary.get("package"), dict) else {}
-    artifact = summary.get("artifact", {}) if isinstance(summary.get("artifact"), dict) else {}
     comparison = summary.get("comparison", {}) if isinstance(summary.get("comparison"), dict) else {}
     fp16 = summary.get("fp16", {}) if isinstance(summary.get("fp16"), dict) else {}
     gptq = summary.get("gptq", {}) if isinstance(summary.get("gptq"), dict) else {}
     tokens = int(summary.get("tokens") or 0)
-    calibration_count = int(summary.get("calibration_count") or 0)
     ratio = comparison.get("ppl_ratio_gptq_vs_fp16")
 
     if not summary.get("passed"):
-        failures.append("GPTQModel summary did not pass")
+        failures.append(f"{label} GPTQModel eval summary did not pass")
+    if tokens <= 0:
+        failures.append(f"{label} eval has no tokens")
+    if not finite(fp16.get("ppl")) or not finite(gptq.get("ppl")):
+        failures.append(f"{label} has non-finite FP16 or GPTQ PPL")
+    if not finite(ratio):
+        failures.append(f"{label} GPTQ/FP16 ppl ratio is non-finite")
+    elif float(ratio) > args.max_ppl_ratio:
+        failures.append(f"{label} ppl ratio {float(ratio):.4f} > {args.max_ppl_ratio:.4f}")
+    failures.extend(guard_failures(guard, args.max_memory_ratio))
+    return failures, {
+        "label": label,
+        "prompt_count": summary.get("prompt_count"),
+        "tokens": tokens,
+        "artifact_reused": bool(summary.get("artifact_reused")),
+        "fp16_ppl": fp16.get("ppl"),
+        "gptq_ppl": gptq.get("ppl"),
+        "ppl_ratio_gptq_vs_fp16": ratio,
+        "delta_nll_gptq_minus_fp16": comparison.get("delta_nll_gptq_minus_fp16"),
+        "guard_max_memory_used_ratio": guard.get("max_memory_used_ratio"),
+        "guard_max_memory_used_mib": guard.get("max_memory_used_mib"),
+    }
+
+
+def build_result(
+    *,
+    summary: dict[str, Any],
+    guard: dict[str, Any],
+    args: argparse.Namespace,
+    evals: list[tuple[str, dict[str, Any], dict[str, Any]]] | None = None,
+) -> dict[str, Any]:
+    failures: list[str] = []
+    package = summary.get("package", {}) if isinstance(summary.get("package"), dict) else {}
+    artifact = summary.get("artifact", {}) if isinstance(summary.get("artifact"), dict) else {}
+    calibration_count = int(summary.get("calibration_count") or 0)
+
+    if not summary.get("passed"):
+        failures.append("fresh GPTQModel quantization summary did not pass")
     if package.get("name") != "gptqmodel":
         failures.append(f"package {package.get('name')} != gptqmodel")
     if calibration_count < args.min_calibration_texts:
@@ -65,15 +122,22 @@ def build_result(*, summary: dict[str, Any], guard: dict[str, Any], args: argpar
         failures.append("no saved GPTQ artifact files")
     if args.require_fresh_quantization and summary.get("artifact_reused"):
         failures.append("formal GPTQModel gate reused an existing artifact")
-    if tokens < args.min_tokens:
-        failures.append(f"tokens {tokens} < {args.min_tokens}")
-    if not finite(fp16.get("ppl")) or not finite(gptq.get("ppl")):
-        failures.append("non-finite FP16 or GPTQ PPL")
-    if not finite(ratio):
-        failures.append("GPTQ/FP16 ppl ratio is non-finite")
-    elif float(ratio) > args.max_ppl_ratio:
-        failures.append(f"ppl ratio {float(ratio):.4f} > {args.max_ppl_ratio:.4f}")
     failures.extend(guard_failures(guard, args.max_memory_ratio))
+
+    eval_inputs = evals if evals is not None else [("primary", summary, guard)]
+    eval_rows: list[dict[str, Any]] = []
+    total_eval_tokens = 0
+    min_eval_slices = int(getattr(args, "min_eval_slices", 1) or 1)
+    min_total_tokens = int(getattr(args, "min_total_tokens", getattr(args, "min_tokens", 0)) or 0)
+    if len(eval_inputs) < min_eval_slices:
+        failures.append(f"eval slices {len(eval_inputs)} < {min_eval_slices}")
+    for label, eval_summary, eval_guard in eval_inputs:
+        row_failures, row = eval_failures(label, eval_summary, eval_guard, args)
+        failures.extend(row_failures)
+        eval_rows.append(row)
+        total_eval_tokens += int(row["tokens"] or 0)
+    if total_eval_tokens < min_total_tokens:
+        failures.append(f"total eval tokens {total_eval_tokens} < {min_total_tokens}")
 
     return {
         "date": datetime.now(timezone.utc).replace(microsecond=0).isoformat(),
@@ -88,27 +152,37 @@ def build_result(*, summary: dict[str, Any], guard: dict[str, Any], args: argpar
             "artifact_file_count": artifact.get("file_count"),
             "artifact_total_bytes": artifact.get("total_bytes"),
             "artifact_reused": bool(summary.get("artifact_reused")),
+            "eval_slice_count": len(eval_inputs),
+            "total_eval_tokens": total_eval_tokens,
             "prompt_count": summary.get("prompt_count"),
-            "tokens": tokens,
-            "fp16_ppl": fp16.get("ppl"),
-            "gptq_ppl": gptq.get("ppl"),
-            "ppl_ratio_gptq_vs_fp16": ratio,
-            "delta_nll_gptq_minus_fp16": comparison.get("delta_nll_gptq_minus_fp16"),
+            "tokens": total_eval_tokens,
+            "fp16_ppl": eval_rows[0].get("fp16_ppl") if eval_rows else None,
+            "gptq_ppl": eval_rows[0].get("gptq_ppl") if eval_rows else None,
+            "ppl_ratio_gptq_vs_fp16": eval_rows[0].get("ppl_ratio_gptq_vs_fp16") if eval_rows else None,
+            "delta_nll_gptq_minus_fp16": eval_rows[0].get("delta_nll_gptq_minus_fp16") if eval_rows else None,
             "guard_max_memory_used_ratio": guard.get("max_memory_used_ratio"),
             "guard_max_memory_used_mib": guard.get("max_memory_used_mib"),
+            "evals": eval_rows,
         },
         "failures": failures,
         "claim_boundary": (
-            "Valid claim: one public-calibration GPTQModel W4 group-128 smoke ran under guard, "
-            "saved/reloaded a local artifact, and produced a tiny matched FP16-vs-GPTQ PPL diagnostic. "
+            "Valid claim: one fresh public-calibration GPTQModel W4 group-128 smoke ran under guard, "
+            "saved/reloaded a local artifact, and produced tiny labeled FP16-vs-GPTQ PPL diagnostics. "
             "Invalid claim: this is a complete official AWQ/GPTQ competitive baseline, SOTA PTQ result, "
             "task-retention proof, or production runtime."
         ),
     }
 
 
+def format_float(value: Any) -> str:
+    if not finite(value):
+        return "NA"
+    return f"{float(value):.6f}"
+
+
 def write_markdown(path: Path, result: dict[str, Any]) -> None:
     summary = result["summary"]
+    eval_rows = summary.get("evals") if isinstance(summary.get("evals"), list) else []
     lines = [
         "# Official GPTQModel Public-Calibration Gate",
         "",
@@ -125,25 +199,44 @@ def write_markdown(path: Path, result: dict[str, Any]) -> None:
         f"- artifact files: `{summary['artifact_file_count']}`",
         f"- artifact bytes: `{summary['artifact_total_bytes']}`",
         f"- artifact reused: `{summary['artifact_reused']}`",
-        f"- prompts: `{summary['prompt_count']}`",
-        f"- tokens: `{summary['tokens']}`",
+        f"- eval slices: `{summary['eval_slice_count']}`",
+        f"- total eval tokens: `{summary['total_eval_tokens']}`",
         f"- peak VRAM ratio: `{summary['guard_max_memory_used_ratio']}`",
+        "",
+        "## Evaluation Slices",
+        "",
+        "| slice | prompts | tokens | FP16 PPL | GPTQ PPL | ratio | artifact reused | peak VRAM |",
+        "|---|---:|---:|---:|---:|---:|---|---:|",
+    ]
+    for row in eval_rows:
+        lines.append(
+            "| "
+            f"`{row['label']}` | "
+            f"{row['prompt_count']} | "
+            f"{row['tokens']} | "
+            f"{format_float(row['fp16_ppl'])} | "
+            f"{format_float(row['gptq_ppl'])} | "
+            f"{format_float(row['ppl_ratio_gptq_vs_fp16'])} | "
+            f"`{row['artifact_reused']}` | "
+            f"{format_float(row['guard_max_memory_used_ratio'])} |"
+        )
+    lines.extend([
         "",
         "## Metrics",
         "",
         "| run | PPL |",
         "|---|---:|",
-        f"| `fp16` | {float(summary['fp16_ppl']):.6f} |",
-        f"| `gptqmodel_w4g128` | {float(summary['gptq_ppl']):.6f} |",
+        f"| `fp16` | {format_float(summary['fp16_ppl'])} |",
+        f"| `gptqmodel_w4g128` | {format_float(summary['gptq_ppl'])} |",
         "",
         "## Comparison",
         "",
-        f"- PPL ratio GPTQ/FP16: `{float(summary['ppl_ratio_gptq_vs_fp16']):.6f}`",
-        f"- delta NLL GPTQ-FP16: `{float(summary['delta_nll_gptq_minus_fp16']):.6f}`",
+        f"- PPL ratio GPTQ/FP16: `{format_float(summary['ppl_ratio_gptq_vs_fp16'])}`",
+        f"- delta NLL GPTQ-FP16: `{format_float(summary['delta_nll_gptq_minus_fp16'])}`",
         "",
         "## Failures",
         "",
-    ]
+    ])
     if result["failures"]:
         lines.extend(f"- {failure}" for failure in result["failures"])
     else:
@@ -157,7 +250,11 @@ def main() -> None:
     parser = argparse.ArgumentParser(description="Gate public-calibration GPTQModel smoke.")
     parser.add_argument("--summary-json", type=Path, required=True)
     parser.add_argument("--guard-json", type=Path, required=True)
+    parser.add_argument("--eval-summary", type=parse_labeled_path, action="append", default=[])
+    parser.add_argument("--eval-guard", type=parse_labeled_path, action="append", default=[])
     parser.add_argument("--min-tokens", type=int, default=128)
+    parser.add_argument("--min-eval-slices", type=int, default=1)
+    parser.add_argument("--min-total-tokens", type=int)
     parser.add_argument("--min-calibration-texts", type=int, default=1)
     parser.add_argument("--max-memory-ratio", type=float, default=0.85)
     parser.add_argument("--max-ppl-ratio", type=float, default=5.0)
@@ -166,8 +263,16 @@ def main() -> None:
     parser.add_argument("--out-md", type=Path, required=True)
     args = parser.parse_args()
     args.require_fresh_quantization = not args.allow_reused_artifact
+    if args.min_total_tokens is None:
+        args.min_total_tokens = args.min_tokens
 
-    result = build_result(summary=load_json(args.summary_json), guard=load_json(args.guard_json), args=args)
+    summary = load_json(args.summary_json)
+    guard = load_json(args.guard_json)
+    evals = None
+    if args.eval_summary or args.eval_guard:
+        evals = load_eval_pairs(summaries=args.eval_summary, guards=args.eval_guard)
+
+    result = build_result(summary=summary, guard=guard, evals=evals, args=args)
     args.out_json.parent.mkdir(parents=True, exist_ok=True)
     args.out_json.write_text(json.dumps(result, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     write_markdown(args.out_md, result)
