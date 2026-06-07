@@ -54,6 +54,24 @@ artifact section unless it proves end-to-end speedup.
 | End-to-end quantized runtime is slower. | Systems reviewers will reject any acceleration claim. | Keep speed claims kernel-only until TTFT/tokens/s beats FP16 in a minimal runtime. |
 | Math looks like prose. | The CSI contribution reads as a heuristic. | Promote estimator noise, rank-inversion, bootstrap CI, permutation null, and Holm correction into display equations. |
 
+## Optimized Response To External Critique
+
+The project should treat the critique as a routing problem, not as a request to
+merge every direction into one paper.
+
+| track | promote only if | paper role now |
+|---|---|---|
+| CSI/statistical robustness | equations, seed/bootstrap artifacts, and matched PTQ task retention all stay claim-aligned | AAAI mainline |
+| Native PTQ retention | FP16/AutoAWQ/GPTQModel run on the same prompts with paired uncertainty intervals | AAAI evidence table |
+| ESMP/Triton kernels | kernel speedup plus real packed-file size and bounded reconstruction drift are both reported | artifact/appendix only |
+| Minimal runtime | quantized path beats FP16 on TTFT, tokens/s, and peak VRAM outside hook-based fake quant | separate systems paper |
+| Hybrid bypass | token-layer heatmap and per-token latency staircase show a measured skip benefit | separate routing paper |
+
+Hard rule: a systems result that is kernel-fast but end-to-end-slower must be
+presented as an integration-risk finding, not as a speedup. Conversely, the
+AAAI paper does not need to solve runtime acceleration if it cleanly establishes
+calibration split instability and measured retention under native PTQ baselines.
+
 ## P0 Work Before Writing
 
 1. **Theory polish.** Convert Section 4 and statistical testing into LaTeX-ready
@@ -63,6 +81,8 @@ artifact section unless it proves end-to-end speedup.
    - pairwise rank-inversion probability;
    - bootstrap confidence intervals;
    - null-permutation p-values and Holm-adjusted rejection.
+   The draft already has a first equation pass; the remaining work is to trim it
+   to the AAAI page budget and ensure every symbol is defined once.
 
 2. **Native PTQ baselines.** Expand the current AutoAWQ/GPTQModel evidence from
    readiness/smoke into matched task/PPL rows. The table must separate:
