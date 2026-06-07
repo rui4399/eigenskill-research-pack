@@ -189,6 +189,14 @@ def metric_parts(summary: dict[str, Any]) -> list[str]:
         parts.append(f"gain CI positive {summary.get('all_full_range_gain_ci_positive')}")
     if "all_full_range_dominance_high" in summary:
         parts.append(f"dominance high {summary.get('all_full_range_dominance_high')}")
+    if (value := finite_float(summary.get("min_observed_gain"))) is not None:
+        parts.append(f"min observed gain {value:.4f}")
+    if (value := finite_float(summary.get("max_holm_adjusted_p_value"))) is not None:
+        parts.append(f"max Holm p {value:.6g}")
+    if "all_observed_gains_positive" in summary:
+        parts.append(f"all gains positive {summary.get('all_observed_gains_positive')}")
+    if "all_holm_significant" in summary:
+        parts.append(f"Holm significant {summary.get('all_holm_significant')}")
     if (value := finite_float(summary.get("mean_empirical_inversion_rate_initial"))) is not None:
         parts.append(f"mean inversion init {value:.4f}")
     if (value := finite_float(summary.get("mean_empirical_inversion_rate_final"))) is not None:

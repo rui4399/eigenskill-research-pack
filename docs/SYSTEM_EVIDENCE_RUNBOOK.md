@@ -10,7 +10,7 @@ by an executable gate and an explicit claim boundary.
 ## Evidence Ledger
 
 `train_python/build_current_evidence_ledger.py` is the stable public entry
-point for the current paper-facing gate set. It fixes the 37 gate paths in one
+point for the current paper-facing gate set. It fixes the 38 gate paths in one
 manifest, rebuilds the ledger, and avoids copying a long `--gate` list across
 README files and paper appendices.
 
@@ -21,7 +21,7 @@ python train_python/build_current_evidence_ledger.py
 ```
 
 `train_python/build_evidence_ledger.py` is the lower-level builder for custom
-or future gate manifests. The expanded form of the current 37-gate ledger is:
+or future gate manifests. The expanded form of the current 38-gate ledger is:
 
 ```bash
 python train_python/build_evidence_ledger.py \
@@ -31,6 +31,7 @@ python train_python/build_evidence_ledger.py \
   --gate calibration_seed_stability=outputs/calibration_seed_stability_qwen25_0p5b_2026_06_07.json \
   --gate csi_vs_n_curve=outputs/csi_vs_n_curve_qwen25_0p5b_2026_06_07.json \
   --gate csi_trend_significance=outputs/csi_trend_significance_qwen25_0p5b_2026_06_07.json \
+  --gate csi_null_permutation=outputs/csi_null_permutation_qwen25_0p5b_2026_06_07.json \
   --gate rank_inversion_theory=outputs/rank_inversion_theory_qwen25_0p5b_2026_06_07.json \
   --gate calibration_robustness_stress=outputs/calibration_robustness_stress_gate_2026_06_07.json \
   --gate consensus_transfer_boundary=outputs/consensus_transfer_boundary_gate_2026_06_07.json \
@@ -66,8 +67,8 @@ python train_python/build_evidence_ledger.py \
   --out-md outputs/real_system_packer_2026-06-05/EVIDENCE_LEDGER_2026_06_06.md
 ```
 
-The current ledger passes with 37/37 gates across repo hygiene, calibration
-robustness, CSI trend significance, rank-inversion theory, artifact integrity, kernel, runtime wiring, selected-row, C++
+The current ledger passes with 38/38 gates across repo hygiene, calibration
+robustness, CSI trend significance, CSI null permutation, rank-inversion theory, artifact integrity, kernel, runtime wiring, selected-row, C++
 runtime, decode integration, QKV replacement, quality, task-retention, runtime profile, and
 capability-retention/model-ladder, allocation-comparator, rotation-comparator, and
 matched PTQ baseline, true subset100 official PTQ task/runtime evidence, deterministic IFEval-style PTQ execution, expanded AutoAWQ public PPL, PTQ-comparator, and
@@ -161,14 +162,14 @@ Current gate:
 ```bash
 python train_python/gate_paper_evidence_alignment.py \
   --paper paper_drafts/eigenskill_q_research_draft_en_2026_06_07.md \
-  --expected-gate-count 37 \
+  --expected-gate-count 38 \
   --out-json outputs/paper_evidence_alignment_gate_2026_06_07.json \
   --out-md outputs/PAPER_EVIDENCE_ALIGNMENT_GATE_2026_06_07.md
 ```
 
 Current result: 25/25 required evidence references present, referenced repo
 paths found and 0 missing, 0 stale forbidden tokens, 0 unsafe non-negated claim
-lines, and the paper mentions the current 37-gate ledger.
+lines, and the paper mentions the current 38-gate ledger.
 
 Valid claim:
 
@@ -765,7 +766,7 @@ Invalid claim:
 `train_python/run_official_awq_smoke.py` is a minimal package-readiness probe.
 It exists to verify that AutoAWQ can execute, save local quantized artifacts,
 and run one short generation smoke under the GPU guard. It is intentionally not
-part of the 37-gate paper-facing ledger.
+part of the 38-gate paper-facing ledger.
 
 Example WSL/GPU command:
 
@@ -1347,6 +1348,41 @@ Valid claim:
 
 - in this fixed Qwen2.5-0.5B public-prompt setting, the measured n=8 stability
   distribution statistically dominates the measured n=2 distribution.
+
+Invalid claim:
+
+- this proves a universal scaling law, downstream task retention, large-model
+  behavior, deployment speed, or SOTA quantization.
+
+## CSI Null Permutation Gate
+
+`train_python/gate_csi_null_permutation.py` adds a pooled-label null test for
+the same n=2 and n=8 seed-pair stability metrics. It shuffles the calibration
+size labels over the pooled metric values, estimates a one-sided p-value for
+the observed n=8-minus-n=2 mean gain, and reports Holm-adjusted p-values across
+the audited metrics.
+
+Current gate:
+
+```bash
+python train_python/gate_csi_null_permutation.py \
+  --case 2=outputs/calibration_seed_stability_qwen25_0p5b_n2_2026_06_07.json \
+  --case 4=outputs/calibration_seed_stability_qwen25_0p5b_2026_06_07.json \
+  --case 8=outputs/calibration_seed_stability_qwen25_0p5b_n8_2026_06_07.json \
+  --permutation-samples 20000 \
+  --max-holm-p-value 0.01 \
+  --out-json outputs/csi_null_permutation_qwen25_0p5b_2026_06_07.json \
+  --out-md outputs/CSI_NULL_PERMUTATION_QWEN25_0P5B_2026_06_07.md
+```
+
+Current result: all three audited metrics have positive observed n=8-vs-n=2
+gains. Under the 20,000-sample Monte-Carlo null, each metric has raw
+`p=4.99975e-05` and the maximum Holm-adjusted p-value is `0.000149993`.
+
+Valid claim:
+
+- in this fixed Qwen2.5-0.5B public-prompt setting, the n=8 stability gain is
+  unlikely under a pooled n=2/n=8 seed-pair label-shuffle null.
 
 Invalid claim:
 

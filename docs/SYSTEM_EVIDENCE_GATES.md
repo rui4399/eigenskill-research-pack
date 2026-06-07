@@ -25,7 +25,7 @@ Current ledger artifact:
 outputs/real_system_packer_2026-06-05/EVIDENCE_LEDGER_2026_06_06.md
 ```
 
-Current status: **37 / 37 gates pass**.
+Current status: **38 / 38 gates pass**.
 
 Valid claim:
 
@@ -48,6 +48,7 @@ Invalid claim:
 | `calibration_seed_stability` | calibration robustness | `outputs/CALIBRATION_SEED_STABILITY_QWEN25_0P5B_2026_06_07.md` | Qwen2.5-0.5B deterministic six-seed prompt-sensitivity runs over the same 16-prompt pool show moderate mean rank agreement with pair-bootstrap CIs but drifting top-sensitive module sets; this is not quality-retention or deployment evidence. |
 | `csi_vs_n_curve` | calibration robustness | `outputs/CSI_VS_N_CURVE_QWEN25_0P5B_2026_06_07.md` | Qwen2.5-0.5B six-seed sensitivity gates at n=2, n=4, and n=8 show monotonic stability gains in mean Spearman, top-20 Jaccard, and positive-set Jaccard; this is local calibration-size evidence, not a universal scaling law. |
 | `csi_trend_significance` | calibration robustness | `outputs/CSI_TREND_SIGNIFICANCE_QWEN25_0P5B_2026_06_07.md` | Independent bootstrap trend checks show positive n=8-vs-n=2 mean-gain CIs for all audited CSI stability metrics and minimum random pair dominance probability 0.9422; this is local trend evidence, not a universal scaling law. |
+| `csi_null_permutation` | calibration robustness | `outputs/CSI_NULL_PERMUTATION_QWEN25_0P5B_2026_06_07.md` | Monte-Carlo label-shuffle permutation tests over pooled n=2/n=8 seed-pair metrics give max Holm-adjusted p-value 0.00015 for the audited stability gains; this is local null-test evidence, not downstream retention. |
 | `rank_inversion_theory` | theory | `outputs/RANK_INVERSION_THEORY_QWEN25_0P5B_2026_06_07.md` | A Chebyshev-style plug-in rank-inversion analysis over the same Qwen2.5 seed artifacts shows decreasing empirical inversion risk and variance/gap^2 bound proxies from n=2 to n=8; this is not a tight-bound proof. |
 | `calibration_robustness_stress` | calibration robustness | `outputs/CALIBRATION_ROBUSTNESS_STRESS_GATE_2026_06_07.md` | Current target policies beat uniform INT4, best random seed, and random mean across committed short fake-quant PPL slices. |
 | `consensus_transfer_boundary` | allocation boundary | `outputs/CONSENSUS_TRANSFER_BOUNDARY_GATE_2026_06_07.md` | Consensus avoids the worse single-split policy on paired Qwen3 transfer slices with bounded best-single regret. |
@@ -82,7 +83,7 @@ Invalid claim:
 ## Non-Ledger Readiness Probes
 
 These probes are tracked because they reduce environment uncertainty, but they
-are not counted in the current 37-gate paper-facing ledger.
+are not counted in the current 38-gate paper-facing ledger.
 
 | probe | category | primary artifact | boundary |
 |---|---|---|---|

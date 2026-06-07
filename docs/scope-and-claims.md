@@ -44,6 +44,9 @@ In compressed form, the supported claims are:
 - Qwen2.5 CSI trend-significance diagnostics show positive n=8-vs-n=2
   bootstrap mean-gain CIs for the audited stability metrics, with minimum
   random seed-pair dominance probability 0.9422 in the same fixed setting;
+- Qwen2.5 CSI null-permutation diagnostics reject a pooled n=2/n=8
+  label-shuffle null for the audited stability gains, with maximum
+  Holm-adjusted p-value 0.000149993 in the same fixed setting;
 - a Chebyshev-style plug-in rank-inversion analysis over the same n=2/4/8
   Qwen2.5 seed artifacts shows decreasing empirical inversion risk and
   decreasing variance/gap^2 bound proxies;

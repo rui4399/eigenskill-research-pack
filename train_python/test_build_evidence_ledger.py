@@ -139,6 +139,26 @@ class BuildEvidenceLedgerTests(unittest.TestCase):
         self.assertIn("gain CI positive True", joined)
         self.assertEqual(ledger.infer_category("csi_trend_significance"), "calibration robustness")
 
+    def test_csi_null_permutation_metrics_are_reported(self) -> None:
+        metrics = ledger.metric_parts(
+            {
+                "point_count": 3,
+                "min_n": 2,
+                "max_n": 8,
+                "min_observed_gain": 0.1797,
+                "max_holm_adjusted_p_value": 0.0001499925,
+                "all_observed_gains_positive": True,
+                "all_holm_significant": True,
+            }
+        )
+        joined = "; ".join(metrics)
+        self.assertIn("points 3", joined)
+        self.assertIn("n 2->8", joined)
+        self.assertIn("min observed gain 0.1797", joined)
+        self.assertIn("max Holm p 0.000149993", joined)
+        self.assertIn("Holm significant True", joined)
+        self.assertEqual(ledger.infer_category("csi_null_permutation"), "calibration robustness")
+
     def test_allocation_family_metrics_are_reported(self) -> None:
         metrics = ledger.metric_parts(
             {
