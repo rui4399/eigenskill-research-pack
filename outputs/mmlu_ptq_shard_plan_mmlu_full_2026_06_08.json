@@ -1,0 +1,969 @@
+{
+  "date": "2026-06-07T23:39:26+00:00",
+  "suite": "mmlu_full",
+  "preset": "full",
+  "subjects": [
+    "abstract_algebra",
+    "anatomy",
+    "astronomy",
+    "business_ethics",
+    "clinical_knowledge",
+    "college_biology",
+    "college_chemistry",
+    "college_computer_science",
+    "college_mathematics",
+    "college_medicine",
+    "college_physics",
+    "computer_security",
+    "conceptual_physics",
+    "econometrics",
+    "electrical_engineering",
+    "elementary_mathematics",
+    "formal_logic",
+    "global_facts",
+    "high_school_biology",
+    "high_school_chemistry",
+    "high_school_computer_science",
+    "high_school_european_history",
+    "high_school_geography",
+    "high_school_government_and_politics",
+    "high_school_macroeconomics",
+    "high_school_mathematics",
+    "high_school_microeconomics",
+    "high_school_physics",
+    "high_school_psychology",
+    "high_school_statistics",
+    "high_school_us_history",
+    "high_school_world_history",
+    "human_aging",
+    "human_sexuality",
+    "international_law",
+    "jurisprudence",
+    "logical_fallacies",
+    "machine_learning",
+    "management",
+    "marketing",
+    "medical_genetics",
+    "miscellaneous",
+    "moral_disputes",
+    "moral_scenarios",
+    "nutrition",
+    "philosophy",
+    "prehistory",
+    "professional_accounting",
+    "professional_law",
+    "professional_medicine",
+    "professional_psychology",
+    "public_relations",
+    "security_studies",
+    "sociology",
+    "us_foreign_policy",
+    "virology",
+    "world_religions"
+  ],
+  "rows_per_subject": 20,
+  "full_test_split": true,
+  "subject_row_counts": {
+    "abstract_algebra": 100,
+    "anatomy": 135,
+    "astronomy": 152,
+    "business_ethics": 100,
+    "clinical_knowledge": 265,
+    "college_biology": 144,
+    "college_chemistry": 100,
+    "college_computer_science": 100,
+    "college_mathematics": 100,
+    "college_medicine": 173,
+    "college_physics": 102,
+    "computer_security": 100,
+    "conceptual_physics": 235,
+    "econometrics": 114,
+    "electrical_engineering": 145,
+    "elementary_mathematics": 378,
+    "formal_logic": 126,
+    "global_facts": 100,
+    "high_school_biology": 310,
+    "high_school_chemistry": 203,
+    "high_school_computer_science": 100,
+    "high_school_european_history": 165,
+    "high_school_geography": 198,
+    "high_school_government_and_politics": 193,
+    "high_school_macroeconomics": 390,
+    "high_school_mathematics": 270,
+    "high_school_microeconomics": 238,
+    "high_school_physics": 151,
+    "high_school_psychology": 545,
+    "high_school_statistics": 216,
+    "high_school_us_history": 204,
+    "high_school_world_history": 237,
+    "human_aging": 223,
+    "human_sexuality": 131,
+    "international_law": 121,
+    "jurisprudence": 108,
+    "logical_fallacies": 163,
+    "machine_learning": 112,
+    "management": 103,
+    "marketing": 234,
+    "medical_genetics": 100,
+    "miscellaneous": 783,
+    "moral_disputes": 346,
+    "moral_scenarios": 895,
+    "nutrition": 306,
+    "philosophy": 311,
+    "prehistory": 324,
+    "professional_accounting": 282,
+    "professional_law": 1534,
+    "professional_medicine": 272,
+    "professional_psychology": 612,
+    "public_relations": 110,
+    "security_studies": 245,
+    "sociology": 201,
+    "us_foreign_policy": 100,
+    "virology": 166,
+    "world_religions": 171
+  },
+  "total_rows_planned": 14042,
+  "shard_size": 500,
+  "paths": {
+    "fixture": "data_eval/public_task_benchmark_v1/mmlu_mmlu_full_test.jsonl",
+    "manifest_json": "outputs/public_task_benchmark_mmlu_mmlu_full_manifest_2026_06_08.json",
+    "manifest_md": "outputs/PUBLIC_TASK_BENCHMARK_MMLU_MMLU_FULL_MANIFEST_2026_06_08.md",
+    "matrix_json": "outputs/official_ptq_task_qwen25_1p5b_mmlu_mmlu_full_fp16_awq_gptqmodel_matrix_2026_06_08.json",
+    "matrix_md": "outputs/OFFICIAL_PTQ_TASK_QWEN25_1P5B_MMLU_MMLU_FULL_FP16_AWQ_GPTQMODEL_MATRIX_2026_06_08.md",
+    "runtime_json": "outputs/official_ptq_qwen25_1p5b_mmlu_mmlu_full_fp16_awq_gptqmodel_runtime_profile_2026_06_08.json",
+    "runtime_md": "outputs/OFFICIAL_PTQ_QWEN25_1P5B_MMLU_MMLU_FULL_FP16_AWQ_GPTQMODEL_RUNTIME_PROFILE_2026_06_08.md",
+    "statistics_json": "outputs/official_ptq_task_qwen25_1p5b_mmlu_mmlu_full_fp16_awq_gptqmodel_statistics_2026_06_08.json",
+    "statistics_md": "outputs/OFFICIAL_PTQ_TASK_QWEN25_1P5B_MMLU_MMLU_FULL_FP16_AWQ_GPTQMODEL_STATISTICS_2026_06_08.md"
+  },
+  "fixture_command": "python3 train_python/build_public_task_smoke.py --out-dir data_eval/public_task_benchmark_v1 --gsm8k-count 0 --mmlu-count 0 --mmlu-count-per-subject 20 --file-tag mmlu_full --mmlu-combined-file mmlu_mmlu_full_test.jsonl --title 'Public Task Benchmark MMLU mmlu_full Manifest' --claim-boundary 'Public MMLU fixture for guarded local PTQ retention; not full leaderboard evidence until all shards and gates pass.' --source auto --out-json outputs/public_task_benchmark_mmlu_mmlu_full_manifest_2026_06_08.json --out-md outputs/PUBLIC_TASK_BENCHMARK_MMLU_MMLU_FULL_MANIFEST_2026_06_08.md --mmlu-subject abstract_algebra --mmlu-subject anatomy --mmlu-subject astronomy --mmlu-subject business_ethics --mmlu-subject clinical_knowledge --mmlu-subject college_biology --mmlu-subject college_chemistry --mmlu-subject college_computer_science --mmlu-subject college_mathematics --mmlu-subject college_medicine --mmlu-subject college_physics --mmlu-subject computer_security --mmlu-subject conceptual_physics --mmlu-subject econometrics --mmlu-subject electrical_engineering --mmlu-subject elementary_mathematics --mmlu-subject formal_logic --mmlu-subject global_facts --mmlu-subject high_school_biology --mmlu-subject high_school_chemistry --mmlu-subject high_school_computer_science --mmlu-subject high_school_european_history --mmlu-subject high_school_geography --mmlu-subject high_school_government_and_politics --mmlu-subject high_school_macroeconomics --mmlu-subject high_school_mathematics --mmlu-subject high_school_microeconomics --mmlu-subject high_school_physics --mmlu-subject high_school_psychology --mmlu-subject high_school_statistics --mmlu-subject high_school_us_history --mmlu-subject high_school_world_history --mmlu-subject human_aging --mmlu-subject human_sexuality --mmlu-subject international_law --mmlu-subject jurisprudence --mmlu-subject logical_fallacies --mmlu-subject machine_learning --mmlu-subject management --mmlu-subject marketing --mmlu-subject medical_genetics --mmlu-subject miscellaneous --mmlu-subject moral_disputes --mmlu-subject moral_scenarios --mmlu-subject nutrition --mmlu-subject philosophy --mmlu-subject prehistory --mmlu-subject professional_accounting --mmlu-subject professional_law --mmlu-subject professional_medicine --mmlu-subject professional_psychology --mmlu-subject public_relations --mmlu-subject security_studies --mmlu-subject sociology --mmlu-subject us_foreign_policy --mmlu-subject virology --mmlu-subject world_religions --mmlu-subject-count abstract_algebra=100 --mmlu-subject-count anatomy=135 --mmlu-subject-count astronomy=152 --mmlu-subject-count business_ethics=100 --mmlu-subject-count clinical_knowledge=265 --mmlu-subject-count college_biology=144 --mmlu-subject-count college_chemistry=100 --mmlu-subject-count college_computer_science=100 --mmlu-subject-count college_mathematics=100 --mmlu-subject-count college_medicine=173 --mmlu-subject-count college_physics=102 --mmlu-subject-count computer_security=100 --mmlu-subject-count conceptual_physics=235 --mmlu-subject-count econometrics=114 --mmlu-subject-count electrical_engineering=145 --mmlu-subject-count elementary_mathematics=378 --mmlu-subject-count formal_logic=126 --mmlu-subject-count global_facts=100 --mmlu-subject-count high_school_biology=310 --mmlu-subject-count high_school_chemistry=203 --mmlu-subject-count high_school_computer_science=100 --mmlu-subject-count high_school_european_history=165 --mmlu-subject-count high_school_geography=198 --mmlu-subject-count high_school_government_and_politics=193 --mmlu-subject-count high_school_macroeconomics=390 --mmlu-subject-count high_school_mathematics=270 --mmlu-subject-count high_school_microeconomics=238 --mmlu-subject-count high_school_physics=151 --mmlu-subject-count high_school_psychology=545 --mmlu-subject-count high_school_statistics=216 --mmlu-subject-count high_school_us_history=204 --mmlu-subject-count high_school_world_history=237 --mmlu-subject-count human_aging=223 --mmlu-subject-count human_sexuality=131 --mmlu-subject-count international_law=121 --mmlu-subject-count jurisprudence=108 --mmlu-subject-count logical_fallacies=163 --mmlu-subject-count machine_learning=112 --mmlu-subject-count management=103 --mmlu-subject-count marketing=234 --mmlu-subject-count medical_genetics=100 --mmlu-subject-count miscellaneous=783 --mmlu-subject-count moral_disputes=346 --mmlu-subject-count moral_scenarios=895 --mmlu-subject-count nutrition=306 --mmlu-subject-count philosophy=311 --mmlu-subject-count prehistory=324 --mmlu-subject-count professional_accounting=282 --mmlu-subject-count professional_law=1534 --mmlu-subject-count professional_medicine=272 --mmlu-subject-count professional_psychology=612 --mmlu-subject-count public_relations=110 --mmlu-subject-count security_studies=245 --mmlu-subject-count sociology=201 --mmlu-subject-count us_foreign_policy=100 --mmlu-subject-count virology=166 --mmlu-subject-count world_religions=171",
+  "variants": [
+    {
+      "variant": "fp16",
+      "loader": "hf",
+      "model": "Qwen/Qwen2.5-1.5B-Instruct",
+      "merged": {
+        "summary_json": "outputs/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_summary_2026_06_08.json",
+        "summary_md": "outputs/OFFICIAL_PTQ_TASK_FP16_QWEN25_1P5B_MMLU_MMLU_FULL_2026_06_08.md",
+        "guard_json": "outputs/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_summary_2026_06_08_gpu_guard.json"
+      },
+      "shards": [
+        {
+          "summary_json": "outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_0_500_2026_06_08.json",
+          "summary_md": "outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_0_500_2026_06_08.md",
+          "guard_json": "outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_0_500_2026_06_08_gpu_guard.json",
+          "title": "FP16 Qwen2.5-1.5B MMLU MMLU_FULL shard 0-500",
+          "offset": 0,
+          "limit": 500,
+          "command": "python3 train_python/run_with_gpu_guard.py --max-memory-ratio 0.90 --max-start-memory-ratio 0.85 --min-disk-free-gb 20 --disk-check-path /home/rui --timeout-sec 1800 --out outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_0_500_2026_06_08_gpu_guard.json -- python3 train_python/eval_chat_task_benchmark.py --tasks-jsonl data_eval/public_task_benchmark_v1/mmlu_mmlu_full_test.jsonl --task-format mmlu --model Qwen/Qwen2.5-1.5B-Instruct --loader hf --max-new-tokens 64 --limit 500 --offset 0 --chat-template --no-think --out-json outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_0_500_2026_06_08.json --out-md outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_0_500_2026_06_08.md --hf-device-map auto --hf-max-gpu-memory-mib 2400"
+        },
+        {
+          "summary_json": "outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_500_1000_2026_06_08.json",
+          "summary_md": "outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_500_1000_2026_06_08.md",
+          "guard_json": "outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_500_1000_2026_06_08_gpu_guard.json",
+          "title": "FP16 Qwen2.5-1.5B MMLU MMLU_FULL shard 500-1000",
+          "offset": 500,
+          "limit": 500,
+          "command": "python3 train_python/run_with_gpu_guard.py --max-memory-ratio 0.90 --max-start-memory-ratio 0.85 --min-disk-free-gb 20 --disk-check-path /home/rui --timeout-sec 1800 --out outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_500_1000_2026_06_08_gpu_guard.json -- python3 train_python/eval_chat_task_benchmark.py --tasks-jsonl data_eval/public_task_benchmark_v1/mmlu_mmlu_full_test.jsonl --task-format mmlu --model Qwen/Qwen2.5-1.5B-Instruct --loader hf --max-new-tokens 64 --limit 500 --offset 500 --chat-template --no-think --out-json outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_500_1000_2026_06_08.json --out-md outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_500_1000_2026_06_08.md --hf-device-map auto --hf-max-gpu-memory-mib 2400"
+        },
+        {
+          "summary_json": "outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_1000_1500_2026_06_08.json",
+          "summary_md": "outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_1000_1500_2026_06_08.md",
+          "guard_json": "outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_1000_1500_2026_06_08_gpu_guard.json",
+          "title": "FP16 Qwen2.5-1.5B MMLU MMLU_FULL shard 1000-1500",
+          "offset": 1000,
+          "limit": 500,
+          "command": "python3 train_python/run_with_gpu_guard.py --max-memory-ratio 0.90 --max-start-memory-ratio 0.85 --min-disk-free-gb 20 --disk-check-path /home/rui --timeout-sec 1800 --out outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_1000_1500_2026_06_08_gpu_guard.json -- python3 train_python/eval_chat_task_benchmark.py --tasks-jsonl data_eval/public_task_benchmark_v1/mmlu_mmlu_full_test.jsonl --task-format mmlu --model Qwen/Qwen2.5-1.5B-Instruct --loader hf --max-new-tokens 64 --limit 500 --offset 1000 --chat-template --no-think --out-json outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_1000_1500_2026_06_08.json --out-md outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_1000_1500_2026_06_08.md --hf-device-map auto --hf-max-gpu-memory-mib 2400"
+        },
+        {
+          "summary_json": "outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_1500_2000_2026_06_08.json",
+          "summary_md": "outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_1500_2000_2026_06_08.md",
+          "guard_json": "outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_1500_2000_2026_06_08_gpu_guard.json",
+          "title": "FP16 Qwen2.5-1.5B MMLU MMLU_FULL shard 1500-2000",
+          "offset": 1500,
+          "limit": 500,
+          "command": "python3 train_python/run_with_gpu_guard.py --max-memory-ratio 0.90 --max-start-memory-ratio 0.85 --min-disk-free-gb 20 --disk-check-path /home/rui --timeout-sec 1800 --out outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_1500_2000_2026_06_08_gpu_guard.json -- python3 train_python/eval_chat_task_benchmark.py --tasks-jsonl data_eval/public_task_benchmark_v1/mmlu_mmlu_full_test.jsonl --task-format mmlu --model Qwen/Qwen2.5-1.5B-Instruct --loader hf --max-new-tokens 64 --limit 500 --offset 1500 --chat-template --no-think --out-json outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_1500_2000_2026_06_08.json --out-md outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_1500_2000_2026_06_08.md --hf-device-map auto --hf-max-gpu-memory-mib 2400"
+        },
+        {
+          "summary_json": "outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_2000_2500_2026_06_08.json",
+          "summary_md": "outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_2000_2500_2026_06_08.md",
+          "guard_json": "outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_2000_2500_2026_06_08_gpu_guard.json",
+          "title": "FP16 Qwen2.5-1.5B MMLU MMLU_FULL shard 2000-2500",
+          "offset": 2000,
+          "limit": 500,
+          "command": "python3 train_python/run_with_gpu_guard.py --max-memory-ratio 0.90 --max-start-memory-ratio 0.85 --min-disk-free-gb 20 --disk-check-path /home/rui --timeout-sec 1800 --out outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_2000_2500_2026_06_08_gpu_guard.json -- python3 train_python/eval_chat_task_benchmark.py --tasks-jsonl data_eval/public_task_benchmark_v1/mmlu_mmlu_full_test.jsonl --task-format mmlu --model Qwen/Qwen2.5-1.5B-Instruct --loader hf --max-new-tokens 64 --limit 500 --offset 2000 --chat-template --no-think --out-json outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_2000_2500_2026_06_08.json --out-md outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_2000_2500_2026_06_08.md --hf-device-map auto --hf-max-gpu-memory-mib 2400"
+        },
+        {
+          "summary_json": "outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_2500_3000_2026_06_08.json",
+          "summary_md": "outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_2500_3000_2026_06_08.md",
+          "guard_json": "outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_2500_3000_2026_06_08_gpu_guard.json",
+          "title": "FP16 Qwen2.5-1.5B MMLU MMLU_FULL shard 2500-3000",
+          "offset": 2500,
+          "limit": 500,
+          "command": "python3 train_python/run_with_gpu_guard.py --max-memory-ratio 0.90 --max-start-memory-ratio 0.85 --min-disk-free-gb 20 --disk-check-path /home/rui --timeout-sec 1800 --out outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_2500_3000_2026_06_08_gpu_guard.json -- python3 train_python/eval_chat_task_benchmark.py --tasks-jsonl data_eval/public_task_benchmark_v1/mmlu_mmlu_full_test.jsonl --task-format mmlu --model Qwen/Qwen2.5-1.5B-Instruct --loader hf --max-new-tokens 64 --limit 500 --offset 2500 --chat-template --no-think --out-json outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_2500_3000_2026_06_08.json --out-md outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_2500_3000_2026_06_08.md --hf-device-map auto --hf-max-gpu-memory-mib 2400"
+        },
+        {
+          "summary_json": "outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_3000_3500_2026_06_08.json",
+          "summary_md": "outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_3000_3500_2026_06_08.md",
+          "guard_json": "outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_3000_3500_2026_06_08_gpu_guard.json",
+          "title": "FP16 Qwen2.5-1.5B MMLU MMLU_FULL shard 3000-3500",
+          "offset": 3000,
+          "limit": 500,
+          "command": "python3 train_python/run_with_gpu_guard.py --max-memory-ratio 0.90 --max-start-memory-ratio 0.85 --min-disk-free-gb 20 --disk-check-path /home/rui --timeout-sec 1800 --out outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_3000_3500_2026_06_08_gpu_guard.json -- python3 train_python/eval_chat_task_benchmark.py --tasks-jsonl data_eval/public_task_benchmark_v1/mmlu_mmlu_full_test.jsonl --task-format mmlu --model Qwen/Qwen2.5-1.5B-Instruct --loader hf --max-new-tokens 64 --limit 500 --offset 3000 --chat-template --no-think --out-json outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_3000_3500_2026_06_08.json --out-md outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_3000_3500_2026_06_08.md --hf-device-map auto --hf-max-gpu-memory-mib 2400"
+        },
+        {
+          "summary_json": "outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_3500_4000_2026_06_08.json",
+          "summary_md": "outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_3500_4000_2026_06_08.md",
+          "guard_json": "outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_3500_4000_2026_06_08_gpu_guard.json",
+          "title": "FP16 Qwen2.5-1.5B MMLU MMLU_FULL shard 3500-4000",
+          "offset": 3500,
+          "limit": 500,
+          "command": "python3 train_python/run_with_gpu_guard.py --max-memory-ratio 0.90 --max-start-memory-ratio 0.85 --min-disk-free-gb 20 --disk-check-path /home/rui --timeout-sec 1800 --out outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_3500_4000_2026_06_08_gpu_guard.json -- python3 train_python/eval_chat_task_benchmark.py --tasks-jsonl data_eval/public_task_benchmark_v1/mmlu_mmlu_full_test.jsonl --task-format mmlu --model Qwen/Qwen2.5-1.5B-Instruct --loader hf --max-new-tokens 64 --limit 500 --offset 3500 --chat-template --no-think --out-json outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_3500_4000_2026_06_08.json --out-md outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_3500_4000_2026_06_08.md --hf-device-map auto --hf-max-gpu-memory-mib 2400"
+        },
+        {
+          "summary_json": "outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_4000_4500_2026_06_08.json",
+          "summary_md": "outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_4000_4500_2026_06_08.md",
+          "guard_json": "outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_4000_4500_2026_06_08_gpu_guard.json",
+          "title": "FP16 Qwen2.5-1.5B MMLU MMLU_FULL shard 4000-4500",
+          "offset": 4000,
+          "limit": 500,
+          "command": "python3 train_python/run_with_gpu_guard.py --max-memory-ratio 0.90 --max-start-memory-ratio 0.85 --min-disk-free-gb 20 --disk-check-path /home/rui --timeout-sec 1800 --out outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_4000_4500_2026_06_08_gpu_guard.json -- python3 train_python/eval_chat_task_benchmark.py --tasks-jsonl data_eval/public_task_benchmark_v1/mmlu_mmlu_full_test.jsonl --task-format mmlu --model Qwen/Qwen2.5-1.5B-Instruct --loader hf --max-new-tokens 64 --limit 500 --offset 4000 --chat-template --no-think --out-json outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_4000_4500_2026_06_08.json --out-md outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_4000_4500_2026_06_08.md --hf-device-map auto --hf-max-gpu-memory-mib 2400"
+        },
+        {
+          "summary_json": "outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_4500_5000_2026_06_08.json",
+          "summary_md": "outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_4500_5000_2026_06_08.md",
+          "guard_json": "outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_4500_5000_2026_06_08_gpu_guard.json",
+          "title": "FP16 Qwen2.5-1.5B MMLU MMLU_FULL shard 4500-5000",
+          "offset": 4500,
+          "limit": 500,
+          "command": "python3 train_python/run_with_gpu_guard.py --max-memory-ratio 0.90 --max-start-memory-ratio 0.85 --min-disk-free-gb 20 --disk-check-path /home/rui --timeout-sec 1800 --out outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_4500_5000_2026_06_08_gpu_guard.json -- python3 train_python/eval_chat_task_benchmark.py --tasks-jsonl data_eval/public_task_benchmark_v1/mmlu_mmlu_full_test.jsonl --task-format mmlu --model Qwen/Qwen2.5-1.5B-Instruct --loader hf --max-new-tokens 64 --limit 500 --offset 4500 --chat-template --no-think --out-json outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_4500_5000_2026_06_08.json --out-md outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_4500_5000_2026_06_08.md --hf-device-map auto --hf-max-gpu-memory-mib 2400"
+        },
+        {
+          "summary_json": "outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_5000_5500_2026_06_08.json",
+          "summary_md": "outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_5000_5500_2026_06_08.md",
+          "guard_json": "outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_5000_5500_2026_06_08_gpu_guard.json",
+          "title": "FP16 Qwen2.5-1.5B MMLU MMLU_FULL shard 5000-5500",
+          "offset": 5000,
+          "limit": 500,
+          "command": "python3 train_python/run_with_gpu_guard.py --max-memory-ratio 0.90 --max-start-memory-ratio 0.85 --min-disk-free-gb 20 --disk-check-path /home/rui --timeout-sec 1800 --out outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_5000_5500_2026_06_08_gpu_guard.json -- python3 train_python/eval_chat_task_benchmark.py --tasks-jsonl data_eval/public_task_benchmark_v1/mmlu_mmlu_full_test.jsonl --task-format mmlu --model Qwen/Qwen2.5-1.5B-Instruct --loader hf --max-new-tokens 64 --limit 500 --offset 5000 --chat-template --no-think --out-json outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_5000_5500_2026_06_08.json --out-md outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_5000_5500_2026_06_08.md --hf-device-map auto --hf-max-gpu-memory-mib 2400"
+        },
+        {
+          "summary_json": "outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_5500_6000_2026_06_08.json",
+          "summary_md": "outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_5500_6000_2026_06_08.md",
+          "guard_json": "outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_5500_6000_2026_06_08_gpu_guard.json",
+          "title": "FP16 Qwen2.5-1.5B MMLU MMLU_FULL shard 5500-6000",
+          "offset": 5500,
+          "limit": 500,
+          "command": "python3 train_python/run_with_gpu_guard.py --max-memory-ratio 0.90 --max-start-memory-ratio 0.85 --min-disk-free-gb 20 --disk-check-path /home/rui --timeout-sec 1800 --out outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_5500_6000_2026_06_08_gpu_guard.json -- python3 train_python/eval_chat_task_benchmark.py --tasks-jsonl data_eval/public_task_benchmark_v1/mmlu_mmlu_full_test.jsonl --task-format mmlu --model Qwen/Qwen2.5-1.5B-Instruct --loader hf --max-new-tokens 64 --limit 500 --offset 5500 --chat-template --no-think --out-json outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_5500_6000_2026_06_08.json --out-md outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_5500_6000_2026_06_08.md --hf-device-map auto --hf-max-gpu-memory-mib 2400"
+        },
+        {
+          "summary_json": "outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_6000_6500_2026_06_08.json",
+          "summary_md": "outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_6000_6500_2026_06_08.md",
+          "guard_json": "outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_6000_6500_2026_06_08_gpu_guard.json",
+          "title": "FP16 Qwen2.5-1.5B MMLU MMLU_FULL shard 6000-6500",
+          "offset": 6000,
+          "limit": 500,
+          "command": "python3 train_python/run_with_gpu_guard.py --max-memory-ratio 0.90 --max-start-memory-ratio 0.85 --min-disk-free-gb 20 --disk-check-path /home/rui --timeout-sec 1800 --out outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_6000_6500_2026_06_08_gpu_guard.json -- python3 train_python/eval_chat_task_benchmark.py --tasks-jsonl data_eval/public_task_benchmark_v1/mmlu_mmlu_full_test.jsonl --task-format mmlu --model Qwen/Qwen2.5-1.5B-Instruct --loader hf --max-new-tokens 64 --limit 500 --offset 6000 --chat-template --no-think --out-json outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_6000_6500_2026_06_08.json --out-md outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_6000_6500_2026_06_08.md --hf-device-map auto --hf-max-gpu-memory-mib 2400"
+        },
+        {
+          "summary_json": "outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_6500_7000_2026_06_08.json",
+          "summary_md": "outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_6500_7000_2026_06_08.md",
+          "guard_json": "outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_6500_7000_2026_06_08_gpu_guard.json",
+          "title": "FP16 Qwen2.5-1.5B MMLU MMLU_FULL shard 6500-7000",
+          "offset": 6500,
+          "limit": 500,
+          "command": "python3 train_python/run_with_gpu_guard.py --max-memory-ratio 0.90 --max-start-memory-ratio 0.85 --min-disk-free-gb 20 --disk-check-path /home/rui --timeout-sec 1800 --out outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_6500_7000_2026_06_08_gpu_guard.json -- python3 train_python/eval_chat_task_benchmark.py --tasks-jsonl data_eval/public_task_benchmark_v1/mmlu_mmlu_full_test.jsonl --task-format mmlu --model Qwen/Qwen2.5-1.5B-Instruct --loader hf --max-new-tokens 64 --limit 500 --offset 6500 --chat-template --no-think --out-json outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_6500_7000_2026_06_08.json --out-md outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_6500_7000_2026_06_08.md --hf-device-map auto --hf-max-gpu-memory-mib 2400"
+        },
+        {
+          "summary_json": "outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_7000_7500_2026_06_08.json",
+          "summary_md": "outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_7000_7500_2026_06_08.md",
+          "guard_json": "outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_7000_7500_2026_06_08_gpu_guard.json",
+          "title": "FP16 Qwen2.5-1.5B MMLU MMLU_FULL shard 7000-7500",
+          "offset": 7000,
+          "limit": 500,
+          "command": "python3 train_python/run_with_gpu_guard.py --max-memory-ratio 0.90 --max-start-memory-ratio 0.85 --min-disk-free-gb 20 --disk-check-path /home/rui --timeout-sec 1800 --out outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_7000_7500_2026_06_08_gpu_guard.json -- python3 train_python/eval_chat_task_benchmark.py --tasks-jsonl data_eval/public_task_benchmark_v1/mmlu_mmlu_full_test.jsonl --task-format mmlu --model Qwen/Qwen2.5-1.5B-Instruct --loader hf --max-new-tokens 64 --limit 500 --offset 7000 --chat-template --no-think --out-json outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_7000_7500_2026_06_08.json --out-md outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_7000_7500_2026_06_08.md --hf-device-map auto --hf-max-gpu-memory-mib 2400"
+        },
+        {
+          "summary_json": "outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_7500_8000_2026_06_08.json",
+          "summary_md": "outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_7500_8000_2026_06_08.md",
+          "guard_json": "outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_7500_8000_2026_06_08_gpu_guard.json",
+          "title": "FP16 Qwen2.5-1.5B MMLU MMLU_FULL shard 7500-8000",
+          "offset": 7500,
+          "limit": 500,
+          "command": "python3 train_python/run_with_gpu_guard.py --max-memory-ratio 0.90 --max-start-memory-ratio 0.85 --min-disk-free-gb 20 --disk-check-path /home/rui --timeout-sec 1800 --out outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_7500_8000_2026_06_08_gpu_guard.json -- python3 train_python/eval_chat_task_benchmark.py --tasks-jsonl data_eval/public_task_benchmark_v1/mmlu_mmlu_full_test.jsonl --task-format mmlu --model Qwen/Qwen2.5-1.5B-Instruct --loader hf --max-new-tokens 64 --limit 500 --offset 7500 --chat-template --no-think --out-json outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_7500_8000_2026_06_08.json --out-md outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_7500_8000_2026_06_08.md --hf-device-map auto --hf-max-gpu-memory-mib 2400"
+        },
+        {
+          "summary_json": "outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_8000_8500_2026_06_08.json",
+          "summary_md": "outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_8000_8500_2026_06_08.md",
+          "guard_json": "outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_8000_8500_2026_06_08_gpu_guard.json",
+          "title": "FP16 Qwen2.5-1.5B MMLU MMLU_FULL shard 8000-8500",
+          "offset": 8000,
+          "limit": 500,
+          "command": "python3 train_python/run_with_gpu_guard.py --max-memory-ratio 0.90 --max-start-memory-ratio 0.85 --min-disk-free-gb 20 --disk-check-path /home/rui --timeout-sec 1800 --out outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_8000_8500_2026_06_08_gpu_guard.json -- python3 train_python/eval_chat_task_benchmark.py --tasks-jsonl data_eval/public_task_benchmark_v1/mmlu_mmlu_full_test.jsonl --task-format mmlu --model Qwen/Qwen2.5-1.5B-Instruct --loader hf --max-new-tokens 64 --limit 500 --offset 8000 --chat-template --no-think --out-json outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_8000_8500_2026_06_08.json --out-md outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_8000_8500_2026_06_08.md --hf-device-map auto --hf-max-gpu-memory-mib 2400"
+        },
+        {
+          "summary_json": "outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_8500_9000_2026_06_08.json",
+          "summary_md": "outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_8500_9000_2026_06_08.md",
+          "guard_json": "outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_8500_9000_2026_06_08_gpu_guard.json",
+          "title": "FP16 Qwen2.5-1.5B MMLU MMLU_FULL shard 8500-9000",
+          "offset": 8500,
+          "limit": 500,
+          "command": "python3 train_python/run_with_gpu_guard.py --max-memory-ratio 0.90 --max-start-memory-ratio 0.85 --min-disk-free-gb 20 --disk-check-path /home/rui --timeout-sec 1800 --out outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_8500_9000_2026_06_08_gpu_guard.json -- python3 train_python/eval_chat_task_benchmark.py --tasks-jsonl data_eval/public_task_benchmark_v1/mmlu_mmlu_full_test.jsonl --task-format mmlu --model Qwen/Qwen2.5-1.5B-Instruct --loader hf --max-new-tokens 64 --limit 500 --offset 8500 --chat-template --no-think --out-json outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_8500_9000_2026_06_08.json --out-md outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_8500_9000_2026_06_08.md --hf-device-map auto --hf-max-gpu-memory-mib 2400"
+        },
+        {
+          "summary_json": "outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_9000_9500_2026_06_08.json",
+          "summary_md": "outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_9000_9500_2026_06_08.md",
+          "guard_json": "outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_9000_9500_2026_06_08_gpu_guard.json",
+          "title": "FP16 Qwen2.5-1.5B MMLU MMLU_FULL shard 9000-9500",
+          "offset": 9000,
+          "limit": 500,
+          "command": "python3 train_python/run_with_gpu_guard.py --max-memory-ratio 0.90 --max-start-memory-ratio 0.85 --min-disk-free-gb 20 --disk-check-path /home/rui --timeout-sec 1800 --out outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_9000_9500_2026_06_08_gpu_guard.json -- python3 train_python/eval_chat_task_benchmark.py --tasks-jsonl data_eval/public_task_benchmark_v1/mmlu_mmlu_full_test.jsonl --task-format mmlu --model Qwen/Qwen2.5-1.5B-Instruct --loader hf --max-new-tokens 64 --limit 500 --offset 9000 --chat-template --no-think --out-json outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_9000_9500_2026_06_08.json --out-md outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_9000_9500_2026_06_08.md --hf-device-map auto --hf-max-gpu-memory-mib 2400"
+        },
+        {
+          "summary_json": "outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_9500_10000_2026_06_08.json",
+          "summary_md": "outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_9500_10000_2026_06_08.md",
+          "guard_json": "outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_9500_10000_2026_06_08_gpu_guard.json",
+          "title": "FP16 Qwen2.5-1.5B MMLU MMLU_FULL shard 9500-10000",
+          "offset": 9500,
+          "limit": 500,
+          "command": "python3 train_python/run_with_gpu_guard.py --max-memory-ratio 0.90 --max-start-memory-ratio 0.85 --min-disk-free-gb 20 --disk-check-path /home/rui --timeout-sec 1800 --out outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_9500_10000_2026_06_08_gpu_guard.json -- python3 train_python/eval_chat_task_benchmark.py --tasks-jsonl data_eval/public_task_benchmark_v1/mmlu_mmlu_full_test.jsonl --task-format mmlu --model Qwen/Qwen2.5-1.5B-Instruct --loader hf --max-new-tokens 64 --limit 500 --offset 9500 --chat-template --no-think --out-json outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_9500_10000_2026_06_08.json --out-md outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_9500_10000_2026_06_08.md --hf-device-map auto --hf-max-gpu-memory-mib 2400"
+        },
+        {
+          "summary_json": "outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_10000_10500_2026_06_08.json",
+          "summary_md": "outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_10000_10500_2026_06_08.md",
+          "guard_json": "outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_10000_10500_2026_06_08_gpu_guard.json",
+          "title": "FP16 Qwen2.5-1.5B MMLU MMLU_FULL shard 10000-10500",
+          "offset": 10000,
+          "limit": 500,
+          "command": "python3 train_python/run_with_gpu_guard.py --max-memory-ratio 0.90 --max-start-memory-ratio 0.85 --min-disk-free-gb 20 --disk-check-path /home/rui --timeout-sec 1800 --out outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_10000_10500_2026_06_08_gpu_guard.json -- python3 train_python/eval_chat_task_benchmark.py --tasks-jsonl data_eval/public_task_benchmark_v1/mmlu_mmlu_full_test.jsonl --task-format mmlu --model Qwen/Qwen2.5-1.5B-Instruct --loader hf --max-new-tokens 64 --limit 500 --offset 10000 --chat-template --no-think --out-json outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_10000_10500_2026_06_08.json --out-md outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_10000_10500_2026_06_08.md --hf-device-map auto --hf-max-gpu-memory-mib 2400"
+        },
+        {
+          "summary_json": "outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_10500_11000_2026_06_08.json",
+          "summary_md": "outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_10500_11000_2026_06_08.md",
+          "guard_json": "outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_10500_11000_2026_06_08_gpu_guard.json",
+          "title": "FP16 Qwen2.5-1.5B MMLU MMLU_FULL shard 10500-11000",
+          "offset": 10500,
+          "limit": 500,
+          "command": "python3 train_python/run_with_gpu_guard.py --max-memory-ratio 0.90 --max-start-memory-ratio 0.85 --min-disk-free-gb 20 --disk-check-path /home/rui --timeout-sec 1800 --out outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_10500_11000_2026_06_08_gpu_guard.json -- python3 train_python/eval_chat_task_benchmark.py --tasks-jsonl data_eval/public_task_benchmark_v1/mmlu_mmlu_full_test.jsonl --task-format mmlu --model Qwen/Qwen2.5-1.5B-Instruct --loader hf --max-new-tokens 64 --limit 500 --offset 10500 --chat-template --no-think --out-json outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_10500_11000_2026_06_08.json --out-md outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_10500_11000_2026_06_08.md --hf-device-map auto --hf-max-gpu-memory-mib 2400"
+        },
+        {
+          "summary_json": "outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_11000_11500_2026_06_08.json",
+          "summary_md": "outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_11000_11500_2026_06_08.md",
+          "guard_json": "outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_11000_11500_2026_06_08_gpu_guard.json",
+          "title": "FP16 Qwen2.5-1.5B MMLU MMLU_FULL shard 11000-11500",
+          "offset": 11000,
+          "limit": 500,
+          "command": "python3 train_python/run_with_gpu_guard.py --max-memory-ratio 0.90 --max-start-memory-ratio 0.85 --min-disk-free-gb 20 --disk-check-path /home/rui --timeout-sec 1800 --out outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_11000_11500_2026_06_08_gpu_guard.json -- python3 train_python/eval_chat_task_benchmark.py --tasks-jsonl data_eval/public_task_benchmark_v1/mmlu_mmlu_full_test.jsonl --task-format mmlu --model Qwen/Qwen2.5-1.5B-Instruct --loader hf --max-new-tokens 64 --limit 500 --offset 11000 --chat-template --no-think --out-json outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_11000_11500_2026_06_08.json --out-md outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_11000_11500_2026_06_08.md --hf-device-map auto --hf-max-gpu-memory-mib 2400"
+        },
+        {
+          "summary_json": "outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_11500_12000_2026_06_08.json",
+          "summary_md": "outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_11500_12000_2026_06_08.md",
+          "guard_json": "outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_11500_12000_2026_06_08_gpu_guard.json",
+          "title": "FP16 Qwen2.5-1.5B MMLU MMLU_FULL shard 11500-12000",
+          "offset": 11500,
+          "limit": 500,
+          "command": "python3 train_python/run_with_gpu_guard.py --max-memory-ratio 0.90 --max-start-memory-ratio 0.85 --min-disk-free-gb 20 --disk-check-path /home/rui --timeout-sec 1800 --out outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_11500_12000_2026_06_08_gpu_guard.json -- python3 train_python/eval_chat_task_benchmark.py --tasks-jsonl data_eval/public_task_benchmark_v1/mmlu_mmlu_full_test.jsonl --task-format mmlu --model Qwen/Qwen2.5-1.5B-Instruct --loader hf --max-new-tokens 64 --limit 500 --offset 11500 --chat-template --no-think --out-json outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_11500_12000_2026_06_08.json --out-md outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_11500_12000_2026_06_08.md --hf-device-map auto --hf-max-gpu-memory-mib 2400"
+        },
+        {
+          "summary_json": "outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_12000_12500_2026_06_08.json",
+          "summary_md": "outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_12000_12500_2026_06_08.md",
+          "guard_json": "outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_12000_12500_2026_06_08_gpu_guard.json",
+          "title": "FP16 Qwen2.5-1.5B MMLU MMLU_FULL shard 12000-12500",
+          "offset": 12000,
+          "limit": 500,
+          "command": "python3 train_python/run_with_gpu_guard.py --max-memory-ratio 0.90 --max-start-memory-ratio 0.85 --min-disk-free-gb 20 --disk-check-path /home/rui --timeout-sec 1800 --out outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_12000_12500_2026_06_08_gpu_guard.json -- python3 train_python/eval_chat_task_benchmark.py --tasks-jsonl data_eval/public_task_benchmark_v1/mmlu_mmlu_full_test.jsonl --task-format mmlu --model Qwen/Qwen2.5-1.5B-Instruct --loader hf --max-new-tokens 64 --limit 500 --offset 12000 --chat-template --no-think --out-json outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_12000_12500_2026_06_08.json --out-md outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_12000_12500_2026_06_08.md --hf-device-map auto --hf-max-gpu-memory-mib 2400"
+        },
+        {
+          "summary_json": "outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_12500_13000_2026_06_08.json",
+          "summary_md": "outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_12500_13000_2026_06_08.md",
+          "guard_json": "outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_12500_13000_2026_06_08_gpu_guard.json",
+          "title": "FP16 Qwen2.5-1.5B MMLU MMLU_FULL shard 12500-13000",
+          "offset": 12500,
+          "limit": 500,
+          "command": "python3 train_python/run_with_gpu_guard.py --max-memory-ratio 0.90 --max-start-memory-ratio 0.85 --min-disk-free-gb 20 --disk-check-path /home/rui --timeout-sec 1800 --out outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_12500_13000_2026_06_08_gpu_guard.json -- python3 train_python/eval_chat_task_benchmark.py --tasks-jsonl data_eval/public_task_benchmark_v1/mmlu_mmlu_full_test.jsonl --task-format mmlu --model Qwen/Qwen2.5-1.5B-Instruct --loader hf --max-new-tokens 64 --limit 500 --offset 12500 --chat-template --no-think --out-json outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_12500_13000_2026_06_08.json --out-md outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_12500_13000_2026_06_08.md --hf-device-map auto --hf-max-gpu-memory-mib 2400"
+        },
+        {
+          "summary_json": "outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_13000_13500_2026_06_08.json",
+          "summary_md": "outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_13000_13500_2026_06_08.md",
+          "guard_json": "outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_13000_13500_2026_06_08_gpu_guard.json",
+          "title": "FP16 Qwen2.5-1.5B MMLU MMLU_FULL shard 13000-13500",
+          "offset": 13000,
+          "limit": 500,
+          "command": "python3 train_python/run_with_gpu_guard.py --max-memory-ratio 0.90 --max-start-memory-ratio 0.85 --min-disk-free-gb 20 --disk-check-path /home/rui --timeout-sec 1800 --out outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_13000_13500_2026_06_08_gpu_guard.json -- python3 train_python/eval_chat_task_benchmark.py --tasks-jsonl data_eval/public_task_benchmark_v1/mmlu_mmlu_full_test.jsonl --task-format mmlu --model Qwen/Qwen2.5-1.5B-Instruct --loader hf --max-new-tokens 64 --limit 500 --offset 13000 --chat-template --no-think --out-json outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_13000_13500_2026_06_08.json --out-md outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_13000_13500_2026_06_08.md --hf-device-map auto --hf-max-gpu-memory-mib 2400"
+        },
+        {
+          "summary_json": "outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_13500_14000_2026_06_08.json",
+          "summary_md": "outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_13500_14000_2026_06_08.md",
+          "guard_json": "outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_13500_14000_2026_06_08_gpu_guard.json",
+          "title": "FP16 Qwen2.5-1.5B MMLU MMLU_FULL shard 13500-14000",
+          "offset": 13500,
+          "limit": 500,
+          "command": "python3 train_python/run_with_gpu_guard.py --max-memory-ratio 0.90 --max-start-memory-ratio 0.85 --min-disk-free-gb 20 --disk-check-path /home/rui --timeout-sec 1800 --out outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_13500_14000_2026_06_08_gpu_guard.json -- python3 train_python/eval_chat_task_benchmark.py --tasks-jsonl data_eval/public_task_benchmark_v1/mmlu_mmlu_full_test.jsonl --task-format mmlu --model Qwen/Qwen2.5-1.5B-Instruct --loader hf --max-new-tokens 64 --limit 500 --offset 13500 --chat-template --no-think --out-json outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_13500_14000_2026_06_08.json --out-md outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_13500_14000_2026_06_08.md --hf-device-map auto --hf-max-gpu-memory-mib 2400"
+        },
+        {
+          "summary_json": "outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_14000_14042_2026_06_08.json",
+          "summary_md": "outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_14000_14042_2026_06_08.md",
+          "guard_json": "outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_14000_14042_2026_06_08_gpu_guard.json",
+          "title": "FP16 Qwen2.5-1.5B MMLU MMLU_FULL shard 14000-14042",
+          "offset": 14000,
+          "limit": 42,
+          "command": "python3 train_python/run_with_gpu_guard.py --max-memory-ratio 0.90 --max-start-memory-ratio 0.85 --min-disk-free-gb 20 --disk-check-path /home/rui --timeout-sec 1800 --out outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_14000_14042_2026_06_08_gpu_guard.json -- python3 train_python/eval_chat_task_benchmark.py --tasks-jsonl data_eval/public_task_benchmark_v1/mmlu_mmlu_full_test.jsonl --task-format mmlu --model Qwen/Qwen2.5-1.5B-Instruct --loader hf --max-new-tokens 64 --limit 42 --offset 14000 --chat-template --no-think --out-json outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_14000_14042_2026_06_08.json --out-md outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_14000_14042_2026_06_08.md --hf-device-map auto --hf-max-gpu-memory-mib 2400"
+        }
+      ],
+      "merge_command": "python3 train_python/merge_chat_task_shards.py --out-json outputs/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_summary_2026_06_08.json --out-md outputs/OFFICIAL_PTQ_TASK_FP16_QWEN25_1P5B_MMLU_MMLU_FULL_2026_06_08.md --out-guard-json outputs/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_summary_2026_06_08_gpu_guard.json --shard outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_0_500_2026_06_08.json=outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_0_500_2026_06_08_gpu_guard.json --shard outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_500_1000_2026_06_08.json=outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_500_1000_2026_06_08_gpu_guard.json --shard outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_1000_1500_2026_06_08.json=outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_1000_1500_2026_06_08_gpu_guard.json --shard outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_1500_2000_2026_06_08.json=outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_1500_2000_2026_06_08_gpu_guard.json --shard outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_2000_2500_2026_06_08.json=outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_2000_2500_2026_06_08_gpu_guard.json --shard outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_2500_3000_2026_06_08.json=outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_2500_3000_2026_06_08_gpu_guard.json --shard outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_3000_3500_2026_06_08.json=outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_3000_3500_2026_06_08_gpu_guard.json --shard outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_3500_4000_2026_06_08.json=outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_3500_4000_2026_06_08_gpu_guard.json --shard outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_4000_4500_2026_06_08.json=outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_4000_4500_2026_06_08_gpu_guard.json --shard outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_4500_5000_2026_06_08.json=outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_4500_5000_2026_06_08_gpu_guard.json --shard outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_5000_5500_2026_06_08.json=outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_5000_5500_2026_06_08_gpu_guard.json --shard outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_5500_6000_2026_06_08.json=outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_5500_6000_2026_06_08_gpu_guard.json --shard outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_6000_6500_2026_06_08.json=outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_6000_6500_2026_06_08_gpu_guard.json --shard outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_6500_7000_2026_06_08.json=outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_6500_7000_2026_06_08_gpu_guard.json --shard outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_7000_7500_2026_06_08.json=outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_7000_7500_2026_06_08_gpu_guard.json --shard outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_7500_8000_2026_06_08.json=outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_7500_8000_2026_06_08_gpu_guard.json --shard outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_8000_8500_2026_06_08.json=outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_8000_8500_2026_06_08_gpu_guard.json --shard outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_8500_9000_2026_06_08.json=outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_8500_9000_2026_06_08_gpu_guard.json --shard outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_9000_9500_2026_06_08.json=outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_9000_9500_2026_06_08_gpu_guard.json --shard outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_9500_10000_2026_06_08.json=outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_9500_10000_2026_06_08_gpu_guard.json --shard outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_10000_10500_2026_06_08.json=outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_10000_10500_2026_06_08_gpu_guard.json --shard outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_10500_11000_2026_06_08.json=outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_10500_11000_2026_06_08_gpu_guard.json --shard outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_11000_11500_2026_06_08.json=outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_11000_11500_2026_06_08_gpu_guard.json --shard outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_11500_12000_2026_06_08.json=outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_11500_12000_2026_06_08_gpu_guard.json --shard outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_12000_12500_2026_06_08.json=outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_12000_12500_2026_06_08_gpu_guard.json --shard outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_12500_13000_2026_06_08.json=outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_12500_13000_2026_06_08_gpu_guard.json --shard outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_13000_13500_2026_06_08.json=outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_13000_13500_2026_06_08_gpu_guard.json --shard outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_13500_14000_2026_06_08.json=outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_13500_14000_2026_06_08_gpu_guard.json --shard outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_14000_14042_2026_06_08.json=outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_14000_14042_2026_06_08_gpu_guard.json"
+    },
+    {
+      "variant": "autoawq",
+      "loader": "autoawq",
+      "model": "/home/rui/eigenskill_artifacts/qwen25_1p5b_awq_model_2026_06_07",
+      "merged": {
+        "summary_json": "outputs/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_summary_2026_06_08.json",
+        "summary_md": "outputs/OFFICIAL_PTQ_TASK_AUTOAWQ_QWEN25_1P5B_MMLU_MMLU_FULL_2026_06_08.md",
+        "guard_json": "outputs/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_summary_2026_06_08_gpu_guard.json"
+      },
+      "shards": [
+        {
+          "summary_json": "outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_0_500_2026_06_08.json",
+          "summary_md": "outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_0_500_2026_06_08.md",
+          "guard_json": "outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_0_500_2026_06_08_gpu_guard.json",
+          "title": "AUTOAWQ Qwen2.5-1.5B MMLU MMLU_FULL shard 0-500",
+          "offset": 0,
+          "limit": 500,
+          "command": "python3 train_python/run_with_gpu_guard.py --max-memory-ratio 0.90 --max-start-memory-ratio 0.85 --min-disk-free-gb 20 --disk-check-path /home/rui --timeout-sec 1800 --out outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_0_500_2026_06_08_gpu_guard.json -- python3 train_python/eval_chat_task_benchmark.py --tasks-jsonl data_eval/public_task_benchmark_v1/mmlu_mmlu_full_test.jsonl --task-format mmlu --model /home/rui/eigenskill_artifacts/qwen25_1p5b_awq_model_2026_06_07 --loader autoawq --max-new-tokens 64 --limit 500 --offset 0 --chat-template --no-think --out-json outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_0_500_2026_06_08.json --out-md outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_0_500_2026_06_08.md"
+        },
+        {
+          "summary_json": "outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_500_1000_2026_06_08.json",
+          "summary_md": "outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_500_1000_2026_06_08.md",
+          "guard_json": "outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_500_1000_2026_06_08_gpu_guard.json",
+          "title": "AUTOAWQ Qwen2.5-1.5B MMLU MMLU_FULL shard 500-1000",
+          "offset": 500,
+          "limit": 500,
+          "command": "python3 train_python/run_with_gpu_guard.py --max-memory-ratio 0.90 --max-start-memory-ratio 0.85 --min-disk-free-gb 20 --disk-check-path /home/rui --timeout-sec 1800 --out outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_500_1000_2026_06_08_gpu_guard.json -- python3 train_python/eval_chat_task_benchmark.py --tasks-jsonl data_eval/public_task_benchmark_v1/mmlu_mmlu_full_test.jsonl --task-format mmlu --model /home/rui/eigenskill_artifacts/qwen25_1p5b_awq_model_2026_06_07 --loader autoawq --max-new-tokens 64 --limit 500 --offset 500 --chat-template --no-think --out-json outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_500_1000_2026_06_08.json --out-md outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_500_1000_2026_06_08.md"
+        },
+        {
+          "summary_json": "outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_1000_1500_2026_06_08.json",
+          "summary_md": "outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_1000_1500_2026_06_08.md",
+          "guard_json": "outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_1000_1500_2026_06_08_gpu_guard.json",
+          "title": "AUTOAWQ Qwen2.5-1.5B MMLU MMLU_FULL shard 1000-1500",
+          "offset": 1000,
+          "limit": 500,
+          "command": "python3 train_python/run_with_gpu_guard.py --max-memory-ratio 0.90 --max-start-memory-ratio 0.85 --min-disk-free-gb 20 --disk-check-path /home/rui --timeout-sec 1800 --out outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_1000_1500_2026_06_08_gpu_guard.json -- python3 train_python/eval_chat_task_benchmark.py --tasks-jsonl data_eval/public_task_benchmark_v1/mmlu_mmlu_full_test.jsonl --task-format mmlu --model /home/rui/eigenskill_artifacts/qwen25_1p5b_awq_model_2026_06_07 --loader autoawq --max-new-tokens 64 --limit 500 --offset 1000 --chat-template --no-think --out-json outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_1000_1500_2026_06_08.json --out-md outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_1000_1500_2026_06_08.md"
+        },
+        {
+          "summary_json": "outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_1500_2000_2026_06_08.json",
+          "summary_md": "outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_1500_2000_2026_06_08.md",
+          "guard_json": "outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_1500_2000_2026_06_08_gpu_guard.json",
+          "title": "AUTOAWQ Qwen2.5-1.5B MMLU MMLU_FULL shard 1500-2000",
+          "offset": 1500,
+          "limit": 500,
+          "command": "python3 train_python/run_with_gpu_guard.py --max-memory-ratio 0.90 --max-start-memory-ratio 0.85 --min-disk-free-gb 20 --disk-check-path /home/rui --timeout-sec 1800 --out outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_1500_2000_2026_06_08_gpu_guard.json -- python3 train_python/eval_chat_task_benchmark.py --tasks-jsonl data_eval/public_task_benchmark_v1/mmlu_mmlu_full_test.jsonl --task-format mmlu --model /home/rui/eigenskill_artifacts/qwen25_1p5b_awq_model_2026_06_07 --loader autoawq --max-new-tokens 64 --limit 500 --offset 1500 --chat-template --no-think --out-json outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_1500_2000_2026_06_08.json --out-md outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_1500_2000_2026_06_08.md"
+        },
+        {
+          "summary_json": "outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_2000_2500_2026_06_08.json",
+          "summary_md": "outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_2000_2500_2026_06_08.md",
+          "guard_json": "outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_2000_2500_2026_06_08_gpu_guard.json",
+          "title": "AUTOAWQ Qwen2.5-1.5B MMLU MMLU_FULL shard 2000-2500",
+          "offset": 2000,
+          "limit": 500,
+          "command": "python3 train_python/run_with_gpu_guard.py --max-memory-ratio 0.90 --max-start-memory-ratio 0.85 --min-disk-free-gb 20 --disk-check-path /home/rui --timeout-sec 1800 --out outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_2000_2500_2026_06_08_gpu_guard.json -- python3 train_python/eval_chat_task_benchmark.py --tasks-jsonl data_eval/public_task_benchmark_v1/mmlu_mmlu_full_test.jsonl --task-format mmlu --model /home/rui/eigenskill_artifacts/qwen25_1p5b_awq_model_2026_06_07 --loader autoawq --max-new-tokens 64 --limit 500 --offset 2000 --chat-template --no-think --out-json outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_2000_2500_2026_06_08.json --out-md outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_2000_2500_2026_06_08.md"
+        },
+        {
+          "summary_json": "outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_2500_3000_2026_06_08.json",
+          "summary_md": "outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_2500_3000_2026_06_08.md",
+          "guard_json": "outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_2500_3000_2026_06_08_gpu_guard.json",
+          "title": "AUTOAWQ Qwen2.5-1.5B MMLU MMLU_FULL shard 2500-3000",
+          "offset": 2500,
+          "limit": 500,
+          "command": "python3 train_python/run_with_gpu_guard.py --max-memory-ratio 0.90 --max-start-memory-ratio 0.85 --min-disk-free-gb 20 --disk-check-path /home/rui --timeout-sec 1800 --out outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_2500_3000_2026_06_08_gpu_guard.json -- python3 train_python/eval_chat_task_benchmark.py --tasks-jsonl data_eval/public_task_benchmark_v1/mmlu_mmlu_full_test.jsonl --task-format mmlu --model /home/rui/eigenskill_artifacts/qwen25_1p5b_awq_model_2026_06_07 --loader autoawq --max-new-tokens 64 --limit 500 --offset 2500 --chat-template --no-think --out-json outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_2500_3000_2026_06_08.json --out-md outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_2500_3000_2026_06_08.md"
+        },
+        {
+          "summary_json": "outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_3000_3500_2026_06_08.json",
+          "summary_md": "outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_3000_3500_2026_06_08.md",
+          "guard_json": "outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_3000_3500_2026_06_08_gpu_guard.json",
+          "title": "AUTOAWQ Qwen2.5-1.5B MMLU MMLU_FULL shard 3000-3500",
+          "offset": 3000,
+          "limit": 500,
+          "command": "python3 train_python/run_with_gpu_guard.py --max-memory-ratio 0.90 --max-start-memory-ratio 0.85 --min-disk-free-gb 20 --disk-check-path /home/rui --timeout-sec 1800 --out outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_3000_3500_2026_06_08_gpu_guard.json -- python3 train_python/eval_chat_task_benchmark.py --tasks-jsonl data_eval/public_task_benchmark_v1/mmlu_mmlu_full_test.jsonl --task-format mmlu --model /home/rui/eigenskill_artifacts/qwen25_1p5b_awq_model_2026_06_07 --loader autoawq --max-new-tokens 64 --limit 500 --offset 3000 --chat-template --no-think --out-json outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_3000_3500_2026_06_08.json --out-md outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_3000_3500_2026_06_08.md"
+        },
+        {
+          "summary_json": "outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_3500_4000_2026_06_08.json",
+          "summary_md": "outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_3500_4000_2026_06_08.md",
+          "guard_json": "outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_3500_4000_2026_06_08_gpu_guard.json",
+          "title": "AUTOAWQ Qwen2.5-1.5B MMLU MMLU_FULL shard 3500-4000",
+          "offset": 3500,
+          "limit": 500,
+          "command": "python3 train_python/run_with_gpu_guard.py --max-memory-ratio 0.90 --max-start-memory-ratio 0.85 --min-disk-free-gb 20 --disk-check-path /home/rui --timeout-sec 1800 --out outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_3500_4000_2026_06_08_gpu_guard.json -- python3 train_python/eval_chat_task_benchmark.py --tasks-jsonl data_eval/public_task_benchmark_v1/mmlu_mmlu_full_test.jsonl --task-format mmlu --model /home/rui/eigenskill_artifacts/qwen25_1p5b_awq_model_2026_06_07 --loader autoawq --max-new-tokens 64 --limit 500 --offset 3500 --chat-template --no-think --out-json outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_3500_4000_2026_06_08.json --out-md outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_3500_4000_2026_06_08.md"
+        },
+        {
+          "summary_json": "outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_4000_4500_2026_06_08.json",
+          "summary_md": "outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_4000_4500_2026_06_08.md",
+          "guard_json": "outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_4000_4500_2026_06_08_gpu_guard.json",
+          "title": "AUTOAWQ Qwen2.5-1.5B MMLU MMLU_FULL shard 4000-4500",
+          "offset": 4000,
+          "limit": 500,
+          "command": "python3 train_python/run_with_gpu_guard.py --max-memory-ratio 0.90 --max-start-memory-ratio 0.85 --min-disk-free-gb 20 --disk-check-path /home/rui --timeout-sec 1800 --out outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_4000_4500_2026_06_08_gpu_guard.json -- python3 train_python/eval_chat_task_benchmark.py --tasks-jsonl data_eval/public_task_benchmark_v1/mmlu_mmlu_full_test.jsonl --task-format mmlu --model /home/rui/eigenskill_artifacts/qwen25_1p5b_awq_model_2026_06_07 --loader autoawq --max-new-tokens 64 --limit 500 --offset 4000 --chat-template --no-think --out-json outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_4000_4500_2026_06_08.json --out-md outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_4000_4500_2026_06_08.md"
+        },
+        {
+          "summary_json": "outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_4500_5000_2026_06_08.json",
+          "summary_md": "outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_4500_5000_2026_06_08.md",
+          "guard_json": "outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_4500_5000_2026_06_08_gpu_guard.json",
+          "title": "AUTOAWQ Qwen2.5-1.5B MMLU MMLU_FULL shard 4500-5000",
+          "offset": 4500,
+          "limit": 500,
+          "command": "python3 train_python/run_with_gpu_guard.py --max-memory-ratio 0.90 --max-start-memory-ratio 0.85 --min-disk-free-gb 20 --disk-check-path /home/rui --timeout-sec 1800 --out outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_4500_5000_2026_06_08_gpu_guard.json -- python3 train_python/eval_chat_task_benchmark.py --tasks-jsonl data_eval/public_task_benchmark_v1/mmlu_mmlu_full_test.jsonl --task-format mmlu --model /home/rui/eigenskill_artifacts/qwen25_1p5b_awq_model_2026_06_07 --loader autoawq --max-new-tokens 64 --limit 500 --offset 4500 --chat-template --no-think --out-json outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_4500_5000_2026_06_08.json --out-md outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_4500_5000_2026_06_08.md"
+        },
+        {
+          "summary_json": "outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_5000_5500_2026_06_08.json",
+          "summary_md": "outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_5000_5500_2026_06_08.md",
+          "guard_json": "outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_5000_5500_2026_06_08_gpu_guard.json",
+          "title": "AUTOAWQ Qwen2.5-1.5B MMLU MMLU_FULL shard 5000-5500",
+          "offset": 5000,
+          "limit": 500,
+          "command": "python3 train_python/run_with_gpu_guard.py --max-memory-ratio 0.90 --max-start-memory-ratio 0.85 --min-disk-free-gb 20 --disk-check-path /home/rui --timeout-sec 1800 --out outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_5000_5500_2026_06_08_gpu_guard.json -- python3 train_python/eval_chat_task_benchmark.py --tasks-jsonl data_eval/public_task_benchmark_v1/mmlu_mmlu_full_test.jsonl --task-format mmlu --model /home/rui/eigenskill_artifacts/qwen25_1p5b_awq_model_2026_06_07 --loader autoawq --max-new-tokens 64 --limit 500 --offset 5000 --chat-template --no-think --out-json outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_5000_5500_2026_06_08.json --out-md outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_5000_5500_2026_06_08.md"
+        },
+        {
+          "summary_json": "outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_5500_6000_2026_06_08.json",
+          "summary_md": "outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_5500_6000_2026_06_08.md",
+          "guard_json": "outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_5500_6000_2026_06_08_gpu_guard.json",
+          "title": "AUTOAWQ Qwen2.5-1.5B MMLU MMLU_FULL shard 5500-6000",
+          "offset": 5500,
+          "limit": 500,
+          "command": "python3 train_python/run_with_gpu_guard.py --max-memory-ratio 0.90 --max-start-memory-ratio 0.85 --min-disk-free-gb 20 --disk-check-path /home/rui --timeout-sec 1800 --out outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_5500_6000_2026_06_08_gpu_guard.json -- python3 train_python/eval_chat_task_benchmark.py --tasks-jsonl data_eval/public_task_benchmark_v1/mmlu_mmlu_full_test.jsonl --task-format mmlu --model /home/rui/eigenskill_artifacts/qwen25_1p5b_awq_model_2026_06_07 --loader autoawq --max-new-tokens 64 --limit 500 --offset 5500 --chat-template --no-think --out-json outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_5500_6000_2026_06_08.json --out-md outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_5500_6000_2026_06_08.md"
+        },
+        {
+          "summary_json": "outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_6000_6500_2026_06_08.json",
+          "summary_md": "outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_6000_6500_2026_06_08.md",
+          "guard_json": "outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_6000_6500_2026_06_08_gpu_guard.json",
+          "title": "AUTOAWQ Qwen2.5-1.5B MMLU MMLU_FULL shard 6000-6500",
+          "offset": 6000,
+          "limit": 500,
+          "command": "python3 train_python/run_with_gpu_guard.py --max-memory-ratio 0.90 --max-start-memory-ratio 0.85 --min-disk-free-gb 20 --disk-check-path /home/rui --timeout-sec 1800 --out outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_6000_6500_2026_06_08_gpu_guard.json -- python3 train_python/eval_chat_task_benchmark.py --tasks-jsonl data_eval/public_task_benchmark_v1/mmlu_mmlu_full_test.jsonl --task-format mmlu --model /home/rui/eigenskill_artifacts/qwen25_1p5b_awq_model_2026_06_07 --loader autoawq --max-new-tokens 64 --limit 500 --offset 6000 --chat-template --no-think --out-json outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_6000_6500_2026_06_08.json --out-md outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_6000_6500_2026_06_08.md"
+        },
+        {
+          "summary_json": "outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_6500_7000_2026_06_08.json",
+          "summary_md": "outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_6500_7000_2026_06_08.md",
+          "guard_json": "outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_6500_7000_2026_06_08_gpu_guard.json",
+          "title": "AUTOAWQ Qwen2.5-1.5B MMLU MMLU_FULL shard 6500-7000",
+          "offset": 6500,
+          "limit": 500,
+          "command": "python3 train_python/run_with_gpu_guard.py --max-memory-ratio 0.90 --max-start-memory-ratio 0.85 --min-disk-free-gb 20 --disk-check-path /home/rui --timeout-sec 1800 --out outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_6500_7000_2026_06_08_gpu_guard.json -- python3 train_python/eval_chat_task_benchmark.py --tasks-jsonl data_eval/public_task_benchmark_v1/mmlu_mmlu_full_test.jsonl --task-format mmlu --model /home/rui/eigenskill_artifacts/qwen25_1p5b_awq_model_2026_06_07 --loader autoawq --max-new-tokens 64 --limit 500 --offset 6500 --chat-template --no-think --out-json outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_6500_7000_2026_06_08.json --out-md outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_6500_7000_2026_06_08.md"
+        },
+        {
+          "summary_json": "outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_7000_7500_2026_06_08.json",
+          "summary_md": "outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_7000_7500_2026_06_08.md",
+          "guard_json": "outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_7000_7500_2026_06_08_gpu_guard.json",
+          "title": "AUTOAWQ Qwen2.5-1.5B MMLU MMLU_FULL shard 7000-7500",
+          "offset": 7000,
+          "limit": 500,
+          "command": "python3 train_python/run_with_gpu_guard.py --max-memory-ratio 0.90 --max-start-memory-ratio 0.85 --min-disk-free-gb 20 --disk-check-path /home/rui --timeout-sec 1800 --out outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_7000_7500_2026_06_08_gpu_guard.json -- python3 train_python/eval_chat_task_benchmark.py --tasks-jsonl data_eval/public_task_benchmark_v1/mmlu_mmlu_full_test.jsonl --task-format mmlu --model /home/rui/eigenskill_artifacts/qwen25_1p5b_awq_model_2026_06_07 --loader autoawq --max-new-tokens 64 --limit 500 --offset 7000 --chat-template --no-think --out-json outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_7000_7500_2026_06_08.json --out-md outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_7000_7500_2026_06_08.md"
+        },
+        {
+          "summary_json": "outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_7500_8000_2026_06_08.json",
+          "summary_md": "outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_7500_8000_2026_06_08.md",
+          "guard_json": "outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_7500_8000_2026_06_08_gpu_guard.json",
+          "title": "AUTOAWQ Qwen2.5-1.5B MMLU MMLU_FULL shard 7500-8000",
+          "offset": 7500,
+          "limit": 500,
+          "command": "python3 train_python/run_with_gpu_guard.py --max-memory-ratio 0.90 --max-start-memory-ratio 0.85 --min-disk-free-gb 20 --disk-check-path /home/rui --timeout-sec 1800 --out outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_7500_8000_2026_06_08_gpu_guard.json -- python3 train_python/eval_chat_task_benchmark.py --tasks-jsonl data_eval/public_task_benchmark_v1/mmlu_mmlu_full_test.jsonl --task-format mmlu --model /home/rui/eigenskill_artifacts/qwen25_1p5b_awq_model_2026_06_07 --loader autoawq --max-new-tokens 64 --limit 500 --offset 7500 --chat-template --no-think --out-json outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_7500_8000_2026_06_08.json --out-md outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_7500_8000_2026_06_08.md"
+        },
+        {
+          "summary_json": "outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_8000_8500_2026_06_08.json",
+          "summary_md": "outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_8000_8500_2026_06_08.md",
+          "guard_json": "outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_8000_8500_2026_06_08_gpu_guard.json",
+          "title": "AUTOAWQ Qwen2.5-1.5B MMLU MMLU_FULL shard 8000-8500",
+          "offset": 8000,
+          "limit": 500,
+          "command": "python3 train_python/run_with_gpu_guard.py --max-memory-ratio 0.90 --max-start-memory-ratio 0.85 --min-disk-free-gb 20 --disk-check-path /home/rui --timeout-sec 1800 --out outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_8000_8500_2026_06_08_gpu_guard.json -- python3 train_python/eval_chat_task_benchmark.py --tasks-jsonl data_eval/public_task_benchmark_v1/mmlu_mmlu_full_test.jsonl --task-format mmlu --model /home/rui/eigenskill_artifacts/qwen25_1p5b_awq_model_2026_06_07 --loader autoawq --max-new-tokens 64 --limit 500 --offset 8000 --chat-template --no-think --out-json outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_8000_8500_2026_06_08.json --out-md outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_8000_8500_2026_06_08.md"
+        },
+        {
+          "summary_json": "outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_8500_9000_2026_06_08.json",
+          "summary_md": "outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_8500_9000_2026_06_08.md",
+          "guard_json": "outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_8500_9000_2026_06_08_gpu_guard.json",
+          "title": "AUTOAWQ Qwen2.5-1.5B MMLU MMLU_FULL shard 8500-9000",
+          "offset": 8500,
+          "limit": 500,
+          "command": "python3 train_python/run_with_gpu_guard.py --max-memory-ratio 0.90 --max-start-memory-ratio 0.85 --min-disk-free-gb 20 --disk-check-path /home/rui --timeout-sec 1800 --out outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_8500_9000_2026_06_08_gpu_guard.json -- python3 train_python/eval_chat_task_benchmark.py --tasks-jsonl data_eval/public_task_benchmark_v1/mmlu_mmlu_full_test.jsonl --task-format mmlu --model /home/rui/eigenskill_artifacts/qwen25_1p5b_awq_model_2026_06_07 --loader autoawq --max-new-tokens 64 --limit 500 --offset 8500 --chat-template --no-think --out-json outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_8500_9000_2026_06_08.json --out-md outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_8500_9000_2026_06_08.md"
+        },
+        {
+          "summary_json": "outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_9000_9500_2026_06_08.json",
+          "summary_md": "outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_9000_9500_2026_06_08.md",
+          "guard_json": "outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_9000_9500_2026_06_08_gpu_guard.json",
+          "title": "AUTOAWQ Qwen2.5-1.5B MMLU MMLU_FULL shard 9000-9500",
+          "offset": 9000,
+          "limit": 500,
+          "command": "python3 train_python/run_with_gpu_guard.py --max-memory-ratio 0.90 --max-start-memory-ratio 0.85 --min-disk-free-gb 20 --disk-check-path /home/rui --timeout-sec 1800 --out outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_9000_9500_2026_06_08_gpu_guard.json -- python3 train_python/eval_chat_task_benchmark.py --tasks-jsonl data_eval/public_task_benchmark_v1/mmlu_mmlu_full_test.jsonl --task-format mmlu --model /home/rui/eigenskill_artifacts/qwen25_1p5b_awq_model_2026_06_07 --loader autoawq --max-new-tokens 64 --limit 500 --offset 9000 --chat-template --no-think --out-json outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_9000_9500_2026_06_08.json --out-md outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_9000_9500_2026_06_08.md"
+        },
+        {
+          "summary_json": "outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_9500_10000_2026_06_08.json",
+          "summary_md": "outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_9500_10000_2026_06_08.md",
+          "guard_json": "outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_9500_10000_2026_06_08_gpu_guard.json",
+          "title": "AUTOAWQ Qwen2.5-1.5B MMLU MMLU_FULL shard 9500-10000",
+          "offset": 9500,
+          "limit": 500,
+          "command": "python3 train_python/run_with_gpu_guard.py --max-memory-ratio 0.90 --max-start-memory-ratio 0.85 --min-disk-free-gb 20 --disk-check-path /home/rui --timeout-sec 1800 --out outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_9500_10000_2026_06_08_gpu_guard.json -- python3 train_python/eval_chat_task_benchmark.py --tasks-jsonl data_eval/public_task_benchmark_v1/mmlu_mmlu_full_test.jsonl --task-format mmlu --model /home/rui/eigenskill_artifacts/qwen25_1p5b_awq_model_2026_06_07 --loader autoawq --max-new-tokens 64 --limit 500 --offset 9500 --chat-template --no-think --out-json outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_9500_10000_2026_06_08.json --out-md outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_9500_10000_2026_06_08.md"
+        },
+        {
+          "summary_json": "outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_10000_10500_2026_06_08.json",
+          "summary_md": "outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_10000_10500_2026_06_08.md",
+          "guard_json": "outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_10000_10500_2026_06_08_gpu_guard.json",
+          "title": "AUTOAWQ Qwen2.5-1.5B MMLU MMLU_FULL shard 10000-10500",
+          "offset": 10000,
+          "limit": 500,
+          "command": "python3 train_python/run_with_gpu_guard.py --max-memory-ratio 0.90 --max-start-memory-ratio 0.85 --min-disk-free-gb 20 --disk-check-path /home/rui --timeout-sec 1800 --out outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_10000_10500_2026_06_08_gpu_guard.json -- python3 train_python/eval_chat_task_benchmark.py --tasks-jsonl data_eval/public_task_benchmark_v1/mmlu_mmlu_full_test.jsonl --task-format mmlu --model /home/rui/eigenskill_artifacts/qwen25_1p5b_awq_model_2026_06_07 --loader autoawq --max-new-tokens 64 --limit 500 --offset 10000 --chat-template --no-think --out-json outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_10000_10500_2026_06_08.json --out-md outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_10000_10500_2026_06_08.md"
+        },
+        {
+          "summary_json": "outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_10500_11000_2026_06_08.json",
+          "summary_md": "outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_10500_11000_2026_06_08.md",
+          "guard_json": "outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_10500_11000_2026_06_08_gpu_guard.json",
+          "title": "AUTOAWQ Qwen2.5-1.5B MMLU MMLU_FULL shard 10500-11000",
+          "offset": 10500,
+          "limit": 500,
+          "command": "python3 train_python/run_with_gpu_guard.py --max-memory-ratio 0.90 --max-start-memory-ratio 0.85 --min-disk-free-gb 20 --disk-check-path /home/rui --timeout-sec 1800 --out outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_10500_11000_2026_06_08_gpu_guard.json -- python3 train_python/eval_chat_task_benchmark.py --tasks-jsonl data_eval/public_task_benchmark_v1/mmlu_mmlu_full_test.jsonl --task-format mmlu --model /home/rui/eigenskill_artifacts/qwen25_1p5b_awq_model_2026_06_07 --loader autoawq --max-new-tokens 64 --limit 500 --offset 10500 --chat-template --no-think --out-json outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_10500_11000_2026_06_08.json --out-md outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_10500_11000_2026_06_08.md"
+        },
+        {
+          "summary_json": "outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_11000_11500_2026_06_08.json",
+          "summary_md": "outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_11000_11500_2026_06_08.md",
+          "guard_json": "outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_11000_11500_2026_06_08_gpu_guard.json",
+          "title": "AUTOAWQ Qwen2.5-1.5B MMLU MMLU_FULL shard 11000-11500",
+          "offset": 11000,
+          "limit": 500,
+          "command": "python3 train_python/run_with_gpu_guard.py --max-memory-ratio 0.90 --max-start-memory-ratio 0.85 --min-disk-free-gb 20 --disk-check-path /home/rui --timeout-sec 1800 --out outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_11000_11500_2026_06_08_gpu_guard.json -- python3 train_python/eval_chat_task_benchmark.py --tasks-jsonl data_eval/public_task_benchmark_v1/mmlu_mmlu_full_test.jsonl --task-format mmlu --model /home/rui/eigenskill_artifacts/qwen25_1p5b_awq_model_2026_06_07 --loader autoawq --max-new-tokens 64 --limit 500 --offset 11000 --chat-template --no-think --out-json outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_11000_11500_2026_06_08.json --out-md outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_11000_11500_2026_06_08.md"
+        },
+        {
+          "summary_json": "outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_11500_12000_2026_06_08.json",
+          "summary_md": "outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_11500_12000_2026_06_08.md",
+          "guard_json": "outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_11500_12000_2026_06_08_gpu_guard.json",
+          "title": "AUTOAWQ Qwen2.5-1.5B MMLU MMLU_FULL shard 11500-12000",
+          "offset": 11500,
+          "limit": 500,
+          "command": "python3 train_python/run_with_gpu_guard.py --max-memory-ratio 0.90 --max-start-memory-ratio 0.85 --min-disk-free-gb 20 --disk-check-path /home/rui --timeout-sec 1800 --out outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_11500_12000_2026_06_08_gpu_guard.json -- python3 train_python/eval_chat_task_benchmark.py --tasks-jsonl data_eval/public_task_benchmark_v1/mmlu_mmlu_full_test.jsonl --task-format mmlu --model /home/rui/eigenskill_artifacts/qwen25_1p5b_awq_model_2026_06_07 --loader autoawq --max-new-tokens 64 --limit 500 --offset 11500 --chat-template --no-think --out-json outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_11500_12000_2026_06_08.json --out-md outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_11500_12000_2026_06_08.md"
+        },
+        {
+          "summary_json": "outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_12000_12500_2026_06_08.json",
+          "summary_md": "outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_12000_12500_2026_06_08.md",
+          "guard_json": "outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_12000_12500_2026_06_08_gpu_guard.json",
+          "title": "AUTOAWQ Qwen2.5-1.5B MMLU MMLU_FULL shard 12000-12500",
+          "offset": 12000,
+          "limit": 500,
+          "command": "python3 train_python/run_with_gpu_guard.py --max-memory-ratio 0.90 --max-start-memory-ratio 0.85 --min-disk-free-gb 20 --disk-check-path /home/rui --timeout-sec 1800 --out outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_12000_12500_2026_06_08_gpu_guard.json -- python3 train_python/eval_chat_task_benchmark.py --tasks-jsonl data_eval/public_task_benchmark_v1/mmlu_mmlu_full_test.jsonl --task-format mmlu --model /home/rui/eigenskill_artifacts/qwen25_1p5b_awq_model_2026_06_07 --loader autoawq --max-new-tokens 64 --limit 500 --offset 12000 --chat-template --no-think --out-json outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_12000_12500_2026_06_08.json --out-md outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_12000_12500_2026_06_08.md"
+        },
+        {
+          "summary_json": "outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_12500_13000_2026_06_08.json",
+          "summary_md": "outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_12500_13000_2026_06_08.md",
+          "guard_json": "outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_12500_13000_2026_06_08_gpu_guard.json",
+          "title": "AUTOAWQ Qwen2.5-1.5B MMLU MMLU_FULL shard 12500-13000",
+          "offset": 12500,
+          "limit": 500,
+          "command": "python3 train_python/run_with_gpu_guard.py --max-memory-ratio 0.90 --max-start-memory-ratio 0.85 --min-disk-free-gb 20 --disk-check-path /home/rui --timeout-sec 1800 --out outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_12500_13000_2026_06_08_gpu_guard.json -- python3 train_python/eval_chat_task_benchmark.py --tasks-jsonl data_eval/public_task_benchmark_v1/mmlu_mmlu_full_test.jsonl --task-format mmlu --model /home/rui/eigenskill_artifacts/qwen25_1p5b_awq_model_2026_06_07 --loader autoawq --max-new-tokens 64 --limit 500 --offset 12500 --chat-template --no-think --out-json outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_12500_13000_2026_06_08.json --out-md outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_12500_13000_2026_06_08.md"
+        },
+        {
+          "summary_json": "outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_13000_13500_2026_06_08.json",
+          "summary_md": "outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_13000_13500_2026_06_08.md",
+          "guard_json": "outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_13000_13500_2026_06_08_gpu_guard.json",
+          "title": "AUTOAWQ Qwen2.5-1.5B MMLU MMLU_FULL shard 13000-13500",
+          "offset": 13000,
+          "limit": 500,
+          "command": "python3 train_python/run_with_gpu_guard.py --max-memory-ratio 0.90 --max-start-memory-ratio 0.85 --min-disk-free-gb 20 --disk-check-path /home/rui --timeout-sec 1800 --out outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_13000_13500_2026_06_08_gpu_guard.json -- python3 train_python/eval_chat_task_benchmark.py --tasks-jsonl data_eval/public_task_benchmark_v1/mmlu_mmlu_full_test.jsonl --task-format mmlu --model /home/rui/eigenskill_artifacts/qwen25_1p5b_awq_model_2026_06_07 --loader autoawq --max-new-tokens 64 --limit 500 --offset 13000 --chat-template --no-think --out-json outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_13000_13500_2026_06_08.json --out-md outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_13000_13500_2026_06_08.md"
+        },
+        {
+          "summary_json": "outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_13500_14000_2026_06_08.json",
+          "summary_md": "outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_13500_14000_2026_06_08.md",
+          "guard_json": "outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_13500_14000_2026_06_08_gpu_guard.json",
+          "title": "AUTOAWQ Qwen2.5-1.5B MMLU MMLU_FULL shard 13500-14000",
+          "offset": 13500,
+          "limit": 500,
+          "command": "python3 train_python/run_with_gpu_guard.py --max-memory-ratio 0.90 --max-start-memory-ratio 0.85 --min-disk-free-gb 20 --disk-check-path /home/rui --timeout-sec 1800 --out outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_13500_14000_2026_06_08_gpu_guard.json -- python3 train_python/eval_chat_task_benchmark.py --tasks-jsonl data_eval/public_task_benchmark_v1/mmlu_mmlu_full_test.jsonl --task-format mmlu --model /home/rui/eigenskill_artifacts/qwen25_1p5b_awq_model_2026_06_07 --loader autoawq --max-new-tokens 64 --limit 500 --offset 13500 --chat-template --no-think --out-json outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_13500_14000_2026_06_08.json --out-md outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_13500_14000_2026_06_08.md"
+        },
+        {
+          "summary_json": "outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_14000_14042_2026_06_08.json",
+          "summary_md": "outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_14000_14042_2026_06_08.md",
+          "guard_json": "outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_14000_14042_2026_06_08_gpu_guard.json",
+          "title": "AUTOAWQ Qwen2.5-1.5B MMLU MMLU_FULL shard 14000-14042",
+          "offset": 14000,
+          "limit": 42,
+          "command": "python3 train_python/run_with_gpu_guard.py --max-memory-ratio 0.90 --max-start-memory-ratio 0.85 --min-disk-free-gb 20 --disk-check-path /home/rui --timeout-sec 1800 --out outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_14000_14042_2026_06_08_gpu_guard.json -- python3 train_python/eval_chat_task_benchmark.py --tasks-jsonl data_eval/public_task_benchmark_v1/mmlu_mmlu_full_test.jsonl --task-format mmlu --model /home/rui/eigenskill_artifacts/qwen25_1p5b_awq_model_2026_06_07 --loader autoawq --max-new-tokens 64 --limit 42 --offset 14000 --chat-template --no-think --out-json outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_14000_14042_2026_06_08.json --out-md outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_14000_14042_2026_06_08.md"
+        }
+      ],
+      "merge_command": "python3 train_python/merge_chat_task_shards.py --out-json outputs/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_summary_2026_06_08.json --out-md outputs/OFFICIAL_PTQ_TASK_AUTOAWQ_QWEN25_1P5B_MMLU_MMLU_FULL_2026_06_08.md --out-guard-json outputs/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_summary_2026_06_08_gpu_guard.json --shard outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_0_500_2026_06_08.json=outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_0_500_2026_06_08_gpu_guard.json --shard outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_500_1000_2026_06_08.json=outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_500_1000_2026_06_08_gpu_guard.json --shard outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_1000_1500_2026_06_08.json=outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_1000_1500_2026_06_08_gpu_guard.json --shard outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_1500_2000_2026_06_08.json=outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_1500_2000_2026_06_08_gpu_guard.json --shard outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_2000_2500_2026_06_08.json=outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_2000_2500_2026_06_08_gpu_guard.json --shard outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_2500_3000_2026_06_08.json=outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_2500_3000_2026_06_08_gpu_guard.json --shard outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_3000_3500_2026_06_08.json=outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_3000_3500_2026_06_08_gpu_guard.json --shard outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_3500_4000_2026_06_08.json=outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_3500_4000_2026_06_08_gpu_guard.json --shard outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_4000_4500_2026_06_08.json=outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_4000_4500_2026_06_08_gpu_guard.json --shard outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_4500_5000_2026_06_08.json=outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_4500_5000_2026_06_08_gpu_guard.json --shard outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_5000_5500_2026_06_08.json=outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_5000_5500_2026_06_08_gpu_guard.json --shard outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_5500_6000_2026_06_08.json=outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_5500_6000_2026_06_08_gpu_guard.json --shard outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_6000_6500_2026_06_08.json=outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_6000_6500_2026_06_08_gpu_guard.json --shard outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_6500_7000_2026_06_08.json=outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_6500_7000_2026_06_08_gpu_guard.json --shard outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_7000_7500_2026_06_08.json=outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_7000_7500_2026_06_08_gpu_guard.json --shard outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_7500_8000_2026_06_08.json=outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_7500_8000_2026_06_08_gpu_guard.json --shard outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_8000_8500_2026_06_08.json=outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_8000_8500_2026_06_08_gpu_guard.json --shard outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_8500_9000_2026_06_08.json=outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_8500_9000_2026_06_08_gpu_guard.json --shard outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_9000_9500_2026_06_08.json=outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_9000_9500_2026_06_08_gpu_guard.json --shard outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_9500_10000_2026_06_08.json=outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_9500_10000_2026_06_08_gpu_guard.json --shard outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_10000_10500_2026_06_08.json=outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_10000_10500_2026_06_08_gpu_guard.json --shard outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_10500_11000_2026_06_08.json=outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_10500_11000_2026_06_08_gpu_guard.json --shard outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_11000_11500_2026_06_08.json=outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_11000_11500_2026_06_08_gpu_guard.json --shard outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_11500_12000_2026_06_08.json=outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_11500_12000_2026_06_08_gpu_guard.json --shard outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_12000_12500_2026_06_08.json=outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_12000_12500_2026_06_08_gpu_guard.json --shard outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_12500_13000_2026_06_08.json=outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_12500_13000_2026_06_08_gpu_guard.json --shard outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_13000_13500_2026_06_08.json=outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_13000_13500_2026_06_08_gpu_guard.json --shard outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_13500_14000_2026_06_08.json=outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_13500_14000_2026_06_08_gpu_guard.json --shard outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_14000_14042_2026_06_08.json=outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_14000_14042_2026_06_08_gpu_guard.json"
+    },
+    {
+      "variant": "gptqmodel",
+      "loader": "gptqmodel",
+      "model": "/home/rui/eigenskill_artifacts/qwen25_1p5b_gptq_model_smoke4_2026_06_08",
+      "merged": {
+        "summary_json": "outputs/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_summary_2026_06_08.json",
+        "summary_md": "outputs/OFFICIAL_PTQ_TASK_GPTQMODEL_QWEN25_1P5B_MMLU_MMLU_FULL_2026_06_08.md",
+        "guard_json": "outputs/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_summary_2026_06_08_gpu_guard.json"
+      },
+      "shards": [
+        {
+          "summary_json": "outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_0_500_2026_06_08.json",
+          "summary_md": "outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_0_500_2026_06_08.md",
+          "guard_json": "outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_0_500_2026_06_08_gpu_guard.json",
+          "title": "GPTQMODEL Qwen2.5-1.5B MMLU MMLU_FULL shard 0-500",
+          "offset": 0,
+          "limit": 500,
+          "command": "python3 train_python/run_with_gpu_guard.py --max-memory-ratio 0.90 --max-start-memory-ratio 0.85 --min-disk-free-gb 20 --disk-check-path /home/rui --timeout-sec 1800 --out outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_0_500_2026_06_08_gpu_guard.json -- python3 train_python/eval_chat_task_benchmark.py --tasks-jsonl data_eval/public_task_benchmark_v1/mmlu_mmlu_full_test.jsonl --task-format mmlu --model /home/rui/eigenskill_artifacts/qwen25_1p5b_gptq_model_smoke4_2026_06_08 --loader gptqmodel --max-new-tokens 64 --limit 500 --offset 0 --chat-template --no-think --out-json outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_0_500_2026_06_08.json --out-md outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_0_500_2026_06_08.md"
+        },
+        {
+          "summary_json": "outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_500_1000_2026_06_08.json",
+          "summary_md": "outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_500_1000_2026_06_08.md",
+          "guard_json": "outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_500_1000_2026_06_08_gpu_guard.json",
+          "title": "GPTQMODEL Qwen2.5-1.5B MMLU MMLU_FULL shard 500-1000",
+          "offset": 500,
+          "limit": 500,
+          "command": "python3 train_python/run_with_gpu_guard.py --max-memory-ratio 0.90 --max-start-memory-ratio 0.85 --min-disk-free-gb 20 --disk-check-path /home/rui --timeout-sec 1800 --out outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_500_1000_2026_06_08_gpu_guard.json -- python3 train_python/eval_chat_task_benchmark.py --tasks-jsonl data_eval/public_task_benchmark_v1/mmlu_mmlu_full_test.jsonl --task-format mmlu --model /home/rui/eigenskill_artifacts/qwen25_1p5b_gptq_model_smoke4_2026_06_08 --loader gptqmodel --max-new-tokens 64 --limit 500 --offset 500 --chat-template --no-think --out-json outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_500_1000_2026_06_08.json --out-md outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_500_1000_2026_06_08.md"
+        },
+        {
+          "summary_json": "outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_1000_1500_2026_06_08.json",
+          "summary_md": "outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_1000_1500_2026_06_08.md",
+          "guard_json": "outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_1000_1500_2026_06_08_gpu_guard.json",
+          "title": "GPTQMODEL Qwen2.5-1.5B MMLU MMLU_FULL shard 1000-1500",
+          "offset": 1000,
+          "limit": 500,
+          "command": "python3 train_python/run_with_gpu_guard.py --max-memory-ratio 0.90 --max-start-memory-ratio 0.85 --min-disk-free-gb 20 --disk-check-path /home/rui --timeout-sec 1800 --out outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_1000_1500_2026_06_08_gpu_guard.json -- python3 train_python/eval_chat_task_benchmark.py --tasks-jsonl data_eval/public_task_benchmark_v1/mmlu_mmlu_full_test.jsonl --task-format mmlu --model /home/rui/eigenskill_artifacts/qwen25_1p5b_gptq_model_smoke4_2026_06_08 --loader gptqmodel --max-new-tokens 64 --limit 500 --offset 1000 --chat-template --no-think --out-json outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_1000_1500_2026_06_08.json --out-md outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_1000_1500_2026_06_08.md"
+        },
+        {
+          "summary_json": "outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_1500_2000_2026_06_08.json",
+          "summary_md": "outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_1500_2000_2026_06_08.md",
+          "guard_json": "outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_1500_2000_2026_06_08_gpu_guard.json",
+          "title": "GPTQMODEL Qwen2.5-1.5B MMLU MMLU_FULL shard 1500-2000",
+          "offset": 1500,
+          "limit": 500,
+          "command": "python3 train_python/run_with_gpu_guard.py --max-memory-ratio 0.90 --max-start-memory-ratio 0.85 --min-disk-free-gb 20 --disk-check-path /home/rui --timeout-sec 1800 --out outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_1500_2000_2026_06_08_gpu_guard.json -- python3 train_python/eval_chat_task_benchmark.py --tasks-jsonl data_eval/public_task_benchmark_v1/mmlu_mmlu_full_test.jsonl --task-format mmlu --model /home/rui/eigenskill_artifacts/qwen25_1p5b_gptq_model_smoke4_2026_06_08 --loader gptqmodel --max-new-tokens 64 --limit 500 --offset 1500 --chat-template --no-think --out-json outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_1500_2000_2026_06_08.json --out-md outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_1500_2000_2026_06_08.md"
+        },
+        {
+          "summary_json": "outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_2000_2500_2026_06_08.json",
+          "summary_md": "outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_2000_2500_2026_06_08.md",
+          "guard_json": "outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_2000_2500_2026_06_08_gpu_guard.json",
+          "title": "GPTQMODEL Qwen2.5-1.5B MMLU MMLU_FULL shard 2000-2500",
+          "offset": 2000,
+          "limit": 500,
+          "command": "python3 train_python/run_with_gpu_guard.py --max-memory-ratio 0.90 --max-start-memory-ratio 0.85 --min-disk-free-gb 20 --disk-check-path /home/rui --timeout-sec 1800 --out outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_2000_2500_2026_06_08_gpu_guard.json -- python3 train_python/eval_chat_task_benchmark.py --tasks-jsonl data_eval/public_task_benchmark_v1/mmlu_mmlu_full_test.jsonl --task-format mmlu --model /home/rui/eigenskill_artifacts/qwen25_1p5b_gptq_model_smoke4_2026_06_08 --loader gptqmodel --max-new-tokens 64 --limit 500 --offset 2000 --chat-template --no-think --out-json outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_2000_2500_2026_06_08.json --out-md outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_2000_2500_2026_06_08.md"
+        },
+        {
+          "summary_json": "outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_2500_3000_2026_06_08.json",
+          "summary_md": "outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_2500_3000_2026_06_08.md",
+          "guard_json": "outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_2500_3000_2026_06_08_gpu_guard.json",
+          "title": "GPTQMODEL Qwen2.5-1.5B MMLU MMLU_FULL shard 2500-3000",
+          "offset": 2500,
+          "limit": 500,
+          "command": "python3 train_python/run_with_gpu_guard.py --max-memory-ratio 0.90 --max-start-memory-ratio 0.85 --min-disk-free-gb 20 --disk-check-path /home/rui --timeout-sec 1800 --out outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_2500_3000_2026_06_08_gpu_guard.json -- python3 train_python/eval_chat_task_benchmark.py --tasks-jsonl data_eval/public_task_benchmark_v1/mmlu_mmlu_full_test.jsonl --task-format mmlu --model /home/rui/eigenskill_artifacts/qwen25_1p5b_gptq_model_smoke4_2026_06_08 --loader gptqmodel --max-new-tokens 64 --limit 500 --offset 2500 --chat-template --no-think --out-json outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_2500_3000_2026_06_08.json --out-md outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_2500_3000_2026_06_08.md"
+        },
+        {
+          "summary_json": "outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_3000_3500_2026_06_08.json",
+          "summary_md": "outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_3000_3500_2026_06_08.md",
+          "guard_json": "outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_3000_3500_2026_06_08_gpu_guard.json",
+          "title": "GPTQMODEL Qwen2.5-1.5B MMLU MMLU_FULL shard 3000-3500",
+          "offset": 3000,
+          "limit": 500,
+          "command": "python3 train_python/run_with_gpu_guard.py --max-memory-ratio 0.90 --max-start-memory-ratio 0.85 --min-disk-free-gb 20 --disk-check-path /home/rui --timeout-sec 1800 --out outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_3000_3500_2026_06_08_gpu_guard.json -- python3 train_python/eval_chat_task_benchmark.py --tasks-jsonl data_eval/public_task_benchmark_v1/mmlu_mmlu_full_test.jsonl --task-format mmlu --model /home/rui/eigenskill_artifacts/qwen25_1p5b_gptq_model_smoke4_2026_06_08 --loader gptqmodel --max-new-tokens 64 --limit 500 --offset 3000 --chat-template --no-think --out-json outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_3000_3500_2026_06_08.json --out-md outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_3000_3500_2026_06_08.md"
+        },
+        {
+          "summary_json": "outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_3500_4000_2026_06_08.json",
+          "summary_md": "outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_3500_4000_2026_06_08.md",
+          "guard_json": "outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_3500_4000_2026_06_08_gpu_guard.json",
+          "title": "GPTQMODEL Qwen2.5-1.5B MMLU MMLU_FULL shard 3500-4000",
+          "offset": 3500,
+          "limit": 500,
+          "command": "python3 train_python/run_with_gpu_guard.py --max-memory-ratio 0.90 --max-start-memory-ratio 0.85 --min-disk-free-gb 20 --disk-check-path /home/rui --timeout-sec 1800 --out outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_3500_4000_2026_06_08_gpu_guard.json -- python3 train_python/eval_chat_task_benchmark.py --tasks-jsonl data_eval/public_task_benchmark_v1/mmlu_mmlu_full_test.jsonl --task-format mmlu --model /home/rui/eigenskill_artifacts/qwen25_1p5b_gptq_model_smoke4_2026_06_08 --loader gptqmodel --max-new-tokens 64 --limit 500 --offset 3500 --chat-template --no-think --out-json outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_3500_4000_2026_06_08.json --out-md outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_3500_4000_2026_06_08.md"
+        },
+        {
+          "summary_json": "outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_4000_4500_2026_06_08.json",
+          "summary_md": "outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_4000_4500_2026_06_08.md",
+          "guard_json": "outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_4000_4500_2026_06_08_gpu_guard.json",
+          "title": "GPTQMODEL Qwen2.5-1.5B MMLU MMLU_FULL shard 4000-4500",
+          "offset": 4000,
+          "limit": 500,
+          "command": "python3 train_python/run_with_gpu_guard.py --max-memory-ratio 0.90 --max-start-memory-ratio 0.85 --min-disk-free-gb 20 --disk-check-path /home/rui --timeout-sec 1800 --out outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_4000_4500_2026_06_08_gpu_guard.json -- python3 train_python/eval_chat_task_benchmark.py --tasks-jsonl data_eval/public_task_benchmark_v1/mmlu_mmlu_full_test.jsonl --task-format mmlu --model /home/rui/eigenskill_artifacts/qwen25_1p5b_gptq_model_smoke4_2026_06_08 --loader gptqmodel --max-new-tokens 64 --limit 500 --offset 4000 --chat-template --no-think --out-json outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_4000_4500_2026_06_08.json --out-md outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_4000_4500_2026_06_08.md"
+        },
+        {
+          "summary_json": "outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_4500_5000_2026_06_08.json",
+          "summary_md": "outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_4500_5000_2026_06_08.md",
+          "guard_json": "outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_4500_5000_2026_06_08_gpu_guard.json",
+          "title": "GPTQMODEL Qwen2.5-1.5B MMLU MMLU_FULL shard 4500-5000",
+          "offset": 4500,
+          "limit": 500,
+          "command": "python3 train_python/run_with_gpu_guard.py --max-memory-ratio 0.90 --max-start-memory-ratio 0.85 --min-disk-free-gb 20 --disk-check-path /home/rui --timeout-sec 1800 --out outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_4500_5000_2026_06_08_gpu_guard.json -- python3 train_python/eval_chat_task_benchmark.py --tasks-jsonl data_eval/public_task_benchmark_v1/mmlu_mmlu_full_test.jsonl --task-format mmlu --model /home/rui/eigenskill_artifacts/qwen25_1p5b_gptq_model_smoke4_2026_06_08 --loader gptqmodel --max-new-tokens 64 --limit 500 --offset 4500 --chat-template --no-think --out-json outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_4500_5000_2026_06_08.json --out-md outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_4500_5000_2026_06_08.md"
+        },
+        {
+          "summary_json": "outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_5000_5500_2026_06_08.json",
+          "summary_md": "outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_5000_5500_2026_06_08.md",
+          "guard_json": "outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_5000_5500_2026_06_08_gpu_guard.json",
+          "title": "GPTQMODEL Qwen2.5-1.5B MMLU MMLU_FULL shard 5000-5500",
+          "offset": 5000,
+          "limit": 500,
+          "command": "python3 train_python/run_with_gpu_guard.py --max-memory-ratio 0.90 --max-start-memory-ratio 0.85 --min-disk-free-gb 20 --disk-check-path /home/rui --timeout-sec 1800 --out outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_5000_5500_2026_06_08_gpu_guard.json -- python3 train_python/eval_chat_task_benchmark.py --tasks-jsonl data_eval/public_task_benchmark_v1/mmlu_mmlu_full_test.jsonl --task-format mmlu --model /home/rui/eigenskill_artifacts/qwen25_1p5b_gptq_model_smoke4_2026_06_08 --loader gptqmodel --max-new-tokens 64 --limit 500 --offset 5000 --chat-template --no-think --out-json outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_5000_5500_2026_06_08.json --out-md outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_5000_5500_2026_06_08.md"
+        },
+        {
+          "summary_json": "outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_5500_6000_2026_06_08.json",
+          "summary_md": "outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_5500_6000_2026_06_08.md",
+          "guard_json": "outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_5500_6000_2026_06_08_gpu_guard.json",
+          "title": "GPTQMODEL Qwen2.5-1.5B MMLU MMLU_FULL shard 5500-6000",
+          "offset": 5500,
+          "limit": 500,
+          "command": "python3 train_python/run_with_gpu_guard.py --max-memory-ratio 0.90 --max-start-memory-ratio 0.85 --min-disk-free-gb 20 --disk-check-path /home/rui --timeout-sec 1800 --out outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_5500_6000_2026_06_08_gpu_guard.json -- python3 train_python/eval_chat_task_benchmark.py --tasks-jsonl data_eval/public_task_benchmark_v1/mmlu_mmlu_full_test.jsonl --task-format mmlu --model /home/rui/eigenskill_artifacts/qwen25_1p5b_gptq_model_smoke4_2026_06_08 --loader gptqmodel --max-new-tokens 64 --limit 500 --offset 5500 --chat-template --no-think --out-json outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_5500_6000_2026_06_08.json --out-md outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_5500_6000_2026_06_08.md"
+        },
+        {
+          "summary_json": "outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_6000_6500_2026_06_08.json",
+          "summary_md": "outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_6000_6500_2026_06_08.md",
+          "guard_json": "outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_6000_6500_2026_06_08_gpu_guard.json",
+          "title": "GPTQMODEL Qwen2.5-1.5B MMLU MMLU_FULL shard 6000-6500",
+          "offset": 6000,
+          "limit": 500,
+          "command": "python3 train_python/run_with_gpu_guard.py --max-memory-ratio 0.90 --max-start-memory-ratio 0.85 --min-disk-free-gb 20 --disk-check-path /home/rui --timeout-sec 1800 --out outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_6000_6500_2026_06_08_gpu_guard.json -- python3 train_python/eval_chat_task_benchmark.py --tasks-jsonl data_eval/public_task_benchmark_v1/mmlu_mmlu_full_test.jsonl --task-format mmlu --model /home/rui/eigenskill_artifacts/qwen25_1p5b_gptq_model_smoke4_2026_06_08 --loader gptqmodel --max-new-tokens 64 --limit 500 --offset 6000 --chat-template --no-think --out-json outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_6000_6500_2026_06_08.json --out-md outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_6000_6500_2026_06_08.md"
+        },
+        {
+          "summary_json": "outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_6500_7000_2026_06_08.json",
+          "summary_md": "outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_6500_7000_2026_06_08.md",
+          "guard_json": "outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_6500_7000_2026_06_08_gpu_guard.json",
+          "title": "GPTQMODEL Qwen2.5-1.5B MMLU MMLU_FULL shard 6500-7000",
+          "offset": 6500,
+          "limit": 500,
+          "command": "python3 train_python/run_with_gpu_guard.py --max-memory-ratio 0.90 --max-start-memory-ratio 0.85 --min-disk-free-gb 20 --disk-check-path /home/rui --timeout-sec 1800 --out outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_6500_7000_2026_06_08_gpu_guard.json -- python3 train_python/eval_chat_task_benchmark.py --tasks-jsonl data_eval/public_task_benchmark_v1/mmlu_mmlu_full_test.jsonl --task-format mmlu --model /home/rui/eigenskill_artifacts/qwen25_1p5b_gptq_model_smoke4_2026_06_08 --loader gptqmodel --max-new-tokens 64 --limit 500 --offset 6500 --chat-template --no-think --out-json outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_6500_7000_2026_06_08.json --out-md outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_6500_7000_2026_06_08.md"
+        },
+        {
+          "summary_json": "outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_7000_7500_2026_06_08.json",
+          "summary_md": "outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_7000_7500_2026_06_08.md",
+          "guard_json": "outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_7000_7500_2026_06_08_gpu_guard.json",
+          "title": "GPTQMODEL Qwen2.5-1.5B MMLU MMLU_FULL shard 7000-7500",
+          "offset": 7000,
+          "limit": 500,
+          "command": "python3 train_python/run_with_gpu_guard.py --max-memory-ratio 0.90 --max-start-memory-ratio 0.85 --min-disk-free-gb 20 --disk-check-path /home/rui --timeout-sec 1800 --out outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_7000_7500_2026_06_08_gpu_guard.json -- python3 train_python/eval_chat_task_benchmark.py --tasks-jsonl data_eval/public_task_benchmark_v1/mmlu_mmlu_full_test.jsonl --task-format mmlu --model /home/rui/eigenskill_artifacts/qwen25_1p5b_gptq_model_smoke4_2026_06_08 --loader gptqmodel --max-new-tokens 64 --limit 500 --offset 7000 --chat-template --no-think --out-json outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_7000_7500_2026_06_08.json --out-md outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_7000_7500_2026_06_08.md"
+        },
+        {
+          "summary_json": "outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_7500_8000_2026_06_08.json",
+          "summary_md": "outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_7500_8000_2026_06_08.md",
+          "guard_json": "outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_7500_8000_2026_06_08_gpu_guard.json",
+          "title": "GPTQMODEL Qwen2.5-1.5B MMLU MMLU_FULL shard 7500-8000",
+          "offset": 7500,
+          "limit": 500,
+          "command": "python3 train_python/run_with_gpu_guard.py --max-memory-ratio 0.90 --max-start-memory-ratio 0.85 --min-disk-free-gb 20 --disk-check-path /home/rui --timeout-sec 1800 --out outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_7500_8000_2026_06_08_gpu_guard.json -- python3 train_python/eval_chat_task_benchmark.py --tasks-jsonl data_eval/public_task_benchmark_v1/mmlu_mmlu_full_test.jsonl --task-format mmlu --model /home/rui/eigenskill_artifacts/qwen25_1p5b_gptq_model_smoke4_2026_06_08 --loader gptqmodel --max-new-tokens 64 --limit 500 --offset 7500 --chat-template --no-think --out-json outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_7500_8000_2026_06_08.json --out-md outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_7500_8000_2026_06_08.md"
+        },
+        {
+          "summary_json": "outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_8000_8500_2026_06_08.json",
+          "summary_md": "outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_8000_8500_2026_06_08.md",
+          "guard_json": "outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_8000_8500_2026_06_08_gpu_guard.json",
+          "title": "GPTQMODEL Qwen2.5-1.5B MMLU MMLU_FULL shard 8000-8500",
+          "offset": 8000,
+          "limit": 500,
+          "command": "python3 train_python/run_with_gpu_guard.py --max-memory-ratio 0.90 --max-start-memory-ratio 0.85 --min-disk-free-gb 20 --disk-check-path /home/rui --timeout-sec 1800 --out outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_8000_8500_2026_06_08_gpu_guard.json -- python3 train_python/eval_chat_task_benchmark.py --tasks-jsonl data_eval/public_task_benchmark_v1/mmlu_mmlu_full_test.jsonl --task-format mmlu --model /home/rui/eigenskill_artifacts/qwen25_1p5b_gptq_model_smoke4_2026_06_08 --loader gptqmodel --max-new-tokens 64 --limit 500 --offset 8000 --chat-template --no-think --out-json outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_8000_8500_2026_06_08.json --out-md outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_8000_8500_2026_06_08.md"
+        },
+        {
+          "summary_json": "outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_8500_9000_2026_06_08.json",
+          "summary_md": "outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_8500_9000_2026_06_08.md",
+          "guard_json": "outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_8500_9000_2026_06_08_gpu_guard.json",
+          "title": "GPTQMODEL Qwen2.5-1.5B MMLU MMLU_FULL shard 8500-9000",
+          "offset": 8500,
+          "limit": 500,
+          "command": "python3 train_python/run_with_gpu_guard.py --max-memory-ratio 0.90 --max-start-memory-ratio 0.85 --min-disk-free-gb 20 --disk-check-path /home/rui --timeout-sec 1800 --out outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_8500_9000_2026_06_08_gpu_guard.json -- python3 train_python/eval_chat_task_benchmark.py --tasks-jsonl data_eval/public_task_benchmark_v1/mmlu_mmlu_full_test.jsonl --task-format mmlu --model /home/rui/eigenskill_artifacts/qwen25_1p5b_gptq_model_smoke4_2026_06_08 --loader gptqmodel --max-new-tokens 64 --limit 500 --offset 8500 --chat-template --no-think --out-json outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_8500_9000_2026_06_08.json --out-md outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_8500_9000_2026_06_08.md"
+        },
+        {
+          "summary_json": "outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_9000_9500_2026_06_08.json",
+          "summary_md": "outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_9000_9500_2026_06_08.md",
+          "guard_json": "outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_9000_9500_2026_06_08_gpu_guard.json",
+          "title": "GPTQMODEL Qwen2.5-1.5B MMLU MMLU_FULL shard 9000-9500",
+          "offset": 9000,
+          "limit": 500,
+          "command": "python3 train_python/run_with_gpu_guard.py --max-memory-ratio 0.90 --max-start-memory-ratio 0.85 --min-disk-free-gb 20 --disk-check-path /home/rui --timeout-sec 1800 --out outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_9000_9500_2026_06_08_gpu_guard.json -- python3 train_python/eval_chat_task_benchmark.py --tasks-jsonl data_eval/public_task_benchmark_v1/mmlu_mmlu_full_test.jsonl --task-format mmlu --model /home/rui/eigenskill_artifacts/qwen25_1p5b_gptq_model_smoke4_2026_06_08 --loader gptqmodel --max-new-tokens 64 --limit 500 --offset 9000 --chat-template --no-think --out-json outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_9000_9500_2026_06_08.json --out-md outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_9000_9500_2026_06_08.md"
+        },
+        {
+          "summary_json": "outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_9500_10000_2026_06_08.json",
+          "summary_md": "outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_9500_10000_2026_06_08.md",
+          "guard_json": "outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_9500_10000_2026_06_08_gpu_guard.json",
+          "title": "GPTQMODEL Qwen2.5-1.5B MMLU MMLU_FULL shard 9500-10000",
+          "offset": 9500,
+          "limit": 500,
+          "command": "python3 train_python/run_with_gpu_guard.py --max-memory-ratio 0.90 --max-start-memory-ratio 0.85 --min-disk-free-gb 20 --disk-check-path /home/rui --timeout-sec 1800 --out outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_9500_10000_2026_06_08_gpu_guard.json -- python3 train_python/eval_chat_task_benchmark.py --tasks-jsonl data_eval/public_task_benchmark_v1/mmlu_mmlu_full_test.jsonl --task-format mmlu --model /home/rui/eigenskill_artifacts/qwen25_1p5b_gptq_model_smoke4_2026_06_08 --loader gptqmodel --max-new-tokens 64 --limit 500 --offset 9500 --chat-template --no-think --out-json outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_9500_10000_2026_06_08.json --out-md outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_9500_10000_2026_06_08.md"
+        },
+        {
+          "summary_json": "outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_10000_10500_2026_06_08.json",
+          "summary_md": "outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_10000_10500_2026_06_08.md",
+          "guard_json": "outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_10000_10500_2026_06_08_gpu_guard.json",
+          "title": "GPTQMODEL Qwen2.5-1.5B MMLU MMLU_FULL shard 10000-10500",
+          "offset": 10000,
+          "limit": 500,
+          "command": "python3 train_python/run_with_gpu_guard.py --max-memory-ratio 0.90 --max-start-memory-ratio 0.85 --min-disk-free-gb 20 --disk-check-path /home/rui --timeout-sec 1800 --out outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_10000_10500_2026_06_08_gpu_guard.json -- python3 train_python/eval_chat_task_benchmark.py --tasks-jsonl data_eval/public_task_benchmark_v1/mmlu_mmlu_full_test.jsonl --task-format mmlu --model /home/rui/eigenskill_artifacts/qwen25_1p5b_gptq_model_smoke4_2026_06_08 --loader gptqmodel --max-new-tokens 64 --limit 500 --offset 10000 --chat-template --no-think --out-json outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_10000_10500_2026_06_08.json --out-md outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_10000_10500_2026_06_08.md"
+        },
+        {
+          "summary_json": "outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_10500_11000_2026_06_08.json",
+          "summary_md": "outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_10500_11000_2026_06_08.md",
+          "guard_json": "outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_10500_11000_2026_06_08_gpu_guard.json",
+          "title": "GPTQMODEL Qwen2.5-1.5B MMLU MMLU_FULL shard 10500-11000",
+          "offset": 10500,
+          "limit": 500,
+          "command": "python3 train_python/run_with_gpu_guard.py --max-memory-ratio 0.90 --max-start-memory-ratio 0.85 --min-disk-free-gb 20 --disk-check-path /home/rui --timeout-sec 1800 --out outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_10500_11000_2026_06_08_gpu_guard.json -- python3 train_python/eval_chat_task_benchmark.py --tasks-jsonl data_eval/public_task_benchmark_v1/mmlu_mmlu_full_test.jsonl --task-format mmlu --model /home/rui/eigenskill_artifacts/qwen25_1p5b_gptq_model_smoke4_2026_06_08 --loader gptqmodel --max-new-tokens 64 --limit 500 --offset 10500 --chat-template --no-think --out-json outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_10500_11000_2026_06_08.json --out-md outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_10500_11000_2026_06_08.md"
+        },
+        {
+          "summary_json": "outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_11000_11500_2026_06_08.json",
+          "summary_md": "outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_11000_11500_2026_06_08.md",
+          "guard_json": "outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_11000_11500_2026_06_08_gpu_guard.json",
+          "title": "GPTQMODEL Qwen2.5-1.5B MMLU MMLU_FULL shard 11000-11500",
+          "offset": 11000,
+          "limit": 500,
+          "command": "python3 train_python/run_with_gpu_guard.py --max-memory-ratio 0.90 --max-start-memory-ratio 0.85 --min-disk-free-gb 20 --disk-check-path /home/rui --timeout-sec 1800 --out outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_11000_11500_2026_06_08_gpu_guard.json -- python3 train_python/eval_chat_task_benchmark.py --tasks-jsonl data_eval/public_task_benchmark_v1/mmlu_mmlu_full_test.jsonl --task-format mmlu --model /home/rui/eigenskill_artifacts/qwen25_1p5b_gptq_model_smoke4_2026_06_08 --loader gptqmodel --max-new-tokens 64 --limit 500 --offset 11000 --chat-template --no-think --out-json outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_11000_11500_2026_06_08.json --out-md outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_11000_11500_2026_06_08.md"
+        },
+        {
+          "summary_json": "outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_11500_12000_2026_06_08.json",
+          "summary_md": "outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_11500_12000_2026_06_08.md",
+          "guard_json": "outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_11500_12000_2026_06_08_gpu_guard.json",
+          "title": "GPTQMODEL Qwen2.5-1.5B MMLU MMLU_FULL shard 11500-12000",
+          "offset": 11500,
+          "limit": 500,
+          "command": "python3 train_python/run_with_gpu_guard.py --max-memory-ratio 0.90 --max-start-memory-ratio 0.85 --min-disk-free-gb 20 --disk-check-path /home/rui --timeout-sec 1800 --out outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_11500_12000_2026_06_08_gpu_guard.json -- python3 train_python/eval_chat_task_benchmark.py --tasks-jsonl data_eval/public_task_benchmark_v1/mmlu_mmlu_full_test.jsonl --task-format mmlu --model /home/rui/eigenskill_artifacts/qwen25_1p5b_gptq_model_smoke4_2026_06_08 --loader gptqmodel --max-new-tokens 64 --limit 500 --offset 11500 --chat-template --no-think --out-json outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_11500_12000_2026_06_08.json --out-md outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_11500_12000_2026_06_08.md"
+        },
+        {
+          "summary_json": "outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_12000_12500_2026_06_08.json",
+          "summary_md": "outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_12000_12500_2026_06_08.md",
+          "guard_json": "outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_12000_12500_2026_06_08_gpu_guard.json",
+          "title": "GPTQMODEL Qwen2.5-1.5B MMLU MMLU_FULL shard 12000-12500",
+          "offset": 12000,
+          "limit": 500,
+          "command": "python3 train_python/run_with_gpu_guard.py --max-memory-ratio 0.90 --max-start-memory-ratio 0.85 --min-disk-free-gb 20 --disk-check-path /home/rui --timeout-sec 1800 --out outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_12000_12500_2026_06_08_gpu_guard.json -- python3 train_python/eval_chat_task_benchmark.py --tasks-jsonl data_eval/public_task_benchmark_v1/mmlu_mmlu_full_test.jsonl --task-format mmlu --model /home/rui/eigenskill_artifacts/qwen25_1p5b_gptq_model_smoke4_2026_06_08 --loader gptqmodel --max-new-tokens 64 --limit 500 --offset 12000 --chat-template --no-think --out-json outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_12000_12500_2026_06_08.json --out-md outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_12000_12500_2026_06_08.md"
+        },
+        {
+          "summary_json": "outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_12500_13000_2026_06_08.json",
+          "summary_md": "outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_12500_13000_2026_06_08.md",
+          "guard_json": "outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_12500_13000_2026_06_08_gpu_guard.json",
+          "title": "GPTQMODEL Qwen2.5-1.5B MMLU MMLU_FULL shard 12500-13000",
+          "offset": 12500,
+          "limit": 500,
+          "command": "python3 train_python/run_with_gpu_guard.py --max-memory-ratio 0.90 --max-start-memory-ratio 0.85 --min-disk-free-gb 20 --disk-check-path /home/rui --timeout-sec 1800 --out outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_12500_13000_2026_06_08_gpu_guard.json -- python3 train_python/eval_chat_task_benchmark.py --tasks-jsonl data_eval/public_task_benchmark_v1/mmlu_mmlu_full_test.jsonl --task-format mmlu --model /home/rui/eigenskill_artifacts/qwen25_1p5b_gptq_model_smoke4_2026_06_08 --loader gptqmodel --max-new-tokens 64 --limit 500 --offset 12500 --chat-template --no-think --out-json outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_12500_13000_2026_06_08.json --out-md outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_12500_13000_2026_06_08.md"
+        },
+        {
+          "summary_json": "outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_13000_13500_2026_06_08.json",
+          "summary_md": "outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_13000_13500_2026_06_08.md",
+          "guard_json": "outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_13000_13500_2026_06_08_gpu_guard.json",
+          "title": "GPTQMODEL Qwen2.5-1.5B MMLU MMLU_FULL shard 13000-13500",
+          "offset": 13000,
+          "limit": 500,
+          "command": "python3 train_python/run_with_gpu_guard.py --max-memory-ratio 0.90 --max-start-memory-ratio 0.85 --min-disk-free-gb 20 --disk-check-path /home/rui --timeout-sec 1800 --out outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_13000_13500_2026_06_08_gpu_guard.json -- python3 train_python/eval_chat_task_benchmark.py --tasks-jsonl data_eval/public_task_benchmark_v1/mmlu_mmlu_full_test.jsonl --task-format mmlu --model /home/rui/eigenskill_artifacts/qwen25_1p5b_gptq_model_smoke4_2026_06_08 --loader gptqmodel --max-new-tokens 64 --limit 500 --offset 13000 --chat-template --no-think --out-json outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_13000_13500_2026_06_08.json --out-md outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_13000_13500_2026_06_08.md"
+        },
+        {
+          "summary_json": "outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_13500_14000_2026_06_08.json",
+          "summary_md": "outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_13500_14000_2026_06_08.md",
+          "guard_json": "outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_13500_14000_2026_06_08_gpu_guard.json",
+          "title": "GPTQMODEL Qwen2.5-1.5B MMLU MMLU_FULL shard 13500-14000",
+          "offset": 13500,
+          "limit": 500,
+          "command": "python3 train_python/run_with_gpu_guard.py --max-memory-ratio 0.90 --max-start-memory-ratio 0.85 --min-disk-free-gb 20 --disk-check-path /home/rui --timeout-sec 1800 --out outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_13500_14000_2026_06_08_gpu_guard.json -- python3 train_python/eval_chat_task_benchmark.py --tasks-jsonl data_eval/public_task_benchmark_v1/mmlu_mmlu_full_test.jsonl --task-format mmlu --model /home/rui/eigenskill_artifacts/qwen25_1p5b_gptq_model_smoke4_2026_06_08 --loader gptqmodel --max-new-tokens 64 --limit 500 --offset 13500 --chat-template --no-think --out-json outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_13500_14000_2026_06_08.json --out-md outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_13500_14000_2026_06_08.md"
+        },
+        {
+          "summary_json": "outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_14000_14042_2026_06_08.json",
+          "summary_md": "outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_14000_14042_2026_06_08.md",
+          "guard_json": "outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_14000_14042_2026_06_08_gpu_guard.json",
+          "title": "GPTQMODEL Qwen2.5-1.5B MMLU MMLU_FULL shard 14000-14042",
+          "offset": 14000,
+          "limit": 42,
+          "command": "python3 train_python/run_with_gpu_guard.py --max-memory-ratio 0.90 --max-start-memory-ratio 0.85 --min-disk-free-gb 20 --disk-check-path /home/rui --timeout-sec 1800 --out outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_14000_14042_2026_06_08_gpu_guard.json -- python3 train_python/eval_chat_task_benchmark.py --tasks-jsonl data_eval/public_task_benchmark_v1/mmlu_mmlu_full_test.jsonl --task-format mmlu --model /home/rui/eigenskill_artifacts/qwen25_1p5b_gptq_model_smoke4_2026_06_08 --loader gptqmodel --max-new-tokens 64 --limit 42 --offset 14000 --chat-template --no-think --out-json outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_14000_14042_2026_06_08.json --out-md outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_14000_14042_2026_06_08.md"
+        }
+      ],
+      "merge_command": "python3 train_python/merge_chat_task_shards.py --out-json outputs/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_summary_2026_06_08.json --out-md outputs/OFFICIAL_PTQ_TASK_GPTQMODEL_QWEN25_1P5B_MMLU_MMLU_FULL_2026_06_08.md --out-guard-json outputs/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_summary_2026_06_08_gpu_guard.json --shard outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_0_500_2026_06_08.json=outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_0_500_2026_06_08_gpu_guard.json --shard outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_500_1000_2026_06_08.json=outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_500_1000_2026_06_08_gpu_guard.json --shard outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_1000_1500_2026_06_08.json=outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_1000_1500_2026_06_08_gpu_guard.json --shard outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_1500_2000_2026_06_08.json=outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_1500_2000_2026_06_08_gpu_guard.json --shard outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_2000_2500_2026_06_08.json=outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_2000_2500_2026_06_08_gpu_guard.json --shard outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_2500_3000_2026_06_08.json=outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_2500_3000_2026_06_08_gpu_guard.json --shard outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_3000_3500_2026_06_08.json=outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_3000_3500_2026_06_08_gpu_guard.json --shard outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_3500_4000_2026_06_08.json=outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_3500_4000_2026_06_08_gpu_guard.json --shard outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_4000_4500_2026_06_08.json=outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_4000_4500_2026_06_08_gpu_guard.json --shard outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_4500_5000_2026_06_08.json=outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_4500_5000_2026_06_08_gpu_guard.json --shard outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_5000_5500_2026_06_08.json=outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_5000_5500_2026_06_08_gpu_guard.json --shard outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_5500_6000_2026_06_08.json=outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_5500_6000_2026_06_08_gpu_guard.json --shard outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_6000_6500_2026_06_08.json=outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_6000_6500_2026_06_08_gpu_guard.json --shard outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_6500_7000_2026_06_08.json=outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_6500_7000_2026_06_08_gpu_guard.json --shard outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_7000_7500_2026_06_08.json=outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_7000_7500_2026_06_08_gpu_guard.json --shard outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_7500_8000_2026_06_08.json=outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_7500_8000_2026_06_08_gpu_guard.json --shard outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_8000_8500_2026_06_08.json=outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_8000_8500_2026_06_08_gpu_guard.json --shard outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_8500_9000_2026_06_08.json=outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_8500_9000_2026_06_08_gpu_guard.json --shard outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_9000_9500_2026_06_08.json=outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_9000_9500_2026_06_08_gpu_guard.json --shard outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_9500_10000_2026_06_08.json=outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_9500_10000_2026_06_08_gpu_guard.json --shard outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_10000_10500_2026_06_08.json=outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_10000_10500_2026_06_08_gpu_guard.json --shard outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_10500_11000_2026_06_08.json=outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_10500_11000_2026_06_08_gpu_guard.json --shard outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_11000_11500_2026_06_08.json=outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_11000_11500_2026_06_08_gpu_guard.json --shard outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_11500_12000_2026_06_08.json=outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_11500_12000_2026_06_08_gpu_guard.json --shard outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_12000_12500_2026_06_08.json=outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_12000_12500_2026_06_08_gpu_guard.json --shard outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_12500_13000_2026_06_08.json=outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_12500_13000_2026_06_08_gpu_guard.json --shard outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_13000_13500_2026_06_08.json=outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_13000_13500_2026_06_08_gpu_guard.json --shard outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_13500_14000_2026_06_08.json=outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_13500_14000_2026_06_08_gpu_guard.json --shard outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_14000_14042_2026_06_08.json=outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_14000_14042_2026_06_08_gpu_guard.json"
+    }
+  ],
+  "gate_commands": {
+    "task_retention": "python3 train_python/gate_official_ptq_task_retention.py --baseline-variant fp16 --required-variant fp16 --required-variant autoawq --required-variant gptqmodel --required-format mmlu --min-tasks-per-case 14042 --max-memory-ratio 0.90 --max-accuracy-drop 0.1500 --matrix-title 'Qwen2.5-1.5B FP16 vs AutoAWQ vs GPTQModel MMLU mmlu_full task matrix' --evidence-label 'matched Qwen2.5-1.5B local MMLU mmlu_full task evidence for FP16, AutoAWQ, and GPTQModel' --out-json outputs/official_ptq_task_qwen25_1p5b_mmlu_mmlu_full_fp16_awq_gptqmodel_matrix_2026_06_08.json --out-md outputs/OFFICIAL_PTQ_TASK_QWEN25_1P5B_MMLU_MMLU_FULL_FP16_AWQ_GPTQMODEL_MATRIX_2026_06_08.md --case fp16:mmlu=outputs/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_summary_2026_06_08.json=outputs/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_summary_2026_06_08_gpu_guard.json --case autoawq:mmlu=outputs/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_summary_2026_06_08.json=outputs/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_summary_2026_06_08_gpu_guard.json --case gptqmodel:mmlu=outputs/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_summary_2026_06_08.json=outputs/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_summary_2026_06_08_gpu_guard.json",
+    "runtime_profile": "python3 train_python/gate_official_ptq_runtime_profile.py --matrix-json outputs/official_ptq_task_qwen25_1p5b_mmlu_mmlu_full_fp16_awq_gptqmodel_matrix_2026_06_08.json --baseline-variant fp16 --required-variant fp16 --required-variant autoawq --required-variant gptqmodel --min-cases-per-variant 1 --max-memory-ratio 0.90 --out-json outputs/official_ptq_qwen25_1p5b_mmlu_mmlu_full_fp16_awq_gptqmodel_runtime_profile_2026_06_08.json --out-md outputs/OFFICIAL_PTQ_QWEN25_1P5B_MMLU_MMLU_FULL_FP16_AWQ_GPTQMODEL_RUNTIME_PROFILE_2026_06_08.md",
+    "task_statistics": "python3 train_python/gate_official_ptq_task_statistics.py --baseline-variant fp16 --min-tasks-per-case 14042 --min-shared-tasks 14042 --max-ci-accuracy-drop 0.1500 --bootstrap-samples 4000 --matrix-title 'Qwen2.5-1.5B FP16 vs AutoAWQ vs GPTQModel MMLU mmlu_full task statistics' --out-json outputs/official_ptq_task_qwen25_1p5b_mmlu_mmlu_full_fp16_awq_gptqmodel_statistics_2026_06_08.json --out-md outputs/OFFICIAL_PTQ_TASK_QWEN25_1P5B_MMLU_MMLU_FULL_FP16_AWQ_GPTQMODEL_STATISTICS_2026_06_08.md --case fp16:mmlu=outputs/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_summary_2026_06_08.json --case autoawq:mmlu=outputs/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_summary_2026_06_08.json --case gptqmodel:mmlu=outputs/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_summary_2026_06_08.json"
+  },
+  "claim_boundary": "This is a command plan only. It proves no model quality until the fixture, shard summaries, merged summaries, GPU guard logs, and gates are produced and committed."
+}

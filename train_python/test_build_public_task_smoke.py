@@ -37,6 +37,16 @@ class BuildPublicTaskSmokeTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             smoke.mmlu_dataset_key(" ")
 
+    def test_parse_mmlu_subject_counts(self) -> None:
+        self.assertEqual(
+            smoke.parse_mmlu_subject_counts(["abstract_algebra=100", "professional_law=1534"]),
+            {"abstract_algebra": 100, "professional_law": 1534},
+        )
+        with self.assertRaises(ValueError):
+            smoke.parse_mmlu_subject_counts(["abstract_algebra"])
+        with self.assertRaises(ValueError):
+            smoke.parse_mmlu_subject_counts(["abstract_algebra=-1"])
+
     def test_build_suite_supports_multiple_mmlu_subjects(self) -> None:
         def fake_records(dataset, config, split, count, source="auto"):
             return [

@@ -11,12 +11,14 @@ evaluation.
 
 import argparse
 import json
+import time
 from datetime import datetime, timezone
 from itertools import islice
 from pathlib import Path
 from typing import Any, Iterable
 from urllib.parse import urlencode
 from urllib.request import urlopen
+from urllib.error import HTTPError, URLError
 
 
 DATASETS = {
@@ -58,6 +60,25 @@ def mmlu_dataset_spec(subject: str) -> dict[str, str]:
     }
 
 
+def parse_mmlu_subject_counts(entries: list[str]) -> dict[str, int]:
+    counts: dict[str, int] = {}
+    for entry in entries:
+        if "=" not in entry:
+            raise ValueError(f"expected SUBJECT=COUNT for --mmlu-subject-count, got {entry!r}")
+        subject, raw_count = entry.split("=", 1)
+        key = subject.strip()
+        if not key:
+            raise ValueError("MMLU subject count entry has empty subject")
+        try:
+            count = int(raw_count)
+        except ValueError as exc:
+            raise ValueError(f"MMLU subject count for {key!r} is not an integer: {raw_count!r}") from exc
+        if count < 0:
+            raise ValueError(f"MMLU subject count for {key!r} must be non-negative")
+        counts[key] = count
+    return counts
+
+
 def take_records(rows: Iterable[dict[str, Any]], count: int) -> list[dict[str, Any]]:
     if count < 0:
         raise ValueError("count must be non-negative")
@@ -81,6 +102,7 @@ def artifact_file(base_file: str, file_tag: str) -> str:
 
 
 DATASETS_SERVER_PAGE_SIZE = 100
+DATASETS_SERVER_MAX_RETRIES = 6
 
 
 def load_dataset_server_page(dataset: str, config: str | None, split: str, offset: int, length: int) -> list[dict[str, Any]]:
@@ -93,8 +115,24 @@ def load_dataset_server_page(dataset: str, config: str | None, split: str, offse
     if config:
         params["config"] = config
     url = f"https://datasets-server.huggingface.co/rows?{urlencode(params)}"
-    with urlopen(url, timeout=60) as response:
-        payload = json.loads(response.read().decode("utf-8"))
+    for attempt in range(DATASETS_SERVER_MAX_RETRIES):
+        try:
+            with urlopen(url, timeout=60) as response:
+                payload = json.loads(response.read().decode("utf-8"))
+            break
+        except HTTPError as exc:
+            retryable = exc.code in {429, 500, 502, 503, 504}
+            if not retryable or attempt == DATASETS_SERVER_MAX_RETRIES - 1:
+                raise
+            retry_after = exc.headers.get("Retry-After")
+            delay = float(retry_after) if retry_after and retry_after.isdigit() else min(60.0, 5.0 * (2**attempt))
+            time.sleep(delay)
+        except URLError:
+            if attempt == DATASETS_SERVER_MAX_RETRIES - 1:
+                raise
+            time.sleep(min(30.0, 2.0 * (2**attempt)))
+    else:
+        raise RuntimeError("unreachable datasets-server retry state")
     rows = payload.get("rows", [])
     return [dict(item["row"]) for item in rows]
 
@@ -255,6 +293,12 @@ def main() -> None:
         default=None,
         help="Rows per MMLU subject. Defaults to --mmlu-count for backwards compatibility.",
     )
+    parser.add_argument(
+        "--mmlu-subject-count",
+        action="append",
+        default=[],
+        help="Override rows for one MMLU subject as SUBJECT=COUNT. Repeat for full mixed-size fixtures.",
+    )
     parser.add_argument("--file-tag", default="smoke")
     parser.add_argument("--mmlu-combined-file", default="", help="Optional combined JSONL filename for all fetched MMLU subjects.")
     parser.add_argument("--title", default="Public Task Smoke Manifest")
@@ -265,10 +309,11 @@ def main() -> None:
     args = parser.parse_args()
 
     mmlu_count = args.mmlu_count if args.mmlu_count_per_subject is None else args.mmlu_count_per_subject
-    subjects = tuple(args.mmlu_subject or DEFAULT_MMLU_SUBJECTS)
+    subject_count_overrides = parse_mmlu_subject_counts(args.mmlu_subject_count)
+    subjects = tuple(dict.fromkeys([*(args.mmlu_subject or DEFAULT_MMLU_SUBJECTS), *subject_count_overrides]))
     counts = {"gsm8k": args.gsm8k_count}
     for subject in subjects:
-        counts[mmlu_dataset_key(subject)] = mmlu_count
+        counts[mmlu_dataset_key(subject)] = subject_count_overrides.get(subject, mmlu_count)
 
     manifest = build_suite(
         args.out_dir,

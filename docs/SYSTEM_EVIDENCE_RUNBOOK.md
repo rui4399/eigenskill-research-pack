@@ -858,6 +858,34 @@ gate reports minimum bootstrap lower bound `-0.0950` under 4,000 samples. This
 further broadens MMLU coverage, but is still not full MMLU or leaderboard-scale
 retention evidence.
 
+Current MMLU Broad20x20 result: 1200 guarded task executions across FP16,
+AutoAWQ, and GPTQModel over twenty MMLU subjects. FP16 gets 214/400, AutoAWQ
+gets 204/400, and GPTQModel gets 198/400. The task gate records max measured
+drop `0.0400` versus FP16 and peak guard VRAM ratio `0.8201`. The runtime
+profile reports mean `8.8340` tok/s and mean TTFT `0.256271` s. The paired
+statistics gate reports minimum bootstrap lower bound `-0.0825` under 4,000
+samples. This further improves subject breadth, but is still not full MMLU or
+leaderboard-scale retention evidence.
+
+Full-MMLU execution plan:
+
+```bash
+python train_python/plan_mmlu_ptq_shards.py \
+  --suite mmlu_full \
+  --preset full \
+  --full-test-split \
+  --source auto \
+  --shard-size 500 \
+  --date-tag 2026_06_08
+```
+
+This produces `outputs/MMLU_PTQ_SHARD_PLAN_MMLU_FULL_2026_06_08.md` and a
+57-subject, 14,042-row fixture manifest at
+`outputs/PUBLIC_TASK_BENCHMARK_MMLU_MMLU_FULL_MANIFEST_2026_06_08.md`. It is a
+run plan and input fixture only. Full-MMLU retention evidence requires all
+FP16/AutoAWQ/GPTQModel shards, merged summaries, guard logs, and the generated
+task-retention/runtime/statistics gates.
+
 The earlier GSM8K200/MMLU100 statistical gate reports paired bootstrap
 candidate-minus-FP16 deltas:
 AutoAWQ GSM8K `+0.0150` with CI `[-0.0350, +0.0650]`, AutoAWQ MMLU `+0.0100`
@@ -869,7 +897,7 @@ superiority.
 Valid claim:
 
 - FP16, AutoAWQ, and GPTQModel Qwen2.5-1.5B variants have matched local
-  subset100, GSM8K200/MMLU100, GSM8K500, full GSM8K1319, and MMLU Broad10x20
+  subset100, GSM8K200/MMLU100, GSM8K500, full GSM8K1319, and MMLU Broad20x20
   task/runtime/VRAM evidence under the GPU guard.
 
 Invalid claim:

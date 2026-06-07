@@ -14,6 +14,7 @@ def args_for_test(**overrides):
         "preset": "broad20",
         "mmlu_subject": [],
         "rows_per_subject": 20,
+        "full_test_split": False,
         "total_rows": 0,
         "shard_size": 100,
         "date_tag": "2026_06_08",
@@ -48,6 +49,15 @@ class PlanMmluPtqShardsTests(unittest.TestCase):
             plan.shard_ranges(0, 100)
         with self.assertRaises(ValueError):
             plan.shard_ranges(100, 0)
+
+    def test_full_test_split_uses_static_mmlu_row_counts(self) -> None:
+        result = plan.build_plan(args_for_test(suite="mmlu_full", preset="full", full_test_split=True, shard_size=500))
+        self.assertEqual(len(result["subjects"]), 57)
+        self.assertEqual(result["total_rows_planned"], 14042)
+        self.assertTrue(result["full_test_split"])
+        self.assertEqual(result["subject_row_counts"]["professional_law"], 1534)
+        self.assertIn("--mmlu-subject-count professional_law=1534", result["fixture_command"])
+        self.assertEqual(len(result["variants"][0]["shards"]), 29)
 
     def test_build_plan_contains_variant_and_gate_commands(self) -> None:
         result = plan.build_plan(args_for_test())

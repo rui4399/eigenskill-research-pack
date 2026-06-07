@@ -78,6 +78,66 @@ MMLU_SUBJECTS: tuple[str, ...] = (
     "world_religions",
 )
 
+MMLU_TEST_ROWS: dict[str, int] = {
+    "abstract_algebra": 100,
+    "anatomy": 135,
+    "astronomy": 152,
+    "business_ethics": 100,
+    "clinical_knowledge": 265,
+    "college_biology": 144,
+    "college_chemistry": 100,
+    "college_computer_science": 100,
+    "college_mathematics": 100,
+    "college_medicine": 173,
+    "college_physics": 102,
+    "computer_security": 100,
+    "conceptual_physics": 235,
+    "econometrics": 114,
+    "electrical_engineering": 145,
+    "elementary_mathematics": 378,
+    "formal_logic": 126,
+    "global_facts": 100,
+    "high_school_biology": 310,
+    "high_school_chemistry": 203,
+    "high_school_computer_science": 100,
+    "high_school_european_history": 165,
+    "high_school_geography": 198,
+    "high_school_government_and_politics": 193,
+    "high_school_macroeconomics": 390,
+    "high_school_mathematics": 270,
+    "high_school_microeconomics": 238,
+    "high_school_physics": 151,
+    "high_school_psychology": 545,
+    "high_school_statistics": 216,
+    "high_school_us_history": 204,
+    "high_school_world_history": 237,
+    "human_aging": 223,
+    "human_sexuality": 131,
+    "international_law": 121,
+    "jurisprudence": 108,
+    "logical_fallacies": 163,
+    "machine_learning": 112,
+    "management": 103,
+    "marketing": 234,
+    "medical_genetics": 100,
+    "miscellaneous": 783,
+    "moral_disputes": 346,
+    "moral_scenarios": 895,
+    "nutrition": 306,
+    "philosophy": 311,
+    "prehistory": 324,
+    "professional_accounting": 282,
+    "professional_law": 1534,
+    "professional_medicine": 272,
+    "professional_psychology": 612,
+    "public_relations": 110,
+    "security_studies": 245,
+    "sociology": 201,
+    "us_foreign_policy": 100,
+    "virology": 166,
+    "world_religions": 171,
+}
+
 BROAD10_SUBJECTS: tuple[str, ...] = (
     "abstract_algebra",
     "anatomy",
@@ -168,6 +228,17 @@ def shard_ranges(total_rows: int, shard_size: int) -> list[tuple[int, int]]:
     return ranges
 
 
+def subject_row_counts(subjects: tuple[str, ...], rows_per_subject: int, full_test_split: bool) -> dict[str, int]:
+    if full_test_split:
+        missing = [subject for subject in subjects if subject not in MMLU_TEST_ROWS]
+        if missing:
+            raise ValueError(f"missing MMLU test row counts for subjects: {missing}")
+        return {subject: MMLU_TEST_ROWS[subject] for subject in subjects}
+    if rows_per_subject <= 0:
+        raise ValueError("rows_per_subject must be positive unless --full-test-split is set")
+    return {subject: rows_per_subject for subject in subjects}
+
+
 def output_paths(suite: str, date_tag: str) -> dict[str, str]:
     upper_suite = suite.upper()
     return {
@@ -207,7 +278,12 @@ def variant_merged_paths(variant: str, suite: str, date_tag: str) -> dict[str, s
     }
 
 
-def build_fixture_command(subjects: tuple[str, ...], args: argparse.Namespace, paths: dict[str, str]) -> list[str]:
+def build_fixture_command(
+    subjects: tuple[str, ...],
+    args: argparse.Namespace,
+    paths: dict[str, str],
+    row_counts: dict[str, int],
+) -> list[str]:
     command = [
         "python3",
         "train_python/build_public_task_smoke.py",
@@ -236,6 +312,9 @@ def build_fixture_command(subjects: tuple[str, ...], args: argparse.Namespace, p
     ]
     for subject in subjects:
         command.extend(["--mmlu-subject", subject])
+    if args.full_test_split:
+        for subject in subjects:
+            command.extend(["--mmlu-subject-count", f"{subject}={row_counts[subject]}"])
     return command
 
 
@@ -288,7 +367,8 @@ def eval_command_for_shard(variant: VariantSpec, args: argparse.Namespace, paths
 def build_plan(args: argparse.Namespace) -> dict[str, Any]:
     args.suite = normalize_suite(args.suite)
     subjects = select_subjects(args.preset, args.mmlu_subject)
-    total_rows = args.total_rows or (len(subjects) * args.rows_per_subject)
+    row_counts = subject_row_counts(subjects, args.rows_per_subject, args.full_test_split)
+    total_rows = args.total_rows or sum(row_counts.values())
     paths = output_paths(args.suite, args.date_tag)
     variants = DEFAULT_VARIANTS
     ranges = shard_ranges(total_rows, args.shard_size)
@@ -412,10 +492,12 @@ def build_plan(args: argparse.Namespace) -> dict[str, Any]:
         "preset": args.preset,
         "subjects": list(subjects),
         "rows_per_subject": args.rows_per_subject,
+        "full_test_split": args.full_test_split,
+        "subject_row_counts": row_counts,
         "total_rows_planned": total_rows,
         "shard_size": args.shard_size,
         "paths": paths,
-        "fixture_command": shell_join(build_fixture_command(subjects, args, paths)),
+        "fixture_command": shell_join(build_fixture_command(subjects, args, paths, row_counts)),
         "variants": variant_plans,
         "gate_commands": {
             "task_retention": shell_join(retention_command),
@@ -435,6 +517,7 @@ def write_markdown(path: Path, plan: dict[str, Any]) -> None:
         "",
         f"Date: `{plan['date']}`",
         f"Subjects: `{len(plan['subjects'])}`",
+        f"Full test split: `{plan.get('full_test_split', False)}`",
         f"Planned rows: `{plan['total_rows_planned']}`",
         f"Shard size: `{plan['shard_size']}`",
         "",
@@ -478,6 +561,7 @@ def main() -> None:
     parser.add_argument("--preset", choices=["broad10", "broad20", "full"], default="broad20")
     parser.add_argument("--mmlu-subject", action="append", default=[])
     parser.add_argument("--rows-per-subject", type=int, default=20)
+    parser.add_argument("--full-test-split", action="store_true", help="Use static per-subject MMLU test row counts instead of a uniform row limit.")
     parser.add_argument("--total-rows", type=int, default=0, help="Override planned total rows for sharding.")
     parser.add_argument("--shard-size", type=int, default=100)
     parser.add_argument("--date-tag", default="2026_06_08")
