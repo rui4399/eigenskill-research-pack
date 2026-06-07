@@ -21,12 +21,13 @@ python train_python/build_current_evidence_ledger.py
 ```
 
 `train_python/build_evidence_ledger.py` is the lower-level builder for custom
-or future gate manifests. The expanded form of the current 26-gate ledger is:
+or future gate manifests. The expanded form of the current 27-gate ledger is:
 
 ```bash
 python train_python/build_evidence_ledger.py \
   --gate public_hygiene=outputs/real_system_packer_2026-06-05/public_repo_hygiene_gate_2026_06_06.json \
   --gate calibration_instability=outputs/calibration_instability_benchmark_2026_06_06.json \
+  --gate sensitivity_perturbation_matrix=outputs/sensitivity_perturbation_matrix_qwen25_2026_06_07.json \
   --gate calibration_robustness_stress=outputs/calibration_robustness_stress_gate_2026_06_07.json \
   --gate consensus_transfer_boundary=outputs/consensus_transfer_boundary_gate_2026_06_07.json \
   --gate interaction_swap_boundary=outputs/interaction_swap_boundary_gate_2026_06_07.json \
@@ -55,7 +56,7 @@ python train_python/build_evidence_ledger.py \
   --out-md outputs/real_system_packer_2026-06-05/EVIDENCE_LEDGER_2026_06_06.md
 ```
 
-The current ledger passes with 26/26 gates across repo hygiene, calibration
+The current ledger passes with 27/27 gates across repo hygiene, calibration
 robustness, artifact integrity, kernel, runtime wiring, selected-row, C++
 runtime, decode integration, QKV replacement, quality, task-retention, runtime profile, and
 capability-retention/model-ladder, allocation-comparator, rotation-comparator, and
@@ -154,9 +155,9 @@ python train_python/gate_paper_evidence_alignment.py \
   --out-md outputs/PAPER_EVIDENCE_ALIGNMENT_GATE_2026_06_07.md
 ```
 
-Current result: 13/13 required evidence references present, referenced repo
+Current result: 14/14 required evidence references present, referenced repo
 paths found and 0 missing, 0 stale forbidden tokens, 0 unsafe non-negated claim
-lines, and the paper mentions the current 26-gate ledger.
+lines, and the paper mentions the current 27-gate ledger.
 
 Valid claim:
 
@@ -562,7 +563,7 @@ Invalid claim:
 `train_python/run_official_awq_smoke.py` is a minimal package-readiness probe.
 It exists to verify that AutoAWQ can execute, save local quantized artifacts,
 and run one short generation smoke under the GPU guard. It is intentionally not
-part of the 26-gate paper-facing ledger.
+part of the 27-gate paper-facing ledger.
 
 Example WSL/GPU command:
 
@@ -905,6 +906,39 @@ Invalid claim:
 
 - instability alone proves consensus allocation is better. Downstream PPL/task
   gates are still required.
+
+## Sensitivity Perturbation Matrix Gate
+
+`train_python/gate_sensitivity_perturbation_matrix.py` compares sensitivity
+rankings under two different perturbation axes. The current gate asks whether
+same-model calibration sample-size changes are more stable than directly
+transferring sensitivity rankings across Qwen2.5 model scale.
+
+Current gate:
+
+```bash
+python train_python/gate_sensitivity_perturbation_matrix.py \
+  --case sample_size:qwen25_0p5b_limit2_vs_limit8=outputs/qwen25_0p5b_module_loss_sensitivity_limit2_group128.json=outputs/qwen25_0p5b_module_loss_sensitivity_limit8_group128.json \
+  --case sample_size:qwen25_1p5b_limit2_vs_limit8=outputs/qwen25_1p5b_module_loss_sensitivity_limit2_group128.json=outputs/qwen25_1p5b_module_loss_sensitivity_limit8_group128.json \
+  --case model_scale:qwen25_0p5b_vs_1p5b_limit2=outputs/qwen25_0p5b_module_loss_sensitivity_limit2_group128.json=outputs/qwen25_1p5b_module_loss_sensitivity_limit2_group128.json \
+  --out-json outputs/sensitivity_perturbation_matrix_qwen25_2026_06_07.json \
+  --out-md outputs/SENSITIVITY_PERTURBATION_MATRIX_QWEN25_2026_06_07.md
+```
+
+Current result: 3 cases, sample-size mean Spearman `0.6356`, sample-size min
+top-20 Jaccard `0.4815`, model-scale mean Spearman `0.1273`, model-scale
+mean top-20 Jaccard `0.2903`, and perturbation separation margin `0.5082`.
+
+Valid claim:
+
+- within the measured Qwen2.5 sensitivity artifacts, increasing calibration
+  sample count inside the same model preserves sensitivity rankings
+  substantially better than cross-model-scale transfer.
+
+Invalid claim:
+
+- this proves downstream quality retention, a universal scaling law, or a
+  production quantization method.
 
 ## Calibration Robustness Stress Gate
 

@@ -51,6 +51,7 @@ CATEGORIES = {
     "public": "repo hygiene",
     "calibration": "calibration robustness",
     "instability": "calibration robustness",
+    "perturbation": "calibration robustness",
 }
 
 
@@ -174,6 +175,12 @@ def metric_parts(summary: dict[str, Any]) -> list[str]:
         parts.append(f"slices {summary.get('slice_count')}")
     if "unstable_case_count" in summary:
         parts.append(f"unstable {summary.get('unstable_case_count')}")
+    if (value := finite_float(summary.get("sample_size_mean_spearman"))) is not None:
+        parts.append(f"sample-size rho {value:.4f}")
+    if (value := finite_float(summary.get("model_scale_mean_spearman"))) is not None:
+        parts.append(f"model-scale rho {value:.4f}")
+    if (value := finite_float(summary.get("perturbation_separation_margin"))) is not None:
+        parts.append(f"separation {value:.4f}")
     if "total_tasks" in summary:
         parts.append(f"tasks {summary.get('total_tasks')}")
     if "total_cases" in summary:

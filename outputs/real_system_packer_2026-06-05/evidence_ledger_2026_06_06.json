@@ -1,8 +1,8 @@
 {
-  "date": "2026-06-07T02:58:17+00:00",
+  "date": "2026-06-07T03:19:00+00:00",
   "passed": true,
-  "gate_count": 26,
-  "passed_count": 26,
+  "gate_count": 27,
+  "passed_count": 27,
   "failed_count": 0,
   "categories": [
     "allocation comparator",
@@ -32,9 +32,9 @@
       "path": "outputs\\real_system_packer_2026-06-05\\public_repo_hygiene_gate_2026_06_06.json",
       "passed": true,
       "failures": [],
-      "metrics": "tracked files 1808; forbidden files 0; placeholders 0",
+      "metrics": "tracked files 1812; forbidden files 0; placeholders 0",
       "summary": {
-        "tracked_file_count": 1808,
+        "tracked_file_count": 1812,
         "forbidden_file_count": 0,
         "root_clutter_count": 0,
         "placeholder_count": 0,
@@ -58,6 +58,32 @@
         "mean_top20_jaccard": 0.10219994430520746,
         "instability_spearman_threshold": 0.3,
         "instability_jaccard_threshold": 0.55
+      }
+    },
+    {
+      "label": "sensitivity_perturbation_matrix",
+      "category": "calibration robustness",
+      "path": "outputs\\sensitivity_perturbation_matrix_qwen25_2026_06_07.json",
+      "passed": true,
+      "failures": [],
+      "metrics": "cases 3; sample-size rho 0.6356; model-scale rho 0.1273; separation 0.5082",
+      "summary": {
+        "case_count": 3,
+        "axis_count": 2,
+        "axes": [
+          "model_scale",
+          "sample_size"
+        ],
+        "sample_size_case_count": 2,
+        "model_scale_case_count": 1,
+        "sample_size_mean_spearman": 0.6355663365735722,
+        "sample_size_min_top20_jaccard": 0.48148148148148145,
+        "model_scale_mean_spearman": 0.12733357887035468,
+        "model_scale_mean_top20_jaccard": 0.2903225806451613,
+        "perturbation_separation_margin": 0.5082327577032175,
+        "min_sample_size_spearman": 0.5,
+        "max_model_scale_spearman": 0.3,
+        "min_separation_margin": 0.2
       }
     },
     {
@@ -167,16 +193,16 @@
       "path": "outputs\\paper_evidence_alignment_gate_2026_06_07.json",
       "passed": true,
       "failures": [],
-      "metrics": "required refs 13; missing refs 0; paper paths 19; missing paths 0; unsafe claims 0; stale tokens 0; ledger gates 26",
+      "metrics": "required refs 14; missing refs 0; paper paths 20; missing paths 0; unsafe claims 0; stale tokens 0; ledger gates 27",
       "summary": {
         "paper": "paper_drafts\\eigenskill_q_research_draft_en_2026_06_07.md",
-        "required_reference_count": 13,
+        "required_reference_count": 14,
         "missing_required_reference_count": 0,
-        "referenced_repo_path_count": 19,
+        "referenced_repo_path_count": 20,
         "missing_referenced_path_count": 0,
         "stale_token_count": 0,
         "unsafe_claim_count": 0,
-        "ledger_gate_count": 26,
+        "ledger_gate_count": 27,
         "ledger_gate_count_mentioned": true
       }
     },

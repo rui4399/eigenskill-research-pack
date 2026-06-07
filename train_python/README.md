@@ -26,6 +26,7 @@ as generalization evidence.
 | evaluate fake weight-quant PPL | `eval_weight_quant_ppl.py` |
 | build random/heuristic allocation baselines | `build_baseline_allocations.py` |
 | aggregate calibration split instability | `build_calibration_instability_benchmark.py` |
+| gate sensitivity perturbation axes | `gate_sensitivity_perturbation_matrix.py` |
 | build cross-model robustness stress gate | `build_calibration_robustness_stress.py` |
 | build single-split transfer boundary gate | `build_consensus_transfer_boundary.py` |
 | build tiny public PPL prompt slices | `build_public_ppl_prompts.py` |

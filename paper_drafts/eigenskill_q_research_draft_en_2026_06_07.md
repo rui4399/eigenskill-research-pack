@@ -22,9 +22,12 @@ fake-quant loss sensitivity on multiple calibration views, allocates a fixed
 `{4,8}`-bit budget through cross-split consensus sensitivity, and records every
 paper-facing result through executable evidence gates. Across Qwen3-0.6B,
 Qwen3-1.7B, OLMo2-0425-1B-Instruct, and SmolLM2-1.7B short-slice diagnostics,
-the current evidence ledger passes 26/26 gates. The calibration-instability
+the current evidence ledger passes 27/27 gates. The calibration-instability
 gate finds 3/3 unstable model/dataset cases with mean score/cost Spearman
-0.0713 and mean top-20 Jaccard 0.1022. The robustness stress gate reports
+0.0713 and mean top-20 Jaccard 0.1022. A Qwen2.5 perturbation matrix further
+separates calibration sample-size and model-scale effects: within-model
+limit2-vs-limit8 sensitivity rankings have mean Spearman 0.6356, while direct
+0.5B-vs-1.5B cross-scale transfer has Spearman 0.1273. The robustness stress gate reports
 11/11 wins versus uniform INT4, best random seed, and random-seed mean under the
 same budget, with a one-sided sign-test p-value of 0.000488 versus best random.
 A paired transfer-boundary gate shows consensus avoiding the worse single-split
@@ -71,12 +74,13 @@ offers three narrower contributions:
 1. **Problem definition and measurement.** We define calibration split
    instability as disagreement among module-sensitivity rankings induced by
    small calibration splits, and measure it across Qwen3 and OLMo2 model
-   families.
+   families. We also separate same-model calibration sample-size perturbations
+   from cross-model-scale perturbations on Qwen2.5 sensitivity artifacts.
 2. **Consensus sensitivity allocation.** We evaluate a simple cross-split
    consensus allocator that protects modules that are consistently sensitive or
    have high average sensitivity under a fixed `{4,8}` budget.
 3. **Gated evidence discipline.** We convert scattered fake-quant, runtime,
-   task-smoke, paper-alignment, and repository-hygiene outputs into 26 executable gates, each
+   task-smoke, paper-alignment, and repository-hygiene outputs into 27 executable gates, each
    with an explicit claim boundary.
 
 The paper is intentionally conservative. It keeps negative results visible:
@@ -206,11 +210,12 @@ future allocator.
 ## 6. Evidence Gates
 
 Every paper-facing claim is indexed by a gate JSON and a Markdown report. The
-current ledger passes 26/26 gates. The most important gates are:
+current ledger passes 27/27 gates. The most important gates are:
 
 | Gate | Evidence | Valid claim | Non-claim |
 |---|---|---|---|
 | Calibration instability | 3 Qwen3/OLMo2 split comparisons | Small calibration splits induce unstable module rankings. | Instability alone proves consensus is superior. |
+| Sensitivity perturbation matrix | Qwen2.5 sample-size and model-scale perturbations; see `outputs/SENSITIVITY_PERTURBATION_MATRIX_QWEN25_2026_06_07.md`. | Same-model calibration sample-size changes are more stable than cross-model-scale sensitivity transfer in the measured artifacts. | Downstream quality retention, a universal scaling law, or production quantization. |
 | Robustness stress | 11 short fake-quant PPL slices | Target policies beat uniform and random baselines on committed slices. | Not SOTA PTQ or task retention. |
 | Consensus transfer boundary | 4 paired Qwen3 slices | Consensus avoids the worse single-split policy with bounded best-single regret. | Consensus always beats the best single split. |
 | Interaction swap boundary | 16 SmolLM2-1.7B swap trials | Global feedback exposes local-proxy failures. | Global optimality or broad transfer. |
@@ -245,7 +250,25 @@ calibration-instability gate reports:
 These low rank correlations motivate treating the calibration split as a source
 of allocation risk, not merely as an implementation detail.
 
-### 7.2 Robustness Stress Gate
+### 7.2 Sensitivity Perturbation Matrix
+
+The Qwen2.5 perturbation gate separates two different questions: whether a
+sensitivity ranking stabilizes when the same model receives more calibration
+examples, and whether the same ranking can be transferred across model scale.
+
+| Perturbation | Cases | Mean score/cost Spearman | Top-20 Jaccard |
+|---|---:|---:|---:|
+| Same-model sample size, limit2 vs limit8 | 2 | 0.6356 | min 0.4815 |
+| Cross-model scale, 0.5B vs 1.5B at limit2 | 1 | 0.1273 | 0.2903 |
+
+The separation margin between the sample-size and model-scale Spearman values
+is 0.5082. This suggests that calibration instability is not a single scalar
+failure mode: more samples can stabilize a ranking inside one model, while
+reusing that ranking across model sizes remains weak in the measured artifacts.
+This is still a diagnostic result; it does not claim downstream quality
+retention or a general scaling law.
+
+### 7.3 Robustness Stress Gate
 
 The robustness stress gate aggregates 11 committed Qwen3/OLMo2/SmolLM2 PPL
 summaries under a fixed mixed-precision budget:
@@ -264,7 +287,7 @@ summaries under a fixed mixed-precision budget:
 The result is strong for the committed short-slice fake-quant setting. It does
 not replace official GPTQ/AWQ/SmoothQuant/QuaRot/SpinQuant comparisons.
 
-### 7.3 Consensus Transfer Boundary
+### 7.4 Consensus Transfer Boundary
 
 The paired Qwen3 transfer-boundary gate compares WikiText2-only, C4-only, and
 cross-split consensus policies:
@@ -281,7 +304,7 @@ cross-split consensus policies:
 This supports a robust-risk framing: consensus is not an oracle, but it reduces
 the risk of choosing the worse calibration split.
 
-### 7.4 Interaction-aware Swap Boundary
+### 7.5 Interaction-aware Swap Boundary
 
 The interaction gate uses SmolLM2-1.7B search cases on WikiText2 and C4:
 

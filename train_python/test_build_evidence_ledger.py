@@ -82,6 +82,21 @@ class BuildEvidenceLedgerTests(unittest.TestCase):
         self.assertIn("sign p/best-random 0.00049", joined)
         self.assertIn("mean FP16 regret 4.1600", joined)
 
+    def test_sensitivity_perturbation_metrics_are_reported(self) -> None:
+        metrics = ledger.metric_parts(
+            {
+                "case_count": 3,
+                "sample_size_mean_spearman": 0.63,
+                "model_scale_mean_spearman": 0.12,
+                "perturbation_separation_margin": 0.51,
+            }
+        )
+        joined = "; ".join(metrics)
+        self.assertIn("sample-size rho 0.6300", joined)
+        self.assertIn("model-scale rho 0.1200", joined)
+        self.assertIn("separation 0.5100", joined)
+        self.assertEqual(ledger.infer_category("sensitivity_perturbation_matrix"), "calibration robustness")
+
     def test_transfer_boundary_metrics_are_reported(self) -> None:
         metrics = ledger.metric_parts(
             {

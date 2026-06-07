@@ -2,7 +2,7 @@
 
 > CCF 风格论文初稿，2026-06-05。本文按正式学术论文结构组织，写法参考经典系统/模型论文的“问题清晰化、方法简洁化、实验证据驱动”范式，但不复用其原文表述。当前稿件是技术报告级草案，尚未满足正式投稿所需的完整基线、硬件与统计显著性要求。
 >
-> 状态更新，2026-06-07：本中文稿保留为历史草稿。当前更接近投稿骨架的版本是 `paper_drafts/eigenskill_q_research_draft_en_2026_06_07.md`，它已纳入 26-gate evidence ledger、calibration robustness stress、consensus transfer boundary、interaction-aware swap boundary、public-task model ladder、official PTQ task-execution smoke、official PTQ matched subset50/runtime profile 和 paper-evidence alignment gate。若两者不一致，以新版英文稿和 `docs/PAPER_CLAIM_MATRIX.md` 为准。
+> 状态更新，2026-06-07：本中文稿保留为历史草稿。当前更接近投稿骨架的版本是 `paper_drafts/eigenskill_q_research_draft_en_2026_06_07.md`，它已纳入 27-gate evidence ledger、calibration robustness stress、sensitivity perturbation matrix、consensus transfer boundary、interaction-aware swap boundary、public-task model ladder、official PTQ task-execution smoke、official PTQ matched subset50/runtime profile 和 paper-evidence alignment gate。若两者不一致，以新版英文稿和 `docs/PAPER_CLAIM_MATRIX.md` 为准。
 
 ## 摘要
 

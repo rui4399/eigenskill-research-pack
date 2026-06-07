@@ -1,0 +1,217 @@
+{
+  "date": "2026-06-07T03:07:19+00:00",
+  "passed": true,
+  "summary": {
+    "case_count": 3,
+    "axis_count": 2,
+    "axes": [
+      "model_scale",
+      "sample_size"
+    ],
+    "sample_size_case_count": 2,
+    "model_scale_case_count": 1,
+    "sample_size_mean_spearman": 0.6355663365735722,
+    "sample_size_min_top20_jaccard": 0.48148148148148145,
+    "model_scale_mean_spearman": 0.12733357887035468,
+    "model_scale_mean_top20_jaccard": 0.2903225806451613,
+    "perturbation_separation_margin": 0.5082327577032175,
+    "min_sample_size_spearman": 0.5,
+    "max_model_scale_spearman": 0.3,
+    "min_separation_margin": 0.2
+  },
+  "axis_summaries": {
+    "sample_size": {
+      "case_count": 2,
+      "mean_score_spearman": 0.6355663365735722,
+      "min_score_spearman": 0.6070023807963062,
+      "max_score_spearman": 0.6641302923508381,
+      "mean_top20_jaccard": 0.5407407407407407,
+      "min_top20_jaccard": 0.48148148148148145,
+      "max_top20_jaccard": 0.6
+    },
+    "model_scale": {
+      "case_count": 1,
+      "mean_score_spearman": 0.12733357887035468,
+      "min_score_spearman": 0.12733357887035468,
+      "max_score_spearman": 0.12733357887035468,
+      "mean_top20_jaccard": 0.2903225806451613,
+      "min_top20_jaccard": 0.2903225806451613,
+      "max_top20_jaccard": 0.2903225806451613
+    }
+  },
+  "entries": [
+    {
+      "axis": "sample_size",
+      "label": "qwen25_0p5b_limit2_vs_limit8",
+      "left": "outputs\\qwen25_0p5b_module_loss_sensitivity_limit2_group128.json",
+      "right": "outputs\\qwen25_0p5b_module_loss_sensitivity_limit8_group128.json",
+      "shared_modules": 169,
+      "positive_jaccard": 0.7131782945736435,
+      "score_spearman": 0.6641302923508381,
+      "score_kendall_tau_a": 0.5972413793103448,
+      "top20_jaccard": 0.6,
+      "result": {
+        "left_path": "outputs\\qwen25_0p5b_module_loss_sensitivity_limit2_group128.json",
+        "right_path": "outputs\\qwen25_0p5b_module_loss_sensitivity_limit8_group128.json",
+        "left_name": "left",
+        "right_name": "right",
+        "epsilon": 1e-12,
+        "shared_modules": 169,
+        "left_positive_count": 107,
+        "right_positive_count": 114,
+        "both_positive_count": 92,
+        "either_positive_count": 129,
+        "positive_jaccard": 0.7131782945736435,
+        "sign_agreement_count": 132,
+        "sign_agreement_ratio": 0.7810650887573964,
+        "positive_delta_pearson": 0.955125048251648,
+        "positive_delta_spearman": 0.7449021941125633,
+        "score_pearson": 0.8593413646090441,
+        "score_spearman": 0.6641302923508381,
+        "score_kendall_tau_a": 0.5972413793103448,
+        "top_overlap": [
+          {
+            "k": 10,
+            "left_count": 10,
+            "right_count": 10,
+            "overlap": 6,
+            "union": 14,
+            "jaccard": 0.42857142857142855
+          },
+          {
+            "k": 20,
+            "left_count": 20,
+            "right_count": 20,
+            "overlap": 15,
+            "union": 25,
+            "jaccard": 0.6
+          },
+          {
+            "k": 40,
+            "left_count": 40,
+            "right_count": 40,
+            "overlap": 30,
+            "union": 50,
+            "jaccard": 0.6
+          }
+        ]
+      }
+    },
+    {
+      "axis": "sample_size",
+      "label": "qwen25_1p5b_limit2_vs_limit8",
+      "left": "outputs\\qwen25_1p5b_module_loss_sensitivity_limit2_group128.json",
+      "right": "outputs\\qwen25_1p5b_module_loss_sensitivity_limit8_group128.json",
+      "shared_modules": 197,
+      "positive_jaccard": 0.6835443037974683,
+      "score_spearman": 0.6070023807963062,
+      "score_kendall_tau_a": 0.5466699987504686,
+      "top20_jaccard": 0.48148148148148145,
+      "result": {
+        "left_path": "outputs\\qwen25_1p5b_module_loss_sensitivity_limit2_group128.json",
+        "right_path": "outputs\\qwen25_1p5b_module_loss_sensitivity_limit8_group128.json",
+        "left_name": "left",
+        "right_name": "right",
+        "epsilon": 1e-12,
+        "shared_modules": 197,
+        "left_positive_count": 130,
+        "right_positive_count": 136,
+        "both_positive_count": 108,
+        "either_positive_count": 158,
+        "positive_jaccard": 0.6835443037974683,
+        "sign_agreement_count": 147,
+        "sign_agreement_ratio": 0.7461928934010152,
+        "positive_delta_pearson": 0.9351018889141224,
+        "positive_delta_spearman": 0.5862189818818218,
+        "score_pearson": 0.9254709126995809,
+        "score_spearman": 0.6070023807963062,
+        "score_kendall_tau_a": 0.5466699987504686,
+        "top_overlap": [
+          {
+            "k": 10,
+            "left_count": 10,
+            "right_count": 10,
+            "overlap": 5,
+            "union": 15,
+            "jaccard": 0.3333333333333333
+          },
+          {
+            "k": 20,
+            "left_count": 20,
+            "right_count": 20,
+            "overlap": 13,
+            "union": 27,
+            "jaccard": 0.48148148148148145
+          },
+          {
+            "k": 40,
+            "left_count": 40,
+            "right_count": 40,
+            "overlap": 31,
+            "union": 49,
+            "jaccard": 0.6326530612244898
+          }
+        ]
+      }
+    },
+    {
+      "axis": "model_scale",
+      "label": "qwen25_0p5b_vs_1p5b_limit2",
+      "left": "outputs\\qwen25_0p5b_module_loss_sensitivity_limit2_group128.json",
+      "right": "outputs\\qwen25_1p5b_module_loss_sensitivity_limit2_group128.json",
+      "shared_modules": 169,
+      "positive_jaccard": 0.4827586206896552,
+      "score_spearman": 0.12733357887035468,
+      "score_kendall_tau_a": 0.11543112268626174,
+      "top20_jaccard": 0.2903225806451613,
+      "result": {
+        "left_path": "outputs\\qwen25_0p5b_module_loss_sensitivity_limit2_group128.json",
+        "right_path": "outputs\\qwen25_1p5b_module_loss_sensitivity_limit2_group128.json",
+        "left_name": "left",
+        "right_name": "right",
+        "epsilon": 1e-12,
+        "shared_modules": 169,
+        "left_positive_count": 107,
+        "right_positive_count": 108,
+        "both_positive_count": 70,
+        "either_positive_count": 145,
+        "positive_jaccard": 0.4827586206896552,
+        "sign_agreement_count": 94,
+        "sign_agreement_ratio": 0.5562130177514792,
+        "positive_delta_pearson": 0.6559843313333137,
+        "positive_delta_spearman": 0.20521007268427022,
+        "score_pearson": 0.32012319271515605,
+        "score_spearman": 0.12733357887035468,
+        "score_kendall_tau_a": 0.11543112268626174,
+        "top_overlap": [
+          {
+            "k": 10,
+            "left_count": 10,
+            "right_count": 10,
+            "overlap": 3,
+            "union": 17,
+            "jaccard": 0.17647058823529413
+          },
+          {
+            "k": 20,
+            "left_count": 20,
+            "right_count": 20,
+            "overlap": 9,
+            "union": 31,
+            "jaccard": 0.2903225806451613
+          },
+          {
+            "k": 40,
+            "left_count": 40,
+            "right_count": 40,
+            "overlap": 16,
+            "union": 64,
+            "jaccard": 0.25
+          }
+        ]
+      }
+    }
+  ],
+  "failures": [],
+  "claim_boundary": "Valid claim: in the measured Qwen2.5 sensitivity artifacts, increasing calibration sample count within the same model preserves sensitivity rankings substantially better than transferring the ranking across model scale. Invalid claim: this is downstream quality retention, a universal scaling law, or a production quantization method."
+}

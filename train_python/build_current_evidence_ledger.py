@@ -22,6 +22,7 @@ DEFAULT_OUT_MD = Path("outputs/real_system_packer_2026-06-05/EVIDENCE_LEDGER_202
 CURRENT_GATE_SPECS: tuple[tuple[str, str], ...] = (
     ("public_hygiene", "outputs/real_system_packer_2026-06-05/public_repo_hygiene_gate_2026_06_06.json"),
     ("calibration_instability", "outputs/calibration_instability_benchmark_2026_06_06.json"),
+    ("sensitivity_perturbation_matrix", "outputs/sensitivity_perturbation_matrix_qwen25_2026_06_07.json"),
     ("calibration_robustness_stress", "outputs/calibration_robustness_stress_gate_2026_06_07.json"),
     ("consensus_transfer_boundary", "outputs/consensus_transfer_boundary_gate_2026_06_07.json"),
     ("interaction_swap_boundary", "outputs/interaction_swap_boundary_gate_2026_06_07.json"),
