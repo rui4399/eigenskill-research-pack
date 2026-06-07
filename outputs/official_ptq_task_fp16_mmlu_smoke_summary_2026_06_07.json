@@ -1,0 +1,76 @@
+{
+  "model": "Qwen/Qwen2.5-0.5B-Instruct",
+  "task_file": "data_eval/public_task_smoke_v1/mmlu_abstract_algebra_test_smoke.jsonl",
+  "task_format": "mmlu",
+  "task_count": 4,
+  "chat_template": true,
+  "no_think": true,
+  "max_new_tokens": 8,
+  "baseline": {
+    "aggregate": {
+      "tasks": 4,
+      "passes": 1,
+      "accuracy": 0.25,
+      "mean_tokens_per_second": 25.217247923664832,
+      "mean_ttft_seconds": 0.35968261525000145
+    },
+    "rows": [
+      {
+        "id": "mmlu_0",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Find the degree for the given field extension Q(sqrt(2), sqrt(3), sqrt(18)) over Q.\nA. 0\nB. 4\nC. 2\nD. 6\n/no_think",
+        "answer": "B",
+        "generated_text": "C. 2",
+        "score": {
+          "passed": false,
+          "predicted": "C",
+          "expected": "B"
+        },
+        "ttft_seconds": 1.226743015000011,
+        "tokens_per_second": 3.146730101179208
+      },
+      {
+        "id": "mmlu_1",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Let p = (1, 2, 5, 4)(2, 3) in S_5 . Find the index of <p> in S_5.\nA. 8\nB. 2\nC. 24\nD. 120\n/no_think",
+        "answer": "C",
+        "generated_text": "To find the index of \\( \\langle",
+        "score": {
+          "passed": false,
+          "predicted": null,
+          "expected": "C"
+        },
+        "ttft_seconds": 0.04662198399999795,
+        "tokens_per_second": 30.594853401834037
+      },
+      {
+        "id": "mmlu_2",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Find all zeros in the indicated finite field of the given polynomial with coefficients in that field. x^5 + 3x^3 + x^2 + 2x in Z_5\nA. 0\nB. 1\nC. 0,1\nD. 0,4\n/no_think",
+        "answer": "D",
+        "generated_text": "C. 0,1",
+        "score": {
+          "passed": false,
+          "predicted": "C",
+          "expected": "D"
+        },
+        "ttft_seconds": 0.09861613300000727,
+        "tokens_per_second": 35.7756033949046
+      },
+      {
+        "id": "mmlu_3",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Statement 1 | A factor group of a non-Abelian group is non-Abelian. Statement 2 | If K is a normal subgroup of H and H is a normal subgroup of G, then K is a normal subgroup of G.\nA. True, True\nB. False, False\nC. True, False\nD. False, True\n/no_think",
+        "answer": "B",
+        "generated_text": "B. False, False",
+        "score": {
+          "passed": true,
+          "predicted": "B",
+          "expected": "B"
+        },
+        "ttft_seconds": 0.06674932899998964,
+        "tokens_per_second": 31.35180479674148
+      }
+    ]
+  }
+}

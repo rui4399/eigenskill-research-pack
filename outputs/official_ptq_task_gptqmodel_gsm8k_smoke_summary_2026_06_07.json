@@ -1,0 +1,84 @@
+{
+  "model": "outputs/official_gptqmodel_smoke_2026_06_07/qwen25_0p5b_public_calib_gptq_model",
+  "task_file": "data_eval/public_task_smoke_v1/gsm8k_test_smoke.jsonl",
+  "task_format": "gsm8k",
+  "task_count": 4,
+  "chat_template": true,
+  "no_think": true,
+  "max_new_tokens": 16,
+  "baseline": {
+    "aggregate": {
+      "tasks": 4,
+      "passes": 0,
+      "accuracy": 0.0,
+      "mean_tokens_per_second": 7.298830964408436,
+      "mean_ttft_seconds": 0.551945764249993
+    },
+    "rows": [
+      {
+        "id": "gsm8k_0",
+        "type": "number",
+        "prompt": "Answer with only the final number.\nJanet’s ducks lay 16 eggs per day. She eats three for breakfast every morning and bakes muffins for her friends every day with four. She sells the remainder at the farmers' market daily for $2 per fresh duck egg. How much in dollars does she make every day at the farmers' market?\n/no_think",
+        "answer": "18",
+        "generated_text": "30",
+        "score": {
+          "passed": false,
+          "predicted": [
+            "30"
+          ],
+          "expected": "18"
+        },
+        "ttft_seconds": 1.3470269879999819,
+        "tokens_per_second": 1.4844944972839516
+      },
+      {
+        "id": "gsm8k_1",
+        "type": "number",
+        "prompt": "Answer with only the final number.\nA robe takes 2 bolts of blue fiber and half that much white fiber.  How many bolts in total does it take?\n/no_think",
+        "answer": "3",
+        "generated_text": "10",
+        "score": {
+          "passed": false,
+          "predicted": [
+            "10"
+          ],
+          "expected": "3"
+        },
+        "ttft_seconds": 0.2598832689999995,
+        "tokens_per_second": 7.687812953327436
+      },
+      {
+        "id": "gsm8k_2",
+        "type": "number",
+        "prompt": "Answer with only the final number.\nJosh decides to try flipping a house.  He buys a house for $80,000 and then puts in $50,000 in repairs.  This increased the value of the house by 150%.  How much profit did he make?\n/no_think",
+        "answer": "70000",
+        "generated_text": "20%",
+        "score": {
+          "passed": false,
+          "predicted": [
+            "20"
+          ],
+          "expected": "70000"
+        },
+        "ttft_seconds": 0.3184003000000075,
+        "tokens_per_second": 9.414406203668108
+      },
+      {
+        "id": "gsm8k_3",
+        "type": "number",
+        "prompt": "Answer with only the final number.\nJames decides to run 3 sprints 3 times a week.  He runs 60 meters each sprint.  How many total meters does he run a week?\n/no_think",
+        "answer": "540",
+        "generated_text": "180",
+        "score": {
+          "passed": false,
+          "predicted": [
+            "180"
+          ],
+          "expected": "540"
+        },
+        "ttft_seconds": 0.28247249999998303,
+        "tokens_per_second": 10.60861020335425
+      }
+    ]
+  }
+}

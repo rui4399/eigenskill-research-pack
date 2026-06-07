@@ -30,6 +30,7 @@ paper claims.
 | Robust-LCB downstream boundary gate | `outputs/QWEN3_0P6B_ROBUST_LCB_QUALITY_GATE_2026_06_07.md` |
 | Public task benchmark gate | `outputs/PUBLIC_TASK_BENCHMARK_OLLAMA_QWEN25_ABLITERATE_7B_GATE_2026_06_07.md` |
 | Public task model ladder gate | `outputs/PUBLIC_TASK_MODEL_LADDER_GATE_2026_06_07.md` |
+| Official PTQ task-execution smoke matrix | `outputs/OFFICIAL_PTQ_TASK_RETENTION_SMOKE_MATRIX_2026_06_07.md` |
 | Baseline/readiness gap dashboard | `outputs/BASELINE_GAP_DASHBOARD_2026_06_06.md` |
 | Claim matrix | `docs/PAPER_CLAIM_MATRIX.md` |
 | System gate index | `docs/SYSTEM_EVIDENCE_GATES.md` |
@@ -39,7 +40,7 @@ paper claims.
 ## Non-Ledger Readiness Probes
 
 These artifacts are useful for environment readiness and reviewer-risk
-tracking, but they are not counted in the 22-gate paper-facing ledger.
+tracking, but they are not counted in the 23-gate paper-facing ledger.
 
 | Purpose | Artifact | Boundary |
 |---|---|---|
@@ -101,4 +102,4 @@ one of the following is true:
 
 Future cleanup should reduce `outputs/` by moving scratch and raw intermediate
 files out of the main branch, but not at the cost of breaking the current
-22-gate reproducibility story.
+23-gate reproducibility story.

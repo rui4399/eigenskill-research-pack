@@ -1,8 +1,8 @@
 {
-  "date": "2026-06-07T00:57:52+00:00",
+  "date": "2026-06-07T01:26:01+00:00",
   "passed": true,
-  "gate_count": 22,
-  "passed_count": 22,
+  "gate_count": 23,
+  "passed_count": 23,
   "failed_count": 0,
   "categories": [
     "allocation comparator",
@@ -162,16 +162,16 @@
       "path": "outputs\\paper_evidence_alignment_gate_2026_06_07.json",
       "passed": true,
       "failures": [],
-      "metrics": "required refs 9; missing refs 0; paper paths 15; missing paths 0; unsafe claims 0; stale tokens 0; ledger gates 22",
+      "metrics": "required refs 10; missing refs 0; paper paths 16; missing paths 0; unsafe claims 0; stale tokens 0; ledger gates 23",
       "summary": {
         "paper": "paper_drafts\\eigenskill_q_research_draft_en_2026_06_07.md",
-        "required_reference_count": 9,
+        "required_reference_count": 10,
         "missing_required_reference_count": 0,
-        "referenced_repo_path_count": 15,
+        "referenced_repo_path_count": 16,
         "missing_referenced_path_count": 0,
         "stale_token_count": 0,
         "unsafe_claim_count": 0,
-        "ledger_gate_count": 22,
+        "ledger_gate_count": 23,
         "ledger_gate_count_mentioned": true
       }
     },
@@ -543,6 +543,39 @@
         "max_guard_vram_ratio": 0.8865169917801496,
         "mean_tokens_per_second": 52.03493721585636,
         "mean_ttft_seconds": 0.6076382794973324
+      }
+    },
+    {
+      "label": "official_ptq_task_retention",
+      "category": "ptq comparator",
+      "path": "outputs\\official_ptq_task_retention_smoke_matrix_2026_06_07.json",
+      "passed": true,
+      "failures": [],
+      "metrics": "cases 6; tasks 24; passes 2; accuracy 0.0833; VRAM 0.6108",
+      "summary": {
+        "case_count": 6,
+        "variant_count": 3,
+        "format_count": 2,
+        "variants": [
+          "autoawq",
+          "fp16",
+          "gptqmodel"
+        ],
+        "task_formats": [
+          "gsm8k",
+          "mmlu"
+        ],
+        "baseline_variant": "fp16",
+        "total_tasks": 24,
+        "total_passes": 2,
+        "mean_accuracy": 0.08333333333333333,
+        "max_accuracy_drop_vs_fp16": 0.25,
+        "baseline_zero_accuracy_formats": [
+          "gsm8k"
+        ],
+        "max_guard_vram_ratio": 0.6108452950558214,
+        "mean_tokens_per_second": 11.46080518982865,
+        "mean_ttft_seconds": 0.5084949021250004
       }
     },
     {

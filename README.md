@@ -22,7 +22,7 @@ supporting material unless explicitly referenced by a gate.
 | Consensus allocation | passes committed short fake-quant stress gates | robustness diagnostic |
 | Public task coverage | guarded local subset ladder, not leaderboard-scale | capability smoke |
 | Packed runtime | gated ESMP/Triton/C++ prototypes | module-level system evidence |
-| Official PTQ baselines | AutoAWQ and GPTQModel public-calibrated W4/G128 probes are aligned in one readiness matrix over the same tiny WikiText2/C4 public eval budget; faithful AWQ/GPTQ competitive baselines are still blockers | partial readiness only |
+| Official PTQ baselines | AutoAWQ and GPTQModel public-calibrated W4/G128 probes are aligned over the same tiny WikiText2/C4 public PPL budget, and a tiny task-execution smoke matrix now loads FP16/AutoAWQ/GPTQModel on the same MMLU/GSM8K smoke tasks | partial readiness only |
 | Mobile/Redmi evidence | no real TTFT/tokens/s/memory logs yet | no deployment claim |
 
 Current paper-facing ledger:
@@ -31,7 +31,7 @@ Current paper-facing ledger:
 outputs/real_system_packer_2026-06-05/EVIDENCE_LEDGER_2026_06_06.md
 ```
 
-Current ledger status: **22 / 22 gates pass**. This means the committed gate
+Current ledger status: **23 / 23 gates pass**. This means the committed gate
 artifacts are internally consistent; it does **not** mean the paper is ready for
 SOTA or deployment claims.
 
@@ -44,7 +44,7 @@ historical artifacts.
 1. `docs/README.md` for the documentation map.
 2. `docs/PAPER_CLAIM_MATRIX.md` for the claim firewall.
 3. `outputs/real_system_packer_2026-06-05/EVIDENCE_LEDGER_2026_06_06.md`
-   for the current 22 paper-facing gates.
+   for the current 23 paper-facing gates.
 4. `outputs/BASELINE_GAP_DASHBOARD_2026_06_06.md` for missing official
    baselines and mobile/runtime blockers.
 5. `docs/ARTIFACT_MANIFEST.md` for the curated artifact map.
@@ -69,6 +69,10 @@ paper-facing claim.
 - The official PTQ readiness matrix verifies that the current AutoAWQ and
   GPTQModel probes use the same model, W4/G128 shape, WikiText2/C4 eval labels,
   and 1487-token public eval budget before they are presented together.
+- A tiny official PTQ task-execution smoke matrix can load FP16, AutoAWQ, and
+  GPTQModel Qwen2.5-0.5B variants on the same 24 public MMLU/GSM8K smoke tasks
+  under GPU guard. Because the FP16 GSM8K smoke baseline is itself 0/4, this is
+  execution-path evidence only, not leaderboard or task-retention evidence.
 
 ## Non-Claims
 
@@ -138,7 +142,7 @@ python train_python/gate_public_repo_hygiene.py \
 Rebuild the current paper-facing ledger:
 
 ```bash
-python train_python/build_current_evidence_ledger.py --expected-gate-count 22
+python train_python/build_current_evidence_ledger.py --expected-gate-count 23
 ```
 
 For detailed gate commands and claim boundaries, see:

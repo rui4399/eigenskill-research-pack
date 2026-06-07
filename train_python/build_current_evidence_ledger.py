@@ -37,6 +37,7 @@ CURRENT_GATE_SPECS: tuple[tuple[str, str], ...] = (
     ("chat_task_stress", "outputs/real_system_packer_2026-06-05/chat_task_stress_v3_84_gate_2026_06_06.json"),
     ("public_task_benchmark", "outputs/public_task_benchmark_ollama_qwen25_abliterate_7b_gate_2026_06_07.json"),
     ("public_task_model_ladder", "outputs/public_task_model_ladder_gate_2026_06_07.json"),
+    ("official_ptq_task_retention", "outputs/official_ptq_task_retention_smoke_matrix_2026_06_07.json"),
     ("allocation_family_proxy", "outputs/q_palette_style_allocation_family_gate_2026_06_06.json"),
     ("robust_lcb_consensus", "outputs/robust_lcb_consensus_family_gate_2026_06_06.json"),
     ("robust_lcb_quality", "outputs/qwen3_0p6b_robust_lcb_quality_gate_2026_06_07.json"),

@@ -10,7 +10,7 @@ by an executable gate and an explicit claim boundary.
 ## Evidence Ledger
 
 `train_python/build_current_evidence_ledger.py` is the stable public entry
-point for the current paper-facing gate set. It fixes the 22 gate paths in one
+point for the current paper-facing gate set. It fixes the 23 gate paths in one
 manifest, rebuilds the ledger, and avoids copying a long `--gate` list across
 README files and paper appendices.
 
@@ -21,7 +21,7 @@ python train_python/build_current_evidence_ledger.py
 ```
 
 `train_python/build_evidence_ledger.py` is the lower-level builder for custom
-or future gate manifests. The expanded form of the current 22-gate ledger is:
+or future gate manifests. The expanded form of the current 23-gate ledger is:
 
 ```bash
 python train_python/build_evidence_ledger.py \
@@ -42,6 +42,7 @@ python train_python/build_evidence_ledger.py \
   --gate chat_task_stress=outputs/real_system_packer_2026-06-05/chat_task_stress_v3_84_gate_2026_06_06.json \
   --gate public_task_benchmark=outputs/public_task_benchmark_ollama_qwen25_abliterate_7b_gate_2026_06_07.json \
   --gate public_task_model_ladder=outputs/public_task_model_ladder_gate_2026_06_07.json \
+  --gate official_ptq_task_retention=outputs/official_ptq_task_retention_smoke_matrix_2026_06_07.json \
   --gate allocation_family_proxy=outputs/q_palette_style_allocation_family_gate_2026_06_06.json \
   --gate robust_lcb_consensus=outputs/robust_lcb_consensus_family_gate_2026_06_06.json \
   --gate robust_lcb_quality=outputs/qwen3_0p6b_robust_lcb_quality_gate_2026_06_07.json \
@@ -51,7 +52,7 @@ python train_python/build_evidence_ledger.py \
   --out-md outputs/real_system_packer_2026-06-05/EVIDENCE_LEDGER_2026_06_06.md
 ```
 
-The current ledger passes with 22/22 gates across repo hygiene, calibration
+The current ledger passes with 23/23 gates across repo hygiene, calibration
 robustness, artifact integrity, kernel, runtime wiring, selected-row, C++
 runtime, decode integration, QKV replacement, quality, task-retention, and
 capability-retention/model-ladder, allocation-comparator, rotation-comparator, and
@@ -145,14 +146,14 @@ Current gate:
 ```bash
 python train_python/gate_paper_evidence_alignment.py \
   --paper paper_drafts/eigenskill_q_research_draft_en_2026_06_07.md \
-  --expected-gate-count 22 \
+  --expected-gate-count 23 \
   --out-json outputs/paper_evidence_alignment_gate_2026_06_07.json \
   --out-md outputs/PAPER_EVIDENCE_ALIGNMENT_GATE_2026_06_07.md
 ```
 
-Current result: 9/9 required evidence references present, 14 referenced repo
+Current result: 10/10 required evidence references present, referenced repo
 paths found and 0 missing, 0 stale forbidden tokens, 0 unsafe non-negated claim
-lines, and the paper mentions the current 22-gate ledger.
+lines, and the paper mentions the current 23-gate ledger.
 
 Valid claim:
 
@@ -233,6 +234,45 @@ Invalid claim:
 
 - this proves monotonic scaling, fused quantized retention, leaderboard-scale
   quality, or SOTA reasoning performance.
+
+## Official PTQ Task-Execution Smoke Matrix
+
+`train_python/gate_official_ptq_task_retention.py` combines guarded task-smoke
+runs for the same Qwen2.5-0.5B family under FP16, AutoAWQ, and GPTQModel. It
+exists to ensure official PTQ artifacts are not reported with PPL-only evidence.
+The matrix is intentionally tiny and negative-friendly. Formats where the FP16
+baseline is already zero are execution-only evidence.
+
+Current gate:
+
+```bash
+python train_python/gate_official_ptq_task_retention.py \
+  --case fp16:mmlu=outputs/official_ptq_task_fp16_mmlu_smoke_summary_2026_06_07.json=outputs/official_ptq_task_fp16_mmlu_smoke_gpu_guard_2026_06_07.json \
+  --case fp16:gsm8k=outputs/official_ptq_task_fp16_gsm8k_smoke_summary_2026_06_07.json=outputs/official_ptq_task_fp16_gsm8k_smoke_gpu_guard_2026_06_07.json \
+  --case autoawq:mmlu=outputs/official_ptq_task_awq_mmlu_smoke_summary_2026_06_07.json=outputs/official_ptq_task_awq_mmlu_smoke_gpu_guard_2026_06_07.json \
+  --case autoawq:gsm8k=outputs/official_ptq_task_awq_gsm8k_smoke_summary_2026_06_07.json=outputs/official_ptq_task_awq_gsm8k_smoke_gpu_guard_2026_06_07.json \
+  --case gptqmodel:mmlu=outputs/official_ptq_task_gptqmodel_mmlu_smoke_summary_2026_06_07.json=outputs/official_ptq_task_gptqmodel_mmlu_smoke_gpu_guard_2026_06_07.json \
+  --case gptqmodel:gsm8k=outputs/official_ptq_task_gptqmodel_gsm8k_smoke_summary_2026_06_07.json=outputs/official_ptq_task_gptqmodel_gsm8k_smoke_gpu_guard_2026_06_07.json \
+  --max-accuracy-drop 0.25 \
+  --out-json outputs/official_ptq_task_retention_smoke_matrix_2026_06_07.json \
+  --out-md outputs/OFFICIAL_PTQ_TASK_RETENTION_SMOKE_MATRIX_2026_06_07.md
+```
+
+Current result: 6 cases, 3 variants, 2 task formats, 24 total task executions,
+2 total passes, max accuracy drop versus FP16 `0.25`, and peak guard VRAM ratio
+`0.6108`. The current matrix marks `gsm8k` as a zero-accuracy FP16 baseline
+format.
+
+Valid claim:
+
+- FP16, AutoAWQ, and GPTQModel Qwen2.5-0.5B variants can all be loaded and
+  evaluated on the same tiny public MMLU/GSM8K smoke fixtures under GPU guard.
+  The GSM8K slice is valid only as execution-path evidence because FP16 is 0/4.
+
+Invalid claim:
+
+- this proves broad task retention, leaderboard quality, official AWQ/GPTQ
+  competitiveness, or production inference performance.
 
 ## Allocation Family Proxy Gate
 
@@ -423,7 +463,7 @@ Invalid claim:
 `train_python/run_official_awq_smoke.py` is a minimal package-readiness probe.
 It exists to verify that AutoAWQ can execute, save local quantized artifacts,
 and run one short generation smoke under the GPU guard. It is intentionally not
-part of the 22-gate paper-facing ledger.
+part of the 23-gate paper-facing ledger.
 
 Example WSL/GPU command:
 
