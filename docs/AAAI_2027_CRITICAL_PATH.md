@@ -11,6 +11,27 @@ due 2026-07-28, and supplementary material/code due 2026-07-31.
 
 Source: https://aaai.org/conference/aaai/aaai-27/
 
+## Veto-First Decision
+
+The optimized submission strategy is to avoid a hybrid "algorithm plus systems"
+paper until the system path has end-to-end speed evidence. AAAI gets the
+statistical story: calibration split instability, uncertainty-aware evaluation,
+and conservative consensus allocation. The packed-runtime/Triton/bypass work
+stays as artifact evidence and a separate systems-paper track unless it clears
+all runtime gates below.
+
+This means the next experiment priority is not another draft and not another
+kernel-only speed row. It is a matched downstream-retention row on real
+quantized variants:
+
+```text
+FP16 vs AutoAWQ vs GPTQModel vs CSI allocation
+same model, same public calibration, same task fixture, same guard.
+```
+
+The systems track can be promoted only when it reports physical file size,
+peak VRAM, TTFT, and tokens/s for the same model against an FP16 baseline.
+
 ## Mainline Submission Story
 
 The AAAI-facing paper should be:
@@ -27,7 +48,7 @@ artifact section unless it proves end-to-end speedup.
 
 | veto | why it can reject the paper | required closure |
 |---|---|---|
-| Only tiny task subsets. | Reviewers can call the result a toy diagnosis. | Larger MMLU/GSM8K/IFEval slices first; full runs if the guard can hold. |
+| Only tiny task subsets. | Reviewers can call the result a toy diagnosis. | Full GSM8K is now covered for the local 7B model; next close broader MMLU/IFEval or quantized full-task retention. |
 | Native baseline confrontation is still incomplete. | Random and proxy baselines are too weak; current AutoAWQ/GPTQModel rows are local readiness/subset evidence, not full competition. | Extend matched AutoAWQ/GPTQModel rows beyond smoke/subset slices; add SmoothQuant or rotation-family row if feasible. |
 | Scale row is public-task only. | The new 7B Ollama row improves model-scale coverage but is not quantized-retention evidence. | Add one quantized 3B/7B or broader 1.5B row if the guard can hold. |
 | End-to-end quantized runtime is slower. | Systems reviewers will reject any acceleration claim. | Keep speed claims kernel-only until TTFT/tokens/s beats FP16 in a minimal runtime. |
@@ -47,9 +68,9 @@ artifact section unless it proves end-to-end speedup.
    readiness/smoke into matched task/PPL rows. The table must separate:
    FP16, uniform W4, AutoAWQ W4/G128, GPTQModel W4/G128, and CSI allocation.
 
-3. **Task retention.** Move beyond subset100. The minimum paper-facing target is
-   a larger fixed public slice with confidence intervals; the stretch target is
-   full MMLU and full GSM8K.
+3. **Task retention.** Move beyond subset100. Full GSM8K is now measured for
+   the local 7B public-task path; the next target is broader MMLU/IFEval or
+   full-task retention on actual quantized variants.
 
 4. **Scale.** Keep the committed Qwen2.5-abliterate-7B public-task row as
    scale coverage. The next upgrade is quantized retention at 3B/7B scale, or
@@ -106,9 +127,9 @@ Anything else stays in future work.
 
 ## Next Execution Order
 
-1. Extend the new Qwen2.5-1.5B FP16/AutoAWQ/GPTQModel GSM8K200/MMLU100 matrix
-   toward full GSM8K or broader MMLU subjects before claiming broad task
-   retention.
+1. Extend the Qwen2.5-1.5B FP16/AutoAWQ/GPTQModel GSM8K200/MMLU100 matrix
+   toward full GSM8K, using the new full-GSM8K fixture and local 7B result as
+   public-task coverage evidence rather than quantized retention.
 2. Upgrade the 7B public-task row into quantized retention only if disk and
    VRAM headroom are safe; otherwise broaden the 1.5B matched PTQ matrix.
 3. Add a downstream proxy for W4A8 activation quantization before using the

@@ -75,6 +75,9 @@ The current evidence supports:
   Qwen2.5-abliterate-7B, covering 100 MMLU abstract-algebra rows plus 200 GSM8K
   rows under guard: 84/300 total passes, mean throughput 19.9987 tokens/s, mean
   TTFT 0.478812 s, and peak guarded VRAM ratio 0.7135;
+- a full single-task GSM8K coverage row for the same Ollama 7B model, covering
+  all 1319 GSM8K test rows under guard: 183/1319 passes, mean throughput
+  16.8942 tokens/s, mean TTFT 0.463880 s, and peak guarded VRAM ratio 0.6934;
 - a local matched AutoAWQ/GPTQModel Qwen2.5-0.5B W4/G128 baseline pack that
   ties public-calibration PPL, subset50 MMLU/GSM8K execution, and PC-side
   runtime/VRAM into one explicit claim boundary;
@@ -122,8 +125,8 @@ Current AAAI-facing critical path:
    matched FP16/AutoAWQ/GPTQModel subset100 and GSM8K200/MMLU100 task/runtime
    matrices, and paired uncertainty reporting. SmoothQuant, rotation baselines,
    broader subjects, and full benchmark retention still need scale-up.
-3. Downstream tasks: move from subset50/subset100 and deterministic IFEval-style
-   execution evidence toward stronger MMLU/GSM8K/IFEval retention on actual
+3. Downstream tasks: full GSM8K is now measured for the local 7B public-task
+   path; move next toward broader MMLU/IFEval and stronger retention on actual
    quantized variants.
 4. Scale: keep the committed 7B public-task row as coverage evidence; upgrade
    it to quantized retention only if the 8GB local GPU can hold the run, else
@@ -161,10 +164,11 @@ The blockers are concrete:
    at least one faithful rotation or mixed-precision allocation comparator, and
    broader task subjects are still missing.
 2. Larger evaluation: more WikiText2/C4 prompts and broader calibration-seed sweeps.
-3. Downstream retention: larger MMLU/GSM8K/IFEval or similar task slices on the
-   actual quantized/fused variants; current IFEval-style evidence is only an
-   8-row deterministic execution smoke, and current public PTQ task evidence is
-   still local 50/100-row subset coverage rather than leaderboard-scale.
+3. Downstream retention: broader MMLU/IFEval or similar task slices on the
+   actual quantized/fused variants; full GSM8K is measured only for the local
+   Ollama 7B public-task path, current IFEval-style evidence is only an 8-row
+   deterministic execution smoke, and current public PTQ task evidence is still
+   local subset coverage rather than leaderboard-scale.
 4. Statistical robustness: the first n=2/4/8 CSI curve, trend-significance
    gate, permutation-null gate, and rank-inversion theory gate are now
    committed, but larger n grids, more prompt pools, and

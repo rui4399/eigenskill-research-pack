@@ -25,7 +25,7 @@ Current ledger artifact:
 outputs/real_system_packer_2026-06-05/EVIDENCE_LEDGER_2026_06_06.md
 ```
 
-Current status: **48 / 48 gates pass**.
+Current status: **49 / 49 gates pass**.
 
 Valid claim:
 
@@ -59,6 +59,7 @@ Invalid claim:
 | `rotation_family_proxy` | comparator proxy | `outputs/QUAROT_SPINQUANT_ROTATION_FAMILY_GATE_2026_06_06.md` | A QuaRot/SpinQuant-style rotation-family proxy is executable; it is not a faithful rotation implementation. |
 | `awq_gptq_proxy` | comparator proxy | `outputs/AWQ_GPTQ_PROXY_GATE_2026_06_06.md` | AWQ/GPTQ-style proxy policies are executable; this is not an official AWQ/GPTQ run. |
 | `public_task_benchmark` | public task coverage | `outputs/PUBLIC_TASK_BENCHMARK_OLLAMA_QWEN25_ABLITERATE_7B_GSM8K200_MMLU100_GATE_2026_06_08.md` | A local Ollama 7B model ran 300 MMLU/GSM8K subset rows under GPU guard. |
+| `public_task_gsm8k_full_7b` | public task coverage | `outputs/PUBLIC_TASK_BENCHMARK_GSM8KFULL_OLLAMA_QWEN25_ABLITERATE_7B_GATE_2026_06_08.md` | The same local Ollama 7B model ran all 1319 GSM8K test rows under GPU guard. |
 | `public_task_model_ladder` | public task coverage | `outputs/PUBLIC_TASK_MODEL_LADDER_GATE_2026_06_07.md` | Public-task evidence is shown as a guarded two-model ladder, not a single cherry-picked result. |
 | `official_ptq_task_retention` | task execution smoke | `outputs/OFFICIAL_PTQ_TASK_RETENTION_SMOKE_MATRIX_2026_06_07.md` | FP16, AutoAWQ, and GPTQModel Qwen2.5-0.5B variants load and run the same tiny public MMLU/GSM8K smoke tasks under GPU guard; this is not leaderboard-scale retention, and zero-FP16 formats are execution-only. |
 | `official_ptq_runtime_profile` | runtime profile | `outputs/OFFICIAL_PTQ_RUNTIME_PROFILE_2026_06_07.md` | PC-side TTFT/tokens/s/VRAM are summarized from the same guarded official PTQ task-smoke path; this is not mobile deployment or production runtime speedup. |

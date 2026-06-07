@@ -40,6 +40,14 @@ class GatePublicTaskBenchmarkTests(unittest.TestCase):
         self.assertTrue(result["passed"])
         self.assertEqual(result["summary"]["total_tasks"], 100)
 
+    def test_passes_single_format_full_task_gate(self) -> None:
+        result = gate.build_result(
+            [case("gsm8kfull", "gsm8k", 1319)],
+            args(min_cases=1, min_total_tasks=1319, require_formats="gsm8k"),
+        )
+        self.assertTrue(result["passed"])
+        self.assertEqual(result["summary"]["total_tasks"], 1319)
+
     def test_fails_when_task_count_is_too_small(self) -> None:
         result = gate.build_result([case("mmlu", "mmlu", 4), case("gsm8k", "gsm8k", 4)], args())
         self.assertFalse(result["passed"])

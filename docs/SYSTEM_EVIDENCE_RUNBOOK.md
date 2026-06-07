@@ -49,6 +49,7 @@ python train_python/build_evidence_ledger.py \
   --gate fused_qkv_quality=outputs/real_system_packer_2026-06-05/fused_qkv_prompt_suite_gate_2026_06_06.json \
   --gate chat_task_stress=outputs/real_system_packer_2026-06-05/chat_task_stress_v3_84_gate_2026_06_06.json \
   --gate public_task_benchmark=outputs/public_task_benchmark_ollama_qwen25_abliterate_7b_gsm8k200_mmlu100_gate_2026_06_08.json \
+  --gate public_task_gsm8k_full_7b=outputs/public_task_benchmark_gsm8kfull_ollama_qwen25_abliterate_7b_gate_2026_06_08.json \
   --gate public_task_model_ladder=outputs/public_task_model_ladder_gate_2026_06_07.json \
   --gate official_ptq_task_retention=outputs/official_ptq_task_retention_smoke_matrix_2026_06_07.json \
   --gate official_ptq_runtime_profile=outputs/official_ptq_runtime_profile_2026_06_07.json \
@@ -77,11 +78,11 @@ python train_python/build_evidence_ledger.py \
   --out-md outputs/real_system_packer_2026-06-05/EVIDENCE_LEDGER_2026_06_06.md
 ```
 
-The current ledger passes with 48/48 gates across repo hygiene, calibration
+The current ledger passes with 49/49 gates across repo hygiene, calibration
 robustness, CSI trend significance, CSI null permutation, rank-inversion theory, artifact integrity, kernel, runtime wiring, selected-row, C++
 runtime, decode integration, QKV replacement, quality, task-retention, runtime profile, and
 capability-retention/model-ladder, allocation-comparator, rotation-comparator, and
-matched PTQ baseline, true subset100 official PTQ task/runtime evidence, deterministic IFEval-style PTQ execution, expanded AutoAWQ public PPL, Qwen2.5-1.5B GPTQModel task-execution subset evidence, Qwen2.5-1.5B FP16/AutoAWQ/GPTQModel subset100 plus GSM8K200/MMLU100 task/runtime/statistical-interval evidence, PTQ-comparator, and
+matched PTQ baseline, true subset100 official PTQ task/runtime evidence, deterministic IFEval-style PTQ execution, expanded AutoAWQ public PPL, Qwen2.5-1.5B GPTQModel task-execution subset evidence, Qwen2.5-1.5B FP16/AutoAWQ/GPTQModel subset100 plus GSM8K200/MMLU100 task/runtime/statistical-interval evidence, full-GSM8K local 7B public-task coverage, PTQ-comparator, and
 paper-alignment evidence categories, plus extended W4A8 attention/MLP real-activation reconstruction.
 
 Valid claim:
@@ -238,7 +239,7 @@ Current gate:
 ```bash
 python train_python/gate_paper_evidence_alignment.py \
   --paper paper_drafts/eigenskill_q_research_draft_en_2026_06_07.md \
-  --expected-gate-count 48 \
+  --expected-gate-count 49 \
   --out-json outputs/paper_evidence_alignment_gate_2026_06_08.json \
   --out-md outputs/PAPER_EVIDENCE_ALIGNMENT_GATE_2026_06_08.md
 ```
@@ -291,6 +292,76 @@ Invalid claim:
 
 - this proves leaderboard-scale quality, fused-retention quality, or SOTA
   reasoning performance.
+
+## Full GSM8K 7B Public Task Gate
+
+This gate uses the same public-task evaluator but runs the full 1319-row GSM8K
+test fixture through the local Ollama 7B model. It is a single-task public
+coverage gate, not quantized retention and not a multi-task leaderboard.
+
+Build the fixture:
+
+```bash
+python train_python/build_public_task_smoke.py \
+  --out-dir data_eval/public_task_benchmark_v1 \
+  --gsm8k-count 1319 \
+  --mmlu-count 0 \
+  --file-tag gsm8kfull \
+  --title "Public Task Benchmark GSM8K Full Manifest" \
+  --claim-boundary "Full GSM8K test fixture for guarded local execution; not leaderboard-scale multi-task evaluation or quantized retention." \
+  --source datasets-server \
+  --out-json outputs/public_task_benchmark_gsm8kfull_manifest_2026_06_08.json \
+  --out-md outputs/PUBLIC_TASK_BENCHMARK_GSM8KFULL_MANIFEST_2026_06_08.md
+```
+
+Run the guarded Ollama evaluation:
+
+```bash
+python train_python/run_with_gpu_guard.py \
+  --max-memory-ratio 0.90 \
+  --max-start-memory-ratio 0.90 \
+  --poll-seconds 2 \
+  --timeout-sec 7200 \
+  --cleanup-repo-caches \
+  --cleanup-root . \
+  --min-disk-free-gb 2 \
+  --disk-check-path . \
+  --out outputs/public_task_benchmark_gsm8kfull_ollama_qwen25_abliterate_7b_gpu_guard_2026_06_08.json \
+  python train_python/eval_chat_task_ollama.py \
+    --tasks-jsonl data_eval/public_task_benchmark_v1/gsm8k_test_gsm8kfull.jsonl \
+    --task-format gsm8k \
+    --model huihui_ai/qwen2.5-abliterate:7b-instruct \
+    --max-new-tokens 64 \
+    --no-think \
+    --out-json outputs/public_task_benchmark_gsm8kfull_ollama_qwen25_abliterate_7b_summary_2026_06_08.json \
+    --out-md outputs/PUBLIC_TASK_BENCHMARK_GSM8KFULL_OLLAMA_QWEN25_ABLITERATE_7B_2026_06_08.md
+```
+
+Gate it:
+
+```bash
+python train_python/gate_public_task_benchmark.py \
+  --case gsm8kfull=outputs/public_task_benchmark_gsm8kfull_ollama_qwen25_abliterate_7b_summary_2026_06_08.json=outputs/public_task_benchmark_gsm8kfull_ollama_qwen25_abliterate_7b_gpu_guard_2026_06_08.json \
+  --min-cases 1 \
+  --min-total-tasks 1319 \
+  --require-formats gsm8k \
+  --max-memory-ratio 0.90 \
+  --out-json outputs/public_task_benchmark_gsm8kfull_ollama_qwen25_abliterate_7b_gate_2026_06_08.json \
+  --out-md outputs/PUBLIC_TASK_BENCHMARK_GSM8KFULL_OLLAMA_QWEN25_ABLITERATE_7B_GATE_2026_06_08.md
+```
+
+Current result: 1319 GSM8K test rows, 183 passes, mean accuracy `0.1387`,
+mean throughput `16.8942` tok/s, mean TTFT `0.463880` s, and peak guard VRAM
+ratio `0.6934`.
+
+Valid claim:
+
+- full GSM8K public-task execution is wired and guarded for the local 7B model.
+
+Invalid claim:
+
+- this proves quantized retention, multi-task leaderboard quality, fused-runtime
+  quality, or SOTA reasoning performance.
 
 ## Public Task Model Ladder Gate
 

@@ -47,6 +47,10 @@ CURRENT_GATE_SPECS: tuple[tuple[str, str], ...] = (
         "public_task_benchmark",
         "outputs/public_task_benchmark_ollama_qwen25_abliterate_7b_gsm8k200_mmlu100_gate_2026_06_08.json",
     ),
+    (
+        "public_task_gsm8k_full_7b",
+        "outputs/public_task_benchmark_gsm8kfull_ollama_qwen25_abliterate_7b_gate_2026_06_08.json",
+    ),
     ("public_task_model_ladder", "outputs/public_task_model_ladder_gate_2026_06_07.json"),
     ("official_ptq_task_retention", "outputs/official_ptq_task_retention_smoke_matrix_2026_06_07.json"),
     ("official_ptq_runtime_profile", "outputs/official_ptq_runtime_profile_2026_06_07.json"),

@@ -105,7 +105,7 @@ def build_result(cases: list[dict[str, Any]], args: argparse.Namespace) -> dict[
         "cases": cases,
         "failures": failures,
         "claim_boundary": (
-            "Valid claim: public MMLU/GSM8K subset evaluation ran under guard. "
+            "Valid claim: public task subset/full evaluation ran under guard. "
             "Invalid claim: this is leaderboard-scale or SOTA quality evidence."
         ),
     }

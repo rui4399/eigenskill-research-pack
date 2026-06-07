@@ -22,7 +22,7 @@ fake-quant loss sensitivity on multiple calibration views, allocates a fixed
 `{4,8}`-bit budget through cross-split consensus sensitivity, and records every
 paper-facing result through executable evidence gates. Across Qwen3-0.6B,
 Qwen3-1.7B, OLMo2-0425-1B-Instruct, and SmolLM2-1.7B short-slice diagnostics,
-the current evidence ledger passes 48/48 gates. The calibration-instability
+the current evidence ledger passes 49/49 gates. The calibration-instability
 gate finds 3/3 unstable model/dataset cases with mean score/cost Spearman
 0.0713 and mean top-20 Jaccard 0.1022. A Qwen2.5 perturbation matrix further
 separates calibration sample-size and model-scale effects: within-model
@@ -56,7 +56,11 @@ includes a two-model guarded Ollama ladder plus a 7B single-model scale row over
 100 MMLU abstract-algebra and 200 GSM8K subset rows. The latter obtains 84/300
 passes with mean 19.9987 tokens/s, mean TTFT 0.478812 s, and peak guarded VRAM
 ratio 0.7135, and is treated only as public-task coverage rather than quantized
-retention. We also include a tiny official PTQ task-execution smoke matrix over
+retention. We further run all 1319 GSM8K test rows through the same local 7B
+Ollama model, obtaining 183/1319 passes with mean 16.8942 tokens/s, mean TTFT
+0.463880 s, and peak guarded VRAM ratio 0.6934. This closes a full single-task
+execution gap but is still not multi-task leaderboard or quantized-retention
+evidence. We also include a tiny official PTQ task-execution smoke matrix over
 FP16/AutoAWQ/GPTQModel Qwen2.5-0.5B variants. We further run the same three
 official PTQ variants on
 matched 50-row public MMLU and GSM8K subsets, producing 300 guarded task
@@ -481,7 +485,7 @@ future allocator.
 ## 7. Evidence Gates
 
 Every paper-facing claim is indexed by a gate JSON and a Markdown report. The
-current ledger passes 48/48 gates. The most important gates are:
+current ledger passes 49/49 gates. The most important gates are:
 
 | Gate | Evidence | Valid claim | Non-claim |
 |---|---|---|---|
@@ -497,6 +501,7 @@ current ledger passes 48/48 gates. The most important gates are:
 | Interaction swap boundary | 16 SmolLM2-1.7B swap trials | Global feedback exposes local-proxy failures. | Global optimality or broad transfer. |
 | Allocation-family proxy | Q-Palette-style closed-form Lagrangian allocation on Qwen3 and Qwen2.5 sensitivity artifacts; see `outputs/Q_PALETTE_STYLE_ALLOCATION_FAMILY_GATE_2026_06_06.md`. | Six measured-sensitivity allocation cases satisfy a 4.5 average-bit budget with finite lambda solutions and non-trivial bit histograms. | Faithful Q-Palette/IMPQ/WINDQuant reproduction or downstream quality retention. |
 | Public 7B task scale row | Ollama Qwen2.5-abliterate-7B over 100 MMLU abstract-algebra plus 200 GSM8K rows; see `outputs/PUBLIC_TASK_BENCHMARK_OLLAMA_QWEN25_ABLITERATE_7B_GSM8K200_MMLU100_GATE_2026_06_08.md`. | A 7B local model runs 300 public-task subset rows under guard, with 84/300 passes and peak guard VRAM ratio 0.7135. | Leaderboard quality, quantized retention, monotonic scaling, or fused-runtime evidence. |
+| Full GSM8K 7B public row | Ollama Qwen2.5-abliterate-7B over all 1319 GSM8K test rows; see `outputs/PUBLIC_TASK_BENCHMARK_GSM8KFULL_OLLAMA_QWEN25_ABLITERATE_7B_GATE_2026_06_08.md`. | A 7B local model runs the full GSM8K test split under guard, with 183/1319 passes and peak guard VRAM ratio 0.6934. | Multi-task leaderboard quality, quantized retention, monotonic scaling, or fused-runtime evidence. |
 | Public task model ladder | 2 local Ollama models over 200 MMLU/GSM8K subset rows | Public-task evidence is reported without hiding the weaker 4B case. | Leaderboard quality, monotonic scaling, or fused quantized retention. |
 | Official PTQ task-execution smoke | FP16/AutoAWQ/GPTQModel Qwen2.5-0.5B on 24 public smoke executions; see `outputs/OFFICIAL_PTQ_TASK_RETENTION_SMOKE_MATRIX_2026_06_07.md`. | Official-package artifacts load and run matching tiny task fixtures under guard; zero-FP16 formats are execution-only. | Broad task retention, leaderboard quality, or AWQ/GPTQ competitiveness. |
 | Official PTQ runtime profile | FP16/AutoAWQ/GPTQModel Qwen2.5-0.5B PC-side runtime profile; see `outputs/OFFICIAL_PTQ_RUNTIME_PROFILE_2026_06_07.md`. | TTFT, tokens/s, and peak guarded VRAM are reported for the same task-smoke path. | Not mobile deployment, not production runtime speedup, not energy savings, and not AWQ/GPTQ competitiveness. |
@@ -1035,6 +1040,7 @@ outputs/CONSENSUS_TRANSFER_BOUNDARY_GATE_2026_06_07.md
 outputs/INTERACTION_SWAP_BOUNDARY_GATE_2026_06_07.md
 outputs/Q_PALETTE_STYLE_ALLOCATION_FAMILY_GATE_2026_06_06.md
 outputs/PUBLIC_TASK_BENCHMARK_OLLAMA_QWEN25_ABLITERATE_7B_GSM8K200_MMLU100_GATE_2026_06_08.md
+outputs/PUBLIC_TASK_BENCHMARK_GSM8KFULL_OLLAMA_QWEN25_ABLITERATE_7B_GATE_2026_06_08.md
 outputs/PUBLIC_TASK_MODEL_LADDER_GATE_2026_06_07.md
 outputs/OFFICIAL_AWQ_PUBLIC_CALIB_QWEN25_0P5B_BUNDLE_16_GATE_2026_06_07.md
 outputs/OFFICIAL_AWQ_PUBLIC_CALIB_QWEN25_1P5B_BUNDLE_16_GATE_2026_06_07.md
