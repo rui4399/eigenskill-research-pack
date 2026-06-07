@@ -1,8 +1,8 @@
 # Evidence Ledger
 
-Date: `2026-06-07T11:16:38+00:00`
+Date: `2026-06-07T12:13:06+00:00`
 Status: **PASS**
-Gates: `38 / 38` passed
+Gates: `39 / 39` passed
 Categories: `allocation comparator, artifact integrity, c++ runtime, calibration robustness, capability retention, decode integration, kernel, matched PTQ baseline, official PTQ readiness, paper alignment, ptq comparator, qkv replacement, quality, repo hygiene, rotation comparator, runtime profile, runtime wiring, selected-row, task execution smoke, task execution subset, task retention, theory`
 
 ## Gate Summary
@@ -20,7 +20,7 @@ Categories: `allocation comparator, artifact integrity, c++ runtime, calibration
 | `calibration_robustness_stress` | calibration robustness | **PASS** | cases 11; wins/uniform 11; wins/best-random 11; wins/random-mean 11; mean margin/uniform 4.2942; mean margin/uniform CI [3.0664, 5.6886]; worst margin/uniform 1.3608; mean margin/best-random 1.1622; mean margin/best-random CI [0.6143, 1.7982]; worst margin/best-random 0.1120; mean margin/random-mean 2.7444; mean margin/random-mean CI [1.7921, 3.5862]; worst margin/random-mean 0.5656; mean FP16 regret 4.1683; max FP16 regret 11.6693; sign p/uniform 0.00048828; sign p/best-random 0.00048828; sign p/random-mean 0.00048828 | `outputs/calibration_robustness_stress_gate_2026_06_07.json` |
 | `consensus_transfer_boundary` | allocation comparator | **PASS** | cases 2; slices 4; wins/left-single 4; wins/right-single 2; wins/best-single 2; wins/worst-single 4; min margin/worst-single 0.8726; mean regret/best-single 0.0043; max regret/best-single 0.3046 | `outputs/consensus_transfer_boundary_gate_2026_06_07.json` |
 | `interaction_swap_boundary` | allocation comparator | **PASS** | cases 3; trials 16; improved cases 1; improved trials 5; interaction counterexamples 5; max best improvement 0.0502; transfer positives 1; transfer max regret 0.0087; VRAM 0.8487 | `outputs/interaction_swap_boundary_gate_2026_06_07.json` |
-| `paper_evidence_alignment` | paper alignment | **PASS** | required refs 27; missing refs 0; paper paths 33; missing paths 0; unsafe claims 0; stale tokens 0; ledger gates 38 | `outputs/paper_evidence_alignment_gate_2026_06_07.json` |
+| `paper_evidence_alignment` | paper alignment | **PASS** | required refs 28; missing refs 0; paper paths 34; missing paths 0; unsafe claims 0; stale tokens 0; ledger gates 39 | `outputs/paper_evidence_alignment_gate_2026_06_07.json` |
 | `esmp_package` | artifact integrity | **PASS** | checked modules 8/8; missing files 0; failed modules 0; checked compression 6.2797x | `outputs/real_system_packer_2026-06-05/esmp_package_verify_qwen3_0p6b_limit8_2026_06_06.json` |
 | `triton_shape_family` | kernel | **PASS** | configs 96/96; FP16 wins 10; best FP16 2.7647x; VRAM 0.4514 | `outputs/real_system_packer_2026-06-05/triton_qwen_shape_family_gate_2026_06_06.json` |
 | `selector_runtime` | runtime wiring | **PASS** | selector calls 4; VRAM 0.5721 | `outputs/real_system_packer_2026-06-05/selector_runtime_smoke_gate_2026_06_06.json` |
@@ -42,6 +42,7 @@ Categories: `allocation comparator, artifact integrity, c++ runtime, calibration
 | `official_ptq_ifeval_v2_runtime_profile` | runtime profile | **PASS** | tasks 24; cases 3; mean tok/s 16.5678; mean TTFT 0.425468s; VRAM MiB 4168; VRAM 0.5113 | `outputs/official_ptq_runtime_ifeval_v2_profile_2026_06_07.json` |
 | `official_ptq_matched_baseline_pack` | matched PTQ baseline | **PASS** | max PPL ratio 1.2570; max drop 0.0400; max VRAM ratio 0.9010; max tok/s ratio 0.3315; VRAM 0.6148 | `outputs/official_ptq_matched_baseline_pack_qwen25_0p5b_2026_06_07.json` |
 | `official_awq_public_calib_16_eval` | official PTQ readiness | **PASS** | eval slices 2; eval tokens 2857; max eval PPL ratio 1.2114; AWQ blocks 8 | `outputs/official_awq_public_calib_qwen25_0p5b_bundle_16_gate_2026_06_07.json` |
+| `official_awq_public_calib_1p5b_16_eval` | official PTQ readiness | **PASS** | eval slices 2; eval tokens 2857; max eval PPL ratio 1.1344; AWQ blocks 2 | `outputs/official_awq_public_calib_qwen25_1p5b_bundle_16_gate_2026_06_07.json` |
 | `allocation_family_proxy` | allocation comparator | **PASS** | cases 6; min budget util 0.9999; finite lambdas 6; nontrivial hists 6; records 1126; max avg bits 4.4999; target bits 4.5000 | `outputs/q_palette_style_allocation_family_gate_2026_06_06.json` |
 | `robust_lcb_consensus` | allocation comparator | **PASS** | cases 3; high-bit modules 99; consistent selected 80; selected modules 80; max avg bits 4.4997 | `outputs/robust_lcb_consensus_family_gate_2026_06_06.json` |
 | `robust_lcb_quality` | quality | **PASS** | cases 2; wins/uniform 2; wins/mean 0; margin vs uniform 5.6188; margin vs mean -2.8834; VRAM 0.7032 | `outputs/qwen3_0p6b_robust_lcb_quality_gate_2026_06_07.json` |

@@ -48,6 +48,9 @@ The current evidence supports:
 - expanded 16-prompt-per-split AutoAWQ and GPTQModel public PPL gates for the
   same public-calibrated Qwen2.5-0.5B W4/G128 setting, aligned in the official
   PTQ readiness matrix;
+- a Qwen2.5-1.5B AutoAWQ W4/G128 public-calibration scale-up smoke that
+  quantizes under an 85% VRAM guard and evaluates 16 WikiText2 plus 16 C4 public
+  PPL prompts with max PPL ratio 1.1344;
 - a local matched AutoAWQ/GPTQModel Qwen2.5-0.5B W4/G128 baseline pack that
   ties public-calibration PPL, subset50 MMLU/GSM8K execution, and PC-side
   runtime/VRAM into one explicit claim boundary;
@@ -86,7 +89,9 @@ Current AAAI-facing critical path:
    Chebyshev inversion-risk CSI sections concise and tied to the measured
    seed/bootstrap artifacts.
 2. Real quantization: expand the AutoAWQ/GPTQModel matched pack beyond the
-   0.5B readiness setting and report negative runtime results honestly.
+   0.5B readiness setting and report negative runtime results honestly. The
+   first Qwen2.5-1.5B AutoAWQ public-calibration gate is now complete, but GPTQ
+   and task retention still need scale-up.
 3. Downstream tasks: move from subset50/subset100 and deterministic IFEval-style
    execution evidence toward stronger MMLU/GSM8K/IFEval retention on actual
    quantized variants.
@@ -114,10 +119,10 @@ evidence become much deeper.
 
 The blockers are concrete:
 
-1. Official baselines: the local AutoAWQ/GPTQModel 0.5B matched pack and the
-   expanded 16-prompt public PPL gates are useful but not enough; larger AWQ/GPTQ
-   rows, SmoothQuant, and at least one faithful rotation or mixed-precision
-   allocation comparator are still missing.
+1. Official baselines: the local AutoAWQ/GPTQModel 0.5B matched pack, expanded
+   16-prompt public PPL gates, and Qwen2.5-1.5B AutoAWQ scale-up smoke are
+   useful but not enough; larger GPTQ rows, SmoothQuant, and at least one
+   faithful rotation or mixed-precision allocation comparator are still missing.
 2. Larger evaluation: more WikiText2/C4 prompts and broader calibration-seed sweeps.
 3. Downstream retention: larger MMLU/GSM8K/IFEval or similar task slices on the
    actual quantized/fused variants; current IFEval-style evidence is only an

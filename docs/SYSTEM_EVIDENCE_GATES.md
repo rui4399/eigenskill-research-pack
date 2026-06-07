@@ -25,7 +25,7 @@ Current ledger artifact:
 outputs/real_system_packer_2026-06-05/EVIDENCE_LEDGER_2026_06_06.md
 ```
 
-Current status: **38 / 38 gates pass**.
+Current status: **39 / 39 gates pass**.
 
 Valid claim:
 
@@ -70,6 +70,7 @@ Invalid claim:
 | `official_ptq_ifeval_v2_runtime_profile` | runtime profile | `outputs/OFFICIAL_PTQ_RUNTIME_IFEVAL_V2_PROFILE_2026_06_07.md` | PC-side TTFT/tokens/s/VRAM are summarized from the IFEval-style matrix; quantized paths reduce guarded VRAM in this run but this is not a production speed or mobile claim. |
 | `official_ptq_matched_baseline_pack` | matched PTQ baseline | `outputs/OFFICIAL_PTQ_MATCHED_BASELINE_PACK_QWEN25_0P5B_2026_06_07.md` | AutoAWQ/GPTQModel Qwen2.5-0.5B W4/G128 public-calibration PPL, subset50 task, and subset50 runtime evidence are cited together with explicit local-only and no-speedup boundaries. |
 | `official_awq_public_calib_16_eval` | official PTQ readiness | `outputs/OFFICIAL_AWQ_PUBLIC_CALIB_QWEN25_0P5B_BUNDLE_16_GATE_2026_06_07.md` | The public-calibrated AutoAWQ W4 group-128 Qwen2.5-0.5B bundle is re-evaluated on 16 WikiText2 prompts and 16 C4 prompts, totaling 2857 PPL tokens with max PPL ratio 1.2114; this is expanded local readiness evidence, not a complete AWQ/GPTQ baseline. |
+| `official_awq_public_calib_1p5b_16_eval` | official PTQ readiness | `outputs/OFFICIAL_AWQ_PUBLIC_CALIB_QWEN25_1P5B_BUNDLE_16_GATE_2026_06_07.md` | A public-calibrated AutoAWQ W4 group-128 Qwen2.5-1.5B artifact is quantized under an 85% VRAM guard and evaluated on 16 WikiText2 plus 16 C4 prompts, totaling 2857 PPL tokens with max PPL ratio 1.1344; this is a scale-up readiness smoke, not a complete AWQ/GPTQ baseline or speed claim. |
 | `esmp_package` | artifact integrity | `outputs/real_system_packer_2026-06-05/ESMP_PACKAGE_VERIFY_QWEN3_0P6B_LIMIT8_2026_06_06.md` | ESMP package metadata, manifest, and binary headers are independently checkable. |
 | `triton_shape_family` | kernel | `outputs/real_system_packer_2026-06-05/TRITON_QWEN_SHAPE_FAMILY_GATE_2026_06_06.md` | Tuned grouped packed INT4/INT8 Triton kernels can beat torch FP16 on selected measured shapes. |
 | `selector_runtime` | runtime wiring | `outputs/real_system_packer_2026-06-05/SELECTOR_RUNTIME_SMOKE_GATE_2026_06_06.md` | Selector-driven runtime wiring loads measured kernel configs and records selector calls. |
@@ -83,7 +84,7 @@ Invalid claim:
 ## Non-Ledger Readiness Probes
 
 These probes are tracked because they reduce environment uncertainty, but they
-are not counted in the current 38-gate paper-facing ledger.
+are not counted in the current 39-gate paper-facing ledger.
 
 | probe | category | primary artifact | boundary |
 |---|---|---|---|

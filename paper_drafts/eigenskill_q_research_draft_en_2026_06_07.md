@@ -22,7 +22,7 @@ fake-quant loss sensitivity on multiple calibration views, allocates a fixed
 `{4,8}`-bit budget through cross-split consensus sensitivity, and records every
 paper-facing result through executable evidence gates. Across Qwen3-0.6B,
 Qwen3-1.7B, OLMo2-0425-1B-Instruct, and SmolLM2-1.7B short-slice diagnostics,
-the current evidence ledger passes 38/38 gates. The calibration-instability
+the current evidence ledger passes 39/39 gates. The calibration-instability
 gate finds 3/3 unstable model/dataset cases with mean score/cost Spearman
 0.0713 and mean top-20 Jaccard 0.1022. A Qwen2.5 perturbation matrix further
 separates calibration sample-size and model-scale effects: within-model
@@ -70,7 +70,10 @@ it records lower guarded VRAM than FP16 but slower local tokens/s. We also add
 aligned expanded public PPL gates for the public-calibrated W4/G128
 Qwen2.5-0.5B AutoAWQ and GPTQModel artifacts, each evaluating 16 WikiText2 plus
 16 C4 prompts. The official PTQ readiness matrix now covers 5714 total public
-PPL tokens across the two packages, with max PPL ratio 1.2570.
+PPL tokens across the two packages, with max PPL ratio 1.2570. A further
+Qwen2.5-1.5B AutoAWQ W4/G128 public-calibration scale-up smoke runs under an
+85% VRAM guard, saves a 1.159 GB local artifact, and evaluates 16 WikiText2 plus
+16 C4 public PPL prompts with max PPL ratio 1.1344.
 ESMP packaging, Triton shape tuning, selected-row
 execution, shallow fused-QKV generation, and C++ audit tools are executable.
 The repository does not claim a production LLM runtime.
@@ -318,7 +321,7 @@ future allocator.
 ## 7. Evidence Gates
 
 Every paper-facing claim is indexed by a gate JSON and a Markdown report. The
-current ledger passes 38/38 gates. The most important gates are:
+current ledger passes 39/39 gates. The most important gates are:
 
 | Gate | Evidence | Valid claim | Non-claim |
 |---|---|---|---|
@@ -344,6 +347,7 @@ current ledger passes 38/38 gates. The most important gates are:
 | Official PTQ IFEval-style runtime | PC-side runtime profile for the deterministic IFEval-style fixture; see `outputs/OFFICIAL_PTQ_RUNTIME_IFEVAL_V2_PROFILE_2026_06_07.md`. | TTFT, tokens/s, and guarded VRAM are reported for the 24-execution instruction-smoke path. | Not mobile deployment, not production runtime speedup, and not energy savings. |
 | Official PTQ matched baseline pack | AutoAWQ/GPTQModel Qwen2.5-0.5B public-calibration PPL, subset50 task, and subset50 runtime evidence; see `outputs/OFFICIAL_PTQ_MATCHED_BASELINE_PACK_QWEN25_0P5B_2026_06_07.md`. | A local matched 0.5B baseline package reports 4 16-prompt PPL slices, 5714 PPL tokens, 300 task executions, 300 runtime executions, max PPL ratio 1.2570, max task drop 0.0400, max VRAM ratio 0.9010, and max quantized tokens/s ratio 0.3315 versus FP16. | Not leaderboard-scale evidence, not large-model AWQ/GPTQ competitiveness, not production runtime, not mobile deployment, not energy evidence, and not SOTA PTQ. |
 | Expanded official PTQ public PPL gates | Public-calibrated AutoAWQ and GPTQModel Qwen2.5-0.5B W4/G128 on 16 WikiText2 plus 16 C4 prompts; see `outputs/OFFICIAL_AWQ_PUBLIC_CALIB_QWEN25_0P5B_BUNDLE_16_GATE_2026_06_07.md` and `outputs/OFFICIAL_GPTQMODEL_PUBLIC_CALIB_QWEN25_0P5B_BUDGET8_16_GATE_2026_06_07.md`. | The reused AutoAWQ and GPTQModel artifacts run 5714 public PPL tokens under guard, with max package-vs-FP16 PPL ratio 1.2570. | Not a complete official AWQ/GPTQ baseline, not task retention, not production runtime, not mobile deployment, and not SOTA PTQ. |
+| Qwen2.5-1.5B AutoAWQ scale-up readiness | Public-calibrated AutoAWQ W4/G128 Qwen2.5-1.5B on 16 WikiText2 plus 16 C4 prompts; see `outputs/OFFICIAL_AWQ_PUBLIC_CALIB_QWEN25_1P5B_BUNDLE_16_GATE_2026_06_07.md`. | The local artifact quantizes under an 85% VRAM guard with peak 6712/8151 MiB and runs 2857 public PPL tokens; max PPL ratio is 1.1344. | Not a complete official AWQ/GPTQ baseline, not task retention, not production runtime, not mobile deployment, and not SOTA PTQ. |
 | Packed-system gates | ESMP, Triton, selected-row, sidecar, QKV smoke | Prototype components are executable and audited. | Production Tensor Core/mobile runtime. |
 | Paper evidence alignment | Paper draft, required evidence paths, claim-risk scan | The draft cites committed evidence and avoids unsafe non-negated claims. | Peer-review acceptance or complete baseline coverage. |
 
@@ -616,6 +620,7 @@ outputs/INTERACTION_SWAP_BOUNDARY_GATE_2026_06_07.md
 outputs/Q_PALETTE_STYLE_ALLOCATION_FAMILY_GATE_2026_06_06.md
 outputs/PUBLIC_TASK_MODEL_LADDER_GATE_2026_06_07.md
 outputs/OFFICIAL_AWQ_PUBLIC_CALIB_QWEN25_0P5B_BUNDLE_16_GATE_2026_06_07.md
+outputs/OFFICIAL_AWQ_PUBLIC_CALIB_QWEN25_1P5B_BUNDLE_16_GATE_2026_06_07.md
 outputs/OFFICIAL_GPTQMODEL_PUBLIC_CALIB_QWEN25_0P5B_BUDGET8_16_GATE_2026_06_07.md
 outputs/BASELINE_GAP_DASHBOARD_2026_06_06.md
 docs/PAPER_CLAIM_MATRIX.md

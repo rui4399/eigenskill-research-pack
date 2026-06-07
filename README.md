@@ -46,11 +46,11 @@ files disagree, follow the claim matrix first.
 | CSI null permutation | Monte-Carlo label-shuffle null over n=2/n=8 seed-pair metrics; max Holm-adjusted p-value 0.00015 | local null-test evidence, not downstream retention |
 | Rank-inversion theory | Chebyshev-style plug-in inversion-risk gate over the same n=2/4/8 Qwen2.5 seed artifacts; margin inversion rate falls 0.0969 -> 0.0427 | theory-aligned diagnostic, not a tight bound proof |
 | Consensus allocation | gated robustness and transfer diagnostics under fixed bit budgets | allocation diagnostic, not a production PTQ method |
-| Official PTQ probes | AutoAWQ/GPTQModel Qwen2.5-0.5B W4/G128 readiness, aligned expanded 16-prompt public PPL gates, tiny task smoke, matched 50-row and true 100-row task subset paths, deterministic IFEval-style execution smoke, and a matched local baseline pack | local evidence only; quantized paths save VRAM but are slower here |
+| Official PTQ probes | AutoAWQ/GPTQModel Qwen2.5-0.5B W4/G128 readiness, aligned expanded 16-prompt public PPL gates, tiny task smoke, matched 50-row and true 100-row task subset paths, deterministic IFEval-style execution smoke, a matched local baseline pack, and a guarded Qwen2.5-1.5B AutoAWQ public-calibration scale-up smoke | local evidence only; quantized paths save VRAM but are slower here |
 | Runtime probes | ESMP/Triton/C++ module-level gates plus PC-side smoke/subset50/subset100 runtime profiles | not end-to-end deployment |
 | Mobile evidence | Redmi K80 Pro harness exists, but no real TTFT/tokens/s/memory log is complete | no mobile claim |
 
-Current ledger status: **38 / 38 gates pass**.
+Current ledger status: **39 / 39 gates pass**.
 
 ## Curation Contract
 
@@ -82,7 +82,7 @@ You should not cite it as:
 
 ```bash
 python -m unittest discover -s train_python -p "test_*.py"
-python train_python/build_current_evidence_ledger.py --expected-gate-count 38
+python train_python/build_current_evidence_ledger.py --expected-gate-count 39
 python train_python/gate_public_repo_hygiene.py \
   --out-json outputs/real_system_packer_2026-06-05/public_repo_hygiene_gate_2026_06_06.json \
   --out-md outputs/real_system_packer_2026-06-05/PUBLIC_REPO_HYGIENE_GATE_2026_06_06.md

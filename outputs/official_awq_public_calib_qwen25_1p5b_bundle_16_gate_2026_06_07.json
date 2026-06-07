@@ -1,0 +1,50 @@
+{
+  "date": "2026-06-07T11:59:29+00:00",
+  "passed": true,
+  "summary": {
+    "model": "Qwen/Qwen2.5-1.5B-Instruct",
+    "package": "autoawq",
+    "package_version": "0.2.9",
+    "quant_config": {
+      "zero_point": true,
+      "q_group_size": 128,
+      "w_bit": 4,
+      "version": "GEMM"
+    },
+    "calibration_source": [
+      "data_eval/public_calib_prompts_2026_06_07/wikitext2_test_ppl_prompts.txt",
+      "data_eval/public_calib_prompts_2026_06_07/c4_validation_ppl_prompts.txt"
+    ],
+    "calibration_sample_count": 4,
+    "expected_awq_blocks": 2,
+    "artifact_file_count": 6,
+    "artifact_total_bytes": 1159233350,
+    "smoke_guard_max_memory_used_ratio": 0.8234572445098761,
+    "eval_slice_count": 2,
+    "total_eval_tokens": 2857,
+    "evals": [
+      {
+        "label": "wikitext2",
+        "prompt_source": "data_eval/public_ppl_prompts_16_2026_06_07/wikitext2_test_ppl_prompts.txt",
+        "prompt_count": 16,
+        "tokens": 1413,
+        "fp16_ppl": 16.98414619119244,
+        "awq_ppl": 19.26692996106199,
+        "ppl_ratio_awq_vs_fp16": 1.1344067428631381,
+        "guard_max_memory_used_ratio": 0.6542755490123912
+      },
+      {
+        "label": "c4",
+        "prompt_source": "data_eval/public_ppl_prompts_16_2026_06_07/c4_validation_ppl_prompts.txt",
+        "prompt_count": 16,
+        "tokens": 1444,
+        "fp16_ppl": 21.40553244650899,
+        "awq_ppl": 23.179045632381275,
+        "ppl_ratio_awq_vs_fp16": 1.0828530283142537,
+        "guard_max_memory_used_ratio": 0.46411483253588515
+      }
+    ]
+  },
+  "failures": [],
+  "claim_boundary": "Valid claim: one public-calibration AutoAWQ W4 group-128 baseline bundle ran under guard and was evaluated on tiny public WikiText2/C4 PPL slices. Invalid claim: this is a complete official AWQ/GPTQ competitive baseline, SOTA PTQ result, task-retention proof, or production runtime."
+}

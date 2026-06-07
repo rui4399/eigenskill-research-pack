@@ -1,0 +1,63 @@
+{
+  "date": "2026-06-07T11:52:11+00:00",
+  "passed": true,
+  "model": "Qwen/Qwen2.5-1.5B-Instruct",
+  "package": {
+    "name": "autoawq",
+    "version": "0.2.9"
+  },
+  "quant_config": {
+    "zero_point": true,
+    "q_group_size": 128,
+    "w_bit": 4,
+    "version": "GEMM"
+  },
+  "calibration": {
+    "source": [
+      "data_eval/public_calib_prompts_2026_06_07/wikitext2_test_ppl_prompts.txt",
+      "data_eval/public_calib_prompts_2026_06_07/c4_validation_ppl_prompts.txt"
+    ],
+    "sample_count": 4,
+    "max_calib_seq_len": 128,
+    "plan": {
+      "accepted_sample_count": 4,
+      "skipped_sample_count": 0,
+      "accepted_token_lengths": [
+        98,
+        83,
+        107,
+        93
+      ],
+      "skipped_token_lengths": [],
+      "total_accepted_tokens": 381,
+      "max_seq_len": 128,
+      "expected_awq_blocks": 2,
+      "ok": true
+    }
+  },
+  "artifact": {
+    "path": "/home/rui/eigenskill_artifacts/qwen25_1p5b_awq_model_2026_06_07",
+    "file_count": 6,
+    "total_bytes": 1159233350,
+    "suffix_counts": {
+      ".jinja": 1,
+      ".safetensors": 1,
+      ".json": 4
+    },
+    "sample_files": [
+      "chat_template.jinja",
+      "model.safetensors",
+      "tokenizer.json",
+      "config.json",
+      "tokenizer_config.json",
+      "generation_config.json"
+    ]
+  },
+  "generation_smoke": {
+    "ok": true,
+    "prompt": "Give one short reason calibration robustness matters.",
+    "text": "Give one short reason calibration robustness matters. Calibration is the process of adjusting a model"
+  },
+  "error": "",
+  "elapsed_seconds": 263.2730960845947
+}
