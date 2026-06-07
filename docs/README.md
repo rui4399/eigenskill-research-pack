@@ -2,7 +2,8 @@
 
 Start here before reading the raw `outputs/` tree. The repository is large
 because it commits gate artifacts for reproducibility, but only a small subset
-is paper-facing.
+is paper-facing. Treat this directory as the navigation layer; the root README
+is intentionally short.
 
 ## Authoritative Boundaries
 
@@ -32,6 +33,20 @@ is paper-facing.
 | Removed private/speculative artifacts | `docs/HISTORICAL_ARTIFACTS.md` |
 | Qwen3-1.7B C4-128 chunked random16 run | `docs/qwen3_1p7b_c4_128_random16_chunked_runbook.md` |
 | ESMP binary package format | `docs/ESMPQ001_FORMAT.md` |
+
+## Public Repository Curation
+
+The public branch should look like a reproducible artifact, not a running lab
+notebook. In practice this means:
+
+- the root directory stays small and contains only release-entry files;
+- historical concept material lives only in `docs/HISTORICAL_ARTIFACTS.md`;
+- raw `outputs/` files are supporting evidence only when a gate references
+  them;
+- paper drafts do not override the claim matrix.
+
+The hygiene gate enforces root clutter, generated delivery bundles, blank
+placeholders, stale positioning, and risky root README terms.
 
 ## Reading Rule
 

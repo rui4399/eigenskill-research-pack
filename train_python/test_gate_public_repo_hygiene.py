@@ -35,6 +35,26 @@ class PublicRepoHygieneTests(unittest.TestCase):
             self.assertEqual(len(findings), 2)
             self.assertEqual(findings[0]["line"], 2)
 
+    def test_flags_root_clutter(self) -> None:
+        files = [
+            "README.md",
+            "MODEL_ARTIFACTS.md",
+            ".gitignore",
+            "gptq_log_old.log",
+            "scratch.md",
+            "docs/README.md",
+        ]
+        self.assertEqual(hygiene.find_root_clutter(files), ["gptq_log_old.log", "scratch.md"])
+
+    def test_flags_root_readme_historical_entrypoint_terms(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            readme = root / "README.md"
+            readme.write_text("This root page still mentions acoustic swarm work.\n", encoding="utf-8")
+            findings = hygiene.find_entrypoint_findings(root, ["README.md"])
+            self.assertEqual(len(findings), 1)
+            self.assertEqual(findings[0]["path"], "README.md")
+
     def test_scans_nested_readmes_and_stale_v2_claims(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
@@ -70,9 +90,11 @@ class PublicRepoHygieneTests(unittest.TestCase):
             root = Path(tmp)
             readme = root / "README.md"
             readme.write_text("# Clean\n\nNo placeholder rows.\n", encoding="utf-8")
-            report = hygiene.build_report(root, ["README.md", "train_python/foo.py"])
+            report = hygiene.build_report(root, ["README.md", "MODEL_ARTIFACTS.md", "train_python/foo.py"])
             self.assertTrue(report["passed"])
             self.assertEqual(report["summary"]["forbidden_file_count"], 0)
+            self.assertEqual(report["summary"]["root_clutter_count"], 0)
+            self.assertEqual(report["summary"]["entrypoint_finding_count"], 0)
 
 
 if __name__ == "__main__":

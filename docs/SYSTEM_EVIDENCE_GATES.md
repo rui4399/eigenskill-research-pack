@@ -41,7 +41,7 @@ Invalid claim:
 
 | gate | category | primary artifact | paper-facing claim boundary |
 |---|---|---|---|
-| `public_hygiene` | repo hygiene | `outputs/real_system_packer_2026-06-05/PUBLIC_REPO_HYGIENE_GATE_2026_06_06.md` | Public tree excludes private/process artifacts, speculative swarm/acoustic drafts, blank placeholders, and generated delivery bundles. |
+| `public_hygiene` | repo hygiene | `outputs/real_system_packer_2026-06-05/PUBLIC_REPO_HYGIENE_GATE_2026_06_06.md` | Public tree excludes private/process artifacts, generated delivery bundles, blank placeholders, stale positioning, root clutter, and risky root README terms. |
 | `paper_evidence_alignment` | paper alignment | `outputs/PAPER_EVIDENCE_ALIGNMENT_GATE_2026_06_07.md` | Current paper draft cites required evidence and avoids unsafe non-negated high-risk claims. |
 | `calibration_instability` | calibration robustness | `outputs/CALIBRATION_INSTABILITY_BENCHMARK_2026_06_06.md` | Small calibration splits induce unstable module-sensitivity rankings in the measured model/dataset cases. |
 | `calibration_robustness_stress` | calibration robustness | `outputs/CALIBRATION_ROBUSTNESS_STRESS_GATE_2026_06_07.md` | Current target policies beat uniform INT4, best random seed, and random mean across committed short fake-quant PPL slices. |
