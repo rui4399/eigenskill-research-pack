@@ -35,6 +35,24 @@ Do not treat raw `outputs/` browsing as the evidence boundary. A result is
 paper-facing only if it appears in the claim matrix or gate ledger. When those
 files disagree, follow the claim matrix first.
 
+## Split Research Portfolio
+
+The original monorepo has been split into independent paper/artifact tracks.
+Each child repository has its own `CLAIMS.md`, `REPRODUCE.md`, and paper plan so
+that claims do not bleed across reviewer audiences.
+
+| Track | Repository | Role |
+|---|---|---|
+| CSI quantization robustness | [`eigenskill-q-calibration-robustness`](https://github.com/rui4399/eigenskill-q-calibration-robustness) | Main AAAI/IJCAI/TMLR-style calibration-instability paper |
+| ESMP packed runtime | [`eigenskill-esmp-runtime`](https://github.com/rui4399/eigenskill-esmp-runtime) | Systems/runtime artifact for packed mixed-bit kernels and TTFT/tokens/s work |
+| Hybrid deterministic bypass | [`hybridskill-bypass-runtime`](https://github.com/rui4399/hybridskill-bypass-runtime) | Strict low-entropy skill delegation and negative-result line |
+| CSI benchmark suite | [`csi-benchmark-suite`](https://github.com/rui4399/csi-benchmark-suite) | Community-facing metrics, schemas, and robustness benchmark protocol |
+| Eigen-Swarm vision | [`eigenswarm-vision`](https://github.com/rui4399/eigenswarm-vision) | Position-paper track only; no completed implementation claims |
+
+This integration repository remains the historical source of combined evidence.
+For a clean paper submission, cite the child repository that matches the paper
+claim.
+
 ## Current Status
 
 | Area | Current Evidence | Boundary |

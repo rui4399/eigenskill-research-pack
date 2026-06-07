@@ -29,6 +29,8 @@ mode.
 
 **Working repo:** `eigenskill-q-calibration-robustness`
 
+**Public URL:** <https://github.com/rui4399/eigenskill-q-calibration-robustness>
+
 **Core question:** How unstable are module-sensitivity rankings under small
 calibration splits, and can robust cross-split estimators reduce bad
 mixed-precision allocation choices under a fixed bit budget?
@@ -61,6 +63,8 @@ routing claims, mobile deployment claims, or production runtime claims.
 ## Track B: ESMP Packed Runtime And Kernels
 
 **Working repo:** `eigenskill-esmp-runtime`
+
+**Public URL:** <https://github.com/rui4399/eigenskill-esmp-runtime>
 
 **Core question:** Can an explicit mixed-bit packed format plus selected-row and
 Triton/CPU kernels provide reproducible, inspectable runtime evidence for
@@ -96,6 +100,8 @@ them.
 
 **Working repo:** `hybridskill-bypass-runtime`
 
+**Public URL:** <https://github.com/rui4399/hybridskill-bypass-runtime>
+
 **Core question:** For low-entropy, numerically strict tasks, when should an LLM
 delegate to a deterministic parser or micro-kernel instead of learning the task
 through short LoRA fine-tuning?
@@ -129,6 +135,8 @@ vision.
 
 **Working repo:** `csi-benchmark-suite`
 
+**Public URL:** <https://github.com/rui4399/csi-benchmark-suite>
+
 **Core question:** Can the community standardize calibration split instability
 metrics, prompt-seed robustness, and rank-inversion diagnostics for LLM
 quantization?
@@ -161,6 +169,8 @@ measurement protocol and reproducibility.
 
 **Working repo:** `eigenswarm-vision`
 
+**Public URL:** <https://github.com/rui4399/eigenswarm-vision>
+
 **Core question:** What would a cross-medium distributed edge-intelligence
 architecture require if low-dimensional skill IDs, deterministic bypass, and
 physical topology changes were treated as first-class design constraints?
@@ -192,6 +202,13 @@ github_publish/
   csi-benchmark-suite/                  # benchmark/protocol/tooling track
   eigenswarm-vision/                    # position paper only
 ```
+
+Each child repository now carries a local claim firewall:
+
+- `README.md` defines the research question and venue fit.
+- `CLAIMS.md` separates supported, pending, and rejected claims.
+- `REPRODUCE.md` gives the minimal verification path.
+- `docs/PAPER_PLAN.md` or `docs/VISION_PAPER_PLAN.md` states the paper shape.
 
 The existing `eigenskill-research-pack` should remain the temporary integration
 repo until each child repo has a clean README, claim firewall, and reproduction
