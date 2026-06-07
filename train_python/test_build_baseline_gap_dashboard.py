@@ -93,6 +93,10 @@ class BaselineGapDashboardTests(unittest.TestCase):
             self.assertEqual(result["items"][0]["evidence_task_count"], 4)
             self.assertFalse(result["passed"])
 
+    def test_task_count_reads_matrix_summary_total_tasks(self) -> None:
+        payload = {"summary": {"total_tasks": 24, "total_passes": 2}}
+        self.assertEqual(dashboard.task_count_from_payload(payload), 24)
+
     def test_all_package_mode_requires_every_package(self) -> None:
         available = {
             "torch": {"available": True},

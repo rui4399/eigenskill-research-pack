@@ -12,6 +12,7 @@ from typing import Any
 
 CATEGORIES = {
     "task_model_ladder": "capability retention",
+    "official_ptq_task": "task execution smoke",
     "quality": "quality",
     "prompt": "quality",
     "allocation": "allocation comparator",

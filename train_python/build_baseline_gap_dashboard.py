@@ -55,9 +55,10 @@ def task_count_from_payload(payload: dict[str, Any]) -> int:
             return value
     summary = payload.get("summary", {})
     if isinstance(summary, dict):
-        value = summary.get("tasks")
-        if isinstance(value, int):
-            return value
+        for key in ("total_tasks", "tasks", "task_count"):
+            value = summary.get(key)
+            if isinstance(value, int):
+                return value
     return 0
 
 

@@ -1,10 +1,10 @@
 {
-  "date": "2026-06-07T00:44:58+00:00",
+  "date": "2026-06-07T01:31:41+00:00",
   "schema_version": 1,
   "passed": false,
-  "item_count": 16,
+  "item_count": 17,
   "status_counts": {
-    "covered": 12,
+    "covered": 13,
     "partial": 1,
     "proxy_only": 2,
     "missing": 1
@@ -17,7 +17,7 @@
       "covered": 1
     },
     "external_ptq_readiness": {
-      "covered": 5
+      "covered": 6
     },
     "external_ptq": {
       "partial": 1
@@ -186,8 +186,8 @@
       "paper_blocker": false,
       "description": "Minimal AutoAWQ package execution smoke that produces local quantized artifacts under GPU guard.",
       "required_evidence_globs": [
-        "outputs/**/*official*awq*smoke*summary*.json",
-        "outputs/**/*official*awq*smoke*gate*.json"
+        "outputs/**/official_awq_smoke_*summary*.json",
+        "outputs/**/official_awq_smoke_gate*.json"
       ],
       "required_packages": [
         "autoawq"
@@ -391,6 +391,48 @@
       ]
     },
     {
+      "id": "official_ptq_task_execution_smoke",
+      "family": "external_ptq_readiness",
+      "priority": "optional",
+      "paper_blocker": false,
+      "description": "Tiny same-fixture public task execution smoke for FP16, AutoAWQ, and GPTQModel Qwen2.5-0.5B variants under GPU guard.",
+      "required_evidence_globs": [
+        "outputs/**/official_ptq_task_retention_smoke_matrix*.json"
+      ],
+      "required_packages": [
+        "autoawq",
+        "gptqmodel"
+      ],
+      "package_mode": "all",
+      "claim_boundary": "Execution-path readiness only: it shows official-package artifacts can load and run the same tiny public task fixtures; zero-FP16 formats remain execution-only and this is not task-retention proof.",
+      "status": "covered",
+      "evidence_count": 1,
+      "evidence_task_count": 24,
+      "evidence_matches": [
+        "outputs/official_ptq_task_retention_smoke_matrix_2026_06_07.json"
+      ],
+      "evidence_truncated": false,
+      "partial_evidence_count": 0,
+      "partial_evidence_matches": [],
+      "partial_evidence_truncated": false,
+      "proxy_evidence_count": 0,
+      "proxy_evidence_matches": [],
+      "proxy_evidence_truncated": false,
+      "package_ok": true,
+      "package_summary": [
+        {
+          "name": "autoawq",
+          "available": true,
+          "version": "0.2.9"
+        },
+        {
+          "name": "gptqmodel",
+          "available": true,
+          "version": "7.0.0"
+        }
+      ]
+    },
+    {
       "id": "official_awq_gptq_competitive",
       "family": "external_ptq",
       "priority": "high",
@@ -411,7 +453,8 @@
         "outputs/**/*official*awq*matched*ppl*gate*.json",
         "outputs/**/*official*awq*public*calib*.json",
         "outputs/**/*official*gptqmodel*public*calib*gate*.json",
-        "outputs/**/*official*gptqmodel*public*calib*.json"
+        "outputs/**/*official*gptqmodel*public*calib*.json",
+        "outputs/**/*official*ptq*task*retention*smoke*matrix*.json"
       ],
       "proxy_evidence_globs": [
         "outputs/**/*awq_gptq_proxy*summary.json"
@@ -429,7 +472,7 @@
       "evidence_task_count": 0,
       "evidence_matches": [],
       "evidence_truncated": false,
-      "partial_evidence_count": 28,
+      "partial_evidence_count": 31,
       "partial_evidence_matches": [
         "outputs/official_awq_matched_ppl_gate_2026_06_07.json",
         "outputs/official_awq_matched_ppl_qwen25_0p5b_c4_gate_2026_06_07.json",
@@ -596,7 +639,8 @@
         "outputs/real_system_packer_2026-06-05/chat_task_stress_v3_84_gate_2026_06_06.json",
         "outputs/public_task_smoke_manifest_2026_06_06.json",
         "outputs/public_task_smoke_mmlu_qwen3_0p6b_summary.json",
-        "outputs/public_task_smoke_gsm8k_qwen3_0p6b_summary.json"
+        "outputs/public_task_smoke_gsm8k_qwen3_0p6b_summary.json",
+        "outputs/official_ptq_task_retention_smoke_matrix_2026_06_07.json"
       ],
       "required_evidence_globs": [
         "outputs/**/*mmlu*summary.json",
@@ -620,8 +664,9 @@
         "outputs/public_task_smoke_mmlu_qwen3_0p6b_summary.json"
       ],
       "evidence_truncated": false,
-      "partial_evidence_count": 4,
+      "partial_evidence_count": 5,
       "partial_evidence_matches": [
+        "outputs/official_ptq_task_retention_smoke_matrix_2026_06_07.json",
         "outputs/public_task_smoke_gsm8k_qwen3_0p6b_summary.json",
         "outputs/public_task_smoke_manifest_2026_06_06.json",
         "outputs/public_task_smoke_mmlu_qwen3_0p6b_summary.json",

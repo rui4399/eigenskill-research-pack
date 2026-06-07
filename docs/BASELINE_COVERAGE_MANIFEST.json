@@ -63,8 +63,8 @@
       "paper_blocker": false,
       "description": "Minimal AutoAWQ package execution smoke that produces local quantized artifacts under GPU guard.",
       "required_evidence_globs": [
-        "outputs/**/*official*awq*smoke*summary*.json",
-        "outputs/**/*official*awq*smoke*gate*.json"
+        "outputs/**/official_awq_smoke_*summary*.json",
+        "outputs/**/official_awq_smoke_gate*.json"
       ],
       "required_packages": [
         "autoawq"
@@ -139,6 +139,22 @@
       "claim_boundary": "Presentation and audit readiness only: it verifies aligned probe metadata and eval budget, but it is not a faithful AWQ/GPTQ competitive baseline because package kernels/backend settings, complete task-retention coverage, and broader official baseline settings still differ."
     },
     {
+      "id": "official_ptq_task_execution_smoke",
+      "family": "external_ptq_readiness",
+      "priority": "optional",
+      "paper_blocker": false,
+      "description": "Tiny same-fixture public task execution smoke for FP16, AutoAWQ, and GPTQModel Qwen2.5-0.5B variants under GPU guard.",
+      "required_evidence_globs": [
+        "outputs/**/official_ptq_task_retention_smoke_matrix*.json"
+      ],
+      "required_packages": [
+        "autoawq",
+        "gptqmodel"
+      ],
+      "package_mode": "all",
+      "claim_boundary": "Execution-path readiness only: it shows official-package artifacts can load and run the same tiny public task fixtures; zero-FP16 formats remain execution-only and this is not task-retention proof."
+    },
+    {
       "id": "official_awq_gptq_competitive",
       "family": "external_ptq",
       "priority": "high",
@@ -159,7 +175,8 @@
         "outputs/**/*official*awq*matched*ppl*gate*.json",
         "outputs/**/*official*awq*public*calib*.json",
         "outputs/**/*official*gptqmodel*public*calib*gate*.json",
-        "outputs/**/*official*gptqmodel*public*calib*.json"
+        "outputs/**/*official*gptqmodel*public*calib*.json",
+        "outputs/**/*official*ptq*task*retention*smoke*matrix*.json"
       ],
       "proxy_evidence_globs": [
         "outputs/**/*awq_gptq_proxy*summary.json"
@@ -237,7 +254,8 @@
         "outputs/real_system_packer_2026-06-05/chat_task_stress_v3_84_gate_2026_06_06.json",
         "outputs/public_task_smoke_manifest_2026_06_06.json",
         "outputs/public_task_smoke_mmlu_qwen3_0p6b_summary.json",
-        "outputs/public_task_smoke_gsm8k_qwen3_0p6b_summary.json"
+        "outputs/public_task_smoke_gsm8k_qwen3_0p6b_summary.json",
+        "outputs/official_ptq_task_retention_smoke_matrix_2026_06_07.json"
       ],
       "required_evidence_globs": [
         "outputs/**/*mmlu*summary.json",

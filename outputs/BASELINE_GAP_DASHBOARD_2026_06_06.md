@@ -1,14 +1,14 @@
 # Baseline Gap Dashboard
 
-Date: `2026-06-07T00:44:58+00:00`
+Date: `2026-06-07T01:31:41+00:00`
 Status: **NOT READY** for paper claims that require external baselines
-Items: `16`
+Items: `17`
 
 ## Status Counts
 
 | status | count |
 |---|---:|
-| `covered` | 12 |
+| `covered` | 13 |
 | `missing` | 1 |
 | `partial` | 1 |
 | `proxy_only` | 2 |
@@ -33,11 +33,12 @@ Items: `16`
 | `official_awq_public_calibrated_bundle` | external_ptq_readiness | optional | False | **covered** | 4 | 0 | 0 | 0 | autoawq=yes | Partial official-package readiness: it uses public calibration and public eval slices, but it is still one AutoAWQ tiny-slice bundle, not a matched AWQ/GPTQ competitive baseline. |
 | `official_gptqmodel_public_calibrated_smoke` | external_ptq_readiness | optional | False | **covered** | 10 | 0 | 0 | 0 | gptqmodel=yes | Partial official-package readiness: it proves GPTQModel can quantize, save, reload, and evaluate tiny public WikiText2/C4 slices locally, but it is not a full GPTQ/AWQ competitive baseline or task-retention result. |
 | `official_ptq_readiness_matrix` | external_ptq_readiness | optional | False | **covered** | 2 | 0 | 0 | 0 | autoawq=yes, gptqmodel=yes | Presentation and audit readiness only: it verifies aligned probe metadata and eval budget, but it is not a faithful AWQ/GPTQ competitive baseline because package kernels/backend settings, complete task-retention coverage, and broader official baseline settings still differ. |
-| `official_awq_gptq_competitive` | external_ptq | high | True | **partial** | 0 | 0 | 28 | 2 | autoawq=yes, awq=yes, auto_gptq=no, gptqmodel=yes | Smoke and proxy artifacts are useful readiness diagnostics, but they do not cover faithful official AWQ/GPTQ baseline claims without matched calibration, budget, PPL, and task comparisons. |
+| `official_ptq_task_execution_smoke` | external_ptq_readiness | optional | False | **covered** | 1 | 24 | 0 | 0 | autoawq=yes, gptqmodel=yes | Execution-path readiness only: it shows official-package artifacts can load and run the same tiny public task fixtures; zero-FP16 formats remain execution-only and this is not task-retention proof. |
+| `official_awq_gptq_competitive` | external_ptq | high | True | **partial** | 0 | 0 | 31 | 2 | autoawq=yes, awq=yes, auto_gptq=no, gptqmodel=yes | Smoke and proxy artifacts are useful readiness diagnostics, but they do not cover faithful official AWQ/GPTQ baseline claims without matched calibration, budget, PPL, and task comparisons. |
 | `official_rotation_family` | external_rotation | high | True | **proxy_only** | 0 | 0 | 0 | 2 | n/a | Current rotation-family proxy artifacts are useful related-family diagnostics, but they do not cover faithful QuaRot/SpinQuant implementation or activation/KV quality claims. |
 | `official_allocation_family` | external_allocation | high | True | **proxy_only** | 0 | 0 | 0 | 2 | n/a | Current Q-Palette-style proxy artifacts are useful related-family diagnostics, but they do not cover faithful Q-Palette/IMPQ/WINDQuant reproduction claims. |
 | `public_task_schema_smoke` | capability_retention | required | False | **covered** | 3 | 8 | 0 | 0 | n/a | Proves public-schema task ingestion and guarded execution only; not leaderboard-scale retention. |
-| `public_task_benchmarks` | capability_retention | high | True | **covered** | 6 | 208 | 4 | 0 | n/a | A guarded 100-row public MMLU/GSM8K subset is covered; leaderboard-scale retention and fused-model public quality remain missing. |
+| `public_task_benchmarks` | capability_retention | high | True | **covered** | 6 | 208 | 5 | 0 | n/a | A guarded 100-row public MMLU/GSM8K subset is covered; leaderboard-scale retention and fused-model public quality remain missing. |
 | `packed_kernel_shape_family` | system_kernel | required | False | **covered** | 1 | 0 | 0 | 0 | torch=yes, triton=yes | Kernel-level evidence only; not end-to-end LLM acceleration. |
 | `mobile_redmi_k80_pro` | mobile_system | high | True | **missing** | 0 | 0 | 0 | 0 | n/a | No mobile deployment claim until real device logs exist. |
 

@@ -139,6 +139,9 @@ class BuildEvidenceLedgerTests(unittest.TestCase):
         self.assertIn("unsafe claims 0", joined)
         self.assertEqual(ledger.infer_category("paper_evidence_alignment"), "paper alignment")
 
+    def test_official_ptq_task_gate_is_not_labeled_as_ptq_comparator(self) -> None:
+        self.assertEqual(ledger.infer_category("official_ptq_task_retention"), "task execution smoke")
+
     def test_parse_gate_spec_requires_label(self) -> None:
         label, path = ledger.parse_gate_spec("foo=bar.json")
         self.assertEqual(label, "foo")
