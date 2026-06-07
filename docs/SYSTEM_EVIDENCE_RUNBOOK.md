@@ -61,7 +61,7 @@ python train_python/build_evidence_ledger.py \
   --gate official_ptq_matched_baseline_pack=outputs/official_ptq_matched_baseline_pack_qwen25_0p5b_2026_06_07.json \
   --gate official_awq_public_calib_16_eval=outputs/official_awq_public_calib_qwen25_0p5b_bundle_16_gate_2026_06_07.json \
   --gate official_awq_public_calib_1p5b_16_eval=outputs/official_awq_public_calib_qwen25_1p5b_bundle_16_gate_2026_06_07.json \
-  --gate official_gptqmodel_public_calib_1p5b_smoke=outputs/official_gptqmodel_public_calib_qwen25_1p5b_smoke4_gate_2026_06_08.json \
+  --gate official_gptqmodel_public_calib_1p5b_16_eval=outputs/official_gptqmodel_public_calib_qwen25_1p5b_16_gate_2026_06_08.json \
   --gate official_ptq_task_qwen25_1p5b_subset100=outputs/official_ptq_task_qwen25_1p5b_subset100_matrix_2026_06_07.json \
   --gate official_ptq_qwen25_1p5b_subset100_runtime_profile=outputs/official_ptq_qwen25_1p5b_subset100_runtime_profile_2026_06_07.json \
   --gate official_ptq_task_qwen25_1p5b_gsm8k200_mmlu100=outputs/official_ptq_task_qwen25_1p5b_gsm8k200_mmlu100_matrix_2026_06_08.json \
@@ -1374,7 +1374,7 @@ python3 train_python/run_with_gpu_guard.py \
 The artifact path is intentionally outside the repo (`/home/rui/eigenskill_artifacts`)
 because it is a 1.1 GB local model package.
 
-Qwen2.5-1.5B GPTQModel scale-up gate:
+Qwen2.5-1.5B GPTQModel 4-prompt smoke gate:
 
 ```bash
 python train_python/gate_official_gptqmodel_public_calib.py \
@@ -1388,11 +1388,32 @@ python train_python/gate_official_gptqmodel_public_calib.py \
   --out-md outputs/OFFICIAL_GPTQMODEL_PUBLIC_CALIB_QWEN25_1P5B_SMOKE4_GATE_2026_06_08.md
 ```
 
-Current Qwen2.5-1.5B GPTQModel scale-up result:
+Qwen2.5-1.5B GPTQModel 16-prompt eval gate:
 
-| prompts | tokens | FP16 PPL | GPTQModel PPL | ratio | artifact bytes | peak VRAM |
-|---:|---:|---:|---:|---:|---:|---:|
-| 4 | 380 | 14.1567 | 16.3179 | 1.1527 | 1161301069 | 0.8543 |
+```bash
+python train_python/gate_official_gptqmodel_public_calib.py \
+  --summary-json outputs/official_gptqmodel_public_calib_qwen25_1p5b_smoke4_summary_2026_06_08.json \
+  --guard-json outputs/official_gptqmodel_public_calib_qwen25_1p5b_smoke4_gpu_guard_2026_06_08.json \
+  --eval-summary wikitext2=outputs/official_gptqmodel_public_calib_qwen25_1p5b_wikitext2_16_summary_2026_06_08.json \
+  --eval-guard wikitext2=outputs/official_gptqmodel_public_calib_qwen25_1p5b_wikitext2_16_gpu_guard_2026_06_08.json \
+  --eval-summary c4=outputs/official_gptqmodel_public_calib_qwen25_1p5b_c4_16_summary_2026_06_08.json \
+  --eval-guard c4=outputs/official_gptqmodel_public_calib_qwen25_1p5b_c4_16_gpu_guard_2026_06_08.json \
+  --min-eval-slices 2 \
+  --min-total-tokens 2800 \
+  --min-calibration-texts 4 \
+  --max-memory-ratio 0.90 \
+  --max-ppl-ratio 1.30 \
+  --out-json outputs/official_gptqmodel_public_calib_qwen25_1p5b_16_gate_2026_06_08.json \
+  --out-md outputs/OFFICIAL_GPTQMODEL_PUBLIC_CALIB_QWEN25_1P5B_16_GATE_2026_06_08.md
+```
+
+Current Qwen2.5-1.5B GPTQModel scale-up results:
+
+| slice | prompts | tokens | FP16 PPL | GPTQModel PPL | ratio | artifact reused | peak VRAM |
+|---|---:|---:|---:|---:|---:|---|---:|
+| smoke | 4 | 380 | 14.1567 | 16.3179 | 1.1527 | false | 0.8543 |
+| WikiText2 16 | 16 | 1413 | 16.9841 | 19.2981 | 1.1363 | true | 0.7698 |
+| C4 16 | 16 | 1444 | 21.4055 | 23.3815 | 1.0923 | true | 0.8266 |
 
 Official PTQ readiness matrix:
 

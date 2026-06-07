@@ -1,5 +1,5 @@
 {
-  "date": "2026-06-07T18:26:25+00:00",
+  "date": "2026-06-07T18:33:44+00:00",
   "passed": true,
   "gate_count": 47,
   "passed_count": 47,
@@ -36,9 +36,9 @@
       "path": "outputs\\real_system_packer_2026-06-05\\public_repo_hygiene_gate_2026_06_06.json",
       "passed": true,
       "failures": [],
-      "metrics": "tracked files 2201; forbidden files 0; placeholders 0",
+      "metrics": "tracked files 2209; forbidden files 0; placeholders 0",
       "summary": {
-        "tracked_file_count": 2201,
+        "tracked_file_count": 2209,
         "forbidden_file_count": 0,
         "root_clutter_count": 0,
         "placeholder_count": 0,
@@ -1097,12 +1097,12 @@
       }
     },
     {
-      "label": "official_gptqmodel_public_calib_1p5b_smoke",
+      "label": "official_gptqmodel_public_calib_1p5b_16_eval",
       "category": "ptq comparator",
-      "path": "outputs\\official_gptqmodel_public_calib_qwen25_1p5b_smoke4_gate_2026_06_08.json",
+      "path": "outputs\\official_gptqmodel_public_calib_qwen25_1p5b_16_gate_2026_06_08.json",
       "passed": true,
       "failures": [],
-      "metrics": "eval slices 1; eval tokens 380; VRAM 0.8543",
+      "metrics": "eval slices 2; eval tokens 2857; VRAM 0.8543",
       "summary": {
         "model": "Qwen/Qwen2.5-1.5B-Instruct",
         "package": "gptqmodel",
@@ -1119,28 +1119,40 @@
         "artifact_file_count": 8,
         "artifact_total_bytes": 1161301069,
         "artifact_reused": false,
-        "eval_slice_count": 1,
-        "total_eval_tokens": 380,
+        "eval_slice_count": 2,
+        "total_eval_tokens": 2857,
         "prompt_count": 4,
-        "tokens": 380,
-        "fp16_ppl": 14.156660181990551,
-        "gptq_ppl": 16.317940990407838,
-        "ppl_ratio_gptq_vs_fp16": 1.1526688343601528,
-        "delta_nll_gptq_minus_fp16": 0.14207997918128967,
+        "tokens": 2857,
+        "fp16_ppl": 16.98414619119244,
+        "gptq_ppl": 19.298090017652587,
+        "ppl_ratio_gptq_vs_fp16": 1.136241398325934,
+        "delta_nll_gptq_minus_fp16": 0.12772579625069636,
         "guard_max_memory_used_ratio": 0.854251012145749,
         "guard_max_memory_used_mib": 6963,
         "evals": [
           {
-            "label": "primary",
-            "prompt_count": 4,
-            "tokens": 380,
-            "artifact_reused": false,
-            "fp16_ppl": 14.156660181990551,
-            "gptq_ppl": 16.317940990407838,
-            "ppl_ratio_gptq_vs_fp16": 1.1526688343601528,
-            "delta_nll_gptq_minus_fp16": 0.14207997918128967,
-            "guard_max_memory_used_ratio": 0.854251012145749,
-            "guard_max_memory_used_mib": 6963
+            "label": "wikitext2",
+            "prompt_count": 16,
+            "tokens": 1413,
+            "artifact_reused": true,
+            "fp16_ppl": 16.98414619119244,
+            "gptq_ppl": 19.298090017652587,
+            "ppl_ratio_gptq_vs_fp16": 1.136241398325934,
+            "delta_nll_gptq_minus_fp16": 0.12772579625069636,
+            "guard_max_memory_used_ratio": 0.7698441908968224,
+            "guard_max_memory_used_mib": 6275
+          },
+          {
+            "label": "c4",
+            "prompt_count": 16,
+            "tokens": 1444,
+            "artifact_reused": true,
+            "fp16_ppl": 21.40553244650899,
+            "gptq_ppl": 23.381529589546144,
+            "ppl_ratio_gptq_vs_fp16": 1.09231244996942,
+            "delta_nll_gptq_minus_fp16": 0.08829696274199961,
+            "guard_max_memory_used_ratio": 0.826647037173353,
+            "guard_max_memory_used_mib": 6738
           }
         ]
       }

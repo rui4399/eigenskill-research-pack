@@ -7,7 +7,7 @@ not a new result.
 Current tracked output footprint:
 
 ```text
-outputs/ tracked-or-staged artifact files:       1849
+outputs/ tracked-or-staged artifact files:       1857
 outputs/real_system_packer_2026-06-05 files:     744
 ```
 
@@ -54,7 +54,7 @@ paper claims.
 | Qwen2.5-1.5B GSM8K200/MMLU100 runtime profile | `outputs/OFFICIAL_PTQ_QWEN25_1P5B_GSM8K200_MMLU100_RUNTIME_PROFILE_2026_06_08.md` |
 | Qwen2.5-1.5B GSM8K200/MMLU100 statistics gate | `outputs/OFFICIAL_PTQ_TASK_QWEN25_1P5B_GSM8K200_MMLU100_STATISTICS_2026_06_08.md` |
 | Expanded GPTQModel public PPL gate | `outputs/OFFICIAL_GPTQMODEL_PUBLIC_CALIB_QWEN25_0P5B_BUDGET8_16_GATE_2026_06_07.md` |
-| Qwen2.5-1.5B GPTQModel public PPL smoke gate | `outputs/OFFICIAL_GPTQMODEL_PUBLIC_CALIB_QWEN25_1P5B_SMOKE4_GATE_2026_06_08.md` |
+| Qwen2.5-1.5B GPTQModel public PPL gate | `outputs/OFFICIAL_GPTQMODEL_PUBLIC_CALIB_QWEN25_1P5B_16_GATE_2026_06_08.md` |
 | W4A8 real-activation reconstruction gate | `outputs/w4a8_activation_reconstruction_2026_06_08/W4A8_ACTIVATION_RECONSTRUCTION_GATE.md` |
 | W4A8 extended attention/MLP reconstruction gate | `outputs/w4a8_activation_reconstruction_extended_2026_06_08/W4A8_ACTIVATION_RECONSTRUCTION_EXTENDED_GATE.md` |
 | Baseline/readiness gap dashboard | `outputs/BASELINE_GAP_DASHBOARD_2026_06_06.md` |
