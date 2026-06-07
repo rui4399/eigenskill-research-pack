@@ -61,6 +61,7 @@ python train_python/build_evidence_ledger.py \
   --gate official_ptq_matched_baseline_pack=outputs/official_ptq_matched_baseline_pack_qwen25_0p5b_2026_06_07.json \
   --gate official_awq_public_calib_16_eval=outputs/official_awq_public_calib_qwen25_0p5b_bundle_16_gate_2026_06_07.json \
   --gate official_awq_public_calib_1p5b_16_eval=outputs/official_awq_public_calib_qwen25_1p5b_bundle_16_gate_2026_06_07.json \
+  --gate official_gptqmodel_public_calib_1p5b_smoke=outputs/official_gptqmodel_public_calib_qwen25_1p5b_smoke4_gate_2026_06_08.json \
   --gate official_ptq_task_qwen25_1p5b_subset100=outputs/official_ptq_task_qwen25_1p5b_subset100_matrix_2026_06_07.json \
   --gate official_ptq_qwen25_1p5b_subset100_runtime_profile=outputs/official_ptq_qwen25_1p5b_subset100_runtime_profile_2026_06_07.json \
   --gate official_ptq_task_qwen25_1p5b_gsm8k200_mmlu100=outputs/official_ptq_task_qwen25_1p5b_gsm8k200_mmlu100_matrix_2026_06_08.json \
@@ -75,7 +76,7 @@ python train_python/build_evidence_ledger.py \
   --out-md outputs/real_system_packer_2026-06-05/EVIDENCE_LEDGER_2026_06_06.md
 ```
 
-The current ledger passes with 46/46 gates across repo hygiene, calibration
+The current ledger passes with 47/47 gates across repo hygiene, calibration
 robustness, CSI trend significance, CSI null permutation, rank-inversion theory, artifact integrity, kernel, runtime wiring, selected-row, C++
 runtime, decode integration, QKV replacement, quality, task-retention, runtime profile, and
 capability-retention/model-ladder, allocation-comparator, rotation-comparator, and
@@ -236,7 +237,7 @@ Current gate:
 ```bash
 python train_python/gate_paper_evidence_alignment.py \
   --paper paper_drafts/eigenskill_q_research_draft_en_2026_06_07.md \
-  --expected-gate-count 46 \
+  --expected-gate-count 47 \
   --out-json outputs/paper_evidence_alignment_gate_2026_06_08.json \
   --out-md outputs/PAPER_EVIDENCE_ALIGNMENT_GATE_2026_06_08.md
 ```
@@ -1336,6 +1337,62 @@ python train_python/gate_official_gptqmodel_public_calib.py \
   --out-json outputs/official_gptqmodel_public_calib_qwen25_0p5b_budget8_16_gate_2026_06_07.json \
   --out-md outputs/OFFICIAL_GPTQMODEL_PUBLIC_CALIB_QWEN25_0P5B_BUDGET8_16_GATE_2026_06_07.md
 ```
+
+Qwen2.5-1.5B GPTQModel scale-up smoke:
+
+```bash
+export NVIDIA_SMI_PATH=/usr/lib/wsl/lib/nvidia-smi
+python3 train_python/run_with_gpu_guard.py \
+  --max-memory-ratio 0.90 \
+  --max-start-memory-ratio 0.90 \
+  --max-length-ceiling 0 \
+  --poll-seconds 2 \
+  --timeout-sec 3600 \
+  --min-disk-free-gb 20 \
+  --disk-check-path /home/rui \
+  --out outputs/official_gptqmodel_public_calib_qwen25_1p5b_smoke4_gpu_guard_2026_06_08.json \
+  -- \
+  python3 train_python/run_official_gptqmodel_public_calib.py \
+    --model Qwen/Qwen2.5-1.5B-Instruct \
+    --save-dir /home/rui/eigenskill_artifacts/qwen25_1p5b_gptq_model_smoke4_2026_06_08 \
+    --out-json outputs/official_gptqmodel_public_calib_qwen25_1p5b_smoke4_summary_2026_06_08.json \
+    --out-md outputs/OFFICIAL_GPTQMODEL_PUBLIC_CALIB_QWEN25_1P5B_SMOKE4_2026_06_08.md \
+    --calibration-prompts data_eval/public_calib_prompts_2026_06_07/wikitext2_test_ppl_prompts.txt \
+    --calibration-prompts data_eval/public_calib_prompts_2026_06_07/c4_validation_ppl_prompts.txt \
+    --prompts data_eval/public_ppl_prompts_16_2026_06_07/wikitext2_test_ppl_prompts.txt \
+    --limit-prompts 4 \
+    --max-calib-samples 4 \
+    --max-length 96 \
+    --bits 4 \
+    --group-size 128 \
+    --device cuda \
+    --backend gptq_torch \
+    --dtype float16 \
+    --local-files-only
+```
+
+The artifact path is intentionally outside the repo (`/home/rui/eigenskill_artifacts`)
+because it is a 1.1 GB local model package.
+
+Qwen2.5-1.5B GPTQModel scale-up gate:
+
+```bash
+python train_python/gate_official_gptqmodel_public_calib.py \
+  --summary-json outputs/official_gptqmodel_public_calib_qwen25_1p5b_smoke4_summary_2026_06_08.json \
+  --guard-json outputs/official_gptqmodel_public_calib_qwen25_1p5b_smoke4_gpu_guard_2026_06_08.json \
+  --min-calibration-texts 4 \
+  --min-tokens 300 \
+  --max-memory-ratio 0.90 \
+  --max-ppl-ratio 1.30 \
+  --out-json outputs/official_gptqmodel_public_calib_qwen25_1p5b_smoke4_gate_2026_06_08.json \
+  --out-md outputs/OFFICIAL_GPTQMODEL_PUBLIC_CALIB_QWEN25_1P5B_SMOKE4_GATE_2026_06_08.md
+```
+
+Current Qwen2.5-1.5B GPTQModel scale-up result:
+
+| prompts | tokens | FP16 PPL | GPTQModel PPL | ratio | artifact bytes | peak VRAM |
+|---:|---:|---:|---:|---:|---:|---:|
+| 4 | 380 | 14.1567 | 16.3179 | 1.1527 | 1161301069 | 0.8543 |
 
 Official PTQ readiness matrix:
 

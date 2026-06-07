@@ -1,0 +1,47 @@
+{
+  "date": "2026-06-07T18:17:17+00:00",
+  "passed": true,
+  "summary": {
+    "model": "Qwen/Qwen2.5-1.5B-Instruct",
+    "package": "gptqmodel",
+    "package_version": "7.0.0",
+    "quant_config": {
+      "bits": 4,
+      "group_size": 128
+    },
+    "calibration_source": [
+      "data_eval/public_calib_prompts_2026_06_07/wikitext2_test_ppl_prompts.txt",
+      "data_eval/public_calib_prompts_2026_06_07/c4_validation_ppl_prompts.txt"
+    ],
+    "calibration_count": 4,
+    "artifact_file_count": 8,
+    "artifact_total_bytes": 1161301069,
+    "artifact_reused": false,
+    "eval_slice_count": 1,
+    "total_eval_tokens": 380,
+    "prompt_count": 4,
+    "tokens": 380,
+    "fp16_ppl": 14.156660181990551,
+    "gptq_ppl": 16.317940990407838,
+    "ppl_ratio_gptq_vs_fp16": 1.1526688343601528,
+    "delta_nll_gptq_minus_fp16": 0.14207997918128967,
+    "guard_max_memory_used_ratio": 0.854251012145749,
+    "guard_max_memory_used_mib": 6963,
+    "evals": [
+      {
+        "label": "primary",
+        "prompt_count": 4,
+        "tokens": 380,
+        "artifact_reused": false,
+        "fp16_ppl": 14.156660181990551,
+        "gptq_ppl": 16.317940990407838,
+        "ppl_ratio_gptq_vs_fp16": 1.1526688343601528,
+        "delta_nll_gptq_minus_fp16": 0.14207997918128967,
+        "guard_max_memory_used_ratio": 0.854251012145749,
+        "guard_max_memory_used_mib": 6963
+      }
+    ]
+  },
+  "failures": [],
+  "claim_boundary": "Valid claim: one fresh public-calibration GPTQModel W4 group-128 smoke ran under guard, saved/reloaded a local artifact, and produced tiny labeled FP16-vs-GPTQ PPL diagnostics. Invalid claim: this is a complete official AWQ/GPTQ competitive baseline, SOTA PTQ result, task-retention proof, or production runtime."
+}

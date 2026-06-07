@@ -28,7 +28,7 @@ artifact section unless it proves end-to-end speedup.
 | veto | why it can reject the paper | required closure |
 |---|---|---|
 | Only tiny task subsets. | Reviewers can call the result a toy diagnosis. | Larger MMLU/GSM8K/IFEval slices first; full runs if the guard can hold. |
-| No native baseline confrontation. | Random and proxy baselines are too weak. | Matched AutoAWQ/GPTQModel rows; SmoothQuant or rotation-family row if feasible. |
+| Native baseline confrontation is still incomplete. | Random and proxy baselines are too weak; current AutoAWQ/GPTQModel rows are local readiness/subset evidence, not full competition. | Extend matched AutoAWQ/GPTQModel rows beyond smoke/subset slices; add SmoothQuant or rotation-family row if feasible. |
 | No scale row. | 0.5B/1.5B evidence does not show scaling. | One 3B/7B representative row, even if only PPL plus one task family. |
 | End-to-end quantized runtime is slower. | Systems reviewers will reject any acceleration claim. | Keep speed claims kernel-only until TTFT/tokens/s beats FP16 in a minimal runtime. |
 | Math looks like prose. | The CSI contribution reads as a heuristic. | Promote estimator noise, rank-inversion, bootstrap CI, permutation null, and Holm correction into display equations. |
@@ -109,7 +109,9 @@ Anything else stays in future work.
 1. Extend the new Qwen2.5-1.5B GSM8K200/MMLU100 gate beyond the first paired
    bootstrap CI row and, if runtime allows, full GSM8K before claiming broad
    task retention.
-2. Add or extend native GPTQModel/AutoAWQ rows on Qwen2.5-1.5B.
+2. Extend the new native Qwen2.5-1.5B GPTQModel smoke beyond 4-prompt PPL if
+   guard/time permit; keep the current 1.5B AutoAWQ task row as the stronger
+   task-retention slice for now.
 3. Attempt one 3B/7B row only after checking disk headroom.
 4. Add a downstream proxy for W4A8 activation quantization before using the
    extended attention/MLP drift audit in any quality argument.
