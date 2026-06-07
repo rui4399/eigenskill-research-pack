@@ -25,7 +25,7 @@ Current ledger artifact:
 outputs/real_system_packer_2026-06-05/EVIDENCE_LEDGER_2026_06_06.md
 ```
 
-Current status: **41 / 41 gates pass**.
+Current status: **42 / 42 gates pass**.
 
 Valid claim:
 
@@ -75,6 +75,7 @@ Invalid claim:
 | `official_ptq_qwen25_1p5b_subset100_runtime_profile` | runtime profile | `outputs/OFFICIAL_PTQ_QWEN25_1P5B_SUBSET100_RUNTIME_PROFILE_2026_06_07.md` | PC-side TTFT/tokens/s/VRAM are summarized from the 400-task Qwen2.5-1.5B subset100 matrix; AutoAWQ uses less peak guarded VRAM than FP16 but is slower on this local loader path. |
 | `esmp_package` | artifact integrity | `outputs/real_system_packer_2026-06-05/ESMP_PACKAGE_VERIFY_QWEN3_0P6B_LIMIT8_2026_06_06.md` | ESMP package metadata, manifest, and binary headers are independently checkable. |
 | `triton_shape_family` | kernel | `outputs/real_system_packer_2026-06-05/TRITON_QWEN_SHAPE_FAMILY_GATE_2026_06_06.md` | Tuned grouped packed INT4/INT8 Triton kernels can beat torch FP16 on selected measured shapes. |
+| `w4a8_activation_reconstruction` | module reconstruction | `outputs/w4a8_activation_reconstruction_2026_06_08/W4A8_ACTIVATION_RECONSTRUCTION_GATE.md` | Selected real Qwen3 self-attention module activations have bounded added drift from A8 activation quantization; this is not full-model quality retention or end-to-end speed evidence. |
 | `selector_runtime` | runtime wiring | `outputs/real_system_packer_2026-06-05/SELECTOR_RUNTIME_SMOKE_GATE_2026_06_06.md` | Selector-driven runtime wiring loads measured kernel configs and records selector calls. |
 | `selected_row` | selected-row routing | `outputs/real_system_packer_2026-06-05/SELECTED_ROW_BENCHMARK_GATE_2026_06_06.md` | Selected-row routing can reduce module-level work when the active row set is small. |
 | `cpp_runtime` | C++ runtime | `outputs/real_system_packer_2026-06-05/CPP_RUNTIME_SWEEP_GATE_2026_06_06.md` | C++ ESMP selected-row sweep supports module-level bypass/runtime claims only. |
@@ -86,7 +87,7 @@ Invalid claim:
 ## Non-Ledger Readiness Probes
 
 These probes are tracked because they reduce environment uncertainty, but they
-are not counted in the current 41-gate paper-facing ledger.
+are not counted in the current 42-gate paper-facing ledger.
 
 | probe | category | primary artifact | boundary |
 |---|---|---|---|

@@ -60,7 +60,7 @@ paper claims.
 ## Non-Ledger Readiness Probes
 
 These artifacts are useful for environment readiness and reviewer-risk
-tracking, but they are not counted in the 41-gate paper-facing ledger.
+tracking, but they are not counted in the 42-gate paper-facing ledger.
 
 | Purpose | Artifact | Boundary |
 |---|---|---|
@@ -80,6 +80,7 @@ tracking, but they are not counted in the 41-gate paper-facing ledger.
 | RTX 5070 INT4 layout probe | `outputs/RTX5070_INT4_LAYOUT_PROBE_2026_06_07.md` | Adds all-INT4 contiguous and W4-as-I8 Triton paths with interleaved timing; shows byte-aligned W4 nearly matches FP16 while packed W4 keeps higher compression but remains slower. |
 | RTX 5070 INT8 dot probe | `outputs/RTX5070_INT8_DOT_PROBE_2026_06_07.md` | Adds packed-W4/W4-as-I8 with INT8 activation paths and delayed dequantization; shows kernel-level speedups over torch FP16 on a bounded 4096 x 4096 batch-128/512 shape-family probe, bounded as W4A8 diagnostic evidence only. |
 | W4A8 shape-family gate | `outputs/W4A8_SHAPE_FAMILY_GATE_2026_06_08.md` | Machine-checks the RTX 5070 W4A8 shape-family sweep for speed, compression, activation-drift, and guard-memory thresholds; validates the kernel-level claim boundary without making model-quality claims. |
+| W4A8 real-activation reconstruction gate | `outputs/w4a8_activation_reconstruction_2026_06_08/W4A8_ACTIVATION_RECONSTRUCTION_GATE.md` | Evaluates A8 activation quantization on sampled real Qwen3 self-attention module inputs from the ESMP package; validates a selected-module drift boundary without claiming full-model retention or end-to-end speed. |
 
 ## Supporting System Artifacts
 
@@ -129,4 +130,4 @@ one of the following is true:
 
 Future cleanup should reduce `outputs/` by moving scratch and raw intermediate
 files out of the main branch, but not at the cost of breaking the current
-41-gate reproducibility story.
+42-gate reproducibility story.

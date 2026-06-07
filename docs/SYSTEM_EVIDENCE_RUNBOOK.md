@@ -21,7 +21,7 @@ python train_python/build_current_evidence_ledger.py
 ```
 
 `train_python/build_evidence_ledger.py` is the lower-level builder for custom
-or future gate manifests. The expanded form of the current 41-gate ledger is:
+or future gate manifests. The expanded form of the current 42-gate ledger is:
 
 ```bash
 python train_python/build_evidence_ledger.py \
@@ -36,9 +36,10 @@ python train_python/build_evidence_ledger.py \
   --gate calibration_robustness_stress=outputs/calibration_robustness_stress_gate_2026_06_07.json \
   --gate consensus_transfer_boundary=outputs/consensus_transfer_boundary_gate_2026_06_07.json \
   --gate interaction_swap_boundary=outputs/interaction_swap_boundary_gate_2026_06_07.json \
-  --gate paper_evidence_alignment=outputs/paper_evidence_alignment_gate_2026_06_07.json \
+  --gate paper_evidence_alignment=outputs/paper_evidence_alignment_gate_2026_06_08.json \
   --gate esmp_package=outputs/real_system_packer_2026-06-05/esmp_package_verify_qwen3_0p6b_limit8_2026_06_06.json \
   --gate triton_shape_family=outputs/real_system_packer_2026-06-05/triton_qwen_shape_family_gate_2026_06_06.json \
+  --gate w4a8_activation_reconstruction=outputs/w4a8_activation_reconstruction_2026_06_08/w4a8_activation_reconstruction_gate.json \
   --gate selector_runtime=outputs/real_system_packer_2026-06-05/selector_runtime_smoke_gate_2026_06_06.json \
   --gate selected_row=outputs/real_system_packer_2026-06-05/selected_row_benchmark_gate_2026_06_06.json \
   --gate cpp_runtime=outputs/real_system_packer_2026-06-05/cpp_runtime_sweep_gate_2026_06_06.json \
@@ -70,7 +71,7 @@ python train_python/build_evidence_ledger.py \
   --out-md outputs/real_system_packer_2026-06-05/EVIDENCE_LEDGER_2026_06_06.md
 ```
 
-The current ledger passes with 41/41 gates across repo hygiene, calibration
+The current ledger passes with 42/42 gates across repo hygiene, calibration
 robustness, CSI trend significance, CSI null permutation, rank-inversion theory, artifact integrity, kernel, runtime wiring, selected-row, C++
 runtime, decode integration, QKV replacement, quality, task-retention, runtime profile, and
 capability-retention/model-ladder, allocation-comparator, rotation-comparator, and
@@ -166,14 +167,14 @@ Current gate:
 python train_python/gate_paper_evidence_alignment.py \
   --paper paper_drafts/eigenskill_q_research_draft_en_2026_06_07.md \
   --expected-gate-count 41 \
-  --out-json outputs/paper_evidence_alignment_gate_2026_06_07.json \
-  --out-md outputs/PAPER_EVIDENCE_ALIGNMENT_GATE_2026_06_07.md
+  --out-json outputs/paper_evidence_alignment_gate_2026_06_08.json \
+  --out-md outputs/PAPER_EVIDENCE_ALIGNMENT_GATE_2026_06_08.md
 ```
 
 Current result: the generated alignment artifact records all configured required
 evidence references present, referenced repo paths found, 0 stale forbidden
 tokens, 0 unsafe non-negated claim lines, and the paper mentions the current
-41-gate ledger.
+42-gate ledger.
 
 Valid claim:
 
@@ -838,7 +839,7 @@ Invalid claim:
 `train_python/run_official_awq_smoke.py` is a minimal package-readiness probe.
 It exists to verify that AutoAWQ can execute, save local quantized artifacts,
 and run one short generation smoke under the GPU guard. It is intentionally not
-part of the 41-gate paper-facing ledger.
+part of the 42-gate paper-facing ledger.
 
 Example WSL/GPU command:
 
