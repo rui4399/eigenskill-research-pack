@@ -15,6 +15,7 @@ CATEGORIES = {
     "official_ptq_task_subset": "task execution subset",
     "official_ptq_task": "task execution smoke",
     "official_ptq_matched": "matched PTQ baseline",
+    "official_awq_public_calib": "official PTQ readiness",
     "official_ptq_runtime": "runtime profile",
     "runtime_profile": "runtime profile",
     "quality": "quality",
@@ -174,6 +175,21 @@ def metric_parts(summary: dict[str, Any]) -> list[str]:
         parts.append(f"best accuracy {value:.4f}")
     if "slice_count" in summary:
         parts.append(f"slices {summary.get('slice_count')}")
+    if "eval_slice_count" in summary:
+        parts.append(f"eval slices {summary.get('eval_slice_count')}")
+    if "total_eval_tokens" in summary:
+        parts.append(f"eval tokens {summary.get('total_eval_tokens')}")
+    eval_ratios = [
+        value
+        for row in summary.get("evals", []) or []
+        if isinstance(row, dict)
+        for value in [finite_float(row.get("ppl_ratio_awq_vs_fp16"))]
+        if value is not None
+    ]
+    if eval_ratios:
+        parts.append(f"max eval PPL ratio {max(eval_ratios):.4f}")
+    if "expected_awq_blocks" in summary:
+        parts.append(f"AWQ blocks {summary.get('expected_awq_blocks')}")
     if "unstable_case_count" in summary:
         parts.append(f"unstable {summary.get('unstable_case_count')}")
     if (value := finite_float(summary.get("sample_size_mean_spearman"))) is not None:

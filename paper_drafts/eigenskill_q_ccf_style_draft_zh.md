@@ -2,7 +2,7 @@
 
 > CCF 风格论文初稿，2026-06-05。本文按正式学术论文结构组织，写法参考经典系统/模型论文的“问题清晰化、方法简洁化、实验证据驱动”范式，但不复用其原文表述。当前稿件是技术报告级草案，尚未满足正式投稿所需的完整基线、硬件与统计显著性要求。
 >
-> 状态更新，2026-06-07：本中文稿保留为历史草稿。当前更接近投稿骨架的版本是 `paper_drafts/eigenskill_q_research_draft_en_2026_06_07.md`，它已纳入 28-gate evidence ledger、calibration robustness stress、sensitivity perturbation matrix、consensus transfer boundary、interaction-aware swap boundary、public-task model ladder、official PTQ task-execution smoke、official PTQ matched subset50/runtime profile、official PTQ matched baseline pack 和 paper-evidence alignment gate。若两者不一致，以新版英文稿和 `docs/PAPER_CLAIM_MATRIX.md` 为准。
+> 状态更新，2026-06-07：本中文稿保留为历史草稿。当前更接近投稿骨架的版本是 `paper_drafts/eigenskill_q_research_draft_en_2026_06_07.md`，它已纳入 29-gate evidence ledger、calibration robustness stress、sensitivity perturbation matrix、consensus transfer boundary、interaction-aware swap boundary、public-task model ladder、official PTQ task-execution smoke、official PTQ matched subset50/runtime profile、official PTQ matched baseline pack、expanded AutoAWQ 16-prompt public PPL gate 和 paper-evidence alignment gate。若两者不一致，以新版英文稿和 `docs/PAPER_CLAIM_MATRIX.md` 为准。
 
 ## 摘要
 
@@ -169,7 +169,7 @@ EigenSkill-Q 当前实现中，模型加载和 fake quant PPL 评估仍由 Pytho
 - single-split loss-sensitive：单一校准分布的敏感度分配。
 - WikiText2+C4 consensus：本文主方法。
 
-正式投稿前仍需加入 GPTQ、AWQ、SmoothQuant、QuaRot/SpinQuant 等公开基线。当前稿件不能声称相对这些方法的优势。
+正式投稿前仍需加入更完整的 GPTQ、AWQ、SmoothQuant、QuaRot/SpinQuant 等公开基线。当前仓库已有 Qwen2.5-0.5B 上的局部 AutoAWQ/GPTQModel readiness 与 matched-pack 证据，但它们不能支持相对这些方法的优势声明。
 
 ## 5 实验结果
 
@@ -275,7 +275,7 @@ EigenSkill-Q 当前是 fake-quant 诊断框架，而不是 GPTQ/AWQ/SmoothQuant/
 
 1. 当前评估仍是 PyTorch fake quant，不能支持真实延迟、显存占用或能耗结论。
 2. 数据切片较短，PPL 结果应视为诊断信号，而非完整 benchmark。
-3. 尚未纳入 GPTQ、AWQ、SmoothQuant、QuaRot、SpinQuant 等公开强基线。
+3. 尚未完整纳入 GPTQ、AWQ、SmoothQuant、QuaRot、SpinQuant 等公开强基线；现有 AutoAWQ/GPTQModel 证据仅覆盖 Qwen2.5-0.5B 的局部 readiness 与 tiny/subset 评估。
 4. 当前只覆盖少数模型家族，尚不足以证明跨架构普适性。
 5. 位宽集合仅为 `{4,8}`，未覆盖 INT3、INT2、FP4、NF4、MXFP4 等格式。
 6. C++ 工具主要负责 allocation/report/audit，模型执行仍依赖 Python/PyTorch。

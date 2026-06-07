@@ -1,8 +1,8 @@
 {
-  "date": "2026-06-07T03:43:32+00:00",
+  "date": "2026-06-07T04:32:55+00:00",
   "passed": true,
-  "gate_count": 28,
-  "passed_count": 28,
+  "gate_count": 29,
+  "passed_count": 29,
   "failed_count": 0,
   "categories": [
     "allocation comparator",
@@ -13,6 +13,7 @@
     "decode integration",
     "kernel",
     "matched PTQ baseline",
+    "official PTQ readiness",
     "paper alignment",
     "ptq comparator",
     "qkv replacement",
@@ -194,16 +195,16 @@
       "path": "outputs\\paper_evidence_alignment_gate_2026_06_07.json",
       "passed": true,
       "failures": [],
-      "metrics": "required refs 15; missing refs 0; paper paths 21; missing paths 0; unsafe claims 0; stale tokens 0; ledger gates 28",
+      "metrics": "required refs 16; missing refs 0; paper paths 22; missing paths 0; unsafe claims 0; stale tokens 0; ledger gates 29",
       "summary": {
         "paper": "paper_drafts\\eigenskill_q_research_draft_en_2026_06_07.md",
-        "required_reference_count": 15,
+        "required_reference_count": 16,
         "missing_required_reference_count": 0,
-        "referenced_repo_path_count": 21,
+        "referenced_repo_path_count": 22,
         "missing_referenced_path_count": 0,
         "stale_token_count": 0,
         "unsafe_claim_count": 0,
-        "ledger_gate_count": 28,
+        "ledger_gate_count": 29,
         "ledger_gate_count_mentioned": true
       }
     },
@@ -720,6 +721,58 @@
         "max_ppl_ratio_threshold": 1.35,
         "max_accuracy_drop_threshold": 0.25,
         "max_guard_vram_threshold": 0.9
+      }
+    },
+    {
+      "label": "official_awq_public_calib_16_eval",
+      "category": "official PTQ readiness",
+      "path": "outputs\\official_awq_public_calib_qwen25_0p5b_bundle_16_gate_2026_06_07.json",
+      "passed": true,
+      "failures": [],
+      "metrics": "eval slices 2; eval tokens 2857; max eval PPL ratio 1.2114; AWQ blocks 8",
+      "summary": {
+        "model": "Qwen/Qwen2.5-0.5B-Instruct",
+        "package": "autoawq",
+        "package_version": "0.2.9",
+        "quant_config": {
+          "zero_point": true,
+          "q_group_size": 128,
+          "w_bit": 4,
+          "version": "GEMM"
+        },
+        "calibration_source": [
+          "data_eval/public_calib_prompts_2026_06_07/wikitext2_test_ppl_prompts.txt",
+          "data_eval/public_calib_prompts_2026_06_07/c4_validation_ppl_prompts.txt"
+        ],
+        "calibration_sample_count": 12,
+        "expected_awq_blocks": 8,
+        "artifact_file_count": 6,
+        "artifact_total_bytes": 469809733,
+        "smoke_guard_max_memory_used_ratio": 0.6959882223040118,
+        "eval_slice_count": 2,
+        "total_eval_tokens": 2857,
+        "evals": [
+          {
+            "label": "wikitext2_16",
+            "prompt_source": "data_eval/public_ppl_prompts_16_2026_06_07/wikitext2_test_ppl_prompts.txt",
+            "prompt_count": 16,
+            "tokens": 1413,
+            "fp16_ppl": 24.590744522031002,
+            "awq_ppl": 29.788816911650716,
+            "ppl_ratio_awq_vs_fp16": 1.211383286299556,
+            "guard_max_memory_used_ratio": 0.5492577597840755
+          },
+          {
+            "label": "c4_16",
+            "prompt_source": "data_eval/public_ppl_prompts_16_2026_06_07/c4_validation_ppl_prompts.txt",
+            "prompt_count": 16,
+            "tokens": 1444,
+            "fp16_ppl": 29.9175965878998,
+            "awq_ppl": 35.37464896500742,
+            "ppl_ratio_awq_vs_fp16": 1.1824027662474306,
+            "guard_max_memory_used_ratio": 0.5677830940988836
+          }
+        ]
       }
     },
     {

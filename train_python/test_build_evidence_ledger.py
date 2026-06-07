@@ -180,6 +180,25 @@ class BuildEvidenceLedgerTests(unittest.TestCase):
         self.assertIn("max VRAM ratio 0.9010", joined)
         self.assertIn("max tok/s ratio 0.3315", joined)
 
+    def test_official_awq_public_calib_eval_metrics_are_reported(self) -> None:
+        metrics = ledger.metric_parts(
+            {
+                "eval_slice_count": 2,
+                "total_eval_tokens": 2857,
+                "expected_awq_blocks": 8,
+                "evals": [
+                    {"ppl_ratio_awq_vs_fp16": 1.2108328},
+                    {"ppl_ratio_awq_vs_fp16": 1.1817858},
+                ],
+            }
+        )
+        joined = "; ".join(metrics)
+        self.assertIn("eval slices 2", joined)
+        self.assertIn("eval tokens 2857", joined)
+        self.assertIn("max eval PPL ratio 1.2108", joined)
+        self.assertIn("AWQ blocks 8", joined)
+        self.assertEqual(ledger.infer_category("official_awq_public_calib_16_eval"), "official PTQ readiness")
+
     def test_runtime_profile_metrics_are_reported(self) -> None:
         metrics = ledger.metric_parts(
             {

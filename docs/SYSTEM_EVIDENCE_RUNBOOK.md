@@ -10,7 +10,7 @@ by an executable gate and an explicit claim boundary.
 ## Evidence Ledger
 
 `train_python/build_current_evidence_ledger.py` is the stable public entry
-point for the current paper-facing gate set. It fixes the 28 gate paths in one
+point for the current paper-facing gate set. It fixes the 29 gate paths in one
 manifest, rebuilds the ledger, and avoids copying a long `--gate` list across
 README files and paper appendices.
 
@@ -21,7 +21,7 @@ python train_python/build_current_evidence_ledger.py
 ```
 
 `train_python/build_evidence_ledger.py` is the lower-level builder for custom
-or future gate manifests. The expanded form of the current 28-gate ledger is:
+or future gate manifests. The expanded form of the current 29-gate ledger is:
 
 ```bash
 python train_python/build_evidence_ledger.py \
@@ -48,6 +48,7 @@ python train_python/build_evidence_ledger.py \
   --gate official_ptq_task_subset50=outputs/official_ptq_task_subset50_matrix_2026_06_07.json \
   --gate official_ptq_subset50_runtime_profile=outputs/official_ptq_subset50_runtime_profile_2026_06_07.json \
   --gate official_ptq_matched_baseline_pack=outputs/official_ptq_matched_baseline_pack_qwen25_0p5b_2026_06_07.json \
+  --gate official_awq_public_calib_16_eval=outputs/official_awq_public_calib_qwen25_0p5b_bundle_16_gate_2026_06_07.json \
   --gate allocation_family_proxy=outputs/q_palette_style_allocation_family_gate_2026_06_06.json \
   --gate robust_lcb_consensus=outputs/robust_lcb_consensus_family_gate_2026_06_06.json \
   --gate robust_lcb_quality=outputs/qwen3_0p6b_robust_lcb_quality_gate_2026_06_07.json \
@@ -57,11 +58,12 @@ python train_python/build_evidence_ledger.py \
   --out-md outputs/real_system_packer_2026-06-05/EVIDENCE_LEDGER_2026_06_06.md
 ```
 
-The current ledger passes with 28/28 gates across repo hygiene, calibration
+The current ledger passes with 29/29 gates across repo hygiene, calibration
 robustness, artifact integrity, kernel, runtime wiring, selected-row, C++
 runtime, decode integration, QKV replacement, quality, task-retention, runtime profile, and
 capability-retention/model-ladder, allocation-comparator, rotation-comparator, and
-matched PTQ baseline, PTQ-comparator, and paper-alignment evidence categories.
+matched PTQ baseline, expanded AutoAWQ public PPL, PTQ-comparator, and
+paper-alignment evidence categories.
 
 Valid claim:
 
@@ -156,9 +158,9 @@ python train_python/gate_paper_evidence_alignment.py \
   --out-md outputs/PAPER_EVIDENCE_ALIGNMENT_GATE_2026_06_07.md
 ```
 
-Current result: 14/14 required evidence references present, referenced repo
+Current result: 16/16 required evidence references present, referenced repo
 paths found and 0 missing, 0 stale forbidden tokens, 0 unsafe non-negated claim
-lines, and the paper mentions the current 28-gate ledger.
+lines, and the paper mentions the current 29-gate ledger.
 
 Valid claim:
 
@@ -602,7 +604,7 @@ Invalid claim:
 `train_python/run_official_awq_smoke.py` is a minimal package-readiness probe.
 It exists to verify that AutoAWQ can execute, save local quantized artifacts,
 and run one short generation smoke under the GPU guard. It is intentionally not
-part of the 28-gate paper-facing ledger.
+part of the 29-gate paper-facing ledger.
 
 Example WSL/GPU command:
 
@@ -751,6 +753,89 @@ Current public-calibrated bundle result:
 | WikiText2 test eval | 8 | 760 | 24.676 | 29.081 | 1.1785 | 0.6116 |
 | C4 validation eval | 8 | 727 | 32.952 | 38.173 | 1.1584 | 0.6116 |
 
+Expanded 16-prompt public PPL slices:
+
+```bash
+python train_python/build_public_ppl_prompts.py \
+  --out-dir data_eval/public_ppl_prompts_16_2026_06_07 \
+  --wikitext2-count 16 \
+  --c4-count 16 \
+  --min-chars 40 \
+  --max-chars 512 \
+  --out-json outputs/public_ppl_prompt_manifest_16_2026_06_07.json \
+  --out-md outputs/PUBLIC_PPL_PROMPT_MANIFEST_16_2026_06_07.md
+```
+
+The expanded eval reuses the public-calibrated AutoAWQ artifact above rather
+than re-quantizing it. On this machine AutoAWQ is available in WSL, while the
+Windows Python environment lacks `awq`.
+
+```bash
+python3 train_python/run_with_gpu_guard.py \
+  --max-memory-ratio 0.90 \
+  --max-start-memory-ratio 0.90 \
+  --min-disk-free-gb 8 \
+  --poll-seconds 2 \
+  --timeout-sec 900 \
+  --out outputs/official_awq_public_calib_qwen25_0p5b_wikitext2_16_gpu_guard_2026_06_07.json \
+  -- \
+  python3 train_python/run_official_awq_matched_ppl.py \
+    --model Qwen/Qwen2.5-0.5B-Instruct \
+    --awq-artifact outputs/official_awq_smoke_2026_06_07/qwen25_0p5b_public_calib_awq_model \
+    --prompts data_eval/public_ppl_prompts_16_2026_06_07/wikitext2_test_ppl_prompts.txt \
+    --limit-prompts 16 \
+    --max-length 96 \
+    --device cuda \
+    --dtype float16 \
+    --out-json outputs/official_awq_public_calib_qwen25_0p5b_wikitext2_16_summary_2026_06_07.json \
+    --out-md outputs/OFFICIAL_AWQ_PUBLIC_CALIB_QWEN25_0P5B_WIKITEXT2_16_2026_06_07.md
+
+python3 train_python/run_with_gpu_guard.py \
+  --max-memory-ratio 0.90 \
+  --max-start-memory-ratio 0.90 \
+  --min-disk-free-gb 8 \
+  --poll-seconds 2 \
+  --timeout-sec 900 \
+  --out outputs/official_awq_public_calib_qwen25_0p5b_c4_16_gpu_guard_2026_06_07.json \
+  -- \
+  python3 train_python/run_official_awq_matched_ppl.py \
+    --model Qwen/Qwen2.5-0.5B-Instruct \
+    --awq-artifact outputs/official_awq_smoke_2026_06_07/qwen25_0p5b_public_calib_awq_model \
+    --prompts data_eval/public_ppl_prompts_16_2026_06_07/c4_validation_ppl_prompts.txt \
+    --limit-prompts 16 \
+    --max-length 96 \
+    --device cuda \
+    --dtype float16 \
+    --out-json outputs/official_awq_public_calib_qwen25_0p5b_c4_16_summary_2026_06_07.json \
+    --out-md outputs/OFFICIAL_AWQ_PUBLIC_CALIB_QWEN25_0P5B_C4_16_2026_06_07.md
+```
+
+Expanded 16-prompt gate:
+
+```bash
+python train_python/gate_official_awq_public_calib.py \
+  --smoke-summary-json outputs/official_awq_public_calib_qwen25_0p5b_summary_2026_06_07.json \
+  --smoke-guard-json outputs/official_awq_public_calib_qwen25_0p5b_gpu_guard_2026_06_07.json \
+  --eval-summary wikitext2_16=outputs/official_awq_public_calib_qwen25_0p5b_wikitext2_16_summary_2026_06_07.json \
+  --eval-guard wikitext2_16=outputs/official_awq_public_calib_qwen25_0p5b_wikitext2_16_gpu_guard_2026_06_07.json \
+  --eval-summary c4_16=outputs/official_awq_public_calib_qwen25_0p5b_c4_16_summary_2026_06_07.json \
+  --eval-guard c4_16=outputs/official_awq_public_calib_qwen25_0p5b_c4_16_gpu_guard_2026_06_07.json \
+  --min-eval-slices 2 \
+  --min-total-tokens 2800 \
+  --min-awq-blocks 8 \
+  --max-memory-ratio 0.90 \
+  --max-ppl-ratio 2.0 \
+  --out-json outputs/official_awq_public_calib_qwen25_0p5b_bundle_16_gate_2026_06_07.json \
+  --out-md outputs/OFFICIAL_AWQ_PUBLIC_CALIB_QWEN25_0P5B_BUNDLE_16_GATE_2026_06_07.md
+```
+
+Current expanded AutoAWQ result:
+
+| slice | prompts | tokens | FP16 PPL | AutoAWQ PPL | ratio | peak VRAM |
+|---|---:|---:|---:|---:|---:|---:|
+| WikiText2 test eval | 16 | 1413 | 24.591 | 29.789 | 1.2114 | 0.5493 |
+| C4 validation eval | 16 | 1444 | 29.918 | 35.375 | 1.1824 | 0.5678 |
+
 Public-calibration GPTQModel budget-aligned fresh quantization plus WikiText2 eval:
 
 ```bash
@@ -896,6 +981,8 @@ Valid claim:
   including two tiny public text slices;
 - one public-calibrated AutoAWQ W4 group-128 bundle completed guarded
   quantization and two tiny public PPL eval slices;
+- the same public-calibrated AutoAWQ bundle has an expanded 16-prompt-per-split
+  WikiText2/C4 PPL gate totaling 2857 eval tokens, with max PPL ratio 1.2114;
 - one public-calibrated GPTQModel W4 group-128 smoke completed guarded
   quantization with 12 public calibration texts, local artifact save/reload
   through `gptq_torch`, and two tiny public WikiText2/C4 PPL eval slices at the

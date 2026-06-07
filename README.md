@@ -35,11 +35,11 @@ paper-facing only if it appears in the claim matrix or gate ledger.
 |---|---|---|
 | Calibration instability | Qwen3/OLMo2/SmolLM2 distribution-split diagnostics plus Qwen2.5 sample-size/model-scale perturbation matrix | problem evidence |
 | Consensus allocation | gated robustness and transfer diagnostics under fixed bit budgets | allocation diagnostic, not a production PTQ method |
-| Official PTQ probes | AutoAWQ/GPTQModel Qwen2.5-0.5B W4/G128 readiness, tiny task smoke, matched 50-row task subset paths, and a matched local baseline pack | local evidence only; quantized paths save VRAM but are slower here |
+| Official PTQ probes | AutoAWQ/GPTQModel Qwen2.5-0.5B W4/G128 readiness, an expanded AutoAWQ 16-prompt public PPL gate, tiny task smoke, matched 50-row task subset paths, and a matched local baseline pack | local evidence only; quantized paths save VRAM but are slower here |
 | Runtime probes | ESMP/Triton/C++ module-level gates plus PC-side smoke/subset50 runtime profiles | not end-to-end deployment |
 | Mobile evidence | Redmi K80 Pro harness exists, but no real TTFT/tokens/s/memory log is complete | no mobile claim |
 
-Current ledger status: **28 / 28 gates pass**.
+Current ledger status: **29 / 29 gates pass**.
 
 ## Supported Reading
 
@@ -61,7 +61,7 @@ You should not cite it as:
 
 ```bash
 python -m unittest discover -s train_python -p "test_*.py"
-python train_python/build_current_evidence_ledger.py --expected-gate-count 28
+python train_python/build_current_evidence_ledger.py --expected-gate-count 29
 python train_python/gate_public_repo_hygiene.py \
   --out-json outputs/real_system_packer_2026-06-05/public_repo_hygiene_gate_2026_06_06.json \
   --out-md outputs/real_system_packer_2026-06-05/PUBLIC_REPO_HYGIENE_GATE_2026_06_06.md

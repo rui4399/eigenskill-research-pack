@@ -25,6 +25,8 @@ The current evidence supports:
   boundaries, and bounded interaction-aware swap search;
 - a public-calibrated AutoAWQ W4 group-128 readiness bundle on
   Qwen2.5-0.5B-Instruct with tiny public WikiText2/C4 matched PPL slices;
+- an expanded 16-prompt-per-split AutoAWQ public PPL gate for the same
+  public-calibrated Qwen2.5-0.5B artifact;
 - a local matched AutoAWQ/GPTQModel Qwen2.5-0.5B W4/G128 baseline pack that
   ties public-calibration PPL, subset50 MMLU/GSM8K execution, and PC-side
   runtime/VRAM into one explicit claim boundary;
@@ -59,9 +61,10 @@ evidence become much deeper.
 
 The blockers are concrete:
 
-1. Official baselines: the local AutoAWQ/GPTQModel 0.5B matched pack is useful
-   but not enough; larger AWQ/GPTQ rows, SmoothQuant, and at least one faithful
-   rotation or mixed-precision allocation comparator are still missing.
+1. Official baselines: the local AutoAWQ/GPTQModel 0.5B matched pack and the
+   expanded AutoAWQ public PPL gate are useful but not enough; larger AWQ/GPTQ
+   rows, SmoothQuant, and at least one faithful rotation or mixed-precision
+   allocation comparator are still missing.
 2. Larger evaluation: more WikiText2/C4 prompts and multiple calibration seeds.
 3. Downstream retention: MMLU/GSM8K/IFEval or similar task slices on the actual
    quantized/fused variants, not only base-model capability smoke.
