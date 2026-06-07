@@ -1,0 +1,121 @@
+{
+  "date": "2026-06-07T00:27:38+00:00",
+  "passed": true,
+  "summary": {
+    "package_count": 2,
+    "packages": [
+      "autoawq",
+      "gptqmodel"
+    ],
+    "models": [
+      "Qwen/Qwen2.5-0.5B-Instruct"
+    ],
+    "quant_shapes": [
+      {
+        "bits": 4,
+        "group_size": 128
+      }
+    ],
+    "required_packages": [
+      "autoawq",
+      "gptqmodel"
+    ],
+    "required_eval_labels": [
+      "wikitext2",
+      "c4"
+    ],
+    "common_eval_labels": [
+      "c4",
+      "wikitext2"
+    ],
+    "total_eval_tokens": 2247,
+    "cases": [
+      {
+        "input_label": "autoawq",
+        "package": "autoawq",
+        "package_version": "0.2.9",
+        "model": "Qwen/Qwen2.5-0.5B-Instruct",
+        "quant_shape": {
+          "bits": 4,
+          "group_size": 128
+        },
+        "calibration_source": [
+          "data_eval/public_calib_prompts_2026_06_07/wikitext2_test_ppl_prompts.txt",
+          "data_eval/public_calib_prompts_2026_06_07/c4_validation_ppl_prompts.txt"
+        ],
+        "artifact_file_count": 6,
+        "artifact_total_bytes": 469809733,
+        "eval_slice_count": 2,
+        "total_eval_tokens": 1487,
+        "eval_labels": [
+          "c4",
+          "wikitext2"
+        ],
+        "evals": [
+          {
+            "label": "wikitext2",
+            "prompt_count": 8,
+            "tokens": 760,
+            "fp16_ppl": 24.675866135712827,
+            "quant_ppl": 29.080631395938298,
+            "ppl_ratio_vs_fp16": 1.1785049909089331,
+            "guard_max_memory_used_ratio": 0.6115814010550853
+          },
+          {
+            "label": "c4",
+            "prompt_count": 8,
+            "tokens": 727,
+            "fp16_ppl": 32.95166358574747,
+            "quant_ppl": 38.17270213943104,
+            "ppl_ratio_vs_fp16": 1.1584453707503197,
+            "guard_max_memory_used_ratio": 0.6115814010550853
+          }
+        ]
+      },
+      {
+        "input_label": "gptqmodel",
+        "package": "gptqmodel",
+        "package_version": "7.0.0",
+        "model": "Qwen/Qwen2.5-0.5B-Instruct",
+        "quant_shape": {
+          "bits": 4,
+          "group_size": 128
+        },
+        "calibration_source": [
+          "data_eval/public_calib_prompts_2026_06_07/wikitext2_test_ppl_prompts.txt",
+          "data_eval/public_calib_prompts_2026_06_07/c4_validation_ppl_prompts.txt"
+        ],
+        "artifact_file_count": 8,
+        "artifact_total_bytes": 470821016,
+        "eval_slice_count": 2,
+        "total_eval_tokens": 760,
+        "eval_labels": [
+          "c4",
+          "wikitext2"
+        ],
+        "evals": [
+          {
+            "label": "wikitext2",
+            "prompt_count": 4,
+            "tokens": 380,
+            "fp16_ppl": 19.381306842675034,
+            "quant_ppl": 25.677339366092017,
+            "ppl_ratio_vs_fp16": 1.3248507737132547,
+            "guard_max_memory_used_ratio": 0.6233590970433076
+          },
+          {
+            "label": "c4",
+            "prompt_count": 4,
+            "tokens": 380,
+            "fp16_ppl": 24.665275734471876,
+            "quant_ppl": 31.39774008540991,
+            "ppl_ratio_vs_fp16": 1.272953135550349,
+            "guard_max_memory_used_ratio": 0.6314562630352104
+          }
+        ]
+      }
+    ]
+  },
+  "failures": [],
+  "claim_boundary": "Valid claim: official-package readiness probes are presented in one aligned matrix for the same model family, W-bit/group-size shape, and tiny public eval labels. Invalid claim: this matrix proves AWQ/GPTQ competitiveness, SOTA PTQ quality, task retention, or production runtime readiness."
+}

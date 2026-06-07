@@ -21,7 +21,7 @@ are supported, which are proxies, and which are still blockers.
 | Consensus allocation | passes committed short fake-quant stress gates | robustness diagnostic |
 | Public task coverage | guarded local subset ladder, not leaderboard-scale | capability smoke |
 | Packed runtime | gated ESMP/Triton/C++ prototypes | module-level system evidence |
-| Official PTQ baselines | AutoAWQ public-calibrated W4 bundle plus GPTQModel public-calibrated W4 gate on tiny WikiText2/C4 public slices; faithful AWQ/GPTQ competitive baselines are still blockers | partial readiness only |
+| Official PTQ baselines | AutoAWQ and GPTQModel public-calibrated W4/G128 probes are aligned in one readiness matrix over tiny WikiText2/C4 public slices; faithful AWQ/GPTQ competitive baselines are still blockers | partial readiness only |
 | Mobile/Redmi evidence | no real TTFT/tokens/s/memory logs yet | no deployment claim |
 
 Current paper-facing ledger:
@@ -64,6 +64,9 @@ the corresponding gate and boundary.
 - Public-calibrated AutoAWQ and GPTQModel W4 group-128 readiness runs can
   quantize, save local artifacts, and evaluate tiny public PPL slices under
   guard; this is still not a full AWQ/GPTQ competitive baseline.
+- The official PTQ readiness matrix verifies that the current AutoAWQ and
+  GPTQModel probes use the same model, W4/G128 shape, and WikiText2/C4 eval
+  labels before they are presented together.
 
 ## Non-Claims
 

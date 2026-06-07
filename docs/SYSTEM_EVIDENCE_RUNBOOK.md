@@ -665,6 +665,32 @@ python train_python/gate_official_gptqmodel_public_calib.py \
   --out-md outputs/OFFICIAL_GPTQMODEL_PUBLIC_CALIB_QWEN25_0P5B_GATE_2026_06_07.md
 ```
 
+Official PTQ readiness matrix:
+
+```bash
+python train_python/gate_official_ptq_readiness_matrix.py \
+  --case autoawq=outputs/official_awq_public_calib_qwen25_0p5b_bundle_gate_2026_06_07.json \
+  --case gptqmodel=outputs/official_gptqmodel_public_calib_qwen25_0p5b_gate_2026_06_07.json \
+  --required-package autoawq \
+  --required-package gptqmodel \
+  --required-label wikitext2 \
+  --required-label c4 \
+  --min-packages 2 \
+  --min-eval-slices 2 \
+  --min-total-tokens 512 \
+  --max-ppl-ratio 2.0 \
+  --max-memory-ratio 0.90 \
+  --out-json outputs/official_ptq_readiness_matrix_qwen25_0p5b_2026_06_07.json \
+  --out-md outputs/OFFICIAL_PTQ_READINESS_MATRIX_QWEN25_0P5B_2026_06_07.md
+```
+
+Current matrix result: 2 packages (`autoawq`, `gptqmodel`), one model
+(`Qwen/Qwen2.5-0.5B-Instruct`), normalized W4 group-128 quant shape, common
+WikiText2/C4 eval labels, and 2247 total eval tokens across the readiness
+probes. This matrix is for alignment and auditability; it is not a fair
+head-to-head quality comparison because calibration counts, eval token counts,
+package kernels, and task-retention coverage still differ.
+
 Aggregate gate:
 
 ```bash
@@ -692,7 +718,10 @@ Valid claim:
   quantization and two tiny public PPL eval slices;
 - one public-calibrated GPTQModel W4 group-128 smoke completed guarded
   quantization, local artifact save/reload through `gptq_torch`, and two tiny
-  public WikiText2/C4 PPL eval slices.
+  public WikiText2/C4 PPL eval slices;
+- the official PTQ readiness matrix verifies that the current AutoAWQ and
+  GPTQModel probes share the same model, W4/G128 quantization shape, and
+  WikiText2/C4 eval labels before being presented together.
 
 Invalid claim:
 

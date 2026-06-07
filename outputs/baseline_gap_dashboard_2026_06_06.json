@@ -1,10 +1,10 @@
 {
-  "date": "2026-06-07T00:17:29+00:00",
+  "date": "2026-06-07T00:29:35+00:00",
   "schema_version": 1,
   "passed": false,
-  "item_count": 15,
+  "item_count": 16,
   "status_counts": {
-    "covered": 11,
+    "covered": 12,
     "partial": 1,
     "proxy_only": 2,
     "missing": 1
@@ -17,7 +17,7 @@
       "covered": 1
     },
     "external_ptq_readiness": {
-      "covered": 4
+      "covered": 5
     },
     "external_ptq": {
       "partial": 1
@@ -334,6 +334,50 @@
       "proxy_evidence_truncated": false,
       "package_ok": true,
       "package_summary": [
+        {
+          "name": "gptqmodel",
+          "available": true,
+          "version": "7.0.0"
+        }
+      ]
+    },
+    {
+      "id": "official_ptq_readiness_matrix",
+      "family": "external_ptq_readiness",
+      "priority": "optional",
+      "paper_blocker": false,
+      "description": "Matrix that aligns current public-calibration AutoAWQ and GPTQModel readiness probes on model, W4/G128 quantization shape, and tiny WikiText2/C4 public eval labels.",
+      "required_evidence_globs": [
+        "outputs/**/*official*ptq*readiness*matrix*.json",
+        "outputs/**/*OFFICIAL*PTQ*READINESS*MATRIX*.md"
+      ],
+      "required_packages": [
+        "autoawq",
+        "gptqmodel"
+      ],
+      "package_mode": "any",
+      "claim_boundary": "Presentation and audit readiness only: it verifies aligned probe metadata, but it is not a faithful AWQ/GPTQ competitive baseline because calibration size, eval size, kernels, and task-retention coverage still differ.",
+      "status": "covered",
+      "evidence_count": 2,
+      "evidence_task_count": 0,
+      "evidence_matches": [
+        "outputs/OFFICIAL_PTQ_READINESS_MATRIX_QWEN25_0P5B_2026_06_07.md",
+        "outputs/official_ptq_readiness_matrix_qwen25_0p5b_2026_06_07.json"
+      ],
+      "evidence_truncated": false,
+      "partial_evidence_count": 0,
+      "partial_evidence_matches": [],
+      "partial_evidence_truncated": false,
+      "proxy_evidence_count": 0,
+      "proxy_evidence_matches": [],
+      "proxy_evidence_truncated": false,
+      "package_ok": true,
+      "package_summary": [
+        {
+          "name": "autoawq",
+          "available": true,
+          "version": "0.2.9"
+        },
         {
           "name": "gptqmodel",
           "available": true,

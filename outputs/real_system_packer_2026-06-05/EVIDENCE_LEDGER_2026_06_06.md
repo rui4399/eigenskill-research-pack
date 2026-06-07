@@ -1,6 +1,6 @@
 # Evidence Ledger
 
-Date: `2026-06-07T00:20:22+00:00`
+Date: `2026-06-07T00:31:37+00:00`
 Status: **PASS**
 Gates: `22 / 22` passed
 Categories: `allocation comparator, artifact integrity, c++ runtime, calibration robustness, capability retention, decode integration, kernel, paper alignment, ptq comparator, qkv replacement, quality, repo hygiene, rotation comparator, runtime wiring, selected-row, task retention`
@@ -9,7 +9,7 @@ Categories: `allocation comparator, artifact integrity, c++ runtime, calibration
 
 | gate | category | status | key metrics | source |
 |---|---|---|---|---|
-| `public_hygiene` | repo hygiene | **PASS** | tracked files 1723; forbidden files 0; placeholders 0 | `outputs/real_system_packer_2026-06-05/public_repo_hygiene_gate_2026_06_06.json` |
+| `public_hygiene` | repo hygiene | **PASS** | tracked files 1726; forbidden files 0; placeholders 0 | `outputs/real_system_packer_2026-06-05/public_repo_hygiene_gate_2026_06_06.json` |
 | `calibration_instability` | calibration robustness | **PASS** | cases 3; unstable 3; mean Spearman 0.0713; mean Jaccard 0.4349; top20 Jaccard 0.1022 | `outputs/calibration_instability_benchmark_2026_06_06.json` |
 | `calibration_robustness_stress` | calibration robustness | **PASS** | cases 11; wins/uniform 11; wins/best-random 11; wins/random-mean 11; mean margin/uniform 4.2942; mean margin/uniform CI [3.0664, 5.6886]; worst margin/uniform 1.3608; mean margin/best-random 1.1622; mean margin/best-random CI [0.6143, 1.7982]; worst margin/best-random 0.1120; mean margin/random-mean 2.7444; mean margin/random-mean CI [1.7921, 3.5862]; worst margin/random-mean 0.5656; mean FP16 regret 4.1683; max FP16 regret 11.6693; sign p/uniform 0.00048828; sign p/best-random 0.00048828; sign p/random-mean 0.00048828 | `outputs/calibration_robustness_stress_gate_2026_06_07.json` |
 | `consensus_transfer_boundary` | allocation comparator | **PASS** | cases 2; slices 4; wins/left-single 4; wins/right-single 2; wins/best-single 2; wins/worst-single 4; min margin/worst-single 0.8726; mean regret/best-single 0.0043; max regret/best-single 0.3046 | `outputs/consensus_transfer_boundary_gate_2026_06_07.json` |

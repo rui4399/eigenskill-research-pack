@@ -77,6 +77,7 @@ are not counted in the current 22-gate paper-facing ledger.
 | `official_awq_public_c4_ppl` | external PTQ readiness | `outputs/OFFICIAL_AWQ_MATCHED_PPL_QWEN25_0P5B_C4_GATE_2026_06_07.md` | A tiny public C4 validation slice runs under FP16 and local AutoAWQ W4 group-128 with PPL ratio 1.1824 over 727 tokens; this is not a complete AWQ/GPTQ baseline. |
 | `official_awq_public_calib_bundle` | external PTQ readiness | `outputs/OFFICIAL_AWQ_PUBLIC_CALIB_QWEN25_0P5B_BUNDLE_GATE_2026_06_07.md` | A public-calibration AutoAWQ W4 group-128 bundle quantizes under guard and evaluates tiny public WikiText2/C4 PPL slices; this is partial official-package evidence, not GPTQ/AWQ competitive coverage. |
 | `official_gptqmodel_public_calib_smoke` | external PTQ readiness | `outputs/OFFICIAL_GPTQMODEL_PUBLIC_CALIB_QWEN25_0P5B_GATE_2026_06_07.md` | A public-calibration GPTQModel W4 group-128 gate quantizes under guard, saves/reloads a local artifact with `gptq_torch`, and evaluates tiny public WikiText2/C4 PPL slices; this is partial official-package evidence, not GPTQ/AWQ competitive coverage. |
+| `official_ptq_readiness_matrix` | external PTQ readiness | `outputs/OFFICIAL_PTQ_READINESS_MATRIX_QWEN25_0P5B_2026_06_07.md` | AutoAWQ and GPTQModel readiness probes are normalized into one matrix over the same model, W4/G128 shape, and WikiText2/C4 eval labels; this is presentation hygiene, not a faithful competitive baseline. |
 
 ## Readiness Gaps
 
