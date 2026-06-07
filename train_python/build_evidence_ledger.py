@@ -13,6 +13,7 @@ from typing import Any
 CATEGORIES = {
     "task_model_ladder": "capability retention",
     "official_ptq_task": "task execution smoke",
+    "official_ptq_runtime": "runtime profile",
     "quality": "quality",
     "prompt": "quality",
     "allocation": "allocation comparator",
@@ -173,10 +174,18 @@ def metric_parts(summary: dict[str, Any]) -> list[str]:
         parts.append(f"unstable {summary.get('unstable_case_count')}")
     if "total_tasks" in summary:
         parts.append(f"tasks {summary.get('total_tasks')}")
+    if "total_cases" in summary:
+        parts.append(f"cases {summary.get('total_cases')}")
     if "total_passes" in summary:
         parts.append(f"passes {summary.get('total_passes')}")
     if (value := finite_float(summary.get("mean_accuracy"))) is not None:
         parts.append(f"accuracy {value:.4f}")
+    if (value := finite_float(summary.get("mean_tokens_per_second"))) is not None:
+        parts.append(f"mean tok/s {value:.4f}")
+    if (value := finite_float(summary.get("mean_ttft_seconds"))) is not None:
+        parts.append(f"mean TTFT {value:.6f}s")
+    if (value := finite_float(summary.get("max_guard_vram_mib"))) is not None:
+        parts.append(f"VRAM MiB {value:.0f}")
     if "target_wins_vs_uniform" in summary:
         parts.append(f"wins/uniform {summary.get('target_wins_vs_uniform')}")
     if "target_wins_vs_best_random" in summary:

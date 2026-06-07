@@ -155,6 +155,22 @@
       "claim_boundary": "Execution-path readiness only: it shows official-package artifacts can load and run the same tiny public task fixtures; zero-FP16 formats remain execution-only and this is not task-retention proof."
     },
     {
+      "id": "official_ptq_runtime_profile",
+      "family": "external_ptq_readiness",
+      "priority": "optional",
+      "paper_blocker": false,
+      "description": "PC-side TTFT, tokens/s, and peak guarded VRAM profile derived from the official PTQ task-smoke matrix.",
+      "required_evidence_globs": [
+        "outputs/**/official_ptq_runtime_profile*.json"
+      ],
+      "required_packages": [
+        "autoawq",
+        "gptqmodel"
+      ],
+      "package_mode": "all",
+      "claim_boundary": "Runtime-profile readiness only: it reports PC-side measurements from guarded smoke runs, not mobile deployment, energy, or production runtime speedup."
+    },
+    {
       "id": "official_awq_gptq_competitive",
       "family": "external_ptq",
       "priority": "high",

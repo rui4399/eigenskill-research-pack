@@ -1,10 +1,10 @@
 {
-  "date": "2026-06-07T01:31:41+00:00",
+  "date": "2026-06-07T01:47:28+00:00",
   "schema_version": 1,
   "passed": false,
-  "item_count": 17,
+  "item_count": 18,
   "status_counts": {
-    "covered": 13,
+    "covered": 14,
     "partial": 1,
     "proxy_only": 2,
     "missing": 1
@@ -17,7 +17,7 @@
       "covered": 1
     },
     "external_ptq_readiness": {
-      "covered": 6
+      "covered": 7
     },
     "external_ptq": {
       "partial": 1
@@ -410,6 +410,48 @@
       "evidence_task_count": 24,
       "evidence_matches": [
         "outputs/official_ptq_task_retention_smoke_matrix_2026_06_07.json"
+      ],
+      "evidence_truncated": false,
+      "partial_evidence_count": 0,
+      "partial_evidence_matches": [],
+      "partial_evidence_truncated": false,
+      "proxy_evidence_count": 0,
+      "proxy_evidence_matches": [],
+      "proxy_evidence_truncated": false,
+      "package_ok": true,
+      "package_summary": [
+        {
+          "name": "autoawq",
+          "available": true,
+          "version": "0.2.9"
+        },
+        {
+          "name": "gptqmodel",
+          "available": true,
+          "version": "7.0.0"
+        }
+      ]
+    },
+    {
+      "id": "official_ptq_runtime_profile",
+      "family": "external_ptq_readiness",
+      "priority": "optional",
+      "paper_blocker": false,
+      "description": "PC-side TTFT, tokens/s, and peak guarded VRAM profile derived from the official PTQ task-smoke matrix.",
+      "required_evidence_globs": [
+        "outputs/**/official_ptq_runtime_profile*.json"
+      ],
+      "required_packages": [
+        "autoawq",
+        "gptqmodel"
+      ],
+      "package_mode": "all",
+      "claim_boundary": "Runtime-profile readiness only: it reports PC-side measurements from guarded smoke runs, not mobile deployment, energy, or production runtime speedup.",
+      "status": "covered",
+      "evidence_count": 1,
+      "evidence_task_count": 24,
+      "evidence_matches": [
+        "outputs/official_ptq_runtime_profile_2026_06_07.json"
       ],
       "evidence_truncated": false,
       "partial_evidence_count": 0,

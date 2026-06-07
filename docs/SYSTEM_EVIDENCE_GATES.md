@@ -25,7 +25,7 @@ Current ledger artifact:
 outputs/real_system_packer_2026-06-05/EVIDENCE_LEDGER_2026_06_06.md
 ```
 
-Current status: **23 / 23 gates pass**.
+Current status: **24 / 24 gates pass**.
 
 Valid claim:
 
@@ -55,6 +55,7 @@ Invalid claim:
 | `public_task_benchmark` | public task coverage | `outputs/PUBLIC_TASK_BENCHMARK_OLLAMA_QWEN25_ABLITERATE_7B_GATE_2026_06_07.md` | A local Ollama 7B model ran 100 MMLU/GSM8K subset rows under GPU guard. |
 | `public_task_model_ladder` | public task coverage | `outputs/PUBLIC_TASK_MODEL_LADDER_GATE_2026_06_07.md` | Public-task evidence is shown as a guarded two-model ladder, not a single cherry-picked result. |
 | `official_ptq_task_retention` | task execution smoke | `outputs/OFFICIAL_PTQ_TASK_RETENTION_SMOKE_MATRIX_2026_06_07.md` | FP16, AutoAWQ, and GPTQModel Qwen2.5-0.5B variants load and run the same tiny public MMLU/GSM8K smoke tasks under GPU guard; this is not leaderboard-scale retention, and zero-FP16 formats are execution-only. |
+| `official_ptq_runtime_profile` | runtime profile | `outputs/OFFICIAL_PTQ_RUNTIME_PROFILE_2026_06_07.md` | PC-side TTFT/tokens/s/VRAM are summarized from the same guarded official PTQ task-smoke path; this is not mobile deployment or production runtime speedup. |
 | `esmp_package` | artifact integrity | `outputs/real_system_packer_2026-06-05/ESMP_PACKAGE_VERIFY_QWEN3_0P6B_LIMIT8_2026_06_06.md` | ESMP package metadata, manifest, and binary headers are independently checkable. |
 | `triton_shape_family` | kernel | `outputs/real_system_packer_2026-06-05/TRITON_QWEN_SHAPE_FAMILY_GATE_2026_06_06.md` | Tuned grouped packed INT4/INT8 Triton kernels can beat torch FP16 on selected measured shapes. |
 | `selector_runtime` | runtime wiring | `outputs/real_system_packer_2026-06-05/SELECTOR_RUNTIME_SMOKE_GATE_2026_06_06.md` | Selector-driven runtime wiring loads measured kernel configs and records selector calls. |
@@ -68,7 +69,7 @@ Invalid claim:
 ## Non-Ledger Readiness Probes
 
 These probes are tracked because they reduce environment uncertainty, but they
-are not counted in the current 23-gate paper-facing ledger.
+are not counted in the current 24-gate paper-facing ledger.
 
 | probe | category | primary artifact | boundary |
 |---|---|---|---|

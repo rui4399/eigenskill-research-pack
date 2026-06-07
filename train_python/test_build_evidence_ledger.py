@@ -141,6 +141,26 @@ class BuildEvidenceLedgerTests(unittest.TestCase):
 
     def test_official_ptq_task_gate_is_not_labeled_as_ptq_comparator(self) -> None:
         self.assertEqual(ledger.infer_category("official_ptq_task_retention"), "task execution smoke")
+        self.assertEqual(ledger.infer_category("official_ptq_runtime_profile"), "runtime profile")
+
+    def test_runtime_profile_metrics_are_reported(self) -> None:
+        metrics = ledger.metric_parts(
+            {
+                "total_cases": 6,
+                "total_tasks": 24,
+                "mean_tokens_per_second": 11.46,
+                "mean_ttft_seconds": 0.5084,
+                "max_guard_vram_ratio": 0.6108,
+                "max_guard_vram_mib": 4979,
+            }
+        )
+        joined = "; ".join(metrics)
+        self.assertIn("cases 6", joined)
+        self.assertIn("tasks 24", joined)
+        self.assertIn("mean tok/s 11.4600", joined)
+        self.assertIn("mean TTFT 0.508400s", joined)
+        self.assertIn("VRAM 0.6108", joined)
+        self.assertIn("VRAM MiB 4979", joined)
 
     def test_parse_gate_spec_requires_label(self) -> None:
         label, path = ledger.parse_gate_spec("foo=bar.json")

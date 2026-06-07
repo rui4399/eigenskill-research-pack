@@ -22,7 +22,7 @@ fake-quant loss sensitivity on multiple calibration views, allocates a fixed
 `{4,8}`-bit budget through cross-split consensus sensitivity, and records every
 paper-facing result through executable evidence gates. Across Qwen3-0.6B,
 Qwen3-1.7B, OLMo2-0425-1B-Instruct, and SmolLM2-1.7B short-slice diagnostics,
-the current evidence ledger passes 23/23 gates. The calibration-instability
+the current evidence ledger passes 24/24 gates. The calibration-instability
 gate finds 3/3 unstable model/dataset cases with mean score/cost Spearman
 0.0713 and mean top-20 Jaccard 0.1022. The robustness stress gate reports
 11/11 wins versus uniform INT4, best random seed, and random-seed mean under the
@@ -35,7 +35,8 @@ module ranking misses measurable global interactions. The current system
 evidence is deliberately gated and prototype-level: public-task coverage now
 includes a two-model guarded Ollama ladder over 200 MMLU/GSM8K subset rows and
 a tiny official PTQ task-execution smoke matrix over FP16/AutoAWQ/GPTQModel
-Qwen2.5-0.5B variants. ESMP packaging, Triton shape tuning, selected-row
+Qwen2.5-0.5B variants, plus a PC-side runtime profile with TTFT, tokens/s, and
+guarded VRAM. ESMP packaging, Triton shape tuning, selected-row
 execution, shallow fused-QKV generation, and C++ audit tools are executable.
 The repository does not claim a production LLM runtime.
 
@@ -73,7 +74,7 @@ offers three narrower contributions:
    consensus allocator that protects modules that are consistently sensitive or
    have high average sensitivity under a fixed `{4,8}` budget.
 3. **Gated evidence discipline.** We convert scattered fake-quant, runtime,
-   task-smoke, paper-alignment, and repository-hygiene outputs into 23 executable gates, each
+   task-smoke, paper-alignment, and repository-hygiene outputs into 24 executable gates, each
    with an explicit claim boundary.
 
 The paper is intentionally conservative. It keeps negative results visible:
@@ -203,7 +204,7 @@ future allocator.
 ## 6. Evidence Gates
 
 Every paper-facing claim is indexed by a gate JSON and a Markdown report. The
-current ledger passes 23/23 gates. The most important gates are:
+current ledger passes 24/24 gates. The most important gates are:
 
 | Gate | Evidence | Valid claim | Non-claim |
 |---|---|---|---|
@@ -213,6 +214,7 @@ current ledger passes 23/23 gates. The most important gates are:
 | Interaction swap boundary | 16 SmolLM2-1.7B swap trials | Global feedback exposes local-proxy failures. | Global optimality or broad transfer. |
 | Public task model ladder | 2 local Ollama models over 200 MMLU/GSM8K subset rows | Public-task evidence is reported without hiding the weaker 4B case. | Leaderboard quality, monotonic scaling, or fused quantized retention. |
 | Official PTQ task-execution smoke | FP16/AutoAWQ/GPTQModel Qwen2.5-0.5B on 24 public smoke executions; see `outputs/OFFICIAL_PTQ_TASK_RETENTION_SMOKE_MATRIX_2026_06_07.md`. | Official-package artifacts load and run matching tiny task fixtures under guard; zero-FP16 formats are execution-only. | Broad task retention, leaderboard quality, or AWQ/GPTQ competitiveness. |
+| Official PTQ runtime profile | FP16/AutoAWQ/GPTQModel Qwen2.5-0.5B PC-side runtime profile; see `outputs/OFFICIAL_PTQ_RUNTIME_PROFILE_2026_06_07.md`. | TTFT, tokens/s, and peak guarded VRAM are reported for the same task-smoke path. | Not mobile deployment, not production runtime speedup, not energy savings, and not AWQ/GPTQ competitiveness. |
 | Packed-system gates | ESMP, Triton, selected-row, sidecar, QKV smoke | Prototype components are executable and audited. | Production Tensor Core/mobile runtime. |
 | Paper evidence alignment | Paper draft, required evidence paths, claim-risk scan | The draft cites committed evidence and avoids unsafe non-negated claims. | Peer-review acceptance or complete baseline coverage. |
 

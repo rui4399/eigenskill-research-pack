@@ -1,14 +1,14 @@
 # Baseline Gap Dashboard
 
-Date: `2026-06-07T01:31:41+00:00`
+Date: `2026-06-07T01:47:28+00:00`
 Status: **NOT READY** for paper claims that require external baselines
-Items: `17`
+Items: `18`
 
 ## Status Counts
 
 | status | count |
 |---|---:|
-| `covered` | 13 |
+| `covered` | 14 |
 | `missing` | 1 |
 | `partial` | 1 |
 | `proxy_only` | 2 |
@@ -34,6 +34,7 @@ Items: `17`
 | `official_gptqmodel_public_calibrated_smoke` | external_ptq_readiness | optional | False | **covered** | 10 | 0 | 0 | 0 | gptqmodel=yes | Partial official-package readiness: it proves GPTQModel can quantize, save, reload, and evaluate tiny public WikiText2/C4 slices locally, but it is not a full GPTQ/AWQ competitive baseline or task-retention result. |
 | `official_ptq_readiness_matrix` | external_ptq_readiness | optional | False | **covered** | 2 | 0 | 0 | 0 | autoawq=yes, gptqmodel=yes | Presentation and audit readiness only: it verifies aligned probe metadata and eval budget, but it is not a faithful AWQ/GPTQ competitive baseline because package kernels/backend settings, complete task-retention coverage, and broader official baseline settings still differ. |
 | `official_ptq_task_execution_smoke` | external_ptq_readiness | optional | False | **covered** | 1 | 24 | 0 | 0 | autoawq=yes, gptqmodel=yes | Execution-path readiness only: it shows official-package artifacts can load and run the same tiny public task fixtures; zero-FP16 formats remain execution-only and this is not task-retention proof. |
+| `official_ptq_runtime_profile` | external_ptq_readiness | optional | False | **covered** | 1 | 24 | 0 | 0 | autoawq=yes, gptqmodel=yes | Runtime-profile readiness only: it reports PC-side measurements from guarded smoke runs, not mobile deployment, energy, or production runtime speedup. |
 | `official_awq_gptq_competitive` | external_ptq | high | True | **partial** | 0 | 0 | 31 | 2 | autoawq=yes, awq=yes, auto_gptq=no, gptqmodel=yes | Smoke and proxy artifacts are useful readiness diagnostics, but they do not cover faithful official AWQ/GPTQ baseline claims without matched calibration, budget, PPL, and task comparisons. |
 | `official_rotation_family` | external_rotation | high | True | **proxy_only** | 0 | 0 | 0 | 2 | n/a | Current rotation-family proxy artifacts are useful related-family diagnostics, but they do not cover faithful QuaRot/SpinQuant implementation or activation/KV quality claims. |
 | `official_allocation_family` | external_allocation | high | True | **proxy_only** | 0 | 0 | 0 | 2 | n/a | Current Q-Palette-style proxy artifacts are useful related-family diagnostics, but they do not cover faithful Q-Palette/IMPQ/WINDQuant reproduction claims. |
