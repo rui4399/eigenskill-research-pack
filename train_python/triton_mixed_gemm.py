@@ -20,6 +20,7 @@ import argparse
 import json
 import time
 from pathlib import Path
+from statistics import median
 
 import torch
 
@@ -31,7 +32,13 @@ except ModuleNotFoundError:  # pragma: no cover - runtime dependency
     tl = None
 
 
-@triton.jit
+def _jit(fn):
+    if triton is None:
+        return fn
+    return triton.jit(fn)
+
+
+@_jit
 def _mixed_dequant_matmul_kernel(
     x_ptr,
     q4_ptr,
@@ -70,7 +77,7 @@ def _mixed_dequant_matmul_kernel(
     tl.store(y_ptr + b * rows + row, acc)
 
 
-@triton.jit
+@_jit
 def _int4_grouped_matmul_kernel(
     x_ptr,
     q4_ptr,
@@ -121,7 +128,7 @@ def _int4_grouped_matmul_kernel(
     )
 
 
-@triton.jit
+@_jit
 def _int8_grouped_matmul_kernel(
     x_ptr,
     q8_ptr,
@@ -167,7 +174,7 @@ def _int8_grouped_matmul_kernel(
     )
 
 
-@triton.jit
+@_jit
 def _int4_selected_matmul_kernel(
     x_ptr,
     q4_ptr,
@@ -222,7 +229,7 @@ def _int4_selected_matmul_kernel(
     )
 
 
-@triton.jit
+@_jit
 def _int8_selected_matmul_kernel(
     x_ptr,
     q8_ptr,
@@ -303,6 +310,10 @@ def time_ms(fn, iters: int, warmup: int) -> float:
     return (time.perf_counter() - start) * 1000.0 / max(iters, 1)
 
 
+def time_ms_samples(fn, iters: int, warmup: int, repeats: int) -> list[float]:
+    return [time_ms(fn, iters, warmup) for _ in range(max(repeats, 1))]
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description="Benchmark Triton row-wise mixed INT4/INT8 matmul.")
     parser.add_argument("--rows", type=int, default=2048)
@@ -311,6 +322,7 @@ def main() -> None:
     parser.add_argument("--high-every", type=int, default=16)
     parser.add_argument("--iters", type=int, default=100)
     parser.add_argument("--warmup", type=int, default=20)
+    parser.add_argument("--repeats", type=int, default=1)
     parser.add_argument("--block-m", type=int, default=16)
     parser.add_argument("--block-n", type=int, default=16)
     parser.add_argument("--block-k", type=int, default=64)
@@ -398,9 +410,12 @@ def main() -> None:
                 num_warps=4,
             )
 
-    mixed_ms = time_ms(run_mixed, args.iters, args.warmup)
-    grouped_ms = time_ms(run_grouped, args.iters, args.warmup)
-    fp16_ms = time_ms(run_fp16, args.iters, args.warmup)
+    mixed_samples = time_ms_samples(run_mixed, args.iters, args.warmup, args.repeats)
+    grouped_samples = time_ms_samples(run_grouped, args.iters, args.warmup, args.repeats)
+    fp16_samples = time_ms_samples(run_fp16, args.iters, args.warmup, args.repeats)
+    mixed_ms = median(mixed_samples)
+    grouped_ms = median(grouped_samples)
+    fp16_ms = median(fp16_samples)
     ref = torch.matmul(x.float(), weight.float().t())
     run_mixed()
     run_grouped()
@@ -419,6 +434,10 @@ def main() -> None:
         "rowwise_mixed_ms": mixed_ms,
         "grouped_mixed_ms": grouped_ms,
         "torch_fp16_ms": fp16_ms,
+        "rowwise_mixed_ms_samples": mixed_samples,
+        "grouped_mixed_ms_samples": grouped_samples,
+        "torch_fp16_ms_samples": fp16_samples,
+        "timing_repeats": max(args.repeats, 1),
         "rowwise_speedup_vs_torch_fp16": fp16_ms / mixed_ms if mixed_ms > 0 else None,
         "grouped_speedup_vs_torch_fp16": fp16_ms / grouped_ms if grouped_ms > 0 else None,
         "grouped_speedup_vs_rowwise": mixed_ms / grouped_ms if grouped_ms > 0 else None,

@@ -115,6 +115,7 @@ def main() -> None:
     parser.add_argument("--max-memory-ratio", type=float, default=0.90)
     parser.add_argument("--iters", type=int, default=60)
     parser.add_argument("--warmup", type=int, default=15)
+    parser.add_argument("--repeats", type=int, default=1)
     parser.add_argument("--rows", type=int, default=2048)
     parser.add_argument("--cols", type=int, default=1024)
     parser.add_argument("--batches", default="1,8,16")
@@ -161,6 +162,8 @@ def main() -> None:
                             str(args.iters),
                             "--warmup",
                             str(args.warmup),
+                            "--repeats",
+                            str(args.repeats),
                             "--block-m",
                             str(block_m),
                             "--block-n",

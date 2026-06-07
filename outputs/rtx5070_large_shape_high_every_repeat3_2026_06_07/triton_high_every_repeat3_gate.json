@@ -1,0 +1,125 @@
+{
+  "passed": true,
+  "inputs": [
+    "outputs\\rtx5070_large_shape_high_every_repeat3_2026_06_07\\tuning_results.jsonl"
+  ],
+  "thresholds": {
+    "min_valid_configs": 8,
+    "min_fp16_wins": 0,
+    "min_best_fp16_speedup": 0.6,
+    "min_rowwise_wins": 8,
+    "max_rel_l2": 0.2,
+    "max_vram_ratio": 0.85
+  },
+  "summary": {
+    "total_configs": 8,
+    "valid_configs": 8,
+    "failed_configs": 0,
+    "fp16_wins": 0,
+    "rowwise_wins": 8,
+    "best_fp16_speedup": 0.6645724893135952,
+    "best_rowwise_speedup": 17.727964594545025,
+    "max_rel_l2": 0.15593664348125458,
+    "max_guard_vram_ratio": 0.5220218378113115,
+    "best_compression_vs_fp16": 3.9214935375777884,
+    "best_fp16_config": {
+      "batch": 128,
+      "block_k": 64,
+      "block_m": 32,
+      "block_n": 64,
+      "cols": 4096,
+      "compression_ratio_vs_fp16": 3.9214935375777884,
+      "device": "NVIDIA GeForce RTX 5070 Laptop GPU",
+      "fp16_weight_bytes": 33554432,
+      "grouped_mixed_ms": 0.2219381166665831,
+      "grouped_mixed_ms_samples": [
+        0.2219381166665831,
+        0.22022064999992116,
+        0.22989858333346547
+      ],
+      "grouped_rel_l2": 0.15593664348125458,
+      "grouped_speedup_vs_rowwise": 16.136535432143162,
+      "grouped_speedup_vs_torch_fp16": 0.6645724893135952,
+      "grouped_vs_rowwise_rel_l2": 0.00020604420569725335,
+      "guard_killed": false,
+      "guard_max_memory_used_mib": 4197,
+      "guard_max_memory_used_ratio": 0.5149061464850938,
+      "guard_path": "outputs/rtx5070_large_shape_high_every_repeat3_2026_06_07/tune_4096x4096_b128_h64_bm32_bn64_bk64_guard.json",
+      "high_every": 64,
+      "high_rows": 64,
+      "low_rows": 4032,
+      "max_memory_allocated_mib": 225.09765625,
+      "mixed_payload_bytes": 8556544,
+      "result_path": "outputs/rtx5070_large_shape_high_every_repeat3_2026_06_07/tune_4096x4096_b128_h64_bm32_bn64_bk64.json",
+      "returncode": 0,
+      "rows": 4096,
+      "rowwise_mixed_ms": 3.581312283333441,
+      "rowwise_mixed_ms_samples": [
+        3.581312283333441,
+        3.578090649999884,
+        3.7489126666666075
+      ],
+      "rowwise_rel_l2": 0.15593695640563965,
+      "rowwise_speedup_vs_torch_fp16": 0.041184335516643834,
+      "stderr_tail": "",
+      "stdout_tail": "es\": 537306066944,\n    \"used_bytes\": 525314674688,\n    \"free_bytes\": 11991392256,\n    \"total_gb\": 500.40526962280273,\n    \"used_gb\": 489.2374153137207,\n    \"free_gb\": 11.167854309082031\n  },\n  \"post_cleanup\": null,\n  \"samples\": [\n    {\n      \"utilization_gpu_pct\": 4,\n      \"memory_used_mib\": 3807,\n      \"memory_total_mib\": 8151,\n      \"memory_used_ratio\": 0.4670592565329407,\n      \"t_seconds\": 1780844654.630329\n    },\n    {\n      \"utilization_gpu_pct\": 4,\n      \"memory_used_mib\": 3807,\n      \"memory_total_mib\": 8151,\n      \"memory_used_ratio\": 0.4670592565329407,\n      \"t_seconds\": 1780844655.7096515\n    },\n    {\n      \"utilization_gpu_pct\": 13,\n      \"memory_used_mib\": 4197,\n      \"memory_total_mib\": 8151,\n      \"memory_used_ratio\": 0.5149061464850938,\n      \"t_seconds\": 1780844656.7755458\n    },\n    {\n      \"utilization_gpu_pct\": 95,\n      \"memory_used_mib\": 4197,\n      \"memory_total_mib\": 8151,\n      \"memory_used_ratio\": 0.5149061464850938,\n      \"t_seconds\": 1780844657.830651\n    },\n    {\n      \"utilization_gpu_pct\": 5,\n      \"memory_used_mib\": 4190,\n      \"memory_total_mib\": 8151,\n      \"memory_used_ratio\": 0.5140473561526193,\n      \"t_seconds\": 1780844658.8887727\n    }\n  ]\n}\n",
+      "timing_repeats": 3,
+      "torch_fp16_ms": 0.14749396666668227,
+      "torch_fp16_ms_samples": [
+        0.14749396666668227,
+        0.15338700000005664,
+        0.14373631666657616
+      ]
+    },
+    "best_rowwise_config": {
+      "batch": 128,
+      "block_k": 64,
+      "block_m": 32,
+      "block_n": 32,
+      "cols": 4096,
+      "compression_ratio_vs_fp16": 3.7491990846681924,
+      "device": "NVIDIA GeForce RTX 5070 Laptop GPU",
+      "fp16_weight_bytes": 33554432,
+      "grouped_mixed_ms": 0.19998799999996208,
+      "grouped_mixed_ms_samples": [
+        0.18847648333348843,
+        0.20258309999997928,
+        0.19998799999996208
+      ],
+      "grouped_rel_l2": 0.1522691398859024,
+      "grouped_speedup_vs_rowwise": 17.727964594545025,
+      "grouped_speedup_vs_torch_fp16": 0.6543294264329289,
+      "grouped_vs_rowwise_rel_l2": 0.0002065079315798357,
+      "guard_killed": false,
+      "guard_max_memory_used_mib": 4172,
+      "guard_max_memory_used_ratio": 0.5118390381548277,
+      "guard_path": "outputs/rtx5070_large_shape_high_every_repeat3_2026_06_07/tune_4096x4096_b128_h16_bm32_bn32_bk64_guard.json",
+      "high_every": 16,
+      "high_rows": 256,
+      "low_rows": 3840,
+      "max_memory_allocated_mib": 213.0966796875,
+      "mixed_payload_bytes": 8949760,
+      "result_path": "outputs/rtx5070_large_shape_high_every_repeat3_2026_06_07/tune_4096x4096_b128_h16_bm32_bn32_bk64.json",
+      "returncode": 0,
+      "rows": 4096,
+      "rowwise_mixed_ms": 3.5453801833331986,
+      "rowwise_mixed_ms_samples": [
+        3.517689899999965,
+        3.5453801833331986,
+        3.669299316666752
+      ],
+      "rowwise_rel_l2": 0.15226946771144867,
+      "rowwise_speedup_vs_torch_fp16": 0.036909450204693495,
+      "stderr_tail": "",
+      "stdout_tail": " 537306066944,\n    \"used_bytes\": 525313228800,\n    \"free_bytes\": 11992838144,\n    \"total_gb\": 500.40526962280273,\n    \"used_gb\": 489.23606872558594,\n    \"free_gb\": 11.169200897216797\n  },\n  \"post_cleanup\": null,\n  \"samples\": [\n    {\n      \"utilization_gpu_pct\": 5,\n      \"memory_used_mib\": 3769,\n      \"memory_total_mib\": 8151,\n      \"memory_used_ratio\": 0.46239725187093605,\n      \"t_seconds\": 1780844627.6185095\n    },\n    {\n      \"utilization_gpu_pct\": 5,\n      \"memory_used_mib\": 3769,\n      \"memory_total_mib\": 8151,\n      \"memory_used_ratio\": 0.46239725187093605,\n      \"t_seconds\": 1780844628.7009072\n    },\n    {\n      \"utilization_gpu_pct\": 5,\n      \"memory_used_mib\": 4166,\n      \"memory_total_mib\": 8151,\n      \"memory_used_ratio\": 0.5111029321555637,\n      \"t_seconds\": 1780844629.7610316\n    },\n    {\n      \"utilization_gpu_pct\": 61,\n      \"memory_used_mib\": 4172,\n      \"memory_total_mib\": 8151,\n      \"memory_used_ratio\": 0.5118390381548277,\n      \"t_seconds\": 1780844630.8135502\n    },\n    {\n      \"utilization_gpu_pct\": 4,\n      \"memory_used_mib\": 3770,\n      \"memory_total_mib\": 8151,\n      \"memory_used_ratio\": 0.4625199362041467,\n      \"t_seconds\": 1780844631.8835845\n    }\n  ]\n}\n",
+      "timing_repeats": 3,
+      "torch_fp16_ms": 0.13085803333344379,
+      "torch_fp16_ms_samples": [
+        0.1440565833332149,
+        0.13085803333344379,
+        0.12501586666668155
+      ]
+    }
+  },
+  "failures": []
+}
