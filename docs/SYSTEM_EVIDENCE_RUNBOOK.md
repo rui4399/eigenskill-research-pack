@@ -21,7 +21,7 @@ python train_python/build_current_evidence_ledger.py
 ```
 
 `train_python/build_evidence_ledger.py` is the lower-level builder for custom
-or future gate manifests. The expanded form of the current 48-gate ledger is:
+or future gate manifests. The expanded form of the current 55-gate ledger is:
 
 ```bash
 python train_python/build_evidence_ledger.py \
@@ -78,11 +78,11 @@ python train_python/build_evidence_ledger.py \
   --out-md outputs/real_system_packer_2026-06-05/EVIDENCE_LEDGER_2026_06_06.md
 ```
 
-The current ledger passes with 52/52 gates across repo hygiene, calibration
+The current ledger passes with 55/55 gates across repo hygiene, calibration
 robustness, CSI trend significance, CSI null permutation, rank-inversion theory, artifact integrity, kernel, runtime wiring, selected-row, C++
 runtime, decode integration, QKV replacement, quality, task-retention, runtime profile, and
 capability-retention/model-ladder, allocation-comparator, rotation-comparator, and
-matched PTQ baseline, true subset100 official PTQ task/runtime evidence, deterministic IFEval-style PTQ execution, expanded AutoAWQ public PPL, Qwen2.5-1.5B GPTQModel task-execution subset evidence, Qwen2.5-1.5B FP16/AutoAWQ/GPTQModel subset100 plus GSM8K200/MMLU100 plus sharded GSM8K500 task/runtime/statistical-interval evidence, full-GSM8K local 7B public-task coverage, PTQ-comparator, and
+matched PTQ baseline, true subset100 official PTQ task/runtime evidence, deterministic IFEval-style PTQ execution, expanded AutoAWQ public PPL, Qwen2.5-1.5B GPTQModel task-execution subset evidence, Qwen2.5-1.5B FP16/AutoAWQ/GPTQModel subset100 plus GSM8K200/MMLU100 plus sharded GSM8K500 plus full GSM8K1319 task/runtime/statistical-interval evidence, full-GSM8K local 7B public-task coverage, PTQ-comparator, and
 paper-alignment evidence categories, plus extended W4A8 attention/MLP real-activation reconstruction.
 
 Valid claim:
@@ -239,7 +239,7 @@ Current gate:
 ```bash
 python train_python/gate_paper_evidence_alignment.py \
   --paper paper_drafts/eigenskill_q_research_draft_en_2026_06_07.md \
-  --expected-gate-count 52 \
+  --expected-gate-count 55 \
   --out-json outputs/paper_evidence_alignment_gate_2026_06_08.json \
   --out-md outputs/PAPER_EVIDENCE_ALIGNMENT_GATE_2026_06_08.md
 ```
@@ -247,7 +247,7 @@ python train_python/gate_paper_evidence_alignment.py \
 Current result: the generated alignment artifact records all configured required
 evidence references present, referenced repo paths found, 0 stale forbidden
 tokens, 0 unsafe non-negated claim lines, and the paper mentions the current
-48-gate ledger.
+55-gate ledger.
 
 Valid claim:
 
@@ -806,7 +806,29 @@ ratio `0.8295`. The paired statistics gate reports minimum bootstrap lower
 bound `-0.034` under 10,000 samples. This is a larger single-task local
 retention slice, not full GSM8K quantized retention or leaderboard-scale
 evidence.
-The statistical gate reports paired bootstrap candidate-minus-FP16 deltas:
+
+Full GSM8K1319 extension:
+
+```bash
+# Reuse the merged 800-row prefix plus the 800-1099 and 1100-1318 shards for
+# FP16, AutoAWQ, and GPTQModel, then merge with merge_chat_task_shards.py and
+# gate the resulting matrix/runtime/statistics reports.
+python train_python/gate_official_ptq_task_retention.py \
+  --case fp16:gsm8k=outputs/official_ptq_task_fp16_qwen25_1p5b_gsm8k_gsm8kfull_1319_summary_2026_06_08.json=outputs/official_ptq_task_fp16_qwen25_1p5b_gsm8k_gsm8kfull_1319_gpu_guard_2026_06_08.json \
+  --case autoawq:gsm8k=outputs/official_ptq_task_awq_qwen25_1p5b_gsm8k_gsm8kfull_1319_summary_2026_06_08.json=outputs/official_ptq_task_awq_qwen25_1p5b_gsm8k_gsm8kfull_1319_gpu_guard_2026_06_08.json \
+  --case gptqmodel:gsm8k=outputs/official_ptq_task_gptqmodel_qwen25_1p5b_gsm8k_gsm8kfull_1319_summary_2026_06_08.json=outputs/official_ptq_task_gptqmodel_qwen25_1p5b_gsm8k_gsm8kfull_1319_gpu_guard_2026_06_08.json
+```
+
+Current full-GSM8K result: 3957 guarded task executions across FP16, AutoAWQ,
+and GPTQModel. FP16 gets 107/1319, AutoAWQ gets 104/1319, and GPTQModel gets
+96/1319. The task gate records max measured drop `0.00834` versus FP16 and peak
+guard VRAM ratio `0.8295`. The runtime profile reports mean `9.7071` tok/s and
+mean TTFT `0.320392` s. The paired statistics gate reports minimum bootstrap
+lower bound `-0.0243` under 10,000 samples. This is full single-task local
+retention evidence, not leaderboard-scale quality or production runtime
+evidence.
+The earlier GSM8K200/MMLU100 statistical gate reports paired bootstrap
+candidate-minus-FP16 deltas:
 AutoAWQ GSM8K `+0.0150` with CI `[-0.0350, +0.0650]`, AutoAWQ MMLU `+0.0100`
 with CI `[-0.1000, +0.1200]`, GPTQModel GSM8K `+0.0050` with CI `[-0.0400,
 +0.0500]`, and GPTQModel MMLU `-0.0800` with CI `[-0.1900, +0.0300]`. These
@@ -815,8 +837,9 @@ superiority.
 
 Valid claim:
 
-- FP16 and AutoAWQ Qwen2.5-1.5B variants have matched local 100-row public task
-  and PC-side runtime/VRAM evidence under the GPU guard.
+- FP16, AutoAWQ, and GPTQModel Qwen2.5-1.5B variants have matched local
+  subset100, GSM8K200/MMLU100, GSM8K500, and full GSM8K1319 task/runtime/VRAM
+  evidence under the GPU guard.
 
 Invalid claim:
 
@@ -1135,7 +1158,7 @@ Invalid claim:
 `train_python/run_official_awq_smoke.py` is a minimal package-readiness probe.
 It exists to verify that AutoAWQ can execute, save local quantized artifacts,
 and run one short generation smoke under the GPU guard. It is intentionally not
-part of the 48-gate paper-facing ledger.
+part of the 55-gate paper-facing ledger.
 
 Example WSL/GPU command:
 

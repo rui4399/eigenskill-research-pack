@@ -73,9 +73,10 @@ In compressed form, the supported claims are:
 - the same Qwen2.5-1.5B baseline confrontation now extends to GSM8K200/MMLU100
   across FP16, AutoAWQ, and GPTQModel, with paired bootstrap uncertainty
   reported rather than hidden;
-- the Qwen2.5-1.5B baseline confrontation also has a sharded GSM8K500
+- the Qwen2.5-1.5B baseline confrontation also has a full GSM8K1319
   single-task row across FP16, AutoAWQ, and GPTQModel, still bounded as local
-  subset evidence rather than full benchmark retention;
+  single-task retention evidence rather than leaderboard-scale benchmark
+  quality;
 - the same FP16/AutoAWQ/GPTQModel Qwen2.5-0.5B variants have deterministic
   IFEval-style instruction-following execution and runtime smoke gates, kept as
   execution-path evidence because the FP16 baseline is 0/8;

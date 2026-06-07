@@ -7,7 +7,7 @@ not a new result.
 Current tracked output footprint:
 
 ```text
-outputs/ tracked-or-staged artifact files:       1857
+outputs/ tracked-or-staged artifact files:       1985
 outputs/real_system_packer_2026-06-05 files:     744
 ```
 
@@ -58,6 +58,9 @@ paper claims.
 | Qwen2.5-1.5B FP16/AutoAWQ/GPTQModel GSM8K500 task matrix | `outputs/OFFICIAL_PTQ_TASK_QWEN25_1P5B_GSM8K500_FP16_AWQ_GPTQMODEL_MATRIX_2026_06_08.md` |
 | Qwen2.5-1.5B FP16/AutoAWQ/GPTQModel GSM8K500 runtime profile | `outputs/OFFICIAL_PTQ_QWEN25_1P5B_GSM8K500_FP16_AWQ_GPTQMODEL_RUNTIME_PROFILE_2026_06_08.md` |
 | Qwen2.5-1.5B FP16/AutoAWQ/GPTQModel GSM8K500 statistics gate | `outputs/OFFICIAL_PTQ_TASK_QWEN25_1P5B_GSM8K500_FP16_AWQ_GPTQMODEL_STATISTICS_2026_06_08.md` |
+| Qwen2.5-1.5B FP16/AutoAWQ/GPTQModel full GSM8K task matrix | `outputs/OFFICIAL_PTQ_TASK_QWEN25_1P5B_GSM8KFULL_FP16_AWQ_GPTQMODEL_MATRIX_2026_06_08.md` |
+| Qwen2.5-1.5B FP16/AutoAWQ/GPTQModel full GSM8K runtime profile | `outputs/OFFICIAL_PTQ_QWEN25_1P5B_GSM8KFULL_FP16_AWQ_GPTQMODEL_RUNTIME_PROFILE_2026_06_08.md` |
+| Qwen2.5-1.5B FP16/AutoAWQ/GPTQModel full GSM8K statistics gate | `outputs/OFFICIAL_PTQ_TASK_QWEN25_1P5B_GSM8KFULL_FP16_AWQ_GPTQMODEL_STATISTICS_2026_06_08.md` |
 | Expanded GPTQModel public PPL gate | `outputs/OFFICIAL_GPTQMODEL_PUBLIC_CALIB_QWEN25_0P5B_BUDGET8_16_GATE_2026_06_07.md` |
 | Qwen2.5-1.5B GPTQModel public PPL gate | `outputs/OFFICIAL_GPTQMODEL_PUBLIC_CALIB_QWEN25_1P5B_16_GATE_2026_06_08.md` |
 | Qwen2.5-1.5B GPTQModel task-execution subset100 | `outputs/OFFICIAL_GPTQMODEL_TASK_EXECUTION_QWEN25_1P5B_SUBSET100_MATRIX_2026_06_08.md` |
@@ -72,7 +75,7 @@ paper claims.
 ## Non-Ledger Readiness Probes
 
 These artifacts are useful for environment readiness and reviewer-risk
-tracking, but they are not counted in the 48-gate paper-facing ledger.
+tracking, but they are not counted in the 55-gate paper-facing ledger.
 
 | Purpose | Artifact | Boundary |
 |---|---|---|
@@ -145,4 +148,4 @@ one of the following is true:
 
 Future cleanup should reduce `outputs/` by moving scratch and raw intermediate
 files out of the main branch, but not at the cost of breaking the current
-48-gate reproducibility story.
+55-gate reproducibility story.

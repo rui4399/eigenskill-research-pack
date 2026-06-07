@@ -1,6 +1,6 @@
 # Paper Evidence Alignment Gate
 
-Date: `2026-06-07T21:09:09+00:00`
+Date: `2026-06-07T21:47:20+00:00`
 Status: **PASS**
 
 ## Summary
@@ -12,7 +12,7 @@ Status: **PASS**
 - missing referenced paths: `0`
 - stale forbidden tokens: `0`
 - unsafe claim lines: `0`
-- ledger gate count: `52`
+- ledger gate count: `55`
 - ledger gate count mentioned: `True`
 
 ## Missing Required References

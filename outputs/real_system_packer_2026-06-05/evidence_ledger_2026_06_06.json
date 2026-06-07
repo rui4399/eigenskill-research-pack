@@ -1,8 +1,8 @@
 {
-  "date": "2026-06-07T21:09:09+00:00",
+  "date": "2026-06-07T21:47:20+00:00",
   "passed": true,
-  "gate_count": 52,
-  "passed_count": 52,
+  "gate_count": 55,
+  "passed_count": 55,
   "failed_count": 0,
   "categories": [
     "allocation comparator",
@@ -315,7 +315,7 @@
       "path": "outputs\\paper_evidence_alignment_gate_2026_06_08.json",
       "passed": true,
       "failures": [],
-      "metrics": "required refs 42; missing refs 0; paper paths 51; missing paths 0; unsafe claims 0; stale tokens 0; ledger gates 52",
+      "metrics": "required refs 42; missing refs 0; paper paths 51; missing paths 0; unsafe claims 0; stale tokens 0; ledger gates 55",
       "summary": {
         "paper": "paper_drafts\\eigenskill_q_research_draft_en_2026_06_07.md",
         "required_reference_count": 42,
@@ -324,7 +324,7 @@
         "missing_referenced_path_count": 0,
         "stale_token_count": 0,
         "unsafe_claim_count": 0,
-        "ledger_gate_count": 52,
+        "ledger_gate_count": 55,
         "ledger_gate_count_mentioned": true
       }
     },
@@ -1422,6 +1422,87 @@
         "total_passes": 129,
         "comparison_count": 2,
         "min_paired_bootstrap_delta_low": -0.034,
+        "bootstrap_samples": 10000
+      }
+    },
+    {
+      "label": "official_ptq_task_qwen25_1p5b_gsm8kfull_fp16_awq_gptqmodel",
+      "category": "task execution smoke",
+      "path": "outputs\\official_ptq_task_qwen25_1p5b_gsm8kfull_fp16_awq_gptqmodel_matrix_2026_06_08.json",
+      "passed": true,
+      "failures": [],
+      "metrics": "cases 3; tasks 3957; passes 307; accuracy 0.0776; max drop 0.0083; mean tok/s 9.7071; mean TTFT 0.320392s; VRAM 0.8295",
+      "summary": {
+        "case_count": 3,
+        "variant_count": 3,
+        "format_count": 1,
+        "variants": [
+          "autoawq",
+          "fp16",
+          "gptqmodel"
+        ],
+        "task_formats": [
+          "gsm8k"
+        ],
+        "baseline_variant": "fp16",
+        "total_tasks": 3957,
+        "total_passes": 307,
+        "mean_accuracy": 0.07758402830427091,
+        "max_accuracy_drop_vs_fp16": 0.008339651250947683,
+        "baseline_zero_accuracy_formats": [],
+        "max_guard_vram_ratio": 0.8294687768371979,
+        "mean_tokens_per_second": 9.707059571086624,
+        "mean_ttft_seconds": 0.32039176301718514
+      }
+    },
+    {
+      "label": "official_ptq_qwen25_1p5b_gsm8kfull_fp16_awq_gptqmodel_runtime_profile",
+      "category": "runtime profile",
+      "path": "outputs\\official_ptq_qwen25_1p5b_gsm8kfull_fp16_awq_gptqmodel_runtime_profile_2026_06_08.json",
+      "passed": true,
+      "failures": [],
+      "metrics": "tasks 3957; cases 3; mean tok/s 9.7071; mean TTFT 0.320392s; VRAM MiB 6761; VRAM 0.8295",
+      "summary": {
+        "source_case_count": 3,
+        "variant_count": 3,
+        "variants": [
+          "autoawq",
+          "fp16",
+          "gptqmodel"
+        ],
+        "baseline_variant": "fp16",
+        "total_cases": 3,
+        "total_tasks": 3957,
+        "mean_tokens_per_second": 9.707059571086624,
+        "mean_ttft_seconds": 0.32039176301718514,
+        "max_guard_vram_ratio": 0.8294687768371979,
+        "max_guard_vram_mib": 6761.0
+      }
+    },
+    {
+      "label": "official_ptq_qwen25_1p5b_gsm8kfull_fp16_awq_gptqmodel_statistics",
+      "category": "ptq comparator",
+      "path": "outputs\\official_ptq_task_qwen25_1p5b_gsm8kfull_fp16_awq_gptqmodel_statistics_2026_06_08.json",
+      "passed": true,
+      "failures": [],
+      "metrics": "cases 3; tasks 3957; passes 307",
+      "summary": {
+        "case_count": 3,
+        "variant_count": 3,
+        "format_count": 1,
+        "variants": [
+          "autoawq",
+          "fp16",
+          "gptqmodel"
+        ],
+        "task_formats": [
+          "gsm8k"
+        ],
+        "baseline_variant": "fp16",
+        "total_tasks": 3957,
+        "total_passes": 307,
+        "comparison_count": 2,
+        "min_paired_bootstrap_delta_low": -0.024260803639120546,
         "bootstrap_samples": 10000
       }
     },
