@@ -12,6 +12,10 @@ HF_MODEL="${HF_MODEL:-Qwen/Qwen2.5-1.5B-Instruct}"
 AWQ_MODEL="${AWQ_MODEL:-/home/rui/eigenskill_artifacts/qwen25_1p5b_awq_model_2026_06_07}"
 TASK_TAG="${TASK_TAG:-subset100}"
 TASK_LIMIT="${TASK_LIMIT:-100}"
+HF_DEVICE_MAP="${HF_DEVICE_MAP:-}"
+HF_MAX_GPU_MEMORY_MIB="${HF_MAX_GPU_MEMORY_MIB:-0}"
+HF_MAX_CPU_MEMORY="${HF_MAX_CPU_MEMORY:-64GiB}"
+HF_OFFLOAD_FOLDER="${HF_OFFLOAD_FOLDER:-}"
 MMLU_JSONL="data_eval/public_task_benchmark_v1/mmlu_abstract_algebra_test_${TASK_TAG}.jsonl"
 GSM8K_JSONL="data_eval/public_task_benchmark_v1/gsm8k_test_${TASK_TAG}.jsonl"
 
@@ -22,10 +26,19 @@ run_case() {
   local format="$4"
   local task_jsonl="$5"
   local max_new="$6"
-  local lower_variant lower_format out_prefix
+  local lower_variant lower_format out_prefix extra_args
   lower_variant="$(echo "$variant" | tr '[:upper:]' '[:lower:]')"
   lower_format="$(echo "$format" | tr '[:upper:]' '[:lower:]')"
   out_prefix="official_ptq_task_${lower_variant}_qwen25_1p5b_${lower_format}_${TASK_TAG}"
+  extra_args=()
+  if [[ "$loader" == "hf" && -n "$HF_DEVICE_MAP" ]]; then
+    extra_args+=(--hf-device-map "$HF_DEVICE_MAP")
+    extra_args+=(--hf-max-gpu-memory-mib "$HF_MAX_GPU_MEMORY_MIB")
+    extra_args+=(--hf-max-cpu-memory "$HF_MAX_CPU_MEMORY")
+    if [[ -n "$HF_OFFLOAD_FOLDER" ]]; then
+      extra_args+=(--hf-offload-folder "$HF_OFFLOAD_FOLDER")
+    fi
+  fi
 
   python3 train_python/run_with_gpu_guard.py \
     --max-memory-ratio 0.90 \
@@ -45,6 +58,7 @@ run_case() {
       --loader "$loader" \
       --device cuda \
       --dtype float16 \
+      "${extra_args[@]}" \
       --max-new-tokens "$max_new" \
       --max-seq-len 512 \
       --limit "$TASK_LIMIT" \

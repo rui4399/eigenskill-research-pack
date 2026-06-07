@@ -106,7 +106,8 @@ Anything else stays in future work.
 
 ## Next Execution Order
 
-1. Start larger task retention runs under the GPU guard.
+1. Extend the new Qwen2.5-1.5B GSM8K200/MMLU100 gate with confidence intervals
+   and, if runtime allows, full GSM8K before claiming broad task retention.
 2. Add or extend native GPTQModel/AutoAWQ rows on Qwen2.5-1.5B.
 3. Attempt one 3B/7B row only after checking disk headroom.
 4. Add a downstream proxy for W4A8 activation quantization before using the

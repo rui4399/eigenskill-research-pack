@@ -1,7 +1,11 @@
 import json
+import sys
 import tempfile
+import types
 import unittest
+from argparse import Namespace
 from pathlib import Path
+from unittest import mock
 
 import eval_chat_task_benchmark as bench
 
@@ -164,6 +168,38 @@ class EvalChatTaskBenchmarkTests(unittest.TestCase):
         bench.place_model(wrapper, "cuda:0")
         self.assertEqual(wrapper.model.device, "cuda:0")
         self.assertFalse(wrapper.outer_moved)
+
+    def test_load_causal_lm_passes_hf_offload_kwargs(self) -> None:
+        class FakeAutoModelForCausalLM:
+            called_model = ""
+            called_kwargs = {}
+
+            @classmethod
+            def from_pretrained(cls, model: str, **kwargs: object) -> object:
+                cls.called_model = model
+                cls.called_kwargs = dict(kwargs)
+                return object()
+
+        fake_transformers = types.SimpleNamespace(AutoModelForCausalLM=FakeAutoModelForCausalLM)
+        args = Namespace(
+            loader="hf",
+            model="Qwen/Qwen2.5-1.5B-Instruct",
+            local_files_only=True,
+            hf_device_map="auto",
+            hf_max_gpu_memory_mib=2400,
+            hf_max_cpu_memory="64GiB",
+            hf_offload_folder="/tmp/hf-offload",
+        )
+
+        with mock.patch.dict(sys.modules, {"transformers": fake_transformers}):
+            loaded = bench.load_causal_lm(args, "float16")
+
+        self.assertIsNotNone(loaded)
+        self.assertEqual(FakeAutoModelForCausalLM.called_model, args.model)
+        self.assertEqual(FakeAutoModelForCausalLM.called_kwargs["device_map"], "auto")
+        self.assertEqual(FakeAutoModelForCausalLM.called_kwargs["max_memory"], {0: "2400MiB", "cpu": "64GiB"})
+        self.assertEqual(FakeAutoModelForCausalLM.called_kwargs["offload_folder"], "/tmp/hf-offload")
+        self.assertTrue(FakeAutoModelForCausalLM.called_kwargs["low_cpu_mem_usage"])
 
 
 if __name__ == "__main__":

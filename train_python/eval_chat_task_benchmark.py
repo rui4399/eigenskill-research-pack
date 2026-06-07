@@ -360,12 +360,19 @@ def load_causal_lm(args: argparse.Namespace, dtype: Any):
     if args.loader == "hf":
         from transformers import AutoModelForCausalLM
 
-        return AutoModelForCausalLM.from_pretrained(
-            args.model,
-            torch_dtype=dtype,
-            local_files_only=args.local_files_only,
-            trust_remote_code=True,
-        )
+        kwargs: dict[str, Any] = {
+            "torch_dtype": dtype,
+            "local_files_only": args.local_files_only,
+            "trust_remote_code": True,
+        }
+        if args.hf_device_map:
+            kwargs["device_map"] = args.hf_device_map
+            kwargs["low_cpu_mem_usage"] = True
+            if args.hf_max_gpu_memory_mib > 0:
+                kwargs["max_memory"] = {0: f"{args.hf_max_gpu_memory_mib}MiB", "cpu": args.hf_max_cpu_memory}
+            if args.hf_offload_folder:
+                kwargs["offload_folder"] = args.hf_offload_folder
+        return AutoModelForCausalLM.from_pretrained(args.model, **kwargs)
     if args.loader == "autoawq":
         from awq import AutoAWQForCausalLM
 
@@ -435,6 +442,10 @@ def main() -> None:
     parser.add_argument("--loader", choices=["hf", "autoawq"], default="hf")
     parser.add_argument("--device", default="cuda")
     parser.add_argument("--dtype", choices=["float16", "bfloat16", "float32"], default="float16")
+    parser.add_argument("--hf-device-map", default="", help="Optional HF device_map, e.g. auto for CPU/GPU offload.")
+    parser.add_argument("--hf-max-gpu-memory-mib", type=int, default=0)
+    parser.add_argument("--hf-max-cpu-memory", default="64GiB")
+    parser.add_argument("--hf-offload-folder", default="")
     parser.add_argument("--max-new-tokens", type=int, default=32)
     parser.add_argument("--max-seq-len", type=int, default=512)
     parser.add_argument("--limit", type=int, default=0, help="Evaluate only the first N tasks; 0 means all tasks.")
@@ -468,12 +479,15 @@ def main() -> None:
     tokenizer = AutoTokenizer.from_pretrained(args.model, local_files_only=args.local_files_only, trust_remote_code=True)
     model = load_causal_lm(args, dtype)
     model.eval()
-    place_model(model, torch.device(args.device))
+    if not (args.loader == "hf" and args.hf_device_map):
+        place_model(model, torch.device(args.device))
 
     baseline_rows = evaluate_rows(model, tokenizer, tasks, args.max_new_tokens, args.chat_template, args.no_think)
     result: dict[str, Any] = {
         "model": args.model,
         "loader": args.loader,
+        "hf_device_map": args.hf_device_map,
+        "hf_max_gpu_memory_mib": args.hf_max_gpu_memory_mib,
         "task_file": args.tasks_jsonl,
         "task_format": args.task_format,
         "task_count": len(tasks),

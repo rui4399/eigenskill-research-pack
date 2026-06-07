@@ -7,7 +7,7 @@ not a new result.
 Current tracked output footprint:
 
 ```text
-outputs/ tracked-or-staged artifact files:       1823
+outputs/ tracked-or-staged artifact files:       1842
 outputs/real_system_packer_2026-06-05 files:     744
 ```
 
@@ -50,6 +50,8 @@ paper claims.
 | Qwen2.5-1.5B AutoAWQ public PPL gate | `outputs/OFFICIAL_AWQ_PUBLIC_CALIB_QWEN25_1P5B_BUNDLE_16_GATE_2026_06_07.md` |
 | Qwen2.5-1.5B matched subset100 task matrix | `outputs/OFFICIAL_PTQ_TASK_QWEN25_1P5B_SUBSET100_MATRIX_2026_06_07.md` |
 | Qwen2.5-1.5B subset100 runtime profile | `outputs/OFFICIAL_PTQ_QWEN25_1P5B_SUBSET100_RUNTIME_PROFILE_2026_06_07.md` |
+| Qwen2.5-1.5B GSM8K200/MMLU100 task matrix | `outputs/OFFICIAL_PTQ_TASK_QWEN25_1P5B_GSM8K200_MMLU100_MATRIX_2026_06_08.md` |
+| Qwen2.5-1.5B GSM8K200/MMLU100 runtime profile | `outputs/OFFICIAL_PTQ_QWEN25_1P5B_GSM8K200_MMLU100_RUNTIME_PROFILE_2026_06_08.md` |
 | Expanded GPTQModel public PPL gate | `outputs/OFFICIAL_GPTQMODEL_PUBLIC_CALIB_QWEN25_0P5B_BUDGET8_16_GATE_2026_06_07.md` |
 | W4A8 real-activation reconstruction gate | `outputs/w4a8_activation_reconstruction_2026_06_08/W4A8_ACTIVATION_RECONSTRUCTION_GATE.md` |
 | W4A8 extended attention/MLP reconstruction gate | `outputs/w4a8_activation_reconstruction_extended_2026_06_08/W4A8_ACTIVATION_RECONSTRUCTION_EXTENDED_GATE.md` |
@@ -62,7 +64,7 @@ paper claims.
 ## Non-Ledger Readiness Probes
 
 These artifacts are useful for environment readiness and reviewer-risk
-tracking, but they are not counted in the 43-gate paper-facing ledger.
+tracking, but they are not counted in the 45-gate paper-facing ledger.
 
 | Purpose | Artifact | Boundary |
 |---|---|---|
@@ -134,4 +136,4 @@ one of the following is true:
 
 Future cleanup should reduce `outputs/` by moving scratch and raw intermediate
 files out of the main branch, but not at the cost of breaking the current
-43-gate reproducibility story.
+45-gate reproducibility story.

@@ -1,0 +1,52 @@
+{
+  "model": "Qwen/Qwen2.5-1.5B-Instruct",
+  "loader": "hf",
+  "hf_device_map": "auto",
+  "hf_max_gpu_memory_mib": 2400,
+  "task_file": "data_eval/public_task_benchmark_v1/mmlu_abstract_algebra_test_gsm8k200_mmlu100.jsonl",
+  "task_format": "mmlu",
+  "task_count": 2,
+  "task_limit": 2,
+  "chat_template": true,
+  "no_think": true,
+  "max_new_tokens": 16,
+  "baseline": {
+    "aggregate": {
+      "tasks": 2,
+      "passes": 1,
+      "accuracy": 0.5,
+      "mean_tokens_per_second": 3.4854034010479777,
+      "mean_ttft_seconds": 1.2951817555000007
+    },
+    "rows": [
+      {
+        "id": "mmlu_0",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Find the degree for the given field extension Q(sqrt(2), sqrt(3), sqrt(18)) over Q.\nA. 0\nB. 4\nC. 2\nD. 6\n/no_think",
+        "answer": "B",
+        "generated_text": "B.",
+        "score": {
+          "passed": true,
+          "predicted": "B",
+          "expected": "B"
+        },
+        "ttft_seconds": 2.1616164750000006,
+        "tokens_per_second": 0.9251364692859387
+      },
+      {
+        "id": "mmlu_1",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Let p = (1, 2, 5, 4)(2, 3) in S_5 . Find the index of <p> in S_5.\nA. 8\nB. 2\nC. 24\nD. 120\n/no_think",
+        "answer": "C",
+        "generated_text": "A. 8",
+        "score": {
+          "passed": false,
+          "predicted": "A",
+          "expected": "C"
+        },
+        "ttft_seconds": 0.42874703600000075,
+        "tokens_per_second": 6.045670332810017
+      }
+    ]
+  }
+}

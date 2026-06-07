@@ -10,7 +10,7 @@ by an executable gate and an explicit claim boundary.
 ## Evidence Ledger
 
 `train_python/build_current_evidence_ledger.py` is the stable public entry
-point for the current paper-facing gate set. It fixes the 43 gate paths in one
+point for the current paper-facing gate set. It fixes the 45 gate paths in one
 manifest, rebuilds the ledger, and avoids copying a long `--gate` list across
 README files and paper appendices.
 
@@ -21,7 +21,7 @@ python train_python/build_current_evidence_ledger.py
 ```
 
 `train_python/build_evidence_ledger.py` is the lower-level builder for custom
-or future gate manifests. The expanded form of the current 43-gate ledger is:
+or future gate manifests. The expanded form of the current 45-gate ledger is:
 
 ```bash
 python train_python/build_evidence_ledger.py \
@@ -63,6 +63,8 @@ python train_python/build_evidence_ledger.py \
   --gate official_awq_public_calib_1p5b_16_eval=outputs/official_awq_public_calib_qwen25_1p5b_bundle_16_gate_2026_06_07.json \
   --gate official_ptq_task_qwen25_1p5b_subset100=outputs/official_ptq_task_qwen25_1p5b_subset100_matrix_2026_06_07.json \
   --gate official_ptq_qwen25_1p5b_subset100_runtime_profile=outputs/official_ptq_qwen25_1p5b_subset100_runtime_profile_2026_06_07.json \
+  --gate official_ptq_task_qwen25_1p5b_gsm8k200_mmlu100=outputs/official_ptq_task_qwen25_1p5b_gsm8k200_mmlu100_matrix_2026_06_08.json \
+  --gate official_ptq_qwen25_1p5b_gsm8k200_mmlu100_runtime_profile=outputs/official_ptq_qwen25_1p5b_gsm8k200_mmlu100_runtime_profile_2026_06_08.json \
   --gate allocation_family_proxy=outputs/q_palette_style_allocation_family_gate_2026_06_06.json \
   --gate robust_lcb_consensus=outputs/robust_lcb_consensus_family_gate_2026_06_06.json \
   --gate robust_lcb_quality=outputs/qwen3_0p6b_robust_lcb_quality_gate_2026_06_07.json \
@@ -72,11 +74,11 @@ python train_python/build_evidence_ledger.py \
   --out-md outputs/real_system_packer_2026-06-05/EVIDENCE_LEDGER_2026_06_06.md
 ```
 
-The current ledger passes with 43/43 gates across repo hygiene, calibration
+The current ledger passes with 45/45 gates across repo hygiene, calibration
 robustness, CSI trend significance, CSI null permutation, rank-inversion theory, artifact integrity, kernel, runtime wiring, selected-row, C++
 runtime, decode integration, QKV replacement, quality, task-retention, runtime profile, and
 capability-retention/model-ladder, allocation-comparator, rotation-comparator, and
-matched PTQ baseline, true subset100 official PTQ task/runtime evidence, deterministic IFEval-style PTQ execution, expanded AutoAWQ public PPL, Qwen2.5-1.5B subset100 task/runtime evidence, PTQ-comparator, and
+matched PTQ baseline, true subset100 official PTQ task/runtime evidence, deterministic IFEval-style PTQ execution, expanded AutoAWQ public PPL, Qwen2.5-1.5B subset100 plus GSM8K200/MMLU100 task/runtime evidence, PTQ-comparator, and
 paper-alignment evidence categories, plus extended W4A8 attention/MLP real-activation reconstruction.
 
 Valid claim:
@@ -233,7 +235,7 @@ Current gate:
 ```bash
 python train_python/gate_paper_evidence_alignment.py \
   --paper paper_drafts/eigenskill_q_research_draft_en_2026_06_07.md \
-  --expected-gate-count 43 \
+  --expected-gate-count 45 \
   --out-json outputs/paper_evidence_alignment_gate_2026_06_08.json \
   --out-md outputs/PAPER_EVIDENCE_ALIGNMENT_GATE_2026_06_08.md
 ```
@@ -241,7 +243,7 @@ python train_python/gate_paper_evidence_alignment.py \
 Current result: the generated alignment artifact records all configured required
 evidence references present, referenced repo paths found, 0 stale forbidden
 tokens, 0 unsafe non-negated claim lines, and the paper mentions the current
-43-gate ledger.
+45-gate ledger.
 
 Valid claim:
 
@@ -559,8 +561,15 @@ python train_python/build_public_task_smoke.py \
   --out-md outputs/PUBLIC_TASK_BENCHMARK_GSM8K200_MMLU100_MANIFEST_2026_06_08.md
 
 DATE_TAG=2026_06_08 TASK_TAG=gsm8k200_mmlu100 TASK_LIMIT=200 \
+  HF_DEVICE_MAP=auto HF_MAX_GPU_MEMORY_MIB=2400 \
+  HF_OFFLOAD_FOLDER=/home/rui/eigenskill_artifacts/hf_offload_qwen25_1p5b \
   bash tools/run_qwen25_1p5b_subset100_task_matrix.sh
 ```
+
+The FP16 path for the 2026-06-08 GSM8K200/MMLU100 run uses HF `device_map=auto`
+with CPU/GPU offload to keep the local RTX 5070 Laptop run below the 90% VRAM
+guard. This makes the task-retention comparison useful, but the runtime ratios
+must be read as a local guarded profile rather than a production speedup claim.
 
 Task-retention gate:
 
@@ -584,6 +593,28 @@ python train_python/gate_official_ptq_task_retention.py \
   --out-md outputs/OFFICIAL_PTQ_TASK_QWEN25_1P5B_SUBSET100_MATRIX_2026_06_07.md
 ```
 
+Larger GSM8K200/MMLU100 gate:
+
+```bash
+python train_python/gate_official_ptq_task_retention.py \
+  --case fp16:mmlu=outputs/official_ptq_task_fp16_qwen25_1p5b_mmlu_gsm8k200_mmlu100_summary_2026_06_08.json=outputs/official_ptq_task_fp16_qwen25_1p5b_mmlu_gsm8k200_mmlu100_gpu_guard_2026_06_08.json \
+  --case fp16:gsm8k=outputs/official_ptq_task_fp16_qwen25_1p5b_gsm8k_gsm8k200_mmlu100_summary_2026_06_08.json=outputs/official_ptq_task_fp16_qwen25_1p5b_gsm8k_gsm8k200_mmlu100_gpu_guard_2026_06_08.json \
+  --case autoawq:mmlu=outputs/official_ptq_task_awq_qwen25_1p5b_mmlu_gsm8k200_mmlu100_summary_2026_06_08.json=outputs/official_ptq_task_awq_qwen25_1p5b_mmlu_gsm8k200_mmlu100_gpu_guard_2026_06_08.json \
+  --case autoawq:gsm8k=outputs/official_ptq_task_awq_qwen25_1p5b_gsm8k_gsm8k200_mmlu100_summary_2026_06_08.json=outputs/official_ptq_task_awq_qwen25_1p5b_gsm8k_gsm8k200_mmlu100_gpu_guard_2026_06_08.json \
+  --baseline-variant fp16 \
+  --required-variant fp16 \
+  --required-variant autoawq \
+  --required-format mmlu \
+  --required-format gsm8k \
+  --min-tasks-per-case 100 \
+  --max-memory-ratio 0.90 \
+  --max-accuracy-drop 0.05 \
+  --matrix-title "Qwen2.5-1.5B FP16 vs AutoAWQ GSM8K200/MMLU100 task matrix" \
+  --evidence-label "matched Qwen2.5-1.5B local GSM8K200 plus MMLU100 task evidence with HF FP16 offload" \
+  --out-json outputs/official_ptq_task_qwen25_1p5b_gsm8k200_mmlu100_matrix_2026_06_08.json \
+  --out-md outputs/OFFICIAL_PTQ_TASK_QWEN25_1P5B_GSM8K200_MMLU100_MATRIX_2026_06_08.md
+```
+
 Runtime-profile gate:
 
 ```bash
@@ -600,10 +631,33 @@ python train_python/gate_official_ptq_runtime_profile.py \
   --out-md outputs/OFFICIAL_PTQ_QWEN25_1P5B_SUBSET100_RUNTIME_PROFILE_2026_06_07.md
 ```
 
+Larger GSM8K200/MMLU100 runtime-profile gate:
+
+```bash
+python train_python/gate_official_ptq_runtime_profile.py \
+  --matrix-json outputs/official_ptq_task_qwen25_1p5b_gsm8k200_mmlu100_matrix_2026_06_08.json \
+  --baseline-variant fp16 \
+  --required-variant fp16 \
+  --required-variant autoawq \
+  --min-cases-per-variant 2 \
+  --max-memory-ratio 0.90 \
+  --min-mean-tokens-per-second 1 \
+  --max-mean-ttft-seconds 2.0 \
+  --out-json outputs/official_ptq_qwen25_1p5b_gsm8k200_mmlu100_runtime_profile_2026_06_08.json \
+  --out-md outputs/OFFICIAL_PTQ_QWEN25_1P5B_GSM8K200_MMLU100_RUNTIME_PROFILE_2026_06_08.md
+```
+
 Current result: 400 guarded task executions. FP16 gets 33/100 MMLU and 12/100
 GSM8K; AutoAWQ gets 34/100 MMLU and 11/100 GSM8K. The max drop versus FP16 is
 `0.0100`, peak guard VRAM ratio is `0.8013`, and AutoAWQ reduces peak guarded
 VRAM from 6531 MiB to 4919 MiB while running slower than FP16 locally.
+
+The larger 2026-06-08 run covers 600 guarded task executions. FP16 gets 33/100
+MMLU and 19/200 GSM8K; AutoAWQ gets 34/100 MMLU and 22/200 GSM8K. The gate
+records no measured accuracy drop versus FP16 and peak guard VRAM ratio
+`0.8295`. The paired runtime profile reports FP16 at 5.0148 tok/s and
+0.453859 s mean TTFT under HF offload, AutoAWQ at 12.9601 tok/s and 0.187606 s
+mean TTFT, and peak guarded VRAM falling from 6761 MiB to 6024 MiB.
 
 Valid claim:
 
@@ -927,7 +981,7 @@ Invalid claim:
 `train_python/run_official_awq_smoke.py` is a minimal package-readiness probe.
 It exists to verify that AutoAWQ can execute, save local quantized artifacts,
 and run one short generation smoke under the GPU guard. It is intentionally not
-part of the 43-gate paper-facing ledger.
+part of the 45-gate paper-facing ledger.
 
 Example WSL/GPU command:
 

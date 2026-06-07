@@ -59,6 +59,10 @@ The current evidence supports:
   GSM8K, AutoAWQ gets 34/100 MMLU and 11/100 GSM8K, max drop versus FP16 is
   0.01, and peak guarded VRAM falls from 6531 MiB to 4919 MiB while AutoAWQ is
   slower in this local loader path;
+- a larger Qwen2.5-1.5B FP16-vs-AutoAWQ GSM8K200/MMLU100 task-retention matrix,
+  covering 600 task executions: FP16 gets 33/100 MMLU and 19/200 GSM8K,
+  AutoAWQ gets 34/100 MMLU and 22/200 GSM8K, with no measured accuracy drop
+  versus the offloaded FP16 baseline and peak guarded VRAM ratio 0.8295;
 - a local matched AutoAWQ/GPTQModel Qwen2.5-0.5B W4/G128 baseline pack that
   ties public-calibration PPL, subset50 MMLU/GSM8K execution, and PC-side
   runtime/VRAM into one explicit claim boundary;
@@ -102,9 +106,10 @@ Current AAAI-facing critical path:
    seed/bootstrap artifacts.
 2. Real quantization: expand the AutoAWQ/GPTQModel matched pack beyond the
    0.5B readiness setting and report negative runtime results honestly. The
-   first Qwen2.5-1.5B AutoAWQ public-calibration, 20-row task-subset, and
-   100-row task/runtime gates are complete, but GPTQ, SmoothQuant, rotation
-   baselines, and larger task retention still need scale-up.
+   first Qwen2.5-1.5B AutoAWQ public-calibration, 20-row task-subset, 100-row
+   task/runtime, and GSM8K200/MMLU100 task/runtime gates are complete, but
+   GPTQ, SmoothQuant, rotation baselines, and full benchmark retention still
+   need scale-up.
 3. Downstream tasks: move from subset50/subset100 and deterministic IFEval-style
    execution evidence toward stronger MMLU/GSM8K/IFEval retention on actual
    quantized variants.
