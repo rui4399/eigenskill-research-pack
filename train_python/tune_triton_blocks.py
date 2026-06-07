@@ -35,9 +35,20 @@ def fmt(value: Any, digits: int = 4) -> str:
     return str(value)
 
 
+def best_fp16_speedup(row: dict[str, Any]) -> float:
+    keys = [
+        "grouped_speedup_vs_torch_fp16",
+        "int4_contiguous_speedup_vs_torch_fp16",
+        "int4_unpacked_i8_speedup_vs_torch_fp16",
+        "int4_packed_x_i8_speedup_vs_torch_fp16",
+        "int4_unpacked_i8_x_i8_speedup_vs_torch_fp16",
+    ]
+    return max((float(row[key]) for key in keys if row.get(key) is not None), default=-1.0)
+
+
 def write_report(path: Path, rows: list[dict[str, Any]]) -> None:
     valid = [row for row in rows if row.get("returncode") == 0 and row.get("grouped_mixed_ms")]
-    by_fp16 = sorted(valid, key=lambda row: row.get("grouped_speedup_vs_torch_fp16") or -1.0, reverse=True)
+    by_fp16 = sorted(valid, key=best_fp16_speedup, reverse=True)
     by_rowwise = sorted(valid, key=lambda row: row.get("grouped_speedup_vs_rowwise") or -1.0, reverse=True)
 
     lines = [
@@ -47,12 +58,12 @@ def write_report(path: Path, rows: list[dict[str, Any]]) -> None:
         "",
         "## Best By Torch FP16 Speedup",
         "",
-        "| rank | rows | cols | batch | high_every | BM | BN | BK | grouped ms | packed W4 ms | W4-as-I8 ms | torch FP16 ms | grouped/FP16 | packed W4/FP16 | W4-as-I8/FP16 | grouped/rowwise | rel-L2 |",
-        "|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|",
+        "| rank | rows | cols | batch | high_every | BM | BN | BK | grouped ms | packed W4 ms | W4-as-I8 ms | packed W4xI8 ms | W4-as-I8xI8 ms | torch FP16 ms | grouped/FP16 | packed W4/FP16 | W4-as-I8/FP16 | packed W4xI8/FP16 | W4-as-I8xI8/FP16 | grouped/rowwise | rel-L2 |",
+        "|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|",
     ]
     for rank, row in enumerate(by_fp16[:10], start=1):
         lines.append(
-            "| {rank} | {rows} | {cols} | {batch} | {high_every} | {bm} | {bn} | {bk} | {gms} | {cims} | {u8ms} | {fms} | {gfp16} | {cifp16} | {u8fp16} | {grow} | {rel} |".format(
+            "| {rank} | {rows} | {cols} | {batch} | {high_every} | {bm} | {bn} | {bk} | {gms} | {cims} | {u8ms} | {px8ms} | {u8x8ms} | {fms} | {gfp16} | {cifp16} | {u8fp16} | {px8fp16} | {u8x8fp16} | {grow} | {rel} |".format(
                 rank=rank,
                 rows=row.get("rows"),
                 cols=row.get("cols"),
@@ -64,10 +75,14 @@ def write_report(path: Path, rows: list[dict[str, Any]]) -> None:
                 gms=fmt(row.get("grouped_mixed_ms"), 6),
                 cims=fmt(row.get("int4_contiguous_ms"), 6),
                 u8ms=fmt(row.get("int4_unpacked_i8_ms"), 6),
+                px8ms=fmt(row.get("int4_packed_x_i8_ms"), 6),
+                u8x8ms=fmt(row.get("int4_unpacked_i8_x_i8_ms"), 6),
                 fms=fmt(row.get("torch_fp16_ms"), 6),
                 gfp16=fmt(row.get("grouped_speedup_vs_torch_fp16")),
                 cifp16=fmt(row.get("int4_contiguous_speedup_vs_torch_fp16")),
                 u8fp16=fmt(row.get("int4_unpacked_i8_speedup_vs_torch_fp16")),
+                px8fp16=fmt(row.get("int4_packed_x_i8_speedup_vs_torch_fp16")),
+                u8x8fp16=fmt(row.get("int4_unpacked_i8_x_i8_speedup_vs_torch_fp16")),
                 grow=fmt(row.get("grouped_speedup_vs_rowwise")),
                 rel=fmt(row.get("grouped_rel_l2")),
             )
@@ -78,13 +93,13 @@ def write_report(path: Path, rows: list[dict[str, Any]]) -> None:
             "",
             "## Best By Rowwise Speedup",
             "",
-        "| rank | rows | cols | batch | high_every | BM | BN | BK | rowwise ms | grouped ms | packed W4 ms | W4-as-I8 ms | grouped/rowwise | packed W4/grouped | W4-as-I8/packed W4 | grouped/FP16 |",
-        "|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|",
+        "| rank | rows | cols | batch | high_every | BM | BN | BK | rowwise ms | grouped ms | packed W4 ms | W4-as-I8 ms | packed W4xI8 ms | W4-as-I8xI8 ms | grouped/rowwise | packed W4/grouped | W4-as-I8/packed W4 | packed W4xI8/W4A16 | W4-as-I8xI8/W4-as-I8 | grouped/FP16 |",
+        "|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|",
         ]
     )
     for rank, row in enumerate(by_rowwise[:10], start=1):
         lines.append(
-            "| {rank} | {rows} | {cols} | {batch} | {high_every} | {bm} | {bn} | {bk} | {rms} | {gms} | {cims} | {u8ms} | {grow} | {cig} | {u8c} | {gfp16} |".format(
+            "| {rank} | {rows} | {cols} | {batch} | {high_every} | {bm} | {bn} | {bk} | {rms} | {gms} | {cims} | {u8ms} | {px8ms} | {u8x8ms} | {grow} | {cig} | {u8c} | {px8w4} | {u8x8u8} | {gfp16} |".format(
                 rank=rank,
                 rows=row.get("rows"),
                 cols=row.get("cols"),
@@ -97,9 +112,13 @@ def write_report(path: Path, rows: list[dict[str, Any]]) -> None:
                 gms=fmt(row.get("grouped_mixed_ms"), 6),
                 cims=fmt(row.get("int4_contiguous_ms"), 6),
                 u8ms=fmt(row.get("int4_unpacked_i8_ms"), 6),
+                px8ms=fmt(row.get("int4_packed_x_i8_ms"), 6),
+                u8x8ms=fmt(row.get("int4_unpacked_i8_x_i8_ms"), 6),
                 grow=fmt(row.get("grouped_speedup_vs_rowwise")),
                 cig=fmt(row.get("int4_contiguous_speedup_vs_grouped")),
                 u8c=fmt(row.get("int4_unpacked_i8_speedup_vs_packed_contiguous")),
+                px8w4=fmt(row.get("int4_packed_x_i8_speedup_vs_packed_w4a16")),
+                u8x8u8=fmt(row.get("int4_unpacked_i8_x_i8_speedup_vs_w4_as_i8_w4a16")),
                 gfp16=fmt(row.get("grouped_speedup_vs_torch_fp16")),
             )
         )

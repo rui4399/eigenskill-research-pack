@@ -796,6 +796,18 @@ compression. This does not justify an acceleration claim, but it localizes the
 remaining systems bottleneck: packed nibble unpacking and dequantized tile
 layout, rather than row-wise dispatch alone, are the next kernel targets.
 
+The follow-up delayed-dequantization probe in
+`outputs/RTX5070_INT8_DOT_PROBE_2026_06_07.md` tests the next systems step:
+keep the dot product in the integer domain and apply row/activation scales only
+after accumulation. On the same 4096 x 4096, batch-512 interleaved setting,
+packed W4 weights with per-batch INT8 activations reach 0.292345 ms, or 1.6976x
+torch FP16, while retaining about 3.9825x weight-payload compression. A
+byte-aligned W4-as-I8 variant reaches 0.153371 ms, or 3.2358x torch FP16, but
+only retains about 1.9980x weight-payload compression. This is a W4A8-style
+kernel diagnostic rather than an end-to-end model claim: it introduces
+activation quantization, and the current evidence does not yet show downstream
+quality retention, TTFT/tokens/s wins, mobile performance, or energy savings.
+
 ## 9. Discussion
 
 ### Why not just use more calibration data?

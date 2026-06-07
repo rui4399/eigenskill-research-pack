@@ -78,6 +78,7 @@ tracking, but they are not counted in the 41-gate paper-facing ledger.
 | RTX 5070 Triton mixed-GEMM kernel baseline | `outputs/TRITON_MIXED_GEMM_RTX5070_BASELINE_2026_06_07.md` | Records current grouped INT4/INT8 Triton kernel latency, compression, and guard memory on RTX 5070; negative speedup baseline for future fused-kernel work, not an acceleration claim. |
 | RTX 5070 large-shape Triton diagnostic | `outputs/RTX5070_LARGE_SHAPE_TUNING_2026_06_07.md` | Shows 4096 x 4096 batch-128 grouped mixed kernels remove row-wise overhead but still lose to torch FP16 under repeated timing; motivates fused dequant-dot work. |
 | RTX 5070 INT4 layout probe | `outputs/RTX5070_INT4_LAYOUT_PROBE_2026_06_07.md` | Adds all-INT4 contiguous and W4-as-I8 Triton paths with interleaved timing; shows byte-aligned W4 nearly matches FP16 while packed W4 keeps higher compression but remains slower. |
+| RTX 5070 INT8 dot probe | `outputs/RTX5070_INT8_DOT_PROBE_2026_06_07.md` | Adds packed-W4/W4-as-I8 with INT8 activation paths and delayed dequantization; shows kernel-level speedups over torch FP16 on one 4096 x 4096 batch-512 probe, bounded as W4A8 diagnostic evidence only. |
 
 ## Supporting System Artifacts
 
