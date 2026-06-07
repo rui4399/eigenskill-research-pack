@@ -54,6 +54,9 @@ In compressed form, the supported claims are:
   matched baseline pack covering public-calibration PPL, subset50 task
   execution, and PC-side runtime/VRAM, with the explicit negative result that
   the quantized local paths are slower than FP16;
+- the same FP16/AutoAWQ/GPTQModel Qwen2.5-0.5B variants have deterministic
+  IFEval-style instruction-following execution and runtime smoke gates, kept as
+  execution-path evidence because the FP16 baseline is 0/8;
 - the public-calibrated AutoAWQ and GPTQModel Qwen2.5-0.5B W4/G128 artifacts
   have aligned expanded 16-prompt-per-split WikiText2/C4 PPL gates, totaling
   5714 eval tokens across both packages;

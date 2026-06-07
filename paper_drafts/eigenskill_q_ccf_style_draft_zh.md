@@ -2,7 +2,7 @@
 
 > CCF 风格论文初稿，2026-06-05。本文按正式学术论文结构组织，写法参考经典系统/模型论文的“问题清晰化、方法简洁化、实验证据驱动”范式，但不复用其原文表述。当前稿件是技术报告级草案，尚未满足正式投稿所需的完整基线、硬件与统计显著性要求。
 >
-> 状态更新，2026-06-07：本中文稿保留为中文读者版/历史草稿，不是当前投稿主稿。当前更接近投稿骨架的版本是 `paper_drafts/eigenskill_q_research_draft_en_2026_06_07.md`，它已纳入 31-gate evidence ledger、calibration robustness stress、sensitivity perturbation matrix、calibration seed stability、CSI-vs-n calibration-size curve、consensus transfer boundary、interaction-aware swap boundary、public-task model ladder、official PTQ task-execution smoke、official PTQ matched subset50/runtime profile、official PTQ matched baseline pack、AutoAWQ/GPTQModel aligned 16-prompt public PPL gates、official PTQ readiness matrix 和 paper-evidence alignment gate。若两者不一致，以新版英文稿和 `docs/PAPER_CLAIM_MATRIX.md` 为准。
+> 状态更新，2026-06-07：本中文稿保留为中文读者版/历史草稿，不是当前投稿主稿。当前更接近投稿骨架的版本是 `paper_drafts/eigenskill_q_research_draft_en_2026_06_07.md`，它已纳入 33-gate evidence ledger、calibration robustness stress、sensitivity perturbation matrix、calibration seed stability、CSI-vs-n calibration-size curve、consensus transfer boundary、interaction-aware swap boundary、public-task model ladder、official PTQ task-execution smoke、official PTQ matched subset50/runtime profile、official PTQ deterministic IFEval-style execution/runtime profile、official PTQ matched baseline pack、AutoAWQ/GPTQModel aligned 16-prompt public PPL gates、official PTQ readiness matrix 和 paper-evidence alignment gate。若两者不一致，以新版英文稿和 `docs/PAPER_CLAIM_MATRIX.md` 为准。
 
 ## 摘要
 
@@ -265,7 +265,7 @@ Qwen3-1.7B 和 OLMo2 的相关 guarded runs 也低于 85%，其中 Qwen3 peaked 
 
 当前仓库已把 AutoAWQ 与 GPTQModel 的 Qwen2.5-0.5B W4/G128 本地包纳入统一 readiness matrix。两者均使用公开校准提示，均扩展到 WikiText2/C4 各 16 个 public PPL prompts；两个包合计覆盖 5714 个 PPL eval tokens，最大 package-vs-FP16 PPL ratio 为 1.2570。
 
-同一 matched baseline pack 还合并了 300 次 subset50 public task executions 与 PC 侧 runtime/VRAM profile。这个结果最重要的含义是边界清晰：量化包在本地 Transformers/GPTQModel 路径下降低了部分 guarded VRAM，但 tokens/s 慢于 FP16。因此它是 readiness 与负结果记录，不是加速结果。
+同一 matched baseline pack 还合并了 300 次 subset50 public task executions 与 PC 侧 runtime/VRAM profile。随后新增的 deterministic IFEval-style gate 覆盖 FP16、AutoAWQ、GPTQModel 三种 Qwen2.5-0.5B 变体共 24 次指令格式执行，并记录单独 runtime profile；由于 FP16 baseline 为 0/8，这部分只能作为执行路径证据，而不是任务保持率证据。这个结果最重要的含义是边界清晰：量化包在本地 Transformers/GPTQModel 路径下降低了部分 guarded VRAM，但 tokens/s 慢于 FP16。因此它是 readiness 与负结果记录，不是加速结果。
 
 ## 6 讨论
 

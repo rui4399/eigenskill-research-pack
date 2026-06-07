@@ -41,6 +41,9 @@ The current evidence supports:
 - a local matched AutoAWQ/GPTQModel Qwen2.5-0.5B W4/G128 baseline pack that
   ties public-calibration PPL, subset50 MMLU/GSM8K execution, and PC-side
   runtime/VRAM into one explicit claim boundary;
+- deterministic IFEval-style execution and runtime smoke gates for the same
+  FP16/AutoAWQ/GPTQModel Qwen2.5-0.5B variants, treated as execution-path
+  evidence because the FP16 baseline is 0/8;
 - ESMP package integrity, Triton shape-family kernels, selected-row probes, and
   shallow generation integration gates;
 - explicit gap tracking for official baselines, task retention, and mobile
@@ -70,8 +73,9 @@ Current AAAI-facing critical path:
    measured seed/bootstrap artifacts.
 2. Real quantization: expand the AutoAWQ/GPTQModel matched pack beyond the
    0.5B readiness setting and report negative runtime results honestly.
-3. Downstream tasks: move from subset50 execution evidence toward stronger
-   MMLU/GSM8K/IFEval retention on actual quantized variants.
+3. Downstream tasks: move from subset50 and deterministic IFEval-style
+   execution evidence toward stronger MMLU/GSM8K/IFEval retention on actual
+   quantized variants.
 4. Scale: add at least one representative 3B/7B row if the 8GB local GPU can
    run it under the guard, otherwise document the hardware-limited fallback.
 5. Figures: promote the committed CSI-vs-calibration-size SVG/JSON into the
@@ -101,8 +105,9 @@ The blockers are concrete:
    rows, SmoothQuant, and at least one faithful rotation or mixed-precision
    allocation comparator are still missing.
 2. Larger evaluation: more WikiText2/C4 prompts and broader calibration-seed sweeps.
-3. Downstream retention: MMLU/GSM8K/IFEval or similar task slices on the actual
-   quantized/fused variants, not only base-model capability smoke.
+3. Downstream retention: larger MMLU/GSM8K/IFEval or similar task slices on the
+   actual quantized/fused variants; current IFEval-style evidence is only an
+   8-row deterministic execution smoke.
 4. Statistical robustness: the first n=2/4/8 CSI curve is now gated, but larger
    n grids, more prompt pools, and consensus-vs-single-split confidence
    intervals are still needed.

@@ -1,0 +1,114 @@
+{
+  "date": "2026-06-07T08:48:16+00:00",
+  "passed": true,
+  "matrix_title": "Official PTQ IFEval Deterministic V2 Execution Matrix",
+  "evidence_label": "deterministic IFEval-style instruction-following v2 tasks",
+  "summary": {
+    "case_count": 3,
+    "variant_count": 3,
+    "format_count": 1,
+    "variants": [
+      "autoawq",
+      "fp16",
+      "gptqmodel"
+    ],
+    "task_formats": [
+      "ifeval"
+    ],
+    "baseline_variant": "fp16",
+    "total_tasks": 24,
+    "total_passes": 2,
+    "mean_accuracy": 0.08333333333333333,
+    "max_accuracy_drop_vs_fp16": -0.125,
+    "baseline_zero_accuracy_formats": [
+      "ifeval"
+    ],
+    "max_guard_vram_ratio": 0.511348300821985,
+    "mean_tokens_per_second": 16.567755168160247,
+    "mean_ttft_seconds": 0.4254682839583343
+  },
+  "cases": [
+    {
+      "variant": "fp16",
+      "task_format": "ifeval",
+      "summary_path": "outputs/official_ptq_task_fp16_ifeval_v2_summary_2026_06_07.json",
+      "guard_path": "outputs/official_ptq_task_fp16_ifeval_v2_gpu_guard_2026_06_07.json",
+      "model": "Qwen/Qwen2.5-0.5B-Instruct",
+      "tasks": 8,
+      "passes": 0,
+      "accuracy": 0.0,
+      "mean_tokens_per_second": 30.63483510492631,
+      "mean_ttft_seconds": 0.26494226975000057,
+      "guard_returncode": 0,
+      "killed_by_guard": false,
+      "killed_by_timeout": false,
+      "guard_max_memory_used_ratio": 0.511348300821985,
+      "guard_max_memory_used_mib": 4168,
+      "guard_memory_total_mib": 8151
+    },
+    {
+      "variant": "autoawq",
+      "task_format": "ifeval",
+      "summary_path": "outputs/official_ptq_task_awq_ifeval_v2_summary_2026_06_07.json",
+      "guard_path": "outputs/official_ptq_task_awq_ifeval_v2_gpu_guard_2026_06_07.json",
+      "model": "outputs/official_awq_smoke_2026_06_07/qwen25_0p5b_public_calib_awq_model",
+      "tasks": 8,
+      "passes": 1,
+      "accuracy": 0.125,
+      "mean_tokens_per_second": 6.713006799947244,
+      "mean_ttft_seconds": 0.5863221138749992,
+      "guard_returncode": 0,
+      "killed_by_guard": false,
+      "killed_by_timeout": false,
+      "guard_max_memory_used_ratio": 0.4535639798797694,
+      "guard_max_memory_used_mib": 3697,
+      "guard_memory_total_mib": 8151
+    },
+    {
+      "variant": "gptqmodel",
+      "task_format": "ifeval",
+      "summary_path": "outputs/official_ptq_task_gptqmodel_ifeval_v2_summary_2026_06_07.json",
+      "guard_path": "outputs/official_ptq_task_gptqmodel_ifeval_v2_gpu_guard_2026_06_07.json",
+      "model": "outputs/official_gptqmodel_smoke_2026_06_07/qwen25_0p5b_public_calib_gptq_model",
+      "tasks": 8,
+      "passes": 1,
+      "accuracy": 0.125,
+      "mean_tokens_per_second": 12.355423599607185,
+      "mean_ttft_seconds": 0.42514046825000307,
+      "guard_returncode": 0,
+      "killed_by_guard": false,
+      "killed_by_timeout": false,
+      "guard_max_memory_used_ratio": 0.4518463992148203,
+      "guard_max_memory_used_mib": 3683,
+      "guard_memory_total_mib": 8151
+    }
+  ],
+  "comparisons": [
+    {
+      "variant": "autoawq",
+      "task_format": "ifeval",
+      "baseline_variant": "fp16",
+      "baseline_accuracy": 0.0,
+      "accuracy": 0.125,
+      "accuracy_drop_vs_baseline": -0.125,
+      "baseline_passes": 0,
+      "passes": 1,
+      "baseline_tasks": 8,
+      "tasks": 8
+    },
+    {
+      "variant": "gptqmodel",
+      "task_format": "ifeval",
+      "baseline_variant": "fp16",
+      "baseline_accuracy": 0.0,
+      "accuracy": 0.125,
+      "accuracy_drop_vs_baseline": -0.125,
+      "baseline_passes": 0,
+      "passes": 1,
+      "baseline_tasks": 8,
+      "tasks": 8
+    }
+  ],
+  "failures": [],
+  "claim_boundary": "Valid claim: FP16 and official-package quantized artifacts are loadable and evaluated on the same deterministic IFEval-style instruction-following v2 tasks under GPU guard. Formats with zero FP16 accuracy are execution-only evidence. Invalid claim: this is leaderboard-scale task retention, SOTA PTQ quality, or a production inference benchmark."
+}

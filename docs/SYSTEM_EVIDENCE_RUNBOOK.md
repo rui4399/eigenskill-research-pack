@@ -10,7 +10,7 @@ by an executable gate and an explicit claim boundary.
 ## Evidence Ledger
 
 `train_python/build_current_evidence_ledger.py` is the stable public entry
-point for the current paper-facing gate set. It fixes the 31 gate paths in one
+point for the current paper-facing gate set. It fixes the 33 gate paths in one
 manifest, rebuilds the ledger, and avoids copying a long `--gate` list across
 README files and paper appendices.
 
@@ -21,7 +21,7 @@ python train_python/build_current_evidence_ledger.py
 ```
 
 `train_python/build_evidence_ledger.py` is the lower-level builder for custom
-or future gate manifests. The expanded form of the current 31-gate ledger is:
+or future gate manifests. The expanded form of the current 33-gate ledger is:
 
 ```bash
 python train_python/build_evidence_ledger.py \
@@ -49,6 +49,8 @@ python train_python/build_evidence_ledger.py \
   --gate official_ptq_runtime_profile=outputs/official_ptq_runtime_profile_2026_06_07.json \
   --gate official_ptq_task_subset50=outputs/official_ptq_task_subset50_matrix_2026_06_07.json \
   --gate official_ptq_subset50_runtime_profile=outputs/official_ptq_subset50_runtime_profile_2026_06_07.json \
+  --gate official_ptq_ifeval_v2=outputs/official_ptq_task_ifeval_v2_matrix_2026_06_07.json \
+  --gate official_ptq_ifeval_v2_runtime_profile=outputs/official_ptq_runtime_ifeval_v2_profile_2026_06_07.json \
   --gate official_ptq_matched_baseline_pack=outputs/official_ptq_matched_baseline_pack_qwen25_0p5b_2026_06_07.json \
   --gate official_awq_public_calib_16_eval=outputs/official_awq_public_calib_qwen25_0p5b_bundle_16_gate_2026_06_07.json \
   --gate allocation_family_proxy=outputs/q_palette_style_allocation_family_gate_2026_06_06.json \
@@ -60,11 +62,11 @@ python train_python/build_evidence_ledger.py \
   --out-md outputs/real_system_packer_2026-06-05/EVIDENCE_LEDGER_2026_06_06.md
 ```
 
-The current ledger passes with 31/31 gates across repo hygiene, calibration
+The current ledger passes with 33/33 gates across repo hygiene, calibration
 robustness, artifact integrity, kernel, runtime wiring, selected-row, C++
 runtime, decode integration, QKV replacement, quality, task-retention, runtime profile, and
 capability-retention/model-ladder, allocation-comparator, rotation-comparator, and
-matched PTQ baseline, expanded AutoAWQ public PPL, PTQ-comparator, and
+matched PTQ baseline, deterministic IFEval-style PTQ execution, expanded AutoAWQ public PPL, PTQ-comparator, and
 paper-alignment evidence categories.
 
 Valid claim:
@@ -155,14 +157,14 @@ Current gate:
 ```bash
 python train_python/gate_paper_evidence_alignment.py \
   --paper paper_drafts/eigenskill_q_research_draft_en_2026_06_07.md \
-  --expected-gate-count 31 \
+  --expected-gate-count 33 \
   --out-json outputs/paper_evidence_alignment_gate_2026_06_07.json \
   --out-md outputs/PAPER_EVIDENCE_ALIGNMENT_GATE_2026_06_07.md
 ```
 
-Current result: 20/20 required evidence references present, referenced repo
+Current result: 22/22 required evidence references present, referenced repo
 paths found and 0 missing, 0 stale forbidden tokens, 0 unsafe non-negated claim
-lines, and the paper mentions the current 31-gate ledger.
+lines, and the paper mentions the current 33-gate ledger.
 
 Valid claim:
 
@@ -373,6 +375,80 @@ Valid claim:
 
 - FP16, AutoAWQ, and GPTQModel Qwen2.5-0.5B variants have PC-side TTFT,
   tokens/s, and peak VRAM measurements on the same guarded subset50 path.
+
+Invalid claim:
+
+- this proves Redmi/mobile deployment, production runtime speedup, energy
+  improvement, or official AWQ/GPTQ competitiveness.
+
+## Official PTQ IFEval-Style Execution Matrix
+
+The same task gate can summarize a deterministic IFEval-style fixture covering
+JSON validity, required/forbidden keywords, sentence count, and word count. The
+fixture is intentionally small and strict; because the FP16 baseline is 0/8, it
+is execution-path evidence rather than task-retention evidence.
+
+Current gate:
+
+```bash
+python train_python/gate_official_ptq_task_retention.py \
+  --case fp16:ifeval=outputs/official_ptq_task_fp16_ifeval_v2_summary_2026_06_07.json=outputs/official_ptq_task_fp16_ifeval_v2_gpu_guard_2026_06_07.json \
+  --case autoawq:ifeval=outputs/official_ptq_task_awq_ifeval_v2_summary_2026_06_07.json=outputs/official_ptq_task_awq_ifeval_v2_gpu_guard_2026_06_07.json \
+  --case gptqmodel:ifeval=outputs/official_ptq_task_gptqmodel_ifeval_v2_summary_2026_06_07.json=outputs/official_ptq_task_gptqmodel_ifeval_v2_gpu_guard_2026_06_07.json \
+  --required-variant fp16 \
+  --required-variant autoawq \
+  --required-variant gptqmodel \
+  --required-format ifeval \
+  --min-tasks-per-case 8 \
+  --max-memory-ratio 0.85 \
+  --max-accuracy-drop 0.25 \
+  --matrix-title "Official PTQ IFEval Deterministic V2 Execution Matrix" \
+  --evidence-label "deterministic IFEval-style instruction-following v2 tasks" \
+  --out-json outputs/official_ptq_task_ifeval_v2_matrix_2026_06_07.json \
+  --out-md outputs/OFFICIAL_PTQ_TASK_IFEVAL_V2_MATRIX_2026_06_07.md
+```
+
+Current result: 3 variants, 24 total executions, 2 total passes, mean accuracy
+`0.0833`, peak guarded VRAM ratio `0.5113`, and `ifeval` marked as a
+zero-accuracy FP16 baseline format.
+
+Valid claim:
+
+- FP16, AutoAWQ, and GPTQModel Qwen2.5-0.5B variants load and execute the same
+  deterministic IFEval-style instruction-following fixture under GPU guard.
+
+Invalid claim:
+
+- this proves broad IFEval retention, instruction-following superiority,
+  leaderboard-scale task quality, or official AWQ/GPTQ competitiveness.
+
+## Official PTQ IFEval-Style Runtime Profile Gate
+
+Current gate:
+
+```bash
+python train_python/gate_official_ptq_runtime_profile.py \
+  --matrix-json outputs/official_ptq_task_ifeval_v2_matrix_2026_06_07.json \
+  --baseline-variant fp16 \
+  --required-variant fp16 \
+  --required-variant autoawq \
+  --required-variant gptqmodel \
+  --min-cases-per-variant 1 \
+  --max-memory-ratio 0.85 \
+  --min-mean-tokens-per-second 1.0 \
+  --max-mean-ttft-seconds 2.0 \
+  --out-json outputs/official_ptq_runtime_ifeval_v2_profile_2026_06_07.json \
+  --out-md outputs/OFFICIAL_PTQ_RUNTIME_IFEVAL_V2_PROFILE_2026_06_07.md
+```
+
+Current result: 3 variants, 3 cases, 24 tasks, mean `16.5678` tokens/s, mean
+TTFT `0.425468` s, peak guarded VRAM ratio `0.5113`, and peak guarded VRAM
+`4168` MiB.
+
+Valid claim:
+
+- the deterministic IFEval-style execution path exposes PC-side TTFT, tokens/s,
+  and peak VRAM for FP16, AutoAWQ, and GPTQModel on the same fixture.
 
 Invalid claim:
 
@@ -616,7 +692,7 @@ Invalid claim:
 `train_python/run_official_awq_smoke.py` is a minimal package-readiness probe.
 It exists to verify that AutoAWQ can execute, save local quantized artifacts,
 and run one short generation smoke under the GPU guard. It is intentionally not
-part of the 31-gate paper-facing ledger.
+part of the 33-gate paper-facing ledger.
 
 Example WSL/GPU command:
 
