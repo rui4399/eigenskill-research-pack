@@ -2,16 +2,17 @@
 
 Updated: 2026-06-07
 
-This note is a queue, not a result table. A model becomes paper-facing evidence
-only after it passes the same prompt-slice, random-seed, GPU-guard, and claim
-boundary checks as the existing Qwen3/OLMo rows.
+This is a workbench queue, not a result table and not part of the paper-facing
+evidence ledger. A model becomes paper-facing evidence only after it passes the
+same prompt-slice, random-seed, GPU-guard, and claim-boundary checks as the
+existing Qwen3/OLMo rows.
 
 ## Current Local Constraints
 
 ```text
 GPU: NVIDIA RTX 5070 Laptop GPU, about 8151 MiB visible memory
 guard: train_python/run_with_gpu_guard.py --max-memory-ratio 0.85
-C: free space during latest check: about 14.86 GiB
+C: free space during latest check: about 15.88 GiB
 policy: do not download 3B/4B/7B checkpoints until cache pressure is fixed
 ```
 

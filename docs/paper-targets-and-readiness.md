@@ -25,6 +25,9 @@ The current evidence supports:
   boundaries, and bounded interaction-aware swap search;
 - a public-calibrated AutoAWQ W4 group-128 readiness bundle on
   Qwen2.5-0.5B-Instruct with tiny public WikiText2/C4 matched PPL slices;
+- a local matched AutoAWQ/GPTQModel Qwen2.5-0.5B W4/G128 baseline pack that
+  ties public-calibration PPL, subset50 MMLU/GSM8K execution, and PC-side
+  runtime/VRAM into one explicit claim boundary;
 - ESMP package integrity, Triton shape-family kernels, selected-row probes, and
   shallow generation integration gates;
 - explicit gap tracking for official baselines, task retention, and mobile
@@ -56,8 +59,9 @@ evidence become much deeper.
 
 The blockers are concrete:
 
-1. Official baselines: matched AWQ/GPTQ/SmoothQuant and at least one faithful
-   rotation or mixed-precision allocation comparator.
+1. Official baselines: the local AutoAWQ/GPTQModel 0.5B matched pack is useful
+   but not enough; larger AWQ/GPTQ rows, SmoothQuant, and at least one faithful
+   rotation or mixed-precision allocation comparator are still missing.
 2. Larger evaluation: more WikiText2/C4 prompts and multiple calibration seeds.
 3. Downstream retention: MMLU/GSM8K/IFEval or similar task slices on the actual
    quantized/fused variants, not only base-model capability smoke.
@@ -79,9 +83,10 @@ Consensus Sensitivity Allocation with Gated Packed-System Evidence
 
 Before releasing that version:
 
-- scale the public-calibrated AutoAWQ probe beyond tiny slices;
-- add GPTQ/GPTQModel or another faithful public PTQ comparator under the same
-  calibration and evaluation protocol;
+- scale the public-calibrated AutoAWQ/GPTQModel pack beyond tiny slices and
+  beyond Qwen2.5-0.5B;
+- add SmoothQuant and at least one faithful rotation-family or allocation
+  comparator under the same calibration and evaluation protocol;
 - rerun core fake-quant rows with more calibration seeds;
 - include the budget-curve figure from `outputs/consensus_budget_curve.svg`;
 - keep C++ reporting tools framed as reproducibility infrastructure unless tied

@@ -34,16 +34,22 @@ In compressed form, the supported claims are:
 
 - small calibration splits produce unstable module-sensitivity rankings in the
   committed Qwen3/OLMo2 fake-quant diagnostics;
+- Qwen2.5 perturbation diagnostics separate same-model calibration sample-size
+  instability from much weaker cross-model-scale sensitivity transfer;
 - consensus-style allocation passes the committed short-slice robustness stress
   gate against uniform INT4 and random mixed-precision baselines;
 - paired Qwen3 transfer slices show consensus avoiding the worse single-split
   policy, with bounded regret versus the best single split;
 - bounded global-feedback swap search exposes interaction counterexamples that
   additive module ranking misses on committed SmolLM2-1.7B fake-quant slices;
+- local AutoAWQ/GPTQModel Qwen2.5-0.5B W4/G128 evidence is bundled into a
+  matched baseline pack covering public-calibration PPL, subset50 task
+  execution, and PC-side runtime/VRAM, with the explicit negative result that
+  the quantized local paths are slower than FP16;
 - ESMP package integrity, selected-row probes, Triton shape-family kernels, and
   shallow generation integrations are executable prototype evidence;
-- missing official baselines, task benchmarks, and hardware measurements are
-  tracked as gaps rather than claimed as results.
+- missing broad official baselines, leaderboard-scale task benchmarks, and
+  hardware measurements are tracked as gaps rather than claimed as results.
 
 ## Explicit Non-Claims
 
@@ -95,6 +101,10 @@ The next paper-strengthening steps are:
 3. downstream task-retention evaluation beyond tiny smoke gates;
 4. interaction-aware/global-feedback allocation checks;
 5. real packed-runtime or on-device TTFT/tokens/s/peak-memory measurements.
+
+The first item is only partially started by the local AutoAWQ/GPTQModel
+Qwen2.5-0.5B matched pack. It does not yet cover larger models, SmoothQuant,
+rotation-family baselines, or leaderboard-scale tasks.
 
 Historical notes and removed speculative material are summarized in
 `docs/HISTORICAL_ARTIFACTS.md`.

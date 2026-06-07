@@ -24,12 +24,12 @@ is intentionally short.
 | Calibration instability framing | `docs/calibration_split_instability_position_2026_06_05.md` |
 | Quantization related-work map | `docs/RELATED_WORK_QUANTIZATION_2026.md` |
 | Paper targets and readiness | `docs/paper-targets-and-readiness.md` |
-| Current small-model candidate queue | `docs/recent_small_model_candidates_2026_06_05.md` |
 
-## Historical Or Narrow Runbooks
+## Workbench And Historical Notes
 
 | Need | File |
 |---|---|
+| Current small-model candidate queue | `docs/recent_small_model_candidates_2026_06_05.md` |
 | Removed private/speculative artifacts | `docs/HISTORICAL_ARTIFACTS.md` |
 | Qwen3-1.7B C4-128 chunked random16 run | `docs/qwen3_1p7b_c4_128_random16_chunked_runbook.md` |
 | ESMP binary package format | `docs/ESMPQ001_FORMAT.md` |
