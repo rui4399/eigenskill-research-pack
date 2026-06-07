@@ -64,6 +64,7 @@ claim.
 | Rank-inversion theory | Chebyshev-style plug-in inversion-risk gate over the same n=2/4/8 Qwen2.5 seed artifacts; margin inversion rate falls 0.0969 -> 0.0427 | theory-aligned diagnostic, not a tight bound proof |
 | Consensus allocation | gated robustness and transfer diagnostics under fixed bit budgets | allocation diagnostic, not a production PTQ method |
 | Official PTQ probes | AutoAWQ/GPTQModel Qwen2.5-0.5B W4/G128 readiness, aligned expanded 16-prompt public PPL gates, tiny task smoke, matched 50-row and true 100-row task subset paths, deterministic IFEval-style execution smoke, a matched local baseline pack, guarded Qwen2.5-1.5B AutoAWQ/GPTQModel public-calibration scale-up smokes, Qwen2.5-1.5B GPTQModel MMLU100/GSM8K100 task-execution subset, and Qwen2.5-1.5B FP16/AutoAWQ/GPTQModel matched MMLU/GSM8K task matrices through GSM8K200/MMLU100 | local evidence only; quantized paths save VRAM but are not production speedups here |
+| 7B public task scale row | Ollama Qwen2.5-abliterate-7B runs 100 MMLU abstract-algebra plus 200 GSM8K rows under guard: 84/300 passes, mean 19.9987 tokens/s, mean TTFT 0.478812 s, peak VRAM ratio 0.7135 | public-task coverage only; not leaderboard-scale quality or quantized retention |
 | Runtime probes | ESMP/Triton/C++ module-level gates plus PC-side smoke/subset50/subset100 runtime profiles | not end-to-end deployment |
 | Mobile evidence | Redmi K80 Pro harness exists, but no real TTFT/tokens/s/memory log is complete | no mobile claim |
 

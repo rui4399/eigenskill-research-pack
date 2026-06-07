@@ -1,6 +1,6 @@
 # Evidence Ledger
 
-Date: `2026-06-07T19:41:11+00:00`
+Date: `2026-06-07T20:01:45+00:00`
 Status: **PASS**
 Gates: `48 / 48` passed
 Categories: `allocation comparator, artifact integrity, c++ runtime, calibration robustness, capability retention, decode integration, evidence, kernel, matched PTQ baseline, official PTQ readiness, paper alignment, ptq comparator, qkv replacement, quality, repo hygiene, rotation comparator, runtime profile, runtime wiring, selected-row, task execution smoke, task execution subset, task retention, theory`
@@ -9,7 +9,7 @@ Categories: `allocation comparator, artifact integrity, c++ runtime, calibration
 
 | gate | category | status | key metrics | source |
 |---|---|---|---|---|
-| `public_hygiene` | repo hygiene | **PASS** | tracked files 2229; forbidden files 0; placeholders 0 | `outputs/real_system_packer_2026-06-05/public_repo_hygiene_gate_2026_06_06.json` |
+| `public_hygiene` | repo hygiene | **PASS** | tracked files 2241; forbidden files 0; placeholders 0 | `outputs/real_system_packer_2026-06-05/public_repo_hygiene_gate_2026_06_06.json` |
 | `calibration_instability` | calibration robustness | **PASS** | cases 3; unstable 3; min rho -0.0440; mean Spearman 0.0713; mean Jaccard 0.4349; top20 Jaccard 0.1022 | `outputs/calibration_instability_benchmark_2026_06_06.json` |
 | `sensitivity_perturbation_matrix` | calibration robustness | **PASS** | cases 3; sample-size rho 0.6356; model-scale rho 0.1273; separation 0.5082 | `outputs/sensitivity_perturbation_matrix_qwen25_2026_06_07.json` |
 | `calibration_seed_stability` | calibration robustness | **PASS** | cases 6; prompt selections 6; finite pairs 15; min rho 0.2284; mean rho CI [0.3557, 0.5174]; min top20 0.3793; mean top20 CI [0.4200, 0.5292]; mean Spearman 0.4324; mean Jaccard 0.5734; mean Jaccard CI [0.5375, 0.6120]; top20 Jaccard 0.4672 | `outputs/calibration_seed_stability_qwen25_0p5b_2026_06_07.json` |
@@ -32,7 +32,7 @@ Categories: `allocation comparator, artifact integrity, c++ runtime, calibration
 | `fused_qkv_speed` | qkv replacement | **PASS** | replacements 1; tok/s ratio 1.1300x; TTFT ratio 0.6839x; compression 6.1682x; VRAM 0.4401 | `outputs/real_system_packer_2026-06-05/fused_qkv_generation_gate_2026_06_06.json` |
 | `fused_qkv_quality` | quality | **PASS** | exact 6/6; mean speed 0.8957x; compression 3.9082x; VRAM 0.4359 | `outputs/real_system_packer_2026-06-05/fused_qkv_prompt_suite_gate_2026_06_06.json` |
 | `chat_task_stress` | task retention | **PASS** | regressions 1; fused 45/84; VRAM 0.5469 | `outputs/real_system_packer_2026-06-05/chat_task_stress_v3_84_gate_2026_06_06.json` |
-| `public_task_benchmark` | capability retention | **PASS** | cases 2; tasks 100; passes 39; accuracy 0.3900; mean tok/s 21.0416; mean TTFT 0.817018s; VRAM 0.8865 | `outputs/public_task_benchmark_ollama_qwen25_abliterate_7b_gate_2026_06_07.json` |
+| `public_task_benchmark` | capability retention | **PASS** | cases 2; tasks 300; passes 84; accuracy 0.2800; mean tok/s 19.9987; mean TTFT 0.478812s; VRAM 0.7135 | `outputs/public_task_benchmark_ollama_qwen25_abliterate_7b_gsm8k200_mmlu100_gate_2026_06_08.json` |
 | `public_task_model_ladder` | capability retention | **PASS** | models 2; best passes 39; best accuracy 0.3900; tasks 200; passes 43; accuracy 0.2150; mean tok/s 52.0349; mean TTFT 0.607638s; VRAM 0.8865 | `outputs/public_task_model_ladder_gate_2026_06_07.json` |
 | `official_ptq_task_retention` | task execution smoke | **PASS** | cases 6; tasks 24; passes 2; accuracy 0.0833; max drop 0.2500; mean tok/s 11.4608; mean TTFT 0.508495s; VRAM 0.6108 | `outputs/official_ptq_task_retention_smoke_matrix_2026_06_07.json` |
 | `official_ptq_runtime_profile` | runtime profile | **PASS** | tasks 24; cases 6; mean tok/s 11.4608; mean TTFT 0.508495s; VRAM MiB 4979; VRAM 0.6108 | `outputs/official_ptq_runtime_profile_2026_06_07.json` |

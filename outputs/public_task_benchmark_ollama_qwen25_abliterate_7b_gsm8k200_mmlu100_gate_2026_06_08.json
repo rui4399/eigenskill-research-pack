@@ -1,0 +1,57 @@
+{
+  "date": "2026-06-07T19:54:42+00:00",
+  "passed": true,
+  "summary": {
+    "case_count": 2,
+    "total_tasks": 300,
+    "total_passes": 84,
+    "mean_accuracy": 0.28,
+    "task_formats": [
+      "gsm8k",
+      "mmlu"
+    ],
+    "max_guard_vram_ratio": 0.7135320819531346,
+    "mean_tokens_per_second": 19.998722587494065,
+    "mean_ttft_seconds": 0.4788119097470189
+  },
+  "cases": [
+    {
+      "label": "mmlu100",
+      "summary_path": "outputs\\public_task_benchmark_mmlu_ollama_qwen25_abliterate_7b_gsm8k200_mmlu100_summary.json",
+      "guard_path": "outputs\\public_task_benchmark_mmlu_ollama_qwen25_abliterate_7b_gsm8k200_mmlu100_gpu_guard_2026_06_08.json",
+      "model": "huihui_ai/qwen2.5-abliterate:7b-instruct",
+      "task_format": "mmlu",
+      "task_count": 100,
+      "passes": 50,
+      "accuracy": 0.5,
+      "mean_tokens_per_second": 22.662520044083323,
+      "mean_ttft_seconds": 0.504301486996701,
+      "guard_returncode": 0,
+      "killed_by_guard": false,
+      "killed_by_timeout": false,
+      "guard_max_memory_used_ratio": 0.7131640289535026,
+      "guard_max_memory_used_mib": 5813,
+      "guard_memory_total_mib": 8151
+    },
+    {
+      "label": "gsm8k200",
+      "summary_path": "outputs\\public_task_benchmark_gsm8k_ollama_qwen25_abliterate_7b_gsm8k200_mmlu100_summary.json",
+      "guard_path": "outputs\\public_task_benchmark_gsm8k_ollama_qwen25_abliterate_7b_gsm8k200_mmlu100_gpu_guard_2026_06_08.json",
+      "model": "huihui_ai/qwen2.5-abliterate:7b-instruct",
+      "task_format": "gsm8k",
+      "task_count": 200,
+      "passes": 34,
+      "accuracy": 0.17,
+      "mean_tokens_per_second": 17.334925130904807,
+      "mean_ttft_seconds": 0.4533223324973369,
+      "guard_returncode": 0,
+      "killed_by_guard": false,
+      "killed_by_timeout": false,
+      "guard_max_memory_used_ratio": 0.7135320819531346,
+      "guard_max_memory_used_mib": 5816,
+      "guard_memory_total_mib": 8151
+    }
+  ],
+  "failures": [],
+  "claim_boundary": "Valid claim: public MMLU/GSM8K subset evaluation ran under guard. Invalid claim: this is leaderboard-scale or SOTA quality evidence."
+}

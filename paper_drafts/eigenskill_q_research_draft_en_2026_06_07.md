@@ -52,9 +52,13 @@ best single split. Finally, an interaction-aware swap gate shows 5
 locally-negative-but-globally-improved swap trials, demonstrating that additive
 module ranking misses measurable global interactions. The current system
 evidence is deliberately gated and prototype-level: public-task coverage now
-includes a two-model guarded Ollama ladder over 200 MMLU/GSM8K subset rows and
-a tiny official PTQ task-execution smoke matrix over FP16/AutoAWQ/GPTQModel
-Qwen2.5-0.5B variants. We further run the same three official PTQ variants on
+includes a two-model guarded Ollama ladder plus a 7B single-model scale row over
+100 MMLU abstract-algebra and 200 GSM8K subset rows. The latter obtains 84/300
+passes with mean 19.9987 tokens/s, mean TTFT 0.478812 s, and peak guarded VRAM
+ratio 0.7135, and is treated only as public-task coverage rather than quantized
+retention. We also include a tiny official PTQ task-execution smoke matrix over
+FP16/AutoAWQ/GPTQModel Qwen2.5-0.5B variants. We further run the same three
+official PTQ variants on
 matched 50-row public MMLU and GSM8K subsets, producing 300 guarded task
 executions and a PC-side runtime profile with TTFT, tokens/s, and guarded VRAM.
 The same FP16/AutoAWQ/GPTQModel Qwen2.5-0.5B variants also run an 8-row
@@ -451,6 +455,7 @@ current ledger passes 48/48 gates. The most important gates are:
 | Consensus transfer boundary | 4 paired Qwen3 slices | Consensus avoids the worse single-split policy with bounded best-single regret. | Consensus always beats the best single split. |
 | Interaction swap boundary | 16 SmolLM2-1.7B swap trials | Global feedback exposes local-proxy failures. | Global optimality or broad transfer. |
 | Allocation-family proxy | Q-Palette-style closed-form Lagrangian allocation on Qwen3 and Qwen2.5 sensitivity artifacts; see `outputs/Q_PALETTE_STYLE_ALLOCATION_FAMILY_GATE_2026_06_06.md`. | Six measured-sensitivity allocation cases satisfy a 4.5 average-bit budget with finite lambda solutions and non-trivial bit histograms. | Faithful Q-Palette/IMPQ/WINDQuant reproduction or downstream quality retention. |
+| Public 7B task scale row | Ollama Qwen2.5-abliterate-7B over 100 MMLU abstract-algebra plus 200 GSM8K rows; see `outputs/PUBLIC_TASK_BENCHMARK_OLLAMA_QWEN25_ABLITERATE_7B_GSM8K200_MMLU100_GATE_2026_06_08.md`. | A 7B local model runs 300 public-task subset rows under guard, with 84/300 passes and peak guard VRAM ratio 0.7135. | Leaderboard quality, quantized retention, monotonic scaling, or fused-runtime evidence. |
 | Public task model ladder | 2 local Ollama models over 200 MMLU/GSM8K subset rows | Public-task evidence is reported without hiding the weaker 4B case. | Leaderboard quality, monotonic scaling, or fused quantized retention. |
 | Official PTQ task-execution smoke | FP16/AutoAWQ/GPTQModel Qwen2.5-0.5B on 24 public smoke executions; see `outputs/OFFICIAL_PTQ_TASK_RETENTION_SMOKE_MATRIX_2026_06_07.md`. | Official-package artifacts load and run matching tiny task fixtures under guard; zero-FP16 formats are execution-only. | Broad task retention, leaderboard quality, or AWQ/GPTQ competitiveness. |
 | Official PTQ runtime profile | FP16/AutoAWQ/GPTQModel Qwen2.5-0.5B PC-side runtime profile; see `outputs/OFFICIAL_PTQ_RUNTIME_PROFILE_2026_06_07.md`. | TTFT, tokens/s, and peak guarded VRAM are reported for the same task-smoke path. | Not mobile deployment, not production runtime speedup, not energy savings, and not AWQ/GPTQ competitiveness. |
@@ -937,6 +942,7 @@ outputs/CALIBRATION_ROBUSTNESS_STRESS_GATE_2026_06_07.md
 outputs/CONSENSUS_TRANSFER_BOUNDARY_GATE_2026_06_07.md
 outputs/INTERACTION_SWAP_BOUNDARY_GATE_2026_06_07.md
 outputs/Q_PALETTE_STYLE_ALLOCATION_FAMILY_GATE_2026_06_06.md
+outputs/PUBLIC_TASK_BENCHMARK_OLLAMA_QWEN25_ABLITERATE_7B_GSM8K200_MMLU100_GATE_2026_06_08.md
 outputs/PUBLIC_TASK_MODEL_LADDER_GATE_2026_06_07.md
 outputs/OFFICIAL_AWQ_PUBLIC_CALIB_QWEN25_0P5B_BUNDLE_16_GATE_2026_06_07.md
 outputs/OFFICIAL_AWQ_PUBLIC_CALIB_QWEN25_1P5B_BUNDLE_16_GATE_2026_06_07.md

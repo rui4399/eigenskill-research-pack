@@ -71,6 +71,10 @@ The current evidence supports:
   is +0.005 with CI [-0.040, +0.050] on GSM8K and -0.080 with CI [-0.190,
   +0.030] on MMLU, reported as uncertainty disclosure rather than superiority
   evidence;
+- a representative 7B public-task coverage row through Ollama
+  Qwen2.5-abliterate-7B, covering 100 MMLU abstract-algebra rows plus 200 GSM8K
+  rows under guard: 84/300 total passes, mean throughput 19.9987 tokens/s, mean
+  TTFT 0.478812 s, and peak guarded VRAM ratio 0.7135;
 - a local matched AutoAWQ/GPTQModel Qwen2.5-0.5B W4/G128 baseline pack that
   ties public-calibration PPL, subset50 MMLU/GSM8K execution, and PC-side
   runtime/VRAM into one explicit claim boundary;
@@ -121,8 +125,9 @@ Current AAAI-facing critical path:
 3. Downstream tasks: move from subset50/subset100 and deterministic IFEval-style
    execution evidence toward stronger MMLU/GSM8K/IFEval retention on actual
    quantized variants.
-4. Scale: add at least one representative 3B/7B row if the 8GB local GPU can
-   run it under the guard, otherwise document the hardware-limited fallback.
+4. Scale: keep the committed 7B public-task row as coverage evidence; upgrade
+   it to quantized retention only if the 8GB local GPU can hold the run, else
+   broaden the 1.5B matched PTQ matrix.
 5. Figures: promote the committed CSI-vs-calibration-size SVG/JSON into the
    paper figure pipeline, then add bootstrap bands or a larger n grid if time
    allows.
