@@ -63,6 +63,10 @@ The current evidence supports:
   covering 600 task executions: FP16 gets 33/100 MMLU and 19/200 GSM8K,
   AutoAWQ gets 34/100 MMLU and 22/200 GSM8K, with no measured accuracy drop
   versus the offloaded FP16 baseline and peak guarded VRAM ratio 0.8295;
+- a paired statistical-interval gate over the same Qwen2.5-1.5B matrix:
+  AutoAWQ-minus-FP16 delta is +0.015 with 95% bootstrap CI [-0.035, +0.065] on
+  GSM8K and +0.010 with CI [-0.100, +0.130] on MMLU, reported as uncertainty
+  disclosure rather than superiority evidence;
 - a local matched AutoAWQ/GPTQModel Qwen2.5-0.5B W4/G128 baseline pack that
   ties public-calibration PPL, subset50 MMLU/GSM8K execution, and PC-side
   runtime/VRAM into one explicit claim boundary;

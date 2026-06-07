@@ -25,7 +25,7 @@ Current ledger artifact:
 outputs/real_system_packer_2026-06-05/EVIDENCE_LEDGER_2026_06_06.md
 ```
 
-Current status: **45 / 45 gates pass**.
+Current status: **46 / 46 gates pass**.
 
 Valid claim:
 
@@ -75,6 +75,7 @@ Invalid claim:
 | `official_ptq_qwen25_1p5b_subset100_runtime_profile` | runtime profile | `outputs/OFFICIAL_PTQ_QWEN25_1P5B_SUBSET100_RUNTIME_PROFILE_2026_06_07.md` | PC-side TTFT/tokens/s/VRAM are summarized from the 400-task Qwen2.5-1.5B subset100 matrix; AutoAWQ uses less peak guarded VRAM than FP16 but is slower on this local loader path. |
 | `official_ptq_task_qwen25_1p5b_gsm8k200_mmlu100` | task execution subset | `outputs/OFFICIAL_PTQ_TASK_QWEN25_1P5B_GSM8K200_MMLU100_MATRIX_2026_06_08.md` | FP16 and AutoAWQ Qwen2.5-1.5B variants run the same 200-row GSM8K plus full 100-row MMLU abstract-algebra fixtures under GPU guard; AutoAWQ has no measured accuracy drop versus the offloaded FP16 baseline in this local slice, but this remains non-leaderboard task evidence. |
 | `official_ptq_qwen25_1p5b_gsm8k200_mmlu100_runtime_profile` | runtime profile | `outputs/OFFICIAL_PTQ_QWEN25_1P5B_GSM8K200_MMLU100_RUNTIME_PROFILE_2026_06_08.md` | PC-side TTFT/tokens/s/VRAM are summarized from the 600-task Qwen2.5-1.5B matrix; FP16 uses HF CPU/GPU offload to stay under guard, so runtime ratios are local-profile evidence rather than a production speedup claim. |
+| `official_ptq_qwen25_1p5b_gsm8k200_mmlu100_statistics` | statistical interval | `outputs/OFFICIAL_PTQ_TASK_QWEN25_1P5B_GSM8K200_MMLU100_STATISTICS_2026_06_08.md` | The same 600-task matrix has Wilson accuracy intervals and paired bootstrap AutoAWQ-minus-FP16 deltas; the lower bound is -0.0350 on GSM8K and -0.1000 on MMLU, so this reports uncertainty rather than superiority. |
 | `esmp_package` | artifact integrity | `outputs/real_system_packer_2026-06-05/ESMP_PACKAGE_VERIFY_QWEN3_0P6B_LIMIT8_2026_06_06.md` | ESMP package metadata, manifest, and binary headers are independently checkable. |
 | `triton_shape_family` | kernel | `outputs/real_system_packer_2026-06-05/TRITON_QWEN_SHAPE_FAMILY_GATE_2026_06_06.md` | Tuned grouped packed INT4/INT8 Triton kernels can beat torch FP16 on selected measured shapes. |
 | `w4a8_activation_reconstruction` | module reconstruction | `outputs/w4a8_activation_reconstruction_2026_06_08/W4A8_ACTIVATION_RECONSTRUCTION_GATE.md` | Selected real Qwen3 self-attention module activations have bounded added drift from A8 activation quantization; this is not full-model quality retention or end-to-end speed evidence. |
@@ -90,7 +91,7 @@ Invalid claim:
 ## Non-Ledger Readiness Probes
 
 These probes are tracked because they reduce environment uncertainty, but they
-are not counted in the current 45-gate paper-facing ledger.
+are not counted in the current 46-gate paper-facing ledger.
 
 | probe | category | primary artifact | boundary |
 |---|---|---|---|

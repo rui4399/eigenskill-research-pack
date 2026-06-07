@@ -10,7 +10,7 @@ by an executable gate and an explicit claim boundary.
 ## Evidence Ledger
 
 `train_python/build_current_evidence_ledger.py` is the stable public entry
-point for the current paper-facing gate set. It fixes the 45 gate paths in one
+point for the current paper-facing gate set. It fixes the 46 gate paths in one
 manifest, rebuilds the ledger, and avoids copying a long `--gate` list across
 README files and paper appendices.
 
@@ -21,7 +21,7 @@ python train_python/build_current_evidence_ledger.py
 ```
 
 `train_python/build_evidence_ledger.py` is the lower-level builder for custom
-or future gate manifests. The expanded form of the current 45-gate ledger is:
+or future gate manifests. The expanded form of the current 46-gate ledger is:
 
 ```bash
 python train_python/build_evidence_ledger.py \
@@ -65,6 +65,7 @@ python train_python/build_evidence_ledger.py \
   --gate official_ptq_qwen25_1p5b_subset100_runtime_profile=outputs/official_ptq_qwen25_1p5b_subset100_runtime_profile_2026_06_07.json \
   --gate official_ptq_task_qwen25_1p5b_gsm8k200_mmlu100=outputs/official_ptq_task_qwen25_1p5b_gsm8k200_mmlu100_matrix_2026_06_08.json \
   --gate official_ptq_qwen25_1p5b_gsm8k200_mmlu100_runtime_profile=outputs/official_ptq_qwen25_1p5b_gsm8k200_mmlu100_runtime_profile_2026_06_08.json \
+  --gate official_ptq_qwen25_1p5b_gsm8k200_mmlu100_statistics=outputs/official_ptq_task_qwen25_1p5b_gsm8k200_mmlu100_statistics_2026_06_08.json \
   --gate allocation_family_proxy=outputs/q_palette_style_allocation_family_gate_2026_06_06.json \
   --gate robust_lcb_consensus=outputs/robust_lcb_consensus_family_gate_2026_06_06.json \
   --gate robust_lcb_quality=outputs/qwen3_0p6b_robust_lcb_quality_gate_2026_06_07.json \
@@ -74,11 +75,11 @@ python train_python/build_evidence_ledger.py \
   --out-md outputs/real_system_packer_2026-06-05/EVIDENCE_LEDGER_2026_06_06.md
 ```
 
-The current ledger passes with 45/45 gates across repo hygiene, calibration
+The current ledger passes with 46/46 gates across repo hygiene, calibration
 robustness, CSI trend significance, CSI null permutation, rank-inversion theory, artifact integrity, kernel, runtime wiring, selected-row, C++
 runtime, decode integration, QKV replacement, quality, task-retention, runtime profile, and
 capability-retention/model-ladder, allocation-comparator, rotation-comparator, and
-matched PTQ baseline, true subset100 official PTQ task/runtime evidence, deterministic IFEval-style PTQ execution, expanded AutoAWQ public PPL, Qwen2.5-1.5B subset100 plus GSM8K200/MMLU100 task/runtime evidence, PTQ-comparator, and
+matched PTQ baseline, true subset100 official PTQ task/runtime evidence, deterministic IFEval-style PTQ execution, expanded AutoAWQ public PPL, Qwen2.5-1.5B subset100 plus GSM8K200/MMLU100 task/runtime/statistical-interval evidence, PTQ-comparator, and
 paper-alignment evidence categories, plus extended W4A8 attention/MLP real-activation reconstruction.
 
 Valid claim:
@@ -235,7 +236,7 @@ Current gate:
 ```bash
 python train_python/gate_paper_evidence_alignment.py \
   --paper paper_drafts/eigenskill_q_research_draft_en_2026_06_07.md \
-  --expected-gate-count 45 \
+  --expected-gate-count 46 \
   --out-json outputs/paper_evidence_alignment_gate_2026_06_08.json \
   --out-md outputs/PAPER_EVIDENCE_ALIGNMENT_GATE_2026_06_08.md
 ```
@@ -243,7 +244,7 @@ python train_python/gate_paper_evidence_alignment.py \
 Current result: the generated alignment artifact records all configured required
 evidence references present, referenced repo paths found, 0 stale forbidden
 tokens, 0 unsafe non-negated claim lines, and the paper mentions the current
-45-gate ledger.
+46-gate ledger.
 
 Valid claim:
 
@@ -647,6 +648,25 @@ python train_python/gate_official_ptq_runtime_profile.py \
   --out-md outputs/OFFICIAL_PTQ_QWEN25_1P5B_GSM8K200_MMLU100_RUNTIME_PROFILE_2026_06_08.md
 ```
 
+Larger GSM8K200/MMLU100 statistical-interval gate:
+
+```bash
+python train_python/gate_official_ptq_task_statistics.py \
+  --case fp16:mmlu=outputs/official_ptq_task_fp16_qwen25_1p5b_mmlu_gsm8k200_mmlu100_summary_2026_06_08.json \
+  --case fp16:gsm8k=outputs/official_ptq_task_fp16_qwen25_1p5b_gsm8k_gsm8k200_mmlu100_summary_2026_06_08.json \
+  --case autoawq:mmlu=outputs/official_ptq_task_awq_qwen25_1p5b_mmlu_gsm8k200_mmlu100_summary_2026_06_08.json \
+  --case autoawq:gsm8k=outputs/official_ptq_task_awq_qwen25_1p5b_gsm8k_gsm8k200_mmlu100_summary_2026_06_08.json \
+  --baseline-variant fp16 \
+  --min-tasks-per-case 100 \
+  --min-shared-tasks 100 \
+  --max-ci-accuracy-drop 0.15 \
+  --bootstrap-samples 10000 \
+  --bootstrap-seed 20260608 \
+  --matrix-title "Qwen2.5-1.5B FP16 vs AutoAWQ GSM8K200/MMLU100 task statistics" \
+  --out-json outputs/official_ptq_task_qwen25_1p5b_gsm8k200_mmlu100_statistics_2026_06_08.json \
+  --out-md outputs/OFFICIAL_PTQ_TASK_QWEN25_1P5B_GSM8K200_MMLU100_STATISTICS_2026_06_08.md
+```
+
 Current result: 400 guarded task executions. FP16 gets 33/100 MMLU and 12/100
 GSM8K; AutoAWQ gets 34/100 MMLU and 11/100 GSM8K. The max drop versus FP16 is
 `0.0100`, peak guard VRAM ratio is `0.8013`, and AutoAWQ reduces peak guarded
@@ -658,6 +678,10 @@ records no measured accuracy drop versus FP16 and peak guard VRAM ratio
 `0.8295`. The paired runtime profile reports FP16 at 5.0148 tok/s and
 0.453859 s mean TTFT under HF offload, AutoAWQ at 12.9601 tok/s and 0.187606 s
 mean TTFT, and peak guarded VRAM falling from 6761 MiB to 6024 MiB.
+The statistical gate reports paired bootstrap AutoAWQ-minus-FP16 deltas:
+GSM8K `+0.0150` with CI `[-0.0350, +0.0650]`, and MMLU `+0.0100` with CI
+`[-0.1000, +0.1300]`. These intervals are deliberately reported as uncertainty
+evidence, not statistical superiority.
 
 Valid claim:
 
@@ -981,7 +1005,7 @@ Invalid claim:
 `train_python/run_official_awq_smoke.py` is a minimal package-readiness probe.
 It exists to verify that AutoAWQ can execute, save local quantized artifacts,
 and run one short generation smoke under the GPU guard. It is intentionally not
-part of the 45-gate paper-facing ledger.
+part of the 46-gate paper-facing ledger.
 
 Example WSL/GPU command:
 
