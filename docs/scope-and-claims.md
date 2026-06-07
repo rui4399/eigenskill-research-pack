@@ -70,6 +70,9 @@ In compressed form, the supported claims are:
   matrix. It strengthens native-baseline confrontation, but still reports lower
   guarded VRAM and slower local loader throughput rather than production
   acceleration;
+- the same Qwen2.5-1.5B baseline confrontation now extends to GSM8K200/MMLU100
+  across FP16, AutoAWQ, and GPTQModel, with paired bootstrap uncertainty
+  reported rather than hidden;
 - the same FP16/AutoAWQ/GPTQModel Qwen2.5-0.5B variants have deterministic
   IFEval-style instruction-following execution and runtime smoke gates, kept as
   execution-path evidence because the FP16 baseline is 0/8;

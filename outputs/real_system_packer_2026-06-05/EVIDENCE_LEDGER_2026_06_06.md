@@ -1,6 +1,6 @@
 # Evidence Ledger
 
-Date: `2026-06-07T19:26:45+00:00`
+Date: `2026-06-07T19:41:11+00:00`
 Status: **PASS**
 Gates: `48 / 48` passed
 Categories: `allocation comparator, artifact integrity, c++ runtime, calibration robustness, capability retention, decode integration, evidence, kernel, matched PTQ baseline, official PTQ readiness, paper alignment, ptq comparator, qkv replacement, quality, repo hygiene, rotation comparator, runtime profile, runtime wiring, selected-row, task execution smoke, task execution subset, task retention, theory`
@@ -9,7 +9,7 @@ Categories: `allocation comparator, artifact integrity, c++ runtime, calibration
 
 | gate | category | status | key metrics | source |
 |---|---|---|---|---|
-| `public_hygiene` | repo hygiene | **PASS** | tracked files 2225; forbidden files 0; placeholders 0 | `outputs/real_system_packer_2026-06-05/public_repo_hygiene_gate_2026_06_06.json` |
+| `public_hygiene` | repo hygiene | **PASS** | tracked files 2229; forbidden files 0; placeholders 0 | `outputs/real_system_packer_2026-06-05/public_repo_hygiene_gate_2026_06_06.json` |
 | `calibration_instability` | calibration robustness | **PASS** | cases 3; unstable 3; min rho -0.0440; mean Spearman 0.0713; mean Jaccard 0.4349; top20 Jaccard 0.1022 | `outputs/calibration_instability_benchmark_2026_06_06.json` |
 | `sensitivity_perturbation_matrix` | calibration robustness | **PASS** | cases 3; sample-size rho 0.6356; model-scale rho 0.1273; separation 0.5082 | `outputs/sensitivity_perturbation_matrix_qwen25_2026_06_07.json` |
 | `calibration_seed_stability` | calibration robustness | **PASS** | cases 6; prompt selections 6; finite pairs 15; min rho 0.2284; mean rho CI [0.3557, 0.5174]; min top20 0.3793; mean top20 CI [0.4200, 0.5292]; mean Spearman 0.4324; mean Jaccard 0.5734; mean Jaccard CI [0.5375, 0.6120]; top20 Jaccard 0.4672 | `outputs/calibration_seed_stability_qwen25_0p5b_2026_06_07.json` |
@@ -49,9 +49,9 @@ Categories: `allocation comparator, artifact integrity, c++ runtime, calibration
 | `official_gptqmodel_task_execution_qwen25_1p5b_subset100` | ptq comparator | **PASS** | cases 2; tasks 200; passes 33; accuracy 0.1650; max drop 0.0000; mean tok/s 10.6469; mean TTFT 0.236180s; VRAM 0.6672 | `outputs/official_gptqmodel_task_execution_qwen25_1p5b_subset100_matrix_2026_06_08.json` |
 | `official_ptq_task_qwen25_1p5b_subset100_fp16_awq_gptqmodel` | task execution smoke | **PASS** | cases 6; tasks 600; passes 123; accuracy 0.2050; max drop 0.0800; mean tok/s 13.5818; mean TTFT 0.191775s; VRAM 0.8013 | `outputs/official_ptq_task_qwen25_1p5b_subset100_fp16_awq_gptqmodel_matrix_2026_06_08.json` |
 | `official_ptq_qwen25_1p5b_subset100_fp16_awq_gptqmodel_runtime_profile` | runtime profile | **PASS** | tasks 600; cases 6; mean tok/s 13.5818; mean TTFT 0.191775s; VRAM MiB 6531; VRAM 0.8013 | `outputs/official_ptq_qwen25_1p5b_subset100_fp16_awq_gptqmodel_runtime_profile_2026_06_08.json` |
-| `official_ptq_task_qwen25_1p5b_gsm8k200_mmlu100` | task execution smoke | **PASS** | cases 4; tasks 600; passes 108; accuracy 0.2188; max drop -0.0100; mean tok/s 8.9874; mean TTFT 0.320733s; VRAM 0.8295 | `outputs/official_ptq_task_qwen25_1p5b_gsm8k200_mmlu100_matrix_2026_06_08.json` |
-| `official_ptq_qwen25_1p5b_gsm8k200_mmlu100_runtime_profile` | runtime profile | **PASS** | tasks 600; cases 4; mean tok/s 8.9874; mean TTFT 0.320733s; VRAM MiB 6761; VRAM 0.8295 | `outputs/official_ptq_qwen25_1p5b_gsm8k200_mmlu100_runtime_profile_2026_06_08.json` |
-| `official_ptq_qwen25_1p5b_gsm8k200_mmlu100_statistics` | ptq comparator | **PASS** | cases 4; tasks 600; passes 108 | `outputs/official_ptq_task_qwen25_1p5b_gsm8k200_mmlu100_statistics_2026_06_08.json` |
+| `official_ptq_task_qwen25_1p5b_gsm8k200_mmlu100_fp16_awq_gptqmodel` | task execution smoke | **PASS** | cases 6; tasks 900; passes 153; accuracy 0.2042; max drop 0.0800; mean tok/s 9.5151; mean TTFT 0.291967s; VRAM 0.8295 | `outputs/official_ptq_task_qwen25_1p5b_gsm8k200_mmlu100_fp16_awq_gptqmodel_matrix_2026_06_08.json` |
+| `official_ptq_qwen25_1p5b_gsm8k200_mmlu100_fp16_awq_gptqmodel_runtime_profile` | runtime profile | **PASS** | tasks 900; cases 6; mean tok/s 9.5151; mean TTFT 0.291967s; VRAM MiB 6761; VRAM 0.8295 | `outputs/official_ptq_qwen25_1p5b_gsm8k200_mmlu100_fp16_awq_gptqmodel_runtime_profile_2026_06_08.json` |
+| `official_ptq_qwen25_1p5b_gsm8k200_mmlu100_fp16_awq_gptqmodel_statistics` | ptq comparator | **PASS** | cases 6; tasks 900; passes 153 | `outputs/official_ptq_task_qwen25_1p5b_gsm8k200_mmlu100_fp16_awq_gptqmodel_statistics_2026_06_08.json` |
 | `allocation_family_proxy` | allocation comparator | **PASS** | cases 6; min budget util 0.9999; finite lambdas 6; nontrivial hists 6; records 1126; max avg bits 4.4999; target bits 4.5000 | `outputs/q_palette_style_allocation_family_gate_2026_06_06.json` |
 | `robust_lcb_consensus` | allocation comparator | **PASS** | cases 3; high-bit modules 99; consistent selected 80; selected modules 80; max avg bits 4.4997 | `outputs/robust_lcb_consensus_family_gate_2026_06_06.json` |
 | `robust_lcb_quality` | quality | **PASS** | cases 2; wins/uniform 2; wins/mean 0; margin vs uniform 5.6188; margin vs mean -2.8834; VRAM 0.7032 | `outputs/qwen3_0p6b_robust_lcb_quality_gate_2026_06_07.json` |

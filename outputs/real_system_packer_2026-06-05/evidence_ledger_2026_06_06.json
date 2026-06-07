@@ -1,5 +1,5 @@
 {
-  "date": "2026-06-07T19:26:45+00:00",
+  "date": "2026-06-07T19:41:11+00:00",
   "passed": true,
   "gate_count": 48,
   "passed_count": 48,
@@ -36,9 +36,9 @@
       "path": "outputs\\real_system_packer_2026-06-05\\public_repo_hygiene_gate_2026_06_06.json",
       "passed": true,
       "failures": [],
-      "metrics": "tracked files 2225; forbidden files 0; placeholders 0",
+      "metrics": "tracked files 2229; forbidden files 0; placeholders 0",
       "summary": {
-        "tracked_file_count": 2225,
+        "tracked_file_count": 2229,
         "forbidden_file_count": 0,
         "root_clutter_count": 0,
         "placeholder_count": 0,
@@ -1242,82 +1242,85 @@
       }
     },
     {
-      "label": "official_ptq_task_qwen25_1p5b_gsm8k200_mmlu100",
+      "label": "official_ptq_task_qwen25_1p5b_gsm8k200_mmlu100_fp16_awq_gptqmodel",
       "category": "task execution smoke",
-      "path": "outputs\\official_ptq_task_qwen25_1p5b_gsm8k200_mmlu100_matrix_2026_06_08.json",
+      "path": "outputs\\official_ptq_task_qwen25_1p5b_gsm8k200_mmlu100_fp16_awq_gptqmodel_matrix_2026_06_08.json",
       "passed": true,
       "failures": [],
-      "metrics": "cases 4; tasks 600; passes 108; accuracy 0.2188; max drop -0.0100; mean tok/s 8.9874; mean TTFT 0.320733s; VRAM 0.8295",
+      "metrics": "cases 6; tasks 900; passes 153; accuracy 0.2042; max drop 0.0800; mean tok/s 9.5151; mean TTFT 0.291967s; VRAM 0.8295",
       "summary": {
-        "case_count": 4,
-        "variant_count": 2,
+        "case_count": 6,
+        "variant_count": 3,
         "format_count": 2,
         "variants": [
           "autoawq",
-          "fp16"
+          "fp16",
+          "gptqmodel"
         ],
         "task_formats": [
           "gsm8k",
           "mmlu"
         ],
         "baseline_variant": "fp16",
-        "total_tasks": 600,
-        "total_passes": 108,
-        "mean_accuracy": 0.21875,
-        "max_accuracy_drop_vs_fp16": -0.010000000000000009,
+        "total_tasks": 900,
+        "total_passes": 153,
+        "mean_accuracy": 0.20416666666666666,
+        "max_accuracy_drop_vs_fp16": 0.08000000000000002,
         "baseline_zero_accuracy_formats": [],
         "max_guard_vram_ratio": 0.8294687768371979,
-        "mean_tokens_per_second": 8.98743409317678,
-        "mean_ttft_seconds": 0.32073266908625064
+        "mean_tokens_per_second": 9.515139029588312,
+        "mean_ttft_seconds": 0.29196741876333354
       }
     },
     {
-      "label": "official_ptq_qwen25_1p5b_gsm8k200_mmlu100_runtime_profile",
+      "label": "official_ptq_qwen25_1p5b_gsm8k200_mmlu100_fp16_awq_gptqmodel_runtime_profile",
       "category": "runtime profile",
-      "path": "outputs\\official_ptq_qwen25_1p5b_gsm8k200_mmlu100_runtime_profile_2026_06_08.json",
+      "path": "outputs\\official_ptq_qwen25_1p5b_gsm8k200_mmlu100_fp16_awq_gptqmodel_runtime_profile_2026_06_08.json",
       "passed": true,
       "failures": [],
-      "metrics": "tasks 600; cases 4; mean tok/s 8.9874; mean TTFT 0.320733s; VRAM MiB 6761; VRAM 0.8295",
+      "metrics": "tasks 900; cases 6; mean tok/s 9.5151; mean TTFT 0.291967s; VRAM MiB 6761; VRAM 0.8295",
       "summary": {
-        "source_case_count": 4,
-        "variant_count": 2,
+        "source_case_count": 6,
+        "variant_count": 3,
         "variants": [
           "autoawq",
-          "fp16"
+          "fp16",
+          "gptqmodel"
         ],
         "baseline_variant": "fp16",
-        "total_cases": 4,
-        "total_tasks": 600,
-        "mean_tokens_per_second": 8.987434093176779,
-        "mean_ttft_seconds": 0.32073266908625064,
+        "total_cases": 6,
+        "total_tasks": 900,
+        "mean_tokens_per_second": 9.515139029588312,
+        "mean_ttft_seconds": 0.29196741876333354,
         "max_guard_vram_ratio": 0.8294687768371979,
         "max_guard_vram_mib": 6761.0
       }
     },
     {
-      "label": "official_ptq_qwen25_1p5b_gsm8k200_mmlu100_statistics",
+      "label": "official_ptq_qwen25_1p5b_gsm8k200_mmlu100_fp16_awq_gptqmodel_statistics",
       "category": "ptq comparator",
-      "path": "outputs\\official_ptq_task_qwen25_1p5b_gsm8k200_mmlu100_statistics_2026_06_08.json",
+      "path": "outputs\\official_ptq_task_qwen25_1p5b_gsm8k200_mmlu100_fp16_awq_gptqmodel_statistics_2026_06_08.json",
       "passed": true,
       "failures": [],
-      "metrics": "cases 4; tasks 600; passes 108",
+      "metrics": "cases 6; tasks 900; passes 153",
       "summary": {
-        "case_count": 4,
-        "variant_count": 2,
+        "case_count": 6,
+        "variant_count": 3,
         "format_count": 2,
         "variants": [
           "autoawq",
-          "fp16"
+          "fp16",
+          "gptqmodel"
         ],
         "task_formats": [
           "gsm8k",
           "mmlu"
         ],
         "baseline_variant": "fp16",
-        "total_tasks": 600,
-        "total_passes": 108,
-        "comparison_count": 2,
-        "min_paired_bootstrap_delta_low": -0.1,
+        "total_tasks": 900,
+        "total_passes": 153,
+        "comparison_count": 4,
+        "min_paired_bootstrap_delta_low": -0.19,
         "bootstrap_samples": 10000
       }
     },

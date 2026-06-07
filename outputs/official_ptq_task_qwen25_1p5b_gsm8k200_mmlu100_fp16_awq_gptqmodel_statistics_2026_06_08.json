@@ -1,0 +1,237 @@
+{
+  "date": "2026-06-07T19:33:44+00:00",
+  "passed": true,
+  "matrix_title": "Qwen2.5-1.5B FP16 vs AutoAWQ vs GPTQModel GSM8K200/MMLU100 task statistics",
+  "summary": {
+    "case_count": 6,
+    "variant_count": 3,
+    "format_count": 2,
+    "variants": [
+      "autoawq",
+      "fp16",
+      "gptqmodel"
+    ],
+    "task_formats": [
+      "gsm8k",
+      "mmlu"
+    ],
+    "baseline_variant": "fp16",
+    "total_tasks": 900,
+    "total_passes": 153,
+    "comparison_count": 4,
+    "min_paired_bootstrap_delta_low": -0.19,
+    "bootstrap_samples": 10000
+  },
+  "cases": [
+    {
+      "variant": "fp16",
+      "task_format": "mmlu",
+      "summary_path": "outputs\\official_ptq_task_fp16_qwen25_1p5b_mmlu_gsm8k200_mmlu100_summary_2026_06_08.json",
+      "model": "Qwen/Qwen2.5-1.5B-Instruct",
+      "loader": "hf",
+      "hf_device_map": "auto",
+      "task_count": 100,
+      "row_count": 100,
+      "passes": 33,
+      "accuracy": 0.33,
+      "wilson_accuracy_ci_95": {
+        "passes": 33,
+        "total": 100,
+        "mean": 0.33,
+        "low": 0.24563122734128034,
+        "high": 0.4269465620490947
+      }
+    },
+    {
+      "variant": "fp16",
+      "task_format": "gsm8k",
+      "summary_path": "outputs\\official_ptq_task_fp16_qwen25_1p5b_gsm8k_gsm8k200_mmlu100_summary_2026_06_08.json",
+      "model": "Qwen/Qwen2.5-1.5B-Instruct",
+      "loader": "hf",
+      "hf_device_map": "auto",
+      "task_count": 200,
+      "row_count": 200,
+      "passes": 19,
+      "accuracy": 0.095,
+      "wilson_accuracy_ci_95": {
+        "passes": 19,
+        "total": 200,
+        "mean": 0.095,
+        "low": 0.061663102717386536,
+        "high": 0.1436016116481994
+      }
+    },
+    {
+      "variant": "autoawq",
+      "task_format": "mmlu",
+      "summary_path": "outputs\\official_ptq_task_awq_qwen25_1p5b_mmlu_gsm8k200_mmlu100_summary_2026_06_08.json",
+      "model": "/home/rui/eigenskill_artifacts/qwen25_1p5b_awq_model_2026_06_07",
+      "loader": "autoawq",
+      "hf_device_map": "",
+      "task_count": 100,
+      "row_count": 100,
+      "passes": 34,
+      "accuracy": 0.34,
+      "wilson_accuracy_ci_95": {
+        "passes": 34,
+        "total": 100,
+        "mean": 0.34,
+        "low": 0.25461520797348164,
+        "high": 0.43722271145275377
+      }
+    },
+    {
+      "variant": "autoawq",
+      "task_format": "gsm8k",
+      "summary_path": "outputs\\official_ptq_task_awq_qwen25_1p5b_gsm8k_gsm8k200_mmlu100_summary_2026_06_08.json",
+      "model": "/home/rui/eigenskill_artifacts/qwen25_1p5b_awq_model_2026_06_07",
+      "loader": "autoawq",
+      "hf_device_map": "",
+      "task_count": 200,
+      "row_count": 200,
+      "passes": 22,
+      "accuracy": 0.11,
+      "wilson_accuracy_ci_95": {
+        "passes": 22,
+        "total": 200,
+        "mean": 0.11,
+        "low": 0.07377244460125303,
+        "high": 0.1609269099730149
+      }
+    },
+    {
+      "variant": "gptqmodel",
+      "task_format": "mmlu",
+      "summary_path": "outputs\\official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_gsm8k200_mmlu100_summary_2026_06_08.json",
+      "model": "/home/rui/eigenskill_artifacts/qwen25_1p5b_gptq_model_smoke4_2026_06_08",
+      "loader": "gptqmodel",
+      "hf_device_map": "",
+      "task_count": 100,
+      "row_count": 100,
+      "passes": 25,
+      "accuracy": 0.25,
+      "wilson_accuracy_ci_95": {
+        "passes": 25,
+        "total": 100,
+        "mean": 0.25,
+        "low": 0.17545211362287674,
+        "high": 0.34304463548061603
+      }
+    },
+    {
+      "variant": "gptqmodel",
+      "task_format": "gsm8k",
+      "summary_path": "outputs\\official_ptq_task_gptqmodel_qwen25_1p5b_gsm8k_gsm8k200_mmlu100_summary_2026_06_08.json",
+      "model": "/home/rui/eigenskill_artifacts/qwen25_1p5b_gptq_model_smoke4_2026_06_08",
+      "loader": "gptqmodel",
+      "hf_device_map": "",
+      "task_count": 200,
+      "row_count": 200,
+      "passes": 20,
+      "accuracy": 0.1,
+      "wilson_accuracy_ci_95": {
+        "passes": 20,
+        "total": 200,
+        "mean": 0.1,
+        "low": 0.06567044866909588,
+        "high": 0.1494058124327174
+      }
+    }
+  ],
+  "comparisons": [
+    {
+      "variant": "autoawq",
+      "task_format": "gsm8k",
+      "baseline_variant": "fp16",
+      "shared_tasks": 200,
+      "baseline_accuracy": 0.095,
+      "candidate_accuracy": 0.11,
+      "accuracy_delta_candidate_minus_baseline": 0.015,
+      "accuracy_drop_baseline_minus_candidate": -0.015,
+      "paired_bootstrap_delta_ci_95": {
+        "samples": 10000,
+        "mean": 0.015547499999999999,
+        "low": -0.035,
+        "high": 0.065,
+        "probability_nonnegative": 0.7583
+      },
+      "discordant_pairs": {
+        "baseline_only_correct": 12,
+        "candidate_only_correct": 15,
+        "both_correct": 7,
+        "both_wrong": 166
+      }
+    },
+    {
+      "variant": "gptqmodel",
+      "task_format": "gsm8k",
+      "baseline_variant": "fp16",
+      "shared_tasks": 200,
+      "baseline_accuracy": 0.095,
+      "candidate_accuracy": 0.1,
+      "accuracy_delta_candidate_minus_baseline": 0.0050000000000000044,
+      "accuracy_drop_baseline_minus_candidate": -0.0050000000000000044,
+      "paired_bootstrap_delta_ci_95": {
+        "samples": 10000,
+        "mean": 0.004784,
+        "low": -0.04,
+        "high": 0.05,
+        "probability_nonnegative": 0.625
+      },
+      "discordant_pairs": {
+        "baseline_only_correct": 11,
+        "candidate_only_correct": 12,
+        "both_correct": 8,
+        "both_wrong": 169
+      }
+    },
+    {
+      "variant": "autoawq",
+      "task_format": "mmlu",
+      "baseline_variant": "fp16",
+      "shared_tasks": 100,
+      "baseline_accuracy": 0.33,
+      "candidate_accuracy": 0.34,
+      "accuracy_delta_candidate_minus_baseline": 0.010000000000000009,
+      "accuracy_drop_baseline_minus_candidate": -0.010000000000000009,
+      "paired_bootstrap_delta_ci_95": {
+        "samples": 10000,
+        "mean": 0.009687999999999999,
+        "low": -0.1,
+        "high": 0.12,
+        "probability_nonnegative": 0.6008
+      },
+      "discordant_pairs": {
+        "baseline_only_correct": 16,
+        "candidate_only_correct": 17,
+        "both_correct": 17,
+        "both_wrong": 50
+      }
+    },
+    {
+      "variant": "gptqmodel",
+      "task_format": "mmlu",
+      "baseline_variant": "fp16",
+      "shared_tasks": 100,
+      "baseline_accuracy": 0.33,
+      "candidate_accuracy": 0.25,
+      "accuracy_delta_candidate_minus_baseline": -0.08000000000000002,
+      "accuracy_drop_baseline_minus_candidate": 0.08000000000000002,
+      "paired_bootstrap_delta_ci_95": {
+        "samples": 10000,
+        "mean": -0.079636,
+        "low": -0.19,
+        "high": 0.03,
+        "probability_nonnegative": 0.0983
+      },
+      "discordant_pairs": {
+        "baseline_only_correct": 21,
+        "candidate_only_correct": 13,
+        "both_correct": 12,
+        "both_wrong": 54
+      }
+    }
+  ],
+  "failures": [],
+  "claim_boundary": "Valid claim: this gate reports statistical uncertainty for an already-guarded local official-PTQ task matrix, including Wilson accuracy intervals, paired bootstrap candidate-minus-baseline deltas, and discordant-pair counts. Invalid claim: this does not prove leaderboard-scale retention, statistical superiority, SOTA PTQ quality, production speedup, mobile deployment, or energy savings."
+}

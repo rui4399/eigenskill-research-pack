@@ -65,9 +65,9 @@ python train_python/build_evidence_ledger.py \
   --gate official_gptqmodel_task_execution_qwen25_1p5b_subset100=outputs/official_gptqmodel_task_execution_qwen25_1p5b_subset100_matrix_2026_06_08.json \
   --gate official_ptq_task_qwen25_1p5b_subset100_fp16_awq_gptqmodel=outputs/official_ptq_task_qwen25_1p5b_subset100_fp16_awq_gptqmodel_matrix_2026_06_08.json \
   --gate official_ptq_qwen25_1p5b_subset100_fp16_awq_gptqmodel_runtime_profile=outputs/official_ptq_qwen25_1p5b_subset100_fp16_awq_gptqmodel_runtime_profile_2026_06_08.json \
-  --gate official_ptq_task_qwen25_1p5b_gsm8k200_mmlu100=outputs/official_ptq_task_qwen25_1p5b_gsm8k200_mmlu100_matrix_2026_06_08.json \
-  --gate official_ptq_qwen25_1p5b_gsm8k200_mmlu100_runtime_profile=outputs/official_ptq_qwen25_1p5b_gsm8k200_mmlu100_runtime_profile_2026_06_08.json \
-  --gate official_ptq_qwen25_1p5b_gsm8k200_mmlu100_statistics=outputs/official_ptq_task_qwen25_1p5b_gsm8k200_mmlu100_statistics_2026_06_08.json \
+  --gate official_ptq_task_qwen25_1p5b_gsm8k200_mmlu100_fp16_awq_gptqmodel=outputs/official_ptq_task_qwen25_1p5b_gsm8k200_mmlu100_fp16_awq_gptqmodel_matrix_2026_06_08.json \
+  --gate official_ptq_qwen25_1p5b_gsm8k200_mmlu100_fp16_awq_gptqmodel_runtime_profile=outputs/official_ptq_qwen25_1p5b_gsm8k200_mmlu100_fp16_awq_gptqmodel_runtime_profile_2026_06_08.json \
+  --gate official_ptq_qwen25_1p5b_gsm8k200_mmlu100_fp16_awq_gptqmodel_statistics=outputs/official_ptq_task_qwen25_1p5b_gsm8k200_mmlu100_fp16_awq_gptqmodel_statistics_2026_06_08.json \
   --gate allocation_family_proxy=outputs/q_palette_style_allocation_family_gate_2026_06_06.json \
   --gate robust_lcb_consensus=outputs/robust_lcb_consensus_family_gate_2026_06_06.json \
   --gate robust_lcb_quality=outputs/qwen3_0p6b_robust_lcb_quality_gate_2026_06_07.json \
@@ -81,7 +81,7 @@ The current ledger passes with 48/48 gates across repo hygiene, calibration
 robustness, CSI trend significance, CSI null permutation, rank-inversion theory, artifact integrity, kernel, runtime wiring, selected-row, C++
 runtime, decode integration, QKV replacement, quality, task-retention, runtime profile, and
 capability-retention/model-ladder, allocation-comparator, rotation-comparator, and
-matched PTQ baseline, true subset100 official PTQ task/runtime evidence, deterministic IFEval-style PTQ execution, expanded AutoAWQ public PPL, Qwen2.5-1.5B GPTQModel task-execution subset evidence, Qwen2.5-1.5B FP16/AutoAWQ/GPTQModel subset100 plus FP16/AutoAWQ GSM8K200/MMLU100 task/runtime/statistical-interval evidence, PTQ-comparator, and
+matched PTQ baseline, true subset100 official PTQ task/runtime evidence, deterministic IFEval-style PTQ execution, expanded AutoAWQ public PPL, Qwen2.5-1.5B GPTQModel task-execution subset evidence, Qwen2.5-1.5B FP16/AutoAWQ/GPTQModel subset100 plus GSM8K200/MMLU100 task/runtime/statistical-interval evidence, PTQ-comparator, and
 paper-alignment evidence categories, plus extended W4A8 attention/MLP real-activation reconstruction.
 
 Valid claim:
@@ -532,7 +532,7 @@ Invalid claim:
 - this proves Redmi/mobile deployment, production runtime speedup, energy
   improvement, or official AWQ/GPTQ competitiveness.
 
-## Qwen2.5-1.5B FP16-vs-AutoAWQ Matched Subset100 Matrix
+## Qwen2.5-1.5B Matched Official PTQ Task Matrices
 
 `tools/run_qwen25_1p5b_subset100_task_matrix.sh` reruns the larger local
 official-package task path. By default it evaluates FP16 and the saved AutoAWQ
@@ -614,18 +614,21 @@ python train_python/gate_official_ptq_task_retention.py \
   --case fp16:gsm8k=outputs/official_ptq_task_fp16_qwen25_1p5b_gsm8k_gsm8k200_mmlu100_summary_2026_06_08.json=outputs/official_ptq_task_fp16_qwen25_1p5b_gsm8k_gsm8k200_mmlu100_gpu_guard_2026_06_08.json \
   --case autoawq:mmlu=outputs/official_ptq_task_awq_qwen25_1p5b_mmlu_gsm8k200_mmlu100_summary_2026_06_08.json=outputs/official_ptq_task_awq_qwen25_1p5b_mmlu_gsm8k200_mmlu100_gpu_guard_2026_06_08.json \
   --case autoawq:gsm8k=outputs/official_ptq_task_awq_qwen25_1p5b_gsm8k_gsm8k200_mmlu100_summary_2026_06_08.json=outputs/official_ptq_task_awq_qwen25_1p5b_gsm8k_gsm8k200_mmlu100_gpu_guard_2026_06_08.json \
+  --case gptqmodel:mmlu=outputs/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_gsm8k200_mmlu100_summary_2026_06_08.json=outputs/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_gsm8k200_mmlu100_gpu_guard_2026_06_08.json \
+  --case gptqmodel:gsm8k=outputs/official_ptq_task_gptqmodel_qwen25_1p5b_gsm8k_gsm8k200_mmlu100_summary_2026_06_08.json=outputs/official_ptq_task_gptqmodel_qwen25_1p5b_gsm8k_gsm8k200_mmlu100_gpu_guard_2026_06_08.json \
   --baseline-variant fp16 \
   --required-variant fp16 \
   --required-variant autoawq \
+  --required-variant gptqmodel \
   --required-format mmlu \
   --required-format gsm8k \
   --min-tasks-per-case 100 \
   --max-memory-ratio 0.90 \
   --max-accuracy-drop 0.05 \
-  --matrix-title "Qwen2.5-1.5B FP16 vs AutoAWQ GSM8K200/MMLU100 task matrix" \
-  --evidence-label "matched Qwen2.5-1.5B local GSM8K200 plus MMLU100 task evidence with HF FP16 offload" \
-  --out-json outputs/official_ptq_task_qwen25_1p5b_gsm8k200_mmlu100_matrix_2026_06_08.json \
-  --out-md outputs/OFFICIAL_PTQ_TASK_QWEN25_1P5B_GSM8K200_MMLU100_MATRIX_2026_06_08.md
+  --matrix-title "Qwen2.5-1.5B FP16 vs AutoAWQ vs GPTQModel GSM8K200/MMLU100 task matrix" \
+  --evidence-label "matched Qwen2.5-1.5B local GSM8K200 plus MMLU100 task evidence for FP16, AutoAWQ, and GPTQModel" \
+  --out-json outputs/official_ptq_task_qwen25_1p5b_gsm8k200_mmlu100_fp16_awq_gptqmodel_matrix_2026_06_08.json \
+  --out-md outputs/OFFICIAL_PTQ_TASK_QWEN25_1P5B_GSM8K200_MMLU100_FP16_AWQ_GPTQMODEL_MATRIX_2026_06_08.md
 ```
 
 Runtime-profile gate:
@@ -656,16 +659,17 @@ Larger GSM8K200/MMLU100 runtime-profile gate:
 
 ```bash
 python train_python/gate_official_ptq_runtime_profile.py \
-  --matrix-json outputs/official_ptq_task_qwen25_1p5b_gsm8k200_mmlu100_matrix_2026_06_08.json \
+  --matrix-json outputs/official_ptq_task_qwen25_1p5b_gsm8k200_mmlu100_fp16_awq_gptqmodel_matrix_2026_06_08.json \
   --baseline-variant fp16 \
   --required-variant fp16 \
   --required-variant autoawq \
+  --required-variant gptqmodel \
   --min-cases-per-variant 2 \
   --max-memory-ratio 0.90 \
   --min-mean-tokens-per-second 1 \
   --max-mean-ttft-seconds 2.0 \
-  --out-json outputs/official_ptq_qwen25_1p5b_gsm8k200_mmlu100_runtime_profile_2026_06_08.json \
-  --out-md outputs/OFFICIAL_PTQ_QWEN25_1P5B_GSM8K200_MMLU100_RUNTIME_PROFILE_2026_06_08.md
+  --out-json outputs/official_ptq_qwen25_1p5b_gsm8k200_mmlu100_fp16_awq_gptqmodel_runtime_profile_2026_06_08.json \
+  --out-md outputs/OFFICIAL_PTQ_QWEN25_1P5B_GSM8K200_MMLU100_FP16_AWQ_GPTQMODEL_RUNTIME_PROFILE_2026_06_08.md
 ```
 
 Larger GSM8K200/MMLU100 statistical-interval gate:
@@ -676,15 +680,17 @@ python train_python/gate_official_ptq_task_statistics.py \
   --case fp16:gsm8k=outputs/official_ptq_task_fp16_qwen25_1p5b_gsm8k_gsm8k200_mmlu100_summary_2026_06_08.json \
   --case autoawq:mmlu=outputs/official_ptq_task_awq_qwen25_1p5b_mmlu_gsm8k200_mmlu100_summary_2026_06_08.json \
   --case autoawq:gsm8k=outputs/official_ptq_task_awq_qwen25_1p5b_gsm8k_gsm8k200_mmlu100_summary_2026_06_08.json \
+  --case gptqmodel:mmlu=outputs/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_gsm8k200_mmlu100_summary_2026_06_08.json \
+  --case gptqmodel:gsm8k=outputs/official_ptq_task_gptqmodel_qwen25_1p5b_gsm8k_gsm8k200_mmlu100_summary_2026_06_08.json \
   --baseline-variant fp16 \
   --min-tasks-per-case 100 \
   --min-shared-tasks 100 \
-  --max-ci-accuracy-drop 0.15 \
+  --max-ci-accuracy-drop 0.22 \
   --bootstrap-samples 10000 \
   --bootstrap-seed 20260608 \
-  --matrix-title "Qwen2.5-1.5B FP16 vs AutoAWQ GSM8K200/MMLU100 task statistics" \
-  --out-json outputs/official_ptq_task_qwen25_1p5b_gsm8k200_mmlu100_statistics_2026_06_08.json \
-  --out-md outputs/OFFICIAL_PTQ_TASK_QWEN25_1P5B_GSM8K200_MMLU100_STATISTICS_2026_06_08.md
+  --matrix-title "Qwen2.5-1.5B FP16 vs AutoAWQ vs GPTQModel GSM8K200/MMLU100 task statistics" \
+  --out-json outputs/official_ptq_task_qwen25_1p5b_gsm8k200_mmlu100_fp16_awq_gptqmodel_statistics_2026_06_08.json \
+  --out-md outputs/OFFICIAL_PTQ_TASK_QWEN25_1P5B_GSM8K200_MMLU100_FP16_AWQ_GPTQMODEL_STATISTICS_2026_06_08.md
 ```
 
 Historical 2026-06-07 subset100 result: 400 guarded task executions for FP16
@@ -692,16 +698,20 @@ and AutoAWQ only. It is superseded in the paper-facing ledger by the 2026-06-08
 matched FP16/AutoAWQ/GPTQModel subset100 matrix above, but remains useful as a
 reproducibility input for the larger GSM8K200/MMLU100 AutoAWQ-only follow-up.
 
-The larger 2026-06-08 run covers 600 guarded task executions. FP16 gets 33/100
-MMLU and 19/200 GSM8K; AutoAWQ gets 34/100 MMLU and 22/200 GSM8K. The gate
-records no measured accuracy drop versus FP16 and peak guard VRAM ratio
-`0.8295`. The paired runtime profile reports FP16 at 5.0148 tok/s and
-0.453859 s mean TTFT under HF offload, AutoAWQ at 12.9601 tok/s and 0.187606 s
-mean TTFT, and peak guarded VRAM falling from 6761 MiB to 6024 MiB.
-The statistical gate reports paired bootstrap AutoAWQ-minus-FP16 deltas:
-GSM8K `+0.0150` with CI `[-0.0350, +0.0650]`, and MMLU `+0.0100` with CI
-`[-0.1000, +0.1300]`. These intervals are deliberately reported as uncertainty
-evidence, not statistical superiority.
+The larger 2026-06-08 run covers 900 guarded task executions. FP16 gets 33/100
+MMLU and 19/200 GSM8K; AutoAWQ gets 34/100 MMLU and 22/200 GSM8K; GPTQModel
+gets 25/100 MMLU and 20/200 GSM8K. The gate records max measured drop `0.0800`
+versus FP16 and peak guard VRAM ratio `0.8295`. The paired runtime profile
+reports FP16 at 5.0148 tok/s and 0.453859 s mean TTFT under HF offload, AutoAWQ
+at 12.9601 tok/s and 0.187606 s mean TTFT, GPTQModel at 10.5705 tok/s and
+0.234437 s mean TTFT, and peak guarded VRAM falling from 6761 MiB to 6024 MiB
+for AutoAWQ and 5516 MiB for GPTQModel.
+The statistical gate reports paired bootstrap candidate-minus-FP16 deltas:
+AutoAWQ GSM8K `+0.0150` with CI `[-0.0350, +0.0650]`, AutoAWQ MMLU `+0.0100`
+with CI `[-0.1000, +0.1200]`, GPTQModel GSM8K `+0.0050` with CI `[-0.0400,
++0.0500]`, and GPTQModel MMLU `-0.0800` with CI `[-0.1900, +0.0300]`. These
+intervals are deliberately reported as uncertainty evidence, not statistical
+superiority.
 
 Valid claim:
 

@@ -92,17 +92,19 @@ MMLU and 8/100 GSM8K. The max drop versus FP16 is 0.08. Peak guarded VRAM falls
 from 6531 MiB for FP16 to 4919 MiB for AutoAWQ and 5438 MiB for GPTQModel, while
 both quantized local loader paths remain slower than FP16.
 The larger 2026-06-08 Qwen2.5-1.5B task-retention gate extends this to the same
-100-row MMLU abstract-algebra fixture plus 200 GSM8K rows, covering 600 guarded
-task executions: FP16 obtains 33/100 MMLU and 19/200 GSM8K, while AutoAWQ
-obtains 34/100 MMLU and 22/200 GSM8K, with no measured accuracy drop versus the
-offloaded FP16 baseline and peak guarded VRAM ratio 0.8295. The paired runtime
-profile is reported only as a local guarded profile because the FP16 path uses
-HF CPU/GPU offload to stay under the 90% VRAM guard.
+100-row MMLU abstract-algebra fixture plus 200 GSM8K rows, covering 900 guarded
+task executions across FP16, AutoAWQ, and GPTQModel: FP16 obtains 33/100 MMLU
+and 19/200 GSM8K, AutoAWQ obtains 34/100 MMLU and 22/200 GSM8K, and GPTQModel
+obtains 25/100 MMLU and 20/200 GSM8K. The max measured drop versus FP16 is 0.08,
+and peak guarded VRAM ratio is 0.8295. The paired runtime profile is reported
+only as a local guarded profile because the FP16 path uses HF CPU/GPU offload to
+stay under the 90% VRAM guard.
 The paired statistical gate adds Wilson accuracy intervals and paired bootstrap
-AutoAWQ-minus-FP16 deltas over the shared task ids: GSM8K delta is +0.015 with
-95% bootstrap CI [-0.035, +0.065], and MMLU delta is +0.010 with CI
-[-0.100, +0.130]. These wide intervals are used as uncertainty disclosure, not
-as a superiority claim.
+candidate-minus-FP16 deltas over the shared task ids: AutoAWQ has GSM8K delta
++0.015 with 95% bootstrap CI [-0.035, +0.065] and MMLU delta +0.010 with CI
+[-0.100, +0.120], while GPTQModel has GSM8K delta +0.005 with CI [-0.040,
++0.050] and MMLU delta -0.080 with CI [-0.190, +0.030]. These wide intervals
+are used as uncertainty disclosure, not as a superiority claim.
 ESMP packaging, Triton shape tuning, selected-row
 execution, shallow fused-QKV generation, and C++ audit tools are executable.
 The repository does not claim a production LLM runtime.
@@ -465,9 +467,9 @@ current ledger passes 48/48 gates. The most important gates are:
 | Qwen2.5-1.5B GPTQModel task-execution subset100 | Saved GPTQModel W4/G128 artifact on 100 MMLU abstract-algebra plus 100 GSM8K rows; see `outputs/OFFICIAL_GPTQMODEL_TASK_EXECUTION_QWEN25_1P5B_SUBSET100_MATRIX_2026_06_08.md`. | The native GPTQModel path reloads and generates under guard, with 25/100 MMLU, 8/100 GSM8K, mean 10.6469 tokens/s, mean TTFT 0.236180 s, and peak guard VRAM ratio 0.6672. | Not leaderboard-scale task retention, not GPTQ superiority, not matched FP16/AWQ comparison, not production runtime, and not SOTA PTQ. |
 | Qwen2.5-1.5B matched subset100 task evidence | FP16, AutoAWQ, and GPTQModel Qwen2.5-1.5B on 600 guarded public subset executions; see `outputs/OFFICIAL_PTQ_TASK_QWEN25_1P5B_SUBSET100_FP16_AWQ_GPTQMODEL_MATRIX_2026_06_08.md`. | Matched 100-row MMLU/GSM8K subset evidence is now reported for all three variants: FP16 is 33/100 MMLU and 12/100 GSM8K; AutoAWQ is 34/100 MMLU and 11/100 GSM8K; GPTQModel is 25/100 MMLU and 8/100 GSM8K; max drop versus FP16 is 0.08. | Not leaderboard-scale task retention, not reasoning-quality superiority, not complete AWQ/GPTQ/SmoothQuant competitiveness, not production runtime, not mobile deployment, and not SOTA PTQ. |
 | Qwen2.5-1.5B subset100 runtime profile | PC-side runtime profile over the same 600 guarded task executions; see `outputs/OFFICIAL_PTQ_QWEN25_1P5B_SUBSET100_FP16_AWQ_GPTQMODEL_RUNTIME_PROFILE_2026_06_08.md`. | TTFT, tokens/s, and guarded VRAM are reported for FP16, AutoAWQ, and GPTQModel; AutoAWQ lowers peak guarded VRAM from 6531 MiB to 4919 MiB, GPTQModel lowers it to 5438 MiB, and both quantized local loader paths are slower than FP16. | Not mobile deployment, not production runtime speedup, not energy savings, and not official AWQ/GPTQ/SmoothQuant competitiveness. |
-| Qwen2.5-1.5B GSM8K200/MMLU100 task evidence | FP16 and AutoAWQ Qwen2.5-1.5B on 600 guarded public subset executions; see `outputs/OFFICIAL_PTQ_TASK_QWEN25_1P5B_GSM8K200_MMLU100_MATRIX_2026_06_08.md`. | The larger slice records FP16 at 33/100 MMLU and 19/200 GSM8K, AutoAWQ at 34/100 MMLU and 22/200 GSM8K, no measured accuracy drop versus FP16, and peak guard VRAM ratio 0.8295. | Not leaderboard-scale task retention, not reasoning-quality superiority, not complete PTQ baseline coverage, not production runtime, not mobile deployment, and not SOTA PTQ. |
-| Qwen2.5-1.5B GSM8K200/MMLU100 runtime profile | PC-side runtime profile over the same 600 guarded task executions; see `outputs/OFFICIAL_PTQ_QWEN25_1P5B_GSM8K200_MMLU100_RUNTIME_PROFILE_2026_06_08.md`. | TTFT, tokens/s, and guarded VRAM are reported for FP16 under HF offload and AutoAWQ; this is a controlled local profile. | Because FP16 is offloaded, this is not a production speedup claim, mobile deployment, energy result, or official AWQ/GPTQ/SmoothQuant competitiveness. |
-| Qwen2.5-1.5B GSM8K200/MMLU100 statistics | Wilson intervals and paired bootstrap deltas over the same 600 guarded task executions; see `outputs/OFFICIAL_PTQ_TASK_QWEN25_1P5B_GSM8K200_MMLU100_STATISTICS_2026_06_08.md`. | Task-retention uncertainty is explicit: GSM8K delta +0.015 with CI [-0.035, +0.065], MMLU delta +0.010 with CI [-0.100, +0.130]. | Not statistical superiority, leaderboard-scale retention, complete PTQ baseline coverage, production runtime, mobile deployment, energy, or SOTA PTQ. |
+| Qwen2.5-1.5B GSM8K200/MMLU100 task evidence | FP16, AutoAWQ, and GPTQModel Qwen2.5-1.5B on 900 guarded public subset executions; see `outputs/OFFICIAL_PTQ_TASK_QWEN25_1P5B_GSM8K200_MMLU100_FP16_AWQ_GPTQMODEL_MATRIX_2026_06_08.md`. | The larger slice records FP16 at 33/100 MMLU and 19/200 GSM8K, AutoAWQ at 34/100 MMLU and 22/200 GSM8K, GPTQModel at 25/100 MMLU and 20/200 GSM8K, max measured drop 0.08 versus FP16, and peak guard VRAM ratio 0.8295. | Not leaderboard-scale task retention, not reasoning-quality superiority, not complete PTQ baseline coverage, not production runtime, not mobile deployment, and not SOTA PTQ. |
+| Qwen2.5-1.5B GSM8K200/MMLU100 runtime profile | PC-side runtime profile over the same 900 guarded task executions; see `outputs/OFFICIAL_PTQ_QWEN25_1P5B_GSM8K200_MMLU100_FP16_AWQ_GPTQMODEL_RUNTIME_PROFILE_2026_06_08.md`. | TTFT, tokens/s, and guarded VRAM are reported for FP16 under HF offload plus AutoAWQ and GPTQModel; this is a controlled local profile. | Because FP16 is offloaded, this is not a production speedup claim, mobile deployment, energy result, or official AWQ/GPTQ/SmoothQuant competitiveness. |
+| Qwen2.5-1.5B GSM8K200/MMLU100 statistics | Wilson intervals and paired bootstrap deltas over the same 900 guarded task executions; see `outputs/OFFICIAL_PTQ_TASK_QWEN25_1P5B_GSM8K200_MMLU100_FP16_AWQ_GPTQMODEL_STATISTICS_2026_06_08.md`. | Task-retention uncertainty is explicit: AutoAWQ deltas are +0.015 on GSM8K and +0.010 on MMLU; GPTQModel deltas are +0.005 on GSM8K and -0.080 on MMLU, with minimum bootstrap lower bound -0.190. | Not statistical superiority, leaderboard-scale retention, complete PTQ baseline coverage, production runtime, mobile deployment, energy, or SOTA PTQ. |
 | W4A8 activation reconstruction | Selected Qwen3-0.6B self-attention modules from the ESMP package; see `outputs/w4a8_activation_reconstruction_2026_06_08/W4A8_ACTIVATION_RECONSTRUCTION_GATE.md`. | A8 activation quantization adds bounded module-output drift on sampled real activations: max activation-added rel-L2 0.048561 versus W4A16. | Does not prove full-model quality retention, downstream task retention, end-to-end speed, mobile deployment, energy, or SOTA quantization. |
 | W4A8 extended activation reconstruction | Selected Qwen3-0.6B attention and MLP modules from layers 0/7/14/21; see `outputs/w4a8_activation_reconstruction_extended_2026_06_08/W4A8_ACTIVATION_RECONSTRUCTION_EXTENDED_GATE.md`. | The broader 24-module audit passes with median W4A8 rel-L2 0.144851 and max activation-added rel-L2 0.084533 versus W4A16, exposing MLP down projections as the worst integration-risk cases. | Does not prove full-model quality retention, downstream task retention, end-to-end speed, mobile deployment, energy, or SOTA quantization. |
 | Packed-system gates | ESMP, Triton, selected-row, sidecar, QKV smoke | Prototype components are executable and audited. | Production Tensor Core/mobile runtime. |
@@ -940,9 +942,9 @@ outputs/OFFICIAL_AWQ_PUBLIC_CALIB_QWEN25_0P5B_BUNDLE_16_GATE_2026_06_07.md
 outputs/OFFICIAL_AWQ_PUBLIC_CALIB_QWEN25_1P5B_BUNDLE_16_GATE_2026_06_07.md
 outputs/OFFICIAL_PTQ_TASK_QWEN25_1P5B_SUBSET100_FP16_AWQ_GPTQMODEL_MATRIX_2026_06_08.md
 outputs/OFFICIAL_PTQ_QWEN25_1P5B_SUBSET100_FP16_AWQ_GPTQMODEL_RUNTIME_PROFILE_2026_06_08.md
-outputs/OFFICIAL_PTQ_TASK_QWEN25_1P5B_GSM8K200_MMLU100_MATRIX_2026_06_08.md
-outputs/OFFICIAL_PTQ_QWEN25_1P5B_GSM8K200_MMLU100_RUNTIME_PROFILE_2026_06_08.md
-outputs/OFFICIAL_PTQ_TASK_QWEN25_1P5B_GSM8K200_MMLU100_STATISTICS_2026_06_08.md
+outputs/OFFICIAL_PTQ_TASK_QWEN25_1P5B_GSM8K200_MMLU100_FP16_AWQ_GPTQMODEL_MATRIX_2026_06_08.md
+outputs/OFFICIAL_PTQ_QWEN25_1P5B_GSM8K200_MMLU100_FP16_AWQ_GPTQMODEL_RUNTIME_PROFILE_2026_06_08.md
+outputs/OFFICIAL_PTQ_TASK_QWEN25_1P5B_GSM8K200_MMLU100_FP16_AWQ_GPTQMODEL_STATISTICS_2026_06_08.md
 outputs/OFFICIAL_GPTQMODEL_PUBLIC_CALIB_QWEN25_0P5B_BUDGET8_16_GATE_2026_06_07.md
 outputs/OFFICIAL_GPTQMODEL_PUBLIC_CALIB_QWEN25_1P5B_16_GATE_2026_06_08.md
 outputs/BASELINE_GAP_DASHBOARD_2026_06_06.md
