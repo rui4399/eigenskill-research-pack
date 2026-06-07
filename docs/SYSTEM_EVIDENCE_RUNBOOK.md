@@ -10,7 +10,7 @@ by an executable gate and an explicit claim boundary.
 ## Evidence Ledger
 
 `train_python/build_current_evidence_ledger.py` is the stable public entry
-point for the current paper-facing gate set. It fixes the 39 gate paths in one
+point for the current paper-facing gate set. It fixes the 41 gate paths in one
 manifest, rebuilds the ledger, and avoids copying a long `--gate` list across
 README files and paper appendices.
 
@@ -21,7 +21,7 @@ python train_python/build_current_evidence_ledger.py
 ```
 
 `train_python/build_evidence_ledger.py` is the lower-level builder for custom
-or future gate manifests. The expanded form of the current 39-gate ledger is:
+or future gate manifests. The expanded form of the current 41-gate ledger is:
 
 ```bash
 python train_python/build_evidence_ledger.py \
@@ -59,6 +59,8 @@ python train_python/build_evidence_ledger.py \
   --gate official_ptq_matched_baseline_pack=outputs/official_ptq_matched_baseline_pack_qwen25_0p5b_2026_06_07.json \
   --gate official_awq_public_calib_16_eval=outputs/official_awq_public_calib_qwen25_0p5b_bundle_16_gate_2026_06_07.json \
   --gate official_awq_public_calib_1p5b_16_eval=outputs/official_awq_public_calib_qwen25_1p5b_bundle_16_gate_2026_06_07.json \
+  --gate official_ptq_task_qwen25_1p5b_subset100=outputs/official_ptq_task_qwen25_1p5b_subset100_matrix_2026_06_07.json \
+  --gate official_ptq_qwen25_1p5b_subset100_runtime_profile=outputs/official_ptq_qwen25_1p5b_subset100_runtime_profile_2026_06_07.json \
   --gate allocation_family_proxy=outputs/q_palette_style_allocation_family_gate_2026_06_06.json \
   --gate robust_lcb_consensus=outputs/robust_lcb_consensus_family_gate_2026_06_06.json \
   --gate robust_lcb_quality=outputs/qwen3_0p6b_robust_lcb_quality_gate_2026_06_07.json \
@@ -68,11 +70,11 @@ python train_python/build_evidence_ledger.py \
   --out-md outputs/real_system_packer_2026-06-05/EVIDENCE_LEDGER_2026_06_06.md
 ```
 
-The current ledger passes with 39/39 gates across repo hygiene, calibration
+The current ledger passes with 41/41 gates across repo hygiene, calibration
 robustness, CSI trend significance, CSI null permutation, rank-inversion theory, artifact integrity, kernel, runtime wiring, selected-row, C++
 runtime, decode integration, QKV replacement, quality, task-retention, runtime profile, and
 capability-retention/model-ladder, allocation-comparator, rotation-comparator, and
-matched PTQ baseline, true subset100 official PTQ task/runtime evidence, deterministic IFEval-style PTQ execution, expanded AutoAWQ public PPL, PTQ-comparator, and
+matched PTQ baseline, true subset100 official PTQ task/runtime evidence, deterministic IFEval-style PTQ execution, expanded AutoAWQ public PPL, Qwen2.5-1.5B subset100 task/runtime evidence, PTQ-comparator, and
 paper-alignment evidence categories.
 
 Valid claim:
@@ -163,7 +165,7 @@ Current gate:
 ```bash
 python train_python/gate_paper_evidence_alignment.py \
   --paper paper_drafts/eigenskill_q_research_draft_en_2026_06_07.md \
-  --expected-gate-count 39 \
+  --expected-gate-count 41 \
   --out-json outputs/paper_evidence_alignment_gate_2026_06_07.json \
   --out-md outputs/PAPER_EVIDENCE_ALIGNMENT_GATE_2026_06_07.md
 ```
@@ -171,7 +173,7 @@ python train_python/gate_paper_evidence_alignment.py \
 Current result: the generated alignment artifact records all configured required
 evidence references present, referenced repo paths found, 0 stale forbidden
 tokens, 0 unsafe non-negated claim lines, and the paper mentions the current
-39-gate ledger.
+41-gate ledger.
 
 Valid claim:
 
@@ -456,6 +458,74 @@ Invalid claim:
 
 - this proves Redmi/mobile deployment, production runtime speedup, energy
   improvement, or official AWQ/GPTQ competitiveness.
+
+## Qwen2.5-1.5B FP16-vs-AutoAWQ Matched Subset100 Matrix
+
+`tools/run_qwen25_1p5b_subset100_task_matrix.sh` reruns the larger local
+official-package task path. It evaluates FP16 and the saved AutoAWQ W4/G128
+Qwen2.5-1.5B artifact on the same 100-row MMLU abstract-algebra and 100-row
+GSM8K public subset fixtures under a 90% VRAM guard.
+
+WSL/GPU entry point:
+
+```bash
+export NVIDIA_SMI_PATH=/usr/lib/wsl/lib/nvidia-smi
+DATE_TAG=2026_06_07 bash tools/run_qwen25_1p5b_subset100_task_matrix.sh
+```
+
+Task-retention gate:
+
+```bash
+python train_python/gate_official_ptq_task_retention.py \
+  --case fp16:mmlu=outputs/official_ptq_task_fp16_qwen25_1p5b_mmlu_subset100_summary_2026_06_07.json=outputs/official_ptq_task_fp16_qwen25_1p5b_mmlu_subset100_gpu_guard_2026_06_07.json \
+  --case fp16:gsm8k=outputs/official_ptq_task_fp16_qwen25_1p5b_gsm8k_subset100_summary_2026_06_07.json=outputs/official_ptq_task_fp16_qwen25_1p5b_gsm8k_subset100_gpu_guard_2026_06_07.json \
+  --case autoawq:mmlu=outputs/official_ptq_task_awq_qwen25_1p5b_mmlu_subset100_summary_2026_06_07.json=outputs/official_ptq_task_awq_qwen25_1p5b_mmlu_subset100_gpu_guard_2026_06_07.json \
+  --case autoawq:gsm8k=outputs/official_ptq_task_awq_qwen25_1p5b_gsm8k_subset100_summary_2026_06_07.json=outputs/official_ptq_task_awq_qwen25_1p5b_gsm8k_subset100_gpu_guard_2026_06_07.json \
+  --baseline-variant fp16 \
+  --required-variant fp16 \
+  --required-variant autoawq \
+  --required-format mmlu \
+  --required-format gsm8k \
+  --min-tasks-per-case 100 \
+  --max-memory-ratio 0.90 \
+  --max-accuracy-drop 0.02 \
+  --matrix-title "Qwen2.5-1.5B FP16 vs AutoAWQ subset100 task matrix" \
+  --evidence-label "Matched Qwen2.5-1.5B local subset100 task evidence" \
+  --out-json outputs/official_ptq_task_qwen25_1p5b_subset100_matrix_2026_06_07.json \
+  --out-md outputs/OFFICIAL_PTQ_TASK_QWEN25_1P5B_SUBSET100_MATRIX_2026_06_07.md
+```
+
+Runtime-profile gate:
+
+```bash
+python train_python/gate_official_ptq_runtime_profile.py \
+  --matrix-json outputs/official_ptq_task_qwen25_1p5b_subset100_matrix_2026_06_07.json \
+  --baseline-variant fp16 \
+  --required-variant fp16 \
+  --required-variant autoawq \
+  --min-cases-per-variant 2 \
+  --max-memory-ratio 0.90 \
+  --min-mean-tokens-per-second 1 \
+  --max-mean-ttft-seconds 2.0 \
+  --out-json outputs/official_ptq_qwen25_1p5b_subset100_runtime_profile_2026_06_07.json \
+  --out-md outputs/OFFICIAL_PTQ_QWEN25_1P5B_SUBSET100_RUNTIME_PROFILE_2026_06_07.md
+```
+
+Current result: 400 guarded task executions. FP16 gets 33/100 MMLU and 12/100
+GSM8K; AutoAWQ gets 34/100 MMLU and 11/100 GSM8K. The max drop versus FP16 is
+`0.0100`, peak guard VRAM ratio is `0.8013`, and AutoAWQ reduces peak guarded
+VRAM from 6531 MiB to 4919 MiB while running slower than FP16 locally.
+
+Valid claim:
+
+- FP16 and AutoAWQ Qwen2.5-1.5B variants have matched local 100-row public task
+  and PC-side runtime/VRAM evidence under the GPU guard.
+
+Invalid claim:
+
+- this proves leaderboard-scale task retention, reasoning-quality superiority,
+  mobile deployment, production runtime speedup, energy improvement, or
+  official AWQ/GPTQ/SmoothQuant competitiveness.
 
 ## Official PTQ IFEval-Style Execution Matrix
 
@@ -768,7 +838,7 @@ Invalid claim:
 `train_python/run_official_awq_smoke.py` is a minimal package-readiness probe.
 It exists to verify that AutoAWQ can execute, save local quantized artifacts,
 and run one short generation smoke under the GPU guard. It is intentionally not
-part of the 39-gate paper-facing ledger.
+part of the 41-gate paper-facing ledger.
 
 Example WSL/GPU command:
 

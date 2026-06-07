@@ -22,7 +22,7 @@ fake-quant loss sensitivity on multiple calibration views, allocates a fixed
 `{4,8}`-bit budget through cross-split consensus sensitivity, and records every
 paper-facing result through executable evidence gates. Across Qwen3-0.6B,
 Qwen3-1.7B, OLMo2-0425-1B-Instruct, and SmolLM2-1.7B short-slice diagnostics,
-the current evidence ledger passes 39/39 gates. The calibration-instability
+the current evidence ledger passes 41/41 gates. The calibration-instability
 gate finds 3/3 unstable model/dataset cases with mean score/cost Spearman
 0.0713 and mean top-20 Jaccard 0.1022. A Qwen2.5 perturbation matrix further
 separates calibration sample-size and model-scale effects: within-model
@@ -74,6 +74,12 @@ PPL tokens across the two packages, with max PPL ratio 1.2570. A further
 Qwen2.5-1.5B AutoAWQ W4/G128 public-calibration scale-up smoke runs under an
 85% VRAM guard, saves a 1.159 GB local artifact, and evaluates 16 WikiText2 plus
 16 C4 public PPL prompts with max PPL ratio 1.1344.
+The same Qwen2.5-1.5B FP16 and AutoAWQ artifacts now also run matched 100-row
+public MMLU abstract-algebra and GSM8K subsets, covering 400 guarded task
+executions: FP16 obtains 33/100 MMLU and 12/100 GSM8K, AutoAWQ obtains 34/100
+MMLU and 11/100 GSM8K, the max drop versus FP16 is 0.01, and peak guarded VRAM
+falls from 6531 MiB to 4919 MiB while AutoAWQ remains slower in this local
+loader path.
 ESMP packaging, Triton shape tuning, selected-row
 execution, shallow fused-QKV generation, and C++ audit tools are executable.
 The repository does not claim a production LLM runtime.
@@ -113,7 +119,7 @@ offers three narrower contributions:
    consensus allocator that protects modules that are consistently sensitive or
    have high average sensitivity under a fixed `{4,8}` budget.
 3. **Gated evidence discipline.** We convert scattered fake-quant, runtime,
-   task-smoke, paper-alignment, and repository-hygiene outputs into 31 executable gates, each
+   task-smoke, paper-alignment, and repository-hygiene outputs into 41 executable gates, each
    with an explicit claim boundary.
 
 The paper is intentionally conservative. It keeps negative results visible:
@@ -203,63 +209,147 @@ different rankings for two small calibration splits.
 
 The empirical gates above can be interpreted through a simple estimator-noise
 model. For module `i`, let the per-example loss increase caused by quantizing
-only that module be:
+only that module be
 
-```text
-X_i(x) = max(ell(W_{-i}, Q4(W_i); x) - ell(W; x), 0).
-```
+\[
+X_i(x)
+=
+\Big[
+  \ell\!\left(W_{-i}, Q_4(W_i); x\right)
+  -
+  \ell(W; x)
+\Big]_+,
+\qquad [a]_+ = \max(a,0),
+\tag{1}
+\]
 
-The population sensitivity is `s_i^* = E[X_i(x)]`, and a calibration split
-`D = {x_1, ..., x_m}` estimates it as:
+where \(W_i\) is the weight tensor of module \(i\), \(W_{-i}\) denotes all
+other weights held at full precision, \(Q_4(\cdot)\) is the local 4-bit
+fake-quantization operator, and \(\ell(\cdot;x)\) is the token-level
+negative-log-likelihood on example \(x\). The population module sensitivity is
 
-```text
-hat{s}_i(D) = (1 / m) * sum_j X_i(x_j).
-```
+\[
+s_i^\star = \mathbb{E}_{x \sim \mathcal{D}}[X_i(x)].
+\tag{2}
+\]
 
-Assume `Var[X_i(x)] <= sigma_i^2` and the calibration examples are sampled
-independently from the target calibration distribution. By Chebyshev's
-inequality,
+Given a calibration split \(D = \{x_1,\ldots,x_m\}\), the empirical estimator
+is
 
-```text
-P(|hat{s}_i(D) - s_i^*| >= epsilon) <= sigma_i^2 / (m epsilon^2).
-```
+\[
+\widehat{s}_i(D)
+=
+\frac{1}{m}\sum_{t=1}^{m} X_i(x_t),
+\qquad
+\widehat{r}_i(D)
+=
+\frac{\widehat{s}_i(D)}{c_i},
+\qquad
+r_i^\star
+=
+\frac{s_i^\star}{c_i},
+\tag{3}
+\]
 
-This bound is loose, but it captures the key failure mode: when `m` is small,
-the estimated sensitivity can deviate enough to reorder modules with nearby
-true sensitivities. For two modules `i` and `j`, define the true margin
-`Delta_ij = |s_i^*/c_i - s_j^*/c_j|` and a variance proxy
-`tau_ij^2 = sigma_i^2/c_i^2 + sigma_j^2/c_j^2`. A union-bound argument gives
-the qualitative inversion risk:
+where \(c_i\) is the module storage cost used by the bit-budget allocator.
+Calibration split instability is the event that rankings induced by
+\(\widehat{r}_i(D)\) change when \(D\) changes under a small calibration
+budget.
 
-```text
-P(sign(r_i(D) - r_j(D)) != sign(r_i^* - r_j^*))
-  <= 4 tau_ij^2 / (m Delta_ij^2),
-```
+**Proposition 1 (noisy sensitivity and pairwise rank inversion).** Assume the
+calibration examples are sampled independently from \(\mathcal{D}\) and
+\(\operatorname{Var}[X_i(x)] \le \sigma_i^2\). For any \(\epsilon > 0\),
 
-for nonzero margins, where `r_i^* = s_i^*/c_i`. Thus CSI is expected to be most
-visible when calibration samples are few, per-module loss increments have high
-variance, or many modules have small pairwise margins near the allocation
-threshold.
+\[
+\Pr\!\left(
+  \left|\widehat{s}_i(D) - s_i^\star\right| \ge \epsilon
+\right)
+\le
+\frac{\sigma_i^2}{m\epsilon^2}.
+\tag{4}
+\]
+
+For two modules \(i\) and \(j\), define the normalized population margin and
+the normalized variance proxy as
+
+\[
+\Delta_{ij}
+=
+\left|r_i^\star - r_j^\star\right|,
+\qquad
+\tau_{ij}^2
+=
+\frac{\sigma_i^2}{c_i^2} + \frac{\sigma_j^2}{c_j^2}.
+\tag{5}
+\]
+
+When \(\Delta_{ij}>0\), a Chebyshev-plus-union-bound argument yields the
+diagnostic upper bound
+
+\[
+\Pr\!\left[
+  \operatorname{sign}\!\left(\widehat{r}_i(D)-\widehat{r}_j(D)\right)
+  \ne
+  \operatorname{sign}\!\left(r_i^\star-r_j^\star\right)
+\right]
+\le
+\frac{4\tau_{ij}^2}{m\Delta_{ij}^2}.
+\tag{6}
+\]
+
+This is intentionally a loose diagnostic bound rather than a tight theorem. It
+captures the failure mode relevant to mixed-precision allocation: rank
+inversions become more likely when the calibration split is small, when
+per-module loss increments have high variance, or when many modules have small
+pairwise margins near the high-bit allocation threshold.
 
 The rank-inversion gate uses a plug-in version of this bound. For each
 calibration size, it treats the deterministic prompt-seed sensitivity estimates
-as samples of the estimator `hat{r}_i`, computes seed-level means and variances,
-and reports `(widehat{Var}(hat{r}_i) + widehat{Var}(hat{r}_j)) /
-widehat{Delta}_{ij}^2` for module pairs, clipped to one. This plug-in estimate
-is not a tight finite-sample guarantee, but it connects the theory to an
-auditable artifact: in the measured Qwen2.5-0.5B setting, both empirical
-module-pair inversion rate and the variance-over-gap proxy decrease as
-calibration size grows from n=2 to n=8.
+as samples of \(\widehat{r}_i\), computes seed-level means and variances, and
+reports the clipped proxy
+
+\[
+\widehat{B}_{ij}
+=
+\min\!\left\{
+  1,\,
+  \frac{\widehat{\operatorname{Var}}(\widehat{r}_i)
+        +\widehat{\operatorname{Var}}(\widehat{r}_j)}
+       {\widehat{\Delta}_{ij}^{\,2} + \eta}
+\right\},
+\qquad
+\widehat{\Delta}_{ij}
+=
+\left|\overline{r}_i-\overline{r}_j\right|,
+\tag{7}
+\]
+
+with a small numerical stabilizer \(\eta>0\). This plug-in estimate is not a
+finite-sample guarantee, but it is auditable: in the measured Qwen2.5-0.5B
+setting, both empirical module-pair inversion rate and the variance-over-gap
+proxy decrease as calibration size grows from \(n=2\) to \(n=8\).
 
 Consensus averaging reduces the estimator variance when calibration views are
-not perfectly correlated. If `K` calibration views produce unbiased estimates
-with common variance `sigma_i^2/m` and average pairwise correlation `rho_i`,
-then the averaged estimator has variance:
+not perfectly correlated. Let \(D_1,\ldots,D_K\) be \(K\) calibration views and
+define
 
-```text
-Var((1/K) * sum_k hat{s}_i(D_k))
-  = (sigma_i^2 / (m K)) * (1 + (K - 1) rho_i).
-```
+\[
+\widehat{s}^{\mathrm{cons}}_i
+=
+\frac{1}{K}\sum_{k=1}^{K}\widehat{s}_i(D_k).
+\tag{8}
+\]
+
+If the \(K\) estimators are unbiased, have common variance
+\(\sigma_i^2/m\), and have average pairwise correlation \(\rho_i\), then
+
+\[
+\operatorname{Var}\!\left(\widehat{s}^{\mathrm{cons}}_i\right)
+=
+\frac{\sigma_i^2}{mK}
+\left(1+(K-1)\rho_i\right).
+\tag{9}
+\]
 
 This does not prove that consensus is optimal, and it does not remove ranking
 error when all views share the same bias. It does justify the paper's diagnostic
@@ -321,7 +411,7 @@ future allocator.
 ## 7. Evidence Gates
 
 Every paper-facing claim is indexed by a gate JSON and a Markdown report. The
-current ledger passes 39/39 gates. The most important gates are:
+current ledger passes 41/41 gates. The most important gates are:
 
 | Gate | Evidence | Valid claim | Non-claim |
 |---|---|---|---|
@@ -348,6 +438,8 @@ current ledger passes 39/39 gates. The most important gates are:
 | Official PTQ matched baseline pack | AutoAWQ/GPTQModel Qwen2.5-0.5B public-calibration PPL, subset50 task, and subset50 runtime evidence; see `outputs/OFFICIAL_PTQ_MATCHED_BASELINE_PACK_QWEN25_0P5B_2026_06_07.md`. | A local matched 0.5B baseline package reports 4 16-prompt PPL slices, 5714 PPL tokens, 300 task executions, 300 runtime executions, max PPL ratio 1.2570, max task drop 0.0400, max VRAM ratio 0.9010, and max quantized tokens/s ratio 0.3315 versus FP16. | Not leaderboard-scale evidence, not large-model AWQ/GPTQ competitiveness, not production runtime, not mobile deployment, not energy evidence, and not SOTA PTQ. |
 | Expanded official PTQ public PPL gates | Public-calibrated AutoAWQ and GPTQModel Qwen2.5-0.5B W4/G128 on 16 WikiText2 plus 16 C4 prompts; see `outputs/OFFICIAL_AWQ_PUBLIC_CALIB_QWEN25_0P5B_BUNDLE_16_GATE_2026_06_07.md` and `outputs/OFFICIAL_GPTQMODEL_PUBLIC_CALIB_QWEN25_0P5B_BUDGET8_16_GATE_2026_06_07.md`. | The reused AutoAWQ and GPTQModel artifacts run 5714 public PPL tokens under guard, with max package-vs-FP16 PPL ratio 1.2570. | Not a complete official AWQ/GPTQ baseline, not task retention, not production runtime, not mobile deployment, and not SOTA PTQ. |
 | Qwen2.5-1.5B AutoAWQ scale-up readiness | Public-calibrated AutoAWQ W4/G128 Qwen2.5-1.5B on 16 WikiText2 plus 16 C4 prompts; see `outputs/OFFICIAL_AWQ_PUBLIC_CALIB_QWEN25_1P5B_BUNDLE_16_GATE_2026_06_07.md`. | The local artifact quantizes under an 85% VRAM guard with peak 6712/8151 MiB and runs 2857 public PPL tokens; max PPL ratio is 1.1344. | Not a complete official AWQ/GPTQ baseline, not task retention, not production runtime, not mobile deployment, and not SOTA PTQ. |
+| Qwen2.5-1.5B matched subset100 task evidence | FP16 and AutoAWQ Qwen2.5-1.5B on 400 guarded public subset executions; see `outputs/OFFICIAL_PTQ_TASK_QWEN25_1P5B_SUBSET100_MATRIX_2026_06_07.md`. | Matched 100-row MMLU/GSM8K subset evidence is now reported for the larger local artifact: FP16 is 33/100 MMLU and 12/100 GSM8K; AutoAWQ is 34/100 MMLU and 11/100 GSM8K; max drop versus FP16 is 0.01. | Not leaderboard-scale task retention, not reasoning-quality superiority, not complete AWQ/GPTQ/SmoothQuant competitiveness, not production runtime, not mobile deployment, and not SOTA PTQ. |
+| Qwen2.5-1.5B subset100 runtime profile | PC-side runtime profile over the same 400 guarded task executions; see `outputs/OFFICIAL_PTQ_QWEN25_1P5B_SUBSET100_RUNTIME_PROFILE_2026_06_07.md`. | TTFT, tokens/s, and guarded VRAM are reported for FP16 and AutoAWQ; AutoAWQ lowers peak guarded VRAM from 6531 MiB to 4919 MiB but is slower than FP16 locally. | Not mobile deployment, not production runtime speedup, not energy savings, and not official AWQ/GPTQ/SmoothQuant competitiveness. |
 | Packed-system gates | ESMP, Triton, selected-row, sidecar, QKV smoke | Prototype components are executable and audited. | Production Tensor Core/mobile runtime. |
 | Paper evidence alignment | Paper draft, required evidence paths, claim-risk scan | The draft cites committed evidence and avoids unsafe non-negated claims. | Peer-review acceptance or complete baseline coverage. |
 
@@ -397,6 +489,37 @@ retention or a general scaling law.
 The Qwen2.5-0.5B seed-stability gate reruns module-loss sensitivity on six
 deterministic four-prompt samples from the same 16-prompt WikiText2 pool:
 
+For a stability metric \(q\) such as score/cost Spearman, top-20 Jaccard, or
+positive-set Jaccard, let
+
+\[
+z_{ab}^{(q)}
+=
+q\!\left(R(D_a), R(D_b)\right),
+\qquad
+1 \le a < b \le 6,
+\tag{10}
+\]
+
+where \(R(D_a)\) is the module ranking or selected-set summary induced by prompt
+sample \(D_a\). The reported mean and nonparametric confidence interval are
+
+\[
+\overline{z}^{(q)}
+=
+\frac{1}{15}\sum_{a<b}z_{ab}^{(q)},\qquad
+\mathrm{CI}_{0.95}^{(q)}
+=
+\left[
+  Q_{0.025}\!\left(\overline{z}^{(q),*}\right),
+  Q_{0.975}\!\left(\overline{z}^{(q),*}\right)
+\right],
+\tag{11}
+\]
+
+where \(\overline{z}^{(q),*}\) denotes a bootstrap resample mean over the 15
+seed-pair scores.
+
 | Metric | Value |
 |---|---:|
 | Prompt selections | 6 |
@@ -441,6 +564,34 @@ For each audited stability metric, it independently bootstraps the n=8 minus
 n=2 mean gain and computes the probability that a random n=8 seed-pair score
 exceeds a random n=2 seed-pair score:
 
+Let \(\mathcal{Z}^{(q)}_{n}\) denote the multiset of seed-pair scores for
+calibration size \(n\). The full-range mean gain and dominance probability are
+
+\[
+G_q(8,2)
+=
+\frac{1}{|\mathcal{Z}^{(q)}_8|}
+  \sum_{z\in\mathcal{Z}^{(q)}_8} z
+-
+\frac{1}{|\mathcal{Z}^{(q)}_2|}
+  \sum_{z\in\mathcal{Z}^{(q)}_2} z,
+\tag{12}
+\]
+
+\[
+\Pi_q(8,2)
+=
+\Pr_{z_8\sim\mathcal{Z}^{(q)}_8,\,
+      z_2\sim\mathcal{Z}^{(q)}_2}
+\left[z_8 > z_2\right].
+\tag{13}
+\]
+
+The bootstrap confidence interval in the table is computed from resampled
+copies of \(G_q(8,2)\). A positive lower endpoint is treated as evidence that
+the measured \(n=8\) seed-pair distribution dominates \(n=2\) in this fixed
+prompt-pool setting.
+
 | Metric | n=2 mean | n=8 mean | Mean gain | Bootstrap 95% gain CI | P(n=8 pair > n=2 pair) |
 |---|---:|---:|---:|---:|---:|
 | Score/cost Spearman | 0.3725 | 0.6645 | 0.2920 | [0.2039, 0.3775] | 0.9422 |
@@ -460,6 +611,39 @@ label-shuffle test. It pools the n=2 and n=8 seed-pair values, repeatedly
 shuffles the calibration-size labels, and asks how often the shuffled
 n=8-minus-n=2 mean gain is at least as large as the observed gain:
 
+For metric \(q\), let \(g_q^{\mathrm{obs}}\) be the observed gain in
+Eq. (12). Each permutation \(b \in \{1,\ldots,B\}\) randomly reassigns the
+pooled seed-pair values into two groups with the original group sizes and
+computes a null gain \(g_{q,b}^{\mathrm{perm}}\). The plus-one Monte-Carlo
+p-value is
+
+\[
+p_q
+=
+\frac{
+  1 + \sum_{b=1}^{B}
+      \mathbf{1}\!\left[g_{q,b}^{\mathrm{perm}}
+      \ge g_q^{\mathrm{obs}}\right]
+}{
+  B+1
+}.
+\tag{14}
+\]
+
+For the three audited metrics, let \(p_{(1)}\le p_{(2)}\le p_{(3)}\) be the
+ordered raw p-values. The Holm-adjusted value reported for the \(k\)-th ordered
+test is
+
+\[
+p^{\mathrm{Holm}}_{(k)}
+=
+\max_{\ell\le k}
+\left\{
+  \min\!\left(1,\, (3-\ell+1)\,p_{(\ell)}\right)
+\right\}.
+\tag{15}
+\]
+
 | Metric | Observed gain | Dominance | Raw p | Holm-adjusted p | Extreme null samples |
 |---|---:|---:|---:|---:|---:|
 | Score/cost Spearman | 0.2920 | 0.9422 | 4.99975e-05 | 0.000149993 | 0 / 20000 |
@@ -477,6 +661,52 @@ The rank-inversion theory gate tests the Section 4 variance-over-gap prediction
 more directly. It loads the same n=2/4/8 seed artifacts, forms all comparable
 module pairs, and measures whether the seed-level ordering disagrees with the
 mean ordering:
+
+For seed \(a\), define the empirical pairwise inversion indicator
+
+\[
+I^{(a)}_{ij}
+=
+\mathbf{1}\!\left[
+  \operatorname{sign}\!\left(\widehat{r}^{(a)}_i-\widehat{r}^{(a)}_j\right)
+  \ne
+  \operatorname{sign}\!\left(\overline{r}_i-\overline{r}_j\right)
+\right],
+\tag{16}
+\]
+
+where \(\overline{r}_i\) is the seed-mean score for module \(i\). The reported
+mean inversion rate and plug-in bound proxy are
+
+\[
+\widehat{\mathcal{I}}_n
+=
+\frac{1}{|\mathcal{P}_n|\,S}
+\sum_{(i,j)\in\mathcal{P}_n}\sum_{a=1}^{S} I^{(a)}_{ij},
+\tag{17}
+\]
+
+\[
+\widehat{\mathcal{B}}_n
+=
+\frac{1}{|\mathcal{P}_n|}
+\sum_{(i,j)\in\mathcal{P}_n}
+\min\!\left\{
+  1,\,
+  \frac{
+    \widehat{\operatorname{Var}}(\widehat{r}_i)
+    +
+    \widehat{\operatorname{Var}}(\widehat{r}_j)
+  }{
+    (\overline{r}_i-\overline{r}_j)^2+\eta
+  }
+\right\}.
+\tag{18}
+\]
+
+Here \(\mathcal{P}_n\) is the set of comparable module pairs at calibration
+size \(n\), \(S=6\) prompt seeds in this gate, and \(\eta\) is the same
+numerical stabilizer used in Eq. (7).
 
 | Calibration prompts n | Module pairs | Mean inversion | Mean bound proxy | Top-quartile-margin inversion | Top-quartile-margin bound |
 |---:|---:|---:|---:|---:|---:|
@@ -621,6 +851,8 @@ outputs/Q_PALETTE_STYLE_ALLOCATION_FAMILY_GATE_2026_06_06.md
 outputs/PUBLIC_TASK_MODEL_LADDER_GATE_2026_06_07.md
 outputs/OFFICIAL_AWQ_PUBLIC_CALIB_QWEN25_0P5B_BUNDLE_16_GATE_2026_06_07.md
 outputs/OFFICIAL_AWQ_PUBLIC_CALIB_QWEN25_1P5B_BUNDLE_16_GATE_2026_06_07.md
+outputs/OFFICIAL_PTQ_TASK_QWEN25_1P5B_SUBSET100_MATRIX_2026_06_07.md
+outputs/OFFICIAL_PTQ_QWEN25_1P5B_SUBSET100_RUNTIME_PROFILE_2026_06_07.md
 outputs/OFFICIAL_GPTQMODEL_PUBLIC_CALIB_QWEN25_0P5B_BUDGET8_16_GATE_2026_06_07.md
 outputs/BASELINE_GAP_DASHBOARD_2026_06_06.md
 docs/PAPER_CLAIM_MATRIX.md

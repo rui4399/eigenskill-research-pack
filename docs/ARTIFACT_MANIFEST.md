@@ -48,6 +48,8 @@ paper claims.
 | Official PTQ matched baseline pack | `outputs/OFFICIAL_PTQ_MATCHED_BASELINE_PACK_QWEN25_0P5B_2026_06_07.md` |
 | Expanded AutoAWQ public PPL gate | `outputs/OFFICIAL_AWQ_PUBLIC_CALIB_QWEN25_0P5B_BUNDLE_16_GATE_2026_06_07.md` |
 | Qwen2.5-1.5B AutoAWQ public PPL gate | `outputs/OFFICIAL_AWQ_PUBLIC_CALIB_QWEN25_1P5B_BUNDLE_16_GATE_2026_06_07.md` |
+| Qwen2.5-1.5B matched subset100 task matrix | `outputs/OFFICIAL_PTQ_TASK_QWEN25_1P5B_SUBSET100_MATRIX_2026_06_07.md` |
+| Qwen2.5-1.5B subset100 runtime profile | `outputs/OFFICIAL_PTQ_QWEN25_1P5B_SUBSET100_RUNTIME_PROFILE_2026_06_07.md` |
 | Expanded GPTQModel public PPL gate | `outputs/OFFICIAL_GPTQMODEL_PUBLIC_CALIB_QWEN25_0P5B_BUDGET8_16_GATE_2026_06_07.md` |
 | Baseline/readiness gap dashboard | `outputs/BASELINE_GAP_DASHBOARD_2026_06_06.md` |
 | Claim matrix | `docs/PAPER_CLAIM_MATRIX.md` |
@@ -58,7 +60,7 @@ paper claims.
 ## Non-Ledger Readiness Probes
 
 These artifacts are useful for environment readiness and reviewer-risk
-tracking, but they are not counted in the 39-gate paper-facing ledger.
+tracking, but they are not counted in the 41-gate paper-facing ledger.
 
 | Purpose | Artifact | Boundary |
 |---|---|---|
@@ -122,4 +124,4 @@ one of the following is true:
 
 Future cleanup should reduce `outputs/` by moving scratch and raw intermediate
 files out of the main branch, but not at the cost of breaking the current
-39-gate reproducibility story.
+41-gate reproducibility story.

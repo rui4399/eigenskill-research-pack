@@ -54,6 +54,11 @@ The current evidence supports:
 - a Qwen2.5-1.5B FP16-vs-AutoAWQ matched 20-row public MMLU/GSM8K task subset
   matrix, covering 80 task executions with no measured accuracy drop versus
   FP16 in this tiny local slice and peak guarded VRAM ratio 0.6821;
+- a Qwen2.5-1.5B FP16-vs-AutoAWQ matched 100-row public MMLU/GSM8K task subset
+  matrix, covering 400 task executions: FP16 gets 33/100 MMLU and 12/100
+  GSM8K, AutoAWQ gets 34/100 MMLU and 11/100 GSM8K, max drop versus FP16 is
+  0.01, and peak guarded VRAM falls from 6531 MiB to 4919 MiB while AutoAWQ is
+  slower in this local loader path;
 - a local matched AutoAWQ/GPTQModel Qwen2.5-0.5B W4/G128 baseline pack that
   ties public-calibration PPL, subset50 MMLU/GSM8K execution, and PC-side
   runtime/VRAM into one explicit claim boundary;
@@ -93,9 +98,9 @@ Current AAAI-facing critical path:
    seed/bootstrap artifacts.
 2. Real quantization: expand the AutoAWQ/GPTQModel matched pack beyond the
    0.5B readiness setting and report negative runtime results honestly. The
-   first Qwen2.5-1.5B AutoAWQ public-calibration and 20-row task-subset gates
-   are complete, but GPTQ, SmoothQuant, rotation baselines, and larger task
-   retention still need scale-up.
+   first Qwen2.5-1.5B AutoAWQ public-calibration, 20-row task-subset, and
+   100-row task/runtime gates are complete, but GPTQ, SmoothQuant, rotation
+   baselines, and larger task retention still need scale-up.
 3. Downstream tasks: move from subset50/subset100 and deterministic IFEval-style
    execution evidence toward stronger MMLU/GSM8K/IFEval retention on actual
    quantized variants.
@@ -124,9 +129,10 @@ evidence become much deeper.
 The blockers are concrete:
 
 1. Official baselines: the local AutoAWQ/GPTQModel 0.5B matched pack, expanded
-   16-prompt public PPL gates, and Qwen2.5-1.5B AutoAWQ scale-up smoke are
-   useful but not enough; larger GPTQ rows, SmoothQuant, and at least one
-   faithful rotation or mixed-precision allocation comparator are still missing.
+   16-prompt public PPL gates, and Qwen2.5-1.5B AutoAWQ scale-up/task-runtime
+   rows are useful but not enough; larger GPTQ rows, SmoothQuant, and at least
+   one faithful rotation or mixed-precision allocation comparator are still
+   missing.
 2. Larger evaluation: more WikiText2/C4 prompts and broader calibration-seed sweeps.
 3. Downstream retention: larger MMLU/GSM8K/IFEval or similar task slices on the
    actual quantized/fused variants; current IFEval-style evidence is only an
