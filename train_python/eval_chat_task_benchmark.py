@@ -169,6 +169,14 @@ def load_tasks(path: Path, task_format: str = "native") -> list[dict[str, Any]]:
     return tasks
 
 
+def apply_task_limit(tasks: list[dict[str, Any]], limit: int) -> list[dict[str, Any]]:
+    if limit < 0:
+        raise ValueError("task limit must be >= 0")
+    if limit == 0:
+        return tasks
+    return tasks[:limit]
+
+
 def format_task_prompt(prompt: str, *, no_think: bool = False) -> str:
     rendered = str(prompt).strip()
     if no_think and "/no_think" not in rendered:
@@ -393,6 +401,7 @@ def main() -> None:
     parser.add_argument("--device", default="cuda")
     parser.add_argument("--dtype", choices=["float16", "bfloat16", "float32"], default="float16")
     parser.add_argument("--max-new-tokens", type=int, default=32)
+    parser.add_argument("--limit", type=int, default=0, help="Evaluate only the first N tasks; 0 means all tasks.")
     parser.add_argument("--chat-template", action="store_true")
     parser.add_argument("--no-think", action="store_true", help="Append /no_think once to each task prompt.")
     parser.add_argument("--local-files-only", action="store_true")
@@ -419,7 +428,7 @@ def main() -> None:
         raise SystemExit("CUDA requested but torch.cuda.is_available() is false")
 
     dtype = {"float16": torch.float16, "bfloat16": torch.bfloat16, "float32": torch.float32}[args.dtype]
-    tasks = load_tasks(Path(args.tasks_jsonl), task_format=args.task_format)
+    tasks = apply_task_limit(load_tasks(Path(args.tasks_jsonl), task_format=args.task_format), args.limit)
     tokenizer = AutoTokenizer.from_pretrained(args.model, local_files_only=args.local_files_only, trust_remote_code=True)
     model = AutoModelForCausalLM.from_pretrained(
         args.model,
@@ -436,6 +445,7 @@ def main() -> None:
         "task_file": args.tasks_jsonl,
         "task_format": args.task_format,
         "task_count": len(tasks),
+        "task_limit": args.limit,
         "chat_template": args.chat_template,
         "no_think": args.no_think,
         "max_new_tokens": args.max_new_tokens,

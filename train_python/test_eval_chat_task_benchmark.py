@@ -49,6 +49,13 @@ class EvalChatTaskBenchmarkTests(unittest.TestCase):
         self.assertEqual(aggregate["passes"], 1)
         self.assertEqual(aggregate["accuracy"], 0.5)
 
+    def test_apply_task_limit(self) -> None:
+        tasks = [{"id": str(i)} for i in range(5)]
+        self.assertEqual(len(bench.apply_task_limit(tasks, 0)), 5)
+        self.assertEqual([task["id"] for task in bench.apply_task_limit(tasks, 2)], ["0", "1"])
+        with self.assertRaises(ValueError):
+            bench.apply_task_limit(tasks, -1)
+
     def test_load_mmlu_style_jsonl(self) -> None:
         row = {
             "question": "Which metric reports memory?",

@@ -25,7 +25,7 @@ Current ledger artifact:
 outputs/real_system_packer_2026-06-05/EVIDENCE_LEDGER_2026_06_06.md
 ```
 
-Current status: **24 / 24 gates pass**.
+Current status: **26 / 26 gates pass**.
 
 Valid claim:
 
@@ -56,6 +56,8 @@ Invalid claim:
 | `public_task_model_ladder` | public task coverage | `outputs/PUBLIC_TASK_MODEL_LADDER_GATE_2026_06_07.md` | Public-task evidence is shown as a guarded two-model ladder, not a single cherry-picked result. |
 | `official_ptq_task_retention` | task execution smoke | `outputs/OFFICIAL_PTQ_TASK_RETENTION_SMOKE_MATRIX_2026_06_07.md` | FP16, AutoAWQ, and GPTQModel Qwen2.5-0.5B variants load and run the same tiny public MMLU/GSM8K smoke tasks under GPU guard; this is not leaderboard-scale retention, and zero-FP16 formats are execution-only. |
 | `official_ptq_runtime_profile` | runtime profile | `outputs/OFFICIAL_PTQ_RUNTIME_PROFILE_2026_06_07.md` | PC-side TTFT/tokens/s/VRAM are summarized from the same guarded official PTQ task-smoke path; this is not mobile deployment or production runtime speedup. |
+| `official_ptq_task_subset20` | task execution subset | `outputs/OFFICIAL_PTQ_TASK_SUBSET20_MATRIX_2026_06_07.md` | FP16, AutoAWQ, and GPTQModel Qwen2.5-0.5B variants run the same 20-row public MMLU and 20-row public GSM8K subsets under GPU guard; GSM8K remains execution-only because FP16 is 0/20. |
+| `official_ptq_subset20_runtime_profile` | runtime profile | `outputs/OFFICIAL_PTQ_SUBSET20_RUNTIME_PROFILE_2026_06_07.md` | PC-side TTFT/tokens/s/VRAM are summarized from the 120-task subset20 matrix; the quantized packages use less VRAM but are slower than FP16 on this local path. |
 | `esmp_package` | artifact integrity | `outputs/real_system_packer_2026-06-05/ESMP_PACKAGE_VERIFY_QWEN3_0P6B_LIMIT8_2026_06_06.md` | ESMP package metadata, manifest, and binary headers are independently checkable. |
 | `triton_shape_family` | kernel | `outputs/real_system_packer_2026-06-05/TRITON_QWEN_SHAPE_FAMILY_GATE_2026_06_06.md` | Tuned grouped packed INT4/INT8 Triton kernels can beat torch FP16 on selected measured shapes. |
 | `selector_runtime` | runtime wiring | `outputs/real_system_packer_2026-06-05/SELECTOR_RUNTIME_SMOKE_GATE_2026_06_06.md` | Selector-driven runtime wiring loads measured kernel configs and records selector calls. |
@@ -69,7 +71,7 @@ Invalid claim:
 ## Non-Ledger Readiness Probes
 
 These probes are tracked because they reduce environment uncertainty, but they
-are not counted in the current 24-gate paper-facing ledger.
+are not counted in the current 26-gate paper-facing ledger.
 
 | probe | category | primary artifact | boundary |
 |---|---|---|---|

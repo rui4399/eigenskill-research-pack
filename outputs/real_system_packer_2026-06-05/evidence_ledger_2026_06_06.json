@@ -1,8 +1,8 @@
 {
-  "date": "2026-06-07T01:59:50+00:00",
+  "date": "2026-06-07T02:28:06+00:00",
   "passed": true,
-  "gate_count": 24,
-  "passed_count": 24,
+  "gate_count": 26,
+  "passed_count": 26,
   "failed_count": 0,
   "categories": [
     "allocation comparator",
@@ -31,9 +31,9 @@
       "path": "outputs\\real_system_packer_2026-06-05\\public_repo_hygiene_gate_2026_06_06.json",
       "passed": true,
       "failures": [],
-      "metrics": "tracked files 1764; forbidden files 0; placeholders 0",
+      "metrics": "tracked files 1786; forbidden files 0; placeholders 0",
       "summary": {
-        "tracked_file_count": 1764,
+        "tracked_file_count": 1786,
         "forbidden_file_count": 0,
         "root_clutter_count": 0,
         "placeholder_count": 0,
@@ -166,16 +166,16 @@
       "path": "outputs\\paper_evidence_alignment_gate_2026_06_07.json",
       "passed": true,
       "failures": [],
-      "metrics": "required refs 11; missing refs 0; paper paths 17; missing paths 0; unsafe claims 0; stale tokens 0; ledger gates 24",
+      "metrics": "required refs 13; missing refs 0; paper paths 19; missing paths 0; unsafe claims 0; stale tokens 0; ledger gates 26",
       "summary": {
         "paper": "paper_drafts\\eigenskill_q_research_draft_en_2026_06_07.md",
-        "required_reference_count": 11,
+        "required_reference_count": 13,
         "missing_required_reference_count": 0,
-        "referenced_repo_path_count": 17,
+        "referenced_repo_path_count": 19,
         "missing_referenced_path_count": 0,
         "stale_token_count": 0,
         "unsafe_claim_count": 0,
-        "ledger_gate_count": 24,
+        "ledger_gate_count": 26,
         "ledger_gate_count_mentioned": true
       }
     },
@@ -604,6 +604,63 @@
         "mean_ttft_seconds": 0.5084949021250004,
         "max_guard_vram_ratio": 0.6108452950558214,
         "max_guard_vram_mib": 4979.0
+      }
+    },
+    {
+      "label": "official_ptq_task_subset20",
+      "category": "task execution smoke",
+      "path": "outputs\\official_ptq_task_subset20_matrix_2026_06_07.json",
+      "passed": true,
+      "failures": [],
+      "metrics": "cases 6; tasks 120; passes 15; accuracy 0.1250; mean tok/s 14.7072; mean TTFT 0.302620s; VRAM 0.6131",
+      "summary": {
+        "case_count": 6,
+        "variant_count": 3,
+        "format_count": 2,
+        "variants": [
+          "autoawq",
+          "fp16",
+          "gptqmodel"
+        ],
+        "task_formats": [
+          "gsm8k",
+          "mmlu"
+        ],
+        "baseline_variant": "fp16",
+        "total_tasks": 120,
+        "total_passes": 15,
+        "mean_accuracy": 0.125,
+        "max_accuracy_drop_vs_fp16": 0.0,
+        "baseline_zero_accuracy_formats": [
+          "gsm8k"
+        ],
+        "max_guard_vram_ratio": 0.6130536130536131,
+        "mean_tokens_per_second": 14.70718178717276,
+        "mean_ttft_seconds": 0.30262009107499854
+      }
+    },
+    {
+      "label": "official_ptq_subset20_runtime_profile",
+      "category": "ptq comparator",
+      "path": "outputs\\official_ptq_subset20_runtime_profile_2026_06_07.json",
+      "passed": true,
+      "failures": [],
+      "metrics": "tasks 120; cases 6; mean tok/s 14.7072; mean TTFT 0.302620s; VRAM MiB 4997; VRAM 0.6131",
+      "summary": {
+        "source_case_count": 6,
+        "variant_count": 3,
+        "variants": [
+          "autoawq",
+          "fp16",
+          "gptqmodel"
+        ],
+        "baseline_variant": "fp16",
+        "total_cases": 6,
+        "total_tasks": 120,
+        "mean_tokens_per_second": 14.70718178717276,
+        "mean_ttft_seconds": 0.30262009107499854,
+        "max_guard_vram_ratio": 0.6130536130536131,
+        "max_guard_vram_mib": 4997.0
       }
     },
     {

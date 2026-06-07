@@ -10,7 +10,7 @@ by an executable gate and an explicit claim boundary.
 ## Evidence Ledger
 
 `train_python/build_current_evidence_ledger.py` is the stable public entry
-point for the current paper-facing gate set. It fixes the 24 gate paths in one
+point for the current paper-facing gate set. It fixes the 26 gate paths in one
 manifest, rebuilds the ledger, and avoids copying a long `--gate` list across
 README files and paper appendices.
 
@@ -21,7 +21,7 @@ python train_python/build_current_evidence_ledger.py
 ```
 
 `train_python/build_evidence_ledger.py` is the lower-level builder for custom
-or future gate manifests. The expanded form of the current 24-gate ledger is:
+or future gate manifests. The expanded form of the current 26-gate ledger is:
 
 ```bash
 python train_python/build_evidence_ledger.py \
@@ -44,6 +44,8 @@ python train_python/build_evidence_ledger.py \
   --gate public_task_model_ladder=outputs/public_task_model_ladder_gate_2026_06_07.json \
   --gate official_ptq_task_retention=outputs/official_ptq_task_retention_smoke_matrix_2026_06_07.json \
   --gate official_ptq_runtime_profile=outputs/official_ptq_runtime_profile_2026_06_07.json \
+  --gate official_ptq_task_subset20=outputs/official_ptq_task_subset20_matrix_2026_06_07.json \
+  --gate official_ptq_subset20_runtime_profile=outputs/official_ptq_subset20_runtime_profile_2026_06_07.json \
   --gate allocation_family_proxy=outputs/q_palette_style_allocation_family_gate_2026_06_06.json \
   --gate robust_lcb_consensus=outputs/robust_lcb_consensus_family_gate_2026_06_06.json \
   --gate robust_lcb_quality=outputs/qwen3_0p6b_robust_lcb_quality_gate_2026_06_07.json \
@@ -53,7 +55,7 @@ python train_python/build_evidence_ledger.py \
   --out-md outputs/real_system_packer_2026-06-05/EVIDENCE_LEDGER_2026_06_06.md
 ```
 
-The current ledger passes with 24/24 gates across repo hygiene, calibration
+The current ledger passes with 26/26 gates across repo hygiene, calibration
 robustness, artifact integrity, kernel, runtime wiring, selected-row, C++
 runtime, decode integration, QKV replacement, quality, task-retention, runtime profile, and
 capability-retention/model-ladder, allocation-comparator, rotation-comparator, and
@@ -147,14 +149,14 @@ Current gate:
 ```bash
 python train_python/gate_paper_evidence_alignment.py \
   --paper paper_drafts/eigenskill_q_research_draft_en_2026_06_07.md \
-  --expected-gate-count 24 \
+  --expected-gate-count 26 \
   --out-json outputs/paper_evidence_alignment_gate_2026_06_07.json \
   --out-md outputs/PAPER_EVIDENCE_ALIGNMENT_GATE_2026_06_07.md
 ```
 
-Current result: 11/11 required evidence references present, referenced repo
+Current result: 13/13 required evidence references present, referenced repo
 paths found and 0 missing, 0 stale forbidden tokens, 0 unsafe non-negated claim
-lines, and the paper mentions the current 24-gate ledger.
+lines, and the paper mentions the current 26-gate ledger.
 
 Valid claim:
 
@@ -299,6 +301,72 @@ Valid claim:
 
 - FP16, AutoAWQ, and GPTQModel Qwen2.5-0.5B variants have PC-side TTFT,
   tokens/s, and peak VRAM measurements on the same guarded task-smoke path.
+
+Invalid claim:
+
+- this proves Redmi/mobile deployment, production runtime speedup, energy
+  improvement, or official AWQ/GPTQ competitiveness.
+
+## Official PTQ Matched Task Subset20 Matrix
+
+The same task gate can also summarize a larger matched public subset. The six
+input summaries are produced with `eval_chat_task_benchmark.py --limit 20` over
+the public MMLU and GSM8K subset files for FP16, AutoAWQ, and GPTQModel.
+
+Current gate:
+
+```bash
+python train_python/gate_official_ptq_task_retention.py \
+  --matrix-title "Official PTQ Matched Task Subset20 Matrix" \
+  --evidence-label "20-row matched public MMLU/GSM8K subsets" \
+  --case fp16:mmlu=outputs/official_ptq_task_fp16_mmlu_subset20_summary_2026_06_07.json=outputs/official_ptq_task_fp16_mmlu_subset20_gpu_guard_2026_06_07.json \
+  --case fp16:gsm8k=outputs/official_ptq_task_fp16_gsm8k_subset20_summary_2026_06_07.json=outputs/official_ptq_task_fp16_gsm8k_subset20_gpu_guard_2026_06_07.json \
+  --case autoawq:mmlu=outputs/official_ptq_task_awq_mmlu_subset20_summary_2026_06_07.json=outputs/official_ptq_task_awq_mmlu_subset20_gpu_guard_2026_06_07.json \
+  --case autoawq:gsm8k=outputs/official_ptq_task_awq_gsm8k_subset20_summary_2026_06_07.json=outputs/official_ptq_task_awq_gsm8k_subset20_gpu_guard_2026_06_07.json \
+  --case gptqmodel:mmlu=outputs/official_ptq_task_gptqmodel_mmlu_subset20_summary_2026_06_07.json=outputs/official_ptq_task_gptqmodel_mmlu_subset20_gpu_guard_2026_06_07.json \
+  --case gptqmodel:gsm8k=outputs/official_ptq_task_gptqmodel_gsm8k_subset20_summary_2026_06_07.json=outputs/official_ptq_task_gptqmodel_gsm8k_subset20_gpu_guard_2026_06_07.json \
+  --min-tasks-per-case 20 \
+  --max-accuracy-drop 0.25 \
+  --out-json outputs/official_ptq_task_subset20_matrix_2026_06_07.json \
+  --out-md outputs/OFFICIAL_PTQ_TASK_SUBSET20_MATRIX_2026_06_07.md
+```
+
+Current result: 6 cases, 3 variants, 2 task formats, 120 total task executions,
+15 total passes, max accuracy drop versus FP16 `0.0`, and peak guard VRAM ratio
+`0.6131`. MMLU is 5/20 for all three variants; GSM8K remains execution-only
+because FP16 is 0/20.
+
+Valid claim:
+
+- FP16, AutoAWQ, and GPTQModel Qwen2.5-0.5B variants can all be loaded and
+  evaluated on the same 20-row public MMLU and 20-row public GSM8K subsets under
+  GPU guard.
+
+Invalid claim:
+
+- this proves leaderboard-scale task retention, reasoning quality, official
+  AWQ/GPTQ competitiveness, or production inference performance.
+
+## Official PTQ Subset20 Runtime Profile Gate
+
+Current gate:
+
+```bash
+python train_python/gate_official_ptq_runtime_profile.py \
+  --matrix-json outputs/official_ptq_task_subset20_matrix_2026_06_07.json \
+  --out-json outputs/official_ptq_subset20_runtime_profile_2026_06_07.json \
+  --out-md outputs/OFFICIAL_PTQ_SUBSET20_RUNTIME_PROFILE_2026_06_07.md
+```
+
+Current result: 3 variants, 6 cases, 120 tasks, mean `14.7072` tokens/s, mean
+TTFT `0.302620` s, peak guarded VRAM ratio `0.6131`, and peak guarded VRAM
+`4997` MiB. AutoAWQ and GPTQModel reduce guarded VRAM versus FP16 on this local
+path, but both are slower than FP16.
+
+Valid claim:
+
+- FP16, AutoAWQ, and GPTQModel Qwen2.5-0.5B variants have PC-side TTFT,
+  tokens/s, and peak VRAM measurements on the same guarded subset20 path.
 
 Invalid claim:
 

@@ -1,10 +1,10 @@
 {
-  "date": "2026-06-07T01:47:28+00:00",
+  "date": "2026-06-07T02:22:57+00:00",
   "schema_version": 1,
   "passed": false,
-  "item_count": 18,
+  "item_count": 19,
   "status_counts": {
-    "covered": 14,
+    "covered": 15,
     "partial": 1,
     "proxy_only": 2,
     "missing": 1
@@ -17,7 +17,7 @@
       "covered": 1
     },
     "external_ptq_readiness": {
-      "covered": 7
+      "covered": 8
     },
     "external_ptq": {
       "partial": 1
@@ -433,6 +433,49 @@
       ]
     },
     {
+      "id": "official_ptq_task_subset20",
+      "family": "external_ptq_readiness",
+      "priority": "optional",
+      "paper_blocker": false,
+      "description": "Matched 20-row public MMLU/GSM8K subset execution matrix for FP16, AutoAWQ, and GPTQModel Qwen2.5-0.5B variants under GPU guard.",
+      "required_evidence_globs": [
+        "outputs/**/official_ptq_task_subset20_matrix*.json"
+      ],
+      "required_packages": [
+        "autoawq",
+        "gptqmodel"
+      ],
+      "package_mode": "all",
+      "min_total_tasks": 120,
+      "claim_boundary": "Matched-subset execution and runtime readiness only: it covers 120 guarded task executions, but zero-FP16 GSM8K remains execution-only and this is not leaderboard-scale retention.",
+      "status": "covered",
+      "evidence_count": 1,
+      "evidence_task_count": 120,
+      "evidence_matches": [
+        "outputs/official_ptq_task_subset20_matrix_2026_06_07.json"
+      ],
+      "evidence_truncated": false,
+      "partial_evidence_count": 0,
+      "partial_evidence_matches": [],
+      "partial_evidence_truncated": false,
+      "proxy_evidence_count": 0,
+      "proxy_evidence_matches": [],
+      "proxy_evidence_truncated": false,
+      "package_ok": true,
+      "package_summary": [
+        {
+          "name": "autoawq",
+          "available": true,
+          "version": "0.2.9"
+        },
+        {
+          "name": "gptqmodel",
+          "available": true,
+          "version": "7.0.0"
+        }
+      ]
+    },
+    {
       "id": "official_ptq_runtime_profile",
       "family": "external_ptq_readiness",
       "priority": "optional",
@@ -496,7 +539,8 @@
         "outputs/**/*official*awq*public*calib*.json",
         "outputs/**/*official*gptqmodel*public*calib*gate*.json",
         "outputs/**/*official*gptqmodel*public*calib*.json",
-        "outputs/**/*official*ptq*task*retention*smoke*matrix*.json"
+        "outputs/**/*official*ptq*task*retention*smoke*matrix*.json",
+        "outputs/**/*official*ptq*task*subset20*matrix*.json"
       ],
       "proxy_evidence_globs": [
         "outputs/**/*awq_gptq_proxy*summary.json"
@@ -514,7 +558,7 @@
       "evidence_task_count": 0,
       "evidence_matches": [],
       "evidence_truncated": false,
-      "partial_evidence_count": 31,
+      "partial_evidence_count": 32,
       "partial_evidence_matches": [
         "outputs/official_awq_matched_ppl_gate_2026_06_07.json",
         "outputs/official_awq_matched_ppl_qwen25_0p5b_c4_gate_2026_06_07.json",
@@ -682,7 +726,8 @@
         "outputs/public_task_smoke_manifest_2026_06_06.json",
         "outputs/public_task_smoke_mmlu_qwen3_0p6b_summary.json",
         "outputs/public_task_smoke_gsm8k_qwen3_0p6b_summary.json",
-        "outputs/official_ptq_task_retention_smoke_matrix_2026_06_07.json"
+        "outputs/official_ptq_task_retention_smoke_matrix_2026_06_07.json",
+        "outputs/official_ptq_task_subset20_matrix_2026_06_07.json"
       ],
       "required_evidence_globs": [
         "outputs/**/*mmlu*summary.json",
@@ -706,9 +751,10 @@
         "outputs/public_task_smoke_mmlu_qwen3_0p6b_summary.json"
       ],
       "evidence_truncated": false,
-      "partial_evidence_count": 5,
+      "partial_evidence_count": 6,
       "partial_evidence_matches": [
         "outputs/official_ptq_task_retention_smoke_matrix_2026_06_07.json",
+        "outputs/official_ptq_task_subset20_matrix_2026_06_07.json",
         "outputs/public_task_smoke_gsm8k_qwen3_0p6b_summary.json",
         "outputs/public_task_smoke_manifest_2026_06_06.json",
         "outputs/public_task_smoke_mmlu_qwen3_0p6b_summary.json",

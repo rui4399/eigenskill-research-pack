@@ -108,6 +108,8 @@ def build_comparisons(cases: list[dict[str, Any]], baseline_variant: str) -> tup
 
 def build_result(cases: list[dict[str, Any]], args: argparse.Namespace) -> dict[str, Any]:
     failures: list[str] = []
+    evidence_label = getattr(args, "evidence_label", "tiny public MMLU/GSM8K smoke tasks")
+    matrix_title = getattr(args, "matrix_title", "Official PTQ Task-Execution Smoke Matrix")
     variants = sorted({str(case["variant"]) for case in cases})
     formats = sorted({str(case["task_format"]) for case in cases})
     required_variants = list(args.required_variants)
@@ -175,13 +177,15 @@ def build_result(cases: list[dict[str, Any]], args: argparse.Namespace) -> dict[
     return {
         "date": datetime.now(timezone.utc).replace(microsecond=0).isoformat(),
         "passed": not failures,
+        "matrix_title": matrix_title,
+        "evidence_label": evidence_label,
         "summary": summary,
         "cases": cases,
         "comparisons": comparisons,
         "failures": failures,
         "claim_boundary": (
             "Valid claim: FP16 and official-package quantized artifacts are loadable and evaluated "
-            "on the same tiny public MMLU/GSM8K smoke tasks under GPU guard. Formats with zero FP16 "
+            f"on the same {evidence_label} under GPU guard. Formats with zero FP16 "
             "accuracy are execution-only evidence. Invalid claim: this is leaderboard-scale task "
             "retention, SOTA PTQ quality, or a production inference benchmark."
         ),
@@ -191,7 +195,7 @@ def build_result(cases: list[dict[str, Any]], args: argparse.Namespace) -> dict[
 def write_markdown(path: Path, result: dict[str, Any]) -> None:
     summary = result["summary"]
     lines = [
-        "# Official PTQ Task-Execution Smoke Matrix",
+        f"# {result.get('matrix_title', 'Official PTQ Task-Execution Smoke Matrix')}",
         "",
         f"Date: `{result['date']}`",
         f"Status: **{'PASS' if result['passed'] else 'FAIL'}**",
@@ -249,6 +253,8 @@ def main() -> None:
     parser.add_argument("--min-tasks-per-case", type=int, default=4)
     parser.add_argument("--max-memory-ratio", type=float, default=0.90)
     parser.add_argument("--max-accuracy-drop", type=float, default=0.25)
+    parser.add_argument("--matrix-title", default="Official PTQ Task-Execution Smoke Matrix")
+    parser.add_argument("--evidence-label", default="tiny public MMLU/GSM8K smoke tasks")
     parser.add_argument("--out-json", type=Path, required=True)
     parser.add_argument("--out-md", type=Path, required=True)
     args = parser.parse_args()

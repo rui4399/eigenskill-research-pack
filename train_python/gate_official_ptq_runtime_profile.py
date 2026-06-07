@@ -113,6 +113,7 @@ def build_result(matrix: dict[str, Any], args: argparse.Namespace) -> dict[str, 
     if not isinstance(cases, list):
         cases = []
     failures: list[str] = []
+    source_evidence_label = str(matrix.get("evidence_label") or "task-smoke executions")
     if not matrix.get("passed"):
         failures.append("source task-smoke matrix did not pass")
     profiles = build_profiles([case for case in cases if isinstance(case, dict)])
@@ -161,13 +162,14 @@ def build_result(matrix: dict[str, Any], args: argparse.Namespace) -> dict[str, 
     return {
         "date": datetime.now(timezone.utc).replace(microsecond=0).isoformat(),
         "passed": not failures,
+        "source_evidence_label": source_evidence_label,
         "summary": summary,
         "profiles": profiles,
         "comparisons": comparisons,
         "failures": failures,
         "claim_boundary": (
             "Valid claim: this is a PC-side runtime profile over already-guarded official PTQ "
-            "task-smoke executions, reporting TTFT, tokens/s, and peak VRAM for FP16 and "
+            f"{source_evidence_label}, reporting TTFT, tokens/s, and peak VRAM for FP16 and "
             "official-package quantized artifacts. Invalid claim: this does not prove mobile deployment, "
             "production runtime speedup, energy improvement, or official AWQ/GPTQ competitiveness."
         ),
