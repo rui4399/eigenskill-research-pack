@@ -787,6 +787,15 @@ records these as executable system evidence, but the paper does not claim
 end-to-end quality preservation. It does not claim TTFT/tokens/s wins, real
 mobile results, or edge-board deployment.
 
+A new RTX 5070 layout probe further separates storage compression from compute
+layout; see `outputs/RTX5070_INT4_LAYOUT_PROBE_2026_06_07.md`. On a 4096 x
+4096, batch-512 interleaved timing probe, contiguous packed W4 reaches 0.8424x
+torch FP16 latency while preserving about 4x weight-payload compression. A
+byte-aligned W4-as-I8 layout reaches 0.9905x torch FP16 with about 2x payload
+compression. This does not justify an acceleration claim, but it localizes the
+remaining systems bottleneck: packed nibble unpacking and dequantized tile
+layout, rather than row-wise dispatch alone, are the next kernel targets.
+
 ## 9. Discussion
 
 ### Why not just use more calibration data?

@@ -1,0 +1,147 @@
+{
+  "command": [
+    "python3",
+    "train_python/triton_mixed_gemm.py",
+    "--rows",
+    "4096",
+    "--cols",
+    "4096",
+    "--batch",
+    "512",
+    "--high-every",
+    "0",
+    "--block-m",
+    "64",
+    "--block-n",
+    "128",
+    "--block-k",
+    "64",
+    "--iters",
+    "40",
+    "--warmup",
+    "10",
+    "--repeats",
+    "5",
+    "--interleaved-timing",
+    "--out",
+    "outputs/rtx5070_int4_layout_probe_2026_06_07/final_interleaved_b512/b512_bm64_bn128_bk64.json"
+  ],
+  "returncode": 0,
+  "killed_by_guard": false,
+  "killed_by_timeout": false,
+  "timeout_seconds": 0.0,
+  "max_memory_used_mib": 4256,
+  "memory_total_mib": 8151,
+  "max_memory_used_ratio": 0.5221445221445221,
+  "max_utilization_gpu_pct": 100,
+  "start_state": {
+    "utilization_gpu_pct": 7,
+    "memory_used_mib": 3629,
+    "memory_total_mib": 8151,
+    "memory_used_ratio": 0.44522144522144524
+  },
+  "end_state": {
+    "utilization_gpu_pct": 9,
+    "memory_used_mib": 3653,
+    "memory_total_mib": 8151,
+    "memory_used_ratio": 0.4481658692185008
+  },
+  "start_disk_state": {
+    "path": "/mnt/c/Users/18042/Documents/Codex/2026-06-01/chatgpt-context-request-algorithm-system-co/github_publish/eigenskill-research-pack",
+    "total_bytes": 537306066944,
+    "used_bytes": 525523177472,
+    "free_bytes": 11782889472,
+    "total_gb": 500.40526962280273,
+    "used_gb": 489.4315986633301,
+    "free_gb": 10.973670959472656
+  },
+  "end_disk_state": {
+    "path": "/mnt/c/Users/18042/Documents/Codex/2026-06-01/chatgpt-context-request-algorithm-system-co/github_publish/eigenskill-research-pack",
+    "total_bytes": 537306066944,
+    "used_bytes": 525529620480,
+    "free_bytes": 11776446464,
+    "total_gb": 500.40526962280273,
+    "used_gb": 489.4375991821289,
+    "free_gb": 10.967670440673828
+  },
+  "post_cleanup": null,
+  "samples": [
+    {
+      "utilization_gpu_pct": 7,
+      "memory_used_mib": 3629,
+      "memory_total_mib": 8151,
+      "memory_used_ratio": 0.44522144522144524,
+      "t_seconds": 1780846441.8354416
+    },
+    {
+      "utilization_gpu_pct": 10,
+      "memory_used_mib": 3625,
+      "memory_total_mib": 8151,
+      "memory_used_ratio": 0.44473070788860264,
+      "t_seconds": 1780846442.9238381
+    },
+    {
+      "utilization_gpu_pct": 9,
+      "memory_used_mib": 3633,
+      "memory_total_mib": 8151,
+      "memory_used_ratio": 0.4457121825542878,
+      "t_seconds": 1780846444.0161386
+    },
+    {
+      "utilization_gpu_pct": 18,
+      "memory_used_mib": 3712,
+      "memory_total_mib": 8151,
+      "memory_used_ratio": 0.4554042448779291,
+      "t_seconds": 1780846445.098474
+    },
+    {
+      "utilization_gpu_pct": 19,
+      "memory_used_mib": 4185,
+      "memory_total_mib": 8151,
+      "memory_used_ratio": 0.513433934486566,
+      "t_seconds": 1780846446.1666381
+    },
+    {
+      "utilization_gpu_pct": 95,
+      "memory_used_mib": 4256,
+      "memory_total_mib": 8151,
+      "memory_used_ratio": 0.5221445221445221,
+      "t_seconds": 1780846447.2519677
+    },
+    {
+      "utilization_gpu_pct": 99,
+      "memory_used_mib": 4225,
+      "memory_total_mib": 8151,
+      "memory_used_ratio": 0.518341307814992,
+      "t_seconds": 1780846448.338791
+    },
+    {
+      "utilization_gpu_pct": 100,
+      "memory_used_mib": 4131,
+      "memory_total_mib": 8151,
+      "memory_used_ratio": 0.506808980493191,
+      "t_seconds": 1780846449.4000711
+    },
+    {
+      "utilization_gpu_pct": 99,
+      "memory_used_mib": 4203,
+      "memory_total_mib": 8151,
+      "memory_used_ratio": 0.5156422524843578,
+      "t_seconds": 1780846450.4894044
+    },
+    {
+      "utilization_gpu_pct": 52,
+      "memory_used_mib": 4164,
+      "memory_total_mib": 8151,
+      "memory_used_ratio": 0.5108575634891425,
+      "t_seconds": 1780846451.5570931
+    },
+    {
+      "utilization_gpu_pct": 7,
+      "memory_used_mib": 3663,
+      "memory_total_mib": 8151,
+      "memory_used_ratio": 0.4493927125506073,
+      "t_seconds": 1780846452.6560123
+    }
+  ]
+}

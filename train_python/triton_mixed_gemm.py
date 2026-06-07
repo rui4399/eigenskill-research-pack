@@ -129,6 +129,97 @@ def _int4_grouped_matmul_kernel(
 
 
 @_jit
+def _int4_contiguous_matmul_kernel(
+    x_ptr,
+    q4_ptr,
+    scales_ptr,
+    y_ptr,
+    rows: tl.constexpr,
+    cols: tl.constexpr,
+    batch: tl.constexpr,
+    q4_stride: tl.constexpr,
+    BLOCK_M: tl.constexpr,
+    BLOCK_N: tl.constexpr,
+    BLOCK_K: tl.constexpr,
+):
+    pid_m = tl.program_id(0)
+    pid_n = tl.program_id(1)
+    offs_m = pid_m * BLOCK_M + tl.arange(0, BLOCK_M)
+    offs_n = pid_n * BLOCK_N + tl.arange(0, BLOCK_N)
+    offs_k = tl.arange(0, BLOCK_K)
+    scales = tl.load(scales_ptr + offs_m, mask=offs_m < rows, other=0.0).to(tl.float32)
+    acc = tl.zeros((BLOCK_M, BLOCK_N), dtype=tl.float32)
+
+    for k0 in range(0, cols, BLOCK_K):
+        k = k0 + offs_k
+        packed = tl.load(
+            q4_ptr + offs_m[:, None] * q4_stride + (k[None, :] // 2),
+            mask=(offs_m[:, None] < rows) & (k[None, :] < cols),
+            other=0,
+        ).to(tl.int32)
+        low = packed & 15
+        high = (packed >> 4) & 15
+        raw = tl.where((k[None, :] & 1) == 0, low, high)
+        signed = tl.where(raw >= 8, raw - 16, raw).to(tl.float32)
+        w = (signed * scales[:, None]).to(tl.float16)
+        x = tl.load(
+            x_ptr + offs_n[:, None] * cols + k[None, :],
+            mask=(offs_n[:, None] < batch) & (k[None, :] < cols),
+            other=0.0,
+        ).to(tl.float16)
+        acc += tl.dot(w, tl.trans(x))
+
+    tl.store(
+        y_ptr + offs_n[None, :] * rows + offs_m[:, None],
+        acc,
+        mask=(offs_m[:, None] < rows) & (offs_n[None, :] < batch),
+    )
+
+
+@_jit
+def _int4_unpacked_i8_contiguous_matmul_kernel(
+    x_ptr,
+    q_ptr,
+    scales_ptr,
+    y_ptr,
+    rows: tl.constexpr,
+    cols: tl.constexpr,
+    batch: tl.constexpr,
+    BLOCK_M: tl.constexpr,
+    BLOCK_N: tl.constexpr,
+    BLOCK_K: tl.constexpr,
+):
+    pid_m = tl.program_id(0)
+    pid_n = tl.program_id(1)
+    offs_m = pid_m * BLOCK_M + tl.arange(0, BLOCK_M)
+    offs_n = pid_n * BLOCK_N + tl.arange(0, BLOCK_N)
+    offs_k = tl.arange(0, BLOCK_K)
+    scales = tl.load(scales_ptr + offs_m, mask=offs_m < rows, other=0.0).to(tl.float16)
+    acc = tl.zeros((BLOCK_M, BLOCK_N), dtype=tl.float32)
+
+    for k0 in range(0, cols, BLOCK_K):
+        k = k0 + offs_k
+        q = tl.load(
+            q_ptr + offs_m[:, None] * cols + k[None, :],
+            mask=(offs_m[:, None] < rows) & (k[None, :] < cols),
+            other=0,
+        ).to(tl.float16)
+        w = q * scales[:, None]
+        x = tl.load(
+            x_ptr + offs_n[:, None] * cols + k[None, :],
+            mask=(offs_n[:, None] < batch) & (k[None, :] < cols),
+            other=0.0,
+        ).to(tl.float16)
+        acc += tl.dot(w, tl.trans(x))
+
+    tl.store(
+        y_ptr + offs_n[None, :] * rows + offs_m[:, None],
+        acc,
+        mask=(offs_m[:, None] < rows) & (offs_n[None, :] < batch),
+    )
+
+
+@_jit
 def _int8_grouped_matmul_kernel(
     x_ptr,
     q8_ptr,
@@ -294,6 +385,10 @@ def pack_int8(weight: torch.Tensor, scales: torch.Tensor) -> torch.Tensor:
     return torch.round(weight / scales[:, None]).clamp(-127, 127).to(torch.int8).contiguous()
 
 
+def pack_int4_unpacked_i8(weight: torch.Tensor, scales: torch.Tensor) -> torch.Tensor:
+    return torch.round(weight / scales[:, None]).clamp(-7, 7).to(torch.int8).contiguous()
+
+
 def synchronize() -> None:
     if torch.cuda.is_available():
         torch.cuda.synchronize()
@@ -314,15 +409,32 @@ def time_ms_samples(fn, iters: int, warmup: int, repeats: int) -> list[float]:
     return [time_ms(fn, iters, warmup) for _ in range(max(repeats, 1))]
 
 
+def time_ms_samples_interleaved(
+    named_fns: list[tuple[str, object]],
+    *,
+    iters: int,
+    warmup: int,
+    repeats: int,
+) -> dict[str, list[float]]:
+    samples = {name: [] for name, _ in named_fns}
+    count = len(named_fns)
+    for rep in range(max(repeats, 1)):
+        for offset in range(count):
+            name, fn = named_fns[(rep + offset) % count]
+            samples[name].append(time_ms(fn, iters, warmup))
+    return samples
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description="Benchmark Triton row-wise mixed INT4/INT8 matmul.")
     parser.add_argument("--rows", type=int, default=2048)
     parser.add_argument("--cols", type=int, default=1024)
     parser.add_argument("--batch", type=int, default=1)
-    parser.add_argument("--high-every", type=int, default=16)
+    parser.add_argument("--high-every", type=int, default=16, help="Every Nth row uses INT8; use 0 for all-INT4.")
     parser.add_argument("--iters", type=int, default=100)
     parser.add_argument("--warmup", type=int, default=20)
     parser.add_argument("--repeats", type=int, default=1)
+    parser.add_argument("--interleaved-timing", action="store_true", help="Rotate benchmark order across repeats.")
     parser.add_argument("--block-m", type=int, default=16)
     parser.add_argument("--block-n", type=int, default=16)
     parser.add_argument("--block-k", type=int, default=64)
@@ -339,7 +451,8 @@ def main() -> None:
     weight = torch.randn(args.rows, args.cols, device=device, dtype=torch.float16) * 0.04
     x = torch.randn(args.batch, args.cols, device=device, dtype=torch.float16)
     row_bits = torch.full((args.rows,), 4, device=device, dtype=torch.uint8)
-    row_bits[:: args.high_every] = 8
+    if args.high_every > 0:
+        row_bits[:: args.high_every] = 8
     qmax = torch.where(row_bits == 8, torch.tensor(127.0, device=device), torch.tensor(7.0, device=device))
     scales = weight.abs().amax(dim=1).float().clamp_min(1.0e-8) / qmax
     low_rows = torch.nonzero(row_bits == 4, as_tuple=False).flatten()
@@ -349,8 +462,11 @@ def main() -> None:
     row_slots[high_rows] = torch.arange(high_rows.numel(), device=device, dtype=torch.int32)
     q4 = pack_int4(weight[low_rows].float(), scales[low_rows]).to(device)
     q8 = pack_int8(weight[high_rows].float(), scales[high_rows]).to(device)
+    q4_unpacked_i8 = pack_int4_unpacked_i8(weight.float(), scales).to(device) if high_rows.numel() == 0 else None
     y_mixed = torch.empty(args.batch, args.rows, device=device, dtype=torch.float32)
     y_grouped = torch.empty(args.batch, args.rows, device=device, dtype=torch.float32)
+    y_int4_contiguous = torch.empty(args.batch, args.rows, device=device, dtype=torch.float32)
+    y_int4_unpacked_i8 = torch.empty(args.batch, args.rows, device=device, dtype=torch.float32)
 
     def run_mixed() -> None:
         grid = (args.rows, args.batch)
@@ -410,19 +526,90 @@ def main() -> None:
                 num_warps=4,
             )
 
-    mixed_samples = time_ms_samples(run_mixed, args.iters, args.warmup, args.repeats)
-    grouped_samples = time_ms_samples(run_grouped, args.iters, args.warmup, args.repeats)
-    fp16_samples = time_ms_samples(run_fp16, args.iters, args.warmup, args.repeats)
+    def run_int4_contiguous() -> None:
+        if high_rows.numel():
+            return
+        grid4 = (triton.cdiv(args.rows, args.block_m), triton.cdiv(args.batch, args.block_n))
+        _int4_contiguous_matmul_kernel[grid4](
+            x,
+            q4,
+            scales,
+            y_int4_contiguous,
+            args.rows,
+            args.cols,
+            args.batch,
+            q4.shape[1],
+            args.block_m,
+            args.block_n,
+            args.block_k,
+            num_warps=4,
+        )
+
+    def run_int4_unpacked_i8() -> None:
+        if high_rows.numel() or q4_unpacked_i8 is None:
+            return
+        grid4 = (triton.cdiv(args.rows, args.block_m), triton.cdiv(args.batch, args.block_n))
+        _int4_unpacked_i8_contiguous_matmul_kernel[grid4](
+            x,
+            q4_unpacked_i8,
+            scales,
+            y_int4_unpacked_i8,
+            args.rows,
+            args.cols,
+            args.batch,
+            args.block_m,
+            args.block_n,
+            args.block_k,
+            num_warps=4,
+        )
+
+    if args.interleaved_timing:
+        benchmarks: list[tuple[str, object]] = [("rowwise", run_mixed), ("grouped", run_grouped)]
+        if high_rows.numel() == 0:
+            benchmarks.extend([("int4_contiguous", run_int4_contiguous), ("int4_unpacked_i8", run_int4_unpacked_i8)])
+        benchmarks.append(("fp16", run_fp16))
+        sample_map = time_ms_samples_interleaved(
+            benchmarks,
+            iters=args.iters,
+            warmup=args.warmup,
+            repeats=args.repeats,
+        )
+        mixed_samples = sample_map["rowwise"]
+        grouped_samples = sample_map["grouped"]
+        contiguous_samples = sample_map.get("int4_contiguous", [])
+        unpacked_i8_samples = sample_map.get("int4_unpacked_i8", [])
+        fp16_samples = sample_map["fp16"]
+    else:
+        mixed_samples = time_ms_samples(run_mixed, args.iters, args.warmup, args.repeats)
+        grouped_samples = time_ms_samples(run_grouped, args.iters, args.warmup, args.repeats)
+        contiguous_samples = time_ms_samples(run_int4_contiguous, args.iters, args.warmup, args.repeats) if high_rows.numel() == 0 else []
+        unpacked_i8_samples = time_ms_samples(run_int4_unpacked_i8, args.iters, args.warmup, args.repeats) if high_rows.numel() == 0 else []
+        fp16_samples = time_ms_samples(run_fp16, args.iters, args.warmup, args.repeats)
     mixed_ms = median(mixed_samples)
     grouped_ms = median(grouped_samples)
+    contiguous_ms = median(contiguous_samples) if contiguous_samples else None
+    unpacked_i8_ms = median(unpacked_i8_samples) if unpacked_i8_samples else None
     fp16_ms = median(fp16_samples)
     ref = torch.matmul(x.float(), weight.float().t())
     run_mixed()
     run_grouped()
+    if high_rows.numel() == 0:
+        run_int4_contiguous()
+        run_int4_unpacked_i8()
     rowwise_rel_l2 = torch.linalg.vector_norm(y_mixed - ref) / torch.linalg.vector_norm(ref).clamp_min(1.0e-12)
     grouped_rel_l2 = torch.linalg.vector_norm(y_grouped - ref) / torch.linalg.vector_norm(ref).clamp_min(1.0e-12)
     grouped_vs_rowwise_rel_l2 = torch.linalg.vector_norm(y_grouped - y_mixed) / torch.linalg.vector_norm(y_mixed).clamp_min(1.0e-12)
+    contiguous_rel_l2 = None
+    contiguous_vs_grouped_rel_l2 = None
+    unpacked_i8_rel_l2 = None
+    unpacked_i8_vs_packed_rel_l2 = None
+    if high_rows.numel() == 0:
+        contiguous_rel_l2 = torch.linalg.vector_norm(y_int4_contiguous - ref) / torch.linalg.vector_norm(ref).clamp_min(1.0e-12)
+        contiguous_vs_grouped_rel_l2 = torch.linalg.vector_norm(y_int4_contiguous - y_grouped) / torch.linalg.vector_norm(y_grouped).clamp_min(1.0e-12)
+        unpacked_i8_rel_l2 = torch.linalg.vector_norm(y_int4_unpacked_i8 - ref) / torch.linalg.vector_norm(ref).clamp_min(1.0e-12)
+        unpacked_i8_vs_packed_rel_l2 = torch.linalg.vector_norm(y_int4_unpacked_i8 - y_int4_contiguous) / torch.linalg.vector_norm(y_int4_contiguous).clamp_min(1.0e-12)
     mixed_payload_bytes = int(q4.numel() + q8.numel() + row_bits.numel() + row_slots.numel() * 4 + scales.numel() * 4)
+    unpacked_i8_payload_bytes = int(q4_unpacked_i8.numel() + scales.numel() * 4) if q4_unpacked_i8 is not None else None
     fp16_bytes = int(weight.numel() * 2)
     result = {
         "rows": args.rows,
@@ -433,23 +620,38 @@ def main() -> None:
         "high_rows": int(high_rows.numel()),
         "rowwise_mixed_ms": mixed_ms,
         "grouped_mixed_ms": grouped_ms,
+        "int4_contiguous_ms": contiguous_ms,
+        "int4_unpacked_i8_ms": unpacked_i8_ms,
         "torch_fp16_ms": fp16_ms,
         "rowwise_mixed_ms_samples": mixed_samples,
         "grouped_mixed_ms_samples": grouped_samples,
+        "int4_contiguous_ms_samples": contiguous_samples,
+        "int4_unpacked_i8_ms_samples": unpacked_i8_samples,
         "torch_fp16_ms_samples": fp16_samples,
         "timing_repeats": max(args.repeats, 1),
+        "interleaved_timing": bool(args.interleaved_timing),
         "rowwise_speedup_vs_torch_fp16": fp16_ms / mixed_ms if mixed_ms > 0 else None,
         "grouped_speedup_vs_torch_fp16": fp16_ms / grouped_ms if grouped_ms > 0 else None,
+        "int4_contiguous_speedup_vs_torch_fp16": fp16_ms / contiguous_ms if contiguous_ms and contiguous_ms > 0 else None,
+        "int4_unpacked_i8_speedup_vs_torch_fp16": fp16_ms / unpacked_i8_ms if unpacked_i8_ms and unpacked_i8_ms > 0 else None,
+        "int4_contiguous_speedup_vs_grouped": grouped_ms / contiguous_ms if contiguous_ms and contiguous_ms > 0 else None,
+        "int4_unpacked_i8_speedup_vs_packed_contiguous": contiguous_ms / unpacked_i8_ms if contiguous_ms and unpacked_i8_ms and unpacked_i8_ms > 0 else None,
         "grouped_speedup_vs_rowwise": mixed_ms / grouped_ms if grouped_ms > 0 else None,
         "rowwise_rel_l2": float(rowwise_rel_l2.detach().cpu()),
         "grouped_rel_l2": float(grouped_rel_l2.detach().cpu()),
+        "int4_contiguous_rel_l2": float(contiguous_rel_l2.detach().cpu()) if contiguous_rel_l2 is not None else None,
+        "int4_unpacked_i8_rel_l2": float(unpacked_i8_rel_l2.detach().cpu()) if unpacked_i8_rel_l2 is not None else None,
         "grouped_vs_rowwise_rel_l2": float(grouped_vs_rowwise_rel_l2.detach().cpu()),
+        "int4_contiguous_vs_grouped_rel_l2": float(contiguous_vs_grouped_rel_l2.detach().cpu()) if contiguous_vs_grouped_rel_l2 is not None else None,
+        "int4_unpacked_i8_vs_packed_contiguous_rel_l2": float(unpacked_i8_vs_packed_rel_l2.detach().cpu()) if unpacked_i8_vs_packed_rel_l2 is not None else None,
         "block_m": args.block_m,
         "block_n": args.block_n,
         "block_k": args.block_k,
         "mixed_payload_bytes": mixed_payload_bytes,
+        "int4_unpacked_i8_payload_bytes": unpacked_i8_payload_bytes,
         "fp16_weight_bytes": fp16_bytes,
         "compression_ratio_vs_fp16": fp16_bytes / max(mixed_payload_bytes, 1),
+        "int4_unpacked_i8_compression_ratio_vs_fp16": fp16_bytes / unpacked_i8_payload_bytes if unpacked_i8_payload_bytes else None,
         "device": torch.cuda.get_device_name(0),
         "max_memory_allocated_mib": torch.cuda.max_memory_allocated() / (1024 * 1024),
     }

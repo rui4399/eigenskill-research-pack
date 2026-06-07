@@ -47,12 +47,12 @@ def write_report(path: Path, rows: list[dict[str, Any]]) -> None:
         "",
         "## Best By Torch FP16 Speedup",
         "",
-        "| rank | rows | cols | batch | high_every | BM | BN | BK | grouped ms | torch FP16 ms | grouped/FP16 | grouped/rowwise | rel-L2 |",
-        "|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|",
+        "| rank | rows | cols | batch | high_every | BM | BN | BK | grouped ms | packed W4 ms | W4-as-I8 ms | torch FP16 ms | grouped/FP16 | packed W4/FP16 | W4-as-I8/FP16 | grouped/rowwise | rel-L2 |",
+        "|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|",
     ]
     for rank, row in enumerate(by_fp16[:10], start=1):
         lines.append(
-            "| {rank} | {rows} | {cols} | {batch} | {high_every} | {bm} | {bn} | {bk} | {gms} | {fms} | {gfp16} | {grow} | {rel} |".format(
+            "| {rank} | {rows} | {cols} | {batch} | {high_every} | {bm} | {bn} | {bk} | {gms} | {cims} | {u8ms} | {fms} | {gfp16} | {cifp16} | {u8fp16} | {grow} | {rel} |".format(
                 rank=rank,
                 rows=row.get("rows"),
                 cols=row.get("cols"),
@@ -62,8 +62,12 @@ def write_report(path: Path, rows: list[dict[str, Any]]) -> None:
                 bn=row.get("block_n"),
                 bk=row.get("block_k"),
                 gms=fmt(row.get("grouped_mixed_ms"), 6),
+                cims=fmt(row.get("int4_contiguous_ms"), 6),
+                u8ms=fmt(row.get("int4_unpacked_i8_ms"), 6),
                 fms=fmt(row.get("torch_fp16_ms"), 6),
                 gfp16=fmt(row.get("grouped_speedup_vs_torch_fp16")),
+                cifp16=fmt(row.get("int4_contiguous_speedup_vs_torch_fp16")),
+                u8fp16=fmt(row.get("int4_unpacked_i8_speedup_vs_torch_fp16")),
                 grow=fmt(row.get("grouped_speedup_vs_rowwise")),
                 rel=fmt(row.get("grouped_rel_l2")),
             )
@@ -74,13 +78,13 @@ def write_report(path: Path, rows: list[dict[str, Any]]) -> None:
             "",
             "## Best By Rowwise Speedup",
             "",
-            "| rank | rows | cols | batch | high_every | BM | BN | BK | rowwise ms | grouped ms | grouped/rowwise | grouped/FP16 |",
-            "|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|",
+        "| rank | rows | cols | batch | high_every | BM | BN | BK | rowwise ms | grouped ms | packed W4 ms | W4-as-I8 ms | grouped/rowwise | packed W4/grouped | W4-as-I8/packed W4 | grouped/FP16 |",
+        "|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|",
         ]
     )
     for rank, row in enumerate(by_rowwise[:10], start=1):
         lines.append(
-            "| {rank} | {rows} | {cols} | {batch} | {high_every} | {bm} | {bn} | {bk} | {rms} | {gms} | {grow} | {gfp16} |".format(
+            "| {rank} | {rows} | {cols} | {batch} | {high_every} | {bm} | {bn} | {bk} | {rms} | {gms} | {cims} | {u8ms} | {grow} | {cig} | {u8c} | {gfp16} |".format(
                 rank=rank,
                 rows=row.get("rows"),
                 cols=row.get("cols"),
@@ -91,7 +95,11 @@ def write_report(path: Path, rows: list[dict[str, Any]]) -> None:
                 bk=row.get("block_k"),
                 rms=fmt(row.get("rowwise_mixed_ms"), 6),
                 gms=fmt(row.get("grouped_mixed_ms"), 6),
+                cims=fmt(row.get("int4_contiguous_ms"), 6),
+                u8ms=fmt(row.get("int4_unpacked_i8_ms"), 6),
                 grow=fmt(row.get("grouped_speedup_vs_rowwise")),
+                cig=fmt(row.get("int4_contiguous_speedup_vs_grouped")),
+                u8c=fmt(row.get("int4_unpacked_i8_speedup_vs_packed_contiguous")),
                 gfp16=fmt(row.get("grouped_speedup_vs_torch_fp16")),
             )
         )
@@ -116,6 +124,7 @@ def main() -> None:
     parser.add_argument("--iters", type=int, default=60)
     parser.add_argument("--warmup", type=int, default=15)
     parser.add_argument("--repeats", type=int, default=1)
+    parser.add_argument("--interleaved-timing", action="store_true")
     parser.add_argument("--rows", type=int, default=2048)
     parser.add_argument("--cols", type=int, default=1024)
     parser.add_argument("--batches", default="1,8,16")
@@ -173,6 +182,8 @@ def main() -> None:
                             "--out",
                             str(result_path),
                         ]
+                        if args.interleaved_timing:
+                            command.insert(-2, "--interleaved-timing")
                         code, stdout, stderr = run(command)
                         row: dict[str, Any] = {
                             "returncode": code,
