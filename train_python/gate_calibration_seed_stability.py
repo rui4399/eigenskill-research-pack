@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import random
 from dataclasses import dataclass
 from datetime import datetime, timezone
 from itertools import combinations
@@ -45,6 +46,35 @@ def mean(values: list[float]) -> float | None:
     if not clean:
         return None
     return sum(clean) / len(clean)
+
+
+def percentile(sorted_values: list[float], q: float) -> float | None:
+    if not sorted_values:
+        return None
+    if len(sorted_values) == 1:
+        return sorted_values[0]
+    position = (len(sorted_values) - 1) * q
+    lo = int(position)
+    hi = min(lo + 1, len(sorted_values) - 1)
+    weight = position - lo
+    return sorted_values[lo] * (1.0 - weight) + sorted_values[hi] * weight
+
+
+def bootstrap_mean_ci(values: list[float | None], *, samples: int, seed: int) -> dict[str, float | int | None]:
+    clean = [float(value) for value in values if finite(value) is not None]
+    if not clean or samples <= 0:
+        return {"samples": 0, "low": None, "high": None}
+    rng = random.Random(seed)
+    means: list[float] = []
+    for _ in range(samples):
+        draw = [clean[rng.randrange(len(clean))] for _ in clean]
+        means.append(sum(draw) / len(draw))
+    means.sort()
+    return {
+        "samples": samples,
+        "low": percentile(means, 0.025),
+        "high": percentile(means, 0.975),
+    }
 
 
 def top_jaccard(result: dict[str, Any], k: int = 20) -> float | None:
@@ -88,6 +118,8 @@ def build_gate(
     min_cases: int = 2,
     min_pairs: int = 1,
     require_prompt_selection: bool = True,
+    bootstrap_samples: int = 1000,
+    bootstrap_seed: int = 20260607,
 ) -> dict[str, Any]:
     if len(cases) != len({case.label for case in cases}):
         raise ValueError("case labels must be unique")
@@ -155,11 +187,20 @@ def build_gate(
             "finite_pair_count": finite_pairs,
             "unique_prompt_selection_count": len(signatures),
             "mean_score_spearman": mean(spearman),
+            "mean_score_spearman_ci": bootstrap_mean_ci(
+                spearman, samples=bootstrap_samples, seed=bootstrap_seed
+            ),
             "min_score_spearman": min(spearman) if spearman else None,
             "max_score_spearman": max(spearman) if spearman else None,
             "mean_top20_jaccard": mean(top20),
+            "mean_top20_jaccard_ci": bootstrap_mean_ci(
+                top20, samples=bootstrap_samples, seed=bootstrap_seed + 1
+            ),
             "min_top20_jaccard": min(top20) if top20 else None,
             "mean_positive_jaccard": mean(positive),
+            "mean_positive_jaccard_ci": bootstrap_mean_ci(
+                positive, samples=bootstrap_samples, seed=bootstrap_seed + 2
+            ),
             "min_positive_jaccard": min(positive) if positive else None,
         },
         "prompt_selections": prompt_rows,
@@ -178,6 +219,16 @@ def fmt(value: Any, digits: int = 4) -> str:
     return "n/a" if number is None else f"{number:.{digits}f}"
 
 
+def fmt_ci(ci: Any, digits: int = 4) -> str:
+    if not isinstance(ci, dict):
+        return "n/a"
+    low = finite(ci.get("low"))
+    high = finite(ci.get("high"))
+    if low is None or high is None:
+        return "n/a"
+    return f"[{low:.{digits}f}, {high:.{digits}f}]"
+
+
 def write_markdown(path: Path, report: dict[str, Any]) -> None:
     summary = report["summary"]
     lines = [
@@ -193,10 +244,13 @@ def write_markdown(path: Path, report: dict[str, Any]) -> None:
         f"- finite pairs: `{summary['finite_pair_count']}`",
         f"- unique prompt selections: `{summary['unique_prompt_selection_count']}`",
         f"- mean score/cost Spearman: `{fmt(summary['mean_score_spearman'])}`",
+        f"- mean score/cost Spearman bootstrap 95% CI: `{fmt_ci(summary.get('mean_score_spearman_ci'))}`",
         f"- min score/cost Spearman: `{fmt(summary['min_score_spearman'])}`",
         f"- mean top-20 Jaccard: `{fmt(summary['mean_top20_jaccard'])}`",
+        f"- mean top-20 Jaccard bootstrap 95% CI: `{fmt_ci(summary.get('mean_top20_jaccard_ci'))}`",
         f"- min top-20 Jaccard: `{fmt(summary['min_top20_jaccard'])}`",
         f"- mean positive-set Jaccard: `{fmt(summary['mean_positive_jaccard'])}`",
+        f"- mean positive-set Jaccard bootstrap 95% CI: `{fmt_ci(summary.get('mean_positive_jaccard_ci'))}`",
         "",
         "## Prompt Selections",
         "",
@@ -239,6 +293,8 @@ def main() -> None:
     parser.add_argument("--min-cases", type=int, default=2)
     parser.add_argument("--min-pairs", type=int, default=1)
     parser.add_argument("--allow-missing-prompt-selection", action="store_true")
+    parser.add_argument("--bootstrap-samples", type=int, default=1000)
+    parser.add_argument("--bootstrap-seed", type=int, default=20260607)
     parser.add_argument("--out-json", type=Path, required=True)
     parser.add_argument("--out-md", type=Path, required=True)
     args = parser.parse_args()
@@ -250,6 +306,8 @@ def main() -> None:
         min_cases=args.min_cases,
         min_pairs=args.min_pairs,
         require_prompt_selection=not args.allow_missing_prompt_selection,
+        bootstrap_samples=args.bootstrap_samples,
+        bootstrap_seed=args.bootstrap_seed,
     )
     args.out_json.parent.mkdir(parents=True, exist_ok=True)
     args.out_json.write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")

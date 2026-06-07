@@ -23,9 +23,13 @@ The current evidence supports:
   allocation audits around the 4.5 average-bit budget;
 - budget and robustness gates for mean consensus, robust-LCB, transfer
   boundaries, and bounded interaction-aware swap search;
-- a Qwen2.5-0.5B calibration prompt-seed stability gate showing 3 sampled
-  prompt selections, 3 pairwise comparisons, mean Spearman 0.4230, and minimum
-  top-20 Jaccard 0.4286 under the same 16-prompt WikiText2 pool;
+- a Qwen2.5-0.5B calibration prompt-seed stability gate showing 6 sampled
+  prompt selections, 15 pairwise comparisons, mean Spearman 0.4324 with
+  bootstrap 95% CI [0.3557, 0.5174], and minimum top-20 Jaccard 0.3793 under
+  the same 16-prompt WikiText2 pool;
+- a Qwen2.5-0.5B CSI-vs-calibration-size gate over six-seed n=2/4/8 prompt
+  samples, where mean Spearman rises 0.3725 -> 0.4324 -> 0.6645 and mean
+  top-20 Jaccard rises 0.3797 -> 0.4672 -> 0.6449;
 - a Q-Palette-style closed-form Lagrangian allocation proxy over measured Qwen3
   and Qwen2.5 sensitivity artifacts, gated for finite lambda, budget use, and
   non-trivial bit histograms;
@@ -49,6 +53,30 @@ production runtime claim, or a real-device deployment claim.
 
 These are fit hypotheses, not acceptance claims. School and CCF/CAS recognition
 rules drift, so verify the latest official list before choosing a target.
+
+## AAAI-27 Sprint Window
+
+The official AAAI-27 timetable lists all author deadlines as UTC-12: author
+registration opens on 2026-06-17, paper submission opens on 2026-06-24,
+abstracts are due on 2026-07-21, full papers are due on 2026-07-28, and
+supplementary material/code is due on 2026-07-31. Treat the internal freeze as
+at least 48 hours earlier than each official deadline.
+
+Source: `https://aaai.org/conference/aaai/aaai-27/`
+
+Current AAAI-facing critical path:
+
+1. Theory: keep the Chebyshev/inversion-risk CSI section concise and tied to
+   measured seed/bootstrap artifacts.
+2. Real quantization: expand the AutoAWQ/GPTQModel matched pack beyond the
+   0.5B readiness setting and report negative runtime results honestly.
+3. Downstream tasks: move from subset50 execution evidence toward stronger
+   MMLU/GSM8K/IFEval retention on actual quantized variants.
+4. Scale: add at least one representative 3B/7B row if the 8GB local GPU can
+   run it under the guard, otherwise document the hardware-limited fallback.
+5. Figures: promote the committed CSI-vs-calibration-size SVG/JSON into the
+   paper figure pipeline, then add bootstrap bands or a larger n grid if time
+   allows.
 
 | Route | Why it fits | What must improve first |
 |---|---|---|
@@ -75,8 +103,9 @@ The blockers are concrete:
 2. Larger evaluation: more WikiText2/C4 prompts and broader calibration-seed sweeps.
 3. Downstream retention: MMLU/GSM8K/IFEval or similar task slices on the actual
    quantized/fused variants, not only base-model capability smoke.
-4. Statistical robustness: bootstrap or confidence intervals for
-   consensus-vs-single-split risk.
+4. Statistical robustness: the first n=2/4/8 CSI curve is now gated, but larger
+   n grids, more prompt pools, and consensus-vs-single-split confidence
+   intervals are still needed.
 5. Runtime evidence: packed quantized weights integrated into an inference path;
    PyTorch fake quant cannot justify latency, memory, or energy claims.
 6. Mobile evidence: Redmi K80 Pro or another real device needs TTFT, tokens/s,

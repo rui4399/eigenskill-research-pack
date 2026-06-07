@@ -52,6 +52,8 @@ CATEGORIES = {
     "hygiene": "repo hygiene",
     "public": "repo hygiene",
     "calibration": "calibration robustness",
+    "csi": "calibration robustness",
+    "curve": "calibration robustness",
     "instability": "calibration robustness",
     "perturbation": "calibration robustness",
 }
@@ -167,6 +169,18 @@ def metric_parts(summary: dict[str, Any]) -> list[str]:
         parts.append(f"ledger gates {summary.get('ledger_gate_count')}")
     if "case_count" in summary:
         parts.append(f"cases {summary.get('case_count')}")
+    if "point_count" in summary:
+        parts.append(f"points {summary.get('point_count')}")
+    if "min_n" in summary and "max_n" in summary:
+        parts.append(f"n {summary.get('min_n')}->{summary.get('max_n')}")
+    if (value := finite_float(summary.get("mean_score_spearman_gain"))) is not None:
+        parts.append(f"rho gain {value:.4f}")
+    if (value := finite_float(summary.get("mean_top20_jaccard_gain"))) is not None:
+        parts.append(f"top20 gain {value:.4f}")
+    if (value := finite_float(summary.get("mean_positive_jaccard_gain"))) is not None:
+        parts.append(f"positive gain {value:.4f}")
+    if "mean_score_spearman_monotonic" in summary:
+        parts.append(f"rho monotonic {summary.get('mean_score_spearman_monotonic')}")
     if (value := finite_float(summary.get("min_budget_utilization"))) is not None:
         parts.append(f"min budget util {value:.4f}")
     if "finite_lambda_count" in summary:
@@ -210,8 +224,10 @@ def metric_parts(summary: dict[str, Any]) -> list[str]:
         parts.append(f"separation {value:.4f}")
     if (value := finite_float(summary.get("min_score_spearman"))) is not None:
         parts.append(f"min rho {value:.4f}")
+    append_ci("mean rho", "mean_score_spearman_ci")
     if (value := finite_float(summary.get("min_top20_jaccard"))) is not None:
         parts.append(f"min top20 {value:.4f}")
+    append_ci("mean top20", "mean_top20_jaccard_ci")
     if "total_tasks" in summary:
         parts.append(f"tasks {summary.get('total_tasks')}")
     if "total_cases" in summary:
@@ -325,6 +341,7 @@ def metric_parts(summary: dict[str, Any]) -> list[str]:
         parts.append(f"mean Spearman {value:.4f}")
     if (value := finite_float(summary.get("mean_positive_jaccard"))) is not None:
         parts.append(f"mean Jaccard {value:.4f}")
+    append_ci("mean Jaccard", "mean_positive_jaccard_ci")
     if (value := finite_float(summary.get("mean_top20_jaccard"))) is not None:
         parts.append(f"top20 Jaccard {value:.4f}")
     if (value := finite_float(summary.get("mean_speedup_fused_vs_baseline"))) is not None:

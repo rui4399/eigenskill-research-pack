@@ -1,17 +1,32 @@
 {
-  "date": "2026-06-07T06:18:39+00:00",
+  "date": "2026-06-07T07:12:49+00:00",
   "passed": true,
   "summary": {
-    "case_count": 3,
-    "pair_count": 3,
-    "finite_pair_count": 3,
-    "unique_prompt_selection_count": 3,
-    "mean_score_spearman": 0.4229725693241551,
-    "min_score_spearman": 0.2741117690797627,
-    "max_score_spearman": 0.6837692383846332,
-    "mean_top20_jaccard": 0.46520146520146516,
-    "min_top20_jaccard": 0.42857142857142855,
-    "mean_positive_jaccard": 0.5516787283484438,
+    "case_count": 6,
+    "pair_count": 15,
+    "finite_pair_count": 15,
+    "unique_prompt_selection_count": 6,
+    "mean_score_spearman": 0.4324065883419552,
+    "mean_score_spearman_ci": {
+      "samples": 5000,
+      "low": 0.35570861942261683,
+      "high": 0.5173547956383008
+    },
+    "min_score_spearman": 0.22835302201061253,
+    "max_score_spearman": 0.7441896842115889,
+    "mean_top20_jaccard": 0.4671577889968694,
+    "mean_top20_jaccard_ci": {
+      "samples": 5000,
+      "low": 0.4199636038716498,
+      "high": 0.5292013223047706
+    },
+    "min_top20_jaccard": 0.3793103448275862,
+    "mean_positive_jaccard": 0.573419457112976,
+    "mean_positive_jaccard_ci": {
+      "samples": 5000,
+      "low": 0.5374845147869265,
+      "high": 0.6119734140053951
+    },
     "min_positive_jaccard": 0.463768115942029
   },
   "prompt_selections": [
@@ -54,6 +69,48 @@
         3,
         8,
         12,
+        13
+      ]
+    },
+    {
+      "label": "seed14",
+      "path": "outputs\\qwen25_0p5b_seed14_module_loss_sensitivity_group128_2026_06_07.json",
+      "source": "data_eval/public_ppl_prompts_16_2026_06_07/wikitext2_test_ppl_prompts.txt",
+      "pool_size": 16,
+      "sample_size": 4,
+      "seed": 20260614,
+      "selected_indices": [
+        2,
+        4,
+        5,
+        9
+      ]
+    },
+    {
+      "label": "seed15",
+      "path": "outputs\\qwen25_0p5b_seed15_module_loss_sensitivity_group128_2026_06_07.json",
+      "source": "data_eval/public_ppl_prompts_16_2026_06_07/wikitext2_test_ppl_prompts.txt",
+      "pool_size": 16,
+      "sample_size": 4,
+      "seed": 20260615,
+      "selected_indices": [
+        4,
+        6,
+        13,
+        14
+      ]
+    },
+    {
+      "label": "seed16",
+      "path": "outputs\\qwen25_0p5b_seed16_module_loss_sensitivity_group128_2026_06_07.json",
+      "source": "data_eval/public_ppl_prompts_16_2026_06_07/wikitext2_test_ppl_prompts.txt",
+      "pool_size": 16,
+      "sample_size": 4,
+      "seed": 20260616,
+      "selected_indices": [
+        3,
+        8,
+        10,
         13
       ]
     }
@@ -170,6 +227,171 @@
       }
     },
     {
+      "left": "seed11",
+      "right": "seed14",
+      "shared_modules": 169,
+      "positive_jaccard": 0.4657534246575342,
+      "score_spearman": 0.27262206374070586,
+      "score_kendall_tau_a": 0.23700506661662601,
+      "top20_jaccard": 0.3793103448275862,
+      "result": {
+        "left_path": "outputs\\qwen25_0p5b_seed11_module_loss_sensitivity_group128_2026_06_07.json",
+        "right_path": "outputs\\qwen25_0p5b_seed14_module_loss_sensitivity_group128_2026_06_07.json",
+        "left_name": "seed11",
+        "right_name": "seed14",
+        "epsilon": 1e-12,
+        "shared_modules": 169,
+        "left_positive_count": 104,
+        "right_positive_count": 110,
+        "both_positive_count": 68,
+        "either_positive_count": 146,
+        "positive_jaccard": 0.4657534246575342,
+        "sign_agreement_count": 91,
+        "sign_agreement_ratio": 0.5384615384615384,
+        "positive_delta_pearson": 0.850037586672257,
+        "positive_delta_spearman": 0.25688481121287143,
+        "score_pearson": 0.6360831455546012,
+        "score_spearman": 0.27262206374070586,
+        "score_kendall_tau_a": 0.23700506661662601,
+        "top_overlap": [
+          {
+            "k": 10,
+            "left_count": 10,
+            "right_count": 10,
+            "overlap": 6,
+            "union": 14,
+            "jaccard": 0.42857142857142855
+          },
+          {
+            "k": 20,
+            "left_count": 20,
+            "right_count": 20,
+            "overlap": 11,
+            "union": 29,
+            "jaccard": 0.3793103448275862
+          },
+          {
+            "k": 40,
+            "left_count": 40,
+            "right_count": 40,
+            "overlap": 26,
+            "union": 54,
+            "jaccard": 0.48148148148148145
+          }
+        ]
+      }
+    },
+    {
+      "left": "seed11",
+      "right": "seed15",
+      "shared_modules": 169,
+      "positive_jaccard": 0.5597014925373134,
+      "score_spearman": 0.4625471611386861,
+      "score_kendall_tau_a": 0.4324450677886863,
+      "top20_jaccard": 0.5384615384615384,
+      "result": {
+        "left_path": "outputs\\qwen25_0p5b_seed11_module_loss_sensitivity_group128_2026_06_07.json",
+        "right_path": "outputs\\qwen25_0p5b_seed15_module_loss_sensitivity_group128_2026_06_07.json",
+        "left_name": "seed11",
+        "right_name": "seed15",
+        "epsilon": 1e-12,
+        "shared_modules": 169,
+        "left_positive_count": 104,
+        "right_positive_count": 105,
+        "both_positive_count": 75,
+        "either_positive_count": 134,
+        "positive_jaccard": 0.5597014925373134,
+        "sign_agreement_count": 110,
+        "sign_agreement_ratio": 0.650887573964497,
+        "positive_delta_pearson": 0.9573667186206117,
+        "positive_delta_spearman": 0.4256519546632208,
+        "score_pearson": 0.811905066887925,
+        "score_spearman": 0.4625471611386861,
+        "score_kendall_tau_a": 0.4324450677886863,
+        "top_overlap": [
+          {
+            "k": 10,
+            "left_count": 10,
+            "right_count": 10,
+            "overlap": 5,
+            "union": 15,
+            "jaccard": 0.3333333333333333
+          },
+          {
+            "k": 20,
+            "left_count": 20,
+            "right_count": 20,
+            "overlap": 14,
+            "union": 26,
+            "jaccard": 0.5384615384615384
+          },
+          {
+            "k": 40,
+            "left_count": 40,
+            "right_count": 40,
+            "overlap": 28,
+            "union": 52,
+            "jaccard": 0.5384615384615384
+          }
+        ]
+      }
+    },
+    {
+      "left": "seed11",
+      "right": "seed16",
+      "shared_modules": 169,
+      "positive_jaccard": 0.6953125,
+      "score_spearman": 0.7037490104723456,
+      "score_kendall_tau_a": 0.6298701298701299,
+      "top20_jaccard": 0.5384615384615384,
+      "result": {
+        "left_path": "outputs\\qwen25_0p5b_seed11_module_loss_sensitivity_group128_2026_06_07.json",
+        "right_path": "outputs\\qwen25_0p5b_seed16_module_loss_sensitivity_group128_2026_06_07.json",
+        "left_name": "seed11",
+        "right_name": "seed16",
+        "epsilon": 1e-12,
+        "shared_modules": 169,
+        "left_positive_count": 104,
+        "right_positive_count": 113,
+        "both_positive_count": 89,
+        "either_positive_count": 128,
+        "positive_jaccard": 0.6953125,
+        "sign_agreement_count": 130,
+        "sign_agreement_ratio": 0.7692307692307693,
+        "positive_delta_pearson": 0.9505651492161818,
+        "positive_delta_spearman": 0.6745738645838192,
+        "score_pearson": 0.7034893794922722,
+        "score_spearman": 0.7037490104723456,
+        "score_kendall_tau_a": 0.6298701298701299,
+        "top_overlap": [
+          {
+            "k": 10,
+            "left_count": 10,
+            "right_count": 10,
+            "overlap": 6,
+            "union": 14,
+            "jaccard": 0.42857142857142855
+          },
+          {
+            "k": 20,
+            "left_count": 20,
+            "right_count": 20,
+            "overlap": 14,
+            "union": 26,
+            "jaccard": 0.5384615384615384
+          },
+          {
+            "k": 40,
+            "left_count": 40,
+            "right_count": 40,
+            "overlap": 30,
+            "union": 50,
+            "jaccard": 0.6
+          }
+        ]
+      }
+    },
+    {
       "left": "seed12",
       "right": "seed13",
       "shared_modules": 169,
@@ -220,6 +442,501 @@
             "overlap": 23,
             "union": 57,
             "jaccard": 0.40350877192982454
+          }
+        ]
+      }
+    },
+    {
+      "left": "seed12",
+      "right": "seed14",
+      "shared_modules": 169,
+      "positive_jaccard": 0.6377952755905512,
+      "score_spearman": 0.5123769161551401,
+      "score_kendall_tau_a": 0.4772120430899549,
+      "top20_jaccard": 0.42857142857142855,
+      "result": {
+        "left_path": "outputs\\qwen25_0p5b_seed12_module_loss_sensitivity_group128_2026_06_07.json",
+        "right_path": "outputs\\qwen25_0p5b_seed14_module_loss_sensitivity_group128_2026_06_07.json",
+        "left_name": "seed12",
+        "right_name": "seed14",
+        "epsilon": 1e-12,
+        "shared_modules": 169,
+        "left_positive_count": 98,
+        "right_positive_count": 110,
+        "both_positive_count": 81,
+        "either_positive_count": 127,
+        "positive_jaccard": 0.6377952755905512,
+        "sign_agreement_count": 123,
+        "sign_agreement_ratio": 0.727810650887574,
+        "positive_delta_pearson": 0.9648285141179451,
+        "positive_delta_spearman": 0.539564542953671,
+        "score_pearson": 0.7216594888576958,
+        "score_spearman": 0.5123769161551401,
+        "score_kendall_tau_a": 0.4772120430899549,
+        "top_overlap": [
+          {
+            "k": 10,
+            "left_count": 10,
+            "right_count": 10,
+            "overlap": 6,
+            "union": 14,
+            "jaccard": 0.42857142857142855
+          },
+          {
+            "k": 20,
+            "left_count": 20,
+            "right_count": 20,
+            "overlap": 12,
+            "union": 28,
+            "jaccard": 0.42857142857142855
+          },
+          {
+            "k": 40,
+            "left_count": 40,
+            "right_count": 40,
+            "overlap": 27,
+            "union": 53,
+            "jaccard": 0.5094339622641509
+          }
+        ]
+      }
+    },
+    {
+      "left": "seed12",
+      "right": "seed15",
+      "shared_modules": 169,
+      "positive_jaccard": 0.5615384615384615,
+      "score_spearman": 0.4073251534879435,
+      "score_kendall_tau_a": 0.3984285166730548,
+      "top20_jaccard": 0.3793103448275862,
+      "result": {
+        "left_path": "outputs\\qwen25_0p5b_seed12_module_loss_sensitivity_group128_2026_06_07.json",
+        "right_path": "outputs\\qwen25_0p5b_seed15_module_loss_sensitivity_group128_2026_06_07.json",
+        "left_name": "seed12",
+        "right_name": "seed15",
+        "epsilon": 1e-12,
+        "shared_modules": 169,
+        "left_positive_count": 98,
+        "right_positive_count": 105,
+        "both_positive_count": 73,
+        "either_positive_count": 130,
+        "positive_jaccard": 0.5615384615384615,
+        "sign_agreement_count": 112,
+        "sign_agreement_ratio": 0.6627218934911243,
+        "positive_delta_pearson": 0.883754086294828,
+        "positive_delta_spearman": 0.4722122979351438,
+        "score_pearson": 0.7482934202364878,
+        "score_spearman": 0.4073251534879435,
+        "score_kendall_tau_a": 0.3984285166730548,
+        "top_overlap": [
+          {
+            "k": 10,
+            "left_count": 10,
+            "right_count": 10,
+            "overlap": 6,
+            "union": 14,
+            "jaccard": 0.42857142857142855
+          },
+          {
+            "k": 20,
+            "left_count": 20,
+            "right_count": 20,
+            "overlap": 11,
+            "union": 29,
+            "jaccard": 0.3793103448275862
+          },
+          {
+            "k": 40,
+            "left_count": 40,
+            "right_count": 40,
+            "overlap": 25,
+            "union": 55,
+            "jaccard": 0.45454545454545453
+          }
+        ]
+      }
+    },
+    {
+      "left": "seed12",
+      "right": "seed16",
+      "shared_modules": 169,
+      "positive_jaccard": 0.5514705882352942,
+      "score_spearman": 0.3660121408810941,
+      "score_kendall_tau_a": 0.3358257781101037,
+      "top20_jaccard": 0.42857142857142855,
+      "result": {
+        "left_path": "outputs\\qwen25_0p5b_seed12_module_loss_sensitivity_group128_2026_06_07.json",
+        "right_path": "outputs\\qwen25_0p5b_seed16_module_loss_sensitivity_group128_2026_06_07.json",
+        "left_name": "seed12",
+        "right_name": "seed16",
+        "epsilon": 1e-12,
+        "shared_modules": 169,
+        "left_positive_count": 98,
+        "right_positive_count": 113,
+        "both_positive_count": 75,
+        "either_positive_count": 136,
+        "positive_jaccard": 0.5514705882352942,
+        "sign_agreement_count": 108,
+        "sign_agreement_ratio": 0.6390532544378699,
+        "positive_delta_pearson": 0.9222033235541053,
+        "positive_delta_spearman": 0.41506995456446993,
+        "score_pearson": 0.5827097680148172,
+        "score_spearman": 0.3660121408810941,
+        "score_kendall_tau_a": 0.3358257781101037,
+        "top_overlap": [
+          {
+            "k": 10,
+            "left_count": 10,
+            "right_count": 10,
+            "overlap": 6,
+            "union": 14,
+            "jaccard": 0.42857142857142855
+          },
+          {
+            "k": 20,
+            "left_count": 20,
+            "right_count": 20,
+            "overlap": 12,
+            "union": 28,
+            "jaccard": 0.42857142857142855
+          },
+          {
+            "k": 40,
+            "left_count": 40,
+            "right_count": 40,
+            "overlap": 25,
+            "union": 55,
+            "jaccard": 0.45454545454545453
+          }
+        ]
+      }
+    },
+    {
+      "left": "seed13",
+      "right": "seed14",
+      "shared_modules": 169,
+      "positive_jaccard": 0.5069444444444444,
+      "score_spearman": 0.22835302201061253,
+      "score_kendall_tau_a": 0.20157885074352855,
+      "top20_jaccard": 0.3793103448275862,
+      "result": {
+        "left_path": "outputs\\qwen25_0p5b_seed13_module_loss_sensitivity_group128_2026_06_07.json",
+        "right_path": "outputs\\qwen25_0p5b_seed14_module_loss_sensitivity_group128_2026_06_07.json",
+        "left_name": "seed13",
+        "right_name": "seed14",
+        "epsilon": 1e-12,
+        "shared_modules": 169,
+        "left_positive_count": 107,
+        "right_positive_count": 110,
+        "both_positive_count": 73,
+        "either_positive_count": 144,
+        "positive_jaccard": 0.5069444444444444,
+        "sign_agreement_count": 98,
+        "sign_agreement_ratio": 0.5798816568047337,
+        "positive_delta_pearson": 0.9131346033002419,
+        "positive_delta_spearman": 0.30657892287124416,
+        "score_pearson": 0.5591824834598884,
+        "score_spearman": 0.22835302201061253,
+        "score_kendall_tau_a": 0.20157885074352855,
+        "top_overlap": [
+          {
+            "k": 10,
+            "left_count": 10,
+            "right_count": 10,
+            "overlap": 6,
+            "union": 14,
+            "jaccard": 0.42857142857142855
+          },
+          {
+            "k": 20,
+            "left_count": 20,
+            "right_count": 20,
+            "overlap": 11,
+            "union": 29,
+            "jaccard": 0.3793103448275862
+          },
+          {
+            "k": 40,
+            "left_count": 40,
+            "right_count": 40,
+            "overlap": 26,
+            "union": 54,
+            "jaccard": 0.48148148148148145
+          }
+        ]
+      }
+    },
+    {
+      "left": "seed13",
+      "right": "seed15",
+      "shared_modules": 169,
+      "positive_jaccard": 0.5703703703703704,
+      "score_spearman": 0.4384943215319617,
+      "score_kendall_tau_a": 0.40516129032258064,
+      "top20_jaccard": 0.48148148148148145,
+      "result": {
+        "left_path": "outputs\\qwen25_0p5b_seed13_module_loss_sensitivity_group128_2026_06_07.json",
+        "right_path": "outputs\\qwen25_0p5b_seed15_module_loss_sensitivity_group128_2026_06_07.json",
+        "left_name": "seed13",
+        "right_name": "seed15",
+        "epsilon": 1e-12,
+        "shared_modules": 169,
+        "left_positive_count": 107,
+        "right_positive_count": 105,
+        "both_positive_count": 77,
+        "either_positive_count": 135,
+        "positive_jaccard": 0.5703703703703704,
+        "sign_agreement_count": 111,
+        "sign_agreement_ratio": 0.6568047337278107,
+        "positive_delta_pearson": 0.9538536685717529,
+        "positive_delta_spearman": 0.5046595587956945,
+        "score_pearson": 0.7510329730894066,
+        "score_spearman": 0.4384943215319617,
+        "score_kendall_tau_a": 0.40516129032258064,
+        "top_overlap": [
+          {
+            "k": 10,
+            "left_count": 10,
+            "right_count": 10,
+            "overlap": 6,
+            "union": 14,
+            "jaccard": 0.42857142857142855
+          },
+          {
+            "k": 20,
+            "left_count": 20,
+            "right_count": 20,
+            "overlap": 13,
+            "union": 27,
+            "jaccard": 0.48148148148148145
+          },
+          {
+            "k": 40,
+            "left_count": 40,
+            "right_count": 40,
+            "overlap": 27,
+            "union": 53,
+            "jaccard": 0.5094339622641509
+          }
+        ]
+      }
+    },
+    {
+      "left": "seed13",
+      "right": "seed16",
+      "shared_modules": 169,
+      "positive_jaccard": 0.7322834645669292,
+      "score_spearman": 0.7441896842115889,
+      "score_kendall_tau_a": 0.6949939790125581,
+      "top20_jaccard": 0.8181818181818182,
+      "result": {
+        "left_path": "outputs\\qwen25_0p5b_seed13_module_loss_sensitivity_group128_2026_06_07.json",
+        "right_path": "outputs\\qwen25_0p5b_seed16_module_loss_sensitivity_group128_2026_06_07.json",
+        "left_name": "seed13",
+        "right_name": "seed16",
+        "epsilon": 1e-12,
+        "shared_modules": 169,
+        "left_positive_count": 107,
+        "right_positive_count": 113,
+        "both_positive_count": 93,
+        "either_positive_count": 127,
+        "positive_jaccard": 0.7322834645669292,
+        "sign_agreement_count": 135,
+        "sign_agreement_ratio": 0.7988165680473372,
+        "positive_delta_pearson": 0.986652178118732,
+        "positive_delta_spearman": 0.7587519190219055,
+        "score_pearson": 0.9025821656358635,
+        "score_spearman": 0.7441896842115889,
+        "score_kendall_tau_a": 0.6949939790125581,
+        "top_overlap": [
+          {
+            "k": 10,
+            "left_count": 10,
+            "right_count": 10,
+            "overlap": 9,
+            "union": 11,
+            "jaccard": 0.8181818181818182
+          },
+          {
+            "k": 20,
+            "left_count": 20,
+            "right_count": 20,
+            "overlap": 18,
+            "union": 22,
+            "jaccard": 0.8181818181818182
+          },
+          {
+            "k": 40,
+            "left_count": 40,
+            "right_count": 40,
+            "overlap": 32,
+            "union": 48,
+            "jaccard": 0.6666666666666666
+          }
+        ]
+      }
+    },
+    {
+      "left": "seed14",
+      "right": "seed15",
+      "shared_modules": 169,
+      "positive_jaccard": 0.5693430656934306,
+      "score_spearman": 0.41595850846774546,
+      "score_kendall_tau_a": 0.37929776561787504,
+      "top20_jaccard": 0.3793103448275862,
+      "result": {
+        "left_path": "outputs\\qwen25_0p5b_seed14_module_loss_sensitivity_group128_2026_06_07.json",
+        "right_path": "outputs\\qwen25_0p5b_seed15_module_loss_sensitivity_group128_2026_06_07.json",
+        "left_name": "seed14",
+        "right_name": "seed15",
+        "epsilon": 1e-12,
+        "shared_modules": 169,
+        "left_positive_count": 110,
+        "right_positive_count": 105,
+        "both_positive_count": 78,
+        "either_positive_count": 137,
+        "positive_jaccard": 0.5693430656934306,
+        "sign_agreement_count": 110,
+        "sign_agreement_ratio": 0.650887573964497,
+        "positive_delta_pearson": 0.8824511409145288,
+        "positive_delta_spearman": 0.4476159600726112,
+        "score_pearson": 0.626504069695326,
+        "score_spearman": 0.41595850846774546,
+        "score_kendall_tau_a": 0.37929776561787504,
+        "top_overlap": [
+          {
+            "k": 10,
+            "left_count": 10,
+            "right_count": 10,
+            "overlap": 7,
+            "union": 13,
+            "jaccard": 0.5384615384615384
+          },
+          {
+            "k": 20,
+            "left_count": 20,
+            "right_count": 20,
+            "overlap": 11,
+            "union": 29,
+            "jaccard": 0.3793103448275862
+          },
+          {
+            "k": 40,
+            "left_count": 40,
+            "right_count": 40,
+            "overlap": 28,
+            "union": 52,
+            "jaccard": 0.5384615384615384
+          }
+        ]
+      }
+    },
+    {
+      "left": "seed14",
+      "right": "seed16",
+      "shared_modules": 169,
+      "positive_jaccard": 0.5273972602739726,
+      "score_spearman": 0.28103418980957035,
+      "score_kendall_tau_a": 0.2405786747633506,
+      "top20_jaccard": 0.3793103448275862,
+      "result": {
+        "left_path": "outputs\\qwen25_0p5b_seed14_module_loss_sensitivity_group128_2026_06_07.json",
+        "right_path": "outputs\\qwen25_0p5b_seed16_module_loss_sensitivity_group128_2026_06_07.json",
+        "left_name": "seed14",
+        "right_name": "seed16",
+        "epsilon": 1e-12,
+        "shared_modules": 169,
+        "left_positive_count": 110,
+        "right_positive_count": 113,
+        "both_positive_count": 77,
+        "either_positive_count": 146,
+        "positive_jaccard": 0.5273972602739726,
+        "sign_agreement_count": 100,
+        "sign_agreement_ratio": 0.591715976331361,
+        "positive_delta_pearson": 0.9035750254336845,
+        "positive_delta_spearman": 0.3191073767184357,
+        "score_pearson": 0.4631593908862196,
+        "score_spearman": 0.28103418980957035,
+        "score_kendall_tau_a": 0.2405786747633506,
+        "top_overlap": [
+          {
+            "k": 10,
+            "left_count": 10,
+            "right_count": 10,
+            "overlap": 5,
+            "union": 15,
+            "jaccard": 0.3333333333333333
+          },
+          {
+            "k": 20,
+            "left_count": 20,
+            "right_count": 20,
+            "overlap": 11,
+            "union": 29,
+            "jaccard": 0.3793103448275862
+          },
+          {
+            "k": 40,
+            "left_count": 40,
+            "right_count": 40,
+            "overlap": 24,
+            "union": 56,
+            "jaccard": 0.42857142857142855
+          }
+        ]
+      }
+    },
+    {
+      "left": "seed15",
+      "right": "seed16",
+      "shared_modules": 169,
+      "positive_jaccard": 0.5683453237410072,
+      "score_spearman": 0.38451894524946856,
+      "score_kendall_tau_a": 0.3469977426636569,
+      "top20_jaccard": 0.48148148148148145,
+      "result": {
+        "left_path": "outputs\\qwen25_0p5b_seed15_module_loss_sensitivity_group128_2026_06_07.json",
+        "right_path": "outputs\\qwen25_0p5b_seed16_module_loss_sensitivity_group128_2026_06_07.json",
+        "left_name": "seed15",
+        "right_name": "seed16",
+        "epsilon": 1e-12,
+        "shared_modules": 169,
+        "left_positive_count": 105,
+        "right_positive_count": 113,
+        "both_positive_count": 79,
+        "either_positive_count": 139,
+        "positive_jaccard": 0.5683453237410072,
+        "sign_agreement_count": 109,
+        "sign_agreement_ratio": 0.6449704142011834,
+        "positive_delta_pearson": 0.9515337998082863,
+        "positive_delta_spearman": 0.39096609580157776,
+        "score_pearson": 0.6204045972874527,
+        "score_spearman": 0.38451894524946856,
+        "score_kendall_tau_a": 0.3469977426636569,
+        "top_overlap": [
+          {
+            "k": 10,
+            "left_count": 10,
+            "right_count": 10,
+            "overlap": 6,
+            "union": 14,
+            "jaccard": 0.42857142857142855
+          },
+          {
+            "k": 20,
+            "left_count": 20,
+            "right_count": 20,
+            "overlap": 13,
+            "union": 27,
+            "jaccard": 0.48148148148148145
+          },
+          {
+            "k": 40,
+            "left_count": 40,
+            "right_count": 40,
+            "overlap": 26,
+            "union": 54,
+            "jaccard": 0.48148148148148145
           }
         ]
       }

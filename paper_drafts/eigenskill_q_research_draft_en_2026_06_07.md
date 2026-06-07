@@ -22,15 +22,20 @@ fake-quant loss sensitivity on multiple calibration views, allocates a fixed
 `{4,8}`-bit budget through cross-split consensus sensitivity, and records every
 paper-facing result through executable evidence gates. Across Qwen3-0.6B,
 Qwen3-1.7B, OLMo2-0425-1B-Instruct, and SmolLM2-1.7B short-slice diagnostics,
-the current evidence ledger passes 30/30 gates. The calibration-instability
+the current evidence ledger passes 31/31 gates. The calibration-instability
 gate finds 3/3 unstable model/dataset cases with mean score/cost Spearman
 0.0713 and mean top-20 Jaccard 0.1022. A Qwen2.5 perturbation matrix further
 separates calibration sample-size and model-scale effects: within-model
 limit2-vs-limit8 sensitivity rankings have mean Spearman 0.6356, while direct
 0.5B-vs-1.5B cross-scale transfer has Spearman 0.1273. A prompt-seed stability
-gate on Qwen2.5-0.5B reports mean Spearman 0.4230 and minimum top-20 Jaccard
-0.4286 across three deterministic four-prompt samples from the same public
-WikiText2 prompt pool. The robustness stress gate reports
+gate on Qwen2.5-0.5B reports 15 pairwise comparisons across six deterministic
+four-prompt samples from the same public WikiText2 prompt pool: mean Spearman
+0.4324 with bootstrap 95% CI [0.3557, 0.5174], and mean top-20 Jaccard 0.4672
+with CI [0.4200, 0.5292]. A CSI-vs-calibration-size gate further converts this
+into a three-point n curve: across six-seed n=2, n=4, and n=8 prompt samples,
+mean Spearman increases 0.3725 -> 0.4324 -> 0.6645, mean top-20 Jaccard
+increases 0.3797 -> 0.4672 -> 0.6449, and mean positive-set Jaccard increases
+0.5485 -> 0.5734 -> 0.7282. The robustness stress gate reports
 11/11 wins versus uniform INT4, best random seed, and random-seed mean under the
 same budget, with a one-sided sign-test p-value of 0.000488 versus best random.
 A paired transfer-boundary gate shows consensus avoiding the worse single-split
@@ -90,7 +95,7 @@ offers three narrower contributions:
    consensus allocator that protects modules that are consistently sensitive or
    have high average sensitivity under a fixed `{4,8}` budget.
 3. **Gated evidence discipline.** We convert scattered fake-quant, runtime,
-   task-smoke, paper-alignment, and repository-hygiene outputs into 30 executable gates, each
+   task-smoke, paper-alignment, and repository-hygiene outputs into 31 executable gates, each
    with an explicit claim boundary.
 
 The paper is intentionally conservative. It keeps negative results visible:
@@ -176,7 +181,69 @@ scoring modules to 8-bit until the budget is exhausted. Calibration split
 instability appears when `r_i(D_a)` and `r_i(D_b)` produce substantially
 different rankings for two small calibration splits.
 
-## 4. Consensus Sensitivity Allocation
+## 4. Statistical Model of Calibration Split Instability
+
+The empirical gates above can be interpreted through a simple estimator-noise
+model. For module `i`, let the per-example loss increase caused by quantizing
+only that module be:
+
+```text
+X_i(x) = max(ell(W_{-i}, Q4(W_i); x) - ell(W; x), 0).
+```
+
+The population sensitivity is `s_i^* = E[X_i(x)]`, and a calibration split
+`D = {x_1, ..., x_m}` estimates it as:
+
+```text
+hat{s}_i(D) = (1 / m) * sum_j X_i(x_j).
+```
+
+Assume `Var[X_i(x)] <= sigma_i^2` and the calibration examples are sampled
+independently from the target calibration distribution. By Chebyshev's
+inequality,
+
+```text
+P(|hat{s}_i(D) - s_i^*| >= epsilon) <= sigma_i^2 / (m epsilon^2).
+```
+
+This bound is loose, but it captures the key failure mode: when `m` is small,
+the estimated sensitivity can deviate enough to reorder modules with nearby
+true sensitivities. For two modules `i` and `j`, define the true margin
+`Delta_ij = |s_i^*/c_i - s_j^*/c_j|` and a variance proxy
+`tau_ij^2 = sigma_i^2/c_i^2 + sigma_j^2/c_j^2`. A union-bound argument gives
+the qualitative inversion risk:
+
+```text
+P(sign(r_i(D) - r_j(D)) != sign(r_i^* - r_j^*))
+  <= 4 tau_ij^2 / (m Delta_ij^2),
+```
+
+for nonzero margins, where `r_i^* = s_i^*/c_i`. Thus CSI is expected to be most
+visible when calibration samples are few, per-module loss increments have high
+variance, or many modules have small pairwise margins near the allocation
+threshold.
+
+Consensus averaging reduces the estimator variance when calibration views are
+not perfectly correlated. If `K` calibration views produce unbiased estimates
+with common variance `sigma_i^2/m` and average pairwise correlation `rho_i`,
+then the averaged estimator has variance:
+
+```text
+Var((1/K) * sum_k hat{s}_i(D_k))
+  = (sigma_i^2 / (m K)) * (1 + (K - 1) rho_i).
+```
+
+This does not prove that consensus is optimal, and it does not remove ranking
+error when all views share the same bias. It does justify the paper's diagnostic
+question: measure CSI directly, report variance across calibration choices, and
+treat cross-view agreement as evidence that a high-bit decision is less likely
+to be a single-split artifact. The six-seed Qwen2.5 gate in Section 8.3 is the
+first local check of this estimator-noise story under a fixed prompt pool, and
+the CSI-vs-n curve in Section 8.4 tests the expected direction of stability as
+`m` increases from 2 to 8 prompts. The WikiText2-vs-C4 gate measures a larger
+distribution-shift variant of the same problem.
+
+## 5. Consensus Sensitivity Allocation
 
 Given two calibration views, `D_left` and `D_right`, EigenSkill-Q constructs
 left and right high-bit candidate sets:
@@ -201,7 +268,7 @@ This is not claimed as an optimal robust allocator. It is a deliberately simple
 baseline that asks whether cross-split agreement is enough to reduce the worst
 single-split risk in short-calibration settings.
 
-## 5. Interaction-aware Global Feedback
+## 6. Interaction-aware Global Feedback
 
 Independent module ranking is an additive approximation. It can miss
 interactions: a swap that looks worse under local proxy scores may improve
@@ -217,16 +284,17 @@ The interaction gate is a boundary result rather than a new optimizer. Its role
 is to show that interaction effects are measurable and should be modeled by a
 future allocator.
 
-## 6. Evidence Gates
+## 7. Evidence Gates
 
 Every paper-facing claim is indexed by a gate JSON and a Markdown report. The
-current ledger passes 30/30 gates. The most important gates are:
+current ledger passes 31/31 gates. The most important gates are:
 
 | Gate | Evidence | Valid claim | Non-claim |
 |---|---|---|---|
 | Calibration instability | 3 Qwen3/OLMo2 split comparisons | Small calibration splits induce unstable module rankings. | Instability alone proves consensus is superior. |
 | Sensitivity perturbation matrix | Qwen2.5 sample-size and model-scale perturbations; see `outputs/SENSITIVITY_PERTURBATION_MATRIX_QWEN25_2026_06_07.md`. | Same-model calibration sample-size changes are more stable than cross-model-scale sensitivity transfer in the measured artifacts. | Downstream quality retention, a universal scaling law, or production quantization. |
-| Calibration seed stability | Qwen2.5-0.5B three-seed prompt sampling; see `outputs/CALIBRATION_SEED_STABILITY_QWEN25_0P5B_2026_06_07.md`. | Deterministic small-sample sensitivity runs can be audited for same-model prompt-seed stability; the measured top-sensitive sets still drift. | Does not prove downstream quality retention, broad seed coverage, deployment speed, or SOTA quantization. |
+| Calibration seed stability | Qwen2.5-0.5B six-seed prompt sampling; see `outputs/CALIBRATION_SEED_STABILITY_QWEN25_0P5B_2026_06_07.md`. | Deterministic small-sample sensitivity runs can be audited for same-model prompt-seed stability with pair-bootstrap confidence intervals; the measured top-sensitive sets still drift. | Does not prove downstream quality retention, broad seed coverage, deployment speed, or SOTA quantization. |
+| CSI vs calibration size | Qwen2.5-0.5B n=2/4/8 six-seed curve; see `outputs/CSI_VS_N_CURVE_QWEN25_0P5B_2026_06_07.md`. | Sensitivity-ranking stability increases monotonically with calibration prompt count in this fixed public-prompt setting. | Universal scaling law, downstream quality retention, large-model behavior, deployment speed, or SOTA quantization. |
 | Robustness stress | 11 short fake-quant PPL slices | Target policies beat uniform and random baselines on committed slices. | Not SOTA PTQ or task retention. |
 | Consensus transfer boundary | 4 paired Qwen3 slices | Consensus avoids the worse single-split policy with bounded best-single regret. | Consensus always beats the best single split. |
 | Interaction swap boundary | 16 SmolLM2-1.7B swap trials | Global feedback exposes local-proxy failures. | Global optimality or broad transfer. |
@@ -247,9 +315,9 @@ The evidence ledger is:
 outputs/real_system_packer_2026-06-05/EVIDENCE_LEDGER_2026_06_06.md
 ```
 
-## 7. Experiments
+## 8. Experiments
 
-### 7.1 Calibration Split Instability
+### 8.1 Calibration Split Instability
 
 Across Qwen3-0.6B, Qwen3-1.7B, and OLMo2-0425-1B-Instruct comparisons, the
 calibration-instability gate reports:
@@ -264,7 +332,7 @@ calibration-instability gate reports:
 These low rank correlations motivate treating the calibration split as a source
 of allocation risk, not merely as an implementation detail.
 
-### 7.2 Sensitivity Perturbation Matrix
+### 8.2 Sensitivity Perturbation Matrix
 
 The Qwen2.5 perturbation gate separates two different questions: whether a
 sensitivity ranking stabilizes when the same model receives more calibration
@@ -282,27 +350,48 @@ reusing that ranking across model sizes remains weak in the measured artifacts.
 This is still a diagnostic result; it does not claim downstream quality
 retention or a general scaling law.
 
-### 7.3 Calibration Seed Stability
+### 8.3 Calibration Seed Stability
 
-The Qwen2.5-0.5B seed-stability gate reruns module-loss sensitivity on three
+The Qwen2.5-0.5B seed-stability gate reruns module-loss sensitivity on six
 deterministic four-prompt samples from the same 16-prompt WikiText2 pool:
 
 | Metric | Value |
 |---|---:|
-| Prompt selections | 3 |
-| Pairwise comparisons | 3 |
-| Mean score/cost Spearman | 0.4230 |
-| Minimum score/cost Spearman | 0.2741 |
-| Mean top-20 Jaccard | 0.4652 |
-| Minimum top-20 Jaccard | 0.4286 |
-| Mean positive-set Jaccard | 0.5517 |
+| Prompt selections | 6 |
+| Pairwise comparisons | 15 |
+| Mean score/cost Spearman | 0.4324 |
+| Spearman bootstrap 95% CI | [0.3557, 0.5174] |
+| Minimum score/cost Spearman | 0.2284 |
+| Mean top-20 Jaccard | 0.4672 |
+| Top-20 Jaccard bootstrap 95% CI | [0.4200, 0.5292] |
+| Minimum top-20 Jaccard | 0.3793 |
+| Mean positive-set Jaccard | 0.5734 |
+| Positive-set Jaccard bootstrap 95% CI | [0.5375, 0.6120] |
 
 This result is more nuanced than the WikiText2-vs-C4 split comparison:
 same-pool prompt seeds produce moderate average rank agreement, but the
 top-sensitive module set still changes enough to justify reporting calibration
 seed variance instead of a single deterministic allocation trace.
 
-### 7.4 Robustness Stress Gate
+### 8.4 CSI vs Calibration Size
+
+The CSI-vs-n gate aggregates three six-seed Qwen2.5-0.5B prompt-sampling gates.
+It checks whether ranking stability improves as the number of calibration
+prompts increases from n=2 to n=8:
+
+| Calibration prompts n | Mean score/cost Spearman | Spearman 95% CI | Mean top-20 Jaccard | Top-20 95% CI | Mean positive-set Jaccard |
+|---:|---:|---:|---:|---:|---:|
+| 2 | 0.3725 | [0.2960, 0.4519] | 0.3797 | [0.3336, 0.4270] | 0.5485 |
+| 4 | 0.4324 | [0.3557, 0.5174] | 0.4672 | [0.4200, 0.5292] | 0.5734 |
+| 8 | 0.6645 | [0.6236, 0.7048] | 0.6449 | [0.5962, 0.6915] | 0.7282 |
+
+All three reported stability metrics increase monotonically across the three
+calibration sizes. This is the first direct empirical check of the Section 4
+estimator-noise prediction in the repository: more calibration examples reduce
+ranking variance in the measured setting. The claim remains local to one model
+and one public prompt pool; it does not prove a universal scaling law.
+
+### 8.5 Robustness Stress Gate
 
 The robustness stress gate aggregates 11 committed Qwen3/OLMo2/SmolLM2 PPL
 summaries under a fixed mixed-precision budget:
@@ -321,7 +410,7 @@ summaries under a fixed mixed-precision budget:
 The result is strong for the committed short-slice fake-quant setting. It does
 not replace official GPTQ/AWQ/SmoothQuant/QuaRot/SpinQuant comparisons.
 
-### 7.5 Consensus Transfer Boundary
+### 8.6 Consensus Transfer Boundary
 
 The paired Qwen3 transfer-boundary gate compares WikiText2-only, C4-only, and
 cross-split consensus policies:
@@ -338,7 +427,7 @@ cross-split consensus policies:
 This supports a robust-risk framing: consensus is not an oracle, but it reduces
 the risk of choosing the worse calibration split.
 
-### 7.6 Interaction-aware Swap Boundary
+### 8.7 Interaction-aware Swap Boundary
 
 The interaction gate uses SmolLM2-1.7B search cases on WikiText2 and C4:
 
@@ -360,7 +449,7 @@ Its local proxy gain is negative (`-0.000744`), yet the global PPL improves by
 0.0502. This is direct evidence that additive sensitivity ranking misses
 allocation interactions.
 
-### 7.7 Packed-system Prototype Evidence
+### 8.8 Packed-system Prototype Evidence
 
 The system side is intentionally scoped. The ESMPQ001 format can package and
 audit mixed-bit matrices; Triton shape-family tuning finds selected shape wins;
@@ -370,7 +459,7 @@ records these as executable system evidence, but the paper does not claim
 end-to-end quality preservation. It does not claim TTFT/tokens/s wins, real
 mobile results, or edge-board deployment.
 
-## 8. Discussion
+## 9. Discussion
 
 ### Why not just use more calibration data?
 
@@ -392,7 +481,7 @@ families, and prototype runtime gates. A SOTA quantization paper would need
 faithful official baselines, larger model scales, downstream capability
 benchmarks, and real packed inference measurements.
 
-## 9. Limitations
+## 10. Limitations
 
 1. The main quality evidence is short-slice fake-quant PPL, not packed-runtime
    quality.
@@ -408,7 +497,7 @@ benchmarks, and real packed inference measurements.
 6. The interaction-aware search is bounded one-step feedback, not a global
    optimization algorithm.
 
-## 10. Conclusion
+## 11. Conclusion
 
 EigenSkill-Q reframes the project around a measurable quantization problem:
 small calibration splits can destabilize module-sensitivity rankings and

@@ -1,0 +1,144 @@
+{
+  "date": "2026-06-07T08:12:38+00:00",
+  "passed": true,
+  "summary": {
+    "point_count": 3,
+    "min_n": 2,
+    "max_n": 8,
+    "mean_score_spearman_gain": 0.29200346957219175,
+    "mean_top20_jaccard_gain": 0.2651499583891168,
+    "mean_positive_jaccard_gain": 0.17972187531693273,
+    "mean_score_spearman_monotonic": true,
+    "mean_top20_jaccard_monotonic": true,
+    "mean_positive_jaccard_monotonic": true
+  },
+  "points": [
+    {
+      "n": 2,
+      "path": "outputs\\calibration_seed_stability_qwen25_0p5b_n2_2026_06_07.json",
+      "source_passed": true,
+      "case_count": 6,
+      "pair_count": 15,
+      "unique_prompt_selection_count": 6,
+      "mean_score_spearman": 0.37252470808903665,
+      "mean_score_spearman_ci": {
+        "samples": 5000,
+        "low": 0.2960174065889362,
+        "high": 0.4518793220225575
+      },
+      "mean_top20_jaccard": 0.37970393168216454,
+      "mean_top20_jaccard_ci": {
+        "samples": 5000,
+        "low": 0.33364799431905584,
+        "high": 0.4269922185128896
+      },
+      "mean_positive_jaccard": 0.5484857397719989,
+      "mean_positive_jaccard_ci": {
+        "samples": 5000,
+        "low": 0.5150732770274244,
+        "high": 0.5851946813539924
+      },
+      "min_score_spearman": 0.1128047434527209,
+      "min_top20_jaccard": 0.17647058823529413,
+      "min_positive_jaccard": 0.4589041095890411
+    },
+    {
+      "n": 4,
+      "path": "outputs\\calibration_seed_stability_qwen25_0p5b_2026_06_07.json",
+      "source_passed": true,
+      "case_count": 6,
+      "pair_count": 15,
+      "unique_prompt_selection_count": 6,
+      "mean_score_spearman": 0.4324065883419552,
+      "mean_score_spearman_ci": {
+        "samples": 5000,
+        "low": 0.35570861942261683,
+        "high": 0.5173547956383008
+      },
+      "mean_top20_jaccard": 0.4671577889968694,
+      "mean_top20_jaccard_ci": {
+        "samples": 5000,
+        "low": 0.4199636038716498,
+        "high": 0.5292013223047706
+      },
+      "mean_positive_jaccard": 0.573419457112976,
+      "mean_positive_jaccard_ci": {
+        "samples": 5000,
+        "low": 0.5374845147869265,
+        "high": 0.6119734140053951
+      },
+      "min_score_spearman": 0.22835302201061253,
+      "min_top20_jaccard": 0.3793103448275862,
+      "min_positive_jaccard": 0.463768115942029
+    },
+    {
+      "n": 8,
+      "path": "outputs\\calibration_seed_stability_qwen25_0p5b_n8_2026_06_07.json",
+      "source_passed": true,
+      "case_count": 6,
+      "pair_count": 15,
+      "unique_prompt_selection_count": 6,
+      "mean_score_spearman": 0.6645281776612284,
+      "mean_score_spearman_ci": {
+        "samples": 5000,
+        "low": 0.6235651442261192,
+        "high": 0.7048434965938387
+      },
+      "mean_top20_jaccard": 0.6448538900712814,
+      "mean_top20_jaccard_ci": {
+        "samples": 5000,
+        "low": 0.5961706699098003,
+        "high": 0.6915311307050436
+      },
+      "mean_positive_jaccard": 0.7282076150889316,
+      "mean_positive_jaccard_ci": {
+        "samples": 5000,
+        "low": 0.7049960210842621,
+        "high": 0.7519882541602808
+      },
+      "min_score_spearman": 0.5170961220455416,
+      "min_top20_jaccard": 0.5384615384615384,
+      "min_positive_jaccard": 0.6549295774647887
+    }
+  ],
+  "ci_separation": {
+    "mean_score_spearman": [
+      {
+        "left_n": 2,
+        "right_n": 4,
+        "separated": false
+      },
+      {
+        "left_n": 4,
+        "right_n": 8,
+        "separated": true
+      }
+    ],
+    "mean_top20_jaccard": [
+      {
+        "left_n": 2,
+        "right_n": 4,
+        "separated": false
+      },
+      {
+        "left_n": 4,
+        "right_n": 8,
+        "separated": true
+      }
+    ],
+    "mean_positive_jaccard": [
+      {
+        "left_n": 2,
+        "right_n": 4,
+        "separated": false
+      },
+      {
+        "left_n": 4,
+        "right_n": 8,
+        "separated": true
+      }
+    ]
+  },
+  "failures": [],
+  "claim_boundary": "Valid claim: on Qwen2.5-0.5B-Instruct and this public WikiText2 prompt pool, six deterministic prompt seeds show that sensitivity-ranking stability improves as calibration prompt count increases from n=2 to n=8. Invalid claim: this curve alone proves downstream task retention, real quantized runtime speed, or large-model universality."
+}

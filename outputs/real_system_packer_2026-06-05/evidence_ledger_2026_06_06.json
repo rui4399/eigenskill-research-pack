@@ -1,8 +1,8 @@
 {
-  "date": "2026-06-07T06:47:19+00:00",
+  "date": "2026-06-07T08:34:07+00:00",
   "passed": true,
-  "gate_count": 30,
-  "passed_count": 30,
+  "gate_count": 31,
+  "passed_count": 31,
   "failed_count": 0,
   "categories": [
     "allocation comparator",
@@ -34,9 +34,9 @@
       "path": "outputs\\real_system_packer_2026-06-05\\public_repo_hygiene_gate_2026_06_06.json",
       "passed": true,
       "failures": [],
-      "metrics": "tracked files 1844; forbidden files 0; placeholders 0",
+      "metrics": "tracked files 1934; forbidden files 0; placeholders 0",
       "summary": {
-        "tracked_file_count": 1844,
+        "tracked_file_count": 1934,
         "forbidden_file_count": 0,
         "root_clutter_count": 0,
         "placeholder_count": 0,
@@ -94,19 +94,53 @@
       "path": "outputs\\calibration_seed_stability_qwen25_0p5b_2026_06_07.json",
       "passed": true,
       "failures": [],
-      "metrics": "cases 3; prompt selections 3; finite pairs 3; min rho 0.2741; min top20 0.4286; mean Spearman 0.4230; mean Jaccard 0.5517; top20 Jaccard 0.4652",
+      "metrics": "cases 6; prompt selections 6; finite pairs 15; min rho 0.2284; mean rho CI [0.3557, 0.5174]; min top20 0.3793; mean top20 CI [0.4200, 0.5292]; mean Spearman 0.4324; mean Jaccard 0.5734; mean Jaccard CI [0.5375, 0.6120]; top20 Jaccard 0.4672",
       "summary": {
-        "case_count": 3,
-        "pair_count": 3,
-        "finite_pair_count": 3,
-        "unique_prompt_selection_count": 3,
-        "mean_score_spearman": 0.4229725693241551,
-        "min_score_spearman": 0.2741117690797627,
-        "max_score_spearman": 0.6837692383846332,
-        "mean_top20_jaccard": 0.46520146520146516,
-        "min_top20_jaccard": 0.42857142857142855,
-        "mean_positive_jaccard": 0.5516787283484438,
+        "case_count": 6,
+        "pair_count": 15,
+        "finite_pair_count": 15,
+        "unique_prompt_selection_count": 6,
+        "mean_score_spearman": 0.4324065883419552,
+        "mean_score_spearman_ci": {
+          "samples": 5000,
+          "low": 0.35570861942261683,
+          "high": 0.5173547956383008
+        },
+        "min_score_spearman": 0.22835302201061253,
+        "max_score_spearman": 0.7441896842115889,
+        "mean_top20_jaccard": 0.4671577889968694,
+        "mean_top20_jaccard_ci": {
+          "samples": 5000,
+          "low": 0.4199636038716498,
+          "high": 0.5292013223047706
+        },
+        "min_top20_jaccard": 0.3793103448275862,
+        "mean_positive_jaccard": 0.573419457112976,
+        "mean_positive_jaccard_ci": {
+          "samples": 5000,
+          "low": 0.5374845147869265,
+          "high": 0.6119734140053951
+        },
         "min_positive_jaccard": 0.463768115942029
+      }
+    },
+    {
+      "label": "csi_vs_n_curve",
+      "category": "calibration robustness",
+      "path": "outputs\\csi_vs_n_curve_qwen25_0p5b_2026_06_07.json",
+      "passed": true,
+      "failures": [],
+      "metrics": "points 3; n 2->8; rho gain 0.2920; top20 gain 0.2651; positive gain 0.1797; rho monotonic True",
+      "summary": {
+        "point_count": 3,
+        "min_n": 2,
+        "max_n": 8,
+        "mean_score_spearman_gain": 0.29200346957219175,
+        "mean_top20_jaccard_gain": 0.2651499583891168,
+        "mean_positive_jaccard_gain": 0.17972187531693273,
+        "mean_score_spearman_monotonic": true,
+        "mean_top20_jaccard_monotonic": true,
+        "mean_positive_jaccard_monotonic": true
       }
     },
     {
@@ -216,16 +250,16 @@
       "path": "outputs\\paper_evidence_alignment_gate_2026_06_07.json",
       "passed": true,
       "failures": [],
-      "metrics": "required refs 19; missing refs 0; paper paths 25; missing paths 0; unsafe claims 0; stale tokens 0; ledger gates 30",
+      "metrics": "required refs 20; missing refs 0; paper paths 26; missing paths 0; unsafe claims 0; stale tokens 0; ledger gates 31",
       "summary": {
         "paper": "paper_drafts\\eigenskill_q_research_draft_en_2026_06_07.md",
-        "required_reference_count": 19,
+        "required_reference_count": 20,
         "missing_required_reference_count": 0,
-        "referenced_repo_path_count": 25,
+        "referenced_repo_path_count": 26,
         "missing_referenced_path_count": 0,
         "stale_token_count": 0,
         "unsafe_claim_count": 0,
-        "ledger_gate_count": 30,
+        "ledger_gate_count": 31,
         "ledger_gate_count_mentioned": true
       }
     },

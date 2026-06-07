@@ -48,12 +48,20 @@ class CalibrationSeedStabilityGateTests(unittest.TestCase):
                 gate.SeedCase("seed12", write_sensitivity(root / "seed12.json", [9, 10, 2, 1], seed=12)),
                 gate.SeedCase("seed13", write_sensitivity(root / "seed13.json", [1, 2, 9, 10], seed=13)),
             ]
-            report = gate.build_gate(cases, top_k="1,2", min_cases=3, min_pairs=3)
+            report = gate.build_gate(cases, top_k="1,2,20", min_cases=3, min_pairs=3, bootstrap_samples=50)
             self.assertTrue(report["passed"])
             self.assertEqual(report["summary"]["case_count"], 3)
             self.assertEqual(report["summary"]["pair_count"], 3)
             self.assertEqual(report["summary"]["unique_prompt_selection_count"], 3)
+            self.assertEqual(report["summary"]["mean_score_spearman_ci"]["samples"], 50)
+            self.assertIsNotNone(report["summary"]["mean_score_spearman_ci"]["low"])
+            self.assertIsNotNone(report["summary"]["mean_top20_jaccard_ci"]["high"])
             self.assertEqual(len(report["pairs"]), 3)
+
+    def test_bootstrap_ci_can_be_disabled(self) -> None:
+        ci = gate.bootstrap_mean_ci([0.1, 0.2, 0.3], samples=0, seed=1)
+        self.assertEqual(ci["samples"], 0)
+        self.assertIsNone(ci["low"])
 
     def test_gate_rejects_missing_prompt_selection_by_default(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
