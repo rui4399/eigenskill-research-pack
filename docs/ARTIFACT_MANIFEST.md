@@ -7,7 +7,7 @@ not a new result.
 Current tracked output footprint:
 
 ```text
-outputs/ tracked-or-staged artifact files:       1501
+outputs/ tracked-or-staged artifact files:       1509
 outputs/real_system_packer_2026-06-05 files:     744
 ```
 
@@ -27,6 +27,7 @@ paper claims.
 | Interaction-aware swap boundary gate | `outputs/INTERACTION_SWAP_BOUNDARY_GATE_2026_06_07.md` |
 | Paper evidence alignment gate | `outputs/PAPER_EVIDENCE_ALIGNMENT_GATE_2026_06_07.md` |
 | Mean consensus evidence matrix | `outputs/cross_model_quant_evidence_matrix_extended_auto.md` |
+| Q-Palette-style allocation proxy gate | `outputs/Q_PALETTE_STYLE_ALLOCATION_FAMILY_GATE_2026_06_06.md` |
 | Robust-LCB allocation gate | `outputs/ROBUST_LCB_CONSENSUS_FAMILY_GATE_2026_06_06.md` |
 | Robust-LCB downstream boundary gate | `outputs/QWEN3_0P6B_ROBUST_LCB_QUALITY_GATE_2026_06_07.md` |
 | Public task benchmark gate | `outputs/PUBLIC_TASK_BENCHMARK_OLLAMA_QWEN25_ABLITERATE_7B_GATE_2026_06_07.md` |

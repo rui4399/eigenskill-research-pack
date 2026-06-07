@@ -158,7 +158,7 @@ python train_python/gate_paper_evidence_alignment.py \
   --out-md outputs/PAPER_EVIDENCE_ALIGNMENT_GATE_2026_06_07.md
 ```
 
-Current result: 16/16 required evidence references present, referenced repo
+Current result: 17/17 required evidence references present, referenced repo
 paths found and 0 missing, 0 stale forbidden tokens, 0 unsafe non-negated claim
 lines, and the paper mentions the current 29-gate ledger.
 
@@ -425,26 +425,36 @@ Current gate:
 
 ```bash
 python train_python/gate_allocation_family_proxy.py \
-  --case wikitext2=outputs/q_palette_style_qwen3_0p6b_wikitext2_group128_summary.json \
-  --case c4=outputs/q_palette_style_qwen3_0p6b_c4_group128_summary.json \
-  --min-cases 2 \
+  --case qwen3_0p6b_wikitext2=outputs/q_palette_style_qwen3_0p6b_wikitext2_group128_summary.json \
+  --case qwen3_0p6b_c4=outputs/q_palette_style_qwen3_0p6b_c4_group128_summary.json \
+  --case qwen25_0p5b_limit2=outputs/q_palette_style_qwen25_0p5b_limit2_group128_summary.json \
+  --case qwen25_0p5b_limit8=outputs/q_palette_style_qwen25_0p5b_limit8_group128_summary.json \
+  --case qwen25_1p5b_limit2=outputs/q_palette_style_qwen25_1p5b_limit2_group128_summary.json \
+  --case qwen25_1p5b_limit8=outputs/q_palette_style_qwen25_1p5b_limit8_group128_summary.json \
+  --min-cases 6 \
   --min-records 100 \
   --required-method-token q_palette \
+  --required-formula-token log2 \
+  --min-distinct-bits 3 \
+  --min-budget-utilization 0.999 \
+  --budget-tolerance 0.0005 \
   --out-json outputs/q_palette_style_allocation_family_gate_2026_06_06.json \
   --out-md outputs/Q_PALETTE_STYLE_ALLOCATION_FAMILY_GATE_2026_06_06.md
 ```
 
-Current result: 2 cases, 394 total records, and max average bits `4.4997`
-under a `4.5` target budget.
+Current result: 6 cases, 1126 total records, max average bits `4.4999`,
+minimum budget utilization `0.9999`, 6/6 finite lambda solutions, and 6/6
+non-trivial bit histograms under a `4.5` target budget.
 
 Valid claim:
 
-- a Q-Palette-style rate-distortion allocation comparator proxy is executable
-  on measured Qwen3-0.6B sensitivity artifacts.
+- a Q-Palette-style closed-form Lagrangian allocation comparator proxy is
+  executable on measured Qwen3 and Qwen2.5 sensitivity artifacts.
 
 Invalid claim:
 
-- this is a faithful official Q-Palette/IMPQ/WINDQuant reproduction.
+- this is a faithful official Q-Palette/IMPQ/WINDQuant reproduction or
+  downstream quality-retention result.
 
 ## AWQ/GPTQ Proxy Gate
 

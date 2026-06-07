@@ -167,6 +167,12 @@ def metric_parts(summary: dict[str, Any]) -> list[str]:
         parts.append(f"ledger gates {summary.get('ledger_gate_count')}")
     if "case_count" in summary:
         parts.append(f"cases {summary.get('case_count')}")
+    if (value := finite_float(summary.get("min_budget_utilization"))) is not None:
+        parts.append(f"min budget util {value:.4f}")
+    if "finite_lambda_count" in summary:
+        parts.append(f"finite lambdas {summary.get('finite_lambda_count')}")
+    if "nontrivial_bit_hist_count" in summary:
+        parts.append(f"nontrivial hists {summary.get('nontrivial_bit_hist_count')}")
     if "model_count" in summary:
         parts.append(f"models {summary.get('model_count')}")
     if "best_total_passes" in summary:

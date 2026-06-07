@@ -36,6 +36,14 @@ FORBIDDEN_PREFIXES = (
     "docs/obsidian_quant_route/",
     "docs/notebooklm_enterprise_sources/",
 )
+FORBIDDEN_PROCESS_TOKENS = (
+    "obsidian",
+    "notebooklm",
+    "notion",
+    "wechat",
+    "weixin",
+    "微信",
+)
 PLACEHOLDER_PATTERNS = (
     re.compile(r"^\s*(Base model|Skills|Key v2 metrics|Useful commands|Build on Windows|Run):\s*$", re.IGNORECASE),
     re.compile(r"\b(TODO|TBD|FIXME)\b", re.IGNORECASE),
@@ -84,6 +92,9 @@ def find_forbidden_files(paths: Iterable[str]) -> list[str]:
             bad.append(normalized)
             continue
         if any(normalized.startswith(prefix) for prefix in FORBIDDEN_PREFIXES):
+            bad.append(normalized)
+            continue
+        if any(token in lower for token in FORBIDDEN_PROCESS_TOKENS):
             bad.append(normalized)
     return bad
 

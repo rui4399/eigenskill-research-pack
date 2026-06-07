@@ -46,6 +46,17 @@ class PublicRepoHygieneTests(unittest.TestCase):
         ]
         self.assertEqual(hygiene.find_root_clutter(files), ["gptq_log_old.log", "scratch.md"])
 
+    def test_flags_private_process_export_paths(self) -> None:
+        files = [
+            "docs/Obsidian_EigenSkill_Q_private_note.md",
+            "outputs/notebooklm_source_dump.md",
+            "outputs/notion_page_export.md",
+            "outputs/wechat_delivery_message.md",
+            "outputs/weixin_artifact_link.md",
+            "outputs/微信发送记录.md",
+        ]
+        self.assertEqual(hygiene.find_forbidden_files(files), [path.replace("\\", "/") for path in files])
+
     def test_flags_root_readme_historical_entrypoint_terms(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)

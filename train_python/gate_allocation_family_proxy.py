@@ -31,28 +31,51 @@ def parse_case_spec(spec: str) -> tuple[str, Path]:
 def case_summary(label: str, path: Path) -> dict[str, Any]:
     payload = load_json(path)
     records = payload.get("records", [])
+    bit_hist = payload.get("bit_hist", {})
+    target_avg_bits = float(payload.get("target_avg_bits") or 0.0)
+    avg_bits = float(payload.get("avg_bits") or 0.0)
     return {
         "label": label,
         "path": str(path),
         "method": payload.get("method"),
+        "formula": payload.get("formula"),
+        "lambda": payload.get("lambda"),
         "source": payload.get("source"),
         "record_count": len(records),
-        "target_avg_bits": float(payload.get("target_avg_bits") or 0.0),
-        "avg_bits": float(payload.get("avg_bits") or 0.0),
+        "target_avg_bits": target_avg_bits,
+        "avg_bits": avg_bits,
+        "budget_utilization": avg_bits / target_avg_bits if target_avg_bits > 0.0 else 0.0,
         "budget_satisfied": bool(payload.get("budget_satisfied")),
         "objective_distortion": float(payload.get("objective_distortion") or 0.0),
-        "bit_hist": payload.get("bit_hist", {}),
+        "bit_hist": bit_hist,
+        "distinct_bit_count": sum(1 for count in bit_hist.values() if int(count) > 0) if isinstance(bit_hist, dict) else 0,
     }
+
+
+def finite_number(value: Any) -> bool:
+    try:
+        number = float(value)
+    except (TypeError, ValueError):
+        return False
+    return number == number and number not in (float("inf"), float("-inf"))
 
 
 def build_result(cases: list[dict[str, Any]], args: argparse.Namespace) -> dict[str, Any]:
     failures: list[str] = []
+    required_formula_token = getattr(args, "required_formula_token", "log2")
+    min_distinct_bits = int(getattr(args, "min_distinct_bits", 2))
+    min_budget_utilization = float(getattr(args, "min_budget_utilization", 0.99))
     if len(cases) < args.min_cases:
         failures.append(f"case count {len(cases)} < required {args.min_cases}")
     for case in cases:
         method = str(case.get("method") or "").lower()
         if args.required_method_token.lower() not in method:
             failures.append(f"{case['label']}: method {case.get('method')!r} lacks token {args.required_method_token!r}")
+        formula = str(case.get("formula") or "").lower()
+        if required_formula_token.lower() not in formula:
+            failures.append(f"{case['label']}: formula {case.get('formula')!r} lacks token {required_formula_token!r}")
+        if not finite_number(case.get("lambda")):
+            failures.append(f"{case['label']}: lambda is not finite")
         if case["record_count"] < args.min_records:
             failures.append(f"{case['label']}: records {case['record_count']} < required {args.min_records}")
         if not case["budget_satisfied"]:
@@ -60,6 +83,14 @@ def build_result(cases: list[dict[str, Any]], args: argparse.Namespace) -> dict[
         if case["avg_bits"] > case["target_avg_bits"] + args.budget_tolerance:
             failures.append(
                 f"{case['label']}: avg_bits {case['avg_bits']:.6f} > target {case['target_avg_bits']:.6f}"
+            )
+        if case["budget_utilization"] < min_budget_utilization:
+            failures.append(
+                f"{case['label']}: budget utilization {case['budget_utilization']:.6f} < required {min_budget_utilization:.6f}"
+            )
+        if case["distinct_bit_count"] < min_distinct_bits:
+            failures.append(
+                f"{case['label']}: distinct bit count {case['distinct_bit_count']} < required {min_distinct_bits}"
             )
     return {
         "date": datetime.now(timezone.utc).replace(microsecond=0).isoformat(),
@@ -69,6 +100,9 @@ def build_result(cases: list[dict[str, Any]], args: argparse.Namespace) -> dict[
             "total_records": sum(case["record_count"] for case in cases),
             "max_avg_bits": max((case["avg_bits"] for case in cases), default=0.0),
             "max_target_avg_bits": max((case["target_avg_bits"] for case in cases), default=0.0),
+            "min_budget_utilization": min((case["budget_utilization"] for case in cases), default=0.0),
+            "finite_lambda_count": sum(1 for case in cases if finite_number(case.get("lambda"))),
+            "nontrivial_bit_hist_count": sum(1 for case in cases if case.get("distinct_bit_count", 0) >= min_distinct_bits),
         },
         "cases": cases,
         "failures": failures,
@@ -90,14 +124,15 @@ def write_markdown(path: Path, result: dict[str, Any]) -> None:
         "",
         "## Cases",
         "",
-        "| case | method | records | avg bits | target bits | budget | bit hist |",
-        "|---|---|---:|---:|---:|---:|---|",
+        "| case | method | records | avg bits | target bits | budget use | lambda | distinct bits | bit hist |",
+        "|---|---|---:|---:|---:|---:|---:|---:|---|",
     ]
     for case in result["cases"]:
         lines.append(
             f"| `{case['label']}` | `{case['method']}` | {case['record_count']} | "
             f"{case['avg_bits']:.6f} | {case['target_avg_bits']:.6f} | "
-            f"{str(case['budget_satisfied']).lower()} | `{case['bit_hist']}` |"
+            f"{case['budget_utilization']:.6f} | {float(case['lambda']):.6g} | "
+            f"{case['distinct_bit_count']} | `{case['bit_hist']}` |"
         )
     lines.extend(["", "## Failures", ""])
     if result["failures"]:
@@ -116,6 +151,9 @@ def main() -> None:
     parser.add_argument("--min-cases", type=int, default=2)
     parser.add_argument("--min-records", type=int, default=10)
     parser.add_argument("--required-method-token", default="q_palette")
+    parser.add_argument("--required-formula-token", default="log2")
+    parser.add_argument("--min-distinct-bits", type=int, default=2)
+    parser.add_argument("--min-budget-utilization", type=float, default=0.99)
     parser.add_argument("--budget-tolerance", type=float, default=1.0e-6)
     parser.add_argument("--out-json", type=Path, required=True)
     parser.add_argument("--out-md", type=Path, required=True)

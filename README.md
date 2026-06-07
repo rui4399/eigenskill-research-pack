@@ -12,6 +12,11 @@ This repository is **not** a new production quantizer, a deployment-ready
 runtime, or a claim of state-of-the-art quality. It is organized so reviewers
 can separate supported evidence from exploratory material.
 
+The public branch is now curated as an evidence artifact, not as a running lab
+notebook. Local planning notes, Obsidian summaries, NotebookLM material, Notion
+drafts, delivery bundles, and speculative concept text are deliberately kept
+out of the GitHub tree.
+
 ## Start Here
 
 Read the public artifact in this order:
@@ -27,7 +32,8 @@ Read the public artifact in this order:
    through the committed `outputs/` tree.
 
 Do not treat raw `outputs/` browsing as the evidence boundary. A result is
-paper-facing only if it appears in the claim matrix or gate ledger.
+paper-facing only if it appears in the claim matrix or gate ledger. When those
+files disagree, follow the claim matrix first.
 
 ## Current Status
 
@@ -40,6 +46,16 @@ paper-facing only if it appears in the claim matrix or gate ledger.
 | Mobile evidence | Redmi K80 Pro harness exists, but no real TTFT/tokens/s/memory log is complete | no mobile claim |
 
 Current ledger status: **29 / 29 gates pass**.
+
+## Curation Contract
+
+- GitHub contains reproducible code, gate scripts, compact documentation, and
+  committed artifacts that are referenced by the claim matrix.
+- Obsidian is the place for strategy, criticism, mentor-facing notes, and
+  private work logs.
+- New files should not be added to the public tree unless a gate, runbook row,
+  or claim-matrix row needs them.
+- Existing claims should be narrowed before new claims are added.
 
 ## Supported Reading
 

@@ -11,6 +11,9 @@ def args(**overrides):
         "min_cases": 2,
         "min_records": 2,
         "required_method_token": "q_palette",
+        "required_formula_token": "log2",
+        "min_distinct_bits": 2,
+        "min_budget_utilization": 0.99,
         "budget_tolerance": 1.0e-6,
     }
     values.update(overrides)
@@ -21,12 +24,16 @@ def case(label: str, method: str = "q_palette_style_lagrangian", avg_bits: float
     return {
         "label": label,
         "method": method,
+        "formula": "b_i = 0.5 * log2(signal / lambda)",
+        "lambda": 1.0e-4,
         "record_count": 12,
         "target_avg_bits": 4.5,
         "avg_bits": avg_bits,
+        "budget_utilization": avg_bits / 4.5,
         "budget_satisfied": avg_bits <= 4.5,
         "objective_distortion": 1.0,
         "bit_hist": {"4": 10, "8": 2},
+        "distinct_bit_count": 2,
     }
 
 
@@ -45,6 +52,21 @@ class GateAllocationFamilyProxyTests(unittest.TestCase):
         result = gate.build_result([case("wiki", avg_bits=4.6), case("c4")], args())
         self.assertFalse(result["passed"])
         self.assertTrue(any("avg_bits" in failure for failure in result["failures"]))
+
+    def test_fails_when_formula_token_is_missing(self) -> None:
+        bad = case("wiki")
+        bad["formula"] = "plain greedy score"
+        result = gate.build_result([bad, case("c4")], args())
+        self.assertFalse(result["passed"])
+        self.assertTrue(any("formula" in failure for failure in result["failures"]))
+
+    def test_fails_when_bit_histogram_is_trivial(self) -> None:
+        bad = case("wiki")
+        bad["bit_hist"] = {"4": 12}
+        bad["distinct_bit_count"] = 1
+        result = gate.build_result([bad, case("c4")], args())
+        self.assertFalse(result["passed"])
+        self.assertTrue(any("distinct bit" in failure for failure in result["failures"]))
 
 
 if __name__ == "__main__":

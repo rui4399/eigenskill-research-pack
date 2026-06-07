@@ -42,6 +42,9 @@ In compressed form, the supported claims are:
   policy, with bounded regret versus the best single split;
 - bounded global-feedback swap search exposes interaction counterexamples that
   additive module ranking misses on committed SmolLM2-1.7B fake-quant slices;
+- a Q-Palette-style closed-form Lagrangian allocation proxy now covers measured
+  Qwen3 and Qwen2.5 sensitivity artifacts with finite lambda and strict budget
+  checks, while remaining explicitly non-faithful to Q-Palette/IMPQ/WINDQuant;
 - local AutoAWQ/GPTQModel Qwen2.5-0.5B W4/G128 evidence is bundled into a
   matched baseline pack covering public-calibration PPL, subset50 task
   execution, and PC-side runtime/VRAM, with the explicit negative result that
@@ -52,6 +55,14 @@ In compressed form, the supported claims are:
   shallow generation integrations are executable prototype evidence;
 - missing broad official baselines, leaderboard-scale task benchmarks, and
   hardware measurements are tracked as gaps rather than claimed as results.
+
+## Public-Branch Rule
+
+The repository should be edited as a claim-bounded artifact. Private planning,
+mentor-facing prose, Obsidian notes, NotebookLM source lists, Notion drafts,
+delivery bundles, and chat/WeChat handoff material should stay outside the
+public tree unless they are converted into a reproducible gate, artifact
+manifest row, or claim-matrix row.
 
 ## Explicit Non-Claims
 

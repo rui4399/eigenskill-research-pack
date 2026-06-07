@@ -97,6 +97,25 @@ class BuildEvidenceLedgerTests(unittest.TestCase):
         self.assertIn("separation 0.5100", joined)
         self.assertEqual(ledger.infer_category("sensitivity_perturbation_matrix"), "calibration robustness")
 
+    def test_allocation_family_metrics_are_reported(self) -> None:
+        metrics = ledger.metric_parts(
+            {
+                "case_count": 6,
+                "total_records": 1126,
+                "max_avg_bits": 4.4999181196117,
+                "min_budget_utilization": 0.9999266915915255,
+                "finite_lambda_count": 6,
+                "nontrivial_bit_hist_count": 6,
+            }
+        )
+        joined = "; ".join(metrics)
+        self.assertIn("cases 6", joined)
+        self.assertIn("records 1126", joined)
+        self.assertIn("max avg bits 4.4999", joined)
+        self.assertIn("min budget util 0.9999", joined)
+        self.assertIn("finite lambdas 6", joined)
+        self.assertIn("nontrivial hists 6", joined)
+
     def test_transfer_boundary_metrics_are_reported(self) -> None:
         metrics = ledger.metric_parts(
             {

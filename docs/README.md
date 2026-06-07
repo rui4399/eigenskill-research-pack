@@ -45,8 +45,24 @@ notebook. In practice this means:
   them;
 - paper drafts do not override the claim matrix.
 
-The hygiene gate enforces root clutter, generated delivery bundles, blank
-placeholders, stale positioning, and risky root README terms.
+The hygiene gate enforces root clutter, generated delivery bundles, private
+process exports, blank placeholders, stale positioning, and risky root README
+terms.
+
+## Edit Discipline
+
+Use this rule when deciding whether to change the repository:
+
+```text
+If a file does not help another reader reproduce, verify, or bound a claim, keep
+it in local notes instead of GitHub.
+```
+
+Allowed public changes should usually do one of three things:
+
+- make an existing claim narrower and more checkable;
+- connect a gate command to a committed artifact;
+- remove or block confusing historical/process material.
 
 ## Reading Rule
 

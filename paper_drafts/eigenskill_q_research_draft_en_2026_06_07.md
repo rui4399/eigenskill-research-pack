@@ -225,6 +225,7 @@ current ledger passes 29/29 gates. The most important gates are:
 | Robustness stress | 11 short fake-quant PPL slices | Target policies beat uniform and random baselines on committed slices. | Not SOTA PTQ or task retention. |
 | Consensus transfer boundary | 4 paired Qwen3 slices | Consensus avoids the worse single-split policy with bounded best-single regret. | Consensus always beats the best single split. |
 | Interaction swap boundary | 16 SmolLM2-1.7B swap trials | Global feedback exposes local-proxy failures. | Global optimality or broad transfer. |
+| Allocation-family proxy | Q-Palette-style closed-form Lagrangian allocation on Qwen3 and Qwen2.5 sensitivity artifacts; see `outputs/Q_PALETTE_STYLE_ALLOCATION_FAMILY_GATE_2026_06_06.md`. | Six measured-sensitivity allocation cases satisfy a 4.5 average-bit budget with finite lambda solutions and non-trivial bit histograms. | Faithful Q-Palette/IMPQ/WINDQuant reproduction or downstream quality retention. |
 | Public task model ladder | 2 local Ollama models over 200 MMLU/GSM8K subset rows | Public-task evidence is reported without hiding the weaker 4B case. | Leaderboard quality, monotonic scaling, or fused quantized retention. |
 | Official PTQ task-execution smoke | FP16/AutoAWQ/GPTQModel Qwen2.5-0.5B on 24 public smoke executions; see `outputs/OFFICIAL_PTQ_TASK_RETENTION_SMOKE_MATRIX_2026_06_07.md`. | Official-package artifacts load and run matching tiny task fixtures under guard; zero-FP16 formats are execution-only. | Broad task retention, leaderboard quality, or AWQ/GPTQ competitiveness. |
 | Official PTQ runtime profile | FP16/AutoAWQ/GPTQModel Qwen2.5-0.5B PC-side runtime profile; see `outputs/OFFICIAL_PTQ_RUNTIME_PROFILE_2026_06_07.md`. | TTFT, tokens/s, and peak guarded VRAM are reported for the same task-smoke path. | Not mobile deployment, not production runtime speedup, not energy savings, and not AWQ/GPTQ competitiveness. |
@@ -377,7 +378,8 @@ benchmarks, and real packed inference measurements.
    capability retention or fused quantized retention.
 4. System evidence is prototype/module-level; no Redmi K80 Pro or board-level
    TTFT, tokens/s, memory, energy, or thermal logs are complete.
-5. The bit set is limited to `{4,8}` in the main allocation diagnostics.
+5. The bit set is limited to `{4,8}` in the main consensus diagnostics; the
+   allocation-family proxy also audits `{2,3,4,8}` but remains a proxy.
 6. The interaction-aware search is bounded one-step feedback, not a global
    optimization algorithm.
 
@@ -403,6 +405,7 @@ outputs/CALIBRATION_INSTABILITY_BENCHMARK_2026_06_06.md
 outputs/CALIBRATION_ROBUSTNESS_STRESS_GATE_2026_06_07.md
 outputs/CONSENSUS_TRANSFER_BOUNDARY_GATE_2026_06_07.md
 outputs/INTERACTION_SWAP_BOUNDARY_GATE_2026_06_07.md
+outputs/Q_PALETTE_STYLE_ALLOCATION_FAMILY_GATE_2026_06_06.md
 outputs/PUBLIC_TASK_MODEL_LADDER_GATE_2026_06_07.md
 outputs/OFFICIAL_AWQ_PUBLIC_CALIB_QWEN25_0P5B_BUNDLE_16_GATE_2026_06_07.md
 outputs/BASELINE_GAP_DASHBOARD_2026_06_06.md

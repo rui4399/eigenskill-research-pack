@@ -1,44 +1,139 @@
 {
-  "date": "2026-06-06T13:36:26+00:00",
+  "date": "2026-06-07T04:41:39+00:00",
   "passed": true,
   "summary": {
-    "case_count": 2,
-    "total_records": 394,
-    "max_avg_bits": 4.499670112161865,
-    "max_target_avg_bits": 4.5
+    "case_count": 6,
+    "total_records": 1126,
+    "max_avg_bits": 4.4999181196117,
+    "max_target_avg_bits": 4.5,
+    "min_budget_utilization": 0.9999266915915255,
+    "finite_lambda_count": 6,
+    "nontrivial_bit_hist_count": 6
   },
   "cases": [
     {
-      "label": "wikitext2",
+      "label": "qwen3_0p6b_wikitext2",
       "path": "outputs\\q_palette_style_qwen3_0p6b_wikitext2_group128_summary.json",
       "method": "q_palette_style_lagrangian_proxy",
+      "formula": "b_i = 0.5 * log2((S_i * sigma_i^2 * ln2) / (lambda * c_i))",
+      "lambda": 5.665460628521507e-13,
       "source": "outputs\\qwen3_0p6b_module_loss_sensitivity_limit4_group128.json",
       "record_count": 197,
       "target_avg_bits": 4.5,
       "avg_bits": 4.499670112161865,
+      "budget_utilization": 0.9999266915915255,
       "budget_satisfied": true,
       "objective_distortion": 0.0007903704453420113,
       "bit_hist": {
         "3": 87,
         "4": 45,
         "8": 65
-      }
+      },
+      "distinct_bit_count": 3
     },
     {
-      "label": "c4",
+      "label": "qwen3_0p6b_c4",
       "path": "outputs\\q_palette_style_qwen3_0p6b_c4_group128_summary.json",
       "method": "q_palette_style_lagrangian_proxy",
+      "formula": "b_i = 0.5 * log2((S_i * sigma_i^2 * ln2) / (lambda * c_i))",
+      "lambda": 3.646024502837154e-13,
       "source": "outputs\\qwen3_0p6b_c4_module_loss_sensitivity_limit4_group128.json",
       "record_count": 197,
       "target_avg_bits": 4.5,
       "avg_bits": 4.499670112161865,
+      "budget_utilization": 0.9999266915915255,
       "budget_satisfied": true,
       "objective_distortion": 0.0005454215615827707,
       "bit_hist": {
         "3": 73,
         "4": 63,
         "8": 61
-      }
+      },
+      "distinct_bit_count": 3
+    },
+    {
+      "label": "qwen25_0p5b_limit2",
+      "path": "outputs\\q_palette_style_qwen25_0p5b_limit2_group128_summary.json",
+      "method": "q_palette_style_lagrangian_loss_sensitivity",
+      "formula": "b_i = 0.5 * log2((S_i * sigma_i^2 * ln2) / (lambda * c_i))",
+      "lambda": 3.746141399727346e-13,
+      "source": "outputs\\qwen25_0p5b_module_loss_sensitivity_limit2_group128.json",
+      "record_count": 169,
+      "target_avg_bits": 4.5,
+      "avg_bits": 4.4999181196117,
+      "budget_utilization": 0.9999818043581556,
+      "budget_satisfied": true,
+      "objective_distortion": 0.0005599709038506262,
+      "bit_hist": {
+        "2": 60,
+        "3": 2,
+        "4": 34,
+        "8": 73
+      },
+      "distinct_bit_count": 4
+    },
+    {
+      "label": "qwen25_0p5b_limit8",
+      "path": "outputs\\q_palette_style_qwen25_0p5b_limit8_group128_summary.json",
+      "method": "q_palette_style_lagrangian_loss_sensitivity",
+      "formula": "b_i = 0.5 * log2((S_i * sigma_i^2 * ln2) / (lambda * c_i))",
+      "lambda": 3.9534494921989976e-13,
+      "source": "outputs\\qwen25_0p5b_module_loss_sensitivity_limit8_group128.json",
+      "record_count": 169,
+      "target_avg_bits": 4.5,
+      "avg_bits": 4.499911641732879,
+      "budget_utilization": 0.9999803648295287,
+      "budget_satisfied": true,
+      "objective_distortion": 0.0006179233152585592,
+      "bit_hist": {
+        "2": 54,
+        "3": 3,
+        "4": 37,
+        "8": 75
+      },
+      "distinct_bit_count": 4
+    },
+    {
+      "label": "qwen25_1p5b_limit2",
+      "path": "outputs\\q_palette_style_qwen25_1p5b_limit2_group128_summary.json",
+      "method": "q_palette_style_lagrangian_loss_sensitivity",
+      "formula": "b_i = 0.5 * log2((S_i * sigma_i^2 * ln2) / (lambda * c_i))",
+      "lambda": 1.1915107645845237e-13,
+      "source": "outputs\\qwen25_1p5b_module_loss_sensitivity_limit2_group128.json",
+      "record_count": 197,
+      "target_avg_bits": 4.5,
+      "avg_bits": 4.499844439078496,
+      "budget_utilization": 0.9999654309063324,
+      "budget_satisfied": true,
+      "objective_distortion": 0.0006783317039662506,
+      "bit_hist": {
+        "2": 67,
+        "3": 2,
+        "4": 45,
+        "8": 83
+      },
+      "distinct_bit_count": 4
+    },
+    {
+      "label": "qwen25_1p5b_limit8",
+      "path": "outputs\\q_palette_style_qwen25_1p5b_limit8_group128_summary.json",
+      "method": "q_palette_style_lagrangian_loss_sensitivity",
+      "formula": "b_i = 0.5 * log2((S_i * sigma_i^2 * ln2) / (lambda * c_i))",
+      "lambda": 1.1803986628379084e-13,
+      "source": "outputs\\qwen25_1p5b_module_loss_sensitivity_limit8_group128.json",
+      "record_count": 197,
+      "target_avg_bits": 4.5,
+      "avg_bits": 4.49985356045449,
+      "budget_utilization": 0.9999674578787755,
+      "budget_satisfied": true,
+      "objective_distortion": 0.0006554500524580761,
+      "bit_hist": {
+        "2": 58,
+        "3": 3,
+        "4": 51,
+        "8": 85
+      },
+      "distinct_bit_count": 4
     }
   ],
   "failures": [],
