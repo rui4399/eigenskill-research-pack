@@ -18,3 +18,7 @@ paper/artifact tracks. Use the child repository that matches the paper claim.
 Do not merge the swarm vision text into the AAAI quantization paper. Do not use
 runtime prototype evidence as a quantization-quality claim. Do not use CSI
 method evidence as proof that ESMP kernels accelerate inference.
+
+For the immediate AAAI-27 sprint, use `docs/AAAI_2027_CRITICAL_PATH.md` as the
+priority order. It is the current reviewer-veto checklist and overrides broader
+portfolio ambitions when time or GPU budget conflicts.

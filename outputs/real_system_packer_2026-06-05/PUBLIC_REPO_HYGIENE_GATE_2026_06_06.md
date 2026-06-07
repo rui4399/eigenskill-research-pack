@@ -1,11 +1,11 @@
 # Public Repository Hygiene Gate
 
-Date: `2026-06-07T14:35:05+00:00`
+Date: `2026-06-07T16:50:40+00:00`
 Status: **PASS**
 
 ## Summary
 
-- tracked files: `2028`
+- tracked files: `2162`
 - forbidden tracked files: `0`
 - root clutter files: `0`
 - placeholder lines: `0`

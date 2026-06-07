@@ -110,6 +110,11 @@ Current AAAI-facing critical path:
    paper figure pipeline, then add bootstrap bands or a larger n grid if time
    allows.
 
+See `docs/AAAI_2027_CRITICAL_PATH.md` for the current veto-first execution
+order. It deliberately keeps the AAAI quantization-robustness paper separate
+from the systems-runtime backup track until end-to-end TTFT/tokens/s evidence
+beats FP16.
+
 | Route | Why it fits | What must improve first |
 |---|---|---|
 | ACL Findings / EMNLP Findings / COLING | Compression diagnostic, calibration robustness, public task subsets. | Larger slices, stronger task retention, clearer baseline table. |
