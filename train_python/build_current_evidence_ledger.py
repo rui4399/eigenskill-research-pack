@@ -57,7 +57,7 @@ CURRENT_GATE_SPECS: tuple[tuple[str, str], ...] = (
     ("official_awq_public_calib_16_eval", "outputs/official_awq_public_calib_qwen25_0p5b_bundle_16_gate_2026_06_07.json"),
     ("official_awq_public_calib_1p5b_16_eval", "outputs/official_awq_public_calib_qwen25_1p5b_bundle_16_gate_2026_06_07.json"),
     ("official_gptqmodel_public_calib_1p5b_16_eval", "outputs/official_gptqmodel_public_calib_qwen25_1p5b_16_gate_2026_06_08.json"),
-    ("official_gptqmodel_task_execution_qwen25_1p5b_20", "outputs/official_gptqmodel_task_execution_qwen25_1p5b_20_matrix_2026_06_08.json"),
+    ("official_gptqmodel_task_execution_qwen25_1p5b_subset100", "outputs/official_gptqmodel_task_execution_qwen25_1p5b_subset100_matrix_2026_06_08.json"),
     ("official_ptq_task_qwen25_1p5b_subset100", "outputs/official_ptq_task_qwen25_1p5b_subset100_matrix_2026_06_07.json"),
     ("official_ptq_qwen25_1p5b_subset100_runtime_profile", "outputs/official_ptq_qwen25_1p5b_subset100_runtime_profile_2026_06_07.json"),
     ("official_ptq_task_qwen25_1p5b_gsm8k200_mmlu100", "outputs/official_ptq_task_qwen25_1p5b_gsm8k200_mmlu100_matrix_2026_06_08.json"),

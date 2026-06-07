@@ -62,7 +62,7 @@ python train_python/build_evidence_ledger.py \
   --gate official_awq_public_calib_16_eval=outputs/official_awq_public_calib_qwen25_0p5b_bundle_16_gate_2026_06_07.json \
   --gate official_awq_public_calib_1p5b_16_eval=outputs/official_awq_public_calib_qwen25_1p5b_bundle_16_gate_2026_06_07.json \
   --gate official_gptqmodel_public_calib_1p5b_16_eval=outputs/official_gptqmodel_public_calib_qwen25_1p5b_16_gate_2026_06_08.json \
-  --gate official_gptqmodel_task_execution_qwen25_1p5b_20=outputs/official_gptqmodel_task_execution_qwen25_1p5b_20_matrix_2026_06_08.json \
+  --gate official_gptqmodel_task_execution_qwen25_1p5b_subset100=outputs/official_gptqmodel_task_execution_qwen25_1p5b_subset100_matrix_2026_06_08.json \
   --gate official_ptq_task_qwen25_1p5b_subset100=outputs/official_ptq_task_qwen25_1p5b_subset100_matrix_2026_06_07.json \
   --gate official_ptq_qwen25_1p5b_subset100_runtime_profile=outputs/official_ptq_qwen25_1p5b_subset100_runtime_profile_2026_06_07.json \
   --gate official_ptq_task_qwen25_1p5b_gsm8k200_mmlu100=outputs/official_ptq_task_qwen25_1p5b_gsm8k200_mmlu100_matrix_2026_06_08.json \
@@ -81,7 +81,7 @@ The current ledger passes with 48/48 gates across repo hygiene, calibration
 robustness, CSI trend significance, CSI null permutation, rank-inversion theory, artifact integrity, kernel, runtime wiring, selected-row, C++
 runtime, decode integration, QKV replacement, quality, task-retention, runtime profile, and
 capability-retention/model-ladder, allocation-comparator, rotation-comparator, and
-matched PTQ baseline, true subset100 official PTQ task/runtime evidence, deterministic IFEval-style PTQ execution, expanded AutoAWQ public PPL, Qwen2.5-1.5B GPTQModel task-execution smoke, Qwen2.5-1.5B subset100 plus GSM8K200/MMLU100 task/runtime/statistical-interval evidence, PTQ-comparator, and
+matched PTQ baseline, true subset100 official PTQ task/runtime evidence, deterministic IFEval-style PTQ execution, expanded AutoAWQ public PPL, Qwen2.5-1.5B GPTQModel task-execution subset evidence, Qwen2.5-1.5B subset100 plus GSM8K200/MMLU100 task/runtime/statistical-interval evidence, PTQ-comparator, and
 paper-alignment evidence categories, plus extended W4A8 attention/MLP real-activation reconstruction.
 
 Valid claim:
@@ -1416,7 +1416,7 @@ Current Qwen2.5-1.5B GPTQModel scale-up results:
 | WikiText2 16 | 16 | 1413 | 16.9841 | 19.2981 | 1.1363 | true | 0.7698 |
 | C4 16 | 16 | 1444 | 21.4055 | 23.3815 | 1.0923 | true | 0.8266 |
 
-Qwen2.5-1.5B GPTQModel task-execution smoke gate:
+Qwen2.5-1.5B GPTQModel subset100 task-execution gate:
 
 ```bash
 python train_python/gate_official_ptq_task_retention.py \
@@ -1424,21 +1424,21 @@ python train_python/gate_official_ptq_task_retention.py \
   --required-variant gptqmodel \
   --required-format mmlu \
   --required-format gsm8k \
-  --min-tasks-per-case 20 \
+  --min-tasks-per-case 100 \
   --max-memory-ratio 0.90 \
   --max-accuracy-drop 1.0 \
-  --matrix-title "Official GPTQModel Task-Execution Smoke Matrix" \
-  --evidence-label "GPTQModel Qwen2.5-1.5B MMLU20/GSM8K20 task-execution smokes" \
-  --case gptqmodel:mmlu=outputs/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu20_summary_2026_06_08.json=outputs/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu20_gpu_guard_2026_06_08.json \
-  --case gptqmodel:gsm8k=outputs/official_ptq_task_gptqmodel_qwen25_1p5b_gsm8k20_summary_2026_06_08.json=outputs/official_ptq_task_gptqmodel_qwen25_1p5b_gsm8k20_gpu_guard_2026_06_08.json \
-  --out-json outputs/official_gptqmodel_task_execution_qwen25_1p5b_20_matrix_2026_06_08.json \
-  --out-md outputs/OFFICIAL_GPTQMODEL_TASK_EXECUTION_QWEN25_1P5B_20_MATRIX_2026_06_08.md
+  --matrix-title "Official GPTQModel Qwen2.5-1.5B Subset100 Task-Execution Matrix" \
+  --evidence-label "GPTQModel Qwen2.5-1.5B MMLU100/GSM8K100 task-execution slice" \
+  --case gptqmodel:mmlu=outputs/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_subset100_summary_2026_06_08.json=outputs/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_subset100_gpu_guard_2026_06_08.json \
+  --case gptqmodel:gsm8k=outputs/official_ptq_task_gptqmodel_qwen25_1p5b_gsm8k_subset100_summary_2026_06_08.json=outputs/official_ptq_task_gptqmodel_qwen25_1p5b_gsm8k_subset100_gpu_guard_2026_06_08.json \
+  --out-json outputs/official_gptqmodel_task_execution_qwen25_1p5b_subset100_matrix_2026_06_08.json \
+  --out-md outputs/OFFICIAL_GPTQMODEL_TASK_EXECUTION_QWEN25_1P5B_SUBSET100_MATRIX_2026_06_08.md
 ```
 
-Current task-execution smoke result: 40 guarded public task executions, MMLU
-7/20, GSM8K 1/20, mean `10.0685` tokens/s, mean TTFT `0.352708` s, and peak
-guard VRAM ratio `0.6672`. This is a native-package execution check only; it is
-not a matched FP16/AWQ comparison or leaderboard-scale retention result.
+Current subset100 result: 200 guarded public task executions, MMLU 25/100,
+GSM8K 8/100, mean `10.6469` tokens/s, mean TTFT `0.236180` s, and peak guard
+VRAM ratio `0.6672`. This is a native-package execution check only; it is not a
+matched FP16/AWQ comparison or leaderboard-scale retention result.
 
 Official PTQ readiness matrix:
 
