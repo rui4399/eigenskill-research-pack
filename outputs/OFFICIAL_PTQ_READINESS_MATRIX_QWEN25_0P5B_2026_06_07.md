@@ -1,6 +1,6 @@
 # Official PTQ Readiness Matrix
 
-Date: `2026-06-07T00:27:38+00:00`
+Date: `2026-06-07T00:42:18+00:00`
 Status: **PASS**
 
 ## Summary
@@ -9,7 +9,7 @@ Status: **PASS**
 - models: `['Qwen/Qwen2.5-0.5B-Instruct']`
 - quant shapes: `[{'bits': 4, 'group_size': 128}]`
 - common eval labels: `['c4', 'wikitext2']`
-- total eval tokens across probes: `2247`
+- total eval tokens across probes: `2974`
 
 ## Matrix
 
@@ -17,8 +17,8 @@ Status: **PASS**
 |---|---|---:|---:|---:|---:|---:|---:|
 | `autoawq` | `wikitext2` | 8 | 760 | 24.675866 | 29.080631 | 1.178505 | 0.611581 |
 | `autoawq` | `c4` | 8 | 727 | 32.951664 | 38.172702 | 1.158445 | 0.611581 |
-| `gptqmodel` | `wikitext2` | 4 | 380 | 19.381307 | 25.677339 | 1.324851 | 0.623359 |
-| `gptqmodel` | `c4` | 4 | 380 | 24.665276 | 31.397740 | 1.272953 | 0.631456 |
+| `gptqmodel` | `wikitext2` | 8 | 760 | 24.675866 | 31.952564 | 1.294891 | 0.611091 |
+| `gptqmodel` | `c4` | 8 | 727 | 32.951664 | 39.809985 | 1.208133 | 0.609741 |
 
 ## Failures
 

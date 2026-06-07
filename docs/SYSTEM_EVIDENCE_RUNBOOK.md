@@ -572,7 +572,7 @@ Current public-calibrated bundle result:
 | WikiText2 test eval | 8 | 760 | 24.676 | 29.081 | 1.1785 | 0.6116 |
 | C4 validation eval | 8 | 727 | 32.952 | 38.173 | 1.1584 | 0.6116 |
 
-Public-calibration GPTQModel fresh quantization plus WikiText2 eval:
+Public-calibration GPTQModel budget-aligned fresh quantization plus WikiText2 eval:
 
 ```bash
 python train_python/run_with_gpu_guard.py \
@@ -582,7 +582,7 @@ python train_python/run_with_gpu_guard.py \
   --disk-check-path . \
   --poll-seconds 1.0 \
   --timeout-sec 2400 \
-  --out outputs/official_gptqmodel_public_calib_qwen25_0p5b_gpu_guard_2026_06_07.json \
+  --out outputs/official_gptqmodel_public_calib_qwen25_0p5b_budget8_wikitext2_gpu_guard_2026_06_07.json \
   -- \
   python train_python/run_official_gptqmodel_public_calib.py \
     --model Qwen/Qwen2.5-0.5B-Instruct \
@@ -590,8 +590,8 @@ python train_python/run_with_gpu_guard.py \
     --calibration-prompts data_eval/public_calib_prompts_2026_06_07/wikitext2_test_ppl_prompts.txt \
     --calibration-prompts data_eval/public_calib_prompts_2026_06_07/c4_validation_ppl_prompts.txt \
     --prompts data_eval/public_ppl_prompts_2026_06_07/wikitext2_test_ppl_prompts.txt \
-    --limit-prompts 4 \
-    --max-calib-samples 4 \
+    --limit-prompts 8 \
+    --max-calib-samples 12 \
     --calibration-data-min-length 4 \
     --max-length 96 \
     --bits 4 \
@@ -599,8 +599,8 @@ python train_python/run_with_gpu_guard.py \
     --backend gptq_torch \
     --device cuda \
     --local-files-only \
-    --out-json outputs/official_gptqmodel_public_calib_qwen25_0p5b_wikitext2_summary_2026_06_07.json \
-    --out-md outputs/OFFICIAL_GPTQMODEL_PUBLIC_CALIB_QWEN25_0P5B_WIKITEXT2_2026_06_07.md
+    --out-json outputs/official_gptqmodel_public_calib_qwen25_0p5b_budget8_wikitext2_summary_2026_06_07.json \
+    --out-md outputs/OFFICIAL_GPTQMODEL_PUBLIC_CALIB_QWEN25_0P5B_BUDGET8_WIKITEXT2_2026_06_07.md
 ```
 
 The GPTQModel script also supports `--reuse-existing-artifact` for
@@ -617,7 +617,7 @@ python train_python/run_with_gpu_guard.py \
   --disk-check-path . \
   --poll-seconds 1.0 \
   --timeout-sec 900 \
-  --out outputs/official_gptqmodel_public_calib_qwen25_0p5b_c4_gpu_guard_2026_06_07.json \
+  --out outputs/official_gptqmodel_public_calib_qwen25_0p5b_budget8_c4_gpu_guard_2026_06_07.json \
   -- \
   python train_python/run_official_gptqmodel_public_calib.py \
     --model Qwen/Qwen2.5-0.5B-Instruct \
@@ -625,8 +625,8 @@ python train_python/run_with_gpu_guard.py \
     --calibration-prompts data_eval/public_calib_prompts_2026_06_07/wikitext2_test_ppl_prompts.txt \
     --calibration-prompts data_eval/public_calib_prompts_2026_06_07/c4_validation_ppl_prompts.txt \
     --prompts data_eval/public_ppl_prompts_2026_06_07/c4_validation_ppl_prompts.txt \
-    --limit-prompts 4 \
-    --max-calib-samples 4 \
+    --limit-prompts 8 \
+    --max-calib-samples 12 \
     --calibration-data-min-length 4 \
     --max-length 96 \
     --bits 4 \
@@ -635,34 +635,34 @@ python train_python/run_with_gpu_guard.py \
     --device cuda \
     --local-files-only \
     --reuse-existing-artifact \
-    --out-json outputs/official_gptqmodel_public_calib_qwen25_0p5b_c4_summary_2026_06_07.json \
-    --out-md outputs/OFFICIAL_GPTQMODEL_PUBLIC_CALIB_QWEN25_0P5B_C4_2026_06_07.md
+    --out-json outputs/official_gptqmodel_public_calib_qwen25_0p5b_budget8_c4_summary_2026_06_07.json \
+    --out-md outputs/OFFICIAL_GPTQMODEL_PUBLIC_CALIB_QWEN25_0P5B_BUDGET8_C4_2026_06_07.md
 ```
 
 Current GPTQModel public-calibrated readiness result:
 
 | slice | prompts | tokens | FP16 PPL | GPTQModel PPL | ratio | artifact reused | peak VRAM |
 |---|---:|---:|---:|---:|---:|---|---:|
-| WikiText2 test eval | 4 | 380 | 19.381 | 25.677 | 1.3249 | false | 0.6234 |
-| C4 validation eval | 4 | 380 | 24.665 | 31.398 | 1.2730 | true | 0.6315 |
+| WikiText2 test eval | 8 | 760 | 24.676 | 31.953 | 1.2949 | false | 0.6111 |
+| C4 validation eval | 8 | 727 | 32.952 | 39.810 | 1.2081 | true | 0.6097 |
 
 GPTQModel readiness gate:
 
 ```bash
 python train_python/gate_official_gptqmodel_public_calib.py \
-  --summary-json outputs/official_gptqmodel_public_calib_qwen25_0p5b_wikitext2_summary_2026_06_07.json \
-  --guard-json outputs/official_gptqmodel_public_calib_qwen25_0p5b_gpu_guard_2026_06_07.json \
-  --eval-summary wikitext2=outputs/official_gptqmodel_public_calib_qwen25_0p5b_wikitext2_summary_2026_06_07.json \
-  --eval-guard wikitext2=outputs/official_gptqmodel_public_calib_qwen25_0p5b_gpu_guard_2026_06_07.json \
-  --eval-summary c4=outputs/official_gptqmodel_public_calib_qwen25_0p5b_c4_summary_2026_06_07.json \
-  --eval-guard c4=outputs/official_gptqmodel_public_calib_qwen25_0p5b_c4_gpu_guard_2026_06_07.json \
+  --summary-json outputs/official_gptqmodel_public_calib_qwen25_0p5b_budget8_wikitext2_summary_2026_06_07.json \
+  --guard-json outputs/official_gptqmodel_public_calib_qwen25_0p5b_budget8_wikitext2_gpu_guard_2026_06_07.json \
+  --eval-summary wikitext2=outputs/official_gptqmodel_public_calib_qwen25_0p5b_budget8_wikitext2_summary_2026_06_07.json \
+  --eval-guard wikitext2=outputs/official_gptqmodel_public_calib_qwen25_0p5b_budget8_wikitext2_gpu_guard_2026_06_07.json \
+  --eval-summary c4=outputs/official_gptqmodel_public_calib_qwen25_0p5b_budget8_c4_summary_2026_06_07.json \
+  --eval-guard c4=outputs/official_gptqmodel_public_calib_qwen25_0p5b_budget8_c4_gpu_guard_2026_06_07.json \
   --min-eval-slices 2 \
-  --min-total-tokens 512 \
-  --min-calibration-texts 4 \
+  --min-total-tokens 1400 \
+  --min-calibration-texts 12 \
   --max-memory-ratio 0.85 \
   --max-ppl-ratio 2.0 \
-  --out-json outputs/official_gptqmodel_public_calib_qwen25_0p5b_gate_2026_06_07.json \
-  --out-md outputs/OFFICIAL_GPTQMODEL_PUBLIC_CALIB_QWEN25_0P5B_GATE_2026_06_07.md
+  --out-json outputs/official_gptqmodel_public_calib_qwen25_0p5b_budget8_gate_2026_06_07.json \
+  --out-md outputs/OFFICIAL_GPTQMODEL_PUBLIC_CALIB_QWEN25_0P5B_BUDGET8_GATE_2026_06_07.md
 ```
 
 Official PTQ readiness matrix:
@@ -670,14 +670,14 @@ Official PTQ readiness matrix:
 ```bash
 python train_python/gate_official_ptq_readiness_matrix.py \
   --case autoawq=outputs/official_awq_public_calib_qwen25_0p5b_bundle_gate_2026_06_07.json \
-  --case gptqmodel=outputs/official_gptqmodel_public_calib_qwen25_0p5b_gate_2026_06_07.json \
+  --case gptqmodel=outputs/official_gptqmodel_public_calib_qwen25_0p5b_budget8_gate_2026_06_07.json \
   --required-package autoawq \
   --required-package gptqmodel \
   --required-label wikitext2 \
   --required-label c4 \
   --min-packages 2 \
   --min-eval-slices 2 \
-  --min-total-tokens 512 \
+  --min-total-tokens 1400 \
   --max-ppl-ratio 2.0 \
   --max-memory-ratio 0.90 \
   --out-json outputs/official_ptq_readiness_matrix_qwen25_0p5b_2026_06_07.json \
@@ -686,10 +686,11 @@ python train_python/gate_official_ptq_readiness_matrix.py \
 
 Current matrix result: 2 packages (`autoawq`, `gptqmodel`), one model
 (`Qwen/Qwen2.5-0.5B-Instruct`), normalized W4 group-128 quant shape, common
-WikiText2/C4 eval labels, and 2247 total eval tokens across the readiness
-probes. This matrix is for alignment and auditability; it is not a fair
-head-to-head quality comparison because calibration counts, eval token counts,
-package kernels, and task-retention coverage still differ.
+WikiText2/C4 eval labels, matched 1487-token public eval budgets per package,
+and 2974 total eval tokens across the readiness probes. This matrix is for
+alignment and auditability; it is not a fair head-to-head quality comparison
+because package kernels/backend settings, complete task-retention coverage, and
+broader official baseline settings still differ.
 
 Aggregate gate:
 
@@ -717,11 +718,13 @@ Valid claim:
 - one public-calibrated AutoAWQ W4 group-128 bundle completed guarded
   quantization and two tiny public PPL eval slices;
 - one public-calibrated GPTQModel W4 group-128 smoke completed guarded
-  quantization, local artifact save/reload through `gptq_torch`, and two tiny
-  public WikiText2/C4 PPL eval slices;
+  quantization with 12 public calibration texts, local artifact save/reload
+  through `gptq_torch`, and two tiny public WikiText2/C4 PPL eval slices at the
+  same eval-token budget as the AutoAWQ readiness bundle;
 - the official PTQ readiness matrix verifies that the current AutoAWQ and
-  GPTQModel probes share the same model, W4/G128 quantization shape, and
-  WikiText2/C4 eval labels before being presented together.
+  GPTQModel probes share the same model, W4/G128 quantization shape,
+  WikiText2/C4 eval labels, and 1487-token public eval budget before being
+  presented together.
 
 Invalid claim:
 
