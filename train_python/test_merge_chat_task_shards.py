@@ -78,6 +78,25 @@ class MergeChatTaskShardsTests(unittest.TestCase):
         self.assertEqual(merged["max_memory_used_ratio"], 0.3)
         self.assertEqual(merged["post_cleanup"]["target_count"], 3)
 
+    def test_merge_guards_allows_null_post_cleanup(self) -> None:
+        guards = [
+            {
+                "returncode": 0,
+                "killed_by_guard": False,
+                "killed_by_timeout": False,
+                "timeout_seconds": 10,
+                "max_memory_used_mib": 100,
+                "memory_total_mib": 1000,
+                "max_memory_used_ratio": 0.1,
+                "max_utilization_gpu_pct": 20,
+                "post_cleanup": None,
+            }
+        ]
+        merged = merge.merge_guards(guards, [Path("a")])
+        self.assertEqual(merged["post_cleanup"]["target_count"], 0)
+        self.assertEqual(merged["post_cleanup"]["estimated_bytes"], 0)
+        self.assertEqual(merged["post_cleanup"]["errors"], [])
+
     def test_cli_writes_merged_files(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)

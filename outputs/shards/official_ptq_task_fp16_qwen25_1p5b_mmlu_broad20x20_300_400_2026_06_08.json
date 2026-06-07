@@ -1,0 +1,1425 @@
+{
+  "model": "Qwen/Qwen2.5-1.5B-Instruct",
+  "loader": "hf",
+  "hf_device_map": "auto",
+  "hf_max_gpu_memory_mib": 2400,
+  "task_file": "data_eval/public_task_benchmark_v1/mmlu_broad20x20_test.jsonl",
+  "task_format": "mmlu",
+  "task_count": 100,
+  "task_limit": 100,
+  "task_offset": 300,
+  "chat_template": true,
+  "no_think": true,
+  "max_new_tokens": 64,
+  "baseline": {
+    "aggregate": {
+      "tasks": 100,
+      "passes": 52,
+      "accuracy": 0.52,
+      "mean_tokens_per_second": 5.35128650744411,
+      "mean_ttft_seconds": 0.4038254210299971
+    },
+    "rows": [
+      {
+        "id": "mmlu_300",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: A 10-N force at an angle 45° above the horizontal has a horizontal component of about\nA. 7 N\nB. 5 N\nC. 10 N\nD. 12 N\n/no_think",
+        "answer": "A",
+        "generated_text": "B. 5 N",
+        "score": {
+          "passed": false,
+          "predicted": "B",
+          "expected": "A"
+        },
+        "ttft_seconds": 1.7763766099999998,
+        "tokens_per_second": 2.304555785994768
+      },
+      {
+        "id": "mmlu_301",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: A completely submerged object always displaces its own\nA. weight of fluid.\nB. volume of fluid.\nC. density of fluid.\nD. All of these.\n/no_think",
+        "answer": "B",
+        "generated_text": "B. volume of fluid.",
+        "score": {
+          "passed": true,
+          "predicted": "B",
+          "expected": "B"
+        },
+        "ttft_seconds": 0.46736668199997666,
+        "tokens_per_second": 5.5427449478807675
+      },
+      {
+        "id": "mmlu_302",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: When a diver points a flashlight upward toward the surface of the water at an angle 20° from the normal, the beam of light\nA. totally internally reflects\nB. passes into the air above\nC. is absorbed\nD. None of these\n/no_think",
+        "answer": "B",
+        "generated_text": "B. passes into the air above",
+        "score": {
+          "passed": true,
+          "predicted": "B",
+          "expected": "B"
+        },
+        "ttft_seconds": 0.3832782269999484,
+        "tokens_per_second": 6.894653045373593
+      },
+      {
+        "id": "mmlu_303",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: According to four-dimensional geometry, the angles of a triangle add to 180°\nA. always.\nB. sometimes.\nC. never.\nD. on planet Earth only.\n/no_think",
+        "answer": "B",
+        "generated_text": "A. always.",
+        "score": {
+          "passed": false,
+          "predicted": "A",
+          "expected": "B"
+        },
+        "ttft_seconds": 0.4242656929999953,
+        "tokens_per_second": 6.064410347913367
+      },
+      {
+        "id": "mmlu_304",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: A voltage will be induced in a wire loop when the magnetic field within that loop\nA. changes\nB. aligns with the electric field\nC. is at right angles to the electric field\nD. converts to magnetic energy\n/no_think",
+        "answer": "A",
+        "generated_text": "A. changes",
+        "score": {
+          "passed": true,
+          "predicted": "A",
+          "expected": "A"
+        },
+        "ttft_seconds": 0.43432731700005434,
+        "tokens_per_second": 5.106602384437745
+      },
+      {
+        "id": "mmlu_305",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Among these colors, the one that has the most energy per photon is\nA. red\nB. yellow-green\nC. blue\nD. violet\n/no_think",
+        "answer": "D",
+        "generated_text": "D. violet",
+        "score": {
+          "passed": true,
+          "predicted": "D",
+          "expected": "D"
+        },
+        "ttft_seconds": 0.4179755559999876,
+        "tokens_per_second": 5.465751029236004
+      },
+      {
+        "id": "mmlu_306",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: According to general relativity,\nA. mass distorts spacetime.\nB. gravity affects clocks.\nC. light can’t escape from a black hole.\nD. All of these.\n/no_think",
+        "answer": "D",
+        "generated_text": "D. All of these.",
+        "score": {
+          "passed": true,
+          "predicted": "D",
+          "expected": "D"
+        },
+        "ttft_seconds": 0.35893868700003395,
+        "tokens_per_second": 6.163708036129875
+      },
+      {
+        "id": "mmlu_307",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: A step-up transformer in an electric circuit can step up\nA. voltage\nB. energy\nC. Both of these\nD. Neither of these\n/no_think",
+        "answer": "A",
+        "generated_text": "C.",
+        "score": {
+          "passed": false,
+          "predicted": "C",
+          "expected": "A"
+        },
+        "ttft_seconds": 0.49149153299998716,
+        "tokens_per_second": 4.066839673144464
+      },
+      {
+        "id": "mmlu_308",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Spectral lines of the elements are\nA. chaotic\nB. ordered\nC. positioned by amplitude\nD. in phase\n/no_think",
+        "answer": "B",
+        "generated_text": "B. ordered",
+        "score": {
+          "passed": true,
+          "predicted": "B",
+          "expected": "B"
+        },
+        "ttft_seconds": 0.4440468000000237,
+        "tokens_per_second": 5.189757174167879
+      },
+      {
+        "id": "mmlu_309",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: A wave transfers\nA. amplitude\nB. wavelength\nC. frequency\nD. energy\n/no_think",
+        "answer": "D",
+        "generated_text": "D. energy",
+        "score": {
+          "passed": true,
+          "predicted": "D",
+          "expected": "D"
+        },
+        "ttft_seconds": 0.4734058199999822,
+        "tokens_per_second": 4.959003209675208
+      },
+      {
+        "id": "mmlu_310",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Immediately after two separated charged particles are released from rest, both increase in acceleration. The sign of charge of the particles is therefore\nA. the same\nB. opposite\nC. Either of these\nD. Need more information\n/no_think",
+        "answer": "B",
+        "generated_text": "B. opposite",
+        "score": {
+          "passed": true,
+          "predicted": "B",
+          "expected": "B"
+        },
+        "ttft_seconds": 0.36764235600003303,
+        "tokens_per_second": 6.056081128069885
+      },
+      {
+        "id": "mmlu_311",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: The surface of planet Earth loses energy to outer space due mostly to\nA. conduction\nB. convection\nC. radiation\nD. radioactivity\n/no_think",
+        "answer": "C",
+        "generated_text": "C. radiation",
+        "score": {
+          "passed": true,
+          "predicted": "C",
+          "expected": "C"
+        },
+        "ttft_seconds": 0.42943997600002604,
+        "tokens_per_second": 5.344905228942173
+      },
+      {
+        "id": "mmlu_312",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: In a series circuit, if the current in one lamp is 2 A, the current in the lamp next to it is\nA. half, 1 A\nB. 2 A\nC. Depends on which lamp is closer to the battery\nD. Not enough information to say\n/no_think",
+        "answer": "B",
+        "generated_text": "B. 2 A",
+        "score": {
+          "passed": true,
+          "predicted": "B",
+          "expected": "B"
+        },
+        "ttft_seconds": 0.4624698720000424,
+        "tokens_per_second": 5.348600721543346
+      },
+      {
+        "id": "mmlu_313",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: As a blinking light source approaching you gains speed, you see the frequency of flashes\nA. increase.\nB. decrease.\nC. remain unchanged.\nD. None of these.\n/no_think",
+        "answer": "A",
+        "generated_text": "A. increase.",
+        "score": {
+          "passed": true,
+          "predicted": "A",
+          "expected": "A"
+        },
+        "ttft_seconds": 0.48448938799998587,
+        "tokens_per_second": 5.2458204237242425
+      },
+      {
+        "id": "mmlu_314",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: In the absence of air resistance a ball of mass m is tossed upward to reach a height of 20 m. At the 10-m position half way up the net force on the ball is\nA. 2mg\nB. mg\nC. mg/2\nD. mg/4\n/no_think",
+        "answer": "B",
+        "generated_text": "D. mg/4",
+        "score": {
+          "passed": false,
+          "predicted": "D",
+          "expected": "B"
+        },
+        "ttft_seconds": 0.42816325699999425,
+        "tokens_per_second": 6.007032577206828
+      },
+      {
+        "id": "mmlu_315",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Pumice is a volcanic rock that floats in water. The density of pumice compared with that of water is\nA. less.\nB. equal.\nC. greater.\nD. none because it sinks.\n/no_think",
+        "answer": "A",
+        "generated_text": "A. less.",
+        "score": {
+          "passed": true,
+          "predicted": "A",
+          "expected": "A"
+        },
+        "ttft_seconds": 0.41851345599997103,
+        "tokens_per_second": 5.911108423461884
+      },
+      {
+        "id": "mmlu_316",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: When you look at the red petals of a rose the color light you're seeing is\nA. red.\nB. green.\nC. white minus red.\nD. a mixture of green and yellow.\n/no_think",
+        "answer": "A",
+        "generated_text": "A. red.",
+        "score": {
+          "passed": true,
+          "predicted": "A",
+          "expected": "A"
+        },
+        "ttft_seconds": 0.36730886100002635,
+        "tokens_per_second": 6.399033756141135
+      },
+      {
+        "id": "mmlu_317",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Compared with the sound you hear from the siren of a stationary fire engine the sound you hear when it approaches you has an increased\nA. speed\nB. frequency\nC. wavelength\nD. All of these\n/no_think",
+        "answer": "B",
+        "generated_text": "B. frequency",
+        "score": {
+          "passed": true,
+          "predicted": "B",
+          "expected": "B"
+        },
+        "ttft_seconds": 0.4076837520000254,
+        "tokens_per_second": 5.6702350299944095
+      },
+      {
+        "id": "mmlu_318",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: When you squeeze an air-filled party balloon, you increase its\nA. volume\nB. mass\nC. weight\nD. density\n/no_think",
+        "answer": "D",
+        "generated_text": "A. volume",
+        "score": {
+          "passed": false,
+          "predicted": "A",
+          "expected": "D"
+        },
+        "ttft_seconds": 0.41694313900001134,
+        "tokens_per_second": 5.517277450889709
+      },
+      {
+        "id": "mmlu_319",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Polarization is a property of\nA. transverse waves\nB. longitudinal waves\nC. all waves\nD. None of these\n/no_think",
+        "answer": "A",
+        "generated_text": "A.",
+        "score": {
+          "passed": true,
+          "predicted": "A",
+          "expected": "A"
+        },
+        "ttft_seconds": 0.3844881680000185,
+        "tokens_per_second": 5.198969839722501
+      },
+      {
+        "id": "mmlu_320",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Which one of the following is the most appropriate definition of a 99% confidence interval?\nA. 99% of the time in repeated samples, the interval would contain the true value of the parameter\nB. 99% of the time in repeated samples, the interval would contain the estimated value of the parameter\nC. 99% of the time in repeated samples, the null hypothesis will be rejected\nD. 99% of the time in repeated samples, the null hypothesis will not be rejected when it was false\n/no_think",
+        "answer": "A",
+        "generated_text": "A",
+        "score": {
+          "passed": true,
+          "predicted": "A",
+          "expected": "A"
+        },
+        "ttft_seconds": 0.30262463799994066,
+        "tokens_per_second": 3.302005566527918
+      },
+      {
+        "id": "mmlu_321",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: What is the main difference between the Dickey Fuller (DF) and Phillips-Perron (PP) approaches to unit root testing?\nA. ADF is a single equation approach to unit root testing while PP is a systems approach\nB. PP tests reverse the DF null and alternative hypotheses so that there is stationarity under the null hypothesis of the PP test\nC. The PP test incorporates an automatic correction for autocorrelated residuals in the test regression\nD. PP tests have good power in small samples whereas DF tests do not.\n/no_think",
+        "answer": "C",
+        "generated_text": "B",
+        "score": {
+          "passed": false,
+          "predicted": "B",
+          "expected": "C"
+        },
+        "ttft_seconds": 0.32222374899993156,
+        "tokens_per_second": 3.1009668575886074
+      },
+      {
+        "id": "mmlu_322",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: If there were a leverage effect in practice, what would be the shape of the news impact curve for as model that accounted for that leverage?\nA. It would rise more quickly for negative disturbances than for positive ones of the same magnitude\nB. It would be symmetrical about zero\nC. It would rise less quickly for negative disturbances than for positive ones of the same magnitude\nD. It would be zero for all positive disturbances\n/no_think",
+        "answer": "A",
+        "generated_text": "A.",
+        "score": {
+          "passed": true,
+          "predicted": "A",
+          "expected": "A"
+        },
+        "ttft_seconds": 0.4095160169999872,
+        "tokens_per_second": 4.880890125198985
+      },
+      {
+        "id": "mmlu_323",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Which of the following statements is false concerning the linear probability model?\nA. There is nothing in the model to ensure that the estimated probabilities lie between zero and one\nB. Even if the probabilities are truncated at zero and one, there will probably be many observations for which the probability is either exactly zero or exactly one\nC. The error terms will be heteroscedastic and not normally distributed\nD. The model is much harder to estimate than a standard regression model with a continuous dependent variable\n/no_think",
+        "answer": "D",
+        "generated_text": "A",
+        "score": {
+          "passed": false,
+          "predicted": "A",
+          "expected": "D"
+        },
+        "ttft_seconds": 0.299855698999977,
+        "tokens_per_second": 3.329009006117478
+      },
+      {
+        "id": "mmlu_324",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Which of the following statements concerning the regression population and sample is FALSE?\nA. The population is the total collection of all items of interest\nB. The population can be infinite\nC. In theory, the sample could be larger than the population\nD. A random sample is one where each individual item from the population is equally likely to be drawn.\n/no_think",
+        "answer": "C",
+        "generated_text": "C",
+        "score": {
+          "passed": true,
+          "predicted": "C",
+          "expected": "C"
+        },
+        "ttft_seconds": 0.25839900999994825,
+        "tokens_per_second": 3.8669944176465
+      },
+      {
+        "id": "mmlu_325",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Which of the following statements is INCORRECT concerning a comparison of the Box-Pierce Q and the Ljung-Box Q* statistics for linear dependence in time series?\nA. Asymptotically, the values of the two test statistics will be equal\nB. The Q test has better small-sample properties than the Q*\nC. The Q test is sometimes over-sized for small samples\nD. As the sample size tends towards infinity, both tests will show a tendency to always reject the null hypothesis of zero autocorrelation coefficients.\n/no_think",
+        "answer": "B",
+        "generated_text": "B",
+        "score": {
+          "passed": true,
+          "predicted": "B",
+          "expected": "B"
+        },
+        "ttft_seconds": 0.28423472700001184,
+        "tokens_per_second": 3.514925701413288
+      },
+      {
+        "id": "mmlu_326",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: A parsimonious model is one that\nA. Includes too many variables\nB. Includes as few variables as possible to explain the data\nC. Is a well-specified model\nD. Is a mis-specified model\n/no_think",
+        "answer": "A",
+        "generated_text": "B.",
+        "score": {
+          "passed": false,
+          "predicted": "B",
+          "expected": "A"
+        },
+        "ttft_seconds": 0.43634266900005514,
+        "tokens_per_second": 4.581415040451703
+      },
+      {
+        "id": "mmlu_327",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Which of the following is NOT a feature of continuously compounded returns (i.e. log-returns)?\nA. They can be interpreted as continuously compounded changes in the prices\nB. They can be added over time to give returns for longer time periods\nC. They can be added across a portfolio of assets to give portfolio returns\nD. They are usually fat-tailed\n/no_think",
+        "answer": "C",
+        "generated_text": "D",
+        "score": {
+          "passed": false,
+          "predicted": "D",
+          "expected": "C"
+        },
+        "ttft_seconds": 0.2762187859999585,
+        "tokens_per_second": 3.6164111334074853
+      },
+      {
+        "id": "mmlu_328",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Which of the following features of financial asset return time-series could be captured using a standard GARCH(1,1) model?\n\ni) Fat tails in the return distribution\n\n\nii) Leverage effects\n\n\niii) Volatility clustering\n\n\niv) Volatility affecting returns\nA. (ii) and (iv) only\nB. (i) and (iii) only\nC. (i), (ii), and (iii) only\nD. (i), (ii), (iii), and (iv)\n/no_think",
+        "answer": "B",
+        "generated_text": "C. (i), (ii), and (iii) only",
+        "score": {
+          "passed": false,
+          "predicted": "C",
+          "expected": "B"
+        },
+        "ttft_seconds": 0.48456845800001247,
+        "tokens_per_second": 6.30159342362771
+      },
+      {
+        "id": "mmlu_329",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Consider the estimation of a GARCH-M model. If the data employed were a time-series of daily corporate bond percentage returns, which of the following would you expect the value of the GARCH-in-mean parameter estimate to be?\nA. Less than -1\nB. Between -1 and 0\nC. Between 0 and 1\nD. Bigger than 1\n/no_think",
+        "answer": "C",
+        "generated_text": "D. Bigger than 1",
+        "score": {
+          "passed": false,
+          "predicted": "D",
+          "expected": "C"
+        },
+        "ttft_seconds": 0.37700594000000365,
+        "tokens_per_second": 6.4753261743210215
+      },
+      {
+        "id": "mmlu_330",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Under which of the following situations would bootstrapping be preferred to pure simulation?\n\ni) If it is desired that the distributional properties of the data in the experiment\n\nare the same as those of some actual data\n\n\nii) If it is desired that the distributional properties of the data in the experiment\n\nare known exactly\n\n\niii) If the distributional properties of the actual data are unknown\n\n\niv) If the sample of actual data available is very small\nA. (ii) and (iv) only\nB. (i) and (iii) only\nC. (i), (ii), and (iv) only\nD. (i), (ii), (iii), and (iv)\n/no_think",
+        "answer": "B",
+        "generated_text": "B. (i) and (iii) only",
+        "score": {
+          "passed": true,
+          "predicted": "B",
+          "expected": "B"
+        },
+        "ttft_seconds": 0.422175143000004,
+        "tokens_per_second": 7.180435237759148
+      },
+      {
+        "id": "mmlu_331",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Which of the following may be consequences of one or more of the CLRM assumptions being violated?\n\ni) The coefficient estimates are not optimal\n\n\nii) The standard error estimates are not optimal\n\n\niii) The distributions assumed for the test statistics are inappropriate\n\n\niv) Conclusions regarding the strength of relationships between the dependent\n\nand independent variables may be invalid.\nA. (ii) and (iv) only\nB. (i) and (iii) only\nC. (i), (ii), and (iii) only\nD. (i), (ii), (iii), and (iv)\n/no_think",
+        "answer": "D",
+        "generated_text": "D. (i), (ii), (iii), and (iv)",
+        "score": {
+          "passed": true,
+          "predicted": "D",
+          "expected": "D"
+        },
+        "ttft_seconds": 0.3899714200000517,
+        "tokens_per_second": 6.733957016091151
+      },
+      {
+        "id": "mmlu_332",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Which of the following statements is true concerning forecasting in econometrics?\nA. Forecasts can only be made for time-series data\nB. Mis-specified models are certain to produce inaccurate forecasts\nC. Structural forecasts are simpler to produce than those from time series models\nD. In-sample forecasting ability is a poor test of model adequacy\n/no_think",
+        "answer": "D",
+        "generated_text": "D",
+        "score": {
+          "passed": true,
+          "predicted": "D",
+          "expected": "D"
+        },
+        "ttft_seconds": 0.2685382419999769,
+        "tokens_per_second": 3.7204606723508613
+      },
+      {
+        "id": "mmlu_333",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: The pacf is necessary for distinguishing between\nA. An AR and an MA model\nB. An AR and an ARMA model\nC. An MA and an ARMA model\nD. Different models from within the ARMA family\n/no_think",
+        "answer": "B",
+        "generated_text": "A",
+        "score": {
+          "passed": false,
+          "predicted": "A",
+          "expected": "B"
+        },
+        "ttft_seconds": 0.27400848899992525,
+        "tokens_per_second": 3.6459415779211035
+      },
+      {
+        "id": "mmlu_334",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Negative residual autocorrelation is indicated by which one of the following?\nA. A cyclical pattern in the residuals\nB. An alternating pattern in the residuals\nC. A complete randomness in the residuals\nD. Residuals that are all close to zero\n/no_think",
+        "answer": "B",
+        "generated_text": "A",
+        "score": {
+          "passed": false,
+          "predicted": "A",
+          "expected": "B"
+        },
+        "ttft_seconds": 0.329649576999941,
+        "tokens_per_second": 3.031470311726487
+      },
+      {
+        "id": "mmlu_335",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Which of the following statements are true concerning a comparison between ARCH(q) and GARCH(1,1) models?\n\ni) The ARCH(q) model is likely to be the more parsimonious\n\n\nii) The ARCH(q) model is the more likely to violate non-negativity constraints\n\n\niii) The ARCH(q) model can allow for an infinite number of previous lags of squared\n\nreturns to affect the current conditional variance\n\n\niv) The GARCH(1,1) model will usually be sufficient to capture all of the dependence\n\nin the conditional variance\nA. (ii) and (iv) only\nB. (i) and (iii) only\nC. (i), (ii), and (iii) only\nD. (i), (ii), (iii), and (iv)\n/no_think",
+        "answer": "A",
+        "generated_text": "B. (i) and (iii) only",
+        "score": {
+          "passed": false,
+          "predicted": "B",
+          "expected": "A"
+        },
+        "ttft_seconds": 0.4102440020000131,
+        "tokens_per_second": 6.828142947442584
+      },
+      {
+        "id": "mmlu_336",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Which of the following statements are true concerning a triangular or recursive system?\n\ni) The parameters can be validly estimated using separate applications of OLS to\n\neach equation\n\n\nii) The independent variables may be correlated with the error terms in other\n\nequations\n\n\niii) An application of 2SLS would lead to unbiased but inefficient parameter estimates\n\n\niv) The independent variables may be correlated with the error terms in the equations\n\nin which they appear as independent variables\nA. (ii) and (iv) only\nB. (i) and (iii) only\nC. (i), (ii), and (iii) only\nD. (i), (ii), (iii), and (iv)\n/no_think",
+        "answer": "C",
+        "generated_text": "A. (ii) and (iv) only",
+        "score": {
+          "passed": false,
+          "predicted": "A",
+          "expected": "C"
+        },
+        "ttft_seconds": 0.4371737909999638,
+        "tokens_per_second": 6.780777716797577
+      },
+      {
+        "id": "mmlu_337",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Which one of the following statements best describes the algebraic representation of the fitted regression line?\nA. \\hat{y}_t = \\hat{\\alpha} + \\hat{\\beta}x_t + \\hat{u}_t\nB. \\hat{y}_t = \\hat{\\alpha} + \\hat{\\beta}x_t\nC. \\hat{y}_t = \\hat{\\alpha} + \\hat{\\beta}x_t + u_t\nD. y_t = \\hat{\\alpha} + \\hat{\\beta}x_t + \\hat{u}_t\n/no_think",
+        "answer": "B",
+        "generated_text": "A",
+        "score": {
+          "passed": false,
+          "predicted": "A",
+          "expected": "B"
+        },
+        "ttft_seconds": 0.3305404620000445,
+        "tokens_per_second": 3.0233885498506154
+      },
+      {
+        "id": "mmlu_338",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: What are the dimensions of $\\hat{u}^t \\hat{u}?\nA. T x k\nB. T x 1\nC. k x 1\nD. 1 x 1\n/no_think",
+        "answer": "D",
+        "generated_text": "B.",
+        "score": {
+          "passed": false,
+          "predicted": "B",
+          "expected": "D"
+        },
+        "ttft_seconds": 0.42606746900003145,
+        "tokens_per_second": 4.6918379817595985
+      },
+      {
+        "id": "mmlu_339",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: The characteristic roots of the MA process\n\n$y_t = -3u_{t-1} + u_{t-2} + u_t$\n\nare\nA. 1 and 2\nB. 1 and 0.5\nC. 2 and -0.5\nD. 1 and -3\n/no_think",
+        "answer": "B",
+        "generated_text": "D. 1 and -3",
+        "score": {
+          "passed": false,
+          "predicted": "D",
+          "expected": "B"
+        },
+        "ttft_seconds": 0.3938430270000026,
+        "tokens_per_second": 6.886224117997314
+      },
+      {
+        "id": "mmlu_340",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: The Barkhausen criterion for an oscillator\nA. Loop gain should be unity\nB. Loop gain should be less than unity\nC. The phase of a feedback signal with respect to input should be 0° or 360°\nD. Both A and C\n/no_think",
+        "answer": "D",
+        "generated_text": "D. Both A and C",
+        "score": {
+          "passed": true,
+          "predicted": "D",
+          "expected": "D"
+        },
+        "ttft_seconds": 0.42837025100004666,
+        "tokens_per_second": 5.434721123489897
+      },
+      {
+        "id": "mmlu_341",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Potentiometer method of DC voltage measurement is more accurate than direct measurement using a voltmeter because\nA. It loads the circuit moderately.\nB. It loads the circuit to maximum extent.\nC. It uses centre zero galvanometer instead of voltmeter.\nD. It does not load the circuit at all.\n/no_think",
+        "answer": "D",
+        "generated_text": "D. It does not load the circuit at all.",
+        "score": {
+          "passed": true,
+          "predicted": "D",
+          "expected": "D"
+        },
+        "ttft_seconds": 0.4210385609999321,
+        "tokens_per_second": 6.896698102771549
+      },
+      {
+        "id": "mmlu_342",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Which of these sets of logic gates are designated as universal gates?\nA. NOR, NAND.\nB. XOR, NOR, NAND.\nC. OR, NOT, AND.\nD. NOR, NAND, XNOR.\n/no_think",
+        "answer": "A",
+        "generated_text": "A.",
+        "score": {
+          "passed": true,
+          "predicted": "A",
+          "expected": "A"
+        },
+        "ttft_seconds": 0.3972330270000839,
+        "tokens_per_second": 5.028226464651563
+      },
+      {
+        "id": "mmlu_343",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: A single phase one pulse controlled circuit has a resistance R and counter emf E load 400 sin(314 t) as the source voltage. For a load counter emf of 200 V, the range of firing angle control is\nA. 30° to 150°.\nB. 30° to 180°.\nC. 60° to 120°.\nD. 60° to 180°.\n/no_think",
+        "answer": "A",
+        "generated_text": "A. 30° to 150°.",
+        "score": {
+          "passed": true,
+          "predicted": "A",
+          "expected": "A"
+        },
+        "ttft_seconds": 0.41830498900003477,
+        "tokens_per_second": 6.976195555064955
+      },
+      {
+        "id": "mmlu_344",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: A box which tells the effect of inputs on control sub system is known as\nA. Data Box.\nB. Logical box.\nC. Decision box.\nD. State box.\n/no_think",
+        "answer": "C",
+        "generated_text": "C.",
+        "score": {
+          "passed": true,
+          "predicted": "C",
+          "expected": "C"
+        },
+        "ttft_seconds": 0.36704991799990694,
+        "tokens_per_second": 5.445626478783789
+      },
+      {
+        "id": "mmlu_345",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Two infinite parallel metal plates are charged with equal surface charge density of the same polarity. The electric field in the gap between the plates is\nA. same as that produced by one plate.\nB. double the field produced by one plate.\nC. dependent on coordinates of field points.\nD. zero.\n/no_think",
+        "answer": "D",
+        "generated_text": "D. zero.",
+        "score": {
+          "passed": true,
+          "predicted": "D",
+          "expected": "D"
+        },
+        "ttft_seconds": 0.37001634299997477,
+        "tokens_per_second": 6.428817002492912
+      },
+      {
+        "id": "mmlu_346",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: The resistance in the circuit of the moving coil of a dynamometer wattmeter should be\nA. Low.\nB. Very low.\nC. High.\nD. Almost zero.\n/no_think",
+        "answer": "C",
+        "generated_text": "D.",
+        "score": {
+          "passed": false,
+          "predicted": "D",
+          "expected": "C"
+        },
+        "ttft_seconds": 0.4236178790000622,
+        "tokens_per_second": 4.7187372479809255
+      },
+      {
+        "id": "mmlu_347",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: The following are the necessary requirements of an oscillator\nA. Amplitude stability\nB. Frequency stability\nC. Power stability\nD. Both A and B\n/no_think",
+        "answer": "D",
+        "generated_text": "D. Both A and B",
+        "score": {
+          "passed": true,
+          "predicted": "D",
+          "expected": "D"
+        },
+        "ttft_seconds": 0.4196032400000149,
+        "tokens_per_second": 6.298229915862406
+      },
+      {
+        "id": "mmlu_348",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: The normal voltage used in directional heating is\nA. 1.5 KV.\nB. 15 KV.\nC. 33 KV.\nD. 66 KV.\n/no_think",
+        "answer": "A",
+        "generated_text": "A. 1.5 KV.",
+        "score": {
+          "passed": true,
+          "predicted": "A",
+          "expected": "A"
+        },
+        "ttft_seconds": 0.37605823700005203,
+        "tokens_per_second": 7.16806160908757
+      },
+      {
+        "id": "mmlu_349",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: LC oscillators are used for produce a waveform with frequency ranging from\nA. 1MHz to 500 MHz\nB. 100 KHz to 500 MHz\nC. 1 KHz to 1 MHz\nD. 1MHz to 100 GHz\n/no_think",
+        "answer": "A",
+        "generated_text": "A. 1MHz to 500 MHz",
+        "score": {
+          "passed": true,
+          "predicted": "A",
+          "expected": "A"
+        },
+        "ttft_seconds": 0.37973364099991613,
+        "tokens_per_second": 7.157405364010482
+      },
+      {
+        "id": "mmlu_350",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: A working diode must have\nA. High resistance when forward or reverse biased\nB. Low resistance when forward biased, while high resistance when reverse bias\nC. High resistance when forward biased, while low resistance when reverse bias\nD. Low resistance when forward or reverse biased\n/no_think",
+        "answer": "B",
+        "generated_text": "C",
+        "score": {
+          "passed": false,
+          "predicted": "C",
+          "expected": "B"
+        },
+        "ttft_seconds": 0.2708338399999093,
+        "tokens_per_second": 3.688801369700559
+      },
+      {
+        "id": "mmlu_351",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: What is the name of the fluorescent material that gives red colour fluorescence?\nA. Zinc silicate.\nB. Calcium silicate.\nC. Zinc sulphide.\nD. Magnesium silicate.\n/no_think",
+        "answer": "D",
+        "generated_text": "C.",
+        "score": {
+          "passed": false,
+          "predicted": "C",
+          "expected": "D"
+        },
+        "ttft_seconds": 0.406144562999998,
+        "tokens_per_second": 4.9210064179546915
+      },
+      {
+        "id": "mmlu_352",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: How many bits are required to store one BCD digit ?\nA. 1\nB. 2\nC. 3\nD. 4\n/no_think",
+        "answer": "D",
+        "generated_text": "B. 2",
+        "score": {
+          "passed": false,
+          "predicted": "B",
+          "expected": "D"
+        },
+        "ttft_seconds": 0.43294182799991177,
+        "tokens_per_second": 5.439224467108482
+      },
+      {
+        "id": "mmlu_353",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Commutator in DC generator is used for\nA. collecting of current\nB. reduce losses\nC. increase efficiency\nD. convert AC armature current in to DC\n/no_think",
+        "answer": "D",
+        "generated_text": "D. convert AC armature current into DC",
+        "score": {
+          "passed": true,
+          "predicted": "D",
+          "expected": "D"
+        },
+        "ttft_seconds": 0.3892550369999981,
+        "tokens_per_second": 6.25003559048081
+      },
+      {
+        "id": "mmlu_354",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: 1 F is theoretically equal to\nA. 1 ohm of resistance\nB. ratio of 1 V to 1 C\nC. ratio of 1 C to 1 V\nD. none of these\n/no_think",
+        "answer": "C",
+        "generated_text": "D. none of these",
+        "score": {
+          "passed": false,
+          "predicted": "D",
+          "expected": "C"
+        },
+        "ttft_seconds": 0.40691978699999254,
+        "tokens_per_second": 5.741073992012626
+      },
+      {
+        "id": "mmlu_355",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: How many entries will be in the truth table of a 3 input NAND gate ?\nA. 3\nB. 6\nC. 8\nD. 9\n/no_think",
+        "answer": "C",
+        "generated_text": "B. 6",
+        "score": {
+          "passed": false,
+          "predicted": "B",
+          "expected": "C"
+        },
+        "ttft_seconds": 0.4099446220000118,
+        "tokens_per_second": 5.715916669451213
+      },
+      {
+        "id": "mmlu_356",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: In decimal number system what is MSD\nA. First digit from left to right\nB. First digit from right to left\nC. Middle digit\nD. Mean of all digits\n/no_think",
+        "answer": "A",
+        "generated_text": "A. First digit from left to right",
+        "score": {
+          "passed": true,
+          "predicted": "A",
+          "expected": "A"
+        },
+        "ttft_seconds": 0.4563339260000703,
+        "tokens_per_second": 6.126977524022945
+      },
+      {
+        "id": "mmlu_357",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: In Digital Logic Designs, GAL is abbreviated as\nA. General Advance Logic\nB. General Array Logic\nC. Generic Advance Logic\nD. Generic Array Logic\n/no_think",
+        "answer": "D",
+        "generated_text": "D.",
+        "score": {
+          "passed": true,
+          "predicted": "D",
+          "expected": "D"
+        },
+        "ttft_seconds": 0.37599017799993817,
+        "tokens_per_second": 5.315771993048729
+      },
+      {
+        "id": "mmlu_358",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Inintel 8085A microprocessor ALE signal is made high to\nA. Enable the data bus to be used as low order address bus\nB. To latch data D0-D7 from data bus\nC. To disable data bus\nD. To achieve all the functions listed above\n/no_think",
+        "answer": "A",
+        "generated_text": "A",
+        "score": {
+          "passed": true,
+          "predicted": "A",
+          "expected": "A"
+        },
+        "ttft_seconds": 0.2981306870000253,
+        "tokens_per_second": 3.3513881662593645
+      },
+      {
+        "id": "mmlu_359",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: For an SCR gate cathode characteristic is a straight line of 130. For triggered source volume of 15 V and allowable gate power dissipation of 0.5 W compute the gate source resistance?\nA. 111.9 ohm\nB. 11.19 ohm\nC. 108 ohm\nD. 115 ohm\n/no_think",
+        "answer": "A",
+        "generated_text": "A. 111.9 ohm",
+        "score": {
+          "passed": true,
+          "predicted": "A",
+          "expected": "A"
+        },
+        "ttft_seconds": 0.4503331690000323,
+        "tokens_per_second": 6.779404612971929
+      },
+      {
+        "id": "mmlu_360",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Identify the conclusion of the following argument. It is hard not to verify in our peers the same weakened intelligence due to emotions that we observe in our everyday patients. The arrogance of our consciousness, which in general, belongs to the strongest defense mechanisms, blocks the unconscious complexes. Because of this, it is difficult to convince people of the unconscious, and in turn to teach them what their conscious knowledge contradicts. (Sigmund Freud, The Origin and Development of Psychoanalysis)\nA. It is hard not to verify in our peers the same weakened intelligence due to emotions that we observe in our everyday patients.\nB. The arrogance of our consciousness, which in general, belongs to the strongest defense mechanisms, blocks the unconscious complexes.\nC. Because of this, it is difficult to convince people of the unconscious, and in turn to teach them what their conscious knowledge contradicts.\nD. It is difficult to convince people of the unconscious, and in turn to teach them what their conscious knowledge contradicts.\n/no_think",
+        "answer": "D",
+        "generated_text": "D.",
+        "score": {
+          "passed": true,
+          "predicted": "D",
+          "expected": "D"
+        },
+        "ttft_seconds": 0.4394881550000491,
+        "tokens_per_second": 4.548208371918023
+      },
+      {
+        "id": "mmlu_361",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Select the best translation into predicate logic. David teaches Chris. (c: Chris; d: David; Txy: x teaches y)\nA. Tdc\nB. Tcd\nC. Tcc\nD. dTc\n/no_think",
+        "answer": "A",
+        "generated_text": "A. Tdc",
+        "score": {
+          "passed": true,
+          "predicted": "A",
+          "expected": "A"
+        },
+        "ttft_seconds": 0.45786006000003,
+        "tokens_per_second": 5.5930098920323035
+      },
+      {
+        "id": "mmlu_362",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Select the best English interpretation of the given proposition, using the following translation key: Ax: x is an apartment Hx: x is a house Lx: x is large Bxy: x is bigger than y (∃x)[(Ax • Lx) • (∃y)(Hy • Bxy)]\nA. Some large houses are bigger than some apartments.\nB. Some houses are bigger than all large apartments.\nC. Some large apartments are bigger than some houses.\nD. Some houses are bigger thatn some large apartments.\n/no_think",
+        "answer": "C",
+        "generated_text": "A. Some large houses are bigger than some apartments.",
+        "score": {
+          "passed": false,
+          "predicted": "A",
+          "expected": "C"
+        },
+        "ttft_seconds": 0.4269692350000014,
+        "tokens_per_second": 6.492536802090339
+      },
+      {
+        "id": "mmlu_363",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Construct a complete truth table for the following argument. Then, using the truth table, determine whether the argument is valid or invalid. If the argument is invalid, choose an option which presents a counterexample. (There may be other counterexamples as well.)\n~G ⊃ H\n~H / G\nA. Valid\nB. Invalid. Counterexample when G and H are true\nC. Invalid. Counterexample when G is true and H is false\nD. Invalid. Counterexample when H is true and G is false\n/no_think",
+        "answer": "A",
+        "generated_text": "C",
+        "score": {
+          "passed": false,
+          "predicted": "C",
+          "expected": "A"
+        },
+        "ttft_seconds": 0.2691093290000026,
+        "tokens_per_second": 3.713095718030565
+      },
+      {
+        "id": "mmlu_364",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Use the following key to translate the given formula of PL to natural, English sentences.\nA: Marina reads a Percy Jackson book.\nB: Izzy plays Minecraft.\nC: Emily stops working.\nD: Russell makes dinner.\nE: Ashleigh stops by.\n(~B • E) ⊃ D\nA. If it's not the case that both Izzy plays Minecraft and Ashleigh stops by then Russell makes dinner.\nB. If it's both not the case that Izzy plays Minecraft and Ashleigh stops by then Russell makes dinner.\nC. Izzy playing Minecraft and Ashleigh stopping by entails that Russell makes dinner.\nD. Russell's making dinner is a sufficient condition for Izzy not playing Minecraft and Ashleigh stopping by.\n/no_think",
+        "answer": "B",
+        "generated_text": "A.",
+        "score": {
+          "passed": false,
+          "predicted": "A",
+          "expected": "B"
+        },
+        "ttft_seconds": 0.4245113780000338,
+        "tokens_per_second": 4.708906479160554
+      },
+      {
+        "id": "mmlu_365",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Select the best English interpretation of the given proposition, using the following translation key: Ax: x is an apartment Hx: x is a house Lx: x is large Bxy: x is bigger than y (∃x)[Hx • (∀y)(Ay ⊃ Bxy)]\nA. Some houses are smaller than all apartments.\nB. Every house is bigger than every apartment.\nC. Some apartment is smaller than every house.\nD. Some houses are bigger than every apartment.\n/no_think",
+        "answer": "D",
+        "generated_text": "D. Some houses are bigger than every apartment.",
+        "score": {
+          "passed": true,
+          "predicted": "D",
+          "expected": "D"
+        },
+        "ttft_seconds": 0.49113135499999316,
+        "tokens_per_second": 6.544845712491428
+      },
+      {
+        "id": "mmlu_366",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Construct a complete truth table for the following argument. Then, using the truth table, determine whether the argument is valid or invalid. If the argument is invalid, choose an option which presents a counterexample. (There may be other counterexamples as well.)\n~K ≡ L / (K · L) ∨ (K · ~L)\nA. Valid\nB. Invalid. Counterexample when K and L are true\nC. Invalid. Counterexample when K is true and L is false\nD. Invalid. Counterexample when L is true and K is false\n/no_think",
+        "answer": "D",
+        "generated_text": "B. Invalid. Counterexample when K is true and L is false",
+        "score": {
+          "passed": false,
+          "predicted": "B",
+          "expected": "D"
+        },
+        "ttft_seconds": 0.4239311149999594,
+        "tokens_per_second": 6.394518352855879
+      },
+      {
+        "id": "mmlu_367",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Identify the antecedent of the following conditional proposition: If the university does not increase financial aid, either the president fails to approve it or the board of trustees prevents it.\nA. The university increases financial aid.\nB. The university does not increase financial aid.\nC. The board of trustees prevents it.\nD. The president fails to approve it.\n/no_think",
+        "answer": "B",
+        "generated_text": "B",
+        "score": {
+          "passed": true,
+          "predicted": "B",
+          "expected": "B"
+        },
+        "ttft_seconds": 0.26262177399996744,
+        "tokens_per_second": 3.8027992146432035
+      },
+      {
+        "id": "mmlu_368",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Which of the following propositions is an immediate (one-step) consequence in PL of the given premises?\n~E ⊃ ~F\nG ⊃ F\nH ∨ ~E\nH ⊃ I\n~I\nA. E ⊃ F\nB. F ⊃ G\nC. H ⊃ ~E\nD. ~H\n/no_think",
+        "answer": "D",
+        "generated_text": "C. H ⊃ ~E",
+        "score": {
+          "passed": false,
+          "predicted": "C",
+          "expected": "D"
+        },
+        "ttft_seconds": 0.5441216780000104,
+        "tokens_per_second": 5.204958483176432
+      },
+      {
+        "id": "mmlu_369",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Which of the given formulas of PL is the best symbolization of the following sentence?\nEverybody loves Raymond, or not.\nA. L\nB. ~L\nC. L • ~L\nD. L ∨ ~L\n/no_think",
+        "answer": "D",
+        "generated_text": "D. L ∨ ~L",
+        "score": {
+          "passed": true,
+          "predicted": "D",
+          "expected": "D"
+        },
+        "ttft_seconds": 0.3892124459999877,
+        "tokens_per_second": 6.833324307325573
+      },
+      {
+        "id": "mmlu_370",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Select the best translation into predicate logic. All kings are luckier than all paupers. (Kx: x is a king; Px: x is a pauper; Lxy: x is luckier than y)\nA. (∀x)[Kx ⊃ (∀y)(Py ⊃ Lxy)]\nB. (∀x)[Kx ⊃ (∀y)(Lxy ⊃ Py)]\nC. (∀x)(∀y)[(Kx • Py) ⊃ Lyx]\nD. (∀x)[(Kx • (∀y)(Py)) ⊃ Lxy]\n/no_think",
+        "answer": "A",
+        "generated_text": "A",
+        "score": {
+          "passed": true,
+          "predicted": "A",
+          "expected": "A"
+        },
+        "ttft_seconds": 0.3090264269999352,
+        "tokens_per_second": 3.233521508765179
+      },
+      {
+        "id": "mmlu_371",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Construct a complete truth table for the following pairs of propositions. Then, using the truth tables, determine whether the statements are logically equivalent or contradictory. If neither, determine whether they are consistent or inconsistent. Justify your answers.\n(~M ⊃ ~N) ∨ (O ≡ N) and (~M · N) · [(~O ∨ ~N) · (O ∨ N)]\nA. Logically equivalent\nB. Contradictory\nC. Neither logically equivalent nor contradictory, but consistent\nD. Inconsistent\n/no_think",
+        "answer": "B",
+        "generated_text": "To solve this problem, we need to construct truth tables for both given statements and then compare them to determine their logical relationship.\n\n### Step 1: Construct Truth Tables\n\n#### Statement 1: (~M ⊃ ~N) ∨ (O ≡ N)\n- The symbol ⊃ represents \"implies\"",
+        "score": {
+          "passed": false,
+          "predicted": null,
+          "expected": "B"
+        },
+        "ttft_seconds": 0.27835064099997453,
+        "tokens_per_second": 7.297098051976371
+      },
+      {
+        "id": "mmlu_372",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Which of the following propositions is an immediate (one-step) consequence in PL of the given premises?\nE ⊃ ~F\n~F ⊃ G\n~G\nA. E ⊃ F\nB. F ⊃ G\nC. G ⊃ E\nD. ~~F\n/no_think",
+        "answer": "D",
+        "generated_text": "D. ~~F",
+        "score": {
+          "passed": true,
+          "predicted": "D",
+          "expected": "D"
+        },
+        "ttft_seconds": 0.4118017969999528,
+        "tokens_per_second": 6.299924787560975
+      },
+      {
+        "id": "mmlu_373",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Use indirect truth tables to determine whether the following argument is valid. If the argument is invalid, choose an option which presents a counterexample. (There may be other counterexamples as well.)\nE ⊃ (F ∨ ~G)\nF ⊃ (~E ∨ ~G) / ~(E ≡ F)\nA. Valid\nB. Invalid. Counterexample when E, F, and G are true\nC. Invalid. Counterexample when E and F are true and G is false\nD. Invalid. Counterexample when E, F, and G are false\n/no_think",
+        "answer": "C",
+        "generated_text": "B",
+        "score": {
+          "passed": false,
+          "predicted": "B",
+          "expected": "C"
+        },
+        "ttft_seconds": 0.25022943499993744,
+        "tokens_per_second": 3.993222606756071
+      },
+      {
+        "id": "mmlu_374",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Use indirect truth tables to determine whether the following argument is valid. If the argument is invalid, choose an option which presents a counterexample. (There may be other counterexamples as well.)\nH ≡ (~I ∨ J)\nH ∨ ~J / ~I\nA. Valid\nB. Invalid. Counterexample when H, I, and J are false\nC. Invalid. Counterexample when H and I are true and J is false\nD. Invalid. Counterexample when I is true and H and J are false\n/no_think",
+        "answer": "D",
+        "generated_text": "B",
+        "score": {
+          "passed": false,
+          "predicted": "B",
+          "expected": "D"
+        },
+        "ttft_seconds": 0.26327676099992914,
+        "tokens_per_second": 3.7950956222162824
+      },
+      {
+        "id": "mmlu_375",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Select the best translation into predicate logic. Some firefighters rescue victims from danger. (Dx: x is danger; Fx: x is a firefighter; Vx: x is a victim; Rxyz: x rescues y from z)\nA. (∃x){Fx • (∀y)[Dy ⊃ (∃z)(Vz • Rxyz)]}\nB. (∃x){Fx • (∃y)[Vy • (∃z)(Dz • Rxyz)]}\nC. (∃x){Fx • (∃y)(∃z)[(Vy • Dz) • Rxzy]}\nD. (∀x){Fx ⊃ (∃y)[Vy . (∃z)(Dz • Rxyz)]}\n/no_think",
+        "answer": "B",
+        "generated_text": "A",
+        "score": {
+          "passed": false,
+          "predicted": "A",
+          "expected": "B"
+        },
+        "ttft_seconds": 0.26613050100002056,
+        "tokens_per_second": 3.7544380931119643
+      },
+      {
+        "id": "mmlu_376",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Identify the antecedent of the following conditional proposition: The university raises tuition if, and only if, both the governor approves of it and the board of trustees recommends it.\nA. The university raises tuition.\nB. The governor approves of it.\nC. The board of trustees recommends it.\nD. None of the above\n/no_think",
+        "answer": "D",
+        "generated_text": "B",
+        "score": {
+          "passed": false,
+          "predicted": "B",
+          "expected": "D"
+        },
+        "ttft_seconds": 0.2718688669999665,
+        "tokens_per_second": 3.675274016302636
+      },
+      {
+        "id": "mmlu_377",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Select the best translation into predicate logic. All planets are smaller than Jupiter. (j: Jupiter; Px: x is a planet; Sxy: x is smaller than y)\nA. (∃x)(Px • Sxj)\nB. (∀x)(Px • Sxj)\nC. (∀x)(Px ⊃ Sjx)\nD. (∀x)(Px ⊃ Sxj)\n/no_think",
+        "answer": "D",
+        "generated_text": "D. (∀x)(Px ⊃ Sxj)",
+        "score": {
+          "passed": true,
+          "predicted": "D",
+          "expected": "D"
+        },
+        "ttft_seconds": 0.41260853100004624,
+        "tokens_per_second": 7.060167065786716
+      },
+      {
+        "id": "mmlu_378",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Select the best translation into predicate logic. José introduces Wilma to Kevin. (j: José; k: Kevin; w: Wilma; Ixyz: x introduces y to z)\nA. Iwkj\nB. Ijwk\nC. Iwjk\nD. Ijkw\n/no_think",
+        "answer": "B",
+        "generated_text": "B. Ijwk",
+        "score": {
+          "passed": true,
+          "predicted": "B",
+          "expected": "B"
+        },
+        "ttft_seconds": 0.45467970900006094,
+        "tokens_per_second": 5.665944799235892
+      },
+      {
+        "id": "mmlu_379",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Select the best translation into predicate logic: No artifacts are people.\nA. ~Pa\nB. (∀x)(Ax ⊃ ~Px)\nC. ~Ap\nD. (∀x)(Ax • ~Px)\n/no_think",
+        "answer": "B",
+        "generated_text": "B. (∀x)(Ax ⊃ ~Px)",
+        "score": {
+          "passed": true,
+          "predicted": "B",
+          "expected": "B"
+        },
+        "ttft_seconds": 0.4066216200000099,
+        "tokens_per_second": 6.5979909064905335
+      },
+      {
+        "id": "mmlu_380",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: As of 2016, about what percentage of adults aged 18 years or older were overweight?\nA. 10%\nB. 20%\nC. 40%\nD. 80%\n/no_think",
+        "answer": "C",
+        "generated_text": "C.",
+        "score": {
+          "passed": true,
+          "predicted": "C",
+          "expected": "C"
+        },
+        "ttft_seconds": 0.38778722999995807,
+        "tokens_per_second": 5.153751853269498
+      },
+      {
+        "id": "mmlu_381",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: What was GDP per capita in the United States in 1850 when adjusting for inflation and PPP in 2011 prices?\nA. About $300\nB. About $3k\nC. About $8k\nD. About $15k\n/no_think",
+        "answer": "B",
+        "generated_text": "A. About $300",
+        "score": {
+          "passed": false,
+          "predicted": "A",
+          "expected": "B"
+        },
+        "ttft_seconds": 0.36762003800004095,
+        "tokens_per_second": 7.264911088863086
+      },
+      {
+        "id": "mmlu_382",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: As of 2019, about what percentage of people from the United States says homosexuality should be accepted by society?\nA. 52%\nB. 62%\nC. 72%\nD. 82%\n/no_think",
+        "answer": "C",
+        "generated_text": "D. 82%",
+        "score": {
+          "passed": false,
+          "predicted": "D",
+          "expected": "C"
+        },
+        "ttft_seconds": 0.4649783480000451,
+        "tokens_per_second": 6.054281501301575
+      },
+      {
+        "id": "mmlu_383",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Which of the following countries generated the most total energy from solar sources in 2019?\nA. China\nB. United States\nC. Germany\nD. Japan\n/no_think",
+        "answer": "A",
+        "generated_text": "A. China",
+        "score": {
+          "passed": true,
+          "predicted": "A",
+          "expected": "A"
+        },
+        "ttft_seconds": 0.35778019600002153,
+        "tokens_per_second": 6.285074210165733
+      },
+      {
+        "id": "mmlu_384",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Controlling for inflation and PPP-adjustment, about how much did GDP per capita increase from 1950 to 2016 in Japan?\nA. by 5 fold\nB. by 10 fold\nC. by 15 fold\nD. by 20 fold\n/no_think",
+        "answer": "C",
+        "generated_text": "B. by 10 fold",
+        "score": {
+          "passed": false,
+          "predicted": "B",
+          "expected": "C"
+        },
+        "ttft_seconds": 0.4260641770000575,
+        "tokens_per_second": 6.387156579995632
+      },
+      {
+        "id": "mmlu_385",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: What is the biggest cause of death in children under five years old (as of 2017)?\nA. Lower respiratory infections\nB. Preterm birth complications\nC. Diarrheal diseases\nD. Malaria\n/no_think",
+        "answer": "A",
+        "generated_text": "A. Lower respiratory infections",
+        "score": {
+          "passed": true,
+          "predicted": "A",
+          "expected": "A"
+        },
+        "ttft_seconds": 0.4447828230000823,
+        "tokens_per_second": 5.885735736630835
+      },
+      {
+        "id": "mmlu_386",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: As of 2019, about what percentage of the global population does not have access to safe drinking water?\nA. 10%\nB. 20%\nC. 30%\nD. 40%\n/no_think",
+        "answer": "C",
+        "generated_text": "D.",
+        "score": {
+          "passed": false,
+          "predicted": "D",
+          "expected": "C"
+        },
+        "ttft_seconds": 0.41843896900002164,
+        "tokens_per_second": 4.777239655702293
+      },
+      {
+        "id": "mmlu_387",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: About what percentage of survey respondents from India report having paid a bribe in the last year to access public services (such as education; judiciary; medical and health; police; registry and permit services; utilities; tax revenue and customs; and land service) as of 2017?\nA. 29%\nB. 49%\nC. 69%\nD. 89%\n/no_think",
+        "answer": "C",
+        "generated_text": "D. 89%",
+        "score": {
+          "passed": false,
+          "predicted": "D",
+          "expected": "C"
+        },
+        "ttft_seconds": 0.398583692000102,
+        "tokens_per_second": 6.108059730899319
+      },
+      {
+        "id": "mmlu_388",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: As of 2017, what fraction of the population in Brazil used the internet in the past three months?\nA. 18%\nB. 38%\nC. 58%\nD. 78%\n/no_think",
+        "answer": "C",
+        "generated_text": "A. 18%",
+        "score": {
+          "passed": false,
+          "predicted": "A",
+          "expected": "C"
+        },
+        "ttft_seconds": 0.39510987099993145,
+        "tokens_per_second": 6.475836158318925
+      },
+      {
+        "id": "mmlu_389",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: As of 2017, what fraction of the population in India used the internet in the past three months?\nA. 11%\nB. 26%\nC. 41%\nD. 56%\n/no_think",
+        "answer": "B",
+        "generated_text": "D. 56%",
+        "score": {
+          "passed": false,
+          "predicted": "D",
+          "expected": "B"
+        },
+        "ttft_seconds": 0.41406839700005094,
+        "tokens_per_second": 6.120801903028317
+      },
+      {
+        "id": "mmlu_390",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: As of 2018, about what percentage of Indians say that having an increasing number of people of many different races, ethnic groups and nationalities in their country makes it a better place to live (as opposed to worse or no difference)?\nA. 23%\nB. 38%\nC. 53%\nD. 68%\n/no_think",
+        "answer": "D",
+        "generated_text": "C.",
+        "score": {
+          "passed": false,
+          "predicted": "C",
+          "expected": "D"
+        },
+        "ttft_seconds": 0.4336904939999613,
+        "tokens_per_second": 4.609416144800988
+      },
+      {
+        "id": "mmlu_391",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: As of 2019, about what percentage of the world population lives in extreme poverty (less than $1.90 a day)?\nA. 5%\nB. 10%\nC. 15%\nD. 25%\n/no_think",
+        "answer": "B",
+        "generated_text": "A. 5%",
+        "score": {
+          "passed": false,
+          "predicted": "A",
+          "expected": "B"
+        },
+        "ttft_seconds": 0.3864233580000018,
+        "tokens_per_second": 6.173515856753532
+      },
+      {
+        "id": "mmlu_392",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: As of 2020, about what percentage of the world population practices open defecation?\nA. 2%\nB. 4%\nC. 9%\nD. 18%\n/no_think",
+        "answer": "C",
+        "generated_text": "A. 2%",
+        "score": {
+          "passed": false,
+          "predicted": "A",
+          "expected": "C"
+        },
+        "ttft_seconds": 0.46591797099995347,
+        "tokens_per_second": 5.537673307065134
+      },
+      {
+        "id": "mmlu_393",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Which of the following is not an element of the redistribution-with-growth policy approach?\nA. minimum wage legislation\nB. land reform\nC. progressive taxation\nD. increased access to education\n/no_think",
+        "answer": "A",
+        "generated_text": "A",
+        "score": {
+          "passed": true,
+          "predicted": "A",
+          "expected": "A"
+        },
+        "ttft_seconds": 0.28731272300001365,
+        "tokens_per_second": 3.4771303123923083
+      },
+      {
+        "id": "mmlu_394",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: About what percentage of the global population was literate in 1950?\nA. 36%\nB. 56%\nC. 76%\nD. 96%\n/no_think",
+        "answer": "B",
+        "generated_text": "B. 56%",
+        "score": {
+          "passed": true,
+          "predicted": "B",
+          "expected": "B"
+        },
+        "ttft_seconds": 0.4598447049999095,
+        "tokens_per_second": 5.9669005227911
+      },
+      {
+        "id": "mmlu_395",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: As of 2016, about what percentage of adults aged 18 years or older were obese?\nA. 6%\nB. 13%\nC. 27%\nD. 46%\n/no_think",
+        "answer": "B",
+        "generated_text": "D.",
+        "score": {
+          "passed": false,
+          "predicted": "D",
+          "expected": "B"
+        },
+        "ttft_seconds": 0.40661370399993757,
+        "tokens_per_second": 4.915915671241966
+      },
+      {
+        "id": "mmlu_396",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: As of 2019, about what percentage of Germans say the relationship between the U.S. and Germany is good?\nA. 34%\nB. 49%\nC. 64%\nD. 79%\n/no_think",
+        "answer": "A",
+        "generated_text": "D. 79%",
+        "score": {
+          "passed": false,
+          "predicted": "D",
+          "expected": "A"
+        },
+        "ttft_seconds": 0.4091700110000147,
+        "tokens_per_second": 6.151616461025974
+      },
+      {
+        "id": "mmlu_397",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: As of 2017, what percentage of Americans live in urban areas?\nA. 62%\nB. 72%\nC. 82%\nD. 92%\n/no_think",
+        "answer": "C",
+        "generated_text": "D.",
+        "score": {
+          "passed": false,
+          "predicted": "D",
+          "expected": "C"
+        },
+        "ttft_seconds": 0.46442157399997086,
+        "tokens_per_second": 4.302635848718872
+      },
+      {
+        "id": "mmlu_398",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: What was GDP per capita in the United States in 1950 when adjusting for inflation and PPP in 2011 prices?\nA. About $3k\nB. About $8k\nC. About $15k\nD. About $30k\n/no_think",
+        "answer": "C",
+        "generated_text": "A. About $3k",
+        "score": {
+          "passed": false,
+          "predicted": "A",
+          "expected": "C"
+        },
+        "ttft_seconds": 0.41530325799999446,
+        "tokens_per_second": 5.529373658973265
+      },
+      {
+        "id": "mmlu_399",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: In 2016, about how many people in the United States were homeless?\nA. 55,000\nB. 550,000\nC. 5,500,000\nD. 55,000,000\n/no_think",
+        "answer": "B",
+        "generated_text": "B",
+        "score": {
+          "passed": true,
+          "predicted": "B",
+          "expected": "B"
+        },
+        "ttft_seconds": 0.25540956199995435,
+        "tokens_per_second": 3.9111602936913896
+      }
+    ]
+  }
+}

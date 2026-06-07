@@ -1,0 +1,1425 @@
+{
+  "model": "/home/rui/eigenskill_artifacts/qwen25_1p5b_awq_model_2026_06_07",
+  "loader": "autoawq",
+  "hf_device_map": "",
+  "hf_max_gpu_memory_mib": 0,
+  "task_file": "data_eval/public_task_benchmark_v1/mmlu_broad20x20_test.jsonl",
+  "task_format": "mmlu",
+  "task_count": 100,
+  "task_limit": 100,
+  "task_offset": 0,
+  "chat_template": true,
+  "no_think": true,
+  "max_new_tokens": 64,
+  "baseline": {
+    "aggregate": {
+      "tasks": 100,
+      "passes": 50,
+      "accuracy": 0.5,
+      "mean_tokens_per_second": 11.769007008496988,
+      "mean_ttft_seconds": 0.14572477936000083
+    },
+    "rows": [
+      {
+        "id": "mmlu_0",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Find the degree for the given field extension Q(sqrt(2), sqrt(3), sqrt(18)) over Q.\nA. 0\nB. 4\nC. 2\nD. 6\n/no_think",
+        "answer": "B",
+        "generated_text": "B. 4",
+        "score": {
+          "passed": true,
+          "predicted": "B",
+          "expected": "B"
+        },
+        "ttft_seconds": 1.62484444399999,
+        "tokens_per_second": 2.341895241838552
+      },
+      {
+        "id": "mmlu_1",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Let p = (1, 2, 5, 4)(2, 3) in S_5 . Find the index of <p> in S_5.\nA. 8\nB. 2\nC. 24\nD. 120\n/no_think",
+        "answer": "C",
+        "generated_text": "A. 8",
+        "score": {
+          "passed": false,
+          "predicted": "A",
+          "expected": "C"
+        },
+        "ttft_seconds": 0.15789486600000657,
+        "tokens_per_second": 16.492779444666017
+      },
+      {
+        "id": "mmlu_2",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Find all zeros in the indicated finite field of the given polynomial with coefficients in that field. x^5 + 3x^3 + x^2 + 2x in Z_5\nA. 0\nB. 1\nC. 0,1\nD. 0,4\n/no_think",
+        "answer": "D",
+        "generated_text": "C",
+        "score": {
+          "passed": false,
+          "predicted": "C",
+          "expected": "D"
+        },
+        "ttft_seconds": 0.09860276000000567,
+        "tokens_per_second": 10.12397321524689
+      },
+      {
+        "id": "mmlu_3",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Statement 1 | A factor group of a non-Abelian group is non-Abelian. Statement 2 | If K is a normal subgroup of H and H is a normal subgroup of G, then K is a normal subgroup of G.\nA. True, True\nB. False, False\nC. True, False\nD. False, True\n/no_think",
+        "answer": "B",
+        "generated_text": "C.",
+        "score": {
+          "passed": false,
+          "predicted": "C",
+          "expected": "B"
+        },
+        "ttft_seconds": 0.11567062099999248,
+        "tokens_per_second": 17.264032697802243
+      },
+      {
+        "id": "mmlu_4",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Find the product of the given polynomials in the given polynomial ring. f(x) = 4x - 5, g(x) = 2x^2 - 4x + 2 in Z_8[x].\nA. 2x^2 + 5\nB. 6x^2 + 4x + 6\nC. 0\nD. x^2 + 1\n/no_think",
+        "answer": "B",
+        "generated_text": "C. 0",
+        "score": {
+          "passed": false,
+          "predicted": "C",
+          "expected": "B"
+        },
+        "ttft_seconds": 0.17701325299999837,
+        "tokens_per_second": 14.502664302587295
+      },
+      {
+        "id": "mmlu_5",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Statement 1 | If a group has an element of order 15 it must have at least 8 elements of order 15. Statement 2 | If a group has more than 8 elements of order 15, it must have at least 16 elements of order 15.\nA. True, True\nB. False, False\nC. True, False\nD. False, True\n/no_think",
+        "answer": "A",
+        "generated_text": "C.",
+        "score": {
+          "passed": false,
+          "predicted": "C",
+          "expected": "A"
+        },
+        "ttft_seconds": 0.15422589799999287,
+        "tokens_per_second": 12.953304031966098
+      },
+      {
+        "id": "mmlu_6",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Statement 1 | Every homomorphic image of a group G is isomorphic to a factor group of G. Statement 2 | The homomorphic images of a group G are the same (up to isomorphism) as the factor groups of G.\nA. True, True\nB. False, False\nC. True, False\nD. False, True\n/no_think",
+        "answer": "A",
+        "generated_text": "A.",
+        "score": {
+          "passed": true,
+          "predicted": "A",
+          "expected": "A"
+        },
+        "ttft_seconds": 0.15262579299999857,
+        "tokens_per_second": 13.090209055089128
+      },
+      {
+        "id": "mmlu_7",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Statement 1 | A ring homomorphism is one to one if and only if the kernel is {0}. Statement 2 | Q is an ideal in R.\nA. True, True\nB. False, False\nC. True, False\nD. False, True\n/no_think",
+        "answer": "D",
+        "generated_text": "C.",
+        "score": {
+          "passed": false,
+          "predicted": "C",
+          "expected": "D"
+        },
+        "ttft_seconds": 0.13312740100001008,
+        "tokens_per_second": 15.003829952651582
+      },
+      {
+        "id": "mmlu_8",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Find the degree for the given field extension Q(sqrt(2) + sqrt(3)) over Q.\nA. 0\nB. 4\nC. 2\nD. 6\n/no_think",
+        "answer": "B",
+        "generated_text": "B. 4",
+        "score": {
+          "passed": true,
+          "predicted": "B",
+          "expected": "B"
+        },
+        "ttft_seconds": 0.16187435099999448,
+        "tokens_per_second": 16.032368646874282
+      },
+      {
+        "id": "mmlu_9",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Find all zeros in the indicated finite field of the given polynomial with coefficients in that field. x^3 + 2x + 2 in Z_7\nA. 1\nB. 2\nC. 2,3\nD. 6\n/no_think",
+        "answer": "C",
+        "generated_text": "C",
+        "score": {
+          "passed": true,
+          "predicted": "C",
+          "expected": "C"
+        },
+        "ttft_seconds": 0.08349088900000368,
+        "tokens_per_second": 11.952525191470617
+      },
+      {
+        "id": "mmlu_10",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Statement 1 | If H is a subgroup of G and a belongs to G then |aH| = |Ha|. Statement 2 | If H is a subgroup of G and a and b belong to G, then aH and Hb are identical or disjoint.\nA. True, True\nB. False, False\nC. True, False\nD. False, True\n/no_think",
+        "answer": "C",
+        "generated_text": "C.",
+        "score": {
+          "passed": true,
+          "predicted": "C",
+          "expected": "C"
+        },
+        "ttft_seconds": 0.17555010200000254,
+        "tokens_per_second": 11.380168515486954
+      },
+      {
+        "id": "mmlu_11",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: If A = {1, 2, 3} then relation S = {(1, 1), (2, 2)} is\nA. symmetric only\nB. anti-symmetric only\nC. both symmetric and anti-symmetric\nD. an equivalence relation\n/no_think",
+        "answer": "C",
+        "generated_text": "A.",
+        "score": {
+          "passed": false,
+          "predicted": "A",
+          "expected": "C"
+        },
+        "ttft_seconds": 0.1514994599999966,
+        "tokens_per_second": 13.187168515794033
+      },
+      {
+        "id": "mmlu_12",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Find the order of the factor group (Z_11 x Z_15)/(<1, 1>)\nA. 1\nB. 2\nC. 5\nD. 11\n/no_think",
+        "answer": "A",
+        "generated_text": "C",
+        "score": {
+          "passed": false,
+          "predicted": "C",
+          "expected": "A"
+        },
+        "ttft_seconds": 0.14615104300000326,
+        "tokens_per_second": 6.839046521198519
+      },
+      {
+        "id": "mmlu_13",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: The polynomial x^3 + 2x^2 + 2x + 1 can be factored into linear factors in Z_7[x]. Find this factorization.\nA. (x − 2)(x + 2)(x − 1)\nB. (x + 1)(x + 4)(x − 2)\nC. (x + 1)(x − 4)(x − 2)\nD. (x - 1)(x − 4)(x − 2)\n/no_think",
+        "answer": "C",
+        "generated_text": "D",
+        "score": {
+          "passed": false,
+          "predicted": "D",
+          "expected": "C"
+        },
+        "ttft_seconds": 0.11681683999999848,
+        "tokens_per_second": 8.54821647575229
+      },
+      {
+        "id": "mmlu_14",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Find the maximum possible order for an element of S_n for n = 10.\nA. 6\nB. 12\nC. 30\nD. 105\n/no_think",
+        "answer": "C",
+        "generated_text": "C",
+        "score": {
+          "passed": true,
+          "predicted": "C",
+          "expected": "C"
+        },
+        "ttft_seconds": 0.1153330950000111,
+        "tokens_per_second": 8.653265394931255
+      },
+      {
+        "id": "mmlu_15",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Statement 1 | R is a splitting field of some polynomial over Q. Statement 2 | There is a field with 60 elements.\nA. True, True\nB. False, False\nC. True, False\nD. False, True\n/no_think",
+        "answer": "B",
+        "generated_text": "C.",
+        "score": {
+          "passed": false,
+          "predicted": "C",
+          "expected": "B"
+        },
+        "ttft_seconds": 0.14989170299999444,
+        "tokens_per_second": 13.328593596592818
+      },
+      {
+        "id": "mmlu_16",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: The inverse of -i in the multiplicative group, {1, -1, i , -i} is\nA. 1\nB. -1\nC. i\nD. -i\n/no_think",
+        "answer": "C",
+        "generated_text": "D",
+        "score": {
+          "passed": false,
+          "predicted": "D",
+          "expected": "C"
+        },
+        "ttft_seconds": 0.08534455600000967,
+        "tokens_per_second": 11.69554982107026
+      },
+      {
+        "id": "mmlu_17",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Compute the product in the given ring. (2,3)(3,5) in Z_5 x Z_9\nA. (1,1)\nB. (3,1)\nC. (1,6)\nD. (3,6)\n/no_think",
+        "answer": "C",
+        "generated_text": "C. (1,6)",
+        "score": {
+          "passed": true,
+          "predicted": "C",
+          "expected": "C"
+        },
+        "ttft_seconds": 0.19765783699999417,
+        "tokens_per_second": 15.279583994379001
+      },
+      {
+        "id": "mmlu_18",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: The set of all real numbers under the usual multiplication operation is not a group since\nA. multiplication is not a binary operation\nB. multiplication is not associative\nC. identity element does not exist\nD. zero has no inverse\n/no_think",
+        "answer": "D",
+        "generated_text": "C",
+        "score": {
+          "passed": false,
+          "predicted": "C",
+          "expected": "D"
+        },
+        "ttft_seconds": 0.08791868500000533,
+        "tokens_per_second": 11.352733997756893
+      },
+      {
+        "id": "mmlu_19",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Statement 1| Every group of order p^2 where p is prime is Abelian. Statement 2 | For a fixed prime p a Sylow p-subgroup of a group G is a normal subgroup of G if and only if it is the only Sylow p-subgroup of G.\nA. True, True\nB. False, False\nC. True, False\nD. False, True\n/no_think",
+        "answer": "A",
+        "generated_text": "C.",
+        "score": {
+          "passed": false,
+          "predicted": "C",
+          "expected": "A"
+        },
+        "ttft_seconds": 0.15047533199999918,
+        "tokens_per_second": 13.277327706241817
+      },
+      {
+        "id": "mmlu_20",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: A lesion causing compression of the facial nerve at the stylomastoid foramen will cause ipsilateral\nA. paralysis of the facial muscles.\nB. paralysis of the facial muscles and loss of taste.\nC. paralysis of the facial muscles, loss of taste and lacrimation.\nD. paralysis of the facial muscles, loss of taste, lacrimation and decreased salivation.\n/no_think",
+        "answer": "A",
+        "generated_text": "A",
+        "score": {
+          "passed": true,
+          "predicted": "A",
+          "expected": "A"
+        },
+        "ttft_seconds": 0.08851506799999243,
+        "tokens_per_second": 11.27055045402219
+      },
+      {
+        "id": "mmlu_21",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: A \"dished face\" profile is often associated with\nA. a protruding mandible due to reactivation of the condylar cartilage by acromegaly.\nB. a recessive maxilla due to failure of elongation of the cranial base.\nC. an enlarged frontal bone due to hydrocephaly.\nD. defective development of the maxillary air sinus.\n/no_think",
+        "answer": "B",
+        "generated_text": "A",
+        "score": {
+          "passed": false,
+          "predicted": "A",
+          "expected": "B"
+        },
+        "ttft_seconds": 0.09488731300000097,
+        "tokens_per_second": 10.517029031427658
+      },
+      {
+        "id": "mmlu_22",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Which of the following best describes the structure that collects urine in the body?\nA. Bladder\nB. Kidney\nC. Ureter\nD. Urethra\n/no_think",
+        "answer": "A",
+        "generated_text": "A.",
+        "score": {
+          "passed": true,
+          "predicted": "A",
+          "expected": "A"
+        },
+        "ttft_seconds": 0.1363572500000032,
+        "tokens_per_second": 14.658441062918572
+      },
+      {
+        "id": "mmlu_23",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Which of the following structures is derived from ectomesenchyme?\nA. Motor neurons\nB. Skeletal muscles\nC. Melanocytes\nD. Sweat glands\n/no_think",
+        "answer": "C",
+        "generated_text": "B",
+        "score": {
+          "passed": false,
+          "predicted": "B",
+          "expected": "C"
+        },
+        "ttft_seconds": 0.08588445300000558,
+        "tokens_per_second": 11.619550223246291
+      },
+      {
+        "id": "mmlu_24",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Which of the following describes the cluster of blood capillaries found in each nephron in the kidney?\nA. Afferent arteriole\nB. Glomerulus\nC. Loop of Henle\nD. Renal pelvis\n/no_think",
+        "answer": "B",
+        "generated_text": "B",
+        "score": {
+          "passed": true,
+          "predicted": "B",
+          "expected": "B"
+        },
+        "ttft_seconds": 0.08994201299999816,
+        "tokens_per_second": 11.097171953420945
+      },
+      {
+        "id": "mmlu_25",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: A patient suffers a broken neck with damage to the spinal cord at the level of the sixth cervical vertebra.\nA. They will be unable to breathe without life support.\nB. They will only be able to breathe quietly.\nC. It is impossible to predict an effect on breathing.\nD. Breathing will be unaffected.\n/no_think",
+        "answer": "B",
+        "generated_text": "A.",
+        "score": {
+          "passed": false,
+          "predicted": "A",
+          "expected": "B"
+        },
+        "ttft_seconds": 0.1259977970000108,
+        "tokens_per_second": 15.849345127643344
+      },
+      {
+        "id": "mmlu_26",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Which of the following anatomical regions of abdomen lies just distal to the sternum?\nA. Epigastric\nB. Hypochondriac\nC. Hypogastric\nD. Lumbar\n/no_think",
+        "answer": "A",
+        "generated_text": "C",
+        "score": {
+          "passed": false,
+          "predicted": "C",
+          "expected": "A"
+        },
+        "ttft_seconds": 0.12162679099999707,
+        "tokens_per_second": 8.210409544752405
+      },
+      {
+        "id": "mmlu_27",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Which of the following best describes the human body's defense mechanism against environmental bacteria?\nA. Hair in the nose\nB. Mucous membranes\nC. Osteoblasts\nD. Saliva\n/no_think",
+        "answer": "B",
+        "generated_text": "B",
+        "score": {
+          "passed": true,
+          "predicted": "B",
+          "expected": "B"
+        },
+        "ttft_seconds": 0.12067357700000514,
+        "tokens_per_second": 8.274633428567002
+      },
+      {
+        "id": "mmlu_28",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: The palatine processes begin to fuse at\nA. six weeks post-fertilization.\nB. eight weeks post-fertilization.\nC. ten weeks post-fertilization.\nD. twelve weeks post-fertilization.\n/no_think",
+        "answer": "C",
+        "generated_text": "B. eight weeks post-fertilization.",
+        "score": {
+          "passed": false,
+          "predicted": "B",
+          "expected": "C"
+        },
+        "ttft_seconds": 0.15582214300000885,
+        "tokens_per_second": 18.032042073226105
+      },
+      {
+        "id": "mmlu_29",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Primary motor cortex activity results in\nA. bilateral contraction of antigravity limb muscles.\nB. bilateral contraction of limb musculature.\nC. contraction of ipsilateral limb musculature.\nD. contraction of contralateral limb musculature.\n/no_think",
+        "answer": "D",
+        "generated_text": "D.",
+        "score": {
+          "passed": true,
+          "predicted": "D",
+          "expected": "D"
+        },
+        "ttft_seconds": 0.19758540100001198,
+        "tokens_per_second": 10.113508200777856
+      },
+      {
+        "id": "mmlu_30",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: You notice that your patient's submandibular lymph nodes are enlarged. You would look for potential infection sites in the\nA. hard palate.\nB. hard palate and upper lip.\nC. hard palate, upper lip and upper central incisor.\nD. hard palate, upper lip, upper central incisor and lower first molar.\n/no_think",
+        "answer": "D",
+        "generated_text": "D.",
+        "score": {
+          "passed": true,
+          "predicted": "D",
+          "expected": "D"
+        },
+        "ttft_seconds": 0.13074057100000402,
+        "tokens_per_second": 15.2734517952932
+      },
+      {
+        "id": "mmlu_31",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: A patient suffers damage to the orbit in a road traffic incident resulting in damage to the third cranial nerve. Which of the following signs will be present?\nA. Pupillary constriction and a medial strabismus\nB. Pupillary dilatation and a medial strabismus\nC. Pupillary constriction and a lateral strabismus\nD. Pupillary dilatation and a lateral strabismus\n/no_think",
+        "answer": "D",
+        "generated_text": "A",
+        "score": {
+          "passed": false,
+          "predicted": "A",
+          "expected": "D"
+        },
+        "ttft_seconds": 0.13035590299999456,
+        "tokens_per_second": 7.661383167422139
+      },
+      {
+        "id": "mmlu_32",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Which of the following statements is true of the temporomandibular joint?\nA. It has an articular disc of hyaline cartilage\nB. Its articular surfaces are covered by hyaline cartilage\nC. Proprioceptive information is carried by the chorda tympani and deep temporal nerves\nD. Proprioceptive information is carried by the masseteric and auriculotemporal nerves.\n/no_think",
+        "answer": "D",
+        "generated_text": "A",
+        "score": {
+          "passed": false,
+          "predicted": "A",
+          "expected": "D"
+        },
+        "ttft_seconds": 0.11270966300000396,
+        "tokens_per_second": 8.85852046337572
+      },
+      {
+        "id": "mmlu_33",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Laryngoscopic examination of the vocal folds after suspected recurrent laryngeal nerve damage usually shows that the vocal fold on the injured side is tensed and in an intermediate position between adduction and abduction. This is because\nA. cricothyroid muscle is still functional but the interarytenoid muscles are fully active.\nB. cricothyroid muscle is still functional but the interarytenoids are weak.\nC. cricothyroid muscle is paralyzed but the interarytenoids are fully active.\nD. cricothyroid muscle is paralyzed but the interarytenoids are weak.\n/no_think",
+        "answer": "B",
+        "generated_text": "D",
+        "score": {
+          "passed": false,
+          "predicted": "D",
+          "expected": "B"
+        },
+        "ttft_seconds": 0.09934866899999406,
+        "tokens_per_second": 10.049431848836976
+      },
+      {
+        "id": "mmlu_34",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Which one of the following statements about the growth of the mandible is correct?\nA. The mental symphysis closes at about 1 year postnatally\nB. The condylar growth cartilage ceases activity at puberty\nC. The ossification centre appears about 8 weeks I.U.L medial to Meckel's cartilage\nD. The functional matrix acting on the angle of the mandible is the lateral pterygoid muscle\n/no_think",
+        "answer": "A",
+        "generated_text": "B",
+        "score": {
+          "passed": false,
+          "predicted": "B",
+          "expected": "A"
+        },
+        "ttft_seconds": 0.09947001899999464,
+        "tokens_per_second": 10.036516359296588
+      },
+      {
+        "id": "mmlu_35",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Which of the following statements is true of the pupillary light reflex?\nA. Its efferent limb is carried in the optic nerve\nB. It is mediated by the inferior colliculi in the midbrain\nC. It is a consensual reflex\nD. Its afferent limb is carried in the oculomotor nerve\n/no_think",
+        "answer": "C",
+        "generated_text": "D",
+        "score": {
+          "passed": false,
+          "predicted": "D",
+          "expected": "C"
+        },
+        "ttft_seconds": 0.14880306599999926,
+        "tokens_per_second": 6.713176177789344
+      },
+      {
+        "id": "mmlu_36",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Which muscles are normally active during quiet inspiration?\nA. External and internal intercostal muscles\nB. External intercostal muscles and diaphragm\nC. Internal intercostal muscles and diaphragm\nD. External and internal intercostal muscles and diaphragm\n/no_think",
+        "answer": "B",
+        "generated_text": "B",
+        "score": {
+          "passed": true,
+          "predicted": "B",
+          "expected": "B"
+        },
+        "ttft_seconds": 0.11810865199998943,
+        "tokens_per_second": 8.4538254967937
+      },
+      {
+        "id": "mmlu_37",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Male hormones are produced by which of the following?\nA. Glans penis\nB. Prepuce\nC. Prostate\nD. Testes\n/no_think",
+        "answer": "D",
+        "generated_text": "D. Testes",
+        "score": {
+          "passed": true,
+          "predicted": "D",
+          "expected": "D"
+        },
+        "ttft_seconds": 0.1654739680000148,
+        "tokens_per_second": 13.927172219048146
+      },
+      {
+        "id": "mmlu_38",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Oxygenated blood is carried to the heart by which of the following structures?\nA. Aorta\nB. Carotid arteries\nC. Inferior vena cava\nD. Pulmonary veins\n/no_think",
+        "answer": "D",
+        "generated_text": "A",
+        "score": {
+          "passed": false,
+          "predicted": "A",
+          "expected": "D"
+        },
+        "ttft_seconds": 0.09470475999998484,
+        "tokens_per_second": 10.536833656830652
+      },
+      {
+        "id": "mmlu_39",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Which of the following allows air to pass into the lungs?\nA. Aorta\nB. Esophagus\nC. Trachea\nD. Pancreas\n/no_think",
+        "answer": "C",
+        "generated_text": "C",
+        "score": {
+          "passed": true,
+          "predicted": "C",
+          "expected": "C"
+        },
+        "ttft_seconds": 0.10244377499998336,
+        "tokens_per_second": 9.746602753384343
+      },
+      {
+        "id": "mmlu_40",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: _______ such as bitcoin are becoming increasingly mainstream and have a whole host of associated ethical implications, for example, they are______ and more ______. However, they have also been used to engage in _______.\nA. Cryptocurrencies, Expensive, Secure, Financial Crime\nB. Traditional currency, Cheap, Unsecure, Charitable giving\nC. Cryptocurrencies, Cheap, Secure, Financial crime\nD. Traditional currency, Expensive, Unsecure, Charitable giving\n/no_think",
+        "answer": "C",
+        "generated_text": "C",
+        "score": {
+          "passed": true,
+          "predicted": "C",
+          "expected": "C"
+        },
+        "ttft_seconds": 0.10469712399998343,
+        "tokens_per_second": 9.535342929741462
+      },
+      {
+        "id": "mmlu_41",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Typical advertising regulatory bodies suggest, for example that adverts must not: encourage _________, cause unnecessary ________ or _____, and must not cause _______ offence.\nA. Unsafe practices, Wants, Fear, Trivial\nB. Unsafe practices, Distress, Fear, Serious\nC. Safe practices, Wants, Jealousy, Trivial\nD. Safe practices, Distress, Jealousy, Serious\n/no_think",
+        "answer": "B",
+        "generated_text": "B",
+        "score": {
+          "passed": true,
+          "predicted": "B",
+          "expected": "B"
+        },
+        "ttft_seconds": 0.10724913799998603,
+        "tokens_per_second": 9.310262168511784
+      },
+      {
+        "id": "mmlu_42",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: ______ are the obligations of workers towards their employer, based on individual contracts and wider employment laws.\nA. Employee rights\nB. Employee rights\nC. Employer duties\nD. Employee duties\n/no_think",
+        "answer": "D",
+        "generated_text": "B.",
+        "score": {
+          "passed": false,
+          "predicted": "B",
+          "expected": "D"
+        },
+        "ttft_seconds": 0.18600867900002527,
+        "tokens_per_second": 10.742353392777776
+      },
+      {
+        "id": "mmlu_43",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: ______ is an employee's preferred ratio between work-related and non-work-related activities which, due to intensification of work and technological shifts, has become a hotly contested issue in recent years.\nA. Presenteeism\nB. Absenteeism\nC. Work-play balance\nD. Work-life balance\n/no_think",
+        "answer": "D",
+        "generated_text": "C. Work-play balance",
+        "score": {
+          "passed": false,
+          "predicted": "C",
+          "expected": "D"
+        },
+        "ttft_seconds": 0.15569091099999355,
+        "tokens_per_second": 17.135054348262525
+      },
+      {
+        "id": "mmlu_44",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: _______ can be a likened to their natural counterparts, comprising of a balanced network of interdependent organisms and their environments thus adding value to sustainability thinking due to the consideration of companies and industries as being bound together, and interdependent due to all kinds of resources and wastes.\nA. Industrial supply loops\nB. Industrial ecosystems\nC. Ecological ecosystems\nD. Corporate ecosystems\n/no_think",
+        "answer": "B",
+        "generated_text": "B.",
+        "score": {
+          "passed": true,
+          "predicted": "B",
+          "expected": "B"
+        },
+        "ttft_seconds": 0.14160075099999858,
+        "tokens_per_second": 14.117399489462391
+      },
+      {
+        "id": "mmlu_45",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: ________, where for example one party possess more resources, unfair distribution of ________, where one party gains more from the relationship, and CSOs being ________, are all limitations and risks of business-CSO collaborations.\nA. Power imbalance, Benefits, Hoodwinked\nB. Power imbalance, Resources, Co-opted\nC. Informational asymmetries, Benefits, Hoodwinked\nD. Informational asymmetries, Resources, Co-opted\n/no_think",
+        "answer": "B",
+        "generated_text": "B",
+        "score": {
+          "passed": true,
+          "predicted": "B",
+          "expected": "B"
+        },
+        "ttft_seconds": 0.11595885099998782,
+        "tokens_per_second": 8.611126479579594
+      },
+      {
+        "id": "mmlu_46",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Although corporate profit maximization is not directly prescribed by major normative theories to which normative theory is it most similar?\nA. hedonistic utilitarianism\nB. preference utilitarianism\nC. The Categorical Imperative\nD. ethics of care\n/no_think",
+        "answer": "B",
+        "generated_text": "B",
+        "score": {
+          "passed": true,
+          "predicted": "B",
+          "expected": "B"
+        },
+        "ttft_seconds": 0.15074277700000493,
+        "tokens_per_second": 6.6261381576705105
+      },
+      {
+        "id": "mmlu_47",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: What does Milton Friedman believe to be the sole responsibility of business?\nA. The only social responsibility of business is to its shareholders\nB. Managers should act in ways that balance the interest of society and shareholders\nC. The primary responsibility organizations have is to its employees\nD. The primary responsibility organizations have is to its stakeholders\n/no_think",
+        "answer": "A",
+        "generated_text": "A.",
+        "score": {
+          "passed": true,
+          "predicted": "A",
+          "expected": "A"
+        },
+        "ttft_seconds": 0.16699596200001565,
+        "tokens_per_second": 11.964215223692612
+      },
+      {
+        "id": "mmlu_48",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: ______ regulation goes further than the ______ that CSOs have with businesses, as it also concerns _______of such processes.\nA. Legal, Interactions, Mechanics\nB. Civil, Relations, Outcomes\nC. Political, Interactions, Outcomes\nD. Environmental, Relations, Mechanics\n/no_think",
+        "answer": "B",
+        "generated_text": "C",
+        "score": {
+          "passed": false,
+          "predicted": "C",
+          "expected": "B"
+        },
+        "ttft_seconds": 0.09908848999998554,
+        "tokens_per_second": 10.07412592224324
+      },
+      {
+        "id": "mmlu_49",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: _______ working practices refer to working patterns which involve temporal, spatial and task related fluidity.\nA. Dynamic\nB. Fluid\nC. Flexible\nD. Modern\n/no_think",
+        "answer": "C",
+        "generated_text": "B.",
+        "score": {
+          "passed": false,
+          "predicted": "B",
+          "expected": "C"
+        },
+        "ttft_seconds": 0.19443777499998305,
+        "tokens_per_second": 10.277487327422358
+      },
+      {
+        "id": "mmlu_50",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: What, according to Schnackenberg and Tomlinson (2014), are the three criteria which can be used to assess the quality of corporate transparency?\nA. Breadth, Clarity, Accuracy\nB. Disclosure, Detail, Accuracy\nC. Disclosure, Clarity, Accuracy\nD. Disclosure, Clarity, Efficiency\n/no_think",
+        "answer": "C",
+        "generated_text": "C",
+        "score": {
+          "passed": true,
+          "predicted": "C",
+          "expected": "C"
+        },
+        "ttft_seconds": 0.10439616400000773,
+        "tokens_per_second": 9.562394605677971
+      },
+      {
+        "id": "mmlu_51",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: A corporation is ________ from its managers, employees, investors and customers. It therefore has _______ succession and also ________.\nA. Indistinguishable, Perpetual, Does not own its own assets\nB. Independent, Limited, Owns its own assets\nC. Independent, Perpetual, Owns its own assets\nD. Indistinguishable, Perpetual, Owns its own assets\n/no_think",
+        "answer": "C",
+        "generated_text": "B",
+        "score": {
+          "passed": false,
+          "predicted": "B",
+          "expected": "C"
+        },
+        "ttft_seconds": 0.1165899020000154,
+        "tokens_per_second": 8.564684518604233
+      },
+      {
+        "id": "mmlu_52",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: The UK Public Services (Social Value) Act 2013 requires those procuring ______ to consider how they can secure wider _____, _____and _____ benefits.\nA. Private services, social, economic and environmental\nB. Public services, social, cultural and environmental\nC. Private services, cultural, economic and environmental\nD. Public services, social, economic and environmental\n/no_think",
+        "answer": "D",
+        "generated_text": "D",
+        "score": {
+          "passed": true,
+          "predicted": "D",
+          "expected": "D"
+        },
+        "ttft_seconds": 0.10587957300000994,
+        "tokens_per_second": 9.428684424619693
+      },
+      {
+        "id": "mmlu_53",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: When the true cost an item is deliberately obscured by a company this is known as?\nA. Predatory pricing\nB. Deceptive pricing\nC. Price fixing\nD. Skimming\n/no_think",
+        "answer": "B",
+        "generated_text": "B.",
+        "score": {
+          "passed": true,
+          "predicted": "B",
+          "expected": "B"
+        },
+        "ttft_seconds": 0.1283094909999818,
+        "tokens_per_second": 15.577856295368012
+      },
+      {
+        "id": "mmlu_54",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: What are the three differing types of stakeholder theory according to Donaldson and Preston (1995)?\nA. Normative, Descriptive and Economic\nB. Normative, Moral and Instrumental\nC. Political, Descriptive and Instrumental\nD. Normative, Descriptive and Instrumental\n/no_think",
+        "answer": "D",
+        "generated_text": "D.",
+        "score": {
+          "passed": true,
+          "predicted": "D",
+          "expected": "D"
+        },
+        "ttft_seconds": 0.14386485900001844,
+        "tokens_per_second": 13.881628122579869
+      },
+      {
+        "id": "mmlu_55",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: The Right to _______ has been a long-standing ethical concern for employees which today are addressed in most developed countries through a dense network of occupational health, safety and environmental regulations companies must abide by.\nA. Work-life balance\nB. Healthy and safe working conditions\nC. Employee privacy\nD. Free Speech\n/no_think",
+        "answer": "B",
+        "generated_text": "B.",
+        "score": {
+          "passed": true,
+          "predicted": "B",
+          "expected": "B"
+        },
+        "ttft_seconds": 0.16833295699998985,
+        "tokens_per_second": 11.869180362831637
+      },
+      {
+        "id": "mmlu_56",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Which of the following would most effectively act as the primary objective of a business organisation?\nA. To make a profit\nB. To procure resources\nC. To communicate with shareholders\nD. To mediate between the organisation and the environment\n/no_think",
+        "answer": "A",
+        "generated_text": "A",
+        "score": {
+          "passed": true,
+          "predicted": "A",
+          "expected": "A"
+        },
+        "ttft_seconds": 0.10882856399999241,
+        "tokens_per_second": 9.172191635664321
+      },
+      {
+        "id": "mmlu_57",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: What is the enlightened self-interest model of CSR?\nA. That it is in an organization's own best interest to put itself first rather than its ethics\nB. That it is in an organization's best interest to consider what a shareholder would want\nC. That it is in an organization's own best interest to act in an ethical way\nD. That it is in an organization's own best interest to follow the legislation and abide by the law\n/no_think",
+        "answer": "C",
+        "generated_text": "A",
+        "score": {
+          "passed": false,
+          "predicted": "A",
+          "expected": "C"
+        },
+        "ttft_seconds": 0.09602384699999789,
+        "tokens_per_second": 10.397794345001714
+      },
+      {
+        "id": "mmlu_58",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: ________ is the right of a consumer to control what information companies can collect about them and how it is stored, used and shared.\nA. Consumer inclusion\nB. Consumer control\nC. Consumer privacy\nD. Consumer exclusion\n/no_think",
+        "answer": "C",
+        "generated_text": "B.",
+        "score": {
+          "passed": false,
+          "predicted": "B",
+          "expected": "C"
+        },
+        "ttft_seconds": 0.14876075500001207,
+        "tokens_per_second": 13.429562595519096
+      },
+      {
+        "id": "mmlu_59",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: The Anglo-American model being considered the best model in light of the recession in the late 2000s.\nA. 1,2,3\nB. 1,3,4\nC. 2,3,4\nD. 1,2,3,4\n/no_think",
+        "answer": "A",
+        "generated_text": "D.",
+        "score": {
+          "passed": false,
+          "predicted": "D",
+          "expected": "A"
+        },
+        "ttft_seconds": 0.13968361699997445,
+        "tokens_per_second": 14.27657523805142
+      },
+      {
+        "id": "mmlu_60",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: What size of cannula would you use in a patient who needed a rapid blood transfusion (as of 2020 medical knowledge)?\nA. 18 gauge.\nB. 20 gauge.\nC. 22 gauge.\nD. 24 gauge.\n/no_think",
+        "answer": "A",
+        "generated_text": "A. 18 gauge.",
+        "score": {
+          "passed": true,
+          "predicted": "A",
+          "expected": "A"
+        },
+        "ttft_seconds": 0.15086598000002027,
+        "tokens_per_second": 16.544110143991553
+      },
+      {
+        "id": "mmlu_61",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: The key attribute in successful marathon running is:\nA. strength.\nB. power.\nC. stride length.\nD. stamina.\n/no_think",
+        "answer": "D",
+        "generated_text": "D.",
+        "score": {
+          "passed": true,
+          "predicted": "D",
+          "expected": "D"
+        },
+        "ttft_seconds": 0.15079991800001835,
+        "tokens_per_second": 13.247813574222288
+      },
+      {
+        "id": "mmlu_62",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Which of the following is the commonest cause of dementia in the UK?\nA. Alzheimer's disease.\nB. Cerebrovascular (stroke) disease.\nC. Lewy body dementia.\nD. HIV infection.\n/no_think",
+        "answer": "A",
+        "generated_text": "A",
+        "score": {
+          "passed": true,
+          "predicted": "A",
+          "expected": "A"
+        },
+        "ttft_seconds": 0.10157854000001976,
+        "tokens_per_second": 9.827842827122863
+      },
+      {
+        "id": "mmlu_63",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Which of the following is NOT a symptom of anaphylaxis?\nA. Stridor.\nB. Bradycardia.\nC. Severe wheeze.\nD. Rash.\n/no_think",
+        "answer": "B",
+        "generated_text": "A",
+        "score": {
+          "passed": false,
+          "predicted": "A",
+          "expected": "B"
+        },
+        "ttft_seconds": 0.11363637200000198,
+        "tokens_per_second": 8.78677500385299
+      },
+      {
+        "id": "mmlu_64",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: In what situation are closed pouches applied?\nA. The patient has a semi-formed or liquid output.\nB. The patient has a colostomy.\nC. In the immediate post-operative period.\nD. The patient has a urostomy.\n/no_think",
+        "answer": "B",
+        "generated_text": "B.",
+        "score": {
+          "passed": true,
+          "predicted": "B",
+          "expected": "B"
+        },
+        "ttft_seconds": 0.15860653900000443,
+        "tokens_per_second": 12.59364738518984
+      },
+      {
+        "id": "mmlu_65",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: With an increasing number of sprints the:\nA. anaerobic contribution progressively increases.\nB. pH of the muscle falls below 6.0.\nC. blood glucose concentration falls below 3 mmol/L.\nD. relative contribution of aerobic metabolism increases.\n/no_think",
+        "answer": "D",
+        "generated_text": "D.",
+        "score": {
+          "passed": true,
+          "predicted": "D",
+          "expected": "D"
+        },
+        "ttft_seconds": 0.1677014449999774,
+        "tokens_per_second": 11.914142802951858
+      },
+      {
+        "id": "mmlu_66",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Which of the following is true in diplopia?\nA. Diplopia can never occur if one eye is covered\nB. The outer image is always the false image\nC. A fourth nerve palsy occurs when the patient looks upwards\nD. A sixth nerve palsy causes a divergent squint\n/no_think",
+        "answer": "B",
+        "generated_text": "D",
+        "score": {
+          "passed": false,
+          "predicted": "D",
+          "expected": "B"
+        },
+        "ttft_seconds": 0.10208067300001744,
+        "tokens_per_second": 9.780251442439605
+      },
+      {
+        "id": "mmlu_67",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Sodium bicarbonate ingestion improves middle distance running performance by:\nA. elevating the pH and buffering capacity of the extracellular fluid allowing a faster efflux of hydrogen ions from muscle.\nB. reducing the pH and buffering capacity of the extracellular fluid allowing a faster efflux of hydrogen ions from muscle.\nC. elevating the pH and buffering capacity of the extracellular fluid allowing a faster influx of hydrogen ions into muscle.\nD. elevating the pre-exercise muscle pH.\n/no_think",
+        "answer": "A",
+        "generated_text": "A",
+        "score": {
+          "passed": true,
+          "predicted": "A",
+          "expected": "A"
+        },
+        "ttft_seconds": 0.08735402300001738,
+        "tokens_per_second": 11.424951481657025
+      },
+      {
+        "id": "mmlu_68",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Codons are composed of:\nA. triplet sequences of nucleotide bases in mRNA or DNA .\nB. quadruplet sequences of nucleotide bases in mRNA or DNA.\nC. triplet sequences of amino acids in polypeptide chains.\nD. triplet sequences of deoxyribose sugars in DNA.\n/no_think",
+        "answer": "A",
+        "generated_text": "A.",
+        "score": {
+          "passed": true,
+          "predicted": "A",
+          "expected": "A"
+        },
+        "ttft_seconds": 0.17551971800000388,
+        "tokens_per_second": 11.38299055202603
+      },
+      {
+        "id": "mmlu_69",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Fatty acids are transported into the mitochondria bound to:\nA. thiokinase.\nB. coenzyme A (CoA).\nC. acetyl-CoA.\nD. carnitine.\n/no_think",
+        "answer": "D",
+        "generated_text": "D.",
+        "score": {
+          "passed": true,
+          "predicted": "D",
+          "expected": "D"
+        },
+        "ttft_seconds": 0.1586043380000035,
+        "tokens_per_second": 12.596944510331788
+      },
+      {
+        "id": "mmlu_70",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Which of the answers below best indicates the compatible blood types that can be given to a person with a blood group B (rhesus negative)?\nA. Blood type AB (rhesus negative), blood type B, and blood type O (rhesus negative).\nB. Blood type B (rhesus positive) and blood type O (rhesus positive).\nC. Blood type B (rhesus negative) and blood type O (rhesus negative).\nD. Blood type B (rhesus negative) only.\n/no_think",
+        "answer": "C",
+        "generated_text": "C",
+        "score": {
+          "passed": true,
+          "predicted": "C",
+          "expected": "C"
+        },
+        "ttft_seconds": 0.1062360319999982,
+        "tokens_per_second": 9.397863209722797
+      },
+      {
+        "id": "mmlu_71",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Which of the following is true of a lower motor neurone lesion in the arm?\nA. It leads to increased tone in the arm (hypertonia)\nB. Fasciculations are never seen\nC. The reflexes are brisk\nD. An ulna nerve palsy is an example of a lower motor neurone lesion\n/no_think",
+        "answer": "D",
+        "generated_text": "D.",
+        "score": {
+          "passed": true,
+          "predicted": "D",
+          "expected": "D"
+        },
+        "ttft_seconds": 0.123695792999996,
+        "tokens_per_second": 16.1471382786096
+      },
+      {
+        "id": "mmlu_72",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Which of the following statements is false?\nA. Ammonia is produced in repeated high intensity exercise.\nB. Muscle lactate accumulation does not begin until at least 5 seconds of intermittent muscle contractions have taken place.\nC. Muscle phosphocreatine depletion begins in the first few seconds of high intensity exercise.\nD. With an increasing number of repeated sprints the rate of accumulation of lactate in muscle declines.\n/no_think",
+        "answer": "B",
+        "generated_text": "A",
+        "score": {
+          "passed": false,
+          "predicted": "A",
+          "expected": "B"
+        },
+        "ttft_seconds": 0.09114689899999462,
+        "tokens_per_second": 10.95105547313054
+      },
+      {
+        "id": "mmlu_73",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Glycogen breakdown in muscle initially results in the formation of:\nA. glucose.\nB. glucose-1-phosphate.\nC. glucose-6-phosphate.\nD. glucose-1,6-diphosphate.\n/no_think",
+        "answer": "B",
+        "generated_text": "B. glucose-1-phosphate.",
+        "score": {
+          "passed": true,
+          "predicted": "B",
+          "expected": "B"
+        },
+        "ttft_seconds": 0.1448165680000102,
+        "tokens_per_second": 18.489034158463358
+      },
+      {
+        "id": "mmlu_74",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: The two principal contractile proteins found in skeletal muscle are:\nA. actin and troponin.\nB. actin and myosin.\nC. troponin and tropomyosin.\nD. myosin and tropomyosin.\n/no_think",
+        "answer": "B",
+        "generated_text": "B. actin and myosin.",
+        "score": {
+          "passed": true,
+          "predicted": "B",
+          "expected": "B"
+        },
+        "ttft_seconds": 0.15282537199999524,
+        "tokens_per_second": 15.368106649209897
+      },
+      {
+        "id": "mmlu_75",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Which one of the following represents a IIIrd cranial nerve palsy and is a neurosurgical emergency?\nA. Unilateral constricted pupil.\nB. Bilateral constricted pupils.\nC. Unilateral fixed dilated pupil.\nD. Oval shaped pupils.\n/no_think",
+        "answer": "C",
+        "generated_text": "C",
+        "score": {
+          "passed": true,
+          "predicted": "C",
+          "expected": "C"
+        },
+        "ttft_seconds": 0.0857051269999829,
+        "tokens_per_second": 11.64247726629054
+      },
+      {
+        "id": "mmlu_76",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Which of the following is true about a thyroid swelling?\nA. It always elevates on swallowing\nB. Lymph node enlargement is a good prognostic sign\nC. An ultrasound of the swelling is the best test to determine whether the nodule is actively secreting hormone\nD. A functioning nodule on isotope scanning is unlikely to be due to cancer\n/no_think",
+        "answer": "D",
+        "generated_text": "C",
+        "score": {
+          "passed": false,
+          "predicted": "C",
+          "expected": "D"
+        },
+        "ttft_seconds": 0.11254080699998781,
+        "tokens_per_second": 8.872032342887664
+      },
+      {
+        "id": "mmlu_77",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Which of the following is true of hepatomegaly?\nA. Emphysema is a cause\nB. The liver enlarges downwards from the left hypochondrium\nC. The presence of jaundice, spider naevi and purpura suggest alcohol as a cause\nD. The liver is usually resonant to percussion\n/no_think",
+        "answer": "C",
+        "generated_text": "D",
+        "score": {
+          "passed": false,
+          "predicted": "D",
+          "expected": "C"
+        },
+        "ttft_seconds": 0.10321731400000544,
+        "tokens_per_second": 9.671914537879472
+      },
+      {
+        "id": "mmlu_78",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Which of the following is true regarding reflexes?\nA. A positive babinski reflex is the same as a normal flexor response in the assessment of the plantar reflex\nB. An extensor plantar response indicates a lower motor neurone lesion\nC. The root value of the ankle reflex is S1\nD. The root value of the knee reflex is L1, L2\n/no_think",
+        "answer": "C",
+        "generated_text": "B",
+        "score": {
+          "passed": false,
+          "predicted": "B",
+          "expected": "C"
+        },
+        "ttft_seconds": 0.09303138599997851,
+        "tokens_per_second": 10.729462922786992
+      },
+      {
+        "id": "mmlu_79",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Which of the following is true of facial nerve palsy?\nA. Bells palsy is another term for an upper motor neurone lesion\nB. Ramsay Hunt Syndrome is an upper motor neurone lesion secondary to a Herpes Zoster infection\nC. An inability to close the eyelid on the paralysed side indicates a lower motor neurone lesion\nD. In Bell's Palsy the sense of taste is never affected\n/no_think",
+        "answer": "C",
+        "generated_text": "C",
+        "score": {
+          "passed": true,
+          "predicted": "C",
+          "expected": "C"
+        },
+        "ttft_seconds": 0.15104145799998037,
+        "tokens_per_second": 6.612389266119243
+      },
+      {
+        "id": "mmlu_80",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: The access matrix approach to protection has the difficulty that\nA. the matrix, if stored directly, is large and can be clumsy to manage\nB. it is not capable of expressing complex protection requirements\nC. deciding whether a process has access to a resource is undecidable\nD. there is no way to express who has rights to change the access matrix itself\n/no_think",
+        "answer": "A",
+        "generated_text": "A.",
+        "score": {
+          "passed": true,
+          "predicted": "A",
+          "expected": "A"
+        },
+        "ttft_seconds": 0.18282766900000524,
+        "tokens_per_second": 10.926959010207597
+      },
+      {
+        "id": "mmlu_81",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: An integer c is a common divisor of two integers x and y if and only if c is a divisor of x and c is a divisor of y. Which of the following sets of integers could possibly be the set of all common divisors of two integers?\nA. {-6,-2, -1, 1, 2, 6}\nB. {-6, -2, -1, 0, 1, 2, 6}\nC. {-6, -3, -2, -1, 1, 2, 3, 6}\nD. {-6, -3, -2, -1, 0, 1, 2, 3, 6}\n/no_think",
+        "answer": "C",
+        "generated_text": "B",
+        "score": {
+          "passed": false,
+          "predicted": "B",
+          "expected": "C"
+        },
+        "ttft_seconds": 0.08950854299999378,
+        "tokens_per_second": 11.150399668233906
+      },
+      {
+        "id": "mmlu_82",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: In the NoNicks operating system, the time required by a single file-read operation has four nonoverlapping components:\ndisk seek time-25 msec\ndisk latency time-8 msec\ndisk transfer time- 1 msec per 1,000 bytes\noperating system overhead-1 msec per 1,000 bytes + 10 msec\nIn version 1 of the system, the file read retrieved blocks of 1,000 bytes. In version 2, the file read (along with the underlying layout on disk) was modified to retrieve blocks of 4,000 bytes. The ratio of-the time required to read a large file under version 2 to the time required to read the same large file under version 1 is approximately\nA. 1:4\nB. 1:3.5\nC. 1:1\nD. 1.1:1\n/no_think",
+        "answer": "B",
+        "generated_text": "B. 1:3.5",
+        "score": {
+          "passed": true,
+          "predicted": "B",
+          "expected": "B"
+        },
+        "ttft_seconds": 0.17379590100000541,
+        "tokens_per_second": 14.80652845084461
+      },
+      {
+        "id": "mmlu_83",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: You want to cluster 7 points into 3 clusters using the k-Means Clustering algorithm. Suppose after the first iteration, clusters C1, C2 and C3 contain the following two-dimensional points: C1 contains the 2 points: {(0,6), (6,0)} C2 contains the 3 points: {(2,2), (4,4), (6,6)} C3 contains the 2 points: {(5,5), (7,7)} What are the cluster centers computed for these 3 clusters?\nA. C1: (3,3), C2: (4,4), C3: (6,6)\nB. C1: (3,3), C2: (6,6), C3: (12,12)\nC. C1: (6,6), C2: (12,12), C3: (12,12)\nD. C1: (0,0), C2: (48,48), C3: (35,35)\n/no_think",
+        "answer": "A",
+        "generated_text": "A",
+        "score": {
+          "passed": true,
+          "predicted": "A",
+          "expected": "A"
+        },
+        "ttft_seconds": 0.11437614799999096,
+        "tokens_per_second": 8.724959768992626
+      },
+      {
+        "id": "mmlu_84",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Any set of Boolean operators that is sufficient to represent all Boolean expressions is said to be complete. Which of the following is NOT complete?\nA. {AND, NOT}\nB. {NOT, OR}\nC. {AND, OR}\nD. {NAND}\n/no_think",
+        "answer": "C",
+        "generated_text": "D",
+        "score": {
+          "passed": false,
+          "predicted": "D",
+          "expected": "C"
+        },
+        "ttft_seconds": 0.10719461200000069,
+        "tokens_per_second": 9.309350547214276
+      },
+      {
+        "id": "mmlu_85",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Consider the collection of all undirected graphs with 10 nodes and 6 edges. Let M and m, respectively, be the maximum and minimum number of connected components in any graph in the collection. If a graph has no selfloops and there is at most one edge between any pair of nodes, which of the following is true?\nA. M = 10, m = 10\nB. M = 10, m = 1\nC. M = 7, m = 4\nD. M = 6, m = 4\n/no_think",
+        "answer": "C",
+        "generated_text": "D. M = 6, m = 4",
+        "score": {
+          "passed": false,
+          "predicted": "D",
+          "expected": "C"
+        },
+        "ttft_seconds": 0.1329724370000065,
+        "tokens_per_second": 19.15067794844949
+      },
+      {
+        "id": "mmlu_86",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Resolution theorem proving for showing that a formula of propositional logic is not satisfiable has which of the following properties?\nI. It is a sound proof system in the sense that there does not exist a proof of the unsatisfiability of a satisfiable formula of propositional logic.\nII. It is a complete proof system in the sense that there is a proof of unsatisfiability for every unsa tisfiable formula of propositional logic.\nIII. It is a succinct proof system in the sense that whenever an unsatisfiable formula F of propositional logic has a resolution proof, F also has a proof whose length is polynomial in the length of F.\nA. I only\nB. III only\nC. I and II only\nD. I and III only\n/no_think",
+        "answer": "C",
+        "generated_text": "D. I and III only",
+        "score": {
+          "passed": false,
+          "predicted": "D",
+          "expected": "C"
+        },
+        "ttft_seconds": 0.19801590300002658,
+        "tokens_per_second": 14.62759745904954
+      },
+      {
+        "id": "mmlu_87",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Which of the following statements describe(s) properties of a purely segmented memory system?\nI. It divides memory into units of equal size.\nII. It permits implementation of virtual memory.\nIII. It suffers from internal fragmentation.\nA. I only\nB. II only\nC. III only\nD. I and III\n/no_think",
+        "answer": "B",
+        "generated_text": "C.",
+        "score": {
+          "passed": false,
+          "predicted": "C",
+          "expected": "B"
+        },
+        "ttft_seconds": 0.18139957800002549,
+        "tokens_per_second": 11.013181897675693
+      },
+      {
+        "id": "mmlu_88",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Which of the following statements about floating-point arithmetic is NOT true?\nA. It is inherently nonassociative because some numbers have no exact representation.\nB. It is inherently nonassociative because there have to be upper and lower bounds on the size of numbers.\nC. Associativity can be achieved with appropriate roundoff conventions.\nD. Some rational numbers have no exact representation.\n/no_think",
+        "answer": "C",
+        "generated_text": "B",
+        "score": {
+          "passed": false,
+          "predicted": "B",
+          "expected": "C"
+        },
+        "ttft_seconds": 0.09600766500000191,
+        "tokens_per_second": 10.3976175814037
+      },
+      {
+        "id": "mmlu_89",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Suppose sharing of tiles in a multilevel directory structure is achieved with directory entries that are links pointing to a node containing information about a shared file. Information in this node includes (1) the owner of the file, (2) a count of the number of links to the tile, and (3) the disk block numbers of the file. What is a primary drawback to this approach to sharing?\nA. If the owner modifies the file, another user who does not share will see the changes.\nB. If the owner renames the file, other users will not be able to access it.\nC. If the owner is allowed to delete a file, dangling links may result.\nD. If any user who shares the file appends to it, others who share it will not be able to access the new disk blocks.\n/no_think",
+        "answer": "C",
+        "generated_text": "C.",
+        "score": {
+          "passed": true,
+          "predicted": "C",
+          "expected": "C"
+        },
+        "ttft_seconds": 0.15921924700001,
+        "tokens_per_second": 12.543587004906652
+      },
+      {
+        "id": "mmlu_90",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Mergesort works by splitting a list of n numbers in half, sorting each half recursively, and merging the two halves. Which of the following data structures will allow mergesort to work in O(n log n) time?\nI. A singly linked list\nII. A doubly linked list\nIII. An array\nA. None\nB. III only\nC. I and II only\nD. I, II, and III\n/no_think",
+        "answer": "D",
+        "generated_text": "B",
+        "score": {
+          "passed": false,
+          "predicted": "B",
+          "expected": "D"
+        },
+        "ttft_seconds": 0.09018054099999517,
+        "tokens_per_second": 11.06553304116825
+      },
+      {
+        "id": "mmlu_91",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: If p(x) is the minimal-degree interpolating polynomial for the real-valued function f(x) at the n + 1 distinct real numbers x0, .... xn what is the maximum possible degree of p(x)?\nA. n\nB. n + 1\nC. n + 2\nD. 2n\n/no_think",
+        "answer": "A",
+        "generated_text": "B. n + 1",
+        "score": {
+          "passed": false,
+          "predicted": "B",
+          "expected": "A"
+        },
+        "ttft_seconds": 0.18472136700000874,
+        "tokens_per_second": 14.403756326804503
+      },
+      {
+        "id": "mmlu_92",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: An internal hash table has 5 buckets, numbered 0, 1, 2, 3, 4. Keys are integers, and the hash function h(i) = i mod 5 is used, with linear resolution of collisions (i.e., if bucket h(i) is filled, the buckets h(i) + 1, h(i) + 2, ... are tried successively with all bucket numbers computed modulo 5). If elements with keys 13, 8, 24, 10, and 3 are inserted, m that order, into an initially blank hash table, then the content of the bucket numbered 2 is\nA. 3\nB. 8\nC. 10\nD. 13\n/no_think",
+        "answer": "A",
+        "generated_text": "A. 3",
+        "score": {
+          "passed": true,
+          "predicted": "A",
+          "expected": "A"
+        },
+        "ttft_seconds": 0.13941760100001943,
+        "tokens_per_second": 17.146859832328623
+      },
+      {
+        "id": "mmlu_93",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: TCP protocol is responsible (among other things) for\nA. Routing packets through the network\nB. Reliable delivery of packets between directly connected machines\nC. Reliable delivery of large (multi-packet) messages between machines that are not necessarily directly connected\nD. Dealing with differences among operating system architectures\n/no_think",
+        "answer": "C",
+        "generated_text": "B",
+        "score": {
+          "passed": false,
+          "predicted": "B",
+          "expected": "C"
+        },
+        "ttft_seconds": 0.13078874600000745,
+        "tokens_per_second": 7.6364569372063
+      },
+      {
+        "id": "mmlu_94",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Let A and B be two sets of words (strings) from Σ*, for some alphabet of symbols Σ. Suppose that B is a subset of A. Which of the following statements must always be true of A and B ?\nI. If A is finite, then B is finite.\nII. If A is regular, then B is regular.\nIII. If A is context-free, then B is context-free.\nA. I only\nB. II only\nC. III only\nD. I and II only\n/no_think",
+        "answer": "A",
+        "generated_text": "A. I only",
+        "score": {
+          "passed": true,
+          "predicted": "A",
+          "expected": "A"
+        },
+        "ttft_seconds": 0.15353983400001425,
+        "tokens_per_second": 16.23798712190464
+      },
+      {
+        "id": "mmlu_95",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: For all strings x, the function x^M is defined recursively as follows.\ne^M= e, and\nif w is a string and a is a string with length 1, then\n(aw)^M = aw^Ma.\nLet a be a string with length 1, and let x and y be arbitrary strings. Which of the following is true?\nA. a^M = a\nB. (ax)^M = (xa)^M\nC. (xy)^M = y^Mx^M\nD. None of the above\n/no_think",
+        "answer": "D",
+        "generated_text": "D. None of the above",
+        "score": {
+          "passed": true,
+          "predicted": "D",
+          "expected": "D"
+        },
+        "ttft_seconds": 0.13162159699999165,
+        "tokens_per_second": 16.113071610913483
+      },
+      {
+        "id": "mmlu_96",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Which of the following is NOT a reasonable justification for choosing to busy-wait on an asynchronous event?\nA. The wait is expected to be short.\nB. A busy-wait loop is easier to code than an interrupt handler.\nC. There is no other work for the processor to do.\nD. The program executes on a time-sharing system.\n/no_think",
+        "answer": "D",
+        "generated_text": "A",
+        "score": {
+          "passed": false,
+          "predicted": "A",
+          "expected": "D"
+        },
+        "ttft_seconds": 0.12869675299998562,
+        "tokens_per_second": 7.760027422075034
+      },
+      {
+        "id": "mmlu_97",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: The language {ww | w in (0 + 1)*} is\nA. not accepted by any Turing machine\nB. accepted by some Turing machine, but by no pushdown automaton\nC. accepted by some pushdown automaton, but not context-free\nD. context-free, but not regular\n/no_think",
+        "answer": "B",
+        "generated_text": "D",
+        "score": {
+          "passed": false,
+          "predicted": "D",
+          "expected": "B"
+        },
+        "ttft_seconds": 0.08904315600000245,
+        "tokens_per_second": 11.210490992712957
+      },
+      {
+        "id": "mmlu_98",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Which of the following statements about Ethernets is typically FALSE?\nA. Ethernets use circuit switching to send messages.\nB. Ethernets use buses with multiple masters.\nC. Ethernet protocols use a collision-detection method to ensure that messages are transmitted properly.\nD. Networks connected by Ethernets are limited in length to a few hundred meters.\n/no_think",
+        "answer": "A",
+        "generated_text": "A",
+        "score": {
+          "passed": true,
+          "predicted": "A",
+          "expected": "A"
+        },
+        "ttft_seconds": 0.08766290099998741,
+        "tokens_per_second": 11.384822353680912
+      },
+      {
+        "id": "mmlu_99",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Let P be a procedure that for some inputs calls itself (i.e., is recursive). If P is guaranteed to terminate, which of the following statements must be true?\nI. P has a local variable.\nII. P has an execution path where it does not call itself.\nIII. P either refers to a global variable or has at least one parameter.\nA. I only\nB. II only\nC. I and II only\nD. II and III only\n/no_think",
+        "answer": "D",
+        "generated_text": "C. I and II only",
+        "score": {
+          "passed": false,
+          "predicted": "C",
+          "expected": "D"
+        },
+        "ttft_seconds": 0.13188346700002285,
+        "tokens_per_second": 16.55700310428818
+      }
+    ]
+  }
+}

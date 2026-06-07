@@ -79,6 +79,12 @@ The current evidence supports:
   measured drop 0.0350 versus FP16, mean throughput 8.8134 tokens/s, mean TTFT
   0.245115 s, peak guarded VRAM ratio 0.8189, and minimum paired-bootstrap
   lower bound -0.0950 over 4,000 samples;
+- a twenty-subject Qwen2.5-1.5B FP16/AutoAWQ/GPTQModel MMLU Broad20x20
+  task-retention row, covering 1200 task executions over 400 combined MMLU
+  rows: FP16 gets 214/400, AutoAWQ gets 204/400, GPTQModel gets 198/400, with
+  max measured drop 0.0400 versus FP16, mean throughput 8.8340 tokens/s, mean
+  TTFT 0.256271 s, peak guarded VRAM ratio 0.8201, and minimum paired-bootstrap
+  lower bound -0.0825 over 4,000 samples;
 - a paired statistical-interval gate over the same Qwen2.5-1.5B matrix:
   AutoAWQ-minus-FP16 delta is +0.015 with 95% bootstrap CI [-0.035, +0.065] on
   GSM8K and +0.010 with CI [-0.100, +0.120] on MMLU; GPTQModel-minus-FP16 delta
@@ -137,7 +143,7 @@ Current AAAI-facing critical path:
    0.5B readiness setting and report negative runtime results honestly.
    Qwen2.5-1.5B now has public-calibration AutoAWQ/GPTQModel PPL readiness,
    matched FP16/AutoAWQ/GPTQModel subset100, GSM8K200/MMLU100, sharded
-   GSM8K500, full GSM8K1319, and MMLU Broad10x20 task/runtime matrices, with
+   GSM8K500, full GSM8K1319, and MMLU Broad20x20 task/runtime matrices, with
    paired uncertainty reporting. SmoothQuant, rotation baselines, full MMLU,
    and full benchmark retention still need scale-up.
 3. Downstream tasks: full GSM8K is now measured for the local 7B public-task
@@ -175,7 +181,7 @@ The blockers are concrete:
 
 1. Official baselines: the local AutoAWQ/GPTQModel 0.5B matched pack, expanded
    16-prompt public PPL gates, and Qwen2.5-1.5B matched FP16/AutoAWQ/GPTQModel
-   subset100 plus GSM8K200/MMLU100 plus MMLU Broad10x20 rows are useful but not enough; SmoothQuant,
+   subset100 plus GSM8K200/MMLU100 plus MMLU Broad20x20 rows are useful but not enough; SmoothQuant,
    at least one faithful rotation or mixed-precision allocation comparator, and
    broader task subjects are still missing.
 2. Larger evaluation: more WikiText2/C4 prompts and broader calibration-seed sweeps.

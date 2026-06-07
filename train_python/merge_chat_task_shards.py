@@ -108,6 +108,10 @@ def merge_guards(guards: list[dict[str, Any]], guard_paths: list[Path]) -> dict[
     returncodes = [int(guard.get("returncode", 1) or 0) for guard in guards]
     memory_total_mib = max(int(guard.get("memory_total_mib") or 0) for guard in guards)
     max_memory_used_mib = max(int(guard.get("max_memory_used_mib") or 0) for guard in guards)
+    post_cleanups = [
+        cleanup if isinstance(cleanup := guard.get("post_cleanup"), dict) else {}
+        for guard in guards
+    ]
     return {
         "command": ["merged_chat_task_shards"],
         "returncode": 0 if all(code == 0 for code in returncodes) else max(returncodes),
@@ -125,12 +129,12 @@ def merge_guards(guards: list[dict[str, Any]], guard_paths: list[Path]) -> dict[
         "start_disk_state": guards[0].get("start_disk_state", {}),
         "end_disk_state": guards[-1].get("end_disk_state", {}),
         "post_cleanup": {
-            "target_count": sum(int(guard.get("post_cleanup", {}).get("target_count") or 0) for guard in guards),
-            "estimated_bytes": sum(int(guard.get("post_cleanup", {}).get("estimated_bytes") or 0) for guard in guards),
+            "target_count": sum(int(cleanup.get("target_count") or 0) for cleanup in post_cleanups),
+            "estimated_bytes": sum(int(cleanup.get("estimated_bytes") or 0) for cleanup in post_cleanups),
             "errors": [
                 error
-                for guard in guards
-                for error in guard.get("post_cleanup", {}).get("errors", [])
+                for cleanup in post_cleanups
+                for error in cleanup.get("errors", [])
             ],
         },
         "merged_shard_count": len(guards),

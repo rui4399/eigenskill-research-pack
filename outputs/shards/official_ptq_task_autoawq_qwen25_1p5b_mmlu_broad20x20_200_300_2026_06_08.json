@@ -1,0 +1,1425 @@
+{
+  "model": "/home/rui/eigenskill_artifacts/qwen25_1p5b_awq_model_2026_06_07",
+  "loader": "autoawq",
+  "hf_device_map": "",
+  "hf_max_gpu_memory_mib": 0,
+  "task_file": "data_eval/public_task_benchmark_v1/mmlu_broad20x20_test.jsonl",
+  "task_format": "mmlu",
+  "task_count": 100,
+  "task_limit": 100,
+  "task_offset": 200,
+  "chat_template": true,
+  "no_think": true,
+  "max_new_tokens": 64,
+  "baseline": {
+    "aggregate": {
+      "tasks": 100,
+      "passes": 56,
+      "accuracy": 0.56,
+      "mean_tokens_per_second": 11.61557692085085,
+      "mean_ttft_seconds": 0.16019314861999703
+    },
+    "rows": [
+      {
+        "id": "mmlu_200",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: What is true for a type-Ia (\"type one-a\") supernova?\nA. This type occurs in binary systems.\nB. This type occurs in young galaxies.\nC. This type produces gamma-ray bursts.\nD. This type produces high amounts of X-rays.\n/no_think",
+        "answer": "A",
+        "generated_text": "A.",
+        "score": {
+          "passed": true,
+          "predicted": "A",
+          "expected": "A"
+        },
+        "ttft_seconds": 1.7728768399999808,
+        "tokens_per_second": 1.1279622008947785
+      },
+      {
+        "id": "mmlu_201",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: If you know both the actual brightness of an object and its apparent brightness from your location then with no other information you can estimate:\nA. Its speed relative to you\nB. Its composition\nC. Its size\nD. Its distance from you\n/no_think",
+        "answer": "D",
+        "generated_text": "D.",
+        "score": {
+          "passed": true,
+          "predicted": "D",
+          "expected": "D"
+        },
+        "ttft_seconds": 0.18943961200000103,
+        "tokens_per_second": 10.546364928767872
+      },
+      {
+        "id": "mmlu_202",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Why is the sky blue?\nA. Because the molecules that compose the Earth's atmosphere have a blue-ish color.\nB. Because the sky reflects the color of the Earth's oceans.\nC. Because the atmosphere preferentially scatters short wavelengths.\nD. Because the Earth's atmosphere preferentially absorbs all other colors.\n/no_think",
+        "answer": "C",
+        "generated_text": "C.",
+        "score": {
+          "passed": true,
+          "predicted": "C",
+          "expected": "C"
+        },
+        "ttft_seconds": 0.1994268439999587,
+        "tokens_per_second": 10.019412712326014
+      },
+      {
+        "id": "mmlu_203",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: You’ve made a scientific theory that there is an attractive force between all objects. When will your theory be proven to be correct?\nA. The first time you drop a bowling ball and it falls to the ground proving your hypothesis.\nB. After you’ve repeated your experiment many times.\nC. You can never prove your theory to be correct only “yet to be proven wrong”.\nD. When you and many others have tested the hypothesis.\n/no_think",
+        "answer": "C",
+        "generated_text": "C",
+        "score": {
+          "passed": true,
+          "predicted": "C",
+          "expected": "C"
+        },
+        "ttft_seconds": 0.15196375800002215,
+        "tokens_per_second": 6.569398531557601
+      },
+      {
+        "id": "mmlu_204",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Which of the following is/are true?\nA. Titan is the only outer solar system moon with a thick atmosphere\nB. Titan is the only outer solar system moon with evidence for recent geologic activity\nC. Titan's atmosphere is composed mostly of hydrocarbons\nD. A and D\n/no_think",
+        "answer": "D",
+        "generated_text": "D",
+        "score": {
+          "passed": true,
+          "predicted": "D",
+          "expected": "D"
+        },
+        "ttft_seconds": 0.14294710199999372,
+        "tokens_per_second": 6.984015536978479
+      },
+      {
+        "id": "mmlu_205",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: A comet of mass m impacts the earth (mass M radius R) at the minimum impact speed. What is the expression for the total energy released in the impact?\nA. m*v\nB. 0.5*m/(R^3)\nC. 0.5*m*(2GM/R)\nD. 0.6*G(M^2)/R\n/no_think",
+        "answer": "C",
+        "generated_text": "C",
+        "score": {
+          "passed": true,
+          "predicted": "C",
+          "expected": "C"
+        },
+        "ttft_seconds": 0.1382111899999927,
+        "tokens_per_second": 7.225788184818516
+      },
+      {
+        "id": "mmlu_206",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Some of Mars'water is frozen in the soil and the ice caps and some was lost due to solar wind stripping but much of the original water is thought to have been lost through another mechanism. What happened to this \"lost\"water?\nA. it was stripped away by the magnetic field when it rapidly decreased in strength\nB. it was broken into hydrogen and oxygen by ultraviolet light and the hydrogen was lost through thermal escape\nC. it was consumed by a civilization of thirsty Martians\nD. it was vaporized during a period of intense volcanism and was lost to space through thermal escape\n/no_think",
+        "answer": "B",
+        "generated_text": "B",
+        "score": {
+          "passed": true,
+          "predicted": "B",
+          "expected": "B"
+        },
+        "ttft_seconds": 0.13695995000000494,
+        "tokens_per_second": 7.29120748768392
+      },
+      {
+        "id": "mmlu_207",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Most rocks on the Moon's surface are older than those on the Earth's surface. The best evidence for this is:\nA. Lunar rocks are composed of fragments pulverized by many impacts.\nB. Radioactive dating of lunar samples shows that they are older.\nC. The Moon's surface is more heavily eroded than the Earth's surface.\nD. The Moon's surface has more impact craters than the Earth's surface.\n/no_think",
+        "answer": "B",
+        "generated_text": "B",
+        "score": {
+          "passed": true,
+          "predicted": "B",
+          "expected": "B"
+        },
+        "ttft_seconds": 0.14321633499997688,
+        "tokens_per_second": 6.969686130781134
+      },
+      {
+        "id": "mmlu_208",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: What is the second most common element in the solar system?\nA. Iron\nB. Hydrogen\nC. Methane\nD. Helium\n/no_think",
+        "answer": "D",
+        "generated_text": "B",
+        "score": {
+          "passed": false,
+          "predicted": "B",
+          "expected": "D"
+        },
+        "ttft_seconds": 0.1374071810000146,
+        "tokens_per_second": 7.267546753981965
+      },
+      {
+        "id": "mmlu_209",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: What is the source of the material that causes meteor showers?\nA. Near-Earth asteroids gradually disintegrate and spread out along their orbital path. When the Earth passes through the orbit of an asteroid we are bombarded by sand-sized particles which cause a meteor shower.\nB. Near-Earth asteroids disintegrate as they enter Earth's atmosphere creating hundreds of bright meteors that appear to radiate from a single location in the sky.\nC. The nuclei of comets disintigrate as they enter Earth's atmosphere creating hundreds of bright meteors that appear to radiate from a central location in the sky.\nD. The nuclei of comets gradually disintegrate and spread out along the comet's orbital path. When the Earth passes through the orbit of a comet we are bombarded by sand-sized particles which cause a meteor shower.\n/no_think",
+        "answer": "D",
+        "generated_text": "D",
+        "score": {
+          "passed": true,
+          "predicted": "D",
+          "expected": "D"
+        },
+        "ttft_seconds": 0.12157175200002257,
+        "tokens_per_second": 8.210923179955957
+      },
+      {
+        "id": "mmlu_210",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Why does the plasma (ion) tail of a comet always point away from the Sun?\nA. Radiation pressure from the Sun's light pushes the ions away.\nB. The conservation of the angular momentum in the tail keeps it always pointing away from the Sun.\nC. The ions are following Keplerian orbits that lead away from the Sun.\nD. The solar wind electromagnetically \"blows\" the ions directly away from the Sun.\n/no_think",
+        "answer": "D",
+        "generated_text": "D",
+        "score": {
+          "passed": true,
+          "predicted": "D",
+          "expected": "D"
+        },
+        "ttft_seconds": 0.14030986400001666,
+        "tokens_per_second": 7.115997809125704
+      },
+      {
+        "id": "mmlu_211",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: How did Eratosthenes estimate the size of Earth in 240 B.C.?\nA. By observing the duration of a solar eclipse.\nB. By measuring the size of Earth's shadow on the Moon in a lunar eclipse.\nC. By comparing the maximum altitude of the Sun in two cities at different latitudes at the same time on the same day.\nD. By sending fleets of ships around Earth.\n/no_think",
+        "answer": "C",
+        "generated_text": "C",
+        "score": {
+          "passed": true,
+          "predicted": "C",
+          "expected": "C"
+        },
+        "ttft_seconds": 0.12000362899999573,
+        "tokens_per_second": 8.316944655275766
+      },
+      {
+        "id": "mmlu_212",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: The Large Magellanic Cloud is ...\nA. a dwarf galaxy orbiting the Milky Way.\nB. the closest planetary nebula to the Earth.\nC. a bright star cluster discovered by Magellan.\nD. the outer arm of the Milky Way named after Magellan.\n/no_think",
+        "answer": "A",
+        "generated_text": "A",
+        "score": {
+          "passed": true,
+          "predicted": "A",
+          "expected": "A"
+        },
+        "ttft_seconds": 0.17304167300000017,
+        "tokens_per_second": 5.772300567477085
+      },
+      {
+        "id": "mmlu_213",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Why do we look for water-ice in craters at Mercury's pole?\nA. Actually water-ice is all over Mercury and not just at the poles.\nB. The pole is the only place fortunate enough to have had comet impacts\nC. Radar from the earth can only see Mercury's poles.\nD. These craters contain the only permanently shadowed regions on Mercury\n/no_think",
+        "answer": "D",
+        "generated_text": "D.",
+        "score": {
+          "passed": true,
+          "predicted": "D",
+          "expected": "D"
+        },
+        "ttft_seconds": 0.1893839360000129,
+        "tokens_per_second": 10.54756357873413
+      },
+      {
+        "id": "mmlu_214",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: The Milky Way is part of a giant supercluster with a diameter of 160 Mpc. What is the name of this supercluster?\nA. Virgo\nB. Laniakea\nC. Sculptor\nD. Boötes\n/no_think",
+        "answer": "B",
+        "generated_text": "B. Laniakea",
+        "score": {
+          "passed": true,
+          "predicted": "B",
+          "expected": "B"
+        },
+        "ttft_seconds": 0.1470916279999983,
+        "tokens_per_second": 18.218285359256168
+      },
+      {
+        "id": "mmlu_215",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: On which planet in our solar system can you find the Great Red Spot?\nA. Venus\nB. Mars\nC. Jupiter\nD. Saturn\n/no_think",
+        "answer": "C",
+        "generated_text": "C. Jupiter",
+        "score": {
+          "passed": true,
+          "predicted": "C",
+          "expected": "C"
+        },
+        "ttft_seconds": 0.24541423499999837,
+        "tokens_per_second": 9.84394615293164
+      },
+      {
+        "id": "mmlu_216",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Why does Earth have the strongest magnetic field among the terrestrial worlds?\nA. It is by far the largest terrestrial world.\nB. It is the most volcanically active world.\nC. It is the only one that has both a partially molten metallic core and reasonably rapid rotation.\nD. It rotates much faster than any other terrestrial world.\n/no_think",
+        "answer": "C",
+        "generated_text": "C",
+        "score": {
+          "passed": true,
+          "predicted": "C",
+          "expected": "C"
+        },
+        "ttft_seconds": 0.10058445999999321,
+        "tokens_per_second": 9.926483766369003
+      },
+      {
+        "id": "mmlu_217",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Which of the following is not true?\nA. The Earth and Venus are in a 1:1 orbital resonance (for every 1 Earth orbit there is exactly 1 Venus orbit)\nB. Neptune and Pluto are in a 3:2 orbital resonance (for every 3 Neptune orbits there are exactly 2 Pluto orbits)\nC. The Kirkwood Gaps in the asteroid belt are due to resonances with Jupiter\nD. Neptune and Pluto won't collide because of their orbital resonance\n/no_think",
+        "answer": "A",
+        "generated_text": "D.",
+        "score": {
+          "passed": false,
+          "predicted": "D",
+          "expected": "A"
+        },
+        "ttft_seconds": 0.12913213699999915,
+        "tokens_per_second": 15.462230668142658
+      },
+      {
+        "id": "mmlu_218",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Which of the following is/are common feature(s) of all fresh (i.e. not eroded) impact craters formed on solid surfaces:\nA. ejecta\nB. raised rims\nC. central peaks\nD. A and B only\n/no_think",
+        "answer": "D",
+        "generated_text": "D",
+        "score": {
+          "passed": true,
+          "predicted": "D",
+          "expected": "D"
+        },
+        "ttft_seconds": 0.10799329000002444,
+        "tokens_per_second": 9.24183924800258
+      },
+      {
+        "id": "mmlu_219",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: From laboratory measurements we know that a particular spectral line formed by hydrogen appears at a wavelength of 486.1 nanometers (nm). The spectrum of a particular star shows the same hydrogen line appearing at a wavelength of 485.9 nm. What can we conclude?\nA. The star is getting hotter.\nB. The star is getting colder.\nC. The star is moving toward us.\nD. The star is moving away from us.\n/no_think",
+        "answer": "C",
+        "generated_text": "D.",
+        "score": {
+          "passed": false,
+          "predicted": "D",
+          "expected": "C"
+        },
+        "ttft_seconds": 0.13432755200000202,
+        "tokens_per_second": 14.870904230460699
+      },
+      {
+        "id": "mmlu_220",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Based on the characteristic population curves that result from plotting population growth of a species, the most effective means of controlling the mosquito population is to\nA. maintain the population at a point corresponding to the midpoint of its logistic curve\nB. opt for zero population control once the K value of the curve has been reached\nC. reduce the carrying capacity cif the environment to lower the K value\nD. increase the mortality rate\n/no_think",
+        "answer": "C",
+        "generated_text": "A",
+        "score": {
+          "passed": false,
+          "predicted": "A",
+          "expected": "C"
+        },
+        "ttft_seconds": 0.09417905100002599,
+        "tokens_per_second": 10.59880525815289
+      },
+      {
+        "id": "mmlu_221",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: A frameshift mutation is created when\nA. telomeric sequences are removed from DNA\nB. a codon's nucleotide sequence changes so that it calls for production of a different amino acid than the original one\nC. a base pair is either inserted or deleted in a gene\nD. a codon's nucleotide sequence is changed so that instead of coding for a given amino acid it acts to terminate translation\n/no_think",
+        "answer": "C",
+        "generated_text": "C",
+        "score": {
+          "passed": true,
+          "predicted": "C",
+          "expected": "C"
+        },
+        "ttft_seconds": 0.08385826500000348,
+        "tokens_per_second": 11.900115476339181
+      },
+      {
+        "id": "mmlu_222",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: To prevent desiccation and injury, the embryos of terrestrial vertebrates are encased within a fluid secreted by the\nA. amnion\nB. chorion\nC. allantois\nD. yolk sac\n/no_think",
+        "answer": "A",
+        "generated_text": "A. amnion",
+        "score": {
+          "passed": true,
+          "predicted": "A",
+          "expected": "A"
+        },
+        "ttft_seconds": 0.19752122799997096,
+        "tokens_per_second": 13.63703359903086
+      },
+      {
+        "id": "mmlu_223",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Which of the following is a second messenger that stimulates release of calcium ions into the cytoplasm?\nA. Prostaglandins\nB. Inositol triphosphate\nC. Cyclic AMP\nD. Calmodulin\n/no_think",
+        "answer": "B",
+        "generated_text": "B",
+        "score": {
+          "passed": true,
+          "predicted": "B",
+          "expected": "B"
+        },
+        "ttft_seconds": 0.09995828799998208,
+        "tokens_per_second": 9.986222009494341
+      },
+      {
+        "id": "mmlu_224",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Synthesis of an RNA/DNA hybrid from a single-stranded RNA template requires\nA. a DNA or RNA primer and reverse transcriptase\nB. a DNA or RNA primer and DNA polymerase\nC. RNase only\nD. reverse transcriptase only\n/no_think",
+        "answer": "A",
+        "generated_text": "A",
+        "score": {
+          "passed": true,
+          "predicted": "A",
+          "expected": "A"
+        },
+        "ttft_seconds": 0.10513065000003508,
+        "tokens_per_second": 9.495998277119481
+      },
+      {
+        "id": "mmlu_225",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: In order for the Hardy-Weinberg law to operate with respect to a population of organisms, each of the following conditions must be met EXCEPT:\nA. Genes are exchanged with other populations.\nB. Population size is large.\nC. Natural selection does not take place.\nD. Matings are random.\n/no_think",
+        "answer": "A",
+        "generated_text": "A",
+        "score": {
+          "passed": true,
+          "predicted": "A",
+          "expected": "A"
+        },
+        "ttft_seconds": 0.13760189099997433,
+        "tokens_per_second": 7.25837601167748
+      },
+      {
+        "id": "mmlu_226",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: The Barr body found within female mammalian cells' nuclei is an example of\nA. euchromatin\nB. heterochromatin\nC. a cistron\nD. pseudogenes\n/no_think",
+        "answer": "B",
+        "generated_text": "B",
+        "score": {
+          "passed": true,
+          "predicted": "B",
+          "expected": "B"
+        },
+        "ttft_seconds": 0.13564218199996958,
+        "tokens_per_second": 7.368449649972596
+      },
+      {
+        "id": "mmlu_227",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Which of the following is NOT a source of atmospheric carbon?\nA. Respiration\nB. Photosynthesis\nC. Bacterial decomposition\nD. Combustion of fossil fuels\n/no_think",
+        "answer": "B",
+        "generated_text": "B",
+        "score": {
+          "passed": true,
+          "predicted": "B",
+          "expected": "B"
+        },
+        "ttft_seconds": 0.09003253399998812,
+        "tokens_per_second": 11.086161458391107
+      },
+      {
+        "id": "mmlu_228",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: The concept of punctuated equilibrium refers to\nA. oscillating ecological successional stages\nB. ecological succession arrested by sudden environmental changes, e.g., fire\nC. persistent predator-prey relationships in relatively stable environments\nD. bursts of speciation followed by relatively unchanging lineages\n/no_think",
+        "answer": "D",
+        "generated_text": "B",
+        "score": {
+          "passed": false,
+          "predicted": "B",
+          "expected": "D"
+        },
+        "ttft_seconds": 0.12422381799996174,
+        "tokens_per_second": 8.038548053336159
+      },
+      {
+        "id": "mmlu_229",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: When an influenza virus enters a cell, it immediately starts to do which of the following?\nA. Incorporate viral DNA into the host cell’s chromosome\nB. Destroy the host cell’s transcriptional machinery\nC. Replicate its genetic material and synthesize viral proteins\nD. Use a viral copy of reverse transcriptase to manufacture viral DNA\n/no_think",
+        "answer": "C",
+        "generated_text": "C",
+        "score": {
+          "passed": true,
+          "predicted": "C",
+          "expected": "C"
+        },
+        "ttft_seconds": 0.07974281500003144,
+        "tokens_per_second": 12.510247456445889
+      },
+      {
+        "id": "mmlu_230",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Cleavage symmetry arising from early cell divisions that occur at an oblique angle to the polar axis is known as\nA. meroblastic cleavage\nB. radial cleavage\nC. spiral cleavage\nD. superficial cleavage\n/no_think",
+        "answer": "C",
+        "generated_text": "C",
+        "score": {
+          "passed": true,
+          "predicted": "C",
+          "expected": "C"
+        },
+        "ttft_seconds": 0.0857045369999696,
+        "tokens_per_second": 11.645848760930347
+      },
+      {
+        "id": "mmlu_231",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Targeting of a newly synthesized protein is most likely to require two different signal peptides for which of the following destinations?\nA. Plasma membrane\nB. Lysosome\nC. Cytosol\nD. Chloroplast\n/no_think",
+        "answer": "D",
+        "generated_text": "B",
+        "score": {
+          "passed": false,
+          "predicted": "B",
+          "expected": "D"
+        },
+        "ttft_seconds": 0.08548496999998179,
+        "tokens_per_second": 11.675658928367293
+      },
+      {
+        "id": "mmlu_232",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: In Sweden, the red fox (Vulpes vulpes) severely limits populations of its prey, including hares. However, red fox populations are sometimes attacked by a fatal parasite, the mange mite. As mite population sizes increase at a given site, how are hare and fox populations most likely to respond at the same site? (Assume that hares have no major predators at this site other than foxes.)\nA. Both fox and hare populations will decrease.\nB. Both fox and hare populations will increase.\nC. Fox populations will decrease and hare populations will increase.\nD. Fox populations will increase and hare populations will decrease.\n/no_think",
+        "answer": "C",
+        "generated_text": "A.",
+        "score": {
+          "passed": false,
+          "predicted": "A",
+          "expected": "C"
+        },
+        "ttft_seconds": 0.1934573859999773,
+        "tokens_per_second": 10.32847749947811
+      },
+      {
+        "id": "mmlu_233",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: A cell nucleus contains which of the following?\nI. DNA\nII. Protein\nIII. RNA\nA. I only\nB. II only\nC. III only\nD. I, II, and III\n/no_think",
+        "answer": "D",
+        "generated_text": "D. I, II, and III",
+        "score": {
+          "passed": true,
+          "predicted": "D",
+          "expected": "D"
+        },
+        "ttft_seconds": 0.1615003130000332,
+        "tokens_per_second": 18.954675159018553
+      },
+      {
+        "id": "mmlu_234",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: In one taxonomic classification, Archaea, Eukarya, and Bacteria represent the three major domains of life. Eukarya utilize the general transcription factors TBP (TATA-binding protein) and TFIIB in transcription, whereas Bacteria do not. At least one member of Archaea has a protein similar to TBP and a protein similar to TFIIB. Based on this observation, which of the following scenarios is most likely?\nA. Archaea and Eukarya diverged after their common ancestor diverged from Bacteria.\nB. Archaea and Bacteria diverged after their common ancestor diverged from Eukarya.\nC. Bacteria and Eukarya diverged after their common ancestor diverged from Archaea.\nD. Archaea, Eukarya, and Bacteria diverged simultaneously from a common ancestor.\n/no_think",
+        "answer": "A",
+        "generated_text": "C",
+        "score": {
+          "passed": false,
+          "predicted": "C",
+          "expected": "A"
+        },
+        "ttft_seconds": 0.09119889199996578,
+        "tokens_per_second": 10.945067265591454
+      },
+      {
+        "id": "mmlu_235",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: A rise in intracellular free calcium in the sea urchin oocyte causes the release of proteolytic enzymes which act to prevent polyspermy. The events just described entail the\nA. zona reaction\nB. acrosomal reaction\nC. cortical reaction\nD. fertilization reaction\n/no_think",
+        "answer": "C",
+        "generated_text": "B",
+        "score": {
+          "passed": false,
+          "predicted": "B",
+          "expected": "C"
+        },
+        "ttft_seconds": 0.108517532999997,
+        "tokens_per_second": 9.200090749693512
+      },
+      {
+        "id": "mmlu_236",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Which of the following is a benefit that mycorrhizal fungi confer to many plants?\nA. They protect plant roots from desiccation in extremely dry habitats.\nB. They fix nitrogen, which is particularly important for plants in nitrogen-limited habitats.\nC. They provide access to phosphorus, an essential element that is limited in many kinds of soils.\nD. They provide carbon to plants in exchange for fixed nitrogen.\n/no_think",
+        "answer": "C",
+        "generated_text": "C",
+        "score": {
+          "passed": true,
+          "predicted": "C",
+          "expected": "C"
+        },
+        "ttft_seconds": 0.09336887000000615,
+        "tokens_per_second": 10.688044008745562
+      },
+      {
+        "id": "mmlu_237",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Experiments on song development in birds have shown that when a young male reared in isolation hears only the song of a different bird species, he will develop an adult song repertoire that lacks certain characteristics typical of his own species. This result shows that the song of his species is most likely\nA. entirely learned during development\nB. entirely instinctive\nC. both instinctive and learned\nD. dependent upon hormones for proper development\n/no_think",
+        "answer": "C",
+        "generated_text": "A",
+        "score": {
+          "passed": false,
+          "predicted": "A",
+          "expected": "C"
+        },
+        "ttft_seconds": 0.13064173800000844,
+        "tokens_per_second": 7.65026846666389
+      },
+      {
+        "id": "mmlu_238",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Which of the following most accurately describes a retrotransposon?\nA. A DNA sequence that can move from one site in the genome to another without replicating\nB. A DNA sequence that can be deleted from the genome without consequence\nC. A DNA sequence that replicates via an RNA intermediate\nD. A DNA sequence that replicates via a protein intermediate\n/no_think",
+        "answer": "C",
+        "generated_text": "A",
+        "score": {
+          "passed": false,
+          "predicted": "A",
+          "expected": "C"
+        },
+        "ttft_seconds": 0.07828909899996006,
+        "tokens_per_second": 12.742886910969228
+      },
+      {
+        "id": "mmlu_239",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: The soils of which of the following biomes has the highest rate of leaching and cycling of nutrients?\nA. Tropical rain forest\nB. Tundra\nC. Taiga\nD. Desert\n/no_think",
+        "answer": "A",
+        "generated_text": "A",
+        "score": {
+          "passed": true,
+          "predicted": "A",
+          "expected": "A"
+        },
+        "ttft_seconds": 0.08826857600001858,
+        "tokens_per_second": 11.307369607541498
+      },
+      {
+        "id": "mmlu_240",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: The rate, r, of a zero-order chemical reaction A → B can be expressed as which of the following?\nA. r = k ln[A]\nB. r = k [A]^2\nC. r = k [A]\nD. r = k\n/no_think",
+        "answer": "D",
+        "generated_text": "C",
+        "score": {
+          "passed": false,
+          "predicted": "C",
+          "expected": "D"
+        },
+        "ttft_seconds": 0.11446153299999651,
+        "tokens_per_second": 8.72314616526312
+      },
+      {
+        "id": "mmlu_241",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Infrared (IR) spectroscopy is useful for determining certain aspects of the structure of organic molecules because\nA. all molecular bonds absorb IR radiation\nB. IR peak intensities are related to molecular mass\nC. most organic functional groups absorb in a characteristic region of the IR spectrum\nD. each element absorbs at a characteristic wavelength\n/no_think",
+        "answer": "C",
+        "generated_text": "C",
+        "score": {
+          "passed": true,
+          "predicted": "C",
+          "expected": "C"
+        },
+        "ttft_seconds": 0.11514448200000515,
+        "tokens_per_second": 8.679522300618373
+      },
+      {
+        "id": "mmlu_242",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: What is the maximum number of phases that can be at equilibrium with each other in a three component mixture?\nA. 2\nB. 3\nC. 4\nD. 5\n/no_think",
+        "answer": "D",
+        "generated_text": "A. 2",
+        "score": {
+          "passed": false,
+          "predicted": "A",
+          "expected": "D"
+        },
+        "ttft_seconds": 0.21193552500000123,
+        "tokens_per_second": 13.109595579955647
+      },
+      {
+        "id": "mmlu_243",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: When the following equation is balanced, which of the following is true?\n__ MnO4− + __ I− + __ H+ <-> __ Mn2+ + __ IO3− + __ H2O\nA. The I− : IO3− ratio is 3:1.\nB. The MnO4- : I- ratio is 6:5.\nC. The MnO4- : Mn2+ ratio is 3:1.\nD. The H+ : I− ratio is 2:1.\n/no_think",
+        "answer": "B",
+        "generated_text": "B",
+        "score": {
+          "passed": true,
+          "predicted": "B",
+          "expected": "B"
+        },
+        "ttft_seconds": 0.11503734899997653,
+        "tokens_per_second": 8.675868402586943
+      },
+      {
+        "id": "mmlu_244",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: The equation ΔH = ΔU + PΔV is applicable\nA. always\nB. only for constant pressure processes\nC. only for constant temperature processes\nD. only for constant volume processes\n/no_think",
+        "answer": "B",
+        "generated_text": "B",
+        "score": {
+          "passed": true,
+          "predicted": "B",
+          "expected": "B"
+        },
+        "ttft_seconds": 0.08812158699998918,
+        "tokens_per_second": 11.32400209892396
+      },
+      {
+        "id": "mmlu_245",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Nitronyl nitroxides are stable radicals in which the unpaired electron is coupled to two equivalent nitrogen nuclei. How many lines will appear in the EPR spectrum of a solution of a rigid nitronyl nitroxide diradical with J << a?\nA. 3 lines\nB. 9 lines\nC. 5 lines\nD. 7 lines\n/no_think",
+        "answer": "B",
+        "generated_text": "C. 5 lines",
+        "score": {
+          "passed": false,
+          "predicted": "C",
+          "expected": "B"
+        },
+        "ttft_seconds": 0.12923104399999374,
+        "tokens_per_second": 19.22819257900962
+      },
+      {
+        "id": "mmlu_246",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Cobalt-60 is used in the radiation therapy of cancer and can be produced by bombardment of cobalt-59 with which of the following?\nA. Neutrons\nB. Alpha particles\nC. Beta particles\nD. X-rays\n/no_think",
+        "answer": "A",
+        "generated_text": "B. Alpha particles",
+        "score": {
+          "passed": false,
+          "predicted": "B",
+          "expected": "A"
+        },
+        "ttft_seconds": 0.1274911240000165,
+        "tokens_per_second": 18.386608562286813
+      },
+      {
+        "id": "mmlu_247",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Which of the following is required for both paramagnetism and ferromagnetism?\nA. Strong oxidizing conditions\nB. Low-spin electron configuration\nC. Metallic physical properties\nD. Unpaired electrons\n/no_think",
+        "answer": "D",
+        "generated_text": "D. Unpaired electrons",
+        "score": {
+          "passed": true,
+          "predicted": "D",
+          "expected": "D"
+        },
+        "ttft_seconds": 0.15044142199997168,
+        "tokens_per_second": 15.822961115969758
+      },
+      {
+        "id": "mmlu_248",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: The 1H spectrum of a mixture of dimethylsulphoxide (DMSO) and acetonitrile (AN) contains lines with relative intensities α and 3α, respectively. What is the ratio of the two concentrations, [DMSO]:[AN]?\nA. 1:1\nB. 1:3\nC. 1:6\nD. 2:3\n/no_think",
+        "answer": "C",
+        "generated_text": "B. 1:3",
+        "score": {
+          "passed": false,
+          "predicted": "B",
+          "expected": "C"
+        },
+        "ttft_seconds": 0.14787230299998555,
+        "tokens_per_second": 19.01423156605504
+      },
+      {
+        "id": "mmlu_249",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Which of the following statements most accurately explains why the T1 of a nucleus is sometimes longer than its T2?\nA. T1, unlike T2, is sensitive to very low-frequency molecular motions.\nB. T2, unlike T1, is sensitive to very low-frequency molecular motions.\nC. T1, unlike T2, is sensitive to molecular motions at the Larmor frequency.\nD. T2, unlike T1, is sensitive to molecular motions at the Larmor frequency.\n/no_think",
+        "answer": "D",
+        "generated_text": "C",
+        "score": {
+          "passed": false,
+          "predicted": "C",
+          "expected": "D"
+        },
+        "ttft_seconds": 0.11096400799999628,
+        "tokens_per_second": 9.006549328501064
+      },
+      {
+        "id": "mmlu_250",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: The 1H Larmor frequency of benzene exceeds that of trifluoroacetic acid by 1.656 kHz on a 400 MHz spectrometer. The 1H chemical shift of benzene is 7.16 ppm. What is the chemical shift of trifluoroacetic acid?\nA. 3.02 ppm\nB. 5.03 ppm\nC. 10.56 ppm\nD. 11.30 ppm\n/no_think",
+        "answer": "D",
+        "generated_text": "B. 5.03 ppm",
+        "score": {
+          "passed": false,
+          "predicted": "B",
+          "expected": "D"
+        },
+        "ttft_seconds": 0.13021251199995731,
+        "tokens_per_second": 20.43437441652054
+      },
+      {
+        "id": "mmlu_251",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Suppose that the 13C nuclei in a molecule in a 600 MHz spectrometer can be 100% polarized (p = 1). If T1 = 5.0 s, how long does it take for p to reach a value equal to twice the thermal equilibrium polarization at 298 K?\nA. [The polarization relaxes exponentially: p(t) = [p(0) - peq]exp(-t/T1) + peq.]\nB. 72.0 s\nC. 56.6 s\nD. 12.7 s\n/no_think",
+        "answer": "B",
+        "generated_text": "A",
+        "score": {
+          "passed": false,
+          "predicted": "A",
+          "expected": "B"
+        },
+        "ttft_seconds": 0.08438383500003965,
+        "tokens_per_second": 11.827810031888358
+      },
+      {
+        "id": "mmlu_252",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Estimate the β-hyperfine value for the cyclobutyl radical (C4H7•) assuming the radical is flat and the HCH angle is 115°.\nA. 4.6 mT\nB. 27 G\nC. 5.4 mT\nD. 3.8 mT\n/no_think",
+        "answer": "A",
+        "generated_text": "A. 4.6 mT",
+        "score": {
+          "passed": true,
+          "predicted": "A",
+          "expected": "A"
+        },
+        "ttft_seconds": 0.12715086600002223,
+        "tokens_per_second": 15.973120496721325
+      },
+      {
+        "id": "mmlu_253",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: What is the ratio of line intensities in the EPR spectrum of the t-Bu radical (CH3)3C•?\nA. 1:19:36:84:126:126:84:36:19:1\nB. 1:9:36:84:126:126:84:36:9:1\nC. 1:9:35:82:120:120:82:35:9:1\nD. 1:8:28:56:70:56:28:8:1\n/no_think",
+        "answer": "D",
+        "generated_text": "A",
+        "score": {
+          "passed": false,
+          "predicted": "A",
+          "expected": "D"
+        },
+        "ttft_seconds": 0.12597525000001042,
+        "tokens_per_second": 7.92642049698787
+      },
+      {
+        "id": "mmlu_254",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Which one sentence explains most accurately why spin trapping is often used to detect free radical intermediates?\nA. spin trapping provides more structural information than direct detection by EPR\nB. spin trapping makes it easy to quantify free radical intermediates\nC. steady state concentration of free radical intermediates is often too low to enable direct detection by EPR\nD. detection of spin adducts requires lower power than direct detection of radical intermediates\n/no_think",
+        "answer": "D",
+        "generated_text": "C",
+        "score": {
+          "passed": false,
+          "predicted": "C",
+          "expected": "D"
+        },
+        "ttft_seconds": 0.1337619459999928,
+        "tokens_per_second": 7.4655959210388865
+      },
+      {
+        "id": "mmlu_255",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Calculate the magnetic moment (μI) of a 13C nucleus.\nA. 6.1445 x 10^-27 J T-1\nB. 3.1445 x 10^-27 J T-1\nC. 9.1445 x 10^-27 J T-1\nD. 1.1445 x 10^-28 J T-1\n/no_think",
+        "answer": "C",
+        "generated_text": "A",
+        "score": {
+          "passed": false,
+          "predicted": "A",
+          "expected": "C"
+        },
+        "ttft_seconds": 0.1340153579999992,
+        "tokens_per_second": 7.4514135793560685
+      },
+      {
+        "id": "mmlu_256",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: The normal modes of a carbon dioxide molecule that are infrared-active include which of the following?\nI. Bending\nII. Symmetric stretching\nIII. Asymmetric stretching\nA. I only\nB. II only\nC. III only\nD. I and III only\n/no_think",
+        "answer": "D",
+        "generated_text": "D. I and III only",
+        "score": {
+          "passed": true,
+          "predicted": "D",
+          "expected": "D"
+        },
+        "ttft_seconds": 0.15645498300000327,
+        "tokens_per_second": 16.518312262918542
+      },
+      {
+        "id": "mmlu_257",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Which of the following is a true statement about optical isomerism of complexes containing achiral ligands?\nA. Square planar complexes can display optical isomerism only if all four ligands are identical.\nB. Tetrahedral complexes never display optical isomerism.\nC. Linear complexes can display optical isomerism when both ligands are different.\nD. Octahedral complexes of monodentate ligands can display optical isomerism only when they have at least three different ligands.\n/no_think",
+        "answer": "D",
+        "generated_text": "D",
+        "score": {
+          "passed": true,
+          "predicted": "D",
+          "expected": "D"
+        },
+        "ttft_seconds": 0.10738567999999304,
+        "tokens_per_second": 9.295129249095764
+      },
+      {
+        "id": "mmlu_258",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Which one of the following statements is true:\nA. Protons and neutrons have orbital and spin angular momentum.\nB. Protons have orbital and spin angular momentum, neutrons have spin angular momentum.\nC. Protons and neutrons possess orbital angular momentum only.\nD. Protons and neutrons possess spin angular momentum only.\n/no_think",
+        "answer": "C",
+        "generated_text": "D.",
+        "score": {
+          "passed": false,
+          "predicted": "D",
+          "expected": "C"
+        },
+        "ttft_seconds": 0.1573216920000391,
+        "tokens_per_second": 12.698658205804746
+      },
+      {
+        "id": "mmlu_259",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Calculate the Larmor frequency for a proton in a magnetic field of 1 T.\nA. 23.56 GHz\nB. 42.58 MHz\nC. 74.34 kHz\nD. 13.93 MHz\n/no_think",
+        "answer": "B",
+        "generated_text": "A. 23.56 GHz",
+        "score": {
+          "passed": false,
+          "predicted": "A",
+          "expected": "B"
+        },
+        "ttft_seconds": 0.1283719200000064,
+        "tokens_per_second": 19.498883123473316
+      },
+      {
+        "id": "mmlu_260",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Let k be the number of real solutions of the equation e^x + x - 2 = 0 in the interval [0, 1], and let n be the number of real solutions that are not in [0, 1]. Which of the following is true?\nA. k = 0 and n = 1\nB. k = 1 and n = 0\nC. k = n = 1\nD. k > 1\n/no_think",
+        "answer": "B",
+        "generated_text": "B",
+        "score": {
+          "passed": true,
+          "predicted": "B",
+          "expected": "B"
+        },
+        "ttft_seconds": 0.12315169799995829,
+        "tokens_per_second": 8.115718195125531
+      },
+      {
+        "id": "mmlu_261",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Up to isomorphism, how many additive abelian groups G of order 16 have the property that x + x + x + x = 0 for each x in G ?\nA. 0\nB. 1\nC. 2\nD. 3\n/no_think",
+        "answer": "D",
+        "generated_text": "B. 1",
+        "score": {
+          "passed": false,
+          "predicted": "B",
+          "expected": "D"
+        },
+        "ttft_seconds": 0.1785882949999973,
+        "tokens_per_second": 14.952057200471746
+      },
+      {
+        "id": "mmlu_262",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Suppose P is the set of polynomials with coefficients in Z_5 and degree less than or equal to 7. If the operator D sends p(x) in P to its derivative p′(x), what are the dimensions of the null space n and range r of D?\nA. n = 1 and r = 6\nB. n = 1 and r = 7\nC. n = 2 and r = 5\nD. n = 2 and r = 6\n/no_think",
+        "answer": "D",
+        "generated_text": "D. n = 2 and r = 6",
+        "score": {
+          "passed": true,
+          "predicted": "D",
+          "expected": "D"
+        },
+        "ttft_seconds": 0.16221429999995962,
+        "tokens_per_second": 17.1927371495091
+      },
+      {
+        "id": "mmlu_263",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: The shortest distance from the curve xy = 8 to the origin is\nA. 4\nB. 8\nC. 16\nD. 2sqrt(2)\n/no_think",
+        "answer": "A",
+        "generated_text": "A. 4",
+        "score": {
+          "passed": true,
+          "predicted": "A",
+          "expected": "A"
+        },
+        "ttft_seconds": 0.14596633000002157,
+        "tokens_per_second": 17.09549936147967
+      },
+      {
+        "id": "mmlu_264",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: There are 25 suitcases, 5 of which are damaged. Three suitcases are selected at random. What is the probability that exactly 2 are damaged?\nA. 2/69\nB. 1/30\nC. 2/23\nD. 12/125\n/no_think",
+        "answer": "C",
+        "generated_text": "D. 12/125",
+        "score": {
+          "passed": false,
+          "predicted": "D",
+          "expected": "C"
+        },
+        "ttft_seconds": 0.23033865899998318,
+        "tokens_per_second": 15.827603157713346
+      },
+      {
+        "id": "mmlu_265",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Let (Z_{10} , +, x) be the ring of integers modulo 10, and let S be the subset of Z_{10} represented by {0, 2, 4, 6, 8}. Which of the following statements is FALSE?\nA. (S, +, x) is closed under addition modulo 10.\nB. (S, +, x) is closed under multiplication modulo 10.\nC. (S, +, x) has an identity under addition modulo 10.\nD. (S, +, x) has no identity under multiplication modulo 10.\n/no_think",
+        "answer": "D",
+        "generated_text": "D",
+        "score": {
+          "passed": true,
+          "predicted": "D",
+          "expected": "D"
+        },
+        "ttft_seconds": 0.0890782769999987,
+        "tokens_per_second": 11.184396371250442
+      },
+      {
+        "id": "mmlu_266",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: A ladder 9 meters in length is leaning against a vertical wall on level ground. As the bottom end of the ladder is moved away from the wall at a constant rate of 2 meters per second, the top end slides downward along the wall. How fast, in meters per second, will the top end of the ladder be sliding downward at the moment the top end is 3 meters above the ground?\nA. 12*sqrt(2)\nB. 6*sqrt(2)\nC. 4*sqrt(2)\nD. 1/(2*sqrt(2))\n/no_think",
+        "answer": "C",
+        "generated_text": "B. 6*sqrt(2)",
+        "score": {
+          "passed": false,
+          "predicted": "B",
+          "expected": "C"
+        },
+        "ttft_seconds": 0.15643444399995587,
+        "tokens_per_second": 17.608642600397435
+      },
+      {
+        "id": "mmlu_267",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Consider a segment of length 10. Points A and B are chosen randomly such that A and B divide the segment into three smaller segments. What is the probability that the three smaller segments could form the sides of a triangle?\nA. 0\nB. 10%\nC. 25%\nD. 50%\n/no_think",
+        "answer": "C",
+        "generated_text": "A",
+        "score": {
+          "passed": false,
+          "predicted": "A",
+          "expected": "C"
+        },
+        "ttft_seconds": 0.11662237399997366,
+        "tokens_per_second": 8.56121921966888
+      },
+      {
+        "id": "mmlu_268",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Let V be a finite-dimensional real vector space and let P be a linear transformation of V such that P^2 = P. Which of the following must be true?\nI. P is invertible.\nII. P is diagonalizable.\nIII. P is either the identity transformation or the zero transformation.\nA. None\nB. I only\nC. II only\nD. III only\n/no_think",
+        "answer": "C",
+        "generated_text": "D. III only",
+        "score": {
+          "passed": false,
+          "predicted": "D",
+          "expected": "C"
+        },
+        "ttft_seconds": 0.17640673500000048,
+        "tokens_per_second": 14.607135645653063
+      },
+      {
+        "id": "mmlu_269",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Which of the following is true?\nA. Every compact space is complete\nB. Every complete space is compact\nC. Neither (a) nor (b).\nD.  Both (a) and (b).\n/no_think",
+        "answer": "A",
+        "generated_text": "C.",
+        "score": {
+          "passed": false,
+          "predicted": "C",
+          "expected": "A"
+        },
+        "ttft_seconds": 0.13821520800001963,
+        "tokens_per_second": 14.45182532081533
+      },
+      {
+        "id": "mmlu_270",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: A discrete graph is complete if there is an edge connecting any pair of vertices. How many edges does a complete graph with 10 vertices have?\nA. 10\nB. 20\nC. 25\nD. 45\n/no_think",
+        "answer": "D",
+        "generated_text": "D. 45",
+        "score": {
+          "passed": true,
+          "predicted": "D",
+          "expected": "D"
+        },
+        "ttft_seconds": 0.15303212100002384,
+        "tokens_per_second": 17.689415546344925
+      },
+      {
+        "id": "mmlu_271",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Suppose X is a discrete random variable on the set of positive integers such that for each positive integer n, the probability that X = n is 1/2^n. If Y is a random variable with the same probability distribution and X and Y are independent, what is the probability that the value of at least one of the variables X and Y is greater than 3 ?\nA. 1/64\nB. 15/64\nC. 1/4\nD. 3/8\n/no_think",
+        "answer": "B",
+        "generated_text": "B. 15/64",
+        "score": {
+          "passed": true,
+          "predicted": "B",
+          "expected": "B"
+        },
+        "ttft_seconds": 0.15598667199998317,
+        "tokens_per_second": 15.762434389458804
+      },
+      {
+        "id": "mmlu_272",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Let V and W be 4-dimensional subspaces of a 7-dimensional vector space X. Which of the following CANNOT be the dimension of the subspace V intersect W?\nA. 0\nB. 1\nC. 2\nD. 3\n/no_think",
+        "answer": "A",
+        "generated_text": "A",
+        "score": {
+          "passed": true,
+          "predicted": "A",
+          "expected": "A"
+        },
+        "ttft_seconds": 0.1091966249999814,
+        "tokens_per_second": 9.14267583576126
+      },
+      {
+        "id": "mmlu_273",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: A large class is to be divided into teams and each student must be a member of exactly one team. However, each student dislikes three of their classmates. Dislike between students need not be mutual. If the teams do not need to be equally sized, how many must be created so that no student is the teammate of someone they dislike?\nA. 4\nB. 7\nC. 10\nD. 13\n/no_think",
+        "answer": "B",
+        "generated_text": "C. 10",
+        "score": {
+          "passed": false,
+          "predicted": "C",
+          "expected": "B"
+        },
+        "ttft_seconds": 0.18641363400001865,
+        "tokens_per_second": 14.44265352331252
+      },
+      {
+        "id": "mmlu_274",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Sofia and Tess will each randomly choose one of the 10 integers from 1 to 10. What is the probability that neither integer chosen will be the square of the other?\nA. 0.64\nB. 0.72\nC. 0.81\nD. 0.95\n/no_think",
+        "answer": "D",
+        "generated_text": "C. 0.81",
+        "score": {
+          "passed": false,
+          "predicted": "C",
+          "expected": "D"
+        },
+        "ttft_seconds": 0.15306502200002114,
+        "tokens_per_second": 18.383220254556825
+      },
+      {
+        "id": "mmlu_275",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Let K be a nonempty subset of R^n, where n > 1. Which of the following statements must be true?\nI. If K is compact, then every continuous real-valued function defined on K is bounded.\nII. If every continuous real-valued function defined on K is bounded, then K is compact.\nIII. If K is compact, then K is connected.\nA. I only\nB. II only\nC. III only\nD. I and II only\n/no_think",
+        "answer": "D",
+        "generated_text": "A. I only",
+        "score": {
+          "passed": false,
+          "predicted": "A",
+          "expected": "D"
+        },
+        "ttft_seconds": 0.1713120809999964,
+        "tokens_per_second": 13.960121182785905
+      },
+      {
+        "id": "mmlu_276",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Suppose V is a real vector space of finite dimension n. Call the set of matrices from V into itself M(V). Let T be in M(V). Consider the two subspaces U = {X ∈ M(V) : TX = XT} and W = {TX − XT : X ∈ M(V)}. Which of the following must be TRUE?\nI. If V has a basis containing only eigenvectors of T then U = M(V).\nII. dim (U) + dim (W) = n^2\nIII. dim (U) < n\nA. I only\nB. II only\nC. III only\nD. I and II only\n/no_think",
+        "answer": "B",
+        "generated_text": "A. I only",
+        "score": {
+          "passed": false,
+          "predicted": "A",
+          "expected": "B"
+        },
+        "ttft_seconds": 0.12913558400003922,
+        "tokens_per_second": 18.704318647144497
+      },
+      {
+        "id": "mmlu_277",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Let F be a constant unit force that is parallel to the vector (-1, 0, 1) in xyz-space. What is the work done by F on a particle that moves along the path given by (t, t^2, t^3) between time t=0 and time t=1?\nA. -1/4\nB. -1/(4sqrt(2))\nC. 0\nD. sqrt(2)\n/no_think",
+        "answer": "C",
+        "generated_text": "A. -1/4",
+        "score": {
+          "passed": false,
+          "predicted": "A",
+          "expected": "C"
+        },
+        "ttft_seconds": 0.19192852800000537,
+        "tokens_per_second": 15.535739328770553
+      },
+      {
+        "id": "mmlu_278",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Let X be a topological space, and let A, B, and C be nonempty subsets of X such that A c B c C; that is, A is a proper subset of B, and B is a proper subset of C. Which of the following statements is (are) true?\nI. If A and C are connected, then B is connected.\nII. If A and C are compact, then B is compact.\nIII. If A and C are Hausdorff, then B is Hausdorff.\nA. I and II only\nB. III only\nC. I and III only\nD. I, II, and III\n/no_think",
+        "answer": "D",
+        "generated_text": "C. I and III only",
+        "score": {
+          "passed": false,
+          "predicted": "C",
+          "expected": "D"
+        },
+        "ttft_seconds": 0.1590041129999804,
+        "tokens_per_second": 15.084146003432148
+      },
+      {
+        "id": "mmlu_279",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Let x_1 = 1 and x_(n+1) = sqrt(3+2x_n) for all positive integers n. If it is assumed that {x_n} converges, then lim x_n =\nA. 3\nB. e\nC. sqrt(5)\nD. 0\n/no_think",
+        "answer": "A",
+        "generated_text": "A. 3",
+        "score": {
+          "passed": true,
+          "predicted": "A",
+          "expected": "A"
+        },
+        "ttft_seconds": 0.19839414000000488,
+        "tokens_per_second": 12.319975019525089
+      },
+      {
+        "id": "mmlu_280",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: A police officer carries out hundreds of traffic stops every year. When his supervisor is reviewing the officer’s records for the past year, he notices that the officer is equally likely to stop people of various genders, ages, and races. However, he is significantly more likely to write tickets for middle-aged white males with dark hair and eyes. When confronted with this fact, the officer truthfully states that he has no idea why that is, and that it must simply be a coincidence. Unbeknownst to the officer, this behavior is tied to the fact that these men look like his father, with whom he had an abusive relationship as a child. What psychological framework would directly address the unconscious bias in his behavior?\nA. Behaviorist\nB. Psychoanalytic\nC. Cognitive behavioral\nD. Humanistic\n/no_think",
+        "answer": "B",
+        "generated_text": "B.",
+        "score": {
+          "passed": true,
+          "predicted": "B",
+          "expected": "B"
+        },
+        "ttft_seconds": 0.1754516770000123,
+        "tokens_per_second": 11.387962928878258
+      },
+      {
+        "id": "mmlu_281",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Who set the world record for the mile race in 1886?\nA. R Bannister\nB. S Coe\nC. J DiMaggio\nD. WG George\n/no_think",
+        "answer": "D",
+        "generated_text": "A",
+        "score": {
+          "passed": false,
+          "predicted": "A",
+          "expected": "D"
+        },
+        "ttft_seconds": 0.1215662110000153,
+        "tokens_per_second": 8.220997445232987
+      },
+      {
+        "id": "mmlu_282",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Which of the following statements identifies a chemically based sensory system?\nI. Gustatory system\nII. Auditory system\nIII. Olfactory system\nA. I only\nB. II only\nC. III only\nD. I and III only\n/no_think",
+        "answer": "D",
+        "generated_text": "C.",
+        "score": {
+          "passed": false,
+          "predicted": "C",
+          "expected": "D"
+        },
+        "ttft_seconds": 0.13315223399996512,
+        "tokens_per_second": 14.997255314817625
+      },
+      {
+        "id": "mmlu_283",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: The complete resynthesis of phosphocreatine after very high intensity exercise normally takes:\nA. about 10 seconds.\nB. about 30 seconds.\nC. about 1 minute.\nD. about 4 minutes.\n/no_think",
+        "answer": "D",
+        "generated_text": "A. about 10 seconds.",
+        "score": {
+          "passed": false,
+          "predicted": "A",
+          "expected": "D"
+        },
+        "ttft_seconds": 0.16811185299997078,
+        "tokens_per_second": 14.328469953912002
+      },
+      {
+        "id": "mmlu_284",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: A race car attempting to jump a series of 8 buses is set up on a flat track with a ramp at the end. Engineers assigned to the project have determined that, in order to jump the buses, the car must reach a velocity of 130 km/h. If the distance of the track is 50m, at what rate must the car accelerate to reach this velocity?\nA. 13 m/s^2\nB. 26 m/s^2\nC. 7 m/s^2\nD. 17 m/s^2\n/no_think",
+        "answer": "A",
+        "generated_text": "A. 13 m/s^2",
+        "score": {
+          "passed": true,
+          "predicted": "A",
+          "expected": "A"
+        },
+        "ttft_seconds": 0.15627150300002768,
+        "tokens_per_second": 19.75346798413465
+      },
+      {
+        "id": "mmlu_285",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Fatty acids are transported into the mitochondria bound to:\nA. thiokinase.\nB. coenzyme A (CoA).\nC. acetyl-CoA.\nD. carnitine.\n/no_think",
+        "answer": "D",
+        "generated_text": "D.",
+        "score": {
+          "passed": true,
+          "predicted": "D",
+          "expected": "D"
+        },
+        "ttft_seconds": 0.1893239420000441,
+        "tokens_per_second": 10.554814789334412
+      },
+      {
+        "id": "mmlu_286",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Sauna use, sometimes referred to as \"sauna bathing,\" is characterized by short-term passive exposure to extreme heat. This exposure elicits mild hyperthermia – an increase in the body's core temperature – that induces a thermoregulatory response involving neuroendocrine, cardiovascular, and cytoprotective mechanisms that work together to restore homeostasis and condition the body for future heat stressors… In recent decades, sauna bathing has emerged as a means to increase lifespan and improve overall health, based on compelling data from observational, interventional, and mechanistic studies. Of particular interest are the findings from studies of participants in the Kuopio Ischemic Heart Disease Risk Factor (KIHD) Study, an ongoing prospective population-based cohort study of health outcomes in more than 2,300 middle-aged men from eastern Finland, which identified strong links between sauna use and reduced death and disease… The KIHD findings showed that men who used the sauna two to three times per week were 27 percent less likely to die from cardiovascular-related causes than men who didn't use the sauna.[2] Furthermore, the benefits they experienced were found to be dose-dependent: Men who used the sauna roughly twice as often, about four to seven times per week, experienced roughly twice the benefits – and were 50 percent less likely to die from cardiovascular-related causes.[2] In addition, frequent sauna users were found to be 40 percent less likely to die from all causes of premature death. These findings held true even when considering age, activity levels, and lifestyle factors that might have influenced the men's health.[2]... The KIHD also revealed that frequent sauna use reduced the risk of developing dementia and Alzheimer's disease in a dose-dependent manner. Men who used the sauna two to three times per week had a 66 percent lower risk of developing dementia and a 65 percent lower risk of developing Alzheimer's disease, compared to men who used the sauna only one time per week… The health benefits associated with sauna use extended to other aspects of mental health, as well. Men participating in the KIHD study who used the sauna four to seven times per week were 77 percent less likely to develop psychotic disorders, regardless of the men's dietary habits, socioeconomic status, physical activity, and inflammatory status (as measured by C-reactive protein)…Exposure to high temperature stresses the body, eliciting a rapid, robust response. The skin and core body temperatures increase markedly, and sweating ensues. The skin heats first, rising to 40°C (104°F), and then changes in core body temperature occur, rising slowly from 37°C (98.6°F, or normal) to 38°C (100.4°F) and then rapidly increasing to 39°C (102.2°F)…  Cardiac output, a measure of the amount of work the heart performs in response to the body's need for oxygen, increases by 60 to 70 percent, while the heart rate (the number of beats per minute) increases and the stroke volume (the amount of blood pumped) remains unchanged.[5] During this time, approximately 50 to 70 percent of the body's blood flow is redistributed from the core to the skin to facilitate sweating. The average person loses approximately 0.5 kg of sweat while sauna bathing.[11] Acute heat exposure also induces a transient increase in overall plasma volume to mitigate the decrease in core blood volume. This increase in plasma volume not only provides a reserve source of fluid for sweating, but it also acts like the water in a car's radiator, cooling the body to prevent rapid increases in core body temperature and promoting heat tolerance… Repeated sauna use acclimates the body to heat and optimizes the body's response to future exposures, likely due to a biological phenomenon known as hormesis, a compensatory defense response following exposure to a mild stressor that is disproportionate to the magnitude of the stressor. Hormesis triggers a vast array of protective mechanisms that not only repair cell damage but also provide protection from subsequent exposures to more devastating stressors… The physiological responses to sauna use are remarkably similar to those experienced during moderate- to vigorous-intensity exercise. In fact, sauna use has been proposed as an alternative to exercise for people who are unable to engage in physical activity due to chronic disease or physical limitations.[13]\n\nBased on the article, which of the following statements is the author likely to agree with?\nA. Heart surgery patients who cannot run on treadmills may benefit from sauna use.\nB. Patients on a diet would benefit from sauna use.\nC. Salt restriction would be equal to sauna use for hypertensive patients.\nD. Patients with skin conditions may be cured with sauna use.\n/no_think",
+        "answer": "A",
+        "generated_text": "A.",
+        "score": {
+          "passed": true,
+          "predicted": "A",
+          "expected": "A"
+        },
+        "ttft_seconds": 0.6697483629999965,
+        "tokens_per_second": 2.98529108720357
+      },
+      {
+        "id": "mmlu_287",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Diisopropylfluorophosphate (DFP) binds to the active site of acetylcholinesterase (ACE) in the synapses of neurons. When DFP binds to ACE, the ACE enzyme is rendered permanently inactive. This makes DFP a potent toxin, with lethal amounts at less than 100 mg. The interaction between DFP and ACE can best be characterized as:\nA. Competitive inhibition\nB. Noncompetitive inhibition\nC. Irreversible inhibition\nD. Partially competitive inhibition\n/no_think",
+        "answer": "C",
+        "generated_text": "C",
+        "score": {
+          "passed": true,
+          "predicted": "C",
+          "expected": "C"
+        },
+        "ttft_seconds": 0.1102072990000238,
+        "tokens_per_second": 9.059420029339316
+      },
+      {
+        "id": "mmlu_288",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: The process of translation requires the presence of:\nA. mRNA, tRNA and ribosomes.\nB. mRNA, ribosomes and RNA polymerase.\nC. DNA, mRNA and RNA polymerase.\nD. chromatin, DNA and amino acids.\n/no_think",
+        "answer": "A",
+        "generated_text": "A",
+        "score": {
+          "passed": true,
+          "predicted": "A",
+          "expected": "A"
+        },
+        "ttft_seconds": 0.10478946000000633,
+        "tokens_per_second": 9.528062487931102
+      },
+      {
+        "id": "mmlu_289",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Performance enhancing synthetic steroids are based on the structure of the hormone:\nA. testosterone.\nB. cortisol.\nC. progesterone.\nD. aldosterone.\n/no_think",
+        "answer": "A",
+        "generated_text": "A",
+        "score": {
+          "passed": true,
+          "predicted": "A",
+          "expected": "A"
+        },
+        "ttft_seconds": 0.1411570269999629,
+        "tokens_per_second": 7.080659867935106
+      },
+      {
+        "id": "mmlu_290",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Perchloric acid (HClO4) is considered one of the stronger acids in existence. Which of the following statements corresponds most accurately with strong acids?\nA. Ka is less than 1\nB. They have an open electron spot on their outer valence rings\nC. They have stable conjugate bases\nD. They remain bound in the presence of water.\n/no_think",
+        "answer": "C",
+        "generated_text": "C.",
+        "score": {
+          "passed": true,
+          "predicted": "C",
+          "expected": "C"
+        },
+        "ttft_seconds": 0.12362266299999192,
+        "tokens_per_second": 16.155674528812927
+      },
+      {
+        "id": "mmlu_291",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: A descript amount of 2-bromobutane is placed into a strong solution of ethanol and allowed to complete a reaction. The result of this reaction produces a major product of 2-butene and a minor product of 1-butene. Which of the following descriptions of the starting compound explains why 2-butene is the major product?\nA. Carbon 3 has less hydrogen atoms\nB. 1-butene rearranges to 2-butene in solution\nC. Ethanol prefers the second carbon in any chain\nD. Cyclic aromatization\n/no_think",
+        "answer": "A",
+        "generated_text": "C",
+        "score": {
+          "passed": false,
+          "predicted": "C",
+          "expected": "A"
+        },
+        "ttft_seconds": 0.1081454849999659,
+        "tokens_per_second": 9.232674286577508
+      },
+      {
+        "id": "mmlu_292",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: A hedonic teenager of wayward morals, in one night, sequentially i) has consensual sexual intercourse with his sister, ii) leaves no tip at the bar, iii) has non-censual sexual relations with an unknown woman, and iv) vomits on the steps to the door of a local church. The teenager has violated society’s norms sequentially (to the greatest degree) on the order of:\nA. mores, mores, the law, mores\nB. taboo, folkways, the law, and taboo\nC. the law, folkways, folkways, and folkways\nD. taboo, folkways, the law, and mores\n/no_think",
+        "answer": "D",
+        "generated_text": "D.",
+        "score": {
+          "passed": true,
+          "predicted": "D",
+          "expected": "D"
+        },
+        "ttft_seconds": 0.17798246199998857,
+        "tokens_per_second": 11.218807109515426
+      },
+      {
+        "id": "mmlu_293",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: The maximum sustainable power:\nA. usually remains constant during a race.\nB. declines with the distance of the race.\nC. is improved by a high fat diet.\nD. is inversely related to muscle glycogen content.\n/no_think",
+        "answer": "B",
+        "generated_text": "A",
+        "score": {
+          "passed": false,
+          "predicted": "A",
+          "expected": "B"
+        },
+        "ttft_seconds": 0.12580903399998533,
+        "tokens_per_second": 7.937884088410987
+      },
+      {
+        "id": "mmlu_294",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: A patient comes into the ER looking extremely agitated. They are acting aggressive, and claiming they need medication or “bad things will happen”. What is the likely state of this patient’s dopamine system?\nA. There is decreased dopamine in the synaptic cleft.\nB. There are decreased dopamine receptors on the post-synaptic membrane.\nC. There is cell death in the areas with high dopamine cells.\nD. There is seizure-like activity in the dopamine brain areas.\n/no_think",
+        "answer": "B",
+        "generated_text": "A",
+        "score": {
+          "passed": false,
+          "predicted": "A",
+          "expected": "B"
+        },
+        "ttft_seconds": 0.10533324400000765,
+        "tokens_per_second": 9.486503532448285
+      },
+      {
+        "id": "mmlu_295",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: A scientist carrying out experiments on hearing aids fits 30 mice that were genetically modified to lose their hearing with the latest technology and were tested to press a lever when they heard a bell. This was set to varying levels of power. At 80% power, 20 mice pressed the lever. At 70% power, 15 mice pressed the lever. At 60% power, 10 mice pressed the lever. Which of the following power levels corresponds to the absolute threshold for hearing the decibels produced by the bell?\nA. 80%\nB. 70%\nC. 60%\nD. Not enough information given.\n/no_think",
+        "answer": "B",
+        "generated_text": "D.",
+        "score": {
+          "passed": false,
+          "predicted": "D",
+          "expected": "B"
+        },
+        "ttft_seconds": 0.15038895099996807,
+        "tokens_per_second": 13.284356302830147
+      },
+      {
+        "id": "mmlu_296",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: The transcription of DNA to a molecule of messenger RNA occurs:\nA. on the ribosomes.\nB. in the cytosol.\nC. in the nucleus.\nD. only during cell division.\n/no_think",
+        "answer": "C",
+        "generated_text": "C.",
+        "score": {
+          "passed": true,
+          "predicted": "C",
+          "expected": "C"
+        },
+        "ttft_seconds": 0.1942511569999965,
+        "tokens_per_second": 10.292392725285332
+      },
+      {
+        "id": "mmlu_297",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: A new enzyme is found in a transgenic mice that participates in synthesis of an unknown product using two reactants. When using radiolabeled compounds to study the enzyme, it is found that the enzyme catalyzes a process that switches a nitrogen group on one reactant to the other reactant. Which of the following categories would this new enzyme fall under?\nA. Oxidoreductase\nB. Transferase\nC. Hydrolase\nD. Lyase\n/no_think",
+        "answer": "B",
+        "generated_text": "B",
+        "score": {
+          "passed": true,
+          "predicted": "B",
+          "expected": "B"
+        },
+        "ttft_seconds": 0.10939550399996278,
+        "tokens_per_second": 9.12498743489337
+      },
+      {
+        "id": "mmlu_298",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: For a very weak base, the pKb of a solution would likely be:\nA. Equal to the pOH\nB. Higher than the pOH\nC. Lower than the pOH\nD. Near 7 at 25ºC\n/no_think",
+        "answer": "B",
+        "generated_text": "C",
+        "score": {
+          "passed": false,
+          "predicted": "C",
+          "expected": "B"
+        },
+        "ttft_seconds": 0.14687294100002646,
+        "tokens_per_second": 6.800924348994059
+      },
+      {
+        "id": "mmlu_299",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: The genome is:\nA. the number of chromosomes found in the somatic cells of an organism.\nB. the entire DNA sequence of an organism.\nC. the entire list of proteins that an organism is capable of producing.\nD. the DNA sequence of an entire chromosome.\n/no_think",
+        "answer": "B",
+        "generated_text": "B.",
+        "score": {
+          "passed": true,
+          "predicted": "B",
+          "expected": "B"
+        },
+        "ttft_seconds": 0.20188898899999685,
+        "tokens_per_second": 9.898010111964131
+      }
+    ]
+  }
+}
