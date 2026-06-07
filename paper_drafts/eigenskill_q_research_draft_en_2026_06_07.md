@@ -36,7 +36,7 @@ evidence is deliberately gated and prototype-level: public-task coverage now
 includes a two-model guarded Ollama ladder over 200 MMLU/GSM8K subset rows and
 a tiny official PTQ task-execution smoke matrix over FP16/AutoAWQ/GPTQModel
 Qwen2.5-0.5B variants. We further run the same three official PTQ variants on
-matched 20-row public MMLU and GSM8K subsets, producing 120 guarded task
+matched 50-row public MMLU and GSM8K subsets, producing 300 guarded task
 executions and a PC-side runtime profile with TTFT, tokens/s, and guarded VRAM.
 ESMP packaging, Triton shape tuning, selected-row
 execution, shallow fused-QKV generation, and C++ audit tools are executable.
@@ -217,8 +217,8 @@ current ledger passes 26/26 gates. The most important gates are:
 | Public task model ladder | 2 local Ollama models over 200 MMLU/GSM8K subset rows | Public-task evidence is reported without hiding the weaker 4B case. | Leaderboard quality, monotonic scaling, or fused quantized retention. |
 | Official PTQ task-execution smoke | FP16/AutoAWQ/GPTQModel Qwen2.5-0.5B on 24 public smoke executions; see `outputs/OFFICIAL_PTQ_TASK_RETENTION_SMOKE_MATRIX_2026_06_07.md`. | Official-package artifacts load and run matching tiny task fixtures under guard; zero-FP16 formats are execution-only. | Broad task retention, leaderboard quality, or AWQ/GPTQ competitiveness. |
 | Official PTQ runtime profile | FP16/AutoAWQ/GPTQModel Qwen2.5-0.5B PC-side runtime profile; see `outputs/OFFICIAL_PTQ_RUNTIME_PROFILE_2026_06_07.md`. | TTFT, tokens/s, and peak guarded VRAM are reported for the same task-smoke path. | Not mobile deployment, not production runtime speedup, not energy savings, and not AWQ/GPTQ competitiveness. |
-| Official PTQ matched subset20 | FP16/AutoAWQ/GPTQModel Qwen2.5-0.5B on 120 guarded public subset executions; see `outputs/OFFICIAL_PTQ_TASK_SUBSET20_MATRIX_2026_06_07.md`. | Official-package artifacts run the same 20-row MMLU and 20-row GSM8K subsets; MMLU is 5/20 for all variants. | Leaderboard-scale task retention, reasoning quality, or AWQ/GPTQ competitiveness. |
-| Official PTQ subset20 runtime | PC-side subset20 runtime profile; see `outputs/OFFICIAL_PTQ_SUBSET20_RUNTIME_PROFILE_2026_06_07.md`. | TTFT, tokens/s, and guarded VRAM are reported for the 120-task subset path. | Not mobile deployment, not production runtime speedup, and not energy savings. |
+| Official PTQ matched subset50 | FP16/AutoAWQ/GPTQModel Qwen2.5-0.5B on 300 guarded public subset executions; see `outputs/OFFICIAL_PTQ_TASK_SUBSET50_MATRIX_2026_06_07.md`. | Official-package artifacts run the same 50-row MMLU and 50-row GSM8K subsets; MMLU is 13/50 for FP16, 11/50 for AutoAWQ, and 13/50 for GPTQModel. | Leaderboard-scale task retention, reasoning quality, or AWQ/GPTQ competitiveness. |
+| Official PTQ subset50 runtime | PC-side subset50 runtime profile; see `outputs/OFFICIAL_PTQ_SUBSET50_RUNTIME_PROFILE_2026_06_07.md`. | TTFT, tokens/s, and guarded VRAM are reported for the 300-task subset path. | Not mobile deployment, not production runtime speedup, and not energy savings. |
 | Packed-system gates | ESMP, Triton, selected-row, sidecar, QKV smoke | Prototype components are executable and audited. | Production Tensor Core/mobile runtime. |
 | Paper evidence alignment | Paper draft, required evidence paths, claim-risk scan | The draft cites committed evidence and avoids unsafe non-negated claims. | Peer-review acceptance or complete baseline coverage. |
 

@@ -141,7 +141,9 @@ class BuildEvidenceLedgerTests(unittest.TestCase):
 
     def test_official_ptq_task_gate_is_not_labeled_as_ptq_comparator(self) -> None:
         self.assertEqual(ledger.infer_category("official_ptq_task_retention"), "task execution smoke")
+        self.assertEqual(ledger.infer_category("official_ptq_task_subset50"), "task execution subset")
         self.assertEqual(ledger.infer_category("official_ptq_runtime_profile"), "runtime profile")
+        self.assertEqual(ledger.infer_category("official_ptq_subset50_runtime_profile"), "runtime profile")
 
     def test_runtime_profile_metrics_are_reported(self) -> None:
         metrics = ledger.metric_parts(

@@ -44,8 +44,8 @@ python train_python/build_evidence_ledger.py \
   --gate public_task_model_ladder=outputs/public_task_model_ladder_gate_2026_06_07.json \
   --gate official_ptq_task_retention=outputs/official_ptq_task_retention_smoke_matrix_2026_06_07.json \
   --gate official_ptq_runtime_profile=outputs/official_ptq_runtime_profile_2026_06_07.json \
-  --gate official_ptq_task_subset20=outputs/official_ptq_task_subset20_matrix_2026_06_07.json \
-  --gate official_ptq_subset20_runtime_profile=outputs/official_ptq_subset20_runtime_profile_2026_06_07.json \
+  --gate official_ptq_task_subset50=outputs/official_ptq_task_subset50_matrix_2026_06_07.json \
+  --gate official_ptq_subset50_runtime_profile=outputs/official_ptq_subset50_runtime_profile_2026_06_07.json \
   --gate allocation_family_proxy=outputs/q_palette_style_allocation_family_gate_2026_06_06.json \
   --gate robust_lcb_consensus=outputs/robust_lcb_consensus_family_gate_2026_06_06.json \
   --gate robust_lcb_quality=outputs/qwen3_0p6b_robust_lcb_quality_gate_2026_06_07.json \
@@ -307,39 +307,39 @@ Invalid claim:
 - this proves Redmi/mobile deployment, production runtime speedup, energy
   improvement, or official AWQ/GPTQ competitiveness.
 
-## Official PTQ Matched Task Subset20 Matrix
+## Official PTQ Matched Task Subset50 Matrix
 
 The same task gate can also summarize a larger matched public subset. The six
-input summaries are produced with `eval_chat_task_benchmark.py --limit 20` over
+input summaries are produced with `eval_chat_task_benchmark.py --limit 50` over
 the public MMLU and GSM8K subset files for FP16, AutoAWQ, and GPTQModel.
 
 Current gate:
 
 ```bash
 python train_python/gate_official_ptq_task_retention.py \
-  --matrix-title "Official PTQ Matched Task Subset20 Matrix" \
-  --evidence-label "20-row matched public MMLU/GSM8K subsets" \
-  --case fp16:mmlu=outputs/official_ptq_task_fp16_mmlu_subset20_summary_2026_06_07.json=outputs/official_ptq_task_fp16_mmlu_subset20_gpu_guard_2026_06_07.json \
-  --case fp16:gsm8k=outputs/official_ptq_task_fp16_gsm8k_subset20_summary_2026_06_07.json=outputs/official_ptq_task_fp16_gsm8k_subset20_gpu_guard_2026_06_07.json \
-  --case autoawq:mmlu=outputs/official_ptq_task_awq_mmlu_subset20_summary_2026_06_07.json=outputs/official_ptq_task_awq_mmlu_subset20_gpu_guard_2026_06_07.json \
-  --case autoawq:gsm8k=outputs/official_ptq_task_awq_gsm8k_subset20_summary_2026_06_07.json=outputs/official_ptq_task_awq_gsm8k_subset20_gpu_guard_2026_06_07.json \
-  --case gptqmodel:mmlu=outputs/official_ptq_task_gptqmodel_mmlu_subset20_summary_2026_06_07.json=outputs/official_ptq_task_gptqmodel_mmlu_subset20_gpu_guard_2026_06_07.json \
-  --case gptqmodel:gsm8k=outputs/official_ptq_task_gptqmodel_gsm8k_subset20_summary_2026_06_07.json=outputs/official_ptq_task_gptqmodel_gsm8k_subset20_gpu_guard_2026_06_07.json \
-  --min-tasks-per-case 20 \
+  --matrix-title "Official PTQ Matched Task Subset50 Matrix" \
+  --evidence-label "50-row matched public MMLU/GSM8K subsets" \
+  --case fp16:mmlu=outputs/official_ptq_task_fp16_mmlu_subset50_summary_2026_06_07.json=outputs/official_ptq_task_fp16_mmlu_subset50_gpu_guard_2026_06_07.json \
+  --case fp16:gsm8k=outputs/official_ptq_task_fp16_gsm8k_subset50_summary_2026_06_07.json=outputs/official_ptq_task_fp16_gsm8k_subset50_gpu_guard_2026_06_07.json \
+  --case autoawq:mmlu=outputs/official_ptq_task_awq_mmlu_subset50_summary_2026_06_07.json=outputs/official_ptq_task_awq_mmlu_subset50_gpu_guard_2026_06_07.json \
+  --case autoawq:gsm8k=outputs/official_ptq_task_awq_gsm8k_subset50_summary_2026_06_07.json=outputs/official_ptq_task_awq_gsm8k_subset50_gpu_guard_2026_06_07.json \
+  --case gptqmodel:mmlu=outputs/official_ptq_task_gptqmodel_mmlu_subset50_summary_2026_06_07.json=outputs/official_ptq_task_gptqmodel_mmlu_subset50_gpu_guard_2026_06_07.json \
+  --case gptqmodel:gsm8k=outputs/official_ptq_task_gptqmodel_gsm8k_subset50_summary_2026_06_07.json=outputs/official_ptq_task_gptqmodel_gsm8k_subset50_gpu_guard_2026_06_07.json \
+  --min-tasks-per-case 50 \
   --max-accuracy-drop 0.25 \
-  --out-json outputs/official_ptq_task_subset20_matrix_2026_06_07.json \
-  --out-md outputs/OFFICIAL_PTQ_TASK_SUBSET20_MATRIX_2026_06_07.md
+  --out-json outputs/official_ptq_task_subset50_matrix_2026_06_07.json \
+  --out-md outputs/OFFICIAL_PTQ_TASK_SUBSET50_MATRIX_2026_06_07.md
 ```
 
-Current result: 6 cases, 3 variants, 2 task formats, 120 total task executions,
-15 total passes, max accuracy drop versus FP16 `0.0`, and peak guard VRAM ratio
-`0.6131`. MMLU is 5/20 for all three variants; GSM8K remains execution-only
-because FP16 is 0/20.
+Current result: 6 cases, 3 variants, 2 task formats, 300 total task executions,
+37 total passes, max accuracy drop versus FP16 `0.04`, and peak guard VRAM ratio
+`0.6148`. MMLU is 13/50 for FP16, 11/50 for AutoAWQ, and 13/50 for GPTQModel;
+GSM8K remains execution-only because FP16 is 0/50.
 
 Valid claim:
 
 - FP16, AutoAWQ, and GPTQModel Qwen2.5-0.5B variants can all be loaded and
-  evaluated on the same 20-row public MMLU and 20-row public GSM8K subsets under
+  evaluated on the same 50-row public MMLU and 50-row public GSM8K subsets under
   GPU guard.
 
 Invalid claim:
@@ -347,26 +347,26 @@ Invalid claim:
 - this proves leaderboard-scale task retention, reasoning quality, official
   AWQ/GPTQ competitiveness, or production inference performance.
 
-## Official PTQ Subset20 Runtime Profile Gate
+## Official PTQ Subset50 Runtime Profile Gate
 
 Current gate:
 
 ```bash
 python train_python/gate_official_ptq_runtime_profile.py \
-  --matrix-json outputs/official_ptq_task_subset20_matrix_2026_06_07.json \
-  --out-json outputs/official_ptq_subset20_runtime_profile_2026_06_07.json \
-  --out-md outputs/OFFICIAL_PTQ_SUBSET20_RUNTIME_PROFILE_2026_06_07.md
+  --matrix-json outputs/official_ptq_task_subset50_matrix_2026_06_07.json \
+  --out-json outputs/official_ptq_subset50_runtime_profile_2026_06_07.json \
+  --out-md outputs/OFFICIAL_PTQ_SUBSET50_RUNTIME_PROFILE_2026_06_07.md
 ```
 
-Current result: 3 variants, 6 cases, 120 tasks, mean `14.7072` tokens/s, mean
-TTFT `0.302620` s, peak guarded VRAM ratio `0.6131`, and peak guarded VRAM
-`4997` MiB. AutoAWQ and GPTQModel reduce guarded VRAM versus FP16 on this local
-path, but both are slower than FP16.
+Current result: 3 variants, 6 cases, 300 tasks, mean `15.8107` tokens/s, mean
+TTFT `0.250121` s, peak guarded VRAM ratio `0.6148`, and peak guarded VRAM
+`5011` MiB. AutoAWQ and GPTQModel reduce guarded VRAM versus FP16 on this local
+Transformers/GPTQModel path, but both are slower than FP16.
 
 Valid claim:
 
 - FP16, AutoAWQ, and GPTQModel Qwen2.5-0.5B variants have PC-side TTFT,
-  tokens/s, and peak VRAM measurements on the same guarded subset20 path.
+  tokens/s, and peak VRAM measurements on the same guarded subset50 path.
 
 Invalid claim:
 
@@ -562,7 +562,7 @@ Invalid claim:
 `train_python/run_official_awq_smoke.py` is a minimal package-readiness probe.
 It exists to verify that AutoAWQ can execute, save local quantized artifacts,
 and run one short generation smoke under the GPU guard. It is intentionally not
-part of the 24-gate paper-facing ledger.
+part of the 26-gate paper-facing ledger.
 
 Example WSL/GPU command:
 

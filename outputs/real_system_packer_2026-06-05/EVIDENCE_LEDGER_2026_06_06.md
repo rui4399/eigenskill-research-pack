@@ -1,15 +1,15 @@
 # Evidence Ledger
 
-Date: `2026-06-07T02:28:06+00:00`
+Date: `2026-06-07T02:58:17+00:00`
 Status: **PASS**
 Gates: `26 / 26` passed
-Categories: `allocation comparator, artifact integrity, c++ runtime, calibration robustness, capability retention, decode integration, kernel, paper alignment, ptq comparator, qkv replacement, quality, repo hygiene, rotation comparator, runtime profile, runtime wiring, selected-row, task execution smoke, task retention`
+Categories: `allocation comparator, artifact integrity, c++ runtime, calibration robustness, capability retention, decode integration, kernel, paper alignment, ptq comparator, qkv replacement, quality, repo hygiene, rotation comparator, runtime profile, runtime wiring, selected-row, task execution smoke, task execution subset, task retention`
 
 ## Gate Summary
 
 | gate | category | status | key metrics | source |
 |---|---|---|---|---|
-| `public_hygiene` | repo hygiene | **PASS** | tracked files 1786; forbidden files 0; placeholders 0 | `outputs/real_system_packer_2026-06-05/public_repo_hygiene_gate_2026_06_06.json` |
+| `public_hygiene` | repo hygiene | **PASS** | tracked files 1808; forbidden files 0; placeholders 0 | `outputs/real_system_packer_2026-06-05/public_repo_hygiene_gate_2026_06_06.json` |
 | `calibration_instability` | calibration robustness | **PASS** | cases 3; unstable 3; mean Spearman 0.0713; mean Jaccard 0.4349; top20 Jaccard 0.1022 | `outputs/calibration_instability_benchmark_2026_06_06.json` |
 | `calibration_robustness_stress` | calibration robustness | **PASS** | cases 11; wins/uniform 11; wins/best-random 11; wins/random-mean 11; mean margin/uniform 4.2942; mean margin/uniform CI [3.0664, 5.6886]; worst margin/uniform 1.3608; mean margin/best-random 1.1622; mean margin/best-random CI [0.6143, 1.7982]; worst margin/best-random 0.1120; mean margin/random-mean 2.7444; mean margin/random-mean CI [1.7921, 3.5862]; worst margin/random-mean 0.5656; mean FP16 regret 4.1683; max FP16 regret 11.6693; sign p/uniform 0.00048828; sign p/best-random 0.00048828; sign p/random-mean 0.00048828 | `outputs/calibration_robustness_stress_gate_2026_06_07.json` |
 | `consensus_transfer_boundary` | allocation comparator | **PASS** | cases 2; slices 4; wins/left-single 4; wins/right-single 2; wins/best-single 2; wins/worst-single 4; min margin/worst-single 0.8726; mean regret/best-single 0.0043; max regret/best-single 0.3046 | `outputs/consensus_transfer_boundary_gate_2026_06_07.json` |
@@ -28,8 +28,8 @@ Categories: `allocation comparator, artifact integrity, c++ runtime, calibration
 | `public_task_model_ladder` | capability retention | **PASS** | models 2; best passes 39; best accuracy 0.3900; tasks 200; passes 43; accuracy 0.2150; mean tok/s 52.0349; mean TTFT 0.607638s; VRAM 0.8865 | `outputs/public_task_model_ladder_gate_2026_06_07.json` |
 | `official_ptq_task_retention` | task execution smoke | **PASS** | cases 6; tasks 24; passes 2; accuracy 0.0833; mean tok/s 11.4608; mean TTFT 0.508495s; VRAM 0.6108 | `outputs/official_ptq_task_retention_smoke_matrix_2026_06_07.json` |
 | `official_ptq_runtime_profile` | runtime profile | **PASS** | tasks 24; cases 6; mean tok/s 11.4608; mean TTFT 0.508495s; VRAM MiB 4979; VRAM 0.6108 | `outputs/official_ptq_runtime_profile_2026_06_07.json` |
-| `official_ptq_task_subset20` | task execution smoke | **PASS** | cases 6; tasks 120; passes 15; accuracy 0.1250; mean tok/s 14.7072; mean TTFT 0.302620s; VRAM 0.6131 | `outputs/official_ptq_task_subset20_matrix_2026_06_07.json` |
-| `official_ptq_subset20_runtime_profile` | ptq comparator | **PASS** | tasks 120; cases 6; mean tok/s 14.7072; mean TTFT 0.302620s; VRAM MiB 4997; VRAM 0.6131 | `outputs/official_ptq_subset20_runtime_profile_2026_06_07.json` |
+| `official_ptq_task_subset50` | task execution subset | **PASS** | cases 6; tasks 300; passes 37; accuracy 0.1233; mean tok/s 15.8107; mean TTFT 0.250121s; VRAM 0.6148 | `outputs/official_ptq_task_subset50_matrix_2026_06_07.json` |
+| `official_ptq_subset50_runtime_profile` | runtime profile | **PASS** | tasks 300; cases 6; mean tok/s 15.8107; mean TTFT 0.250121s; VRAM MiB 5011; VRAM 0.6148 | `outputs/official_ptq_subset50_runtime_profile_2026_06_07.json` |
 | `allocation_family_proxy` | allocation comparator | **PASS** | cases 2; records 394; max avg bits 4.4997; target bits 4.5000 | `outputs/q_palette_style_allocation_family_gate_2026_06_06.json` |
 | `robust_lcb_consensus` | allocation comparator | **PASS** | cases 3; high-bit modules 99; consistent selected 80; selected modules 80; max avg bits 4.4997 | `outputs/robust_lcb_consensus_family_gate_2026_06_06.json` |
 | `robust_lcb_quality` | quality | **PASS** | cases 2; wins/uniform 2; wins/mean 0; margin vs uniform 5.6188; margin vs mean -2.8834; VRAM 0.7032 | `outputs/qwen3_0p6b_robust_lcb_quality_gate_2026_06_07.json` |

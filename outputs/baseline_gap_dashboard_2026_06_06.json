@@ -1,5 +1,5 @@
 {
-  "date": "2026-06-07T02:22:57+00:00",
+  "date": "2026-06-07T02:49:08+00:00",
   "schema_version": 1,
   "passed": false,
   "item_count": 19,
@@ -433,26 +433,26 @@
       ]
     },
     {
-      "id": "official_ptq_task_subset20",
+      "id": "official_ptq_task_subset50",
       "family": "external_ptq_readiness",
       "priority": "optional",
       "paper_blocker": false,
-      "description": "Matched 20-row public MMLU/GSM8K subset execution matrix for FP16, AutoAWQ, and GPTQModel Qwen2.5-0.5B variants under GPU guard.",
+      "description": "Matched 50-row public MMLU/GSM8K subset execution matrix for FP16, AutoAWQ, and GPTQModel Qwen2.5-0.5B variants under GPU guard.",
       "required_evidence_globs": [
-        "outputs/**/official_ptq_task_subset20_matrix*.json"
+        "outputs/**/official_ptq_task_subset50_matrix*.json"
       ],
       "required_packages": [
         "autoawq",
         "gptqmodel"
       ],
       "package_mode": "all",
-      "min_total_tasks": 120,
-      "claim_boundary": "Matched-subset execution and runtime readiness only: it covers 120 guarded task executions, but zero-FP16 GSM8K remains execution-only and this is not leaderboard-scale retention.",
+      "min_total_tasks": 300,
+      "claim_boundary": "Matched-subset execution and runtime readiness only: it covers 300 guarded task executions, but zero-FP16 GSM8K remains execution-only and this is not leaderboard-scale retention.",
       "status": "covered",
       "evidence_count": 1,
-      "evidence_task_count": 120,
+      "evidence_task_count": 300,
       "evidence_matches": [
-        "outputs/official_ptq_task_subset20_matrix_2026_06_07.json"
+        "outputs/official_ptq_task_subset50_matrix_2026_06_07.json"
       ],
       "evidence_truncated": false,
       "partial_evidence_count": 0,
@@ -540,7 +540,7 @@
         "outputs/**/*official*gptqmodel*public*calib*gate*.json",
         "outputs/**/*official*gptqmodel*public*calib*.json",
         "outputs/**/*official*ptq*task*retention*smoke*matrix*.json",
-        "outputs/**/*official*ptq*task*subset20*matrix*.json"
+        "outputs/**/*official*ptq*task*subset50*matrix*.json"
       ],
       "proxy_evidence_globs": [
         "outputs/**/*awq_gptq_proxy*summary.json"
@@ -727,7 +727,7 @@
         "outputs/public_task_smoke_mmlu_qwen3_0p6b_summary.json",
         "outputs/public_task_smoke_gsm8k_qwen3_0p6b_summary.json",
         "outputs/official_ptq_task_retention_smoke_matrix_2026_06_07.json",
-        "outputs/official_ptq_task_subset20_matrix_2026_06_07.json"
+        "outputs/official_ptq_task_subset50_matrix_2026_06_07.json"
       ],
       "required_evidence_globs": [
         "outputs/**/*mmlu*summary.json",
@@ -754,7 +754,7 @@
       "partial_evidence_count": 6,
       "partial_evidence_matches": [
         "outputs/official_ptq_task_retention_smoke_matrix_2026_06_07.json",
-        "outputs/official_ptq_task_subset20_matrix_2026_06_07.json",
+        "outputs/official_ptq_task_subset50_matrix_2026_06_07.json",
         "outputs/public_task_smoke_gsm8k_qwen3_0p6b_summary.json",
         "outputs/public_task_smoke_manifest_2026_06_06.json",
         "outputs/public_task_smoke_mmlu_qwen3_0p6b_summary.json",

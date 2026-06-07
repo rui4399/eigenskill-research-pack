@@ -7,7 +7,7 @@ not a new result.
 Current tracked output footprint:
 
 ```text
-outputs/ tracked-or-staged artifact files:       1465
+outputs/ tracked-or-staged artifact files:       1487
 outputs/real_system_packer_2026-06-05 files:     744
 ```
 
@@ -32,8 +32,8 @@ paper claims.
 | Public task model ladder gate | `outputs/PUBLIC_TASK_MODEL_LADDER_GATE_2026_06_07.md` |
 | Official PTQ task-execution smoke matrix | `outputs/OFFICIAL_PTQ_TASK_RETENTION_SMOKE_MATRIX_2026_06_07.md` |
 | Official PTQ PC-side runtime profile | `outputs/OFFICIAL_PTQ_RUNTIME_PROFILE_2026_06_07.md` |
-| Official PTQ matched subset20 matrix | `outputs/OFFICIAL_PTQ_TASK_SUBSET20_MATRIX_2026_06_07.md` |
-| Official PTQ subset20 runtime profile | `outputs/OFFICIAL_PTQ_SUBSET20_RUNTIME_PROFILE_2026_06_07.md` |
+| Official PTQ matched subset50 matrix | `outputs/OFFICIAL_PTQ_TASK_SUBSET50_MATRIX_2026_06_07.md` |
+| Official PTQ subset50 runtime profile | `outputs/OFFICIAL_PTQ_SUBSET50_RUNTIME_PROFILE_2026_06_07.md` |
 | Baseline/readiness gap dashboard | `outputs/BASELINE_GAP_DASHBOARD_2026_06_06.md` |
 | Claim matrix | `docs/PAPER_CLAIM_MATRIX.md` |
 | System gate index | `docs/SYSTEM_EVIDENCE_GATES.md` |
@@ -105,4 +105,4 @@ one of the following is true:
 
 Future cleanup should reduce `outputs/` by moving scratch and raw intermediate
 files out of the main branch, but not at the cost of breaking the current
-24-gate reproducibility story.
+26-gate reproducibility story.

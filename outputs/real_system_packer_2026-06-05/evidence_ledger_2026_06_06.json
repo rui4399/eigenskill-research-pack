@@ -1,5 +1,5 @@
 {
-  "date": "2026-06-07T02:28:06+00:00",
+  "date": "2026-06-07T02:58:17+00:00",
   "passed": true,
   "gate_count": 26,
   "passed_count": 26,
@@ -22,6 +22,7 @@
     "runtime wiring",
     "selected-row",
     "task execution smoke",
+    "task execution subset",
     "task retention"
   ],
   "entries": [
@@ -31,9 +32,9 @@
       "path": "outputs\\real_system_packer_2026-06-05\\public_repo_hygiene_gate_2026_06_06.json",
       "passed": true,
       "failures": [],
-      "metrics": "tracked files 1786; forbidden files 0; placeholders 0",
+      "metrics": "tracked files 1808; forbidden files 0; placeholders 0",
       "summary": {
-        "tracked_file_count": 1786,
+        "tracked_file_count": 1808,
         "forbidden_file_count": 0,
         "root_clutter_count": 0,
         "placeholder_count": 0,
@@ -607,12 +608,12 @@
       }
     },
     {
-      "label": "official_ptq_task_subset20",
-      "category": "task execution smoke",
-      "path": "outputs\\official_ptq_task_subset20_matrix_2026_06_07.json",
+      "label": "official_ptq_task_subset50",
+      "category": "task execution subset",
+      "path": "outputs\\official_ptq_task_subset50_matrix_2026_06_07.json",
       "passed": true,
       "failures": [],
-      "metrics": "cases 6; tasks 120; passes 15; accuracy 0.1250; mean tok/s 14.7072; mean TTFT 0.302620s; VRAM 0.6131",
+      "metrics": "cases 6; tasks 300; passes 37; accuracy 0.1233; mean tok/s 15.8107; mean TTFT 0.250121s; VRAM 0.6148",
       "summary": {
         "case_count": 6,
         "variant_count": 3,
@@ -627,25 +628,25 @@
           "mmlu"
         ],
         "baseline_variant": "fp16",
-        "total_tasks": 120,
-        "total_passes": 15,
-        "mean_accuracy": 0.125,
-        "max_accuracy_drop_vs_fp16": 0.0,
+        "total_tasks": 300,
+        "total_passes": 37,
+        "mean_accuracy": 0.12333333333333334,
+        "max_accuracy_drop_vs_fp16": 0.04000000000000001,
         "baseline_zero_accuracy_formats": [
           "gsm8k"
         ],
-        "max_guard_vram_ratio": 0.6130536130536131,
-        "mean_tokens_per_second": 14.70718178717276,
-        "mean_ttft_seconds": 0.30262009107499854
+        "max_guard_vram_ratio": 0.6147711937185621,
+        "mean_tokens_per_second": 15.810696417391831,
+        "mean_ttft_seconds": 0.2501208791366668
       }
     },
     {
-      "label": "official_ptq_subset20_runtime_profile",
-      "category": "ptq comparator",
-      "path": "outputs\\official_ptq_subset20_runtime_profile_2026_06_07.json",
+      "label": "official_ptq_subset50_runtime_profile",
+      "category": "runtime profile",
+      "path": "outputs\\official_ptq_subset50_runtime_profile_2026_06_07.json",
       "passed": true,
       "failures": [],
-      "metrics": "tasks 120; cases 6; mean tok/s 14.7072; mean TTFT 0.302620s; VRAM MiB 4997; VRAM 0.6131",
+      "metrics": "tasks 300; cases 6; mean tok/s 15.8107; mean TTFT 0.250121s; VRAM MiB 5011; VRAM 0.6148",
       "summary": {
         "source_case_count": 6,
         "variant_count": 3,
@@ -656,11 +657,11 @@
         ],
         "baseline_variant": "fp16",
         "total_cases": 6,
-        "total_tasks": 120,
-        "mean_tokens_per_second": 14.70718178717276,
-        "mean_ttft_seconds": 0.30262009107499854,
-        "max_guard_vram_ratio": 0.6130536130536131,
-        "max_guard_vram_mib": 4997.0
+        "total_tasks": 300,
+        "mean_tokens_per_second": 15.810696417391831,
+        "mean_ttft_seconds": 0.2501208791366668,
+        "max_guard_vram_ratio": 0.6147711937185621,
+        "max_guard_vram_mib": 5011.0
       }
     },
     {

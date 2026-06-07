@@ -35,8 +35,8 @@ paper-facing only if it appears in the claim matrix or gate ledger.
 |---|---|---|
 | Calibration instability | Qwen3/OLMo2/SmolLM2 short-slice fake-quant diagnostics | problem evidence |
 | Consensus allocation | gated robustness and transfer diagnostics under fixed bit budgets | allocation diagnostic, not a production PTQ method |
-| Official PTQ probes | AutoAWQ/GPTQModel Qwen2.5-0.5B W4/G128 readiness, tiny task smoke, and matched 20-row task subset paths | readiness only |
-| Runtime probes | ESMP/Triton/C++ module-level gates plus PC-side smoke/subset runtime profiles | not end-to-end deployment |
+| Official PTQ probes | AutoAWQ/GPTQModel Qwen2.5-0.5B W4/G128 readiness, tiny task smoke, and matched 50-row task subset paths | readiness only |
+| Runtime probes | ESMP/Triton/C++ module-level gates plus PC-side smoke/subset50 runtime profiles | not end-to-end deployment |
 | Mobile evidence | Redmi K80 Pro harness exists, but no real TTFT/tokens/s/memory log is complete | no mobile claim |
 
 Current ledger status: **26 / 26 gates pass**.
