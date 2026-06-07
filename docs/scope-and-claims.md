@@ -66,6 +66,10 @@ In compressed form, the supported claims are:
 - the same official PTQ variants now have true 100-row matched MMLU/GSM8K
   subset execution and PC-side runtime gates, with max task drop 0.03 versus
   FP16 and the same negative local-speed boundary;
+- Qwen2.5-1.5B now has a matched FP16/AutoAWQ/GPTQModel subset100 task/runtime
+  matrix. It strengthens native-baseline confrontation, but still reports lower
+  guarded VRAM and slower local loader throughput rather than production
+  acceleration;
 - the same FP16/AutoAWQ/GPTQModel Qwen2.5-0.5B variants have deterministic
   IFEval-style instruction-following execution and runtime smoke gates, kept as
   execution-path evidence because the FP16 baseline is 0/8;

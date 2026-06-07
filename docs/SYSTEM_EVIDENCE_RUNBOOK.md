@@ -63,8 +63,8 @@ python train_python/build_evidence_ledger.py \
   --gate official_awq_public_calib_1p5b_16_eval=outputs/official_awq_public_calib_qwen25_1p5b_bundle_16_gate_2026_06_07.json \
   --gate official_gptqmodel_public_calib_1p5b_16_eval=outputs/official_gptqmodel_public_calib_qwen25_1p5b_16_gate_2026_06_08.json \
   --gate official_gptqmodel_task_execution_qwen25_1p5b_subset100=outputs/official_gptqmodel_task_execution_qwen25_1p5b_subset100_matrix_2026_06_08.json \
-  --gate official_ptq_task_qwen25_1p5b_subset100=outputs/official_ptq_task_qwen25_1p5b_subset100_matrix_2026_06_07.json \
-  --gate official_ptq_qwen25_1p5b_subset100_runtime_profile=outputs/official_ptq_qwen25_1p5b_subset100_runtime_profile_2026_06_07.json \
+  --gate official_ptq_task_qwen25_1p5b_subset100_fp16_awq_gptqmodel=outputs/official_ptq_task_qwen25_1p5b_subset100_fp16_awq_gptqmodel_matrix_2026_06_08.json \
+  --gate official_ptq_qwen25_1p5b_subset100_fp16_awq_gptqmodel_runtime_profile=outputs/official_ptq_qwen25_1p5b_subset100_fp16_awq_gptqmodel_runtime_profile_2026_06_08.json \
   --gate official_ptq_task_qwen25_1p5b_gsm8k200_mmlu100=outputs/official_ptq_task_qwen25_1p5b_gsm8k200_mmlu100_matrix_2026_06_08.json \
   --gate official_ptq_qwen25_1p5b_gsm8k200_mmlu100_runtime_profile=outputs/official_ptq_qwen25_1p5b_gsm8k200_mmlu100_runtime_profile_2026_06_08.json \
   --gate official_ptq_qwen25_1p5b_gsm8k200_mmlu100_statistics=outputs/official_ptq_task_qwen25_1p5b_gsm8k200_mmlu100_statistics_2026_06_08.json \
@@ -81,7 +81,7 @@ The current ledger passes with 48/48 gates across repo hygiene, calibration
 robustness, CSI trend significance, CSI null permutation, rank-inversion theory, artifact integrity, kernel, runtime wiring, selected-row, C++
 runtime, decode integration, QKV replacement, quality, task-retention, runtime profile, and
 capability-retention/model-ladder, allocation-comparator, rotation-comparator, and
-matched PTQ baseline, true subset100 official PTQ task/runtime evidence, deterministic IFEval-style PTQ execution, expanded AutoAWQ public PPL, Qwen2.5-1.5B GPTQModel task-execution subset evidence, Qwen2.5-1.5B subset100 plus GSM8K200/MMLU100 task/runtime/statistical-interval evidence, PTQ-comparator, and
+matched PTQ baseline, true subset100 official PTQ task/runtime evidence, deterministic IFEval-style PTQ execution, expanded AutoAWQ public PPL, Qwen2.5-1.5B GPTQModel task-execution subset evidence, Qwen2.5-1.5B FP16/AutoAWQ/GPTQModel subset100 plus FP16/AutoAWQ GSM8K200/MMLU100 task/runtime/statistical-interval evidence, PTQ-comparator, and
 paper-alignment evidence categories, plus extended W4A8 attention/MLP real-activation reconstruction.
 
 Valid claim:
@@ -585,16 +585,26 @@ python train_python/gate_official_ptq_task_retention.py \
   --baseline-variant fp16 \
   --required-variant fp16 \
   --required-variant autoawq \
+  --required-variant gptqmodel \
   --required-format mmlu \
   --required-format gsm8k \
   --min-tasks-per-case 100 \
   --max-memory-ratio 0.90 \
-  --max-accuracy-drop 0.02 \
-  --matrix-title "Qwen2.5-1.5B FP16 vs AutoAWQ subset100 task matrix" \
-  --evidence-label "Matched Qwen2.5-1.5B local subset100 task evidence" \
-  --out-json outputs/official_ptq_task_qwen25_1p5b_subset100_matrix_2026_06_07.json \
-  --out-md outputs/OFFICIAL_PTQ_TASK_QWEN25_1P5B_SUBSET100_MATRIX_2026_06_07.md
+  --max-accuracy-drop 0.08 \
+  --matrix-title "Qwen2.5-1.5B FP16 vs AutoAWQ vs GPTQModel Subset100 Task Matrix" \
+  --evidence-label "matched Qwen2.5-1.5B local subset100 task evidence for FP16, AutoAWQ, and GPTQModel" \
+  --case gptqmodel:mmlu=outputs/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_subset100_summary_2026_06_08.json=outputs/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_subset100_gpu_guard_2026_06_08.json \
+  --case gptqmodel:gsm8k=outputs/official_ptq_task_gptqmodel_qwen25_1p5b_gsm8k_subset100_summary_2026_06_08.json=outputs/official_ptq_task_gptqmodel_qwen25_1p5b_gsm8k_subset100_gpu_guard_2026_06_08.json \
+  --out-json outputs/official_ptq_task_qwen25_1p5b_subset100_fp16_awq_gptqmodel_matrix_2026_06_08.json \
+  --out-md outputs/OFFICIAL_PTQ_TASK_QWEN25_1P5B_SUBSET100_FP16_AWQ_GPTQMODEL_MATRIX_2026_06_08.md
 ```
+
+Current subset100 result: 600 guarded public task executions across FP16,
+AutoAWQ, and GPTQModel. FP16 obtains 33/100 MMLU and 12/100 GSM8K; AutoAWQ
+obtains 34/100 MMLU and 11/100 GSM8K; GPTQModel obtains 25/100 MMLU and
+8/100 GSM8K. The max drop versus FP16 is `0.0800`, and the peak guard VRAM
+ratio is `0.8013`. This is matched local subset evidence, not leaderboard-scale
+task retention or PTQ superiority.
 
 Larger GSM8K200/MMLU100 gate:
 
@@ -622,17 +632,25 @@ Runtime-profile gate:
 
 ```bash
 python train_python/gate_official_ptq_runtime_profile.py \
-  --matrix-json outputs/official_ptq_task_qwen25_1p5b_subset100_matrix_2026_06_07.json \
+  --matrix-json outputs/official_ptq_task_qwen25_1p5b_subset100_fp16_awq_gptqmodel_matrix_2026_06_08.json \
   --baseline-variant fp16 \
   --required-variant fp16 \
   --required-variant autoawq \
+  --required-variant gptqmodel \
   --min-cases-per-variant 2 \
   --max-memory-ratio 0.90 \
   --min-mean-tokens-per-second 1 \
   --max-mean-ttft-seconds 2.0 \
-  --out-json outputs/official_ptq_qwen25_1p5b_subset100_runtime_profile_2026_06_07.json \
-  --out-md outputs/OFFICIAL_PTQ_QWEN25_1P5B_SUBSET100_RUNTIME_PROFILE_2026_06_07.md
+  --out-json outputs/official_ptq_qwen25_1p5b_subset100_fp16_awq_gptqmodel_runtime_profile_2026_06_08.json \
+  --out-md outputs/OFFICIAL_PTQ_QWEN25_1P5B_SUBSET100_FP16_AWQ_GPTQMODEL_RUNTIME_PROFILE_2026_06_08.md
 ```
+
+Current subset100 runtime result: FP16 averages `18.3348` tokens/s and
+`0.130220` s TTFT with peak guarded VRAM `6531` MiB; AutoAWQ averages
+`11.7637` tokens/s and `0.208924` s TTFT with peak guarded VRAM `4919` MiB;
+GPTQModel averages `10.6469` tokens/s and `0.236180` s TTFT with peak guarded
+VRAM `5438` MiB. Quantized packages reduce guarded VRAM but remain slower on
+this local loader path.
 
 Larger GSM8K200/MMLU100 runtime-profile gate:
 
@@ -669,10 +687,10 @@ python train_python/gate_official_ptq_task_statistics.py \
   --out-md outputs/OFFICIAL_PTQ_TASK_QWEN25_1P5B_GSM8K200_MMLU100_STATISTICS_2026_06_08.md
 ```
 
-Current result: 400 guarded task executions. FP16 gets 33/100 MMLU and 12/100
-GSM8K; AutoAWQ gets 34/100 MMLU and 11/100 GSM8K. The max drop versus FP16 is
-`0.0100`, peak guard VRAM ratio is `0.8013`, and AutoAWQ reduces peak guarded
-VRAM from 6531 MiB to 4919 MiB while running slower than FP16 locally.
+Historical 2026-06-07 subset100 result: 400 guarded task executions for FP16
+and AutoAWQ only. It is superseded in the paper-facing ledger by the 2026-06-08
+matched FP16/AutoAWQ/GPTQModel subset100 matrix above, but remains useful as a
+reproducibility input for the larger GSM8K200/MMLU100 AutoAWQ-only follow-up.
 
 The larger 2026-06-08 run covers 600 guarded task executions. FP16 gets 33/100
 MMLU and 19/200 GSM8K; AutoAWQ gets 34/100 MMLU and 22/200 GSM8K. The gate

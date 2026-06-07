@@ -1,5 +1,5 @@
 {
-  "date": "2026-06-07T19:08:48+00:00",
+  "date": "2026-06-07T19:26:45+00:00",
   "passed": true,
   "gate_count": 48,
   "passed_count": 48,
@@ -1187,54 +1187,56 @@
       }
     },
     {
-      "label": "official_ptq_task_qwen25_1p5b_subset100",
+      "label": "official_ptq_task_qwen25_1p5b_subset100_fp16_awq_gptqmodel",
       "category": "task execution smoke",
-      "path": "outputs\\official_ptq_task_qwen25_1p5b_subset100_matrix_2026_06_07.json",
+      "path": "outputs\\official_ptq_task_qwen25_1p5b_subset100_fp16_awq_gptqmodel_matrix_2026_06_08.json",
       "passed": true,
       "failures": [],
-      "metrics": "cases 4; tasks 400; passes 90; accuracy 0.2250; max drop 0.0100; mean tok/s 15.0493; mean TTFT 0.169572s; VRAM 0.8013",
+      "metrics": "cases 6; tasks 600; passes 123; accuracy 0.2050; max drop 0.0800; mean tok/s 13.5818; mean TTFT 0.191775s; VRAM 0.8013",
       "summary": {
-        "case_count": 4,
-        "variant_count": 2,
+        "case_count": 6,
+        "variant_count": 3,
         "format_count": 2,
         "variants": [
           "autoawq",
-          "fp16"
+          "fp16",
+          "gptqmodel"
         ],
         "task_formats": [
           "gsm8k",
           "mmlu"
         ],
         "baseline_variant": "fp16",
-        "total_tasks": 400,
-        "total_passes": 90,
-        "mean_accuracy": 0.225,
-        "max_accuracy_drop_vs_fp16": 0.009999999999999995,
+        "total_tasks": 600,
+        "total_passes": 123,
+        "mean_accuracy": 0.20500000000000002,
+        "max_accuracy_drop_vs_fp16": 0.08000000000000002,
         "baseline_zero_accuracy_formats": [],
         "max_guard_vram_ratio": 0.8012513801987486,
-        "mean_tokens_per_second": 15.049256452529782,
-        "mean_ttft_seconds": 0.16957190757249957
+        "mean_tokens_per_second": 13.581799338857353,
+        "mean_ttft_seconds": 0.19177467526999986
       }
     },
     {
-      "label": "official_ptq_qwen25_1p5b_subset100_runtime_profile",
+      "label": "official_ptq_qwen25_1p5b_subset100_fp16_awq_gptqmodel_runtime_profile",
       "category": "runtime profile",
-      "path": "outputs\\official_ptq_qwen25_1p5b_subset100_runtime_profile_2026_06_07.json",
+      "path": "outputs\\official_ptq_qwen25_1p5b_subset100_fp16_awq_gptqmodel_runtime_profile_2026_06_08.json",
       "passed": true,
       "failures": [],
-      "metrics": "tasks 400; cases 4; mean tok/s 15.0493; mean TTFT 0.169572s; VRAM MiB 6531; VRAM 0.8013",
+      "metrics": "tasks 600; cases 6; mean tok/s 13.5818; mean TTFT 0.191775s; VRAM MiB 6531; VRAM 0.8013",
       "summary": {
-        "source_case_count": 4,
-        "variant_count": 2,
+        "source_case_count": 6,
+        "variant_count": 3,
         "variants": [
           "autoawq",
-          "fp16"
+          "fp16",
+          "gptqmodel"
         ],
         "baseline_variant": "fp16",
-        "total_cases": 4,
-        "total_tasks": 400,
-        "mean_tokens_per_second": 15.049256452529782,
-        "mean_ttft_seconds": 0.16957190757249957,
+        "total_cases": 6,
+        "total_tasks": 600,
+        "mean_tokens_per_second": 13.581799338857353,
+        "mean_ttft_seconds": 0.19177467526999986,
         "max_guard_vram_ratio": 0.8012513801987486,
         "max_guard_vram_mib": 6531.0
       }

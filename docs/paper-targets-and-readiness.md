@@ -54,11 +54,12 @@ The current evidence supports:
 - a Qwen2.5-1.5B FP16-vs-AutoAWQ matched 20-row public MMLU/GSM8K task subset
   matrix, covering 80 task executions with no measured accuracy drop versus
   FP16 in this tiny local slice and peak guarded VRAM ratio 0.6821;
-- a Qwen2.5-1.5B FP16-vs-AutoAWQ matched 100-row public MMLU/GSM8K task subset
-  matrix, covering 400 task executions: FP16 gets 33/100 MMLU and 12/100
-  GSM8K, AutoAWQ gets 34/100 MMLU and 11/100 GSM8K, max drop versus FP16 is
-  0.01, and peak guarded VRAM falls from 6531 MiB to 4919 MiB while AutoAWQ is
-  slower in this local loader path;
+- a Qwen2.5-1.5B FP16/AutoAWQ/GPTQModel matched 100-row public MMLU/GSM8K task
+  subset matrix, covering 600 task executions: FP16 gets 33/100 MMLU and
+  12/100 GSM8K, AutoAWQ gets 34/100 MMLU and 11/100 GSM8K, GPTQModel gets
+  25/100 MMLU and 8/100 GSM8K, max drop versus FP16 is 0.08, and peak guarded
+  VRAM falls from 6531 MiB to 4919 MiB for AutoAWQ and 5438 MiB for GPTQModel
+  while both quantized local loader paths are slower than FP16;
 - a larger Qwen2.5-1.5B FP16-vs-AutoAWQ GSM8K200/MMLU100 task-retention matrix,
   covering 600 task executions: FP16 gets 33/100 MMLU and 19/200 GSM8K,
   AutoAWQ gets 34/100 MMLU and 22/200 GSM8K, with no measured accuracy drop
@@ -109,11 +110,12 @@ Current AAAI-facing critical path:
    Chebyshev inversion-risk CSI sections concise and tied to the measured
    seed/bootstrap artifacts.
 2. Real quantization: expand the AutoAWQ/GPTQModel matched pack beyond the
-   0.5B readiness setting and report negative runtime results honestly. The
-   first Qwen2.5-1.5B AutoAWQ public-calibration, 20-row task-subset, 100-row
-   task/runtime, and GSM8K200/MMLU100 task/runtime gates are complete, but
-   GPTQ, SmoothQuant, rotation baselines, and full benchmark retention still
-   need scale-up.
+   0.5B readiness setting and report negative runtime results honestly.
+   Qwen2.5-1.5B now has public-calibration AutoAWQ/GPTQModel PPL readiness,
+   a matched FP16/AutoAWQ/GPTQModel subset100 task/runtime matrix, and a larger
+   FP16-vs-AutoAWQ GSM8K200/MMLU100 gate. GPTQModel on the larger fixture,
+   SmoothQuant, rotation baselines, and full benchmark retention still need
+   scale-up.
 3. Downstream tasks: move from subset50/subset100 and deterministic IFEval-style
    execution evidence toward stronger MMLU/GSM8K/IFEval retention on actual
    quantized variants.
@@ -147,10 +149,10 @@ evidence become much deeper.
 The blockers are concrete:
 
 1. Official baselines: the local AutoAWQ/GPTQModel 0.5B matched pack, expanded
-   16-prompt public PPL gates, and Qwen2.5-1.5B AutoAWQ scale-up/task-runtime
-   rows are useful but not enough; larger GPTQ rows, SmoothQuant, and at least
-   one faithful rotation or mixed-precision allocation comparator are still
-   missing.
+   16-prompt public PPL gates, and Qwen2.5-1.5B matched FP16/AutoAWQ/GPTQModel
+   subset100 rows are useful but not enough; larger GPTQ rows, SmoothQuant, and
+   at least one faithful rotation or mixed-precision allocation comparator are
+   still missing.
 2. Larger evaluation: more WikiText2/C4 prompts and broader calibration-seed sweeps.
 3. Downstream retention: larger MMLU/GSM8K/IFEval or similar task slices on the
    actual quantized/fused variants; current IFEval-style evidence is only an

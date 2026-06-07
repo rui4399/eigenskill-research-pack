@@ -84,12 +84,13 @@ subset over 100 MMLU abstract-algebra rows and 100 GSM8K rows, obtaining 25/100
 and 8/100 respectively, with mean 10.6469 tokens/s, mean TTFT 0.236180 s, and
 peak guarded VRAM ratio 0.6672; this is counted only as native-package
 execution evidence, not leaderboard-scale task retention or GPTQ superiority.
-The same Qwen2.5-1.5B FP16 and AutoAWQ artifacts now also run matched 100-row
-public MMLU abstract-algebra and GSM8K subsets, covering 400 guarded task
-executions: FP16 obtains 33/100 MMLU and 12/100 GSM8K, AutoAWQ obtains 34/100
-MMLU and 11/100 GSM8K, the max drop versus FP16 is 0.01, and peak guarded VRAM
-falls from 6531 MiB to 4919 MiB while AutoAWQ remains slower in this local
-loader path.
+The same Qwen2.5-1.5B FP16, AutoAWQ, and GPTQModel artifacts now also run a
+matched 100-row public MMLU abstract-algebra and GSM8K subset matrix, covering
+600 guarded task executions: FP16 obtains 33/100 MMLU and 12/100 GSM8K,
+AutoAWQ obtains 34/100 MMLU and 11/100 GSM8K, and GPTQModel obtains 25/100
+MMLU and 8/100 GSM8K. The max drop versus FP16 is 0.08. Peak guarded VRAM falls
+from 6531 MiB for FP16 to 4919 MiB for AutoAWQ and 5438 MiB for GPTQModel, while
+both quantized local loader paths remain slower than FP16.
 The larger 2026-06-08 Qwen2.5-1.5B task-retention gate extends this to the same
 100-row MMLU abstract-algebra fixture plus 200 GSM8K rows, covering 600 guarded
 task executions: FP16 obtains 33/100 MMLU and 19/200 GSM8K, while AutoAWQ
@@ -462,8 +463,8 @@ current ledger passes 48/48 gates. The most important gates are:
 | Qwen2.5-1.5B AutoAWQ scale-up readiness | Public-calibrated AutoAWQ W4/G128 Qwen2.5-1.5B on 16 WikiText2 plus 16 C4 prompts; see `outputs/OFFICIAL_AWQ_PUBLIC_CALIB_QWEN25_1P5B_BUNDLE_16_GATE_2026_06_07.md`. | The local artifact quantizes under an 85% VRAM guard with peak 6712/8151 MiB and runs 2857 public PPL tokens; max PPL ratio is 1.1344. | Not a complete official AWQ/GPTQ baseline, not task retention, not production runtime, not mobile deployment, and not SOTA PTQ. |
 | Qwen2.5-1.5B GPTQModel scale-up readiness | Public-calibrated GPTQModel W4/G128 Qwen2.5-1.5B on 16 WikiText2 plus 16 C4 prompts; see `outputs/OFFICIAL_GPTQMODEL_PUBLIC_CALIB_QWEN25_1P5B_16_GATE_2026_06_08.md`. | The local artifact is freshly quantized under a 90% VRAM guard, saved as eight files, reloaded through `gptq_torch`, and evaluated with max PPL ratio 1.1363 over 2857 tokens. | Not a complete official AWQ/GPTQ baseline, not task retention, not production runtime, not mobile deployment, and not SOTA PTQ. |
 | Qwen2.5-1.5B GPTQModel task-execution subset100 | Saved GPTQModel W4/G128 artifact on 100 MMLU abstract-algebra plus 100 GSM8K rows; see `outputs/OFFICIAL_GPTQMODEL_TASK_EXECUTION_QWEN25_1P5B_SUBSET100_MATRIX_2026_06_08.md`. | The native GPTQModel path reloads and generates under guard, with 25/100 MMLU, 8/100 GSM8K, mean 10.6469 tokens/s, mean TTFT 0.236180 s, and peak guard VRAM ratio 0.6672. | Not leaderboard-scale task retention, not GPTQ superiority, not matched FP16/AWQ comparison, not production runtime, and not SOTA PTQ. |
-| Qwen2.5-1.5B matched subset100 task evidence | FP16 and AutoAWQ Qwen2.5-1.5B on 400 guarded public subset executions; see `outputs/OFFICIAL_PTQ_TASK_QWEN25_1P5B_SUBSET100_MATRIX_2026_06_07.md`. | Matched 100-row MMLU/GSM8K subset evidence is now reported for the larger local artifact: FP16 is 33/100 MMLU and 12/100 GSM8K; AutoAWQ is 34/100 MMLU and 11/100 GSM8K; max drop versus FP16 is 0.01. | Not leaderboard-scale task retention, not reasoning-quality superiority, not complete AWQ/GPTQ/SmoothQuant competitiveness, not production runtime, not mobile deployment, and not SOTA PTQ. |
-| Qwen2.5-1.5B subset100 runtime profile | PC-side runtime profile over the same 400 guarded task executions; see `outputs/OFFICIAL_PTQ_QWEN25_1P5B_SUBSET100_RUNTIME_PROFILE_2026_06_07.md`. | TTFT, tokens/s, and guarded VRAM are reported for FP16 and AutoAWQ; AutoAWQ lowers peak guarded VRAM from 6531 MiB to 4919 MiB but is slower than FP16 locally. | Not mobile deployment, not production runtime speedup, not energy savings, and not official AWQ/GPTQ/SmoothQuant competitiveness. |
+| Qwen2.5-1.5B matched subset100 task evidence | FP16, AutoAWQ, and GPTQModel Qwen2.5-1.5B on 600 guarded public subset executions; see `outputs/OFFICIAL_PTQ_TASK_QWEN25_1P5B_SUBSET100_FP16_AWQ_GPTQMODEL_MATRIX_2026_06_08.md`. | Matched 100-row MMLU/GSM8K subset evidence is now reported for all three variants: FP16 is 33/100 MMLU and 12/100 GSM8K; AutoAWQ is 34/100 MMLU and 11/100 GSM8K; GPTQModel is 25/100 MMLU and 8/100 GSM8K; max drop versus FP16 is 0.08. | Not leaderboard-scale task retention, not reasoning-quality superiority, not complete AWQ/GPTQ/SmoothQuant competitiveness, not production runtime, not mobile deployment, and not SOTA PTQ. |
+| Qwen2.5-1.5B subset100 runtime profile | PC-side runtime profile over the same 600 guarded task executions; see `outputs/OFFICIAL_PTQ_QWEN25_1P5B_SUBSET100_FP16_AWQ_GPTQMODEL_RUNTIME_PROFILE_2026_06_08.md`. | TTFT, tokens/s, and guarded VRAM are reported for FP16, AutoAWQ, and GPTQModel; AutoAWQ lowers peak guarded VRAM from 6531 MiB to 4919 MiB, GPTQModel lowers it to 5438 MiB, and both quantized local loader paths are slower than FP16. | Not mobile deployment, not production runtime speedup, not energy savings, and not official AWQ/GPTQ/SmoothQuant competitiveness. |
 | Qwen2.5-1.5B GSM8K200/MMLU100 task evidence | FP16 and AutoAWQ Qwen2.5-1.5B on 600 guarded public subset executions; see `outputs/OFFICIAL_PTQ_TASK_QWEN25_1P5B_GSM8K200_MMLU100_MATRIX_2026_06_08.md`. | The larger slice records FP16 at 33/100 MMLU and 19/200 GSM8K, AutoAWQ at 34/100 MMLU and 22/200 GSM8K, no measured accuracy drop versus FP16, and peak guard VRAM ratio 0.8295. | Not leaderboard-scale task retention, not reasoning-quality superiority, not complete PTQ baseline coverage, not production runtime, not mobile deployment, and not SOTA PTQ. |
 | Qwen2.5-1.5B GSM8K200/MMLU100 runtime profile | PC-side runtime profile over the same 600 guarded task executions; see `outputs/OFFICIAL_PTQ_QWEN25_1P5B_GSM8K200_MMLU100_RUNTIME_PROFILE_2026_06_08.md`. | TTFT, tokens/s, and guarded VRAM are reported for FP16 under HF offload and AutoAWQ; this is a controlled local profile. | Because FP16 is offloaded, this is not a production speedup claim, mobile deployment, energy result, or official AWQ/GPTQ/SmoothQuant competitiveness. |
 | Qwen2.5-1.5B GSM8K200/MMLU100 statistics | Wilson intervals and paired bootstrap deltas over the same 600 guarded task executions; see `outputs/OFFICIAL_PTQ_TASK_QWEN25_1P5B_GSM8K200_MMLU100_STATISTICS_2026_06_08.md`. | Task-retention uncertainty is explicit: GSM8K delta +0.015 with CI [-0.035, +0.065], MMLU delta +0.010 with CI [-0.100, +0.130]. | Not statistical superiority, leaderboard-scale retention, complete PTQ baseline coverage, production runtime, mobile deployment, energy, or SOTA PTQ. |
@@ -937,8 +938,8 @@ outputs/Q_PALETTE_STYLE_ALLOCATION_FAMILY_GATE_2026_06_06.md
 outputs/PUBLIC_TASK_MODEL_LADDER_GATE_2026_06_07.md
 outputs/OFFICIAL_AWQ_PUBLIC_CALIB_QWEN25_0P5B_BUNDLE_16_GATE_2026_06_07.md
 outputs/OFFICIAL_AWQ_PUBLIC_CALIB_QWEN25_1P5B_BUNDLE_16_GATE_2026_06_07.md
-outputs/OFFICIAL_PTQ_TASK_QWEN25_1P5B_SUBSET100_MATRIX_2026_06_07.md
-outputs/OFFICIAL_PTQ_QWEN25_1P5B_SUBSET100_RUNTIME_PROFILE_2026_06_07.md
+outputs/OFFICIAL_PTQ_TASK_QWEN25_1P5B_SUBSET100_FP16_AWQ_GPTQMODEL_MATRIX_2026_06_08.md
+outputs/OFFICIAL_PTQ_QWEN25_1P5B_SUBSET100_FP16_AWQ_GPTQMODEL_RUNTIME_PROFILE_2026_06_08.md
 outputs/OFFICIAL_PTQ_TASK_QWEN25_1P5B_GSM8K200_MMLU100_MATRIX_2026_06_08.md
 outputs/OFFICIAL_PTQ_QWEN25_1P5B_GSM8K200_MMLU100_RUNTIME_PROFILE_2026_06_08.md
 outputs/OFFICIAL_PTQ_TASK_QWEN25_1P5B_GSM8K200_MMLU100_STATISTICS_2026_06_08.md

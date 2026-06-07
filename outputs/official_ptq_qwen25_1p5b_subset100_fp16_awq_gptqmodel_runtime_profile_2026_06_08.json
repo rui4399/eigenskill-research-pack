@@ -1,0 +1,107 @@
+{
+  "date": "2026-06-07T19:11:52+00:00",
+  "passed": true,
+  "source_evidence_label": "matched Qwen2.5-1.5B local subset100 task evidence for FP16, AutoAWQ, and GPTQModel",
+  "summary": {
+    "source_case_count": 6,
+    "variant_count": 3,
+    "variants": [
+      "autoawq",
+      "fp16",
+      "gptqmodel"
+    ],
+    "baseline_variant": "fp16",
+    "total_cases": 6,
+    "total_tasks": 600,
+    "mean_tokens_per_second": 13.581799338857353,
+    "mean_ttft_seconds": 0.19177467526999986,
+    "max_guard_vram_ratio": 0.8012513801987486,
+    "max_guard_vram_mib": 6531.0
+  },
+  "profiles": {
+    "autoawq": {
+      "variant": "autoawq",
+      "case_count": 2,
+      "task_formats": [
+        "gsm8k",
+        "mmlu"
+      ],
+      "total_tasks": 200,
+      "total_passes": 45,
+      "mean_accuracy": 0.225,
+      "mean_tokens_per_second": 11.763722737090754,
+      "min_tokens_per_second": 11.07830466741143,
+      "mean_ttft_seconds": 0.2089235231999993,
+      "max_ttft_seconds": 0.22978235755999946,
+      "max_guard_vram_ratio": 0.6034842350631824,
+      "max_guard_vram_mib": 4919.0,
+      "guard_memory_total_mib": 8151.0
+    },
+    "fp16": {
+      "variant": "fp16",
+      "case_count": 2,
+      "task_formats": [
+        "gsm8k",
+        "mmlu"
+      ],
+      "total_tasks": 200,
+      "total_passes": 45,
+      "mean_accuracy": 0.225,
+      "mean_tokens_per_second": 18.33479016796881,
+      "min_tokens_per_second": 17.651397097255174,
+      "mean_ttft_seconds": 0.13022029194499982,
+      "max_ttft_seconds": 0.13770754556000028,
+      "max_guard_vram_ratio": 0.8012513801987486,
+      "max_guard_vram_mib": 6531.0,
+      "guard_memory_total_mib": 8151.0
+    },
+    "gptqmodel": {
+      "variant": "gptqmodel",
+      "case_count": 2,
+      "task_formats": [
+        "gsm8k",
+        "mmlu"
+      ],
+      "total_tasks": 200,
+      "total_passes": 33,
+      "mean_accuracy": 0.165,
+      "mean_tokens_per_second": 10.646885111512496,
+      "min_tokens_per_second": 10.240337946381743,
+      "mean_ttft_seconds": 0.23618021066500047,
+      "max_ttft_seconds": 0.26465384427000077,
+      "max_guard_vram_ratio": 0.6671574039995093,
+      "max_guard_vram_mib": 5438.0,
+      "guard_memory_total_mib": 8151.0
+    }
+  },
+  "comparisons": [
+    {
+      "variant": "autoawq",
+      "baseline_variant": "fp16",
+      "tokens_per_second_ratio_vs_baseline": 0.6416066194006506,
+      "ttft_ratio_vs_baseline": 1.604385307999776,
+      "vram_ratio_vs_baseline": 0.7531771551064155,
+      "mean_tokens_per_second": 11.763722737090754,
+      "baseline_mean_tokens_per_second": 18.33479016796881,
+      "mean_ttft_seconds": 0.2089235231999993,
+      "baseline_mean_ttft_seconds": 0.13022029194499982,
+      "max_guard_vram_ratio": 0.6034842350631824,
+      "baseline_max_guard_vram_ratio": 0.8012513801987486
+    },
+    {
+      "variant": "gptqmodel",
+      "baseline_variant": "fp16",
+      "tokens_per_second_ratio_vs_baseline": 0.5806930438785597,
+      "ttft_ratio_vs_baseline": 1.8136974440569844,
+      "vram_ratio_vs_baseline": 0.8326443117439902,
+      "mean_tokens_per_second": 10.646885111512496,
+      "baseline_mean_tokens_per_second": 18.33479016796881,
+      "mean_ttft_seconds": 0.23618021066500047,
+      "baseline_mean_ttft_seconds": 0.13022029194499982,
+      "max_guard_vram_ratio": 0.6671574039995093,
+      "baseline_max_guard_vram_ratio": 0.8012513801987486
+    }
+  ],
+  "failures": [],
+  "claim_boundary": "Valid claim: this is a PC-side runtime profile over already-guarded official PTQ matched Qwen2.5-1.5B local subset100 task evidence for FP16, AutoAWQ, and GPTQModel, reporting TTFT, tokens/s, and peak VRAM for FP16 and official-package quantized artifacts. Invalid claim: this does not prove mobile deployment, production runtime speedup, energy improvement, or official AWQ/GPTQ competitiveness."
+}
