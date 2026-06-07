@@ -78,11 +78,11 @@ python train_python/build_evidence_ledger.py \
   --out-md outputs/real_system_packer_2026-06-05/EVIDENCE_LEDGER_2026_06_06.md
 ```
 
-The current ledger passes with 55/55 gates across repo hygiene, calibration
+The current ledger passes with 58/58 gates across repo hygiene, calibration
 robustness, CSI trend significance, CSI null permutation, rank-inversion theory, artifact integrity, kernel, runtime wiring, selected-row, C++
 runtime, decode integration, QKV replacement, quality, task-retention, runtime profile, and
 capability-retention/model-ladder, allocation-comparator, rotation-comparator, and
-matched PTQ baseline, true subset100 official PTQ task/runtime evidence, deterministic IFEval-style PTQ execution, expanded AutoAWQ public PPL, Qwen2.5-1.5B GPTQModel task-execution subset evidence, Qwen2.5-1.5B FP16/AutoAWQ/GPTQModel subset100 plus GSM8K200/MMLU100 plus sharded GSM8K500 plus full GSM8K1319 task/runtime/statistical-interval evidence, full-GSM8K local 7B public-task coverage, PTQ-comparator, and
+matched PTQ baseline, true subset100 official PTQ task/runtime evidence, deterministic IFEval-style PTQ execution, expanded AutoAWQ public PPL, Qwen2.5-1.5B GPTQModel task-execution subset evidence, Qwen2.5-1.5B FP16/AutoAWQ/GPTQModel subset100 plus GSM8K200/MMLU100 plus sharded GSM8K500 plus full GSM8K1319 plus MMLU Broad5x20 task/runtime/statistical-interval evidence, full-GSM8K local 7B public-task coverage, PTQ-comparator, and
 paper-alignment evidence categories, plus extended W4A8 attention/MLP real-activation reconstruction.
 
 Valid claim:
@@ -239,7 +239,7 @@ Current gate:
 ```bash
 python train_python/gate_paper_evidence_alignment.py \
   --paper paper_drafts/eigenskill_q_research_draft_en_2026_06_07.md \
-  --expected-gate-count 55 \
+  --expected-gate-count 58 \
   --out-json outputs/paper_evidence_alignment_gate_2026_06_08.json \
   --out-md outputs/PAPER_EVIDENCE_ALIGNMENT_GATE_2026_06_08.md
 ```
@@ -827,6 +827,16 @@ mean TTFT `0.320392` s. The paired statistics gate reports minimum bootstrap
 lower bound `-0.0243` under 10,000 samples. This is full single-task local
 retention evidence, not leaderboard-scale quality or production runtime
 evidence.
+
+Current MMLU Broad5x20 result: 300 guarded task executions across FP16,
+AutoAWQ, and GPTQModel over five MMLU subjects. FP16 gets 56/100, AutoAWQ gets
+54/100, and GPTQModel gets 50/100. The task gate records max measured drop
+`0.0600` versus FP16 and peak guard VRAM ratio `0.8114`. The runtime profile
+reports mean `8.5774` tok/s and mean TTFT `0.252645` s. The paired statistics
+gate reports minimum bootstrap lower bound `-0.1500` under 2,000 samples. This
+broadens MMLU beyond abstract algebra, but is not full MMLU or leaderboard-scale
+retention evidence.
+
 The earlier GSM8K200/MMLU100 statistical gate reports paired bootstrap
 candidate-minus-FP16 deltas:
 AutoAWQ GSM8K `+0.0150` with CI `[-0.0350, +0.0650]`, AutoAWQ MMLU `+0.0100`
@@ -838,8 +848,8 @@ superiority.
 Valid claim:
 
 - FP16, AutoAWQ, and GPTQModel Qwen2.5-1.5B variants have matched local
-  subset100, GSM8K200/MMLU100, GSM8K500, and full GSM8K1319 task/runtime/VRAM
-  evidence under the GPU guard.
+  subset100, GSM8K200/MMLU100, GSM8K500, full GSM8K1319, and MMLU Broad5x20
+  task/runtime/VRAM evidence under the GPU guard.
 
 Invalid claim:
 

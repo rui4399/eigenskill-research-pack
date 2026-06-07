@@ -1,0 +1,112 @@
+{
+  "date": "2026-06-07T22:05:23+00:00",
+  "passed": true,
+  "matrix_title": "Qwen2.5-1.5B Broad MMLU 5x20 PTQ Retention",
+  "evidence_label": "guarded local five-subject 100-row MMLU retention, not full leaderboard",
+  "summary": {
+    "case_count": 3,
+    "variant_count": 3,
+    "format_count": 1,
+    "variants": [
+      "autoawq",
+      "fp16",
+      "gptqmodel"
+    ],
+    "task_formats": [
+      "mmlu"
+    ],
+    "baseline_variant": "fp16",
+    "total_tasks": 300,
+    "total_passes": 160,
+    "mean_accuracy": 0.5333333333333333,
+    "max_accuracy_drop_vs_fp16": 0.06000000000000005,
+    "baseline_zero_accuracy_formats": [],
+    "max_guard_vram_ratio": 0.8114341798552325,
+    "mean_tokens_per_second": 8.577397945553011,
+    "mean_ttft_seconds": 0.25264450263333293
+  },
+  "cases": [
+    {
+      "variant": "fp16",
+      "task_format": "mmlu",
+      "summary_path": "outputs\\official_ptq_task_fp16_qwen25_1p5b_mmlu_broad5x20_summary_2026_06_08.json",
+      "guard_path": "outputs\\official_ptq_task_fp16_qwen25_1p5b_mmlu_broad5x20_gpu_guard_2026_06_08.json",
+      "model": "Qwen/Qwen2.5-1.5B-Instruct",
+      "tasks": 100,
+      "passes": 56,
+      "accuracy": 0.56,
+      "mean_tokens_per_second": 5.131168128494883,
+      "mean_ttft_seconds": 0.41218782988999975,
+      "guard_returncode": 0,
+      "killed_by_guard": false,
+      "killed_by_timeout": false,
+      "guard_max_memory_used_ratio": 0.8114341798552325,
+      "guard_max_memory_used_mib": 6614,
+      "guard_memory_total_mib": 8151
+    },
+    {
+      "variant": "autoawq",
+      "task_format": "mmlu",
+      "summary_path": "outputs\\official_ptq_task_awq_qwen25_1p5b_mmlu_broad5x20_summary_2026_06_08.json",
+      "guard_path": "outputs\\official_ptq_task_awq_qwen25_1p5b_mmlu_broad5x20_gpu_guard_2026_06_08.json",
+      "model": "/home/rui/eigenskill_artifacts/qwen25_1p5b_awq_model_2026_06_07",
+      "tasks": 100,
+      "passes": 54,
+      "accuracy": 0.54,
+      "mean_tokens_per_second": 11.199772856498697,
+      "mean_ttft_seconds": 0.1546893058699996,
+      "guard_returncode": 0,
+      "killed_by_guard": false,
+      "killed_by_timeout": false,
+      "guard_max_memory_used_ratio": 0.7208931419457735,
+      "guard_max_memory_used_mib": 5876,
+      "guard_memory_total_mib": 8151
+    },
+    {
+      "variant": "gptqmodel",
+      "task_format": "mmlu",
+      "summary_path": "outputs\\official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_broad5x20_summary_2026_06_08.json",
+      "guard_path": "outputs\\official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_broad5x20_gpu_guard_2026_06_08.json",
+      "model": "/home/rui/eigenskill_artifacts/qwen25_1p5b_gptq_model_smoke4_2026_06_08",
+      "tasks": 100,
+      "passes": 50,
+      "accuracy": 0.5,
+      "mean_tokens_per_second": 9.401252851665456,
+      "mean_ttft_seconds": 0.19105637213999954,
+      "guard_returncode": 0,
+      "killed_by_guard": false,
+      "killed_by_timeout": false,
+      "guard_max_memory_used_ratio": 0.6818795239847871,
+      "guard_max_memory_used_mib": 5558,
+      "guard_memory_total_mib": 8151
+    }
+  ],
+  "comparisons": [
+    {
+      "variant": "autoawq",
+      "task_format": "mmlu",
+      "baseline_variant": "fp16",
+      "baseline_accuracy": 0.56,
+      "accuracy": 0.54,
+      "accuracy_drop_vs_baseline": 0.020000000000000018,
+      "baseline_passes": 56,
+      "passes": 54,
+      "baseline_tasks": 100,
+      "tasks": 100
+    },
+    {
+      "variant": "gptqmodel",
+      "task_format": "mmlu",
+      "baseline_variant": "fp16",
+      "baseline_accuracy": 0.56,
+      "accuracy": 0.5,
+      "accuracy_drop_vs_baseline": 0.06000000000000005,
+      "baseline_passes": 56,
+      "passes": 50,
+      "baseline_tasks": 100,
+      "tasks": 100
+    }
+  ],
+  "failures": [],
+  "claim_boundary": "Valid claim: FP16 and official-package quantized artifacts are loadable and evaluated on the same guarded local five-subject 100-row MMLU retention, not full leaderboard under GPU guard. Formats with zero FP16 accuracy are execution-only evidence. Invalid claim: this is leaderboard-scale task retention, SOTA PTQ quality, or a production inference benchmark."
+}

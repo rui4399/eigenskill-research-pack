@@ -25,7 +25,7 @@ Current ledger artifact:
 outputs/real_system_packer_2026-06-05/EVIDENCE_LEDGER_2026_06_06.md
 ```
 
-Current status: **55 / 55 gates pass**.
+Current status: **58 / 58 gates pass**.
 
 Valid claim:
 
@@ -85,6 +85,9 @@ Invalid claim:
 | `official_ptq_task_qwen25_1p5b_gsm8kfull_fp16_awq_gptqmodel` | task execution full task | `outputs/OFFICIAL_PTQ_TASK_QWEN25_1P5B_GSM8KFULL_FP16_AWQ_GPTQMODEL_MATRIX_2026_06_08.md` | FP16, AutoAWQ, and GPTQModel Qwen2.5-1.5B variants run all 1319 GSM8K rows under GPU guard; max drop versus FP16 is 0.00834 and peak guard VRAM ratio is 0.8295, but this remains single-task local retention evidence. |
 | `official_ptq_qwen25_1p5b_gsm8kfull_fp16_awq_gptqmodel_runtime_profile` | runtime profile | `outputs/OFFICIAL_PTQ_QWEN25_1P5B_GSM8KFULL_FP16_AWQ_GPTQMODEL_RUNTIME_PROFILE_2026_06_08.md` | PC-side TTFT/tokens/s/VRAM are summarized from the 3957-task-execution full-GSM8K matrix; FP16 uses HF CPU/GPU offload, so runtime ratios remain local-profile evidence. |
 | `official_ptq_qwen25_1p5b_gsm8kfull_fp16_awq_gptqmodel_statistics` | statistical interval | `outputs/OFFICIAL_PTQ_TASK_QWEN25_1P5B_GSM8KFULL_FP16_AWQ_GPTQMODEL_STATISTICS_2026_06_08.md` | The full-GSM8K matrix has paired bootstrap deltas for AutoAWQ and GPTQModel versus FP16; the minimum bootstrap lower bound is -0.0243, so this reports uncertainty rather than superiority. |
+| `official_ptq_task_qwen25_1p5b_mmlu_broad5x20_fp16_awq_gptqmodel` | task execution subset | `outputs/OFFICIAL_PTQ_TASK_QWEN25_1P5B_MMLU_BROAD5X20_FP16_AWQ_GPTQMODEL_MATRIX_2026_06_08.md` | FP16, AutoAWQ, and GPTQModel Qwen2.5-1.5B variants run a five-subject 100-row MMLU fixture under GPU guard; max drop versus FP16 is 0.0600 and peak guard VRAM ratio is 0.8114, but this is not full MMLU. |
+| `official_ptq_qwen25_1p5b_mmlu_broad5x20_fp16_awq_gptqmodel_runtime_profile` | runtime profile | `outputs/OFFICIAL_PTQ_QWEN25_1P5B_MMLU_BROAD5X20_FP16_AWQ_GPTQMODEL_RUNTIME_PROFILE_2026_06_08.md` | PC-side TTFT/tokens/s/VRAM are summarized from the 300-task-execution MMLU Broad5x20 matrix; FP16 uses a local guarded HF path, so runtime ratios remain local-profile evidence. |
+| `official_ptq_qwen25_1p5b_mmlu_broad5x20_fp16_awq_gptqmodel_statistics` | statistical interval | `outputs/OFFICIAL_PTQ_TASK_QWEN25_1P5B_MMLU_BROAD5X20_FP16_AWQ_GPTQMODEL_STATISTICS_2026_06_08.md` | The MMLU Broad5x20 matrix has paired bootstrap deltas for AutoAWQ and GPTQModel versus FP16; the minimum bootstrap lower bound is -0.1500, so this reports uncertainty rather than superiority. |
 | `esmp_package` | artifact integrity | `outputs/real_system_packer_2026-06-05/ESMP_PACKAGE_VERIFY_QWEN3_0P6B_LIMIT8_2026_06_06.md` | ESMP package metadata, manifest, and binary headers are independently checkable. |
 | `triton_shape_family` | kernel | `outputs/real_system_packer_2026-06-05/TRITON_QWEN_SHAPE_FAMILY_GATE_2026_06_06.md` | Tuned grouped packed INT4/INT8 Triton kernels can beat torch FP16 on selected measured shapes. |
 | `w4a8_activation_reconstruction` | module reconstruction | `outputs/w4a8_activation_reconstruction_2026_06_08/W4A8_ACTIVATION_RECONSTRUCTION_GATE.md` | Selected real Qwen3 self-attention module activations have bounded added drift from A8 activation quantization; this is not full-model quality retention or end-to-end speed evidence. |

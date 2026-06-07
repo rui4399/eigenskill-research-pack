@@ -27,6 +27,49 @@ class BuildPublicTaskSmokeTests(unittest.TestCase):
         self.assertEqual(smoke.artifact_file("gsm8k_test_smoke.jsonl", "smoke"), "gsm8k_test_smoke.jsonl")
         self.assertEqual(smoke.artifact_file("gsm8k_test_smoke.jsonl", "subset100"), "gsm8k_test_subset100.jsonl")
 
+    def test_mmlu_dataset_spec_accepts_new_subjects(self) -> None:
+        self.assertEqual(smoke.mmlu_dataset_key("computer_security"), "mmlu_computer_security")
+        spec = smoke.mmlu_dataset_spec("computer_security")
+        self.assertEqual(spec["dataset"], "cais/mmlu")
+        self.assertEqual(spec["config"], "computer_security")
+        self.assertEqual(spec["task_format"], "mmlu")
+        self.assertEqual(spec["file"], "mmlu_computer_security_test_smoke.jsonl")
+        with self.assertRaises(ValueError):
+            smoke.mmlu_dataset_key(" ")
+
+    def test_build_suite_supports_multiple_mmlu_subjects(self) -> None:
+        def fake_records(dataset, config, split, count, source="auto"):
+            return [
+                {
+                    "question": f"{config}-{idx}",
+                    "choices": ["A", "B", "C", "D"],
+                    "answer": 0,
+                    "subject": config,
+                }
+                for idx in range(count)
+            ]
+
+        with tempfile.TemporaryDirectory() as tmp:
+            with mock.patch.object(smoke, "load_streamed_records", side_effect=fake_records):
+                manifest = smoke.build_suite(
+                    Path(tmp),
+                    {"mmlu_abstract_algebra": 2, "mmlu_computer_security": 3},
+                    file_tag="broad5",
+                    mmlu_combined_file="mmlu_broad5.jsonl",
+                    source="datasets-server",
+                )
+
+            combined_rows = [
+                json.loads(line)
+                for line in (Path(tmp) / "mmlu_broad5.jsonl").read_text(encoding="utf-8").splitlines()
+            ]
+
+        self.assertEqual(manifest["artifact_count"], 3)
+        rows = {item["id"]: item["rows"] for item in manifest["artifacts"]}
+        self.assertEqual(rows, {"mmlu_abstract_algebra": 2, "mmlu_computer_security": 3, "mmlu_combined": 5})
+        self.assertEqual(len(combined_rows), 5)
+        self.assertEqual({row["subject"] for row in combined_rows}, {"abstract_algebra", "computer_security"})
+
     def test_dataset_server_records_fetch_pages(self) -> None:
         calls = []
 

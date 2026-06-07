@@ -37,6 +37,25 @@ DATASETS = {
 }
 
 DEFAULT_CLAIM_BOUNDARY = "Tiny public benchmark smoke fixtures; not leaderboard-scale evaluation."
+DEFAULT_MMLU_SUBJECTS = ("abstract_algebra",)
+
+
+def mmlu_dataset_key(subject: str) -> str:
+    cleaned = subject.strip()
+    if not cleaned:
+        raise ValueError("MMLU subject must not be empty")
+    return f"mmlu_{cleaned}"
+
+
+def mmlu_dataset_spec(subject: str) -> dict[str, str]:
+    cleaned = subject.strip()
+    return {
+        "dataset": "cais/mmlu",
+        "config": cleaned,
+        "split": "test",
+        "task_format": "mmlu",
+        "file": f"mmlu_{cleaned}_test_smoke.jsonl",
+    }
 
 
 def take_records(rows: Iterable[dict[str, Any]], count: int) -> list[dict[str, Any]]:
@@ -123,18 +142,32 @@ def build_suite(
     counts: dict[str, int],
     *,
     file_tag: str = "smoke",
+    mmlu_combined_file: str = "",
     claim_boundary: str = DEFAULT_CLAIM_BOUNDARY,
     title: str = "Public Task Smoke Manifest",
     source: str = "auto",
 ) -> dict[str, Any]:
     artifacts: list[dict[str, Any]] = []
-    for key, spec in DATASETS.items():
+    mmlu_combined_rows: list[dict[str, Any]] = []
+    mmlu_combined_configs: list[str] = []
+    specs = dict(DATASETS)
+    for key, count in counts.items():
+        if key.startswith("mmlu_") and key not in specs:
+            specs[key] = mmlu_dataset_spec(key.removeprefix("mmlu_"))
+    for key, spec in specs.items():
         count = int(counts.get(key, 0))
         if count <= 0:
             continue
         rows = load_streamed_records(str(spec["dataset"]), spec.get("config"), str(spec["split"]), count, source=source)
         out_path = out_dir / artifact_file(str(spec["file"]), file_tag)
         write_jsonl(out_path, rows)
+        if str(spec["task_format"]) == "mmlu":
+            config = str(spec.get("config") or "")
+            mmlu_combined_configs.append(config)
+            for row in rows:
+                enriched = dict(row)
+                enriched.setdefault("subject", config)
+                mmlu_combined_rows.append(enriched)
         artifacts.append(
             {
                 "id": key,
@@ -146,6 +179,22 @@ def build_suite(
                 "path": out_path.as_posix(),
                 "rows": len(rows),
                 "columns": sorted(rows[0].keys()) if rows else [],
+            }
+        )
+    if mmlu_combined_file and mmlu_combined_rows:
+        combined_path = out_dir / mmlu_combined_file
+        write_jsonl(combined_path, mmlu_combined_rows)
+        artifacts.append(
+            {
+                "id": "mmlu_combined",
+                "dataset": "cais/mmlu",
+                "config": ",".join(mmlu_combined_configs),
+                "split": "test",
+                "task_format": "mmlu",
+                "source": source,
+                "path": combined_path.as_posix(),
+                "rows": len(mmlu_combined_rows),
+                "columns": sorted(mmlu_combined_rows[0].keys()),
             }
         )
     return {
@@ -194,7 +243,20 @@ def main() -> None:
     parser.add_argument("--out-dir", type=Path, default=Path("data_eval/public_task_smoke_v1"))
     parser.add_argument("--gsm8k-count", type=int, default=4)
     parser.add_argument("--mmlu-count", type=int, default=4)
+    parser.add_argument(
+        "--mmlu-subject",
+        action="append",
+        default=[],
+        help="MMLU subject/config to fetch. Repeat for multi-subject fixtures. Defaults to abstract_algebra.",
+    )
+    parser.add_argument(
+        "--mmlu-count-per-subject",
+        type=int,
+        default=None,
+        help="Rows per MMLU subject. Defaults to --mmlu-count for backwards compatibility.",
+    )
     parser.add_argument("--file-tag", default="smoke")
+    parser.add_argument("--mmlu-combined-file", default="", help="Optional combined JSONL filename for all fetched MMLU subjects.")
     parser.add_argument("--title", default="Public Task Smoke Manifest")
     parser.add_argument("--claim-boundary", default=DEFAULT_CLAIM_BOUNDARY)
     parser.add_argument("--source", choices=["auto", "datasets", "datasets-server"], default="auto")
@@ -202,13 +264,17 @@ def main() -> None:
     parser.add_argument("--out-md", type=Path, default=Path("outputs/PUBLIC_TASK_SMOKE_MANIFEST_2026_06_06.md"))
     args = parser.parse_args()
 
+    mmlu_count = args.mmlu_count if args.mmlu_count_per_subject is None else args.mmlu_count_per_subject
+    subjects = tuple(args.mmlu_subject or DEFAULT_MMLU_SUBJECTS)
+    counts = {"gsm8k": args.gsm8k_count}
+    for subject in subjects:
+        counts[mmlu_dataset_key(subject)] = mmlu_count
+
     manifest = build_suite(
         args.out_dir,
-        {
-            "gsm8k": args.gsm8k_count,
-            "mmlu_abstract_algebra": args.mmlu_count,
-        },
+        counts,
         file_tag=args.file_tag,
+        mmlu_combined_file=args.mmlu_combined_file,
         claim_boundary=args.claim_boundary,
         title=args.title,
         source=args.source,

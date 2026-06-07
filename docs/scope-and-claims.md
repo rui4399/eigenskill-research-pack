@@ -77,6 +77,9 @@ In compressed form, the supported claims are:
   single-task row across FP16, AutoAWQ, and GPTQModel, still bounded as local
   single-task retention evidence rather than leaderboard-scale benchmark
   quality;
+- the Qwen2.5-1.5B baseline confrontation also has a five-subject MMLU Broad5x20
+  row across FP16, AutoAWQ, and GPTQModel, still bounded as local subset
+  evidence rather than full MMLU benchmark quality;
 - the same FP16/AutoAWQ/GPTQModel Qwen2.5-0.5B variants have deterministic
   IFEval-style instruction-following execution and runtime smoke gates, kept as
   execution-path evidence because the FP16 baseline is 0/8;
@@ -144,14 +147,15 @@ The next paper-strengthening steps are:
 1. faithful public quantization baselines under matched budgets;
 2. larger WikiText2/C4 slices and broader calibration-seed sweeps beyond the
    current n=2/4/8 Qwen2.5-0.5B curve;
-3. downstream task-retention evaluation beyond 50/100-row local subset gates;
+3. downstream task-retention evaluation beyond local subset gates, especially
+   full MMLU and broader IFEval;
 4. interaction-aware/global-feedback allocation checks;
 5. real packed-runtime or on-device TTFT/tokens/s/peak-memory measurements.
 
 The first item is only partially started by the local AutoAWQ/GPTQModel
 Qwen2.5-0.5B matched pack and the expanded 16-prompt public PPL gates.
-It does not yet cover larger models, SmoothQuant, rotation-family baselines, or
-leaderboard-scale tasks.
+It does not yet cover larger models, SmoothQuant, rotation-family baselines,
+full MMLU, or leaderboard-scale tasks.
 
 Historical notes and removed speculative material are summarized in
 `docs/HISTORICAL_ARTIFACTS.md`.

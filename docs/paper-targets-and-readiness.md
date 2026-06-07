@@ -69,6 +69,10 @@ The current evidence supports:
   covering 3957 task executions over all 1319 GSM8K test rows: FP16 gets
   107/1319, AutoAWQ gets 104/1319, GPTQModel gets 96/1319, with max measured
   drop 0.00834 versus FP16 and peak guarded VRAM ratio 0.8295;
+- a five-subject Qwen2.5-1.5B FP16/AutoAWQ/GPTQModel MMLU Broad5x20
+  task-retention row, covering 300 task executions over 100 combined MMLU rows:
+  FP16 gets 56/100, AutoAWQ gets 54/100, GPTQModel gets 50/100, with max
+  measured drop 0.0600 versus FP16 and peak guarded VRAM ratio 0.8114;
 - a paired statistical-interval gate over the same Qwen2.5-1.5B matrix:
   AutoAWQ-minus-FP16 delta is +0.015 with 95% bootstrap CI [-0.035, +0.065] on
   GSM8K and +0.010 with CI [-0.100, +0.120] on MMLU; GPTQModel-minus-FP16 delta
@@ -127,13 +131,12 @@ Current AAAI-facing critical path:
    0.5B readiness setting and report negative runtime results honestly.
    Qwen2.5-1.5B now has public-calibration AutoAWQ/GPTQModel PPL readiness,
    matched FP16/AutoAWQ/GPTQModel subset100, GSM8K200/MMLU100, sharded
-   GSM8K500, and full GSM8K1319 task/runtime matrices, with paired uncertainty
-   reporting. SmoothQuant,
-   rotation baselines, broader subjects, and full benchmark retention still need
-   scale-up.
+   GSM8K500, full GSM8K1319, and MMLU Broad5x20 task/runtime matrices, with
+   paired uncertainty reporting. SmoothQuant, rotation baselines, full MMLU,
+   and full benchmark retention still need scale-up.
 3. Downstream tasks: full GSM8K is now measured for the local 7B public-task
-   path; move next toward broader MMLU/IFEval and stronger retention on actual
-   quantized variants.
+   path and for Qwen2.5-1.5B PTQ variants; move next toward full MMLU/IFEval and
+   stronger retention on actual quantized variants.
 4. Scale: keep the committed 7B public-task row as coverage evidence; upgrade
    it to quantized retention only if the 8GB local GPU can hold the run, else
    broaden the 1.5B matched PTQ matrix.
@@ -166,14 +169,15 @@ The blockers are concrete:
 
 1. Official baselines: the local AutoAWQ/GPTQModel 0.5B matched pack, expanded
    16-prompt public PPL gates, and Qwen2.5-1.5B matched FP16/AutoAWQ/GPTQModel
-   subset100 plus GSM8K200/MMLU100 rows are useful but not enough; SmoothQuant,
+   subset100 plus GSM8K200/MMLU100 plus MMLU Broad5x20 rows are useful but not enough; SmoothQuant,
    at least one faithful rotation or mixed-precision allocation comparator, and
    broader task subjects are still missing.
 2. Larger evaluation: more WikiText2/C4 prompts and broader calibration-seed sweeps.
-3. Downstream retention: broader MMLU/IFEval or similar task slices on the
+3. Downstream retention: full MMLU/IFEval or similar task slices on the
    actual quantized/fused variants; full GSM8K is measured for both the local
    Ollama 7B public-task path and Qwen2.5-1.5B FP16/AutoAWQ/GPTQModel PTQ
-   variants, current IFEval-style evidence is only an 8-row
+   variants, MMLU is broadened to a five-subject 100-row local fixture, and
+   current IFEval-style evidence is only an 8-row
    deterministic execution smoke, and current public PTQ task evidence is still
    local subset coverage rather than leaderboard-scale.
 4. Statistical robustness: the first n=2/4/8 CSI curve, trend-significance
