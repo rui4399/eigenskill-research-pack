@@ -198,12 +198,20 @@ def metric_parts(summary: dict[str, Any]) -> list[str]:
         parts.append(f"AWQ blocks {summary.get('expected_awq_blocks')}")
     if "unstable_case_count" in summary:
         parts.append(f"unstable {summary.get('unstable_case_count')}")
+    if "unique_prompt_selection_count" in summary:
+        parts.append(f"prompt selections {summary.get('unique_prompt_selection_count')}")
+    if "finite_pair_count" in summary:
+        parts.append(f"finite pairs {summary.get('finite_pair_count')}")
     if (value := finite_float(summary.get("sample_size_mean_spearman"))) is not None:
         parts.append(f"sample-size rho {value:.4f}")
     if (value := finite_float(summary.get("model_scale_mean_spearman"))) is not None:
         parts.append(f"model-scale rho {value:.4f}")
     if (value := finite_float(summary.get("perturbation_separation_margin"))) is not None:
         parts.append(f"separation {value:.4f}")
+    if (value := finite_float(summary.get("min_score_spearman"))) is not None:
+        parts.append(f"min rho {value:.4f}")
+    if (value := finite_float(summary.get("min_top20_jaccard"))) is not None:
+        parts.append(f"min top20 {value:.4f}")
     if "total_tasks" in summary:
         parts.append(f"tasks {summary.get('total_tasks')}")
     if "total_cases" in summary:

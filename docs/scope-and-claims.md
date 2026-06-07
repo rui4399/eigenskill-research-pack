@@ -36,6 +36,9 @@ In compressed form, the supported claims are:
   committed Qwen3/OLMo2 fake-quant diagnostics;
 - Qwen2.5 perturbation diagnostics separate same-model calibration sample-size
   instability from much weaker cross-model-scale sensitivity transfer;
+- Qwen2.5 prompt-seed diagnostics show that deterministic small-sample
+  sensitivity runs can have moderate average rank agreement while still
+  drifting in top-sensitive module sets;
 - consensus-style allocation passes the committed short-slice robustness stress
   gate against uniform INT4 and random mixed-precision baselines;
 - paired Qwen3 transfer slices show consensus avoiding the worse single-split
@@ -111,7 +114,7 @@ SOTA quantizer
 The next paper-strengthening steps are:
 
 1. faithful public quantization baselines under matched budgets;
-2. larger WikiText2/C4 slices and multiple calibration seeds;
+2. larger WikiText2/C4 slices and broader calibration-seed sweeps;
 3. downstream task-retention evaluation beyond tiny smoke gates;
 4. interaction-aware/global-feedback allocation checks;
 5. real packed-runtime or on-device TTFT/tokens/s/peak-memory measurements.

@@ -23,6 +23,7 @@ import argparse
 import gc
 import json
 import math
+import random
 import time
 from pathlib import Path
 
@@ -47,12 +48,43 @@ DEFAULT_PROMPTS = [
 ]
 
 
-def load_prompts(path: str, limit: int) -> list[str]:
+def read_prompt_pool(path: str) -> list[str]:
     if path:
-        prompts = [line.strip() for line in Path(path).read_text(encoding="utf-8").splitlines() if line.strip()]
+        return [line.strip() for line in Path(path).read_text(encoding="utf-8").splitlines() if line.strip()]
+    return list(DEFAULT_PROMPTS)
+
+
+def select_prompt_indices(count: int, *, limit: int, sample_size: int, seed: int) -> list[int]:
+    if count <= 0:
+        return []
+    if sample_size < 0:
+        raise ValueError("--prompt-sample-size must be >= 0")
+    if sample_size:
+        selected = sorted(random.Random(seed).sample(range(count), min(sample_size, count)))
     else:
-        prompts = list(DEFAULT_PROMPTS)
-    return prompts[:limit] if limit else prompts
+        selected = list(range(count))
+    if limit:
+        selected = selected[:limit]
+    return selected
+
+
+def load_prompts_with_metadata(path: str, limit: int, sample_size: int = 0, seed: int = 0) -> tuple[list[str], dict]:
+    pool = read_prompt_pool(path)
+    indices = select_prompt_indices(len(pool), limit=limit, sample_size=sample_size, seed=seed)
+    prompts = [pool[idx] for idx in indices]
+    return prompts, {
+        "source": path or "default",
+        "pool_size": len(pool),
+        "limit": limit,
+        "sample_size": sample_size,
+        "seed": seed,
+        "selected_indices": indices,
+    }
+
+
+def load_prompts(path: str, limit: int) -> list[str]:
+    prompts, _metadata = load_prompts_with_metadata(path, limit)
+    return prompts
 
 
 def quantize_weight(weight: torch.Tensor, bits: int, group_size: int = 0) -> torch.Tensor:
@@ -439,6 +471,7 @@ def build_result(
         "date": time.strftime("%Y-%m-%d"),
         "model": args.model,
         "prompt_count": baseline.get("prompt_count", 0),
+        "prompt_selection": getattr(args, "prompt_selection", {}),
         "max_length": args.max_length,
         "device": args.device,
         "dtype": args.dtype,
@@ -492,6 +525,13 @@ def main() -> None:
     parser.add_argument("--model", default="HuggingFaceTB/SmolLM2-360M-Instruct")
     parser.add_argument("--prompts", default="")
     parser.add_argument("--limit-prompts", type=int, default=4)
+    parser.add_argument(
+        "--prompt-sample-size",
+        type=int,
+        default=0,
+        help="Sample this many prompts from --prompts before applying --limit-prompts; 0 keeps the original order.",
+    )
+    parser.add_argument("--prompt-seed", type=int, default=0, help="Seed for --prompt-sample-size.")
     parser.add_argument("--max-length", type=int, default=128)
     parser.add_argument("--device", default="cuda")
     parser.add_argument("--dtype", choices=["float16", "bfloat16", "float32"], default="float16")
@@ -524,7 +564,13 @@ def main() -> None:
     model.eval()
     model.to(args.device)
 
-    prompts = load_prompts(args.prompts, args.limit_prompts)
+    prompts, prompt_selection = load_prompts_with_metadata(
+        args.prompts,
+        args.limit_prompts,
+        sample_size=args.prompt_sample_size,
+        seed=args.prompt_seed,
+    )
+    args.prompt_selection = prompt_selection
     batches = tokenize_prompts(tokenizer, prompts, args.device, args.max_length)
     modules = collect_linear_modules(model, args.max_modules)
     resume_records = load_resume_records(args.resume_json)

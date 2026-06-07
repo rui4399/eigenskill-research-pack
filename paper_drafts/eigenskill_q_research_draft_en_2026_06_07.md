@@ -22,12 +22,15 @@ fake-quant loss sensitivity on multiple calibration views, allocates a fixed
 `{4,8}`-bit budget through cross-split consensus sensitivity, and records every
 paper-facing result through executable evidence gates. Across Qwen3-0.6B,
 Qwen3-1.7B, OLMo2-0425-1B-Instruct, and SmolLM2-1.7B short-slice diagnostics,
-the current evidence ledger passes 29/29 gates. The calibration-instability
+the current evidence ledger passes 30/30 gates. The calibration-instability
 gate finds 3/3 unstable model/dataset cases with mean score/cost Spearman
 0.0713 and mean top-20 Jaccard 0.1022. A Qwen2.5 perturbation matrix further
 separates calibration sample-size and model-scale effects: within-model
 limit2-vs-limit8 sensitivity rankings have mean Spearman 0.6356, while direct
-0.5B-vs-1.5B cross-scale transfer has Spearman 0.1273. The robustness stress gate reports
+0.5B-vs-1.5B cross-scale transfer has Spearman 0.1273. A prompt-seed stability
+gate on Qwen2.5-0.5B reports mean Spearman 0.4230 and minimum top-20 Jaccard
+0.4286 across three deterministic four-prompt samples from the same public
+WikiText2 prompt pool. The robustness stress gate reports
 11/11 wins versus uniform INT4, best random seed, and random-seed mean under the
 same budget, with a one-sided sign-test p-value of 0.000488 versus best random.
 A paired transfer-boundary gate shows consensus avoiding the worse single-split
@@ -87,7 +90,7 @@ offers three narrower contributions:
    consensus allocator that protects modules that are consistently sensitive or
    have high average sensitivity under a fixed `{4,8}` budget.
 3. **Gated evidence discipline.** We convert scattered fake-quant, runtime,
-   task-smoke, paper-alignment, and repository-hygiene outputs into 29 executable gates, each
+   task-smoke, paper-alignment, and repository-hygiene outputs into 30 executable gates, each
    with an explicit claim boundary.
 
 The paper is intentionally conservative. It keeps negative results visible:
@@ -217,12 +220,13 @@ future allocator.
 ## 6. Evidence Gates
 
 Every paper-facing claim is indexed by a gate JSON and a Markdown report. The
-current ledger passes 29/29 gates. The most important gates are:
+current ledger passes 30/30 gates. The most important gates are:
 
 | Gate | Evidence | Valid claim | Non-claim |
 |---|---|---|---|
 | Calibration instability | 3 Qwen3/OLMo2 split comparisons | Small calibration splits induce unstable module rankings. | Instability alone proves consensus is superior. |
 | Sensitivity perturbation matrix | Qwen2.5 sample-size and model-scale perturbations; see `outputs/SENSITIVITY_PERTURBATION_MATRIX_QWEN25_2026_06_07.md`. | Same-model calibration sample-size changes are more stable than cross-model-scale sensitivity transfer in the measured artifacts. | Downstream quality retention, a universal scaling law, or production quantization. |
+| Calibration seed stability | Qwen2.5-0.5B three-seed prompt sampling; see `outputs/CALIBRATION_SEED_STABILITY_QWEN25_0P5B_2026_06_07.md`. | Deterministic small-sample sensitivity runs can be audited for same-model prompt-seed stability; the measured top-sensitive sets still drift. | Does not prove downstream quality retention, broad seed coverage, deployment speed, or SOTA quantization. |
 | Robustness stress | 11 short fake-quant PPL slices | Target policies beat uniform and random baselines on committed slices. | Not SOTA PTQ or task retention. |
 | Consensus transfer boundary | 4 paired Qwen3 slices | Consensus avoids the worse single-split policy with bounded best-single regret. | Consensus always beats the best single split. |
 | Interaction swap boundary | 16 SmolLM2-1.7B swap trials | Global feedback exposes local-proxy failures. | Global optimality or broad transfer. |
@@ -278,7 +282,27 @@ reusing that ranking across model sizes remains weak in the measured artifacts.
 This is still a diagnostic result; it does not claim downstream quality
 retention or a general scaling law.
 
-### 7.3 Robustness Stress Gate
+### 7.3 Calibration Seed Stability
+
+The Qwen2.5-0.5B seed-stability gate reruns module-loss sensitivity on three
+deterministic four-prompt samples from the same 16-prompt WikiText2 pool:
+
+| Metric | Value |
+|---|---:|
+| Prompt selections | 3 |
+| Pairwise comparisons | 3 |
+| Mean score/cost Spearman | 0.4230 |
+| Minimum score/cost Spearman | 0.2741 |
+| Mean top-20 Jaccard | 0.4652 |
+| Minimum top-20 Jaccard | 0.4286 |
+| Mean positive-set Jaccard | 0.5517 |
+
+This result is more nuanced than the WikiText2-vs-C4 split comparison:
+same-pool prompt seeds produce moderate average rank agreement, but the
+top-sensitive module set still changes enough to justify reporting calibration
+seed variance instead of a single deterministic allocation trace.
+
+### 7.4 Robustness Stress Gate
 
 The robustness stress gate aggregates 11 committed Qwen3/OLMo2/SmolLM2 PPL
 summaries under a fixed mixed-precision budget:
@@ -297,7 +321,7 @@ summaries under a fixed mixed-precision budget:
 The result is strong for the committed short-slice fake-quant setting. It does
 not replace official GPTQ/AWQ/SmoothQuant/QuaRot/SpinQuant comparisons.
 
-### 7.4 Consensus Transfer Boundary
+### 7.5 Consensus Transfer Boundary
 
 The paired Qwen3 transfer-boundary gate compares WikiText2-only, C4-only, and
 cross-split consensus policies:
@@ -314,7 +338,7 @@ cross-split consensus policies:
 This supports a robust-risk framing: consensus is not an oracle, but it reduces
 the risk of choosing the worse calibration split.
 
-### 7.5 Interaction-aware Swap Boundary
+### 7.6 Interaction-aware Swap Boundary
 
 The interaction gate uses SmolLM2-1.7B search cases on WikiText2 and C4:
 
@@ -336,7 +360,7 @@ Its local proxy gain is negative (`-0.000744`), yet the global PPL improves by
 0.0502. This is direct evidence that additive sensitivity ranking misses
 allocation interactions.
 
-### 7.5 Packed-system Prototype Evidence
+### 7.7 Packed-system Prototype Evidence
 
 The system side is intentionally scoped. The ESMPQ001 format can package and
 audit mixed-bit matrices; Triton shape-family tuning finds selected shape wins;

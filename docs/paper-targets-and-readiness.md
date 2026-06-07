@@ -23,6 +23,9 @@ The current evidence supports:
   allocation audits around the 4.5 average-bit budget;
 - budget and robustness gates for mean consensus, robust-LCB, transfer
   boundaries, and bounded interaction-aware swap search;
+- a Qwen2.5-0.5B calibration prompt-seed stability gate showing 3 sampled
+  prompt selections, 3 pairwise comparisons, mean Spearman 0.4230, and minimum
+  top-20 Jaccard 0.4286 under the same 16-prompt WikiText2 pool;
 - a Q-Palette-style closed-form Lagrangian allocation proxy over measured Qwen3
   and Qwen2.5 sensitivity artifacts, gated for finite lambda, budget use, and
   non-trivial bit histograms;
@@ -69,7 +72,7 @@ The blockers are concrete:
    expanded 16-prompt public PPL gates are useful but not enough; larger AWQ/GPTQ
    rows, SmoothQuant, and at least one faithful rotation or mixed-precision
    allocation comparator are still missing.
-2. Larger evaluation: more WikiText2/C4 prompts and multiple calibration seeds.
+2. Larger evaluation: more WikiText2/C4 prompts and broader calibration-seed sweeps.
 3. Downstream retention: MMLU/GSM8K/IFEval or similar task slices on the actual
    quantized/fused variants, not only base-model capability smoke.
 4. Statistical robustness: bootstrap or confidence intervals for

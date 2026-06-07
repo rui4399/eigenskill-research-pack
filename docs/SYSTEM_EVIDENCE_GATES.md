@@ -25,7 +25,7 @@ Current ledger artifact:
 outputs/real_system_packer_2026-06-05/EVIDENCE_LEDGER_2026_06_06.md
 ```
 
-Current status: **29 / 29 gates pass**.
+Current status: **30 / 30 gates pass**.
 
 Valid claim:
 
@@ -45,6 +45,7 @@ Invalid claim:
 | `paper_evidence_alignment` | paper alignment | `outputs/PAPER_EVIDENCE_ALIGNMENT_GATE_2026_06_07.md` | Current paper draft cites required evidence and avoids unsafe non-negated high-risk claims. |
 | `calibration_instability` | calibration robustness | `outputs/CALIBRATION_INSTABILITY_BENCHMARK_2026_06_06.md` | Small calibration splits induce unstable module-sensitivity rankings in the measured model/dataset cases. |
 | `sensitivity_perturbation_matrix` | calibration robustness | `outputs/SENSITIVITY_PERTURBATION_MATRIX_QWEN25_2026_06_07.md` | Qwen2.5 sensitivity rankings are more stable under within-model calibration sample-size changes than under cross-model-scale transfer; this is not downstream quality evidence. |
+| `calibration_seed_stability` | calibration robustness | `outputs/CALIBRATION_SEED_STABILITY_QWEN25_0P5B_2026_06_07.md` | Qwen2.5-0.5B deterministic prompt-seed sensitivity runs over the same 16-prompt pool show moderate mean rank agreement but drifting top-sensitive module sets; this is not quality-retention or deployment evidence. |
 | `calibration_robustness_stress` | calibration robustness | `outputs/CALIBRATION_ROBUSTNESS_STRESS_GATE_2026_06_07.md` | Current target policies beat uniform INT4, best random seed, and random mean across committed short fake-quant PPL slices. |
 | `consensus_transfer_boundary` | allocation boundary | `outputs/CONSENSUS_TRANSFER_BOUNDARY_GATE_2026_06_07.md` | Consensus avoids the worse single-split policy on paired Qwen3 transfer slices with bounded best-single regret. |
 | `interaction_swap_boundary` | allocation boundary | `outputs/INTERACTION_SWAP_BOUNDARY_GATE_2026_06_07.md` | Bounded global-feedback swap search exposes interaction effects beyond additive module ranking. |
@@ -74,7 +75,7 @@ Invalid claim:
 ## Non-Ledger Readiness Probes
 
 These probes are tracked because they reduce environment uncertainty, but they
-are not counted in the current 29-gate paper-facing ledger.
+are not counted in the current 30-gate paper-facing ledger.
 
 | probe | category | primary artifact | boundary |
 |---|---|---|---|
