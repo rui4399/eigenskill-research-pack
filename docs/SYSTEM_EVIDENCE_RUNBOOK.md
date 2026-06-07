@@ -10,7 +10,7 @@ by an executable gate and an explicit claim boundary.
 ## Evidence Ledger
 
 `train_python/build_current_evidence_ledger.py` is the stable public entry
-point for the current paper-facing gate set. It fixes the 48 gate paths in one
+point for the current paper-facing gate set. It fixes the 61 gate paths in one
 manifest, rebuilds the ledger, and avoids copying a long `--gate` list across
 README files and paper appendices.
 
@@ -21,7 +21,7 @@ python train_python/build_current_evidence_ledger.py
 ```
 
 `train_python/build_evidence_ledger.py` is the lower-level builder for custom
-or future gate manifests. The expanded form of the current 55-gate ledger is:
+or future gate manifests. The expanded form of the current 61-gate ledger is:
 
 ```bash
 python train_python/build_evidence_ledger.py \
@@ -69,6 +69,15 @@ python train_python/build_evidence_ledger.py \
   --gate official_ptq_task_qwen25_1p5b_gsm8k200_mmlu100_fp16_awq_gptqmodel=outputs/official_ptq_task_qwen25_1p5b_gsm8k200_mmlu100_fp16_awq_gptqmodel_matrix_2026_06_08.json \
   --gate official_ptq_qwen25_1p5b_gsm8k200_mmlu100_fp16_awq_gptqmodel_runtime_profile=outputs/official_ptq_qwen25_1p5b_gsm8k200_mmlu100_fp16_awq_gptqmodel_runtime_profile_2026_06_08.json \
   --gate official_ptq_qwen25_1p5b_gsm8k200_mmlu100_fp16_awq_gptqmodel_statistics=outputs/official_ptq_task_qwen25_1p5b_gsm8k200_mmlu100_fp16_awq_gptqmodel_statistics_2026_06_08.json \
+  --gate official_ptq_task_qwen25_1p5b_gsm8kfull_fp16_awq_gptqmodel=outputs/official_ptq_task_qwen25_1p5b_gsm8kfull_fp16_awq_gptqmodel_matrix_2026_06_08.json \
+  --gate official_ptq_qwen25_1p5b_gsm8kfull_fp16_awq_gptqmodel_runtime_profile=outputs/official_ptq_qwen25_1p5b_gsm8kfull_fp16_awq_gptqmodel_runtime_profile_2026_06_08.json \
+  --gate official_ptq_qwen25_1p5b_gsm8kfull_fp16_awq_gptqmodel_statistics=outputs/official_ptq_task_qwen25_1p5b_gsm8kfull_fp16_awq_gptqmodel_statistics_2026_06_08.json \
+  --gate official_ptq_task_qwen25_1p5b_mmlu_broad5x20_fp16_awq_gptqmodel=outputs/official_ptq_task_qwen25_1p5b_mmlu_broad5x20_fp16_awq_gptqmodel_matrix_2026_06_08.json \
+  --gate official_ptq_qwen25_1p5b_mmlu_broad5x20_fp16_awq_gptqmodel_runtime_profile=outputs/official_ptq_qwen25_1p5b_mmlu_broad5x20_fp16_awq_gptqmodel_runtime_profile_2026_06_08.json \
+  --gate official_ptq_qwen25_1p5b_mmlu_broad5x20_fp16_awq_gptqmodel_statistics=outputs/official_ptq_task_qwen25_1p5b_mmlu_broad5x20_fp16_awq_gptqmodel_statistics_2026_06_08.json \
+  --gate official_ptq_task_qwen25_1p5b_mmlu_broad10x20_fp16_awq_gptqmodel=outputs/official_ptq_task_qwen25_1p5b_mmlu_broad10x20_fp16_awq_gptqmodel_matrix_2026_06_08.json \
+  --gate official_ptq_qwen25_1p5b_mmlu_broad10x20_fp16_awq_gptqmodel_runtime_profile=outputs/official_ptq_qwen25_1p5b_mmlu_broad10x20_fp16_awq_gptqmodel_runtime_profile_2026_06_08.json \
+  --gate official_ptq_qwen25_1p5b_mmlu_broad10x20_fp16_awq_gptqmodel_statistics=outputs/official_ptq_task_qwen25_1p5b_mmlu_broad10x20_fp16_awq_gptqmodel_statistics_2026_06_08.json \
   --gate allocation_family_proxy=outputs/q_palette_style_allocation_family_gate_2026_06_06.json \
   --gate robust_lcb_consensus=outputs/robust_lcb_consensus_family_gate_2026_06_06.json \
   --gate robust_lcb_quality=outputs/qwen3_0p6b_robust_lcb_quality_gate_2026_06_07.json \
@@ -78,11 +87,11 @@ python train_python/build_evidence_ledger.py \
   --out-md outputs/real_system_packer_2026-06-05/EVIDENCE_LEDGER_2026_06_06.md
 ```
 
-The current ledger passes with 58/58 gates across repo hygiene, calibration
+The current ledger passes with 61/61 gates across repo hygiene, calibration
 robustness, CSI trend significance, CSI null permutation, rank-inversion theory, artifact integrity, kernel, runtime wiring, selected-row, C++
 runtime, decode integration, QKV replacement, quality, task-retention, runtime profile, and
 capability-retention/model-ladder, allocation-comparator, rotation-comparator, and
-matched PTQ baseline, true subset100 official PTQ task/runtime evidence, deterministic IFEval-style PTQ execution, expanded AutoAWQ public PPL, Qwen2.5-1.5B GPTQModel task-execution subset evidence, Qwen2.5-1.5B FP16/AutoAWQ/GPTQModel subset100 plus GSM8K200/MMLU100 plus sharded GSM8K500 plus full GSM8K1319 plus MMLU Broad5x20 task/runtime/statistical-interval evidence, full-GSM8K local 7B public-task coverage, PTQ-comparator, and
+matched PTQ baseline, true subset100 official PTQ task/runtime evidence, deterministic IFEval-style PTQ execution, expanded AutoAWQ public PPL, Qwen2.5-1.5B GPTQModel task-execution subset evidence, Qwen2.5-1.5B FP16/AutoAWQ/GPTQModel subset100 plus GSM8K200/MMLU100 plus sharded GSM8K500 plus full GSM8K1319 plus MMLU Broad5x20/Broad10x20 task/runtime/statistical-interval evidence, full-GSM8K local 7B public-task coverage, PTQ-comparator, and
 paper-alignment evidence categories, plus extended W4A8 attention/MLP real-activation reconstruction.
 
 Valid claim:
@@ -239,7 +248,7 @@ Current gate:
 ```bash
 python train_python/gate_paper_evidence_alignment.py \
   --paper paper_drafts/eigenskill_q_research_draft_en_2026_06_07.md \
-  --expected-gate-count 58 \
+  --expected-gate-count 61 \
   --out-json outputs/paper_evidence_alignment_gate_2026_06_08.json \
   --out-md outputs/PAPER_EVIDENCE_ALIGNMENT_GATE_2026_06_08.md
 ```
@@ -247,7 +256,7 @@ python train_python/gate_paper_evidence_alignment.py \
 Current result: the generated alignment artifact records all configured required
 evidence references present, referenced repo paths found, 0 stale forbidden
 tokens, 0 unsafe non-negated claim lines, and the paper mentions the current
-55-gate ledger.
+61-gate ledger.
 
 Valid claim:
 
@@ -837,6 +846,15 @@ gate reports minimum bootstrap lower bound `-0.1500` under 2,000 samples. This
 broadens MMLU beyond abstract algebra, but is not full MMLU or leaderboard-scale
 retention evidence.
 
+Current MMLU Broad10x20 result: 600 guarded task executions across FP16,
+AutoAWQ, and GPTQModel over ten MMLU subjects. FP16 gets 101/200, AutoAWQ gets
+96/200, and GPTQModel gets 94/200. The task gate records max measured drop
+`0.0350` versus FP16 and peak guard VRAM ratio `0.8189`. The runtime profile
+reports mean `8.8134` tok/s and mean TTFT `0.245115` s. The paired statistics
+gate reports minimum bootstrap lower bound `-0.0950` under 4,000 samples. This
+further broadens MMLU coverage, but is still not full MMLU or leaderboard-scale
+retention evidence.
+
 The earlier GSM8K200/MMLU100 statistical gate reports paired bootstrap
 candidate-minus-FP16 deltas:
 AutoAWQ GSM8K `+0.0150` with CI `[-0.0350, +0.0650]`, AutoAWQ MMLU `+0.0100`
@@ -848,7 +866,7 @@ superiority.
 Valid claim:
 
 - FP16, AutoAWQ, and GPTQModel Qwen2.5-1.5B variants have matched local
-  subset100, GSM8K200/MMLU100, GSM8K500, full GSM8K1319, and MMLU Broad5x20
+  subset100, GSM8K200/MMLU100, GSM8K500, full GSM8K1319, and MMLU Broad10x20
   task/runtime/VRAM evidence under the GPU guard.
 
 Invalid claim:
@@ -1168,7 +1186,7 @@ Invalid claim:
 `train_python/run_official_awq_smoke.py` is a minimal package-readiness probe.
 It exists to verify that AutoAWQ can execute, save local quantized artifacts,
 and run one short generation smoke under the GPU guard. It is intentionally not
-part of the 55-gate paper-facing ledger.
+part of the 61-gate paper-facing ledger.
 
 Example WSL/GPU command:
 

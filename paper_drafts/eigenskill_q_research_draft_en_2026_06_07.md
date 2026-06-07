@@ -22,7 +22,7 @@ fake-quant loss sensitivity on multiple calibration views, allocates a fixed
 `{4,8}`-bit budget through cross-split consensus sensitivity, and records every
 paper-facing result through executable evidence gates. Across Qwen3-0.6B,
 Qwen3-1.7B, OLMo2-0425-1B-Instruct, and SmolLM2-1.7B short-slice diagnostics,
-the current evidence ledger passes 58/58 gates. The calibration-instability
+the current evidence ledger passes 61/61 gates. The calibration-instability
 gate finds 3/3 unstable model/dataset cases with mean score/cost Spearman
 0.0713 and mean top-20 Jaccard 0.1022. A Qwen2.5 perturbation matrix further
 separates calibration sample-size and model-scale effects: within-model
@@ -119,6 +119,13 @@ with a five-subject 100-row MMLU Broad5x20 row: FP16 obtains 56/100, AutoAWQ
 guarded VRAM ratio is 0.8114, and the minimum paired-bootstrap lower bound is
 -0.1500 under 2,000 samples. This is explicitly not a full MMLU leaderboard
 claim.
+We further extend the same matched local protocol to a ten-subject 200-row MMLU
+Broad10x20 fixture: FP16 obtains 101/200, AutoAWQ 96/200, and GPTQModel
+94/200; the max measured drop versus FP16 is 0.0350, peak guarded VRAM ratio is
+0.8189, mean throughput is 8.8134 tokens/s, mean TTFT is 0.245115 s, and the
+minimum paired-bootstrap lower bound is -0.0950 under 4,000 samples. This
+improves subject breadth, but remains local subset evidence rather than full
+MMLU or leaderboard-scale retention.
 ESMP packaging, Triton shape tuning, selected-row
 execution, shallow fused-QKV generation, and C++ audit tools are executable.
 The repository does not claim a production LLM runtime.
@@ -491,7 +498,7 @@ future allocator.
 ## 7. Evidence Gates
 
 Every paper-facing claim is indexed by a gate JSON and a Markdown report. The
-current ledger passes 58/58 gates. The most important gates are:
+current ledger passes 61/61 gates. The most important gates are:
 
 | Gate | Evidence | Valid claim | Non-claim |
 |---|---|---|---|
@@ -531,6 +538,8 @@ current ledger passes 58/58 gates. The most important gates are:
 | Qwen2.5-1.5B full GSM8K runtime/statistics | PC-side runtime and paired bootstrap reports over the same 3957 task executions; see `outputs/OFFICIAL_PTQ_QWEN25_1P5B_GSM8KFULL_FP16_AWQ_GPTQMODEL_RUNTIME_PROFILE_2026_06_08.md` and `outputs/OFFICIAL_PTQ_TASK_QWEN25_1P5B_GSM8KFULL_FP16_AWQ_GPTQMODEL_STATISTICS_2026_06_08.md`. | The runtime profile reports mean 9.7071 tokens/s, mean TTFT 0.320392 s, and max guarded VRAM 0.8295; the statistics gate reports minimum paired-bootstrap lower bound -0.0243. | Local single-task uncertainty disclosure only, not statistical superiority or production speed evidence. |
 | Qwen2.5-1.5B MMLU Broad5x20 task evidence | FP16, AutoAWQ, and GPTQModel Qwen2.5-1.5B on a five-subject 100-row MMLU fixture; see `outputs/OFFICIAL_PTQ_TASK_QWEN25_1P5B_MMLU_BROAD5X20_FP16_AWQ_GPTQMODEL_MATRIX_2026_06_08.md`. | The row records FP16 at 56/100, AutoAWQ at 54/100, GPTQModel at 50/100, max measured drop 0.0600 versus FP16, and peak guard VRAM ratio 0.8114. | Five-subject local subset only, not full MMLU, leaderboard-scale retention, complete PTQ baseline coverage, production runtime, mobile deployment, or SOTA PTQ. |
 | Qwen2.5-1.5B MMLU Broad5x20 runtime/statistics | PC-side runtime and paired bootstrap reports over the same 300 task executions; see `outputs/OFFICIAL_PTQ_QWEN25_1P5B_MMLU_BROAD5X20_FP16_AWQ_GPTQMODEL_RUNTIME_PROFILE_2026_06_08.md` and `outputs/OFFICIAL_PTQ_TASK_QWEN25_1P5B_MMLU_BROAD5X20_FP16_AWQ_GPTQMODEL_STATISTICS_2026_06_08.md`. | The runtime profile reports mean 8.5774 tokens/s, mean TTFT 0.252645 s, and max guarded VRAM 0.8114; the statistics gate reports minimum paired-bootstrap lower bound -0.1500. | Local subset uncertainty disclosure only, not statistical superiority, full MMLU retention, or production speed evidence. |
+| Qwen2.5-1.5B MMLU Broad10x20 task evidence | FP16, AutoAWQ, and GPTQModel Qwen2.5-1.5B on a ten-subject 200-row MMLU fixture; see `outputs/OFFICIAL_PTQ_TASK_QWEN25_1P5B_MMLU_BROAD10X20_FP16_AWQ_GPTQMODEL_MATRIX_2026_06_08.md`. | The row records FP16 at 101/200, AutoAWQ at 96/200, GPTQModel at 94/200, max measured drop 0.0350 versus FP16, and peak guard VRAM ratio 0.8189. | Ten-subject local subset only, not full MMLU, leaderboard-scale retention, complete PTQ baseline coverage, production runtime, mobile deployment, or SOTA PTQ. |
+| Qwen2.5-1.5B MMLU Broad10x20 runtime/statistics | PC-side runtime and paired bootstrap reports over the same 600 task executions; see `outputs/OFFICIAL_PTQ_QWEN25_1P5B_MMLU_BROAD10X20_FP16_AWQ_GPTQMODEL_RUNTIME_PROFILE_2026_06_08.md` and `outputs/OFFICIAL_PTQ_TASK_QWEN25_1P5B_MMLU_BROAD10X20_FP16_AWQ_GPTQMODEL_STATISTICS_2026_06_08.md`. | The runtime profile reports mean 8.8134 tokens/s, mean TTFT 0.245115 s, and max guarded VRAM 0.8189; the statistics gate reports minimum paired-bootstrap lower bound -0.0950. | Local subset uncertainty disclosure only, not statistical superiority, full MMLU retention, or production speed evidence. |
 | W4A8 activation reconstruction | Selected Qwen3-0.6B self-attention modules from the ESMP package; see `outputs/w4a8_activation_reconstruction_2026_06_08/W4A8_ACTIVATION_RECONSTRUCTION_GATE.md`. | A8 activation quantization adds bounded module-output drift on sampled real activations: max activation-added rel-L2 0.048561 versus W4A16. | Does not prove full-model quality retention, downstream task retention, end-to-end speed, mobile deployment, energy, or SOTA quantization. |
 | W4A8 extended activation reconstruction | Selected Qwen3-0.6B attention and MLP modules from layers 0/7/14/21; see `outputs/w4a8_activation_reconstruction_extended_2026_06_08/W4A8_ACTIVATION_RECONSTRUCTION_EXTENDED_GATE.md`. | The broader 24-module audit passes with median W4A8 rel-L2 0.144851 and max activation-added rel-L2 0.084533 versus W4A16, exposing MLP down projections as the worst integration-risk cases. | Does not prove full-model quality retention, downstream task retention, end-to-end speed, mobile deployment, energy, or SOTA quantization. |
 | Packed-system gates | ESMP, Triton, selected-row, sidecar, QKV smoke | Prototype components are executable and audited. | Production Tensor Core/mobile runtime. |

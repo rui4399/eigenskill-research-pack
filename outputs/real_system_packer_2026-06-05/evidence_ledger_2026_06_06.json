@@ -1,8 +1,8 @@
 {
-  "date": "2026-06-07T22:14:03+00:00",
+  "date": "2026-06-07T22:40:38+00:00",
   "passed": true,
-  "gate_count": 58,
-  "passed_count": 58,
+  "gate_count": 61,
+  "passed_count": 61,
   "failed_count": 0,
   "categories": [
     "allocation comparator",
@@ -36,9 +36,9 @@
       "path": "outputs\\real_system_packer_2026-06-05\\public_repo_hygiene_gate_2026_06_06.json",
       "passed": true,
       "failures": [],
-      "metrics": "tracked files 2340; forbidden files 0; placeholders 0",
+      "metrics": "tracked files 2363; forbidden files 0; placeholders 0",
       "summary": {
-        "tracked_file_count": 2340,
+        "tracked_file_count": 2363,
         "forbidden_file_count": 0,
         "root_clutter_count": 0,
         "placeholder_count": 0,
@@ -315,16 +315,16 @@
       "path": "outputs\\paper_evidence_alignment_gate_2026_06_08.json",
       "passed": true,
       "failures": [],
-      "metrics": "required refs 45; missing refs 0; paper paths 54; missing paths 0; unsafe claims 0; stale tokens 0; ledger gates 58",
+      "metrics": "required refs 48; missing refs 0; paper paths 57; missing paths 0; unsafe claims 0; stale tokens 0; ledger gates 61",
       "summary": {
         "paper": "paper_drafts\\eigenskill_q_research_draft_en_2026_06_07.md",
-        "required_reference_count": 45,
+        "required_reference_count": 48,
         "missing_required_reference_count": 0,
-        "referenced_repo_path_count": 54,
+        "referenced_repo_path_count": 57,
         "missing_referenced_path_count": 0,
         "stale_token_count": 0,
         "unsafe_claim_count": 0,
-        "ledger_gate_count": 58,
+        "ledger_gate_count": 61,
         "ledger_gate_count_mentioned": true
       }
     },
@@ -1585,6 +1585,87 @@
         "comparison_count": 2,
         "min_paired_bootstrap_delta_low": -0.15,
         "bootstrap_samples": 2000
+      }
+    },
+    {
+      "label": "official_ptq_task_qwen25_1p5b_mmlu_broad10x20_fp16_awq_gptqmodel",
+      "category": "task execution smoke",
+      "path": "outputs\\official_ptq_task_qwen25_1p5b_mmlu_broad10x20_fp16_awq_gptqmodel_matrix_2026_06_08.json",
+      "passed": true,
+      "failures": [],
+      "metrics": "cases 3; tasks 600; passes 291; accuracy 0.4850; max drop 0.0350; mean tok/s 8.8134; mean TTFT 0.245115s; VRAM 0.8189",
+      "summary": {
+        "case_count": 3,
+        "variant_count": 3,
+        "format_count": 1,
+        "variants": [
+          "autoawq",
+          "fp16",
+          "gptqmodel"
+        ],
+        "task_formats": [
+          "mmlu"
+        ],
+        "baseline_variant": "fp16",
+        "total_tasks": 600,
+        "total_passes": 291,
+        "mean_accuracy": 0.485,
+        "max_accuracy_drop_vs_fp16": 0.03500000000000003,
+        "baseline_zero_accuracy_formats": [],
+        "max_guard_vram_ratio": 0.8189179241810821,
+        "mean_tokens_per_second": 8.813364887529065,
+        "mean_ttft_seconds": 0.24511499133000217
+      }
+    },
+    {
+      "label": "official_ptq_qwen25_1p5b_mmlu_broad10x20_fp16_awq_gptqmodel_runtime_profile",
+      "category": "runtime profile",
+      "path": "outputs\\official_ptq_qwen25_1p5b_mmlu_broad10x20_fp16_awq_gptqmodel_runtime_profile_2026_06_08.json",
+      "passed": true,
+      "failures": [],
+      "metrics": "tasks 600; cases 3; mean tok/s 8.8134; mean TTFT 0.245115s; VRAM MiB 6675; VRAM 0.8189",
+      "summary": {
+        "source_case_count": 3,
+        "variant_count": 3,
+        "variants": [
+          "autoawq",
+          "fp16",
+          "gptqmodel"
+        ],
+        "baseline_variant": "fp16",
+        "total_cases": 3,
+        "total_tasks": 600,
+        "mean_tokens_per_second": 8.813364887529065,
+        "mean_ttft_seconds": 0.24511499133000217,
+        "max_guard_vram_ratio": 0.8189179241810821,
+        "max_guard_vram_mib": 6675.0
+      }
+    },
+    {
+      "label": "official_ptq_qwen25_1p5b_mmlu_broad10x20_fp16_awq_gptqmodel_statistics",
+      "category": "ptq comparator",
+      "path": "outputs\\official_ptq_task_qwen25_1p5b_mmlu_broad10x20_fp16_awq_gptqmodel_statistics_2026_06_08.json",
+      "passed": true,
+      "failures": [],
+      "metrics": "cases 3; tasks 600; passes 291",
+      "summary": {
+        "case_count": 3,
+        "variant_count": 3,
+        "format_count": 1,
+        "variants": [
+          "autoawq",
+          "fp16",
+          "gptqmodel"
+        ],
+        "task_formats": [
+          "mmlu"
+        ],
+        "baseline_variant": "fp16",
+        "total_tasks": 600,
+        "total_passes": 291,
+        "comparison_count": 2,
+        "min_paired_bootstrap_delta_low": -0.095,
+        "bootstrap_samples": 4000
       }
     },
     {

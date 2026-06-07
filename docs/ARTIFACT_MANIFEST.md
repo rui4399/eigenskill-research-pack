@@ -7,7 +7,7 @@ not a new result.
 Current tracked output footprint:
 
 ```text
-outputs/ tracked-or-staged artifact files:       1985
+outputs/ tracked-or-staged artifact files:       2019
 outputs/real_system_packer_2026-06-05 files:     744
 ```
 
@@ -64,6 +64,9 @@ paper claims.
 | Qwen2.5-1.5B FP16/AutoAWQ/GPTQModel MMLU Broad5x20 task matrix | `outputs/OFFICIAL_PTQ_TASK_QWEN25_1P5B_MMLU_BROAD5X20_FP16_AWQ_GPTQMODEL_MATRIX_2026_06_08.md` |
 | Qwen2.5-1.5B FP16/AutoAWQ/GPTQModel MMLU Broad5x20 runtime profile | `outputs/OFFICIAL_PTQ_QWEN25_1P5B_MMLU_BROAD5X20_FP16_AWQ_GPTQMODEL_RUNTIME_PROFILE_2026_06_08.md` |
 | Qwen2.5-1.5B FP16/AutoAWQ/GPTQModel MMLU Broad5x20 statistics gate | `outputs/OFFICIAL_PTQ_TASK_QWEN25_1P5B_MMLU_BROAD5X20_FP16_AWQ_GPTQMODEL_STATISTICS_2026_06_08.md` |
+| Qwen2.5-1.5B FP16/AutoAWQ/GPTQModel MMLU Broad10x20 task matrix | `outputs/OFFICIAL_PTQ_TASK_QWEN25_1P5B_MMLU_BROAD10X20_FP16_AWQ_GPTQMODEL_MATRIX_2026_06_08.md` |
+| Qwen2.5-1.5B FP16/AutoAWQ/GPTQModel MMLU Broad10x20 runtime profile | `outputs/OFFICIAL_PTQ_QWEN25_1P5B_MMLU_BROAD10X20_FP16_AWQ_GPTQMODEL_RUNTIME_PROFILE_2026_06_08.md` |
+| Qwen2.5-1.5B FP16/AutoAWQ/GPTQModel MMLU Broad10x20 statistics gate | `outputs/OFFICIAL_PTQ_TASK_QWEN25_1P5B_MMLU_BROAD10X20_FP16_AWQ_GPTQMODEL_STATISTICS_2026_06_08.md` |
 | Expanded GPTQModel public PPL gate | `outputs/OFFICIAL_GPTQMODEL_PUBLIC_CALIB_QWEN25_0P5B_BUDGET8_16_GATE_2026_06_07.md` |
 | Qwen2.5-1.5B GPTQModel public PPL gate | `outputs/OFFICIAL_GPTQMODEL_PUBLIC_CALIB_QWEN25_1P5B_16_GATE_2026_06_08.md` |
 | Qwen2.5-1.5B GPTQModel task-execution subset100 | `outputs/OFFICIAL_GPTQMODEL_TASK_EXECUTION_QWEN25_1P5B_SUBSET100_MATRIX_2026_06_08.md` |
@@ -78,7 +81,7 @@ paper claims.
 ## Non-Ledger Readiness Probes
 
 These artifacts are useful for environment readiness and reviewer-risk
-tracking, but they are not counted in the 55-gate paper-facing ledger.
+tracking, but they are not counted in the 61-gate paper-facing ledger.
 
 | Purpose | Artifact | Boundary |
 |---|---|---|
@@ -91,6 +94,7 @@ tracking, but they are not counted in the 55-gate paper-facing ledger.
 | GSM8K200/MMLU100 public task manifest | `outputs/PUBLIC_TASK_BENCHMARK_GSM8K200_MMLU100_MANIFEST_2026_06_08.md` | Records prepared public task fixtures for the next guarded Qwen2.5-1.5B retention run: 200 GSM8K rows plus the full 100-row MMLU abstract-algebra test split; this is an input fixture, not task-retention evidence. |
 | GSM8K full public task fixture | `data_eval/public_task_benchmark_v1/gsm8k_test_gsm8kfull.jsonl` | Full 1319-row GSM8K test fixture used by the guarded 7B Ollama public-task row; this is single-task public coverage, not quantized retention. |
 | MMLU Broad5x20 public task manifest | `outputs/PUBLIC_TASK_BENCHMARK_MMLU_BROAD5X20_MANIFEST_2026_06_08.md` | Records five 20-row MMLU subject fixtures plus the combined 100-row fixture used by the guarded Qwen2.5-1.5B FP16/AutoAWQ/GPTQModel row; this is not full MMLU. |
+| MMLU Broad10x20 public task manifest | `outputs/PUBLIC_TASK_BENCHMARK_MMLU_BROAD10X20_MANIFEST_2026_06_08.md` | Records ten 20-row MMLU subject fixtures plus the combined 200-row fixture used by the guarded Qwen2.5-1.5B FP16/AutoAWQ/GPTQModel row; this is not full MMLU. |
 | Public-calibration AutoAWQ bundle gate | `outputs/OFFICIAL_AWQ_PUBLIC_CALIB_QWEN25_0P5B_BUNDLE_GATE_2026_06_07.md` | Shows a public-calibrated AutoAWQ W4 group-128 bundle can quantize and run two tiny public PPL eval slices under guard; not GPTQ/AWQ competitive coverage. |
 | Public-calibration GPTQModel readiness gate | `outputs/OFFICIAL_GPTQMODEL_PUBLIC_CALIB_QWEN25_0P5B_BUDGET8_GATE_2026_06_07.md` | Shows GPTQModel W4 group-128 can quantize with 12 public calibration texts, save/reload a local artifact through `gptq_torch`, and run tiny public WikiText2/C4 PPL diagnostics under guard; not GPTQ/AWQ competitive coverage. |
 | Expanded GPTQModel public PPL gate | `outputs/OFFICIAL_GPTQMODEL_PUBLIC_CALIB_QWEN25_0P5B_BUDGET8_16_GATE_2026_06_07.md` | Shows the saved GPTQModel artifact can be reloaded and evaluated on the same 16-prompt WikiText2/C4 public slices as AutoAWQ; not GPTQ/AWQ competitive coverage. |
@@ -152,4 +156,4 @@ one of the following is true:
 
 Future cleanup should reduce `outputs/` by moving scratch and raw intermediate
 files out of the main branch, but not at the cost of breaking the current
-55-gate reproducibility story.
+61-gate reproducibility story.

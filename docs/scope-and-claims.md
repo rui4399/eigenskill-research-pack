@@ -77,9 +77,10 @@ In compressed form, the supported claims are:
   single-task row across FP16, AutoAWQ, and GPTQModel, still bounded as local
   single-task retention evidence rather than leaderboard-scale benchmark
   quality;
-- the Qwen2.5-1.5B baseline confrontation also has a five-subject MMLU Broad5x20
-  row across FP16, AutoAWQ, and GPTQModel, still bounded as local subset
-  evidence rather than full MMLU benchmark quality;
+- the Qwen2.5-1.5B baseline confrontation also has five-subject MMLU Broad5x20
+  and ten-subject MMLU Broad10x20 rows across FP16, AutoAWQ, and GPTQModel,
+  still bounded as local subset evidence rather than full MMLU benchmark
+  quality;
 - the same FP16/AutoAWQ/GPTQModel Qwen2.5-0.5B variants have deterministic
   IFEval-style instruction-following execution and runtime smoke gates, kept as
   execution-path evidence because the FP16 baseline is 0/8;
