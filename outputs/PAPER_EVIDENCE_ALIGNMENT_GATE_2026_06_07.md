@@ -1,18 +1,18 @@
 # Paper Evidence Alignment Gate
 
-Date: `2026-06-07T03:18:45+00:00`
+Date: `2026-06-07T03:40:30+00:00`
 Status: **PASS**
 
 ## Summary
 
 - paper: `paper_drafts\eigenskill_q_research_draft_en_2026_06_07.md`
-- required evidence references: `14`
+- required evidence references: `15`
 - missing required references: `0`
-- referenced repo paths: `20`
+- referenced repo paths: `21`
 - missing referenced paths: `0`
 - stale forbidden tokens: `0`
 - unsafe claim lines: `0`
-- ledger gate count: `27`
+- ledger gate count: `28`
 - ledger gate count mentioned: `True`
 
 ## Missing Required References

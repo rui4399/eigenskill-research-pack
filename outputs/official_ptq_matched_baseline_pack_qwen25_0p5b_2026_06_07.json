@@ -1,0 +1,193 @@
+{
+  "date": "2026-06-07T03:38:48+00:00",
+  "passed": true,
+  "summary": {
+    "variant_count": 2,
+    "variants": [
+      "autoawq",
+      "gptqmodel"
+    ],
+    "ppl_slice_count": 4,
+    "required_ppl_labels": [
+      "wikitext2",
+      "c4"
+    ],
+    "total_ppl_tokens": 2974,
+    "task_total_executions": 300,
+    "runtime_total_executions": 300,
+    "max_ppl_ratio_vs_fp16": 1.294891302929277,
+    "max_accuracy_drop_vs_fp16": 0.04000000000000001,
+    "max_vram_ratio_vs_fp16": 0.9010177609259629,
+    "max_tokens_per_second_ratio_vs_fp16": 0.3315323860144548,
+    "max_guard_vram_ratio": 0.6147711937185621,
+    "max_ppl_ratio_threshold": 1.35,
+    "max_accuracy_drop_threshold": 0.25,
+    "max_guard_vram_threshold": 0.9
+  },
+  "variant_rows": {
+    "autoawq": {
+      "variant": "autoawq",
+      "ppl": [
+        {
+          "variant": "autoawq",
+          "label": "wikitext2",
+          "path": "outputs\\official_awq_public_calib_qwen25_0p5b_wikitext2_summary_2026_06_07.json",
+          "passed": true,
+          "model": "Qwen/Qwen2.5-0.5B-Instruct",
+          "package": {
+            "name": "autoawq",
+            "version": "0.2.9"
+          },
+          "tokens": 760,
+          "prompt_count": 8,
+          "fp16_ppl": 24.675866135712827,
+          "quant_ppl": 29.080631395938298,
+          "ppl_ratio_vs_fp16": 1.1785049909089331,
+          "failures": []
+        },
+        {
+          "variant": "autoawq",
+          "label": "c4",
+          "path": "outputs\\official_awq_public_calib_qwen25_0p5b_c4_summary_2026_06_07.json",
+          "passed": true,
+          "model": "Qwen/Qwen2.5-0.5B-Instruct",
+          "package": {
+            "name": "autoawq",
+            "version": "0.2.9"
+          },
+          "tokens": 727,
+          "prompt_count": 8,
+          "fp16_ppl": 32.95166358574747,
+          "quant_ppl": 38.17270213943104,
+          "ppl_ratio_vs_fp16": 1.1584453707503197,
+          "failures": []
+        }
+      ],
+      "ppl_labels": [
+        "c4",
+        "wikitext2"
+      ],
+      "ppl_token_total": 1487,
+      "max_ppl_ratio_vs_fp16": 1.1785049909089331,
+      "mean_ppl_ratio_vs_fp16": 1.1684751808296263,
+      "task": {
+        "variant": "autoawq",
+        "case_count": 2,
+        "formats": [
+          "gsm8k",
+          "mmlu"
+        ],
+        "total_tasks": 100,
+        "total_passes": 11,
+        "mean_accuracy": 0.11,
+        "max_guard_vram_ratio": 0.5539197644460803
+      },
+      "task_comparison": {
+        "variant": "autoawq",
+        "comparison_count": 2,
+        "max_accuracy_drop_vs_fp16": 0.04000000000000001,
+        "zero_fp16_accuracy_formats": [
+          "gsm8k"
+        ]
+      },
+      "runtime": {
+        "variant": "autoawq",
+        "total_tasks": 100,
+        "mean_tokens_per_second": 5.170461851986116,
+        "mean_ttft_seconds": 0.35932253562999933,
+        "max_guard_vram_ratio": 0.5539197644460803,
+        "tokens_per_second_ratio_vs_fp16": 0.16290516551525272,
+        "ttft_ratio_vs_fp16": 3.4382273382815884,
+        "vram_ratio_vs_fp16": 0.9010177609259629
+      }
+    },
+    "gptqmodel": {
+      "variant": "gptqmodel",
+      "ppl": [
+        {
+          "variant": "gptqmodel",
+          "label": "wikitext2",
+          "path": "outputs\\official_gptqmodel_public_calib_qwen25_0p5b_budget8_wikitext2_summary_2026_06_07.json",
+          "passed": true,
+          "model": "Qwen/Qwen2.5-0.5B-Instruct",
+          "package": {
+            "name": "gptqmodel",
+            "version": "7.0.0"
+          },
+          "tokens": 760,
+          "prompt_count": 8,
+          "fp16_ppl": 24.675866135712827,
+          "quant_ppl": 31.952564451381605,
+          "ppl_ratio_vs_fp16": 1.294891302929277,
+          "failures": []
+        },
+        {
+          "variant": "gptqmodel",
+          "label": "c4",
+          "path": "outputs\\official_gptqmodel_public_calib_qwen25_0p5b_budget8_c4_summary_2026_06_07.json",
+          "passed": true,
+          "model": "Qwen/Qwen2.5-0.5B-Instruct",
+          "package": {
+            "name": "gptqmodel",
+            "version": "7.0.0"
+          },
+          "tokens": 727,
+          "prompt_count": 8,
+          "fp16_ppl": 32.95166358574747,
+          "quant_ppl": 39.80998539309251,
+          "ppl_ratio_vs_fp16": 1.2081327939482687,
+          "failures": []
+        }
+      ],
+      "ppl_labels": [
+        "c4",
+        "wikitext2"
+      ],
+      "ppl_token_total": 1487,
+      "max_ppl_ratio_vs_fp16": 1.294891302929277,
+      "mean_ppl_ratio_vs_fp16": 1.251512048438773,
+      "task": {
+        "variant": "gptqmodel",
+        "case_count": 2,
+        "formats": [
+          "gsm8k",
+          "mmlu"
+        ],
+        "total_tasks": 100,
+        "total_passes": 13,
+        "mean_accuracy": 0.13,
+        "max_guard_vram_ratio": 0.5490123911176543
+      },
+      "task_comparison": {
+        "variant": "gptqmodel",
+        "comparison_count": 2,
+        "max_accuracy_drop_vs_fp16": 0.0,
+        "zero_fp16_accuracy_formats": [
+          "gsm8k"
+        ]
+      },
+      "runtime": {
+        "variant": "gptqmodel",
+        "total_tasks": 100,
+        "mean_tokens_per_second": 10.522536527088679,
+        "mean_ttft_seconds": 0.2865320223900014,
+        "max_guard_vram_ratio": 0.5490123911176543,
+        "tokens_per_second_ratio_vs_fp16": 0.3315323860144548,
+        "ttft_ratio_vs_fp16": 2.7417212531552817,
+        "vram_ratio_vs_fp16": 0.8930353222909599
+      }
+    }
+  },
+  "source_paths": {
+    "task_matrix": "outputs\\official_ptq_task_subset50_matrix_2026_06_07.json",
+    "runtime_profile": "outputs\\official_ptq_subset50_runtime_profile_2026_06_07.json",
+    "ppl_cases": [
+      "outputs\\official_awq_public_calib_qwen25_0p5b_wikitext2_summary_2026_06_07.json",
+      "outputs\\official_awq_public_calib_qwen25_0p5b_c4_summary_2026_06_07.json",
+      "outputs\\official_gptqmodel_public_calib_qwen25_0p5b_budget8_wikitext2_summary_2026_06_07.json",
+      "outputs\\official_gptqmodel_public_calib_qwen25_0p5b_budget8_c4_summary_2026_06_07.json"
+    ]
+  },
+  "failures": [],
+  "claim_boundary": "Valid claim: the local official AutoAWQ and GPTQModel Qwen2.5-0.5B W4/G128 artifacts have matched public-calibration PPL slices, matched 50-row public MMLU/GSM8K task execution, and PC-side runtime/VRAM profiles. Invalid claim: this is a leaderboard-scale or large-model competitive AWQ/GPTQ baseline, a production runtime, mobile deployment, energy result, or SOTA PTQ evidence."
+}

@@ -35,6 +35,7 @@ paper claims.
 | Official PTQ PC-side runtime profile | `outputs/OFFICIAL_PTQ_RUNTIME_PROFILE_2026_06_07.md` |
 | Official PTQ matched subset50 matrix | `outputs/OFFICIAL_PTQ_TASK_SUBSET50_MATRIX_2026_06_07.md` |
 | Official PTQ subset50 runtime profile | `outputs/OFFICIAL_PTQ_SUBSET50_RUNTIME_PROFILE_2026_06_07.md` |
+| Official PTQ matched baseline pack | `outputs/OFFICIAL_PTQ_MATCHED_BASELINE_PACK_QWEN25_0P5B_2026_06_07.md` |
 | Baseline/readiness gap dashboard | `outputs/BASELINE_GAP_DASHBOARD_2026_06_06.md` |
 | Claim matrix | `docs/PAPER_CLAIM_MATRIX.md` |
 | System gate index | `docs/SYSTEM_EVIDENCE_GATES.md` |
@@ -44,7 +45,7 @@ paper claims.
 ## Non-Ledger Readiness Probes
 
 These artifacts are useful for environment readiness and reviewer-risk
-tracking, but they are not counted in the 27-gate paper-facing ledger.
+tracking, but they are not counted in the 28-gate paper-facing ledger.
 
 | Purpose | Artifact | Boundary |
 |---|---|---|
@@ -106,4 +107,4 @@ one of the following is true:
 
 Future cleanup should reduce `outputs/` by moving scratch and raw intermediate
 files out of the main branch, but not at the cost of breaking the current
-27-gate reproducibility story.
+28-gate reproducibility story.

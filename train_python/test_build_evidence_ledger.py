@@ -159,6 +159,26 @@ class BuildEvidenceLedgerTests(unittest.TestCase):
         self.assertEqual(ledger.infer_category("official_ptq_task_subset50"), "task execution subset")
         self.assertEqual(ledger.infer_category("official_ptq_runtime_profile"), "runtime profile")
         self.assertEqual(ledger.infer_category("official_ptq_subset50_runtime_profile"), "runtime profile")
+        self.assertEqual(ledger.infer_category("official_ptq_matched_baseline_pack"), "matched PTQ baseline")
+
+    def test_official_ptq_matched_baseline_pack_metrics_are_reported(self) -> None:
+        metrics = ledger.metric_parts(
+            {
+                "variant_count": 2,
+                "ppl_slice_count": 4,
+                "task_total_executions": 300,
+                "runtime_total_executions": 300,
+                "max_ppl_ratio_vs_fp16": 1.294891302929277,
+                "max_accuracy_drop_vs_fp16": 0.04,
+                "max_vram_ratio_vs_fp16": 0.9010177609259629,
+                "max_tokens_per_second_ratio_vs_fp16": 0.3315323860144548,
+            }
+        )
+        joined = "; ".join(metrics)
+        self.assertIn("max PPL ratio 1.2949", joined)
+        self.assertIn("max drop 0.0400", joined)
+        self.assertIn("max VRAM ratio 0.9010", joined)
+        self.assertIn("max tok/s ratio 0.3315", joined)
 
     def test_runtime_profile_metrics_are_reported(self) -> None:
         metrics = ledger.metric_parts(

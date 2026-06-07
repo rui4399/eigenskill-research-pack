@@ -10,7 +10,7 @@ by an executable gate and an explicit claim boundary.
 ## Evidence Ledger
 
 `train_python/build_current_evidence_ledger.py` is the stable public entry
-point for the current paper-facing gate set. It fixes the 26 gate paths in one
+point for the current paper-facing gate set. It fixes the 28 gate paths in one
 manifest, rebuilds the ledger, and avoids copying a long `--gate` list across
 README files and paper appendices.
 
@@ -21,7 +21,7 @@ python train_python/build_current_evidence_ledger.py
 ```
 
 `train_python/build_evidence_ledger.py` is the lower-level builder for custom
-or future gate manifests. The expanded form of the current 27-gate ledger is:
+or future gate manifests. The expanded form of the current 28-gate ledger is:
 
 ```bash
 python train_python/build_evidence_ledger.py \
@@ -47,6 +47,7 @@ python train_python/build_evidence_ledger.py \
   --gate official_ptq_runtime_profile=outputs/official_ptq_runtime_profile_2026_06_07.json \
   --gate official_ptq_task_subset50=outputs/official_ptq_task_subset50_matrix_2026_06_07.json \
   --gate official_ptq_subset50_runtime_profile=outputs/official_ptq_subset50_runtime_profile_2026_06_07.json \
+  --gate official_ptq_matched_baseline_pack=outputs/official_ptq_matched_baseline_pack_qwen25_0p5b_2026_06_07.json \
   --gate allocation_family_proxy=outputs/q_palette_style_allocation_family_gate_2026_06_06.json \
   --gate robust_lcb_consensus=outputs/robust_lcb_consensus_family_gate_2026_06_06.json \
   --gate robust_lcb_quality=outputs/qwen3_0p6b_robust_lcb_quality_gate_2026_06_07.json \
@@ -56,11 +57,11 @@ python train_python/build_evidence_ledger.py \
   --out-md outputs/real_system_packer_2026-06-05/EVIDENCE_LEDGER_2026_06_06.md
 ```
 
-The current ledger passes with 27/27 gates across repo hygiene, calibration
+The current ledger passes with 28/28 gates across repo hygiene, calibration
 robustness, artifact integrity, kernel, runtime wiring, selected-row, C++
 runtime, decode integration, QKV replacement, quality, task-retention, runtime profile, and
 capability-retention/model-ladder, allocation-comparator, rotation-comparator, and
-PTQ-comparator, and paper-alignment evidence categories.
+matched PTQ baseline, PTQ-comparator, and paper-alignment evidence categories.
 
 Valid claim:
 
@@ -150,14 +151,14 @@ Current gate:
 ```bash
 python train_python/gate_paper_evidence_alignment.py \
   --paper paper_drafts/eigenskill_q_research_draft_en_2026_06_07.md \
-  --expected-gate-count 26 \
+  --expected-gate-count 28 \
   --out-json outputs/paper_evidence_alignment_gate_2026_06_07.json \
   --out-md outputs/PAPER_EVIDENCE_ALIGNMENT_GATE_2026_06_07.md
 ```
 
 Current result: 14/14 required evidence references present, referenced repo
 paths found and 0 missing, 0 stale forbidden tokens, 0 unsafe non-negated claim
-lines, and the paper mentions the current 27-gate ledger.
+lines, and the paper mentions the current 28-gate ledger.
 
 Valid claim:
 
@@ -374,6 +375,44 @@ Invalid claim:
 - this proves Redmi/mobile deployment, production runtime speedup, energy
   improvement, or official AWQ/GPTQ competitiveness.
 
+## Official PTQ Matched Baseline Pack Gate
+
+`train_python/gate_official_ptq_matched_baseline_pack.py` bundles the local
+AutoAWQ/GPTQModel Qwen2.5-0.5B W4/G128 public-calibration PPL slices, matched
+subset50 task matrix, and matched subset50 runtime profile into one
+paper-facing baseline pack. It exists to prevent scattered PTQ evidence from
+being cited more strongly than the data supports.
+
+Current gate:
+
+```bash
+python train_python/gate_official_ptq_matched_baseline_pack.py \
+  --ppl-case autoawq:wikitext2=outputs/official_awq_public_calib_qwen25_0p5b_wikitext2_summary_2026_06_07.json \
+  --ppl-case autoawq:c4=outputs/official_awq_public_calib_qwen25_0p5b_c4_summary_2026_06_07.json \
+  --ppl-case gptqmodel:wikitext2=outputs/official_gptqmodel_public_calib_qwen25_0p5b_budget8_wikitext2_summary_2026_06_07.json \
+  --ppl-case gptqmodel:c4=outputs/official_gptqmodel_public_calib_qwen25_0p5b_budget8_c4_summary_2026_06_07.json \
+  --task-matrix-json outputs/official_ptq_task_subset50_matrix_2026_06_07.json \
+  --runtime-profile-json outputs/official_ptq_subset50_runtime_profile_2026_06_07.json \
+  --out-json outputs/official_ptq_matched_baseline_pack_qwen25_0p5b_2026_06_07.json \
+  --out-md outputs/OFFICIAL_PTQ_MATCHED_BASELINE_PACK_QWEN25_0P5B_2026_06_07.md
+```
+
+Current result: 4 PPL slices, 2974 PPL tokens, 300 task executions, 300
+runtime executions, max PPL ratio `1.2949`, max task accuracy drop `0.0400`,
+max VRAM ratio `0.9010`, and max quantized tokens/s ratio `0.3315` versus
+FP16.
+
+Valid claim:
+
+- local official AutoAWQ and GPTQModel Qwen2.5-0.5B W4/G128 artifacts have
+  matched public-calibration PPL, matched subset50 task execution, and PC-side
+  runtime/VRAM evidence.
+
+Invalid claim:
+
+- this is leaderboard-scale, large-model competitive AWQ/GPTQ evidence, a
+  production runtime, mobile deployment, energy result, or SOTA PTQ evidence.
+
 ## Allocation Family Proxy Gate
 
 `train_python/gate_allocation_family_proxy.py` verifies Q-Palette-style
@@ -563,7 +602,7 @@ Invalid claim:
 `train_python/run_official_awq_smoke.py` is a minimal package-readiness probe.
 It exists to verify that AutoAWQ can execute, save local quantized artifacts,
 and run one short generation smoke under the GPU guard. It is intentionally not
-part of the 27-gate paper-facing ledger.
+part of the 28-gate paper-facing ledger.
 
 Example WSL/GPU command:
 

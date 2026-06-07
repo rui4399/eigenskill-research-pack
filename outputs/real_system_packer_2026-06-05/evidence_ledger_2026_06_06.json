@@ -1,8 +1,8 @@
 {
-  "date": "2026-06-07T03:19:00+00:00",
+  "date": "2026-06-07T03:43:32+00:00",
   "passed": true,
-  "gate_count": 27,
-  "passed_count": 27,
+  "gate_count": 28,
+  "passed_count": 28,
   "failed_count": 0,
   "categories": [
     "allocation comparator",
@@ -12,6 +12,7 @@
     "capability retention",
     "decode integration",
     "kernel",
+    "matched PTQ baseline",
     "paper alignment",
     "ptq comparator",
     "qkv replacement",
@@ -32,9 +33,9 @@
       "path": "outputs\\real_system_packer_2026-06-05\\public_repo_hygiene_gate_2026_06_06.json",
       "passed": true,
       "failures": [],
-      "metrics": "tracked files 1812; forbidden files 0; placeholders 0",
+      "metrics": "tracked files 1816; forbidden files 0; placeholders 0",
       "summary": {
-        "tracked_file_count": 1812,
+        "tracked_file_count": 1816,
         "forbidden_file_count": 0,
         "root_clutter_count": 0,
         "placeholder_count": 0,
@@ -193,16 +194,16 @@
       "path": "outputs\\paper_evidence_alignment_gate_2026_06_07.json",
       "passed": true,
       "failures": [],
-      "metrics": "required refs 14; missing refs 0; paper paths 20; missing paths 0; unsafe claims 0; stale tokens 0; ledger gates 27",
+      "metrics": "required refs 15; missing refs 0; paper paths 21; missing paths 0; unsafe claims 0; stale tokens 0; ledger gates 28",
       "summary": {
         "paper": "paper_drafts\\eigenskill_q_research_draft_en_2026_06_07.md",
-        "required_reference_count": 14,
+        "required_reference_count": 15,
         "missing_required_reference_count": 0,
-        "referenced_repo_path_count": 20,
+        "referenced_repo_path_count": 21,
         "missing_referenced_path_count": 0,
         "stale_token_count": 0,
         "unsafe_claim_count": 0,
-        "ledger_gate_count": 27,
+        "ledger_gate_count": 28,
         "ledger_gate_count_mentioned": true
       }
     },
@@ -582,7 +583,7 @@
       "path": "outputs\\official_ptq_task_retention_smoke_matrix_2026_06_07.json",
       "passed": true,
       "failures": [],
-      "metrics": "cases 6; tasks 24; passes 2; accuracy 0.0833; mean tok/s 11.4608; mean TTFT 0.508495s; VRAM 0.6108",
+      "metrics": "cases 6; tasks 24; passes 2; accuracy 0.0833; max drop 0.2500; mean tok/s 11.4608; mean TTFT 0.508495s; VRAM 0.6108",
       "summary": {
         "case_count": 6,
         "variant_count": 3,
@@ -639,7 +640,7 @@
       "path": "outputs\\official_ptq_task_subset50_matrix_2026_06_07.json",
       "passed": true,
       "failures": [],
-      "metrics": "cases 6; tasks 300; passes 37; accuracy 0.1233; mean tok/s 15.8107; mean TTFT 0.250121s; VRAM 0.6148",
+      "metrics": "cases 6; tasks 300; passes 37; accuracy 0.1233; max drop 0.0400; mean tok/s 15.8107; mean TTFT 0.250121s; VRAM 0.6148",
       "summary": {
         "case_count": 6,
         "variant_count": 3,
@@ -688,6 +689,37 @@
         "mean_ttft_seconds": 0.2501208791366668,
         "max_guard_vram_ratio": 0.6147711937185621,
         "max_guard_vram_mib": 5011.0
+      }
+    },
+    {
+      "label": "official_ptq_matched_baseline_pack",
+      "category": "matched PTQ baseline",
+      "path": "outputs\\official_ptq_matched_baseline_pack_qwen25_0p5b_2026_06_07.json",
+      "passed": true,
+      "failures": [],
+      "metrics": "max PPL ratio 1.2949; max drop 0.0400; max VRAM ratio 0.9010; max tok/s ratio 0.3315; VRAM 0.6148",
+      "summary": {
+        "variant_count": 2,
+        "variants": [
+          "autoawq",
+          "gptqmodel"
+        ],
+        "ppl_slice_count": 4,
+        "required_ppl_labels": [
+          "wikitext2",
+          "c4"
+        ],
+        "total_ppl_tokens": 2974,
+        "task_total_executions": 300,
+        "runtime_total_executions": 300,
+        "max_ppl_ratio_vs_fp16": 1.294891302929277,
+        "max_accuracy_drop_vs_fp16": 0.04000000000000001,
+        "max_vram_ratio_vs_fp16": 0.9010177609259629,
+        "max_tokens_per_second_ratio_vs_fp16": 0.3315323860144548,
+        "max_guard_vram_ratio": 0.6147711937185621,
+        "max_ppl_ratio_threshold": 1.35,
+        "max_accuracy_drop_threshold": 0.25,
+        "max_guard_vram_threshold": 0.9
       }
     },
     {

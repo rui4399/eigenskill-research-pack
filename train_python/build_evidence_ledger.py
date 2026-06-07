@@ -14,6 +14,7 @@ CATEGORIES = {
     "task_model_ladder": "capability retention",
     "official_ptq_task_subset": "task execution subset",
     "official_ptq_task": "task execution smoke",
+    "official_ptq_matched": "matched PTQ baseline",
     "official_ptq_runtime": "runtime profile",
     "runtime_profile": "runtime profile",
     "quality": "quality",
@@ -189,6 +190,14 @@ def metric_parts(summary: dict[str, Any]) -> list[str]:
         parts.append(f"passes {summary.get('total_passes')}")
     if (value := finite_float(summary.get("mean_accuracy"))) is not None:
         parts.append(f"accuracy {value:.4f}")
+    if (value := finite_float(summary.get("max_ppl_ratio_vs_fp16"))) is not None:
+        parts.append(f"max PPL ratio {value:.4f}")
+    if (value := finite_float(summary.get("max_accuracy_drop_vs_fp16"))) is not None:
+        parts.append(f"max drop {value:.4f}")
+    if (value := finite_float(summary.get("max_vram_ratio_vs_fp16"))) is not None:
+        parts.append(f"max VRAM ratio {value:.4f}")
+    if (value := finite_float(summary.get("max_tokens_per_second_ratio_vs_fp16"))) is not None:
+        parts.append(f"max tok/s ratio {value:.4f}")
     if (value := finite_float(summary.get("mean_tokens_per_second"))) is not None:
         parts.append(f"mean tok/s {value:.4f}")
     if (value := finite_float(summary.get("mean_ttft_seconds"))) is not None:
