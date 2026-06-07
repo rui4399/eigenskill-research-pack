@@ -70,6 +70,10 @@ The current evidence supports:
   evidence because the FP16 baseline is 0/8;
 - ESMP package integrity, Triton shape-family kernels, selected-row probes, and
   shallow generation integration gates;
+- W4A8 real-activation reconstruction gates on selected Qwen3-0.6B modules:
+  the first self-attention-only gate bounds added A8 drift at 0.048561 rel-L2,
+  while the 24-module attention/MLP extension reports max added drift 0.084533
+  and exposes MLP down projections as the worst integration-risk cases;
 - explicit gap tracking for official baselines, task retention, and mobile
   deployment.
 

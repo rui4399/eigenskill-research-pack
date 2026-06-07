@@ -35,6 +35,7 @@ CURRENT_GATE_SPECS: tuple[tuple[str, str], ...] = (
     ("esmp_package", "outputs/real_system_packer_2026-06-05/esmp_package_verify_qwen3_0p6b_limit8_2026_06_06.json"),
     ("triton_shape_family", "outputs/real_system_packer_2026-06-05/triton_qwen_shape_family_gate_2026_06_06.json"),
     ("w4a8_activation_reconstruction", "outputs/w4a8_activation_reconstruction_2026_06_08/w4a8_activation_reconstruction_gate.json"),
+    ("w4a8_activation_reconstruction_extended", "outputs/w4a8_activation_reconstruction_extended_2026_06_08/w4a8_activation_reconstruction_extended_gate.json"),
     ("selector_runtime", "outputs/real_system_packer_2026-06-05/selector_runtime_smoke_gate_2026_06_06.json"),
     ("selected_row", "outputs/real_system_packer_2026-06-05/selected_row_benchmark_gate_2026_06_06.json"),
     ("cpp_runtime", "outputs/real_system_packer_2026-06-05/cpp_runtime_sweep_gate_2026_06_06.json"),

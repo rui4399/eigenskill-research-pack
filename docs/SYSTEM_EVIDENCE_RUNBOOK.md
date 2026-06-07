@@ -10,7 +10,7 @@ by an executable gate and an explicit claim boundary.
 ## Evidence Ledger
 
 `train_python/build_current_evidence_ledger.py` is the stable public entry
-point for the current paper-facing gate set. It fixes the 41 gate paths in one
+point for the current paper-facing gate set. It fixes the 43 gate paths in one
 manifest, rebuilds the ledger, and avoids copying a long `--gate` list across
 README files and paper appendices.
 
@@ -21,7 +21,7 @@ python train_python/build_current_evidence_ledger.py
 ```
 
 `train_python/build_evidence_ledger.py` is the lower-level builder for custom
-or future gate manifests. The expanded form of the current 42-gate ledger is:
+or future gate manifests. The expanded form of the current 43-gate ledger is:
 
 ```bash
 python train_python/build_evidence_ledger.py \
@@ -40,6 +40,7 @@ python train_python/build_evidence_ledger.py \
   --gate esmp_package=outputs/real_system_packer_2026-06-05/esmp_package_verify_qwen3_0p6b_limit8_2026_06_06.json \
   --gate triton_shape_family=outputs/real_system_packer_2026-06-05/triton_qwen_shape_family_gate_2026_06_06.json \
   --gate w4a8_activation_reconstruction=outputs/w4a8_activation_reconstruction_2026_06_08/w4a8_activation_reconstruction_gate.json \
+  --gate w4a8_activation_reconstruction_extended=outputs/w4a8_activation_reconstruction_extended_2026_06_08/w4a8_activation_reconstruction_extended_gate.json \
   --gate selector_runtime=outputs/real_system_packer_2026-06-05/selector_runtime_smoke_gate_2026_06_06.json \
   --gate selected_row=outputs/real_system_packer_2026-06-05/selected_row_benchmark_gate_2026_06_06.json \
   --gate cpp_runtime=outputs/real_system_packer_2026-06-05/cpp_runtime_sweep_gate_2026_06_06.json \
@@ -71,12 +72,12 @@ python train_python/build_evidence_ledger.py \
   --out-md outputs/real_system_packer_2026-06-05/EVIDENCE_LEDGER_2026_06_06.md
 ```
 
-The current ledger passes with 42/42 gates across repo hygiene, calibration
+The current ledger passes with 43/43 gates across repo hygiene, calibration
 robustness, CSI trend significance, CSI null permutation, rank-inversion theory, artifact integrity, kernel, runtime wiring, selected-row, C++
 runtime, decode integration, QKV replacement, quality, task-retention, runtime profile, and
 capability-retention/model-ladder, allocation-comparator, rotation-comparator, and
 matched PTQ baseline, true subset100 official PTQ task/runtime evidence, deterministic IFEval-style PTQ execution, expanded AutoAWQ public PPL, Qwen2.5-1.5B subset100 task/runtime evidence, PTQ-comparator, and
-paper-alignment evidence categories.
+paper-alignment evidence categories, plus extended W4A8 attention/MLP real-activation reconstruction.
 
 Valid claim:
 
@@ -85,6 +86,72 @@ Valid claim:
 Invalid claim:
 
 - the ledger itself proves SOTA, mobile deployment, or full paper readiness.
+
+## W4A8 Extended Real-Activation Reconstruction Gate
+
+This gate extends the first eight-module self-attention audit to 24 selected
+Qwen3-0.6B attention and MLP projections across layers 0/7/14/21. It is a
+module-level drift audit, not a quality or runtime benchmark.
+
+WSL/GPU command:
+
+```bash
+python3 train_python/run_with_gpu_guard.py \
+  --max-memory-ratio 0.90 \
+  --max-start-memory-ratio 0.80 \
+  --min-disk-free-gb 5 \
+  --disk-check-path . \
+  --timeout-sec 1200 \
+  --out outputs/w4a8_activation_reconstruction_extended_2026_06_08/gpu_guard.json \
+  -- \
+  python3 train_python/eval_w4a8_activation_reconstruction.py \
+    --local-files-only \
+    --layers 0,7,14,21 \
+    --module-filter self_attn \
+    --module-filter mlp \
+    --max-modules 24 \
+    --limit-prompts 4 \
+    --max-length 96 \
+    --sample-rows-per-module 64 \
+    --chunk-rows 32 \
+    --out-json outputs/w4a8_activation_reconstruction_extended_2026_06_08/w4a8_activation_reconstruction_extended.json \
+    --out-jsonl outputs/w4a8_activation_reconstruction_extended_2026_06_08/w4a8_activation_reconstruction_extended.jsonl \
+    --out-md outputs/w4a8_activation_reconstruction_extended_2026_06_08/W4A8_ACTIVATION_RECONSTRUCTION_EXTENDED.md
+```
+
+Gate command:
+
+```bash
+python train_python/gate_w4a8_activation_reconstruction.py \
+  --json outputs/w4a8_activation_reconstruction_extended_2026_06_08/w4a8_activation_reconstruction_extended.json \
+  --min-modules 24 \
+  --max-activation-added-rel-l2 0.09 \
+  --max-p90-w4a8-rel-l2 0.30 \
+  --min-median-compression 3.5 \
+  --max-memory-ratio 0.90 \
+  --out-json outputs/w4a8_activation_reconstruction_extended_2026_06_08/w4a8_activation_reconstruction_extended_gate.json \
+  --out-md outputs/w4a8_activation_reconstruction_extended_2026_06_08/W4A8_ACTIVATION_RECONSTRUCTION_EXTENDED_GATE.md
+```
+
+Current result: 24/24 modules pass. Median W4A8 output rel-L2 is `0.144851`,
+p90 W4A8 output rel-L2 is `0.212923`, max activation-added rel-L2 versus W4A16
+is `0.084533`, median activation input rel-L2 is `0.035115`, median compression
+versus FP32 is `7.6413x`, and the outer GPU guard peaks at `0.7220`.
+
+Valid claim:
+
+- selected real Qwen3 attention and MLP module activations have measured W4A8
+  reconstruction drift under a guarded local run.
+
+Invalid claim:
+
+- this does not prove full-model quality retention, downstream task retention,
+  end-to-end generation speedup, mobile deployment, energy savings, or SOTA
+  quantization.
+
+Interpretation: the worst two cases are MLP down projections. The extended gate
+therefore strengthens the systems evidence by exposing integration risk instead
+of hiding it.
 
 ## ESMP Artifact Integrity Gate
 
@@ -166,7 +233,7 @@ Current gate:
 ```bash
 python train_python/gate_paper_evidence_alignment.py \
   --paper paper_drafts/eigenskill_q_research_draft_en_2026_06_07.md \
-  --expected-gate-count 41 \
+  --expected-gate-count 43 \
   --out-json outputs/paper_evidence_alignment_gate_2026_06_08.json \
   --out-md outputs/PAPER_EVIDENCE_ALIGNMENT_GATE_2026_06_08.md
 ```
@@ -174,7 +241,7 @@ python train_python/gate_paper_evidence_alignment.py \
 Current result: the generated alignment artifact records all configured required
 evidence references present, referenced repo paths found, 0 stale forbidden
 tokens, 0 unsafe non-negated claim lines, and the paper mentions the current
-42-gate ledger.
+43-gate ledger.
 
 Valid claim:
 
@@ -839,7 +906,7 @@ Invalid claim:
 `train_python/run_official_awq_smoke.py` is a minimal package-readiness probe.
 It exists to verify that AutoAWQ can execute, save local quantized artifacts,
 and run one short generation smoke under the GPU guard. It is intentionally not
-part of the 42-gate paper-facing ledger.
+part of the 43-gate paper-facing ledger.
 
 Example WSL/GPU command:
 

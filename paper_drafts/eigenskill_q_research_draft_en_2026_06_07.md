@@ -22,7 +22,7 @@ fake-quant loss sensitivity on multiple calibration views, allocates a fixed
 `{4,8}`-bit budget through cross-split consensus sensitivity, and records every
 paper-facing result through executable evidence gates. Across Qwen3-0.6B,
 Qwen3-1.7B, OLMo2-0425-1B-Instruct, and SmolLM2-1.7B short-slice diagnostics,
-the current evidence ledger passes 42/42 gates. The calibration-instability
+the current evidence ledger passes 43/43 gates. The calibration-instability
 gate finds 3/3 unstable model/dataset cases with mean score/cost Spearman
 0.0713 and mean top-20 Jaccard 0.1022. A Qwen2.5 perturbation matrix further
 separates calibration sample-size and model-scale effects: within-model
@@ -411,7 +411,7 @@ future allocator.
 ## 7. Evidence Gates
 
 Every paper-facing claim is indexed by a gate JSON and a Markdown report. The
-current ledger passes 42/42 gates. The most important gates are:
+current ledger passes 43/43 gates. The most important gates are:
 
 | Gate | Evidence | Valid claim | Non-claim |
 |---|---|---|---|
@@ -441,6 +441,7 @@ current ledger passes 42/42 gates. The most important gates are:
 | Qwen2.5-1.5B matched subset100 task evidence | FP16 and AutoAWQ Qwen2.5-1.5B on 400 guarded public subset executions; see `outputs/OFFICIAL_PTQ_TASK_QWEN25_1P5B_SUBSET100_MATRIX_2026_06_07.md`. | Matched 100-row MMLU/GSM8K subset evidence is now reported for the larger local artifact: FP16 is 33/100 MMLU and 12/100 GSM8K; AutoAWQ is 34/100 MMLU and 11/100 GSM8K; max drop versus FP16 is 0.01. | Not leaderboard-scale task retention, not reasoning-quality superiority, not complete AWQ/GPTQ/SmoothQuant competitiveness, not production runtime, not mobile deployment, and not SOTA PTQ. |
 | Qwen2.5-1.5B subset100 runtime profile | PC-side runtime profile over the same 400 guarded task executions; see `outputs/OFFICIAL_PTQ_QWEN25_1P5B_SUBSET100_RUNTIME_PROFILE_2026_06_07.md`. | TTFT, tokens/s, and guarded VRAM are reported for FP16 and AutoAWQ; AutoAWQ lowers peak guarded VRAM from 6531 MiB to 4919 MiB but is slower than FP16 locally. | Not mobile deployment, not production runtime speedup, not energy savings, and not official AWQ/GPTQ/SmoothQuant competitiveness. |
 | W4A8 activation reconstruction | Selected Qwen3-0.6B self-attention modules from the ESMP package; see `outputs/w4a8_activation_reconstruction_2026_06_08/W4A8_ACTIVATION_RECONSTRUCTION_GATE.md`. | A8 activation quantization adds bounded module-output drift on sampled real activations: max activation-added rel-L2 0.048561 versus W4A16. | Does not prove full-model quality retention, downstream task retention, end-to-end speed, mobile deployment, energy, or SOTA quantization. |
+| W4A8 extended activation reconstruction | Selected Qwen3-0.6B attention and MLP modules from layers 0/7/14/21; see `outputs/w4a8_activation_reconstruction_extended_2026_06_08/W4A8_ACTIVATION_RECONSTRUCTION_EXTENDED_GATE.md`. | The broader 24-module audit passes with median W4A8 rel-L2 0.144851 and max activation-added rel-L2 0.084533 versus W4A16, exposing MLP down projections as the worst integration-risk cases. | Does not prove full-model quality retention, downstream task retention, end-to-end speed, mobile deployment, energy, or SOTA quantization. |
 | Packed-system gates | ESMP, Triton, selected-row, sidecar, QKV smoke | Prototype components are executable and audited. | Production Tensor Core/mobile runtime. |
 | Paper evidence alignment | Paper draft, required evidence paths, claim-risk scan | The draft cites committed evidence and avoids unsafe non-negated claims. | Peer-review acceptance or complete baseline coverage. |
 
@@ -832,6 +833,18 @@ is reported as an integration-risk measurement rather than hidden: W4A8 has
 kernel-level speed evidence, but still needs broader layer coverage and
 downstream task retention before it can support an end-to-end quantized LLM
 claim.
+
+We then extend the same audit beyond attention-only projections in
+`outputs/w4a8_activation_reconstruction_extended_2026_06_08/W4A8_ACTIVATION_RECONSTRUCTION_EXTENDED_GATE.md`.
+The extended run covers 24 selected modules from layers 0/7/14/21, including
+self-attention and MLP projections. It passes the broader coverage gate with
+24/24 modules OK, median W4A8 output rel-L2 0.144851, p90 W4A8 output rel-L2
+0.212923, maximum activation-added rel-L2 0.084533 versus W4A16, median
+activation input rel-L2 0.035115, median compression 7.6413x versus FP32, and
+outer guard peak GPU memory ratio 0.7220. The two largest added-drift cases are
+MLP down projections, so this result is not presented as a quality guarantee;
+it is the evidence that a future W4A8 runtime needs module-family-aware
+activation quantization or a conservative fallback for these layers.
 
 ## 9. Discussion
 

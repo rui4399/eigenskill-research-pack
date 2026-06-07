@@ -7,7 +7,7 @@ not a new result.
 Current tracked output footprint:
 
 ```text
-outputs/ tracked-or-staged artifact files:       1645
+outputs/ tracked-or-staged artifact files:       1821
 outputs/real_system_packer_2026-06-05 files:     744
 ```
 
@@ -51,6 +51,8 @@ paper claims.
 | Qwen2.5-1.5B matched subset100 task matrix | `outputs/OFFICIAL_PTQ_TASK_QWEN25_1P5B_SUBSET100_MATRIX_2026_06_07.md` |
 | Qwen2.5-1.5B subset100 runtime profile | `outputs/OFFICIAL_PTQ_QWEN25_1P5B_SUBSET100_RUNTIME_PROFILE_2026_06_07.md` |
 | Expanded GPTQModel public PPL gate | `outputs/OFFICIAL_GPTQMODEL_PUBLIC_CALIB_QWEN25_0P5B_BUDGET8_16_GATE_2026_06_07.md` |
+| W4A8 real-activation reconstruction gate | `outputs/w4a8_activation_reconstruction_2026_06_08/W4A8_ACTIVATION_RECONSTRUCTION_GATE.md` |
+| W4A8 extended attention/MLP reconstruction gate | `outputs/w4a8_activation_reconstruction_extended_2026_06_08/W4A8_ACTIVATION_RECONSTRUCTION_EXTENDED_GATE.md` |
 | Baseline/readiness gap dashboard | `outputs/BASELINE_GAP_DASHBOARD_2026_06_06.md` |
 | Claim matrix | `docs/PAPER_CLAIM_MATRIX.md` |
 | System gate index | `docs/SYSTEM_EVIDENCE_GATES.md` |
@@ -60,7 +62,7 @@ paper claims.
 ## Non-Ledger Readiness Probes
 
 These artifacts are useful for environment readiness and reviewer-risk
-tracking, but they are not counted in the 42-gate paper-facing ledger.
+tracking, but they are not counted in the 43-gate paper-facing ledger.
 
 | Purpose | Artifact | Boundary |
 |---|---|---|
@@ -81,6 +83,7 @@ tracking, but they are not counted in the 42-gate paper-facing ledger.
 | RTX 5070 INT8 dot probe | `outputs/RTX5070_INT8_DOT_PROBE_2026_06_07.md` | Adds packed-W4/W4-as-I8 with INT8 activation paths and delayed dequantization; shows kernel-level speedups over torch FP16 on a bounded 4096 x 4096 batch-128/512 shape-family probe, bounded as W4A8 diagnostic evidence only. |
 | W4A8 shape-family gate | `outputs/W4A8_SHAPE_FAMILY_GATE_2026_06_08.md` | Machine-checks the RTX 5070 W4A8 shape-family sweep for speed, compression, activation-drift, and guard-memory thresholds; validates the kernel-level claim boundary without making model-quality claims. |
 | W4A8 real-activation reconstruction gate | `outputs/w4a8_activation_reconstruction_2026_06_08/W4A8_ACTIVATION_RECONSTRUCTION_GATE.md` | Evaluates A8 activation quantization on sampled real Qwen3 self-attention module inputs from the ESMP package; validates a selected-module drift boundary without claiming full-model retention or end-to-end speed. |
+| W4A8 extended attention/MLP reconstruction gate | `outputs/w4a8_activation_reconstruction_extended_2026_06_08/W4A8_ACTIVATION_RECONSTRUCTION_EXTENDED_GATE.md` | Extends the same real-activation audit to 24 selected Qwen3 attention and MLP modules; reports bounded drift plus MLP down-projection risk without claiming full-model retention or end-to-end speed. |
 
 ## Supporting System Artifacts
 
@@ -130,4 +133,4 @@ one of the following is true:
 
 Future cleanup should reduce `outputs/` by moving scratch and raw intermediate
 files out of the main branch, but not at the cost of breaking the current
-42-gate reproducibility story.
+43-gate reproducibility story.
