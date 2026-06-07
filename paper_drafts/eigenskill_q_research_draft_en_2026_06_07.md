@@ -44,9 +44,10 @@ executions and a PC-side runtime profile with TTFT, tokens/s, and guarded VRAM.
 For AutoAWQ and GPTQModel, a matched local baseline pack ties public-calibration
 PPL, subset50 task execution, and subset50 runtime into one cited evidence unit;
 it records lower guarded VRAM than FP16 but slower local tokens/s. We also add
-an expanded AutoAWQ public PPL gate that reuses the public-calibrated W4/G128
-Qwen2.5-0.5B artifact and evaluates 16 WikiText2 plus 16 C4 prompts, totaling
-2857 eval tokens with max PPL ratio 1.2114.
+aligned expanded public PPL gates for the public-calibrated W4/G128
+Qwen2.5-0.5B AutoAWQ and GPTQModel artifacts, each evaluating 16 WikiText2 plus
+16 C4 prompts. The official PTQ readiness matrix now covers 5714 total public
+PPL tokens across the two packages, with max PPL ratio 1.2570.
 ESMP packaging, Triton shape tuning, selected-row
 execution, shallow fused-QKV generation, and C++ audit tools are executable.
 The repository does not claim a production LLM runtime.
@@ -231,8 +232,8 @@ current ledger passes 29/29 gates. The most important gates are:
 | Official PTQ runtime profile | FP16/AutoAWQ/GPTQModel Qwen2.5-0.5B PC-side runtime profile; see `outputs/OFFICIAL_PTQ_RUNTIME_PROFILE_2026_06_07.md`. | TTFT, tokens/s, and peak guarded VRAM are reported for the same task-smoke path. | Not mobile deployment, not production runtime speedup, not energy savings, and not AWQ/GPTQ competitiveness. |
 | Official PTQ matched subset50 | FP16/AutoAWQ/GPTQModel Qwen2.5-0.5B on 300 guarded public subset executions; see `outputs/OFFICIAL_PTQ_TASK_SUBSET50_MATRIX_2026_06_07.md`. | Official-package artifacts run the same 50-row MMLU and 50-row GSM8K subsets; MMLU is 13/50 for FP16, 11/50 for AutoAWQ, and 13/50 for GPTQModel. | Leaderboard-scale task retention, reasoning quality, or AWQ/GPTQ competitiveness. |
 | Official PTQ subset50 runtime | PC-side subset50 runtime profile; see `outputs/OFFICIAL_PTQ_SUBSET50_RUNTIME_PROFILE_2026_06_07.md`. | TTFT, tokens/s, and guarded VRAM are reported for the 300-task subset path. | Not mobile deployment, not production runtime speedup, and not energy savings. |
-| Official PTQ matched baseline pack | AutoAWQ/GPTQModel Qwen2.5-0.5B public-calibration PPL, subset50 task, and subset50 runtime evidence; see `outputs/OFFICIAL_PTQ_MATCHED_BASELINE_PACK_QWEN25_0P5B_2026_06_07.md`. | A local matched 0.5B baseline package reports 4 PPL slices, 300 task executions, 300 runtime executions, max PPL ratio 1.2949, max task drop 0.0400, max VRAM ratio 0.9010, and max quantized tokens/s ratio 0.3315 versus FP16. | Not leaderboard-scale evidence, not large-model AWQ/GPTQ competitiveness, not production runtime, not mobile deployment, not energy evidence, and not SOTA PTQ. |
-| Expanded AutoAWQ public PPL gate | Public-calibrated AutoAWQ Qwen2.5-0.5B W4/G128 on 16 WikiText2 plus 16 C4 prompts; see `outputs/OFFICIAL_AWQ_PUBLIC_CALIB_QWEN25_0P5B_BUNDLE_16_GATE_2026_06_07.md`. | The reused AutoAWQ artifact runs 2857 public PPL tokens under guard, with max AutoAWQ-vs-FP16 PPL ratio 1.2114. | Not a complete official AWQ/GPTQ baseline, not task retention, not production runtime, not mobile deployment, and not SOTA PTQ. |
+| Official PTQ matched baseline pack | AutoAWQ/GPTQModel Qwen2.5-0.5B public-calibration PPL, subset50 task, and subset50 runtime evidence; see `outputs/OFFICIAL_PTQ_MATCHED_BASELINE_PACK_QWEN25_0P5B_2026_06_07.md`. | A local matched 0.5B baseline package reports 4 16-prompt PPL slices, 5714 PPL tokens, 300 task executions, 300 runtime executions, max PPL ratio 1.2570, max task drop 0.0400, max VRAM ratio 0.9010, and max quantized tokens/s ratio 0.3315 versus FP16. | Not leaderboard-scale evidence, not large-model AWQ/GPTQ competitiveness, not production runtime, not mobile deployment, not energy evidence, and not SOTA PTQ. |
+| Expanded official PTQ public PPL gates | Public-calibrated AutoAWQ and GPTQModel Qwen2.5-0.5B W4/G128 on 16 WikiText2 plus 16 C4 prompts; see `outputs/OFFICIAL_AWQ_PUBLIC_CALIB_QWEN25_0P5B_BUNDLE_16_GATE_2026_06_07.md` and `outputs/OFFICIAL_GPTQMODEL_PUBLIC_CALIB_QWEN25_0P5B_BUDGET8_16_GATE_2026_06_07.md`. | The reused AutoAWQ and GPTQModel artifacts run 5714 public PPL tokens under guard, with max package-vs-FP16 PPL ratio 1.2570. | Not a complete official AWQ/GPTQ baseline, not task retention, not production runtime, not mobile deployment, and not SOTA PTQ. |
 | Packed-system gates | ESMP, Triton, selected-row, sidecar, QKV smoke | Prototype components are executable and audited. | Production Tensor Core/mobile runtime. |
 | Paper evidence alignment | Paper draft, required evidence paths, claim-risk scan | The draft cites committed evidence and avoids unsafe non-negated claims. | Peer-review acceptance or complete baseline coverage. |
 
@@ -408,6 +409,7 @@ outputs/INTERACTION_SWAP_BOUNDARY_GATE_2026_06_07.md
 outputs/Q_PALETTE_STYLE_ALLOCATION_FAMILY_GATE_2026_06_06.md
 outputs/PUBLIC_TASK_MODEL_LADDER_GATE_2026_06_07.md
 outputs/OFFICIAL_AWQ_PUBLIC_CALIB_QWEN25_0P5B_BUNDLE_16_GATE_2026_06_07.md
+outputs/OFFICIAL_GPTQMODEL_PUBLIC_CALIB_QWEN25_0P5B_BUDGET8_16_GATE_2026_06_07.md
 outputs/BASELINE_GAP_DASHBOARD_2026_06_06.md
 docs/PAPER_CLAIM_MATRIX.md
 docs/SYSTEM_EVIDENCE_GATES.md

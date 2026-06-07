@@ -1,0 +1,59 @@
+{
+  "date": "2026-06-07T05:15:04+00:00",
+  "passed": true,
+  "summary": {
+    "model": "Qwen/Qwen2.5-0.5B-Instruct",
+    "package": "gptqmodel",
+    "package_version": "7.0.0",
+    "quant_config": {
+      "bits": 4,
+      "group_size": 128
+    },
+    "calibration_source": [
+      "data_eval/public_calib_prompts_2026_06_07/wikitext2_test_ppl_prompts.txt",
+      "data_eval/public_calib_prompts_2026_06_07/c4_validation_ppl_prompts.txt"
+    ],
+    "calibration_count": 12,
+    "artifact_file_count": 8,
+    "artifact_total_bytes": 470821016,
+    "artifact_reused": false,
+    "eval_slice_count": 2,
+    "total_eval_tokens": 2857,
+    "prompt_count": 8,
+    "tokens": 2857,
+    "fp16_ppl": 24.590744522031002,
+    "gptq_ppl": 30.909568363020394,
+    "ppl_ratio_gptq_vs_fp16": 1.2569594359100562,
+    "delta_nll_gptq_minus_fp16": 0.22869565853056795,
+    "guard_max_memory_used_ratio": 0.6110906637222426,
+    "guard_max_memory_used_mib": 4981,
+    "evals": [
+      {
+        "label": "wikitext2",
+        "prompt_count": 16,
+        "tokens": 1413,
+        "artifact_reused": true,
+        "fp16_ppl": 24.590744522031002,
+        "gptq_ppl": 30.909568363020394,
+        "ppl_ratio_gptq_vs_fp16": 1.2569594359100562,
+        "delta_nll_gptq_minus_fp16": 0.22869565853056795,
+        "guard_max_memory_used_ratio": 0.5746534167586799,
+        "guard_max_memory_used_mib": 4684
+      },
+      {
+        "label": "c4",
+        "prompt_count": 16,
+        "tokens": 1444,
+        "artifact_reused": true,
+        "fp16_ppl": 29.9175965878998,
+        "gptq_ppl": 36.3620516722835,
+        "ppl_ratio_gptq_vs_fp16": 1.2154068447794422,
+        "delta_nll_gptq_minus_fp16": 0.19507887241252586,
+        "guard_max_memory_used_ratio": 0.5566188197767146,
+        "guard_max_memory_used_mib": 4537
+      }
+    ]
+  },
+  "failures": [],
+  "claim_boundary": "Valid claim: one fresh public-calibration GPTQModel W4 group-128 smoke ran under guard, saved/reloaded a local artifact, and produced tiny labeled FP16-vs-GPTQ PPL diagnostics. Invalid claim: this is a complete official AWQ/GPTQ competitive baseline, SOTA PTQ result, task-retention proof, or production runtime."
+}

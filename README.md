@@ -41,7 +41,7 @@ files disagree, follow the claim matrix first.
 |---|---|---|
 | Calibration instability | Qwen3/OLMo2/SmolLM2 distribution-split diagnostics plus Qwen2.5 sample-size/model-scale perturbation matrix | problem evidence |
 | Consensus allocation | gated robustness and transfer diagnostics under fixed bit budgets | allocation diagnostic, not a production PTQ method |
-| Official PTQ probes | AutoAWQ/GPTQModel Qwen2.5-0.5B W4/G128 readiness, an expanded AutoAWQ 16-prompt public PPL gate, tiny task smoke, matched 50-row task subset paths, and a matched local baseline pack | local evidence only; quantized paths save VRAM but are slower here |
+| Official PTQ probes | AutoAWQ/GPTQModel Qwen2.5-0.5B W4/G128 readiness, aligned expanded 16-prompt public PPL gates, tiny task smoke, matched 50-row task subset paths, and a matched local baseline pack | local evidence only; quantized paths save VRAM but are slower here |
 | Runtime probes | ESMP/Triton/C++ module-level gates plus PC-side smoke/subset50 runtime profiles | not end-to-end deployment |
 | Mobile evidence | Redmi K80 Pro harness exists, but no real TTFT/tokens/s/memory log is complete | no mobile claim |
 
@@ -95,7 +95,7 @@ mobile/redmi_k80_pro/  ADB metric harness and NEON decode prototype
 data_eval/             Small public/synthetic prompt slices and configs
 docs/                  Claim matrix, evidence gates, related work, readiness
 outputs/               Committed gate artifacts used by the evidence ledger
-paper_drafts/          Draft text; not the authoritative evidence boundary
+paper_drafts/          Draft text only; claim matrix remains authoritative
 ```
 
 Large model weights and adapters are not committed. See

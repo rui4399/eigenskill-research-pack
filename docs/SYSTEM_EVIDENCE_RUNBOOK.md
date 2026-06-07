@@ -389,18 +389,18 @@ Current gate:
 
 ```bash
 python train_python/gate_official_ptq_matched_baseline_pack.py \
-  --ppl-case autoawq:wikitext2=outputs/official_awq_public_calib_qwen25_0p5b_wikitext2_summary_2026_06_07.json \
-  --ppl-case autoawq:c4=outputs/official_awq_public_calib_qwen25_0p5b_c4_summary_2026_06_07.json \
-  --ppl-case gptqmodel:wikitext2=outputs/official_gptqmodel_public_calib_qwen25_0p5b_budget8_wikitext2_summary_2026_06_07.json \
-  --ppl-case gptqmodel:c4=outputs/official_gptqmodel_public_calib_qwen25_0p5b_budget8_c4_summary_2026_06_07.json \
+  --ppl-case autoawq:wikitext2=outputs/official_awq_public_calib_qwen25_0p5b_wikitext2_16_summary_2026_06_07.json \
+  --ppl-case autoawq:c4=outputs/official_awq_public_calib_qwen25_0p5b_c4_16_summary_2026_06_07.json \
+  --ppl-case gptqmodel:wikitext2=outputs/official_gptqmodel_public_calib_qwen25_0p5b_budget8_wikitext2_16_summary_2026_06_07.json \
+  --ppl-case gptqmodel:c4=outputs/official_gptqmodel_public_calib_qwen25_0p5b_budget8_c4_16_summary_2026_06_07.json \
   --task-matrix-json outputs/official_ptq_task_subset50_matrix_2026_06_07.json \
   --runtime-profile-json outputs/official_ptq_subset50_runtime_profile_2026_06_07.json \
   --out-json outputs/official_ptq_matched_baseline_pack_qwen25_0p5b_2026_06_07.json \
   --out-md outputs/OFFICIAL_PTQ_MATCHED_BASELINE_PACK_QWEN25_0P5B_2026_06_07.md
 ```
 
-Current result: 4 PPL slices, 2974 PPL tokens, 300 task executions, 300
-runtime executions, max PPL ratio `1.2949`, max task accuracy drop `0.0400`,
+Current result: 4 PPL slices, 5714 PPL tokens, 300 task executions, 300
+runtime executions, max PPL ratio `1.2570`, max task accuracy drop `0.0400`,
 max VRAM ratio `0.9010`, and max quantized tokens/s ratio `0.3315` versus
 FP16.
 
@@ -920,38 +920,45 @@ Current GPTQModel public-calibrated readiness result:
 | WikiText2 test eval | 8 | 760 | 24.676 | 31.953 | 1.2949 | false | 0.6111 |
 | C4 validation eval | 8 | 727 | 32.952 | 39.810 | 1.2081 | true | 0.6097 |
 
-GPTQModel readiness gate:
+Expanded 16-prompt GPTQModel eval reuses the saved public-calibrated artifact:
+
+| slice | prompts | tokens | FP16 PPL | GPTQModel PPL | ratio | artifact reused | peak VRAM |
+|---|---:|---:|---:|---:|---:|---|---:|
+| WikiText2 test eval | 16 | 1413 | 24.591 | 30.910 | 1.2570 | true | 0.5747 |
+| C4 validation eval | 16 | 1444 | 29.918 | 36.362 | 1.2154 | true | 0.5566 |
+
+GPTQModel 16-prompt readiness gate:
 
 ```bash
 python train_python/gate_official_gptqmodel_public_calib.py \
   --summary-json outputs/official_gptqmodel_public_calib_qwen25_0p5b_budget8_wikitext2_summary_2026_06_07.json \
   --guard-json outputs/official_gptqmodel_public_calib_qwen25_0p5b_budget8_wikitext2_gpu_guard_2026_06_07.json \
-  --eval-summary wikitext2=outputs/official_gptqmodel_public_calib_qwen25_0p5b_budget8_wikitext2_summary_2026_06_07.json \
-  --eval-guard wikitext2=outputs/official_gptqmodel_public_calib_qwen25_0p5b_budget8_wikitext2_gpu_guard_2026_06_07.json \
-  --eval-summary c4=outputs/official_gptqmodel_public_calib_qwen25_0p5b_budget8_c4_summary_2026_06_07.json \
-  --eval-guard c4=outputs/official_gptqmodel_public_calib_qwen25_0p5b_budget8_c4_gpu_guard_2026_06_07.json \
+  --eval-summary wikitext2=outputs/official_gptqmodel_public_calib_qwen25_0p5b_budget8_wikitext2_16_summary_2026_06_07.json \
+  --eval-guard wikitext2=outputs/official_gptqmodel_public_calib_qwen25_0p5b_budget8_wikitext2_16_gpu_guard_2026_06_07.json \
+  --eval-summary c4=outputs/official_gptqmodel_public_calib_qwen25_0p5b_budget8_c4_16_summary_2026_06_07.json \
+  --eval-guard c4=outputs/official_gptqmodel_public_calib_qwen25_0p5b_budget8_c4_16_gpu_guard_2026_06_07.json \
   --min-eval-slices 2 \
-  --min-total-tokens 1400 \
+  --min-total-tokens 2800 \
   --min-calibration-texts 12 \
-  --max-memory-ratio 0.85 \
+  --max-memory-ratio 0.90 \
   --max-ppl-ratio 2.0 \
-  --out-json outputs/official_gptqmodel_public_calib_qwen25_0p5b_budget8_gate_2026_06_07.json \
-  --out-md outputs/OFFICIAL_GPTQMODEL_PUBLIC_CALIB_QWEN25_0P5B_BUDGET8_GATE_2026_06_07.md
+  --out-json outputs/official_gptqmodel_public_calib_qwen25_0p5b_budget8_16_gate_2026_06_07.json \
+  --out-md outputs/OFFICIAL_GPTQMODEL_PUBLIC_CALIB_QWEN25_0P5B_BUDGET8_16_GATE_2026_06_07.md
 ```
 
 Official PTQ readiness matrix:
 
 ```bash
 python train_python/gate_official_ptq_readiness_matrix.py \
-  --case autoawq=outputs/official_awq_public_calib_qwen25_0p5b_bundle_gate_2026_06_07.json \
-  --case gptqmodel=outputs/official_gptqmodel_public_calib_qwen25_0p5b_budget8_gate_2026_06_07.json \
+  --case autoawq=outputs/official_awq_public_calib_qwen25_0p5b_bundle_16_gate_2026_06_07.json \
+  --case gptqmodel=outputs/official_gptqmodel_public_calib_qwen25_0p5b_budget8_16_gate_2026_06_07.json \
   --required-package autoawq \
   --required-package gptqmodel \
   --required-label wikitext2 \
   --required-label c4 \
   --min-packages 2 \
   --min-eval-slices 2 \
-  --min-total-tokens 1400 \
+  --min-total-tokens 2800 \
   --max-ppl-ratio 2.0 \
   --max-memory-ratio 0.90 \
   --out-json outputs/official_ptq_readiness_matrix_qwen25_0p5b_2026_06_07.json \
@@ -960,8 +967,8 @@ python train_python/gate_official_ptq_readiness_matrix.py \
 
 Current matrix result: 2 packages (`autoawq`, `gptqmodel`), one model
 (`Qwen/Qwen2.5-0.5B-Instruct`), normalized W4 group-128 quant shape, common
-WikiText2/C4 eval labels, matched 1487-token public eval budgets per package,
-and 2974 total eval tokens across the readiness probes. This matrix is for
+WikiText2/C4 eval labels, matched 2857-token public eval budgets per package,
+and 5714 total eval tokens across the readiness probes. This matrix is for
 alignment and auditability; it is not a fair head-to-head quality comparison
 because package kernels/backend settings, complete task-retention coverage, and
 broader official baseline settings still differ.
@@ -995,11 +1002,11 @@ Valid claim:
   WikiText2/C4 PPL gate totaling 2857 eval tokens, with max PPL ratio 1.2114;
 - one public-calibrated GPTQModel W4 group-128 smoke completed guarded
   quantization with 12 public calibration texts, local artifact save/reload
-  through `gptq_torch`, and two tiny public WikiText2/C4 PPL eval slices at the
-  same eval-token budget as the AutoAWQ readiness bundle;
+  through `gptq_torch`, and an expanded 16-prompt-per-split WikiText2/C4 PPL
+  gate totaling 2857 eval tokens, with max PPL ratio 1.2570;
 - the official PTQ readiness matrix verifies that the current AutoAWQ and
   GPTQModel probes share the same model, W4/G128 quantization shape,
-  WikiText2/C4 eval labels, and 1487-token public eval budget before being
+  WikiText2/C4 eval labels, and 2857-token public eval budget before being
   presented together.
 
 Invalid claim:

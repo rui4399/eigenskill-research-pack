@@ -2,11 +2,11 @@
 
 > CCF 风格论文初稿，2026-06-05。本文按正式学术论文结构组织，写法参考经典系统/模型论文的“问题清晰化、方法简洁化、实验证据驱动”范式，但不复用其原文表述。当前稿件是技术报告级草案，尚未满足正式投稿所需的完整基线、硬件与统计显著性要求。
 >
-> 状态更新，2026-06-07：本中文稿保留为历史草稿。当前更接近投稿骨架的版本是 `paper_drafts/eigenskill_q_research_draft_en_2026_06_07.md`，它已纳入 29-gate evidence ledger、calibration robustness stress、sensitivity perturbation matrix、consensus transfer boundary、interaction-aware swap boundary、public-task model ladder、official PTQ task-execution smoke、official PTQ matched subset50/runtime profile、official PTQ matched baseline pack、expanded AutoAWQ 16-prompt public PPL gate 和 paper-evidence alignment gate。若两者不一致，以新版英文稿和 `docs/PAPER_CLAIM_MATRIX.md` 为准。
+> 状态更新，2026-06-07：本中文稿保留为中文读者版/历史草稿，不是当前投稿主稿。当前更接近投稿骨架的版本是 `paper_drafts/eigenskill_q_research_draft_en_2026_06_07.md`，它已纳入 29-gate evidence ledger、calibration robustness stress、sensitivity perturbation matrix、consensus transfer boundary、interaction-aware swap boundary、public-task model ladder、official PTQ task-execution smoke、official PTQ matched subset50/runtime profile、official PTQ matched baseline pack、AutoAWQ/GPTQModel aligned 16-prompt public PPL gates、official PTQ readiness matrix 和 paper-evidence alignment gate。若两者不一致，以新版英文稿和 `docs/PAPER_CLAIM_MATRIX.md` 为准。
 
 ## 摘要
 
-大语言模型在边缘端和资源受限设备上的部署受到显存、访存带宽和能耗的共同限制。后训练量化是降低推理成本的重要路径，但统一低比特量化往往在关键层引入过大的误差，而简单的混合精度分配又依赖少量校准样本估计模块敏感度，容易受到校准分割噪声影响。本文提出 EigenSkill-Q，一种面向短周期可复现实验的跨数据集一致性敏感度混合精度量化诊断框架。其核心思想是：先分别在两个校准分布上估计每个线性模块的低比特损失增量，再在固定平均比特预算下优先保护两侧共同敏感或平均敏感度较高的模块，从而减弱单一校准分割导致的偶然性。本文同时构建了 C++ 分配、审计和结果汇总工具，将位宽分配、随机基线审计、分割稳定性分析和 GPU guard 日志总结从 Python 实验脚本中剥离出来。实验在 Qwen3-0.6B、Qwen3-1.7B 与 OLMo2-0425-1B-Instruct 的 WikiText2/C4 短文本切片上进行。在 Qwen3-0.6B 上，单 WikiText2 校准分配曾在 WikiText2-64 len96 上输给最佳随机同预算分配 1.0322 PPL；引入 WikiText2+C4 一致性分配后，同一设置在 WikiText2 与 C4 上均击败 15 个随机种子分配，分别取得 2.8471 和 3.4551 PPL 的最佳随机边际。实验表明，跨数据集一致性能够把“有用但不稳定”的敏感度信号转化为更稳健的混合精度分配依据。本文不声称生产级量化器、硬件加速或 SOTA 性能，而是给出一个可复现、可审计的量化研究基线。
+大语言模型在资源受限环境中的部署受到显存、访存带宽和推理路径共同限制。后训练量化是降低成本的重要路径，但统一低比特量化往往在关键模块引入过大误差，而混合精度分配又依赖少量校准样本估计模块敏感度，容易受到校准分割噪声影响。本文将问题收敛为：在很小校准预算下，模块敏感度排序到底有多不稳定，以及跨分割一致性是否能降低错误位宽分配的风险。EigenSkill-Q 当前是一份可复现实验工件，而不是生产级量化器。它分别在 WikiText2/C4 等校准视图上估计线性模块的低比特损失增量，在固定平均位宽预算下构建 consensus allocation，并通过 claim matrix 与 evidence ledger 约束每一条可公开声明。当前英文主稿对应 29 个通过的 evidence gates，覆盖校准不稳定性、随机基线压力、跨分割迁移、交互式 swap 边界、Q-Palette 风格拉格朗日分配代理、AutoAWQ/GPTQModel Qwen2.5-0.5B W4/G128 对齐 16-prompt public PPL readiness，以及 PC 侧 subset50 runtime/VRAM 负结果。实验表明，跨数据集一致性能够把“有用但不稳定”的敏感度信号转化为更稳健的短切片 fake-quant 分配依据；同时，官方 PTQ readiness 结果只说明本地基线包可执行，并不支持 SOTA、生产 runtime、移动端部署或端到端加速声明。
 
 **关键词**：大语言模型；后训练量化；混合精度；校准稳定性；模型压缩；C++ 审计工具
 
@@ -25,7 +25,8 @@
 1. 提出并明确化了短校准混合精度量化中的校准分割噪声问题，保留单分割输给最佳随机分配的负结果作为方法动机。
 2. 给出一种简单的跨数据集一致性位宽分配方法，在固定 4.5 average-bit 的 `{4,8}` 预算下优先保护稳定敏感模块。
 3. 构建 C++ 分配、审计和汇总工具，覆盖 consensus allocation builder、random baseline audit、evidence matrix、split-stability audit、budget-curve summary 和 GPU guard summary。
-4. 在 Qwen3-0.6B、Qwen3-1.7B 和 OLMo2-0425-1B-Instruct 的 WikiText2/C4 短切片上验证该诊断路径，展示 consensus 能修复 Qwen3-0.6B 与 OLMo2 中观察到的 best-random 失败行。
+4. 在 Qwen3-0.6B、Qwen3-1.7B、OLMo2-0425-1B-Instruct 与 SmolLM2-1.7B 的短切片 fake-quant 诊断中验证该路径，并保留 robust-LCB、swap search 等边界结果。
+5. 将 AutoAWQ/GPTQModel 的 Qwen2.5-0.5B W4/G128 readiness 证据放入独立 claim boundary：它们用于补齐官方包可执行性与 PPL/任务/PC-runtime 观测，不用于宣称相对强基线的优势。
 
 ## 2 相关工作
 
@@ -138,15 +139,18 @@ EigenSkill-Q 当前实现中，模型加载和 fake quant PPL 评估仍由 Pytho
 
 ### 4.1 模型与数据
 
-当前实验覆盖三个模型：
+当前质量诊断主要覆盖以下模型：
 
 | 模型 | 角色 |
 |---|---|
 | Qwen/Qwen3-0.6B | 最新补充的轻量模型，验证 consensus 是否修复单分割失败 |
 | Qwen/Qwen3-1.7B | 更强 Qwen3 家族模型，已有 consensus 与 budget curve |
 | allenai/OLMo-2-0425-1B-Instruct | 非 Qwen 家族模型，用于检查方法是否只依赖单一架构 |
+| HuggingFaceTB/SmolLM2-1.7B-Instruct | interaction-aware swap boundary 与局部/全局分配反例 |
 
-评估数据为 WikiText2 与 C4 的公开文本短切片。本文报告的 PPL 均来自 PyTorch fake quant 诊断，不代表 packed INT4 runtime 的真实延迟或显存收益。
+评估数据为 WikiText2 与 C4 的公开文本短切片。本文报告的主要 PPL 来自 PyTorch fake quant 诊断，不代表 packed INT4 runtime 的真实延迟或显存收益。
+
+官方 PTQ readiness 另行覆盖 `Qwen/Qwen2.5-0.5B-Instruct` 上的 AutoAWQ 与 GPTQModel W4/G128 本地包。该部分用于说明公开校准、加载、短 PPL、subset50 任务执行和 PC 侧 runtime/VRAM 路径已经接通；它仍不是完整 AWQ/GPTQ 竞争基线。
 
 ### 4.2 评价指标
 
@@ -169,7 +173,7 @@ EigenSkill-Q 当前实现中，模型加载和 fake quant PPL 评估仍由 Pytho
 - single-split loss-sensitive：单一校准分布的敏感度分配。
 - WikiText2+C4 consensus：本文主方法。
 
-正式投稿前仍需加入更完整的 GPTQ、AWQ、SmoothQuant、QuaRot/SpinQuant 等公开基线。当前仓库已有 Qwen2.5-0.5B 上的局部 AutoAWQ/GPTQModel readiness 与 matched-pack 证据，但它们不能支持相对这些方法的优势声明。
+正式投稿前仍需加入更完整的 GPTQ、AWQ、SmoothQuant、QuaRot/SpinQuant 等公开基线。当前仓库已有 Qwen2.5-0.5B 上的局部 AutoAWQ/GPTQModel readiness、aligned 16-prompt public PPL gates 与 matched-pack 证据，但它们只能支持“本地官方包路径已接通”的边界声明，不能支持相对这些方法的优势声明。
 
 ## 5 实验结果
 
@@ -257,6 +261,12 @@ Qwen3-0.6B 含 197 个被测线性模块。单 WikiText2 分割分配 44 个 8-b
 
 Qwen3-1.7B 和 OLMo2 的相关 guarded runs 也低于 85%，其中 Qwen3 peaked at `5071/8151 MiB`，OLMo2 peaked at `4376/8151 MiB`。GPU guard 是实验有效性的必要条件：超出上限被 kill 的运行不纳入结果。
 
+### 5.6 官方 PTQ readiness 与系统证据边界
+
+当前仓库已把 AutoAWQ 与 GPTQModel 的 Qwen2.5-0.5B W4/G128 本地包纳入统一 readiness matrix。两者均使用公开校准提示，均扩展到 WikiText2/C4 各 16 个 public PPL prompts；两个包合计覆盖 5714 个 PPL eval tokens，最大 package-vs-FP16 PPL ratio 为 1.2570。
+
+同一 matched baseline pack 还合并了 300 次 subset50 public task executions 与 PC 侧 runtime/VRAM profile。这个结果最重要的含义是边界清晰：量化包在本地 Transformers/GPTQModel 路径下降低了部分 guarded VRAM，但 tokens/s 慢于 FP16。因此它是 readiness 与负结果记录，不是加速结果。
+
 ## 6 讨论
 
 ### 6.1 为什么不是单纯增加校准样本
@@ -275,7 +285,7 @@ EigenSkill-Q 当前是 fake-quant 诊断框架，而不是 GPTQ/AWQ/SmoothQuant/
 
 1. 当前评估仍是 PyTorch fake quant，不能支持真实延迟、显存占用或能耗结论。
 2. 数据切片较短，PPL 结果应视为诊断信号，而非完整 benchmark。
-3. 尚未完整纳入 GPTQ、AWQ、SmoothQuant、QuaRot、SpinQuant 等公开强基线；现有 AutoAWQ/GPTQModel 证据仅覆盖 Qwen2.5-0.5B 的局部 readiness 与 tiny/subset 评估。
+3. 尚未完整纳入 GPTQ、AWQ、SmoothQuant、QuaRot、SpinQuant 等公开强基线；现有 AutoAWQ/GPTQModel 证据仅覆盖 Qwen2.5-0.5B 的 public-calibrated readiness、16-prompt PPL、subset50 任务执行与 PC 侧 runtime/VRAM 观测。
 4. 当前只覆盖少数模型家族，尚不足以证明跨架构普适性。
 5. 位宽集合仅为 `{4,8}`，未覆盖 INT3、INT2、FP4、NF4、MXFP4 等格式。
 6. C++ 工具主要负责 allocation/report/audit，模型执行仍依赖 Python/PyTorch。
@@ -319,6 +329,10 @@ outputs/qwen3_0p6b_lowmem_consensus_random16_random_seed_audit.md
 outputs/qwen3_0p6b_lowmem_consensus_random16_gpu_guard_summary.md
 outputs/qwen3_0p6b_wikitext2_c4_consensus_alloc_4to8_limit4_group128_report.md
 outputs/INTERACTION_SWAP_BOUNDARY_GATE_2026_06_07.md
+outputs/OFFICIAL_PTQ_MATCHED_BASELINE_PACK_QWEN25_0P5B_2026_06_07.md
+outputs/OFFICIAL_PTQ_READINESS_MATRIX_QWEN25_0P5B_2026_06_07.md
+outputs/OFFICIAL_AWQ_PUBLIC_CALIB_QWEN25_0P5B_BUNDLE_16_GATE_2026_06_07.md
+outputs/OFFICIAL_GPTQMODEL_PUBLIC_CALIB_QWEN25_0P5B_BUDGET8_16_GATE_2026_06_07.md
 outputs/real_system_packer_2026-06-05/EVIDENCE_LEDGER_2026_06_06.md
 docs/consensus-allocation-method.md
 docs/PAPER_CLAIM_MATRIX.md

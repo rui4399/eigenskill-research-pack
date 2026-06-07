@@ -38,6 +38,7 @@ paper claims.
 | Official PTQ subset50 runtime profile | `outputs/OFFICIAL_PTQ_SUBSET50_RUNTIME_PROFILE_2026_06_07.md` |
 | Official PTQ matched baseline pack | `outputs/OFFICIAL_PTQ_MATCHED_BASELINE_PACK_QWEN25_0P5B_2026_06_07.md` |
 | Expanded AutoAWQ public PPL gate | `outputs/OFFICIAL_AWQ_PUBLIC_CALIB_QWEN25_0P5B_BUNDLE_16_GATE_2026_06_07.md` |
+| Expanded GPTQModel public PPL gate | `outputs/OFFICIAL_GPTQMODEL_PUBLIC_CALIB_QWEN25_0P5B_BUDGET8_16_GATE_2026_06_07.md` |
 | Baseline/readiness gap dashboard | `outputs/BASELINE_GAP_DASHBOARD_2026_06_06.md` |
 | Claim matrix | `docs/PAPER_CLAIM_MATRIX.md` |
 | System gate index | `docs/SYSTEM_EVIDENCE_GATES.md` |
@@ -56,10 +57,11 @@ tracking, but they are not counted in the 29-gate paper-facing ledger.
 | Tiny public WikiText2 AutoAWQ PPL probe | `outputs/OFFICIAL_AWQ_MATCHED_PPL_QWEN25_0P5B_WIKITEXT2_GATE_2026_06_07.md` | Shows same-slice FP16-vs-AutoAWQ PPL can run on 8 public WikiText2 prompts under guard; not a full baseline. |
 | Tiny public C4 AutoAWQ PPL probe | `outputs/OFFICIAL_AWQ_MATCHED_PPL_QWEN25_0P5B_C4_GATE_2026_06_07.md` | Shows same-slice FP16-vs-AutoAWQ PPL can run on 8 public C4 validation prompts under guard; not a full baseline. |
 | Public PPL prompt manifest | `outputs/PUBLIC_PPL_PROMPT_MANIFEST_2026_06_07.md` | Records the tiny public prompt files used by the readiness probes; not a benchmark definition. |
-| Expanded public PPL prompt manifest | `outputs/PUBLIC_PPL_PROMPT_MANIFEST_16_2026_06_07.md` | Records the 16-prompt WikiText2/C4 public PPL slices used by the expanded AutoAWQ readiness gate; not a benchmark definition. |
+| Expanded public PPL prompt manifest | `outputs/PUBLIC_PPL_PROMPT_MANIFEST_16_2026_06_07.md` | Records the 16-prompt WikiText2/C4 public PPL slices used by the expanded AutoAWQ and GPTQModel readiness gates; not a benchmark definition. |
 | Public-calibration AutoAWQ bundle gate | `outputs/OFFICIAL_AWQ_PUBLIC_CALIB_QWEN25_0P5B_BUNDLE_GATE_2026_06_07.md` | Shows a public-calibrated AutoAWQ W4 group-128 bundle can quantize and run two tiny public PPL eval slices under guard; not GPTQ/AWQ competitive coverage. |
-| Public-calibration GPTQModel readiness gate | `outputs/OFFICIAL_GPTQMODEL_PUBLIC_CALIB_QWEN25_0P5B_BUDGET8_GATE_2026_06_07.md` | Shows GPTQModel W4 group-128 can quantize with 12 public calibration texts, save/reload a local artifact through `gptq_torch`, and run tiny public WikiText2/C4 PPL diagnostics under guard at the same eval token budget as AutoAWQ; not GPTQ/AWQ competitive coverage. |
-| Official PTQ readiness matrix | `outputs/OFFICIAL_PTQ_READINESS_MATRIX_QWEN25_0P5B_2026_06_07.md` | Shows AutoAWQ and GPTQModel readiness probes are aligned on model, W4/G128 shape, WikiText2/C4 eval labels, and 1487-token public eval budget per package; not a faithful AWQ/GPTQ competition. |
+| Public-calibration GPTQModel readiness gate | `outputs/OFFICIAL_GPTQMODEL_PUBLIC_CALIB_QWEN25_0P5B_BUDGET8_GATE_2026_06_07.md` | Shows GPTQModel W4 group-128 can quantize with 12 public calibration texts, save/reload a local artifact through `gptq_torch`, and run tiny public WikiText2/C4 PPL diagnostics under guard; not GPTQ/AWQ competitive coverage. |
+| Expanded GPTQModel public PPL gate | `outputs/OFFICIAL_GPTQMODEL_PUBLIC_CALIB_QWEN25_0P5B_BUDGET8_16_GATE_2026_06_07.md` | Shows the saved GPTQModel artifact can be reloaded and evaluated on the same 16-prompt WikiText2/C4 public slices as AutoAWQ; not GPTQ/AWQ competitive coverage. |
+| Official PTQ readiness matrix | `outputs/OFFICIAL_PTQ_READINESS_MATRIX_QWEN25_0P5B_2026_06_07.md` | Shows AutoAWQ and GPTQModel readiness probes are aligned on model, W4/G128 shape, WikiText2/C4 eval labels, and 2857-token public eval budget per package; not a faithful AWQ/GPTQ competition. |
 | Public calibration prompt manifest | `outputs/PUBLIC_CALIB_PROMPT_MANIFEST_2026_06_07.md` | Records the tiny public calibration prompt files; not an evaluation benchmark. |
 
 ## Supporting System Artifacts

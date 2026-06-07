@@ -49,8 +49,9 @@ In compressed form, the supported claims are:
   matched baseline pack covering public-calibration PPL, subset50 task
   execution, and PC-side runtime/VRAM, with the explicit negative result that
   the quantized local paths are slower than FP16;
-- the public-calibrated AutoAWQ Qwen2.5-0.5B W4/G128 artifact has an expanded
-  16-prompt-per-split WikiText2/C4 PPL gate totaling 2857 eval tokens;
+- the public-calibrated AutoAWQ and GPTQModel Qwen2.5-0.5B W4/G128 artifacts
+  have aligned expanded 16-prompt-per-split WikiText2/C4 PPL gates, totaling
+  5714 eval tokens across both packages;
 - ESMP package integrity, selected-row probes, Triton shape-family kernels, and
   shallow generation integrations are executable prototype evidence;
 - missing broad official baselines, leaderboard-scale task benchmarks, and
@@ -116,7 +117,7 @@ The next paper-strengthening steps are:
 5. real packed-runtime or on-device TTFT/tokens/s/peak-memory measurements.
 
 The first item is only partially started by the local AutoAWQ/GPTQModel
-Qwen2.5-0.5B matched pack and the expanded AutoAWQ 16-prompt public PPL gate.
+Qwen2.5-0.5B matched pack and the expanded 16-prompt public PPL gates.
 It does not yet cover larger models, SmoothQuant, rotation-family baselines, or
 leaderboard-scale tasks.
 

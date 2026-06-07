@@ -1,6 +1,6 @@
 # Official AutoAWQ Public-Calibration Baseline Gate
 
-Date: `2026-06-07T04:30:52+00:00`
+Date: `2026-06-07T05:16:02+00:00`
 Status: **PASS**
 
 ## Summary
@@ -21,8 +21,8 @@ Status: **PASS**
 
 | label | prompts | tokens | FP16 PPL | AutoAWQ PPL | ratio | peak VRAM |
 |---|---:|---:|---:|---:|---:|---:|
-| `wikitext2_16` | 16 | 1413 | 24.590745 | 29.788817 | 1.211383 | 0.5493 |
-| `c4_16` | 16 | 1444 | 29.917597 | 35.374649 | 1.182403 | 0.5678 |
+| `wikitext2` | 16 | 1413 | 24.590745 | 29.788817 | 1.211383 | 0.5493 |
+| `c4` | 16 | 1444 | 29.917597 | 35.374649 | 1.182403 | 0.5678 |
 
 ## Failures
 
