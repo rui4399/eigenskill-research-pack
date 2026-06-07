@@ -1,8 +1,8 @@
 {
-  "date": "2026-06-07T09:45:43+00:00",
+  "date": "2026-06-07T10:19:28+00:00",
   "passed": true,
-  "gate_count": 35,
-  "passed_count": 35,
+  "gate_count": 36,
+  "passed_count": 36,
   "failed_count": 0,
   "categories": [
     "allocation comparator",
@@ -25,7 +25,8 @@
     "selected-row",
     "task execution smoke",
     "task execution subset",
-    "task retention"
+    "task retention",
+    "theory"
   ],
   "entries": [
     {
@@ -34,9 +35,9 @@
       "path": "outputs\\real_system_packer_2026-06-05\\public_repo_hygiene_gate_2026_06_06.json",
       "passed": true,
       "failures": [],
-      "metrics": "tracked files 1971; forbidden files 0; placeholders 0",
+      "metrics": "tracked files 1975; forbidden files 0; placeholders 0",
       "summary": {
-        "tracked_file_count": 1971,
+        "tracked_file_count": 1975,
         "forbidden_file_count": 0,
         "root_clutter_count": 0,
         "placeholder_count": 0,
@@ -141,6 +142,33 @@
         "mean_score_spearman_monotonic": true,
         "mean_top20_jaccard_monotonic": true,
         "mean_positive_jaccard_monotonic": true
+      }
+    },
+    {
+      "label": "rank_inversion_theory",
+      "category": "theory",
+      "path": "outputs\\rank_inversion_theory_qwen25_0p5b_2026_06_07.json",
+      "passed": true,
+      "failures": [],
+      "metrics": "points 3; n 2->8; mean inversion init 0.2418; mean inversion final 0.1442; margin inversion init 0.0969; margin inversion final 0.0427; mean bound final 0.6097; margin bound final 0.2713; mean inversion decreasing True; margin inversion decreasing True",
+      "summary": {
+        "point_count": 3,
+        "min_n": 2,
+        "max_n": 8,
+        "margin_quantile": 0.75,
+        "mean_empirical_inversion_rate_initial": 0.241776462575448,
+        "mean_empirical_inversion_rate_final": 0.14416079185359254,
+        "mean_chebyshev_bound_initial": 0.8472996060178666,
+        "mean_chebyshev_bound_final": 0.6096554479324002,
+        "margin_empirical_inversion_rate_initial": 0.09694280078895463,
+        "margin_empirical_inversion_rate_final": 0.04269913604860913,
+        "margin_chebyshev_bound_initial": 0.5974430575815372,
+        "margin_chebyshev_bound_final": 0.27132006521861096,
+        "max_final_margin_inversion_rate": 0.1,
+        "mean_empirical_inversion_rate_decreasing": true,
+        "mean_chebyshev_bound_decreasing": true,
+        "margin_empirical_inversion_rate_decreasing": true,
+        "margin_chebyshev_bound_decreasing": true
       }
     },
     {
@@ -250,16 +278,16 @@
       "path": "outputs\\paper_evidence_alignment_gate_2026_06_07.json",
       "passed": true,
       "failures": [],
-      "metrics": "required refs 24; missing refs 0; paper paths 30; missing paths 0; unsafe claims 0; stale tokens 0; ledger gates 35",
+      "metrics": "required refs 25; missing refs 0; paper paths 31; missing paths 0; unsafe claims 0; stale tokens 0; ledger gates 36",
       "summary": {
         "paper": "paper_drafts\\eigenskill_q_research_draft_en_2026_06_07.md",
-        "required_reference_count": 24,
+        "required_reference_count": 25,
         "missing_required_reference_count": 0,
-        "referenced_repo_path_count": 30,
+        "referenced_repo_path_count": 31,
         "missing_referenced_path_count": 0,
         "stale_token_count": 0,
         "unsafe_claim_count": 0,
-        "ledger_gate_count": 35,
+        "ledger_gate_count": 36,
         "ledger_gate_count_mentioned": true
       }
     },

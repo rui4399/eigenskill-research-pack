@@ -30,6 +30,9 @@ The current evidence supports:
 - a Qwen2.5-0.5B CSI-vs-calibration-size gate over six-seed n=2/4/8 prompt
   samples, where mean Spearman rises 0.3725 -> 0.4324 -> 0.6645 and mean
   top-20 Jaccard rises 0.3797 -> 0.4672 -> 0.6449;
+- a rank-inversion theory gate over the same n=2/4/8 artifacts, where mean
+  empirical inversion falls 0.2418 -> 0.1442 and top-quartile-margin inversion
+  falls 0.0969 -> 0.0427 under a Chebyshev-style variance/gap proxy;
 - a Q-Palette-style closed-form Lagrangian allocation proxy over measured Qwen3
   and Qwen2.5 sensitivity artifacts, gated for finite lambda, budget use, and
   non-trivial bit histograms;
@@ -73,7 +76,7 @@ Source: `https://aaai.org/conference/aaai/aaai-27/`
 Current AAAI-facing critical path:
 
 1. Theory: keep the Chebyshev/inversion-risk CSI section concise and tied to
-   measured seed/bootstrap artifacts.
+   the measured seed/bootstrap and rank-inversion artifacts.
 2. Real quantization: expand the AutoAWQ/GPTQModel matched pack beyond the
    0.5B readiness setting and report negative runtime results honestly.
 3. Downstream tasks: move from subset50/subset100 and deterministic IFEval-style
@@ -112,9 +115,9 @@ The blockers are concrete:
    actual quantized/fused variants; current IFEval-style evidence is only an
    8-row deterministic execution smoke, and current public PTQ task evidence is
    still local 50/100-row subset coverage rather than leaderboard-scale.
-4. Statistical robustness: the first n=2/4/8 CSI curve is now gated, but larger
-   n grids, more prompt pools, and consensus-vs-single-split confidence
-   intervals are still needed.
+4. Statistical robustness: the first n=2/4/8 CSI curve and rank-inversion
+   theory gate are now committed, but larger n grids, more prompt pools, and
+   consensus-vs-single-split confidence intervals are still needed.
 5. Runtime evidence: packed quantized weights integrated into an inference path;
    PyTorch fake quant cannot justify latency, memory, or energy claims.
 6. Mobile evidence: Redmi K80 Pro or another real device needs TTFT, tokens/s,

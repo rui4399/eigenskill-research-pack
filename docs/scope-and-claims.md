@@ -41,6 +41,9 @@ In compressed form, the supported claims are:
   drifting in top-sensitive module sets;
 - Qwen2.5 CSI-vs-calibration-size diagnostics show monotonic stability gains
   across n=2, n=4, and n=8 prompt samples in one fixed public-prompt setting;
+- a Chebyshev-style plug-in rank-inversion analysis over the same n=2/4/8
+  Qwen2.5 seed artifacts shows decreasing empirical inversion risk and
+  decreasing variance/gap^2 bound proxies;
 - consensus-style allocation passes the committed short-slice robustness stress
   gate against uniform INT4 and random mixed-precision baselines;
 - paired Qwen3 transfer slices show consensus avoiding the worse single-split

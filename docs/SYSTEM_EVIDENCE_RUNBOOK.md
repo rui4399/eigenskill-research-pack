@@ -10,7 +10,7 @@ by an executable gate and an explicit claim boundary.
 ## Evidence Ledger
 
 `train_python/build_current_evidence_ledger.py` is the stable public entry
-point for the current paper-facing gate set. It fixes the 35 gate paths in one
+point for the current paper-facing gate set. It fixes the 36 gate paths in one
 manifest, rebuilds the ledger, and avoids copying a long `--gate` list across
 README files and paper appendices.
 
@@ -21,7 +21,7 @@ python train_python/build_current_evidence_ledger.py
 ```
 
 `train_python/build_evidence_ledger.py` is the lower-level builder for custom
-or future gate manifests. The expanded form of the current 35-gate ledger is:
+or future gate manifests. The expanded form of the current 36-gate ledger is:
 
 ```bash
 python train_python/build_evidence_ledger.py \
@@ -30,6 +30,7 @@ python train_python/build_evidence_ledger.py \
   --gate sensitivity_perturbation_matrix=outputs/sensitivity_perturbation_matrix_qwen25_2026_06_07.json \
   --gate calibration_seed_stability=outputs/calibration_seed_stability_qwen25_0p5b_2026_06_07.json \
   --gate csi_vs_n_curve=outputs/csi_vs_n_curve_qwen25_0p5b_2026_06_07.json \
+  --gate rank_inversion_theory=outputs/rank_inversion_theory_qwen25_0p5b_2026_06_07.json \
   --gate calibration_robustness_stress=outputs/calibration_robustness_stress_gate_2026_06_07.json \
   --gate consensus_transfer_boundary=outputs/consensus_transfer_boundary_gate_2026_06_07.json \
   --gate interaction_swap_boundary=outputs/interaction_swap_boundary_gate_2026_06_07.json \
@@ -64,8 +65,8 @@ python train_python/build_evidence_ledger.py \
   --out-md outputs/real_system_packer_2026-06-05/EVIDENCE_LEDGER_2026_06_06.md
 ```
 
-The current ledger passes with 35/35 gates across repo hygiene, calibration
-robustness, artifact integrity, kernel, runtime wiring, selected-row, C++
+The current ledger passes with 36/36 gates across repo hygiene, calibration
+robustness, rank-inversion theory, artifact integrity, kernel, runtime wiring, selected-row, C++
 runtime, decode integration, QKV replacement, quality, task-retention, runtime profile, and
 capability-retention/model-ladder, allocation-comparator, rotation-comparator, and
 matched PTQ baseline, true subset100 official PTQ task/runtime evidence, deterministic IFEval-style PTQ execution, expanded AutoAWQ public PPL, PTQ-comparator, and
@@ -159,14 +160,14 @@ Current gate:
 ```bash
 python train_python/gate_paper_evidence_alignment.py \
   --paper paper_drafts/eigenskill_q_research_draft_en_2026_06_07.md \
-  --expected-gate-count 35 \
+  --expected-gate-count 36 \
   --out-json outputs/paper_evidence_alignment_gate_2026_06_07.json \
   --out-md outputs/PAPER_EVIDENCE_ALIGNMENT_GATE_2026_06_07.md
 ```
 
-Current result: 24/24 required evidence references present, referenced repo
+Current result: 25/25 required evidence references present, referenced repo
 paths found and 0 missing, 0 stale forbidden tokens, 0 unsafe non-negated claim
-lines, and the paper mentions the current 35-gate ledger.
+lines, and the paper mentions the current 36-gate ledger.
 
 Valid claim:
 
@@ -763,7 +764,7 @@ Invalid claim:
 `train_python/run_official_awq_smoke.py` is a minimal package-readiness probe.
 It exists to verify that AutoAWQ can execute, save local quantized artifacts,
 and run one short generation smoke under the GPU guard. It is intentionally not
-part of the 35-gate paper-facing ledger.
+part of the 36-gate paper-facing ledger.
 
 Example WSL/GPU command:
 
@@ -1314,6 +1315,44 @@ Invalid claim:
 
 - this proves a universal scaling law, downstream task retention, large-model
   behavior, deployment speed, or SOTA quantization.
+
+## Rank-Inversion Theory Gate
+
+`train_python/gate_rank_inversion_theory.py` instantiates the paper's
+Chebyshev-style inversion-risk argument with the committed n=2/4/8 Qwen2.5
+seed-stability artifacts. For each calibration size, it loads the underlying
+module-sensitivity JSON files, estimates seed-level means and variances for
+each module score, and summarizes pairwise ranking inversions. The bound proxy
+is `(Var_i + Var_j) / gap_ij^2`, clipped to 1.0.
+
+Current gate:
+
+```bash
+python train_python/gate_rank_inversion_theory.py \
+  --case 2=outputs/calibration_seed_stability_qwen25_0p5b_n2_2026_06_07.json \
+  --case 4=outputs/calibration_seed_stability_qwen25_0p5b_2026_06_07.json \
+  --case 8=outputs/calibration_seed_stability_qwen25_0p5b_n8_2026_06_07.json \
+  --margin-quantile 0.75 \
+  --max-final-margin-inversion-rate 0.10 \
+  --out-json outputs/rank_inversion_theory_qwen25_0p5b_2026_06_07.json \
+  --out-md outputs/RANK_INVERSION_THEORY_QWEN25_0P5B_2026_06_07.md
+```
+
+Current result: mean empirical inversion rate falls from `0.2418` at n=2 to
+`0.1442` at n=8, and the mean Chebyshev proxy bound falls from `0.8473` to
+`0.6097`. On the top 25% largest-gap module pairs, empirical inversion falls
+from `0.0969` to `0.0427`, and the bound proxy falls from `0.5974` to `0.2713`.
+
+Valid claim:
+
+- the observed calibration-size stability curve is consistent with a
+  variance-over-gap rank-inversion analysis on the measured Qwen2.5-0.5B seed
+  artifacts.
+
+Invalid claim:
+
+- this proves a tight bound, downstream quality retention, large-model
+  universality, deployment speed, or SOTA quantization.
 
 ## Calibration Robustness Stress Gate
 

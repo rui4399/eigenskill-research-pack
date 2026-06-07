@@ -25,6 +25,7 @@ CURRENT_GATE_SPECS: tuple[tuple[str, str], ...] = (
     ("sensitivity_perturbation_matrix", "outputs/sensitivity_perturbation_matrix_qwen25_2026_06_07.json"),
     ("calibration_seed_stability", "outputs/calibration_seed_stability_qwen25_0p5b_2026_06_07.json"),
     ("csi_vs_n_curve", "outputs/csi_vs_n_curve_qwen25_0p5b_2026_06_07.json"),
+    ("rank_inversion_theory", "outputs/rank_inversion_theory_qwen25_0p5b_2026_06_07.json"),
     ("calibration_robustness_stress", "outputs/calibration_robustness_stress_gate_2026_06_07.json"),
     ("consensus_transfer_boundary", "outputs/consensus_transfer_boundary_gate_2026_06_07.json"),
     ("interaction_swap_boundary", "outputs/interaction_swap_boundary_gate_2026_06_07.json"),

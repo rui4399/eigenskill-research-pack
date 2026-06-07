@@ -97,6 +97,28 @@ class BuildEvidenceLedgerTests(unittest.TestCase):
         self.assertIn("separation 0.5100", joined)
         self.assertEqual(ledger.infer_category("sensitivity_perturbation_matrix"), "calibration robustness")
 
+    def test_rank_inversion_theory_metrics_are_reported(self) -> None:
+        metrics = ledger.metric_parts(
+            {
+                "point_count": 3,
+                "mean_empirical_inversion_rate_initial": 0.24,
+                "mean_empirical_inversion_rate_final": 0.14,
+                "margin_empirical_inversion_rate_initial": 0.09,
+                "margin_empirical_inversion_rate_final": 0.04,
+                "mean_chebyshev_bound_final": 0.61,
+                "margin_chebyshev_bound_final": 0.27,
+                "mean_empirical_inversion_rate_decreasing": True,
+                "margin_empirical_inversion_rate_decreasing": True,
+            }
+        )
+        joined = "; ".join(metrics)
+        self.assertIn("mean inversion init 0.2400", joined)
+        self.assertIn("mean inversion final 0.1400", joined)
+        self.assertIn("margin inversion final 0.0400", joined)
+        self.assertIn("mean bound final 0.6100", joined)
+        self.assertIn("mean inversion decreasing True", joined)
+        self.assertEqual(ledger.infer_category("rank_inversion_theory"), "theory")
+
     def test_allocation_family_metrics_are_reported(self) -> None:
         metrics = ledger.metric_parts(
             {

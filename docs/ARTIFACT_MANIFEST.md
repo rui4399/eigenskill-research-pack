@@ -7,7 +7,7 @@ not a new result.
 Current tracked output footprint:
 
 ```text
-outputs/ tracked-or-staged artifact files:       1639
+outputs/ tracked-or-staged artifact files:       1641
 outputs/real_system_packer_2026-06-05 files:     744
 ```
 
@@ -24,6 +24,7 @@ paper claims.
 | Sensitivity perturbation matrix | `outputs/SENSITIVITY_PERTURBATION_MATRIX_QWEN25_2026_06_07.md` |
 | Calibration seed stability gate | `outputs/CALIBRATION_SEED_STABILITY_QWEN25_0P5B_2026_06_07.md` |
 | CSI vs calibration size gate | `outputs/CSI_VS_N_CURVE_QWEN25_0P5B_2026_06_07.md` |
+| Rank-inversion theory gate | `outputs/RANK_INVERSION_THEORY_QWEN25_0P5B_2026_06_07.md` |
 | Calibration robustness stress gate | `outputs/CALIBRATION_ROBUSTNESS_STRESS_GATE_2026_06_07.md` |
 | Consensus transfer boundary gate | `outputs/CONSENSUS_TRANSFER_BOUNDARY_GATE_2026_06_07.md` |
 | Interaction-aware swap boundary gate | `outputs/INTERACTION_SWAP_BOUNDARY_GATE_2026_06_07.md` |
@@ -54,7 +55,7 @@ paper claims.
 ## Non-Ledger Readiness Probes
 
 These artifacts are useful for environment readiness and reviewer-risk
-tracking, but they are not counted in the 35-gate paper-facing ledger.
+tracking, but they are not counted in the 36-gate paper-facing ledger.
 
 | Purpose | Artifact | Boundary |
 |---|---|---|
@@ -118,4 +119,4 @@ one of the following is true:
 
 Future cleanup should reduce `outputs/` by moving scratch and raw intermediate
 files out of the main branch, but not at the cost of breaking the current
-35-gate reproducibility story.
+36-gate reproducibility story.

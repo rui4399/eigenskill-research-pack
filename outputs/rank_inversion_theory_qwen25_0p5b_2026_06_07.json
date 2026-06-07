@@ -1,0 +1,355 @@
+{
+  "date": "2026-06-07T10:02:06+00:00",
+  "passed": true,
+  "summary": {
+    "point_count": 3,
+    "min_n": 2,
+    "max_n": 8,
+    "margin_quantile": 0.75,
+    "mean_empirical_inversion_rate_initial": 0.241776462575448,
+    "mean_empirical_inversion_rate_final": 0.14416079185359254,
+    "mean_chebyshev_bound_initial": 0.8472996060178666,
+    "mean_chebyshev_bound_final": 0.6096554479324002,
+    "margin_empirical_inversion_rate_initial": 0.09694280078895463,
+    "margin_empirical_inversion_rate_final": 0.04269913604860913,
+    "margin_chebyshev_bound_initial": 0.5974430575815372,
+    "margin_chebyshev_bound_final": 0.27132006521861096,
+    "max_final_margin_inversion_rate": 0.1,
+    "mean_empirical_inversion_rate_decreasing": true,
+    "mean_chebyshev_bound_decreasing": true,
+    "margin_empirical_inversion_rate_decreasing": true,
+    "margin_chebyshev_bound_decreasing": true
+  },
+  "points": [
+    {
+      "n": 2,
+      "source_gate": "outputs\\calibration_seed_stability_qwen25_0p5b_n2_2026_06_07.json",
+      "source_passed": true,
+      "artifact_count": 6,
+      "module_count": 169,
+      "pair_count": 14193,
+      "margin_quantile": 0.75,
+      "margin_gap_threshold": 1.574960805934555e-08,
+      "margin_pair_count": 3549,
+      "mean_empirical_inversion_rate": 0.241776462575448,
+      "mean_chebyshev_bound": 0.8472996060178666,
+      "median_chebyshev_bound": 1.0,
+      "margin_empirical_inversion_rate": 0.09694280078895463,
+      "margin_chebyshev_bound": 0.5974430575815372,
+      "max_empirical_inversion_rate": 0.8333333333333334,
+      "top_high_risk_pairs": [
+        {
+          "left": "model.layers.14.mlp.down_proj",
+          "right": "model.layers.5.self_attn.k_proj",
+          "mean_gap": 5.454419034757942e-09,
+          "variance_sum": 2.2506763774708446e-16,
+          "valid_seed_signs": 6,
+          "empirical_inversion_rate": 0.8333333333333334,
+          "chebyshev_bound": 1.0
+        },
+        {
+          "left": "model.layers.5.self_attn.k_proj",
+          "right": "model.layers.9.mlp.gate_proj",
+          "mean_gap": 5.372882359699286e-09,
+          "variance_sum": 2.249061031250498e-16,
+          "valid_seed_signs": 6,
+          "empirical_inversion_rate": 0.8333333333333334,
+          "chebyshev_bound": 1.0
+        },
+        {
+          "left": "lm_head",
+          "right": "model.layers.5.self_attn.k_proj",
+          "mean_gap": 5.21206872870238e-09,
+          "variance_sum": 2.2489152442669466e-16,
+          "valid_seed_signs": 6,
+          "empirical_inversion_rate": 0.8333333333333334,
+          "chebyshev_bound": 1.0
+        },
+        {
+          "left": "model.layers.20.mlp.up_proj",
+          "right": "model.layers.5.self_attn.k_proj",
+          "mean_gap": 5.184707665960269e-09,
+          "variance_sum": 2.254822876595168e-16,
+          "valid_seed_signs": 6,
+          "empirical_inversion_rate": 0.8333333333333334,
+          "chebyshev_bound": 1.0
+        },
+        {
+          "left": "model.layers.18.mlp.down_proj",
+          "right": "model.layers.5.self_attn.k_proj",
+          "mean_gap": 5.075215841854284e-09,
+          "variance_sum": 2.2508602300054196e-16,
+          "valid_seed_signs": 6,
+          "empirical_inversion_rate": 0.8333333333333334,
+          "chebyshev_bound": 1.0
+        },
+        {
+          "left": "model.layers.18.mlp.gate_proj",
+          "right": "model.layers.5.self_attn.k_proj",
+          "mean_gap": 5.03080233652947e-09,
+          "variance_sum": 2.2590706149909643e-16,
+          "valid_seed_signs": 6,
+          "empirical_inversion_rate": 0.8333333333333334,
+          "chebyshev_bound": 1.0
+        },
+        {
+          "left": "model.layers.11.mlp.gate_proj",
+          "right": "model.layers.5.self_attn.k_proj",
+          "mean_gap": 4.874692114950762e-09,
+          "variance_sum": 2.2503567902797333e-16,
+          "valid_seed_signs": 6,
+          "empirical_inversion_rate": 0.8333333333333334,
+          "chebyshev_bound": 1.0
+        },
+        {
+          "left": "model.layers.1.mlp.gate_proj",
+          "right": "model.layers.5.self_attn.k_proj",
+          "mean_gap": 4.864624007065181e-09,
+          "variance_sum": 2.2657853777405954e-16,
+          "valid_seed_signs": 6,
+          "empirical_inversion_rate": 0.8333333333333334,
+          "chebyshev_bound": 1.0
+        },
+        {
+          "left": "model.layers.19.mlp.up_proj",
+          "right": "model.layers.5.self_attn.k_proj",
+          "mean_gap": 4.8393133011264026e-09,
+          "variance_sum": 2.261903673057128e-16,
+          "valid_seed_signs": 6,
+          "empirical_inversion_rate": 0.8333333333333334,
+          "chebyshev_bound": 1.0
+        },
+        {
+          "left": "model.layers.5.self_attn.k_proj",
+          "right": "model.layers.7.mlp.up_proj",
+          "mean_gap": 4.624964350156256e-09,
+          "variance_sum": 2.267927450514742e-16,
+          "valid_seed_signs": 6,
+          "empirical_inversion_rate": 0.8333333333333334,
+          "chebyshev_bound": 1.0
+        }
+      ]
+    },
+    {
+      "n": 4,
+      "source_gate": "outputs\\calibration_seed_stability_qwen25_0p5b_2026_06_07.json",
+      "source_passed": true,
+      "artifact_count": 6,
+      "module_count": 169,
+      "pair_count": 14168,
+      "margin_quantile": 0.75,
+      "margin_gap_threshold": 1.456692634902345e-08,
+      "margin_pair_count": 3542,
+      "mean_empirical_inversion_rate": 0.21142010163749295,
+      "mean_chebyshev_bound": 0.782511153527984,
+      "median_chebyshev_bound": 1.0,
+      "margin_empirical_inversion_rate": 0.07742330133634481,
+      "margin_chebyshev_bound": 0.4700974654109834,
+      "max_empirical_inversion_rate": 0.8333333333333334,
+      "top_high_risk_pairs": [
+        {
+          "left": "model.layers.13.self_attn.v_proj",
+          "right": "model.layers.5.mlp.up_proj",
+          "mean_gap": 9.906745911361988e-09,
+          "variance_sum": 6.505527193796555e-16,
+          "valid_seed_signs": 6,
+          "empirical_inversion_rate": 0.8333333333333334,
+          "chebyshev_bound": 1.0
+        },
+        {
+          "left": "model.layers.13.self_attn.v_proj",
+          "right": "model.layers.19.mlp.up_proj",
+          "mean_gap": 9.704464576694593e-09,
+          "variance_sum": 6.500355743096665e-16,
+          "valid_seed_signs": 6,
+          "empirical_inversion_rate": 0.8333333333333334,
+          "chebyshev_bound": 1.0
+        },
+        {
+          "left": "model.layers.13.self_attn.v_proj",
+          "right": "model.layers.17.mlp.down_proj",
+          "mean_gap": 9.61587561268837e-09,
+          "variance_sum": 6.499852237777525e-16,
+          "valid_seed_signs": 6,
+          "empirical_inversion_rate": 0.8333333333333334,
+          "chebyshev_bound": 1.0
+        },
+        {
+          "left": "model.layers.13.self_attn.v_proj",
+          "right": "model.layers.15.mlp.up_proj",
+          "mean_gap": 9.565161571360948e-09,
+          "variance_sum": 6.50080829802268e-16,
+          "valid_seed_signs": 6,
+          "empirical_inversion_rate": 0.8333333333333334,
+          "chebyshev_bound": 1.0
+        },
+        {
+          "left": "model.layers.13.self_attn.v_proj",
+          "right": "model.layers.20.mlp.up_proj",
+          "mean_gap": 9.522022499889093e-09,
+          "variance_sum": 6.50213316318598e-16,
+          "valid_seed_signs": 6,
+          "empirical_inversion_rate": 0.8333333333333334,
+          "chebyshev_bound": 1.0
+        },
+        {
+          "left": "model.layers.1.mlp.gate_proj",
+          "right": "model.layers.13.self_attn.v_proj",
+          "mean_gap": 9.417701914665594e-09,
+          "variance_sum": 6.503344985666543e-16,
+          "valid_seed_signs": 6,
+          "empirical_inversion_rate": 0.8333333333333334,
+          "chebyshev_bound": 1.0
+        },
+        {
+          "left": "model.layers.13.self_attn.v_proj",
+          "right": "model.layers.14.self_attn.q_proj",
+          "mean_gap": 8.838882363515761e-09,
+          "variance_sum": 6.507084708091125e-16,
+          "valid_seed_signs": 6,
+          "empirical_inversion_rate": 0.8333333333333334,
+          "chebyshev_bound": 1.0
+        },
+        {
+          "left": "model.layers.1.mlp.up_proj",
+          "right": "model.layers.13.self_attn.v_proj",
+          "mean_gap": 8.772863267156021e-09,
+          "variance_sum": 6.501262910265809e-16,
+          "valid_seed_signs": 6,
+          "empirical_inversion_rate": 0.8333333333333334,
+          "chebyshev_bound": 1.0
+        },
+        {
+          "left": "model.layers.13.self_attn.v_proj",
+          "right": "model.layers.20.mlp.gate_proj",
+          "mean_gap": 8.633200268402721e-09,
+          "variance_sum": 6.501537922897846e-16,
+          "valid_seed_signs": 6,
+          "empirical_inversion_rate": 0.8333333333333334,
+          "chebyshev_bound": 1.0
+        },
+        {
+          "left": "model.layers.10.self_attn.q_proj",
+          "right": "model.layers.13.self_attn.v_proj",
+          "mean_gap": 8.615907235385509e-09,
+          "variance_sum": 6.526022813735063e-16,
+          "valid_seed_signs": 6,
+          "empirical_inversion_rate": 0.8333333333333334,
+          "chebyshev_bound": 1.0
+        }
+      ]
+    },
+    {
+      "n": 8,
+      "source_gate": "outputs\\calibration_seed_stability_qwen25_0p5b_n8_2026_06_07.json",
+      "source_passed": true,
+      "artifact_count": 6,
+      "module_count": 169,
+      "pair_count": 14043,
+      "margin_quantile": 0.75,
+      "margin_gap_threshold": 1.3171845540595626e-08,
+      "margin_pair_count": 3511,
+      "mean_empirical_inversion_rate": 0.14416079185359254,
+      "mean_chebyshev_bound": 0.6096554479324002,
+      "median_chebyshev_bound": 0.7200544968349515,
+      "margin_empirical_inversion_rate": 0.04269913604860913,
+      "margin_chebyshev_bound": 0.27132006521861096,
+      "max_empirical_inversion_rate": 0.8333333333333334,
+      "top_high_risk_pairs": [
+        {
+          "left": "model.layers.21.self_attn.q_proj",
+          "right": "model.layers.9.self_attn.v_proj",
+          "mean_gap": 1.8314817859879915e-09,
+          "variance_sum": 9.14524664638432e-17,
+          "valid_seed_signs": 6,
+          "empirical_inversion_rate": 0.8333333333333334,
+          "chebyshev_bound": 1.0
+        },
+        {
+          "left": "model.layers.19.self_attn.o_proj",
+          "right": "model.layers.9.self_attn.k_proj",
+          "mean_gap": 7.162678483051996e-10,
+          "variance_sum": 2.7478857711074515e-17,
+          "valid_seed_signs": 6,
+          "empirical_inversion_rate": 0.8333333333333334,
+          "chebyshev_bound": 1.0
+        },
+        {
+          "left": "model.layers.20.self_attn.q_proj",
+          "right": "model.layers.9.self_attn.k_proj",
+          "mean_gap": 6.647594369386201e-10,
+          "variance_sum": 2.706327968906685e-17,
+          "valid_seed_signs": 6,
+          "empirical_inversion_rate": 0.8333333333333334,
+          "chebyshev_bound": 1.0
+        },
+        {
+          "left": "model.layers.0.self_attn.o_proj",
+          "right": "model.layers.9.self_attn.v_proj",
+          "mean_gap": 4.1507934139077323e-10,
+          "variance_sum": 9.674012593349972e-17,
+          "valid_seed_signs": 6,
+          "empirical_inversion_rate": 0.8333333333333334,
+          "chebyshev_bound": 1.0
+        },
+        {
+          "left": "model.layers.1.self_attn.v_proj",
+          "right": "model.layers.11.mlp.down_proj",
+          "mean_gap": 3.970359533865077e-10,
+          "variance_sum": 4.539994343315714e-18,
+          "valid_seed_signs": 6,
+          "empirical_inversion_rate": 0.8333333333333334,
+          "chebyshev_bound": 1.0
+        },
+        {
+          "left": "model.layers.1.self_attn.v_proj",
+          "right": "model.layers.13.mlp.gate_proj",
+          "mean_gap": 3.7463881733792245e-10,
+          "variance_sum": 4.490508462935328e-18,
+          "valid_seed_signs": 6,
+          "empirical_inversion_rate": 0.8333333333333334,
+          "chebyshev_bound": 1.0
+        },
+        {
+          "left": "model.layers.1.self_attn.v_proj",
+          "right": "model.layers.17.mlp.gate_proj",
+          "mean_gap": 3.6211210073500907e-10,
+          "variance_sum": 4.554312162562153e-18,
+          "valid_seed_signs": 6,
+          "empirical_inversion_rate": 0.8333333333333334,
+          "chebyshev_bound": 1.0
+        },
+        {
+          "left": "model.layers.1.self_attn.v_proj",
+          "right": "model.layers.9.mlp.gate_proj",
+          "mean_gap": 3.378474825583355e-10,
+          "variance_sum": 4.4653086039024615e-18,
+          "valid_seed_signs": 6,
+          "empirical_inversion_rate": 0.8333333333333334,
+          "chebyshev_bound": 1.0
+        },
+        {
+          "left": "model.layers.23.mlp.gate_proj",
+          "right": "model.layers.9.self_attn.k_proj",
+          "mean_gap": 2.8441170820438385e-10,
+          "variance_sum": 2.6729519492693202e-17,
+          "valid_seed_signs": 6,
+          "empirical_inversion_rate": 0.8333333333333334,
+          "chebyshev_bound": 1.0
+        },
+        {
+          "left": "model.layers.1.self_attn.v_proj",
+          "right": "model.layers.18.mlp.down_proj",
+          "mean_gap": 2.781558778864391e-10,
+          "variance_sum": 4.495894268412643e-18,
+          "valid_seed_signs": 6,
+          "empirical_inversion_rate": 0.8333333333333334,
+          "chebyshev_bound": 1.0
+        }
+      ]
+    }
+  ],
+  "failures": [],
+  "claim_boundary": "Valid claim: a Chebyshev-style plug-in rank-inversion analysis over the committed Qwen2.5-0.5B prompt-seed sensitivity artifacts shows decreasing empirical inversion risk and decreasing variance/gap^2 upper-bound proxies as calibration size increases. Invalid claim: this proves a tight theoretical bound, downstream task retention, large-model universality, or production quantization quality.",
+  "theory_note": "For two unbiased sensitivity estimators with true gap Delta_ij, Chebyshev gives P[(hat{s}_i - hat{s}_j) changes sign] <= (Var[hat{s}_i] + Var[hat{s}_j]) / Delta_ij^2. This gate uses seed-level sample means and variances as a diagnostic plug-in estimator."
+}

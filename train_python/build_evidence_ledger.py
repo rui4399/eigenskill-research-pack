@@ -11,6 +11,8 @@ from typing import Any
 
 
 CATEGORIES = {
+    "rank_inversion": "theory",
+    "theory": "theory",
     "task_model_ladder": "capability retention",
     "official_ptq_task_subset": "task execution subset",
     "official_ptq_task": "task execution smoke",
@@ -179,8 +181,24 @@ def metric_parts(summary: dict[str, Any]) -> list[str]:
         parts.append(f"top20 gain {value:.4f}")
     if (value := finite_float(summary.get("mean_positive_jaccard_gain"))) is not None:
         parts.append(f"positive gain {value:.4f}")
+    if (value := finite_float(summary.get("mean_empirical_inversion_rate_initial"))) is not None:
+        parts.append(f"mean inversion init {value:.4f}")
+    if (value := finite_float(summary.get("mean_empirical_inversion_rate_final"))) is not None:
+        parts.append(f"mean inversion final {value:.4f}")
+    if (value := finite_float(summary.get("margin_empirical_inversion_rate_initial"))) is not None:
+        parts.append(f"margin inversion init {value:.4f}")
+    if (value := finite_float(summary.get("margin_empirical_inversion_rate_final"))) is not None:
+        parts.append(f"margin inversion final {value:.4f}")
+    if (value := finite_float(summary.get("mean_chebyshev_bound_final"))) is not None:
+        parts.append(f"mean bound final {value:.4f}")
+    if (value := finite_float(summary.get("margin_chebyshev_bound_final"))) is not None:
+        parts.append(f"margin bound final {value:.4f}")
     if "mean_score_spearman_monotonic" in summary:
         parts.append(f"rho monotonic {summary.get('mean_score_spearman_monotonic')}")
+    if "mean_empirical_inversion_rate_decreasing" in summary:
+        parts.append(f"mean inversion decreasing {summary.get('mean_empirical_inversion_rate_decreasing')}")
+    if "margin_empirical_inversion_rate_decreasing" in summary:
+        parts.append(f"margin inversion decreasing {summary.get('margin_empirical_inversion_rate_decreasing')}")
     if (value := finite_float(summary.get("min_budget_utilization"))) is not None:
         parts.append(f"min budget util {value:.4f}")
     if "finite_lambda_count" in summary:

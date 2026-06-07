@@ -22,7 +22,7 @@ fake-quant loss sensitivity on multiple calibration views, allocates a fixed
 `{4,8}`-bit budget through cross-split consensus sensitivity, and records every
 paper-facing result through executable evidence gates. Across Qwen3-0.6B,
 Qwen3-1.7B, OLMo2-0425-1B-Instruct, and SmolLM2-1.7B short-slice diagnostics,
-the current evidence ledger passes 35/35 gates. The calibration-instability
+the current evidence ledger passes 36/36 gates. The calibration-instability
 gate finds 3/3 unstable model/dataset cases with mean score/cost Spearman
 0.0713 and mean top-20 Jaccard 0.1022. A Qwen2.5 perturbation matrix further
 separates calibration sample-size and model-scale effects: within-model
@@ -35,7 +35,10 @@ with CI [0.4200, 0.5292]. A CSI-vs-calibration-size gate further converts this
 into a three-point n curve: across six-seed n=2, n=4, and n=8 prompt samples,
 mean Spearman increases 0.3725 -> 0.4324 -> 0.6645, mean top-20 Jaccard
 increases 0.3797 -> 0.4672 -> 0.6449, and mean positive-set Jaccard increases
-0.5485 -> 0.5734 -> 0.7282. The robustness stress gate reports
+0.5485 -> 0.5734 -> 0.7282. A rank-inversion theory gate instantiates a
+Chebyshev-style variance-over-gap diagnostic on the same artifacts: mean
+empirical inversion falls 0.2418 -> 0.1442, and top-quartile-margin inversion
+falls 0.0969 -> 0.0427. The robustness stress gate reports
 11/11 wins versus uniform INT4, best random seed, and random-seed mean under the
 same budget, with a one-sided sign-test p-value of 0.000488 versus best random.
 A paired transfer-boundary gate shows consensus avoiding the worse single-split
@@ -230,6 +233,16 @@ visible when calibration samples are few, per-module loss increments have high
 variance, or many modules have small pairwise margins near the allocation
 threshold.
 
+The rank-inversion gate uses a plug-in version of this bound. For each
+calibration size, it treats the deterministic prompt-seed sensitivity estimates
+as samples of the estimator `hat{r}_i`, computes seed-level means and variances,
+and reports `(widehat{Var}(hat{r}_i) + widehat{Var}(hat{r}_j)) /
+widehat{Delta}_{ij}^2` for module pairs, clipped to one. This plug-in estimate
+is not a tight finite-sample guarantee, but it connects the theory to an
+auditable artifact: in the measured Qwen2.5-0.5B setting, both empirical
+module-pair inversion rate and the variance-over-gap proxy decrease as
+calibration size grows from n=2 to n=8.
+
 Consensus averaging reduces the estimator variance when calibration views are
 not perfectly correlated. If `K` calibration views produce unbiased estimates
 with common variance `sigma_i^2/m` and average pairwise correlation `rho_i`,
@@ -247,8 +260,10 @@ treat cross-view agreement as evidence that a high-bit decision is less likely
 to be a single-split artifact. The six-seed Qwen2.5 gate in Section 8.3 is the
 first local check of this estimator-noise story under a fixed prompt pool, and
 the CSI-vs-n curve in Section 8.4 tests the expected direction of stability as
-`m` increases from 2 to 8 prompts. The WikiText2-vs-C4 gate measures a larger
-distribution-shift variant of the same problem.
+`m` increases from 2 to 8 prompts. The rank-inversion gate in Section 8.5
+then tests the pairwise inversion-risk proxy implied by the same estimator-noise
+model. The WikiText2-vs-C4 gate measures a larger distribution-shift variant of
+the same problem.
 
 ## 5. Consensus Sensitivity Allocation
 
@@ -294,7 +309,7 @@ future allocator.
 ## 7. Evidence Gates
 
 Every paper-facing claim is indexed by a gate JSON and a Markdown report. The
-current ledger passes 35/35 gates. The most important gates are:
+current ledger passes 36/36 gates. The most important gates are:
 
 | Gate | Evidence | Valid claim | Non-claim |
 |---|---|---|---|
@@ -302,6 +317,7 @@ current ledger passes 35/35 gates. The most important gates are:
 | Sensitivity perturbation matrix | Qwen2.5 sample-size and model-scale perturbations; see `outputs/SENSITIVITY_PERTURBATION_MATRIX_QWEN25_2026_06_07.md`. | Same-model calibration sample-size changes are more stable than cross-model-scale sensitivity transfer in the measured artifacts. | Downstream quality retention, a universal scaling law, or production quantization. |
 | Calibration seed stability | Qwen2.5-0.5B six-seed prompt sampling; see `outputs/CALIBRATION_SEED_STABILITY_QWEN25_0P5B_2026_06_07.md`. | Deterministic small-sample sensitivity runs can be audited for same-model prompt-seed stability with pair-bootstrap confidence intervals; the measured top-sensitive sets still drift. | Does not prove downstream quality retention, broad seed coverage, deployment speed, or SOTA quantization. |
 | CSI vs calibration size | Qwen2.5-0.5B n=2/4/8 six-seed curve; see `outputs/CSI_VS_N_CURVE_QWEN25_0P5B_2026_06_07.md`. | Sensitivity-ranking stability increases monotonically with calibration prompt count in this fixed public-prompt setting. | Universal scaling law, downstream quality retention, large-model behavior, deployment speed, or SOTA quantization. |
+| Rank-inversion theory | Qwen2.5-0.5B n=2/4/8 plug-in inversion-risk curve; see `outputs/RANK_INVERSION_THEORY_QWEN25_0P5B_2026_06_07.md`. | Empirical module-pair inversion risk and variance/gap bound proxies decrease with calibration size in the measured artifacts. | Not a tight theoretical bound, not a universal scaling law, not downstream retention, and not SOTA quantization. |
 | Robustness stress | 11 short fake-quant PPL slices | Target policies beat uniform and random baselines on committed slices. | Not SOTA PTQ or task retention. |
 | Consensus transfer boundary | 4 paired Qwen3 slices | Consensus avoids the worse single-split policy with bounded best-single regret. | Consensus always beats the best single split. |
 | Interaction swap boundary | 16 SmolLM2-1.7B swap trials | Global feedback exposes local-proxy failures. | Global optimality or broad transfer. |
@@ -402,7 +418,25 @@ estimator-noise prediction in the repository: more calibration examples reduce
 ranking variance in the measured setting. The claim remains local to one model
 and one public prompt pool; it does not prove a universal scaling law.
 
-### 8.5 Robustness Stress Gate
+### 8.5 Rank-Inversion Theory Gate
+
+The rank-inversion theory gate tests the Section 4 variance-over-gap prediction
+more directly. It loads the same n=2/4/8 seed artifacts, forms all comparable
+module pairs, and measures whether the seed-level ordering disagrees with the
+mean ordering:
+
+| Calibration prompts n | Module pairs | Mean inversion | Mean bound proxy | Top-quartile-margin inversion | Top-quartile-margin bound |
+|---:|---:|---:|---:|---:|---:|
+| 2 | 14193 | 0.2418 | 0.8473 | 0.0969 | 0.5974 |
+| 4 | 14168 | 0.2114 | 0.7825 | 0.0774 | 0.4701 |
+| 8 | 14043 | 0.1442 | 0.6097 | 0.0427 | 0.2713 |
+
+The monotonic decrease is not claimed as a tight theorem. It is a gated
+diagnostic showing that the measured calibration-size curve is consistent with
+the Chebyshev-style mechanism: as estimator variance decreases relative to
+pairwise margins, fewer module orderings flip across prompt seeds.
+
+### 8.6 Robustness Stress Gate
 
 The robustness stress gate aggregates 11 committed Qwen3/OLMo2/SmolLM2 PPL
 summaries under a fixed mixed-precision budget:
@@ -421,7 +455,7 @@ summaries under a fixed mixed-precision budget:
 The result is strong for the committed short-slice fake-quant setting. It does
 not replace official GPTQ/AWQ/SmoothQuant/QuaRot/SpinQuant comparisons.
 
-### 8.6 Consensus Transfer Boundary
+### 8.7 Consensus Transfer Boundary
 
 The paired Qwen3 transfer-boundary gate compares WikiText2-only, C4-only, and
 cross-split consensus policies:
@@ -438,7 +472,7 @@ cross-split consensus policies:
 This supports a robust-risk framing: consensus is not an oracle, but it reduces
 the risk of choosing the worse calibration split.
 
-### 8.7 Interaction-aware Swap Boundary
+### 8.8 Interaction-aware Swap Boundary
 
 The interaction gate uses SmolLM2-1.7B search cases on WikiText2 and C4:
 
@@ -460,7 +494,7 @@ Its local proxy gain is negative (`-0.000744`), yet the global PPL improves by
 0.0502. This is direct evidence that additive sensitivity ranking misses
 allocation interactions.
 
-### 8.8 Packed-system Prototype Evidence
+### 8.9 Packed-system Prototype Evidence
 
 The system side is intentionally scoped. The ESMPQ001 format can package and
 audit mixed-bit matrices; Triton shape-family tuning finds selected shape wins;
