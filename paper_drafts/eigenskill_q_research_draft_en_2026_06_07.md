@@ -811,7 +811,11 @@ A bounded 4096 x 4096 shape-family follow-up over batch 128/512 and eight
 BM/BN/BK configurations keeps this conclusion directionally stable: packed W4
 x INT8 activation beats torch FP16 in all eight measured configurations
 (1.2900x--1.7268x), while W4-as-I8 x INT8 reaches 1.4886x--3.1372x at lower
-static compression.
+static compression. The machine-checkable gate in
+`outputs/W4A8_SHAPE_FAMILY_GATE_2026_06_08.md` further records 8/8 valid
+configs, packed W4 x INT8 median speedup 1.4490x, constant 3.9825x
+weight-payload compression, maximum activation-added rel-L2 0.008702 relative
+to packed W4A16, and maximum guard-memory ratio 0.6219.
 
 ## 9. Discussion
 

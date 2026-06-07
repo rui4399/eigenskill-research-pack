@@ -1,0 +1,49 @@
+{
+  "passed": true,
+  "failures": [],
+  "summary": {
+    "total_configs": 8,
+    "valid_configs": 8,
+    "packed_w4_x_i8_speedup_vs_fp16": {
+      "min": 1.2900114999870902,
+      "median": 1.4489533850697767,
+      "max": 1.7267567833834758
+    },
+    "w4_as_i8_x_i8_speedup_vs_fp16": {
+      "min": 1.4886190947430993,
+      "median": 2.3872569170826843,
+      "max": 3.1371623604471535
+    },
+    "packed_w4_x_i8_speedup_vs_w4a16": {
+      "min": 1.638215070927234,
+      "median": 1.997669304306289,
+      "max": 2.5382104560951055
+    },
+    "weight_payload_compression_vs_fp16": {
+      "min": 3.982498784637822,
+      "median": 3.982498784637822,
+      "max": 3.982498784637822
+    },
+    "activation_added_rel_l2_vs_w4a16": {
+      "min": 0.00868027564138174,
+      "median": 0.00869112741202116,
+      "max": 0.00870197918266058
+    },
+    "guard_peak_memory_ratio": {
+      "min": 0.613421666053245,
+      "median": 0.6163660900503005,
+      "max": 0.6218868850447797
+    },
+    "all_packed_configs_beat_fp16": true,
+    "all_unpacked_configs_beat_fp16": true,
+    "all_packed_configs_beat_w4a16": true
+  },
+  "thresholds": {
+    "min_configs": 8,
+    "min_packed_speedup": 1.0,
+    "min_packed_vs_w4a16_speedup": 1.0,
+    "min_compression": 3.5,
+    "max_added_rel_l2": 0.02,
+    "max_memory_ratio": 0.9
+  }
+}

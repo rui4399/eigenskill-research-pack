@@ -92,6 +92,11 @@ Artifacts:
 - `outputs/rtx5070_int8_tensorcore_probe_2026_06_07/shape_family_4096/TRITON_BLOCK_TUNING_SUMMARY.md`
 - `outputs/rtx5070_int8_tensorcore_probe_2026_06_07/shape_family_4096/tuning_results.jsonl`
 
+Machine-checkable gate:
+
+- `outputs/W4A8_SHAPE_FAMILY_GATE_2026_06_08.md`
+- `outputs/w4a8_shape_family_gate_2026_06_08.json`
+
 ## Artifacts
 
 - `outputs/rtx5070_int8_tensorcore_probe_2026_06_07/final_interleaved_b512/b512_bm64_bn128_bk64.json`
