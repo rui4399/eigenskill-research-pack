@@ -61,12 +61,15 @@ def artifact_file(base_file: str, file_tag: str) -> str:
     return f"{base_file}_{tag}"
 
 
-def load_dataset_server_records(dataset: str, config: str | None, split: str, count: int) -> list[dict[str, Any]]:
+DATASETS_SERVER_PAGE_SIZE = 100
+
+
+def load_dataset_server_page(dataset: str, config: str | None, split: str, offset: int, length: int) -> list[dict[str, Any]]:
     params = {
         "dataset": dataset,
         "split": split,
-        "offset": 0,
-        "length": count,
+        "offset": offset,
+        "length": length,
     }
     if config:
         params["config"] = config
@@ -74,7 +77,26 @@ def load_dataset_server_records(dataset: str, config: str | None, split: str, co
     with urlopen(url, timeout=60) as response:
         payload = json.loads(response.read().decode("utf-8"))
     rows = payload.get("rows", [])
-    return [dict(item["row"]) for item in rows[:count]]
+    return [dict(item["row"]) for item in rows]
+
+
+def load_dataset_server_records(dataset: str, config: str | None, split: str, count: int) -> list[dict[str, Any]]:
+    if count < 0:
+        raise ValueError("count must be non-negative")
+    records: list[dict[str, Any]] = []
+    while len(records) < count:
+        remaining = count - len(records)
+        page = load_dataset_server_page(
+            dataset,
+            config,
+            split,
+            offset=len(records),
+            length=min(DATASETS_SERVER_PAGE_SIZE, remaining),
+        )
+        if not page:
+            break
+        records.extend(page)
+    return records[:count]
 
 
 def load_streamed_records(dataset: str, config: str | None, split: str, count: int, source: str = "auto") -> list[dict[str, Any]]:

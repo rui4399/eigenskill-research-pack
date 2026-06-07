@@ -1,0 +1,40 @@
+{
+  "date": "2026-06-07T17:12:19+00:00",
+  "title": "Public Task Benchmark GSM8K200 MMLU100 Manifest",
+  "file_tag": "gsm8k200_mmlu100",
+  "source": "datasets-server",
+  "artifact_count": 2,
+  "artifacts": [
+    {
+      "id": "gsm8k",
+      "dataset": "openai/gsm8k",
+      "config": "main",
+      "split": "test",
+      "task_format": "gsm8k",
+      "source": "datasets-server",
+      "path": "data_eval/public_task_benchmark_v1/gsm8k_test_gsm8k200_mmlu100.jsonl",
+      "rows": 200,
+      "columns": [
+        "answer",
+        "question"
+      ]
+    },
+    {
+      "id": "mmlu_abstract_algebra",
+      "dataset": "cais/mmlu",
+      "config": "abstract_algebra",
+      "split": "test",
+      "task_format": "mmlu",
+      "source": "datasets-server",
+      "path": "data_eval/public_task_benchmark_v1/mmlu_abstract_algebra_test_gsm8k200_mmlu100.jsonl",
+      "rows": 100,
+      "columns": [
+        "answer",
+        "choices",
+        "question",
+        "subject"
+      ]
+    }
+  ],
+  "claim_boundary": "200-row public GSM8K plus full 100-row MMLU abstract-algebra fixtures for guarded local task retention; not leaderboard-scale evaluation."
+}

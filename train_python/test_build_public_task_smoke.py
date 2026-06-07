@@ -4,6 +4,7 @@ import json
 import tempfile
 import unittest
 from pathlib import Path
+from unittest import mock
 
 import build_public_task_smoke as smoke
 
@@ -25,6 +26,25 @@ class BuildPublicTaskSmokeTests(unittest.TestCase):
     def test_artifact_file_retags_smoke_name(self) -> None:
         self.assertEqual(smoke.artifact_file("gsm8k_test_smoke.jsonl", "smoke"), "gsm8k_test_smoke.jsonl")
         self.assertEqual(smoke.artifact_file("gsm8k_test_smoke.jsonl", "subset100"), "gsm8k_test_subset100.jsonl")
+
+    def test_dataset_server_records_fetch_pages(self) -> None:
+        calls = []
+
+        def fake_page(dataset, config, split, offset, length):
+            calls.append((dataset, config, split, offset, length))
+            return [{"idx": i} for i in range(offset, offset + length)]
+
+        with mock.patch.object(smoke, "load_dataset_server_page", side_effect=fake_page):
+            rows = smoke.load_dataset_server_records("dataset", "config", "split", 205)
+
+        self.assertEqual(len(rows), 205)
+        self.assertEqual(rows[0], {"idx": 0})
+        self.assertEqual(rows[-1], {"idx": 204})
+        self.assertEqual(calls, [
+            ("dataset", "config", "split", 0, 100),
+            ("dataset", "config", "split", 100, 100),
+            ("dataset", "config", "split", 200, 5),
+        ])
 
     def test_write_markdown_lists_artifacts(self) -> None:
         manifest = {

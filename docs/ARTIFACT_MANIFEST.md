@@ -7,7 +7,7 @@ not a new result.
 Current tracked output footprint:
 
 ```text
-outputs/ tracked-or-staged artifact files:       1821
+outputs/ tracked-or-staged artifact files:       1823
 outputs/real_system_packer_2026-06-05 files:     744
 ```
 
@@ -72,6 +72,7 @@ tracking, but they are not counted in the 43-gate paper-facing ledger.
 | Tiny public C4 AutoAWQ PPL probe | `outputs/OFFICIAL_AWQ_MATCHED_PPL_QWEN25_0P5B_C4_GATE_2026_06_07.md` | Shows same-slice FP16-vs-AutoAWQ PPL can run on 8 public C4 validation prompts under guard; not a full baseline. |
 | Public PPL prompt manifest | `outputs/PUBLIC_PPL_PROMPT_MANIFEST_2026_06_07.md` | Records the tiny public prompt files used by the readiness probes; not a benchmark definition. |
 | Expanded public PPL prompt manifest | `outputs/PUBLIC_PPL_PROMPT_MANIFEST_16_2026_06_07.md` | Records the 16-prompt WikiText2/C4 public PPL slices used by the expanded AutoAWQ and GPTQModel readiness gates; not a benchmark definition. |
+| GSM8K200/MMLU100 public task manifest | `outputs/PUBLIC_TASK_BENCHMARK_GSM8K200_MMLU100_MANIFEST_2026_06_08.md` | Records prepared public task fixtures for the next guarded Qwen2.5-1.5B retention run: 200 GSM8K rows plus the full 100-row MMLU abstract-algebra test split; this is an input fixture, not task-retention evidence. |
 | Public-calibration AutoAWQ bundle gate | `outputs/OFFICIAL_AWQ_PUBLIC_CALIB_QWEN25_0P5B_BUNDLE_GATE_2026_06_07.md` | Shows a public-calibrated AutoAWQ W4 group-128 bundle can quantize and run two tiny public PPL eval slices under guard; not GPTQ/AWQ competitive coverage. |
 | Public-calibration GPTQModel readiness gate | `outputs/OFFICIAL_GPTQMODEL_PUBLIC_CALIB_QWEN25_0P5B_BUDGET8_GATE_2026_06_07.md` | Shows GPTQModel W4 group-128 can quantize with 12 public calibration texts, save/reload a local artifact through `gptq_torch`, and run tiny public WikiText2/C4 PPL diagnostics under guard; not GPTQ/AWQ competitive coverage. |
 | Expanded GPTQModel public PPL gate | `outputs/OFFICIAL_GPTQMODEL_PUBLIC_CALIB_QWEN25_0P5B_BUDGET8_16_GATE_2026_06_07.md` | Shows the saved GPTQModel artifact can be reloaded and evaluated on the same 16-prompt WikiText2/C4 public slices as AutoAWQ; not GPTQ/AWQ competitive coverage. |

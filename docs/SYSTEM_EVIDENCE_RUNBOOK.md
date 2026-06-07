@@ -530,15 +530,36 @@ Invalid claim:
 ## Qwen2.5-1.5B FP16-vs-AutoAWQ Matched Subset100 Matrix
 
 `tools/run_qwen25_1p5b_subset100_task_matrix.sh` reruns the larger local
-official-package task path. It evaluates FP16 and the saved AutoAWQ W4/G128
-Qwen2.5-1.5B artifact on the same 100-row MMLU abstract-algebra and 100-row
-GSM8K public subset fixtures under a 90% VRAM guard.
+official-package task path. By default it evaluates FP16 and the saved AutoAWQ
+W4/G128 Qwen2.5-1.5B artifact on the same 100-row MMLU abstract-algebra and
+100-row GSM8K public subset fixtures under a 90% VRAM guard.
 
 WSL/GPU entry point:
 
 ```bash
 export NVIDIA_SMI_PATH=/usr/lib/wsl/lib/nvidia-smi
 DATE_TAG=2026_06_07 bash tools/run_qwen25_1p5b_subset100_task_matrix.sh
+```
+
+The same entry point is parameterized for larger local slices. The current
+prepared fixture is `TASK_TAG=gsm8k200_mmlu100`: it contains 200 GSM8K test
+rows and the full 100-row MMLU abstract-algebra test split. This fixture is
+larger than subset100 for GSM8K, but it is still not leaderboard-scale.
+
+```bash
+python train_python/build_public_task_smoke.py \
+  --out-dir data_eval/public_task_benchmark_v1 \
+  --gsm8k-count 200 \
+  --mmlu-count 100 \
+  --file-tag gsm8k200_mmlu100 \
+  --title "Public Task Benchmark GSM8K200 MMLU100 Manifest" \
+  --claim-boundary "200-row public GSM8K plus full 100-row MMLU abstract-algebra fixtures for guarded local task retention; not leaderboard-scale evaluation." \
+  --source datasets-server \
+  --out-json outputs/public_task_benchmark_gsm8k200_mmlu100_manifest_2026_06_08.json \
+  --out-md outputs/PUBLIC_TASK_BENCHMARK_GSM8K200_MMLU100_MANIFEST_2026_06_08.md
+
+DATE_TAG=2026_06_08 TASK_TAG=gsm8k200_mmlu100 TASK_LIMIT=200 \
+  bash tools/run_qwen25_1p5b_subset100_task_matrix.sh
 ```
 
 Task-retention gate:
