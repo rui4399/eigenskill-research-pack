@@ -144,6 +144,27 @@ class EvalChatTaskBenchmarkTests(unittest.TestCase):
         already = bench.format_task_prompt("Answer with only A.\n/no_think", no_think=True)
         self.assertEqual(already.count("/no_think"), 1)
 
+    def test_place_model_prefers_wrapped_inner_model(self) -> None:
+        class Inner:
+            def __init__(self) -> None:
+                self.device = None
+
+            def to(self, device: object) -> None:
+                self.device = device
+
+        class Wrapper:
+            def __init__(self) -> None:
+                self.model = Inner()
+                self.outer_moved = False
+
+            def to(self, device: object) -> None:
+                self.outer_moved = True
+
+        wrapper = Wrapper()
+        bench.place_model(wrapper, "cuda:0")
+        self.assertEqual(wrapper.model.device, "cuda:0")
+        self.assertFalse(wrapper.outer_moved)
+
 
 if __name__ == "__main__":
     unittest.main()

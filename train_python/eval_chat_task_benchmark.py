@@ -356,6 +356,40 @@ def evaluate_rows(
     return rows
 
 
+def load_causal_lm(args: argparse.Namespace, dtype: Any):
+    if args.loader == "hf":
+        from transformers import AutoModelForCausalLM
+
+        return AutoModelForCausalLM.from_pretrained(
+            args.model,
+            torch_dtype=dtype,
+            local_files_only=args.local_files_only,
+            trust_remote_code=True,
+        )
+    if args.loader == "autoawq":
+        from awq import AutoAWQForCausalLM
+
+        device_map = {"": "cuda:0"} if str(args.device).startswith("cuda") else {"": args.device}
+        return AutoAWQForCausalLM.from_quantized(
+            args.model,
+            trust_remote_code=True,
+            fuse_layers=False,
+            use_exllama=False,
+            use_exllama_v2=False,
+            safetensors=True,
+            device_map=device_map,
+            max_seq_len=args.max_seq_len,
+        )
+    raise ValueError(f"unsupported loader: {args.loader}")
+
+
+def place_model(model: Any, device: Any) -> None:
+    if hasattr(model, "model") and hasattr(model.model, "to"):
+        model.model.to(device)
+    elif hasattr(model, "to"):
+        model.to(device)
+
+
 def render_markdown(result: dict[str, Any]) -> str:
     lines = [
         "# Chat Task Benchmark",
@@ -398,9 +432,11 @@ def main() -> None:
     parser.add_argument("--tasks-jsonl", required=True)
     parser.add_argument("--task-format", choices=["native", "mmlu", "gsm8k", "ifeval"], default="native")
     parser.add_argument("--model", default="Qwen/Qwen3-0.6B")
+    parser.add_argument("--loader", choices=["hf", "autoawq"], default="hf")
     parser.add_argument("--device", default="cuda")
     parser.add_argument("--dtype", choices=["float16", "bfloat16", "float32"], default="float16")
     parser.add_argument("--max-new-tokens", type=int, default=32)
+    parser.add_argument("--max-seq-len", type=int, default=512)
     parser.add_argument("--limit", type=int, default=0, help="Evaluate only the first N tasks; 0 means all tasks.")
     parser.add_argument("--chat-template", action="store_true")
     parser.add_argument("--no-think", action="store_true", help="Append /no_think once to each task prompt.")
@@ -418,7 +454,7 @@ def main() -> None:
     args = parser.parse_args()
 
     import torch
-    from transformers import AutoModelForCausalLM, AutoTokenizer
+    from transformers import AutoTokenizer
     from benchmark_esmp_fused_selected_rows import parse_suffixes
     from eval_esmp_module_reconstruction import load_package_modules, resolve_path, repo_root
     from measure_esmp_fused_qkv_generation import install_fused_qkv
@@ -430,18 +466,14 @@ def main() -> None:
     dtype = {"float16": torch.float16, "bfloat16": torch.bfloat16, "float32": torch.float32}[args.dtype]
     tasks = apply_task_limit(load_tasks(Path(args.tasks_jsonl), task_format=args.task_format), args.limit)
     tokenizer = AutoTokenizer.from_pretrained(args.model, local_files_only=args.local_files_only, trust_remote_code=True)
-    model = AutoModelForCausalLM.from_pretrained(
-        args.model,
-        torch_dtype=dtype,
-        local_files_only=args.local_files_only,
-        trust_remote_code=True,
-    )
+    model = load_causal_lm(args, dtype)
     model.eval()
-    model.to(torch.device(args.device))
+    place_model(model, torch.device(args.device))
 
     baseline_rows = evaluate_rows(model, tokenizer, tasks, args.max_new_tokens, args.chat_template, args.no_think)
     result: dict[str, Any] = {
         "model": args.model,
+        "loader": args.loader,
         "task_file": args.tasks_jsonl,
         "task_format": args.task_format,
         "task_count": len(tasks),

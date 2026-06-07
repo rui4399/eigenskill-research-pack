@@ -347,8 +347,30 @@ def _input_ids_numel(inputs) -> int:
     return int(input_ids.numel()) if hasattr(input_ids, "numel") else len(input_ids[0])
 
 
+def resolve_model_device(model: Any) -> str:
+    direct = getattr(model, "device", None)
+    if direct is not None:
+        return str(direct)
+    inner = getattr(model, "model", None)
+    inner_device = getattr(inner, "device", None)
+    if inner_device is not None:
+        return str(inner_device)
+    for candidate in (model, inner):
+        if candidate is None or not hasattr(candidate, "parameters"):
+            continue
+        try:
+            parameter = next(candidate.parameters())
+        except (StopIteration, TypeError):
+            continue
+        return str(parameter.device)
+    if torch is not None and torch.cuda.is_available():
+        return "cuda:0"
+    return "cpu"
+
+
 def run_generation(model, tokenizer, prompt: str, max_new_tokens: int, use_chat_template: bool = False) -> dict[str, Any]:
-    inputs = build_generation_inputs(tokenizer, prompt, str(model.device), use_chat_template=use_chat_template)
+    device = resolve_model_device(model)
+    inputs = build_generation_inputs(tokenizer, prompt, device, use_chat_template=use_chat_template)
     streamer = TextIteratorStreamer(tokenizer, skip_prompt=True, skip_special_tokens=True)
     kwargs = {
         **inputs,
@@ -367,7 +389,7 @@ def run_generation(model, tokenizer, prompt: str, max_new_tokens: int, use_chat_
             if hasattr(streamer, "on_finalized_text"):
                 streamer.on_finalized_text("", stream_end=True)
 
-    sync_if_cuda(str(model.device))
+    sync_if_cuda(device)
     start = time.perf_counter()
     thread = Thread(target=target)
     thread.start()
@@ -381,7 +403,7 @@ def run_generation(model, tokenizer, prompt: str, max_new_tokens: int, use_chat_
     thread.join()
     if error_box:
         raise RuntimeError(f"generation failed: {error_box['error']!r}") from error_box["error"]
-    sync_if_cuda(str(model.device))
+    sync_if_cuda(device)
     end = time.perf_counter()
     generated_text = "".join(chunks)
     generated_ids = tokenizer(generated_text, return_tensors="pt", add_special_tokens=False).input_ids

@@ -1,0 +1,301 @@
+{
+  "model": "Qwen/Qwen2.5-1.5B-Instruct",
+  "task_file": "data_eval/public_task_benchmark_v1/mmlu_abstract_algebra_test_subset100.jsonl",
+  "task_format": "mmlu",
+  "task_count": 20,
+  "task_limit": 20,
+  "chat_template": true,
+  "no_think": true,
+  "max_new_tokens": 16,
+  "baseline": {
+    "aggregate": {
+      "tasks": 20,
+      "passes": 8,
+      "accuracy": 0.4,
+      "mean_tokens_per_second": 19.628865620706645,
+      "mean_ttft_seconds": 0.15140101170001116
+    },
+    "rows": [
+      {
+        "id": "mmlu_0",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Find the degree for the given field extension Q(sqrt(2), sqrt(3), sqrt(18)) over Q.\nA. 0\nB. 4\nC. 2\nD. 6\n/no_think",
+        "answer": "B",
+        "generated_text": "B.",
+        "score": {
+          "passed": true,
+          "predicted": "B",
+          "expected": "B"
+        },
+        "ttft_seconds": 1.1464430780000043,
+        "tokens_per_second": 1.7440845311588362
+      },
+      {
+        "id": "mmlu_1",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Let p = (1, 2, 5, 4)(2, 3) in S_5 . Find the index of <p> in S_5.\nA. 8\nB. 2\nC. 24\nD. 120\n/no_think",
+        "answer": "C",
+        "generated_text": "A. 8",
+        "score": {
+          "passed": false,
+          "predicted": "A",
+          "expected": "C"
+        },
+        "ttft_seconds": 0.08015591200000927,
+        "tokens_per_second": 30.206728962711736
+      },
+      {
+        "id": "mmlu_2",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Find all zeros in the indicated finite field of the given polynomial with coefficients in that field. x^5 + 3x^3 + x^2 + 2x in Z_5\nA. 0\nB. 1\nC. 0,1\nD. 0,4\n/no_think",
+        "answer": "D",
+        "generated_text": "D.",
+        "score": {
+          "passed": true,
+          "predicted": "D",
+          "expected": "D"
+        },
+        "ttft_seconds": 0.0760738150000293,
+        "tokens_per_second": 26.20320018372416
+      },
+      {
+        "id": "mmlu_3",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Statement 1 | A factor group of a non-Abelian group is non-Abelian. Statement 2 | If K is a normal subgroup of H and H is a normal subgroup of G, then K is a normal subgroup of G.\nA. True, True\nB. False, False\nC. True, False\nD. False, True\n/no_think",
+        "answer": "B",
+        "generated_text": "C.",
+        "score": {
+          "passed": false,
+          "predicted": "C",
+          "expected": "B"
+        },
+        "ttft_seconds": 0.08263901700001952,
+        "tokens_per_second": 24.11925669998118
+      },
+      {
+        "id": "mmlu_4",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Find the product of the given polynomials in the given polynomial ring. f(x) = 4x - 5, g(x) = 2x^2 - 4x + 2 in Z_8[x].\nA. 2x^2 + 5\nB. 6x^2 + 4x + 6\nC. 0\nD. x^2 + 1\n/no_think",
+        "answer": "B",
+        "generated_text": "B.",
+        "score": {
+          "passed": true,
+          "predicted": "B",
+          "expected": "B"
+        },
+        "ttft_seconds": 0.12005180000005566,
+        "tokens_per_second": 16.62400835295949
+      },
+      {
+        "id": "mmlu_5",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Statement 1 | If a group has an element of order 15 it must have at least 8 elements of order 15. Statement 2 | If a group has more than 8 elements of order 15, it must have at least 16 elements of order 15.\nA. True, True\nB. False, False\nC. True, False\nD. False, True\n/no_think",
+        "answer": "A",
+        "generated_text": "C.",
+        "score": {
+          "passed": false,
+          "predicted": "C",
+          "expected": "A"
+        },
+        "ttft_seconds": 0.1434654290000026,
+        "tokens_per_second": 13.916010420085454
+      },
+      {
+        "id": "mmlu_6",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Statement 1 | Every homomorphic image of a group G is isomorphic to a factor group of G. Statement 2 | The homomorphic images of a group G are the same (up to isomorphism) as the factor groups of G.\nA. True, True\nB. False, False\nC. True, False\nD. False, True\n/no_think",
+        "answer": "A",
+        "generated_text": "A.",
+        "score": {
+          "passed": true,
+          "predicted": "A",
+          "expected": "A"
+        },
+        "ttft_seconds": 0.07712763900002528,
+        "tokens_per_second": 25.849397635355444
+      },
+      {
+        "id": "mmlu_7",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Statement 1 | A ring homomorphism is one to one if and only if the kernel is {0}. Statement 2 | Q is an ideal in R.\nA. True, True\nB. False, False\nC. True, False\nD. False, True\n/no_think",
+        "answer": "D",
+        "generated_text": "C.",
+        "score": {
+          "passed": false,
+          "predicted": "C",
+          "expected": "D"
+        },
+        "ttft_seconds": 0.13698810599998978,
+        "tokens_per_second": 14.574698811119186
+      },
+      {
+        "id": "mmlu_8",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Find the degree for the given field extension Q(sqrt(2) + sqrt(3)) over Q.\nA. 0\nB. 4\nC. 2\nD. 6\n/no_think",
+        "answer": "B",
+        "generated_text": "B.",
+        "score": {
+          "passed": true,
+          "predicted": "B",
+          "expected": "B"
+        },
+        "ttft_seconds": 0.13257317500000454,
+        "tokens_per_second": 15.058623522546917
+      },
+      {
+        "id": "mmlu_9",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Find all zeros in the indicated finite field of the given polynomial with coefficients in that field. x^3 + 2x + 2 in Z_7\nA. 1\nB. 2\nC. 2,3\nD. 6\n/no_think",
+        "answer": "C",
+        "generated_text": "C",
+        "score": {
+          "passed": true,
+          "predicted": "C",
+          "expected": "C"
+        },
+        "ttft_seconds": 0.08649452099996324,
+        "tokens_per_second": 11.528170075004812
+      },
+      {
+        "id": "mmlu_10",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Statement 1 | If H is a subgroup of G and a belongs to G then |aH| = |Ha|. Statement 2 | If H is a subgroup of G and a and b belong to G, then aH and Hb are identical or disjoint.\nA. True, True\nB. False, False\nC. True, False\nD. False, True\n/no_think",
+        "answer": "C",
+        "generated_text": "D.",
+        "score": {
+          "passed": false,
+          "predicted": "D",
+          "expected": "C"
+        },
+        "ttft_seconds": 0.11975991500003147,
+        "tokens_per_second": 16.667387253373388
+      },
+      {
+        "id": "mmlu_11",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: If A = {1, 2, 3} then relation S = {(1, 1), (2, 2)} is\nA. symmetric only\nB. anti-symmetric only\nC. both symmetric and anti-symmetric\nD. an equivalence relation\n/no_think",
+        "answer": "C",
+        "generated_text": "A",
+        "score": {
+          "passed": false,
+          "predicted": "A",
+          "expected": "C"
+        },
+        "ttft_seconds": 0.04719908600003464,
+        "tokens_per_second": 21.077448832798375
+      },
+      {
+        "id": "mmlu_12",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Find the order of the factor group (Z_11 x Z_15)/(<1, 1>)\nA. 1\nB. 2\nC. 5\nD. 11\n/no_think",
+        "answer": "A",
+        "generated_text": "C.",
+        "score": {
+          "passed": false,
+          "predicted": "C",
+          "expected": "A"
+        },
+        "ttft_seconds": 0.074932863000015,
+        "tokens_per_second": 26.594326906161374
+      },
+      {
+        "id": "mmlu_13",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: The polynomial x^3 + 2x^2 + 2x + 1 can be factored into linear factors in Z_7[x]. Find this factorization.\nA. (x − 2)(x + 2)(x − 1)\nB. (x + 1)(x + 4)(x − 2)\nC. (x + 1)(x − 4)(x − 2)\nD. (x - 1)(x − 4)(x − 2)\n/no_think",
+        "answer": "C",
+        "generated_text": "D. (x - 1)(x - 4)(x - ",
+        "score": {
+          "passed": false,
+          "predicted": "D",
+          "expected": "C"
+        },
+        "ttft_seconds": 0.08879904500003022,
+        "tokens_per_second": 37.34185906477917
+      },
+      {
+        "id": "mmlu_14",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Find the maximum possible order for an element of S_n for n = 10.\nA. 6\nB. 12\nC. 30\nD. 105\n/no_think",
+        "answer": "C",
+        "generated_text": "C.",
+        "score": {
+          "passed": true,
+          "predicted": "C",
+          "expected": "C"
+        },
+        "ttft_seconds": 0.09619693300004428,
+        "tokens_per_second": 20.739516187523463
+      },
+      {
+        "id": "mmlu_15",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Statement 1 | R is a splitting field of some polynomial over Q. Statement 2 | There is a field with 60 elements.\nA. True, True\nB. False, False\nC. True, False\nD. False, True\n/no_think",
+        "answer": "B",
+        "generated_text": "C.",
+        "score": {
+          "passed": false,
+          "predicted": "C",
+          "expected": "B"
+        },
+        "ttft_seconds": 0.12959133200001816,
+        "tokens_per_second": 15.400315769608204
+      },
+      {
+        "id": "mmlu_16",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: The inverse of -i in the multiplicative group, {1, -1, i , -i} is\nA. 1\nB. -1\nC. i\nD. -i\n/no_think",
+        "answer": "C",
+        "generated_text": "D. -i",
+        "score": {
+          "passed": false,
+          "predicted": "D",
+          "expected": "C"
+        },
+        "ttft_seconds": 0.1068716620000032,
+        "tokens_per_second": 23.185118214537333
+      },
+      {
+        "id": "mmlu_17",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Compute the product in the given ring. (2,3)(3,5) in Z_5 x Z_9\nA. (1,1)\nB. (3,1)\nC. (1,6)\nD. (3,6)\n/no_think",
+        "answer": "C",
+        "generated_text": "C.",
+        "score": {
+          "passed": true,
+          "predicted": "C",
+          "expected": "C"
+        },
+        "ttft_seconds": 0.10143161099995268,
+        "tokens_per_second": 19.668882235134827
+      },
+      {
+        "id": "mmlu_18",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: The set of all real numbers under the usual multiplication operation is not a group since\nA. multiplication is not a binary operation\nB. multiplication is not associative\nC. identity element does not exist\nD. zero has no inverse\n/no_think",
+        "answer": "D",
+        "generated_text": "C",
+        "score": {
+          "passed": false,
+          "predicted": "C",
+          "expected": "D"
+        },
+        "ttft_seconds": 0.07452008899997509,
+        "tokens_per_second": 13.376713122212632
+      },
+      {
+        "id": "mmlu_19",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Statement 1| Every group of order p^2 where p is prime is Abelian. Statement 2 | For a fixed prime p a Sylow p-subgroup of a group G is a normal subgroup of G if and only if it is the only Sylow p-subgroup of G.\nA. True, True\nB. False, False\nC. True, False\nD. False, True\n/no_think",
+        "answer": "A",
+        "generated_text": "D.",
+        "score": {
+          "passed": false,
+          "predicted": "D",
+          "expected": "A"
+        },
+        "ttft_seconds": 0.1067052060000151,
+        "tokens_per_second": 18.70156563335692
+      }
+    ]
+  }
+}

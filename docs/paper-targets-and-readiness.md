@@ -51,6 +51,9 @@ The current evidence supports:
 - a Qwen2.5-1.5B AutoAWQ W4/G128 public-calibration scale-up smoke that
   quantizes under an 85% VRAM guard and evaluates 16 WikiText2 plus 16 C4 public
   PPL prompts with max PPL ratio 1.1344;
+- a Qwen2.5-1.5B FP16-vs-AutoAWQ matched 20-row public MMLU/GSM8K task subset
+  matrix, covering 80 task executions with no measured accuracy drop versus
+  FP16 in this tiny local slice and peak guarded VRAM ratio 0.6821;
 - a local matched AutoAWQ/GPTQModel Qwen2.5-0.5B W4/G128 baseline pack that
   ties public-calibration PPL, subset50 MMLU/GSM8K execution, and PC-side
   runtime/VRAM into one explicit claim boundary;
@@ -90,8 +93,9 @@ Current AAAI-facing critical path:
    seed/bootstrap artifacts.
 2. Real quantization: expand the AutoAWQ/GPTQModel matched pack beyond the
    0.5B readiness setting and report negative runtime results honestly. The
-   first Qwen2.5-1.5B AutoAWQ public-calibration gate is now complete, but GPTQ
-   and task retention still need scale-up.
+   first Qwen2.5-1.5B AutoAWQ public-calibration and 20-row task-subset gates
+   are complete, but GPTQ, SmoothQuant, rotation baselines, and larger task
+   retention still need scale-up.
 3. Downstream tasks: move from subset50/subset100 and deterministic IFEval-style
    execution evidence toward stronger MMLU/GSM8K/IFEval retention on actual
    quantized variants.

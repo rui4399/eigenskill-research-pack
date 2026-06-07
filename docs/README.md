@@ -24,6 +24,7 @@ is intentionally short.
 | Calibration instability framing | `docs/calibration_split_instability_position_2026_06_05.md` |
 | Quantization related-work map | `docs/RELATED_WORK_QUANTIZATION_2026.md` |
 | Paper targets and readiness | `docs/paper-targets-and-readiness.md` |
+| Multi-paper/repository split plan | `docs/RESEARCH_PORTFOLIO_SPLIT.md` |
 
 ## Workbench And Historical Notes
 
