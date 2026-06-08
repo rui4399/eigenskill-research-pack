@@ -882,7 +882,7 @@ python train_python/plan_mmlu_ptq_shards.py \
 This produces `outputs/MMLU_PTQ_SHARD_PLAN_MMLU_FULL_2026_06_08.md` and a
 57-subject, 14,042-row fixture manifest at
 `outputs/PUBLIC_TASK_BENCHMARK_MMLU_MMLU_FULL_MANIFEST_2026_06_08.md`. It is a
-run plan and input fixture. The first 4000-row prefix now has matched local
+run plan and input fixture. The first 4500-row prefix now has matched local
 FP16/AutoAWQ/GPTQModel gates; full-MMLU retention evidence still requires the
 remaining FP16/AutoAWQ/GPTQModel shards, merged summaries, guard logs, and the
 final task-retention/runtime/statistics gates.
@@ -890,7 +890,7 @@ final task-retention/runtime/statistics gates.
 Completed prefixes can now be materialized with:
 
 ```bash
-python train_python/materialize_mmlu_ptq_prefix.py --prefix-rows 4000
+python train_python/materialize_mmlu_ptq_prefix.py --prefix-rows 4500
 ```
 
 This command only consumes completed shard summaries and guard files; it does
@@ -1024,6 +1024,16 @@ runtime profile reports FP16 `4.8154` tok/s and `0.416089` s TTFT, AutoAWQ
 with CI `[-0.0405, -0.0173]` and GPTQModel delta `-0.0553` with CI
 `[-0.0685, -0.0413]`.
 
+Current full-MMLU prefix4500 result: the first nine 500-row shards are merged
+per variant and gated as a 4500-row prefix. FP16 gets 2614/4500, AutoAWQ gets
+2495/4500, and GPTQModel gets 2360/4500. The prefix task gate records max
+measured drop `0.0564` versus FP16 and peak guard VRAM ratio `0.8730`. The
+runtime profile reports FP16 `4.8561` tok/s and `0.417594` s TTFT, AutoAWQ
+`10.9480` tok/s and `0.158347` s TTFT, and GPTQModel `8.8469` tok/s and
+`0.189934` s TTFT. The paired statistics gate reports AutoAWQ delta `-0.0264`
+with CI `[-0.0373, -0.0158]` and GPTQModel delta `-0.0564` with CI
+`[-0.0691, -0.0436]`.
+
 The earlier GSM8K200/MMLU100 statistical gate reports paired bootstrap
 candidate-minus-FP16 deltas:
 AutoAWQ GSM8K `+0.0150` with CI `[-0.0350, +0.0650]`, AutoAWQ MMLU `+0.0100`
@@ -1036,7 +1046,7 @@ Valid claim:
 
 - FP16, AutoAWQ, and GPTQModel Qwen2.5-1.5B variants have matched local
   subset100, GSM8K200/MMLU100, GSM8K500, full GSM8K1319, and MMLU Broad20x20
-  plus full-MMLU prefix4000 task/runtime/VRAM evidence under the GPU guard.
+  plus full-MMLU prefix4500 task/runtime/VRAM evidence under the GPU guard.
 
 Invalid claim:
 
