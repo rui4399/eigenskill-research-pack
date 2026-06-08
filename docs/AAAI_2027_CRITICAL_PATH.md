@@ -48,7 +48,7 @@ artifact section unless it proves end-to-end speedup.
 
 | veto | why it can reject the paper | required closure |
 |---|---|---|
-| Only tiny task subsets. | Reviewers can call the result a toy diagnosis. | Full GSM8K is now covered for both the local 7B public-task row and the guarded Qwen2.5-1.5B FP16/AutoAWQ/GPTQModel row; MMLU has progressed from Broad5x20 to Broad20x20, and a true full-MMLU fixture/plan plus the first matched 12000-row prefix now exist. The remaining 4 full 500-row shards plus the 42-row tail per variant and broader IFEval remain open. |
+| Only tiny task subsets. | Reviewers can call the result a toy diagnosis. | Full GSM8K is now covered for both the local 7B public-task row and the guarded Qwen2.5-1.5B FP16/AutoAWQ/GPTQModel row; MMLU has progressed from Broad5x20/Broad10x20/Broad20x20 to a complete matched 57-subject, 14,042-row local full-MMLU run. Broader IFEval and other downstream tasks remain open. |
 | Native baseline confrontation is still incomplete. | Random and proxy baselines are too weak; current AutoAWQ/GPTQModel rows are local evidence, not full competition. | Full GSM8K matched retention is now covered for Qwen2.5-1.5B; add SmoothQuant or a rotation-family row if feasible. |
 | Scale row is public-task only. | The new 7B Ollama row improves model-scale coverage but is not quantized-retention evidence. | Add one quantized 3B/7B or broader 1.5B row if the guard can hold. |
 | End-to-end quantized runtime is slower. | Systems reviewers will reject any acceleration claim. | Keep speed claims kernel-only until TTFT/tokens/s beats FP16 in a minimal runtime. |
@@ -93,9 +93,9 @@ calibration split instability and measured retention under native PTQ baselines.
    GPTQModel variants. A guarded twenty-subject MMLU Broad20x20 row now broadens
    the abstract-algebra-only evidence. A true 57-subject, 14,042-row MMLU test
    fixture and guarded FP16/AutoAWQ/GPTQModel shard plan now exist, and the
-   first 12000-row prefix has matched task, runtime, and statistics gates. The
-   next target is executing the remaining shards or extending IFEval under the
-   same matched guard protocol.
+   complete 14,042-row local full-MMLU run has matched task, runtime, and
+   statistics gates. The next target is extending IFEval or adding another
+   full downstream task under the same matched guard protocol.
 
 4. **Scale.** Keep the committed Qwen2.5-abliterate-7B public-task row as
    scale coverage. The next upgrade is quantized retention at 3B/7B scale, or
@@ -155,9 +155,8 @@ Anything else stays in future work.
 1. Continue the generated full-MMLU plan:
    `outputs/MMLU_PTQ_SHARD_PLAN_MMLU_FULL_2026_06_08.md`. It covers 57 MMLU
    subjects, 14,042 test rows, and 29 guarded shards per FP16/AutoAWQ/
-   GPTQModel variant. The first 12000-row prefix is gated; full-MMLU completion
-   still requires the remaining shard summaries, guard logs, merged summaries,
-   and final retention/runtime/statistics gates.
+   GPTQModel variant. The complete 14042-row local full-MMLU row is gated; the
+   next task-evidence gap is broader IFEval or another full downstream benchmark.
 2. Upgrade the 7B public-task row into quantized retention only if disk and
    VRAM headroom are safe; otherwise broaden the 1.5B matched PTQ matrix.
 3. Add a downstream proxy for W4A8 activation quantization before using the

@@ -21,7 +21,7 @@ python train_python/build_current_evidence_ledger.py
 ```
 
 `train_python/build_evidence_ledger.py` is the lower-level builder for custom
-or future gate manifests. The expanded form of the current 64-gate ledger is:
+or future gate manifests. The expanded form of the current 70-gate ledger is:
 
 ```bash
 python train_python/build_evidence_ledger.py \
@@ -259,7 +259,7 @@ python train_python/gate_paper_evidence_alignment.py \
 Current result: the generated alignment artifact records all configured required
 evidence references present, referenced repo paths found, 0 stale forbidden
 tokens, 0 unsafe non-negated claim lines, and the paper mentions the current
-64-gate ledger.
+70-gate ledger.
 
 Valid claim:
 
@@ -882,15 +882,13 @@ python train_python/plan_mmlu_ptq_shards.py \
 This produces `outputs/MMLU_PTQ_SHARD_PLAN_MMLU_FULL_2026_06_08.md` and a
 57-subject, 14,042-row fixture manifest at
 `outputs/PUBLIC_TASK_BENCHMARK_MMLU_MMLU_FULL_MANIFEST_2026_06_08.md`. It is a
-run plan and input fixture. The first 12000-row prefix now has matched local
-FP16/AutoAWQ/GPTQModel gates; full-MMLU retention evidence still requires the
-remaining FP16/AutoAWQ/GPTQModel shards, merged summaries, guard logs, and the
-final task-retention/runtime/statistics gates.
+run plan and input fixture. The complete 14,042-row local full-MMLU row now has
+matched FP16/AutoAWQ/GPTQModel task, runtime, and statistics gates.
 
 Completed prefixes can now be materialized with:
 
 ```bash
-python train_python/materialize_mmlu_ptq_prefix.py --prefix-rows 12000
+python train_python/materialize_mmlu_ptq_prefix.py --prefix-rows 14042
 ```
 
 This command only consumes completed shard summaries and guard files; it does
@@ -1134,6 +1132,16 @@ tok/s and `0.185555` s TTFT. The paired statistics gate reports AutoAWQ delta
 `-0.0228` with CI `[-0.0294, -0.0164]` and GPTQModel delta `-0.0483` with CI
 `[-0.0558, -0.0406]`.
 
+Current full-MMLU complete result: all 29 shards are merged per variant and
+gated as the 14,042-row local full-MMLU fixture. FP16 gets 8234/14042, AutoAWQ
+gets 7931/14042, and GPTQModel gets 7529/14042. The task gate records max
+measured drop `0.0502` versus FP16 and peak guard VRAM ratio `0.8794`. The
+runtime profile reports FP16 `4.9773` tok/s and `0.396824` s TTFT, AutoAWQ
+`10.8232` tok/s and `0.153977` s TTFT, and GPTQModel `9.1870` tok/s and
+`0.182449` s TTFT. The paired statistics gate reports AutoAWQ delta `-0.0216`
+with CI `[-0.0273, -0.0155]` and GPTQModel delta `-0.0502` with CI
+`[-0.0570, -0.0432]`.
+
 The earlier GSM8K200/MMLU100 statistical gate reports paired bootstrap
 candidate-minus-FP16 deltas:
 AutoAWQ GSM8K `+0.0150` with CI `[-0.0350, +0.0650]`, AutoAWQ MMLU `+0.0100`
@@ -1146,7 +1154,7 @@ Valid claim:
 
 - FP16, AutoAWQ, and GPTQModel Qwen2.5-1.5B variants have matched local
   subset100, GSM8K200/MMLU100, GSM8K500, full GSM8K1319, and MMLU Broad20x20
-  plus full-MMLU prefix12000 task/runtime/VRAM evidence under the GPU guard.
+  plus complete local full-MMLU task/runtime/VRAM evidence under the GPU guard.
 
 Invalid claim:
 
@@ -1465,7 +1473,7 @@ Invalid claim:
 `train_python/run_official_awq_smoke.py` is a minimal package-readiness probe.
 It exists to verify that AutoAWQ can execute, save local quantized artifacts,
 and run one short generation smoke under the GPU guard. It is intentionally not
-part of the 64-gate paper-facing ledger.
+part of the 70-gate paper-facing ledger.
 
 Example WSL/GPU command:
 

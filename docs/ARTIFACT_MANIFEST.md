@@ -129,6 +129,9 @@ paper claims.
 | Qwen2.5-1.5B FP16/AutoAWQ/GPTQModel full-MMLU prefix12000 task matrix | `outputs/OFFICIAL_PTQ_TASK_QWEN25_1P5B_MMLU_FULL_PREFIX12000_FP16_AWQ_GPTQMODEL_MATRIX_2026_06_08.md` |
 | Qwen2.5-1.5B FP16/AutoAWQ/GPTQModel full-MMLU prefix12000 runtime profile | `outputs/OFFICIAL_PTQ_QWEN25_1P5B_MMLU_FULL_PREFIX12000_FP16_AWQ_GPTQMODEL_RUNTIME_PROFILE_2026_06_08.md` |
 | Qwen2.5-1.5B FP16/AutoAWQ/GPTQModel full-MMLU prefix12000 statistics gate | `outputs/OFFICIAL_PTQ_TASK_QWEN25_1P5B_MMLU_FULL_PREFIX12000_FP16_AWQ_GPTQMODEL_STATISTICS_2026_06_08.md` |
+| Qwen2.5-1.5B FP16/AutoAWQ/GPTQModel complete full-MMLU task matrix | `outputs/OFFICIAL_PTQ_TASK_QWEN25_1P5B_MMLU_FULL_PREFIX14042_FP16_AWQ_GPTQMODEL_MATRIX_2026_06_08.md` |
+| Qwen2.5-1.5B FP16/AutoAWQ/GPTQModel complete full-MMLU runtime profile | `outputs/OFFICIAL_PTQ_QWEN25_1P5B_MMLU_FULL_PREFIX14042_FP16_AWQ_GPTQMODEL_RUNTIME_PROFILE_2026_06_08.md` |
+| Qwen2.5-1.5B FP16/AutoAWQ/GPTQModel complete full-MMLU statistics gate | `outputs/OFFICIAL_PTQ_TASK_QWEN25_1P5B_MMLU_FULL_PREFIX14042_FP16_AWQ_GPTQMODEL_STATISTICS_2026_06_08.md` |
 | Expanded GPTQModel public PPL gate | `outputs/OFFICIAL_GPTQMODEL_PUBLIC_CALIB_QWEN25_0P5B_BUDGET8_16_GATE_2026_06_07.md` |
 | Qwen2.5-1.5B GPTQModel public PPL gate | `outputs/OFFICIAL_GPTQMODEL_PUBLIC_CALIB_QWEN25_1P5B_16_GATE_2026_06_08.md` |
 | Qwen2.5-1.5B GPTQModel task-execution subset100 | `outputs/OFFICIAL_GPTQMODEL_TASK_EXECUTION_QWEN25_1P5B_SUBSET100_MATRIX_2026_06_08.md` |
@@ -143,7 +146,7 @@ paper claims.
 ## Non-Ledger Readiness Probes
 
 These artifacts are useful for environment readiness and reviewer-risk
-tracking, but they are not counted in the 64-gate paper-facing ledger.
+tracking, but they are not counted in the 70-gate paper-facing ledger.
 
 | Purpose | Artifact | Boundary |
 |---|---|---|
@@ -157,9 +160,10 @@ tracking, but they are not counted in the 64-gate paper-facing ledger.
 | GSM8K full public task fixture | `data_eval/public_task_benchmark_v1/gsm8k_test_gsm8kfull.jsonl` | Full 1319-row GSM8K test fixture used by the guarded 7B Ollama public-task row; this is single-task public coverage, not quantized retention. |
 | MMLU Broad5x20 public task manifest | `outputs/PUBLIC_TASK_BENCHMARK_MMLU_BROAD5X20_MANIFEST_2026_06_08.md` | Records five 20-row MMLU subject fixtures plus the combined 100-row fixture used by the guarded Qwen2.5-1.5B FP16/AutoAWQ/GPTQModel row; this is not full MMLU. |
 | MMLU Broad10x20 public task manifest | `outputs/PUBLIC_TASK_BENCHMARK_MMLU_BROAD10X20_MANIFEST_2026_06_08.md` | Records ten 20-row MMLU subject fixtures plus the combined 200-row fixture used by the guarded Qwen2.5-1.5B FP16/AutoAWQ/GPTQModel row; this is not full MMLU. |
-| Full MMLU public task fixture | `outputs/PUBLIC_TASK_BENCHMARK_MMLU_MMLU_FULL_MANIFEST_2026_06_08.md` | Records the 57-subject, 14,042-row `cais/mmlu` test fixture for future guarded Qwen2.5-1.5B FP16/AutoAWQ/GPTQModel retention runs; this is an input fixture, not full-MMLU retention evidence. |
-| Full MMLU PTQ shard plan | `outputs/MMLU_PTQ_SHARD_PLAN_MMLU_FULL_2026_06_08.md` | Plans 29 guarded shards per FP16/AutoAWQ/GPTQModel variant over the full MMLU fixture; the first 12000-row prefix now has matched gates, but full-MMLU completion still requires the remaining shard summaries, guard logs, merges, and final gates. |
+| Full MMLU public task fixture | `outputs/PUBLIC_TASK_BENCHMARK_MMLU_MMLU_FULL_MANIFEST_2026_06_08.md` | Records the 57-subject, 14,042-row `cais/mmlu` test fixture used by the guarded Qwen2.5-1.5B FP16/AutoAWQ/GPTQModel complete local full-MMLU row. |
+| Full MMLU PTQ shard plan | `outputs/MMLU_PTQ_SHARD_PLAN_MMLU_FULL_2026_06_08.md` | Plans 29 guarded shards per FP16/AutoAWQ/GPTQModel variant over the full MMLU fixture; all shards have now been materialized into the complete 14042-row local full-MMLU task/runtime/statistics gates. |
 | Full MMLU PTQ prefix materializer | `train_python/materialize_mmlu_ptq_prefix.py` | Replays completed shard summaries into prefix task/runtime/statistics gates; this is automation for already-completed shards, not a benchmark result. |
+| Full MMLU PTQ shard runner | `train_python/run_mmlu_ptq_shards.py` | Replays missing guarded shard commands from a generated plan with skip-if-complete semantics; this is automation, not a benchmark result. |
 | Full MMLU shard raw summaries | `outputs/shards/official_ptq_task_*_qwen25_1p5b_mmlu_mmlu_full_*_2026_06_08.*` | Raw FP16/AutoAWQ/GPTQModel summaries, merged prefix summaries, and GPU-guard logs for completed shards; cite the matrix/statistics/runtime gates for paper-facing claims. |
 | Public-calibration AutoAWQ bundle gate | `outputs/OFFICIAL_AWQ_PUBLIC_CALIB_QWEN25_0P5B_BUNDLE_GATE_2026_06_07.md` | Shows a public-calibrated AutoAWQ W4 group-128 bundle can quantize and run two tiny public PPL eval slices under guard; not GPTQ/AWQ competitive coverage. |
 | Public-calibration GPTQModel readiness gate | `outputs/OFFICIAL_GPTQMODEL_PUBLIC_CALIB_QWEN25_0P5B_BUDGET8_GATE_2026_06_07.md` | Shows GPTQModel W4 group-128 can quantize with 12 public calibration texts, save/reload a local artifact through `gptq_torch`, and run tiny public WikiText2/C4 PPL diagnostics under guard; not GPTQ/AWQ competitive coverage. |
@@ -222,4 +226,4 @@ one of the following is true:
 
 Future cleanup should reduce `outputs/` by moving scratch and raw intermediate
 files out of the main branch, but not at the cost of breaking the current
-64-gate reproducibility story.
+70-gate reproducibility story.

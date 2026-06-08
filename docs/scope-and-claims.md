@@ -83,9 +83,10 @@ In compressed form, the supported claims are:
   still bounded as local subset evidence rather than full MMLU benchmark
   quality;
 - the same Qwen2.5-1.5B FP16/AutoAWQ/GPTQModel baseline confrontation now
-  reaches a matched 57-subject full-MMLU prefix12000 gate, with task retention,
-  TTFT/tokens/s/VRAM, Wilson intervals, and paired bootstrap deltas reported;
-  the remaining 2042 rows are still required before claiming complete MMLU;
+  reaches a matched 57-subject, 14,042-row local full-MMLU gate, with task
+  retention, TTFT/tokens/s/VRAM, Wilson intervals, and paired bootstrap deltas
+  reported; this is complete local MMLU coverage, but still not an official
+  leaderboard submission or a SOTA claim;
 - the same FP16/AutoAWQ/GPTQModel Qwen2.5-0.5B variants have deterministic
   IFEval-style instruction-following execution and runtime smoke gates, kept as
   execution-path evidence because the FP16 baseline is 0/8;
