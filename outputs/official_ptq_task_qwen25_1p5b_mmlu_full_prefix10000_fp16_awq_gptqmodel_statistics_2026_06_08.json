@@ -1,0 +1,133 @@
+{
+  "date": "2026-06-08T06:25:59+00:00",
+  "passed": true,
+  "matrix_title": "Qwen2.5-1.5B FP16 vs AutoAWQ vs GPTQModel full-MMLU prefix10000 task statistics",
+  "summary": {
+    "case_count": 3,
+    "variant_count": 3,
+    "format_count": 1,
+    "variants": [
+      "autoawq",
+      "fp16",
+      "gptqmodel"
+    ],
+    "task_formats": [
+      "mmlu"
+    ],
+    "baseline_variant": "fp16",
+    "total_tasks": 30000,
+    "total_passes": 17421,
+    "comparison_count": 2,
+    "min_paired_bootstrap_delta_low": -0.0582025,
+    "bootstrap_samples": 4000
+  },
+  "cases": [
+    {
+      "variant": "fp16",
+      "task_format": "mmlu",
+      "summary_path": "outputs\\shards\\official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_prefix10000_2026_06_08.json",
+      "model": "Qwen/Qwen2.5-1.5B-Instruct",
+      "loader": "hf",
+      "hf_device_map": "auto",
+      "task_count": 10000,
+      "row_count": 10000,
+      "passes": 6054,
+      "accuracy": 0.6054,
+      "wilson_accuracy_ci_95": {
+        "passes": 6054,
+        "total": 10000,
+        "mean": 0.6054,
+        "low": 0.5957816702652309,
+        "high": 0.6149373828782306
+      }
+    },
+    {
+      "variant": "autoawq",
+      "task_format": "mmlu",
+      "summary_path": "outputs\\shards\\official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_prefix10000_2026_06_08.json",
+      "model": "/home/rui/eigenskill_artifacts/qwen25_1p5b_awq_model_2026_06_07",
+      "loader": "autoawq",
+      "hf_device_map": "",
+      "task_count": 10000,
+      "row_count": 10000,
+      "passes": 5814,
+      "accuracy": 0.5814,
+      "wilson_accuracy_ci_95": {
+        "passes": 5814,
+        "total": 10000,
+        "mean": 0.5814,
+        "low": 0.5717014672259934,
+        "high": 0.5910360178392605
+      }
+    },
+    {
+      "variant": "gptqmodel",
+      "task_format": "mmlu",
+      "summary_path": "outputs\\shards\\official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_prefix10000_2026_06_08.json",
+      "model": "/home/rui/eigenskill_artifacts/qwen25_1p5b_gptq_model_smoke4_2026_06_08",
+      "loader": "gptqmodel",
+      "hf_device_map": "",
+      "task_count": 10000,
+      "row_count": 10000,
+      "passes": 5553,
+      "accuracy": 0.5553,
+      "wilson_accuracy_ci_95": {
+        "passes": 5553,
+        "total": 10000,
+        "mean": 0.5553,
+        "low": 0.5455409138940318,
+        "high": 0.5650166158861715
+      }
+    }
+  ],
+  "comparisons": [
+    {
+      "variant": "autoawq",
+      "task_format": "mmlu",
+      "baseline_variant": "fp16",
+      "shared_tasks": 10000,
+      "baseline_accuracy": 0.6054,
+      "candidate_accuracy": 0.5814,
+      "accuracy_delta_candidate_minus_baseline": -0.02400000000000002,
+      "accuracy_drop_baseline_minus_candidate": 0.02400000000000002,
+      "paired_bootstrap_delta_ci_95": {
+        "samples": 4000,
+        "mean": -0.0240468,
+        "low": -0.031,
+        "high": -0.0173,
+        "probability_nonnegative": 0.0
+      },
+      "discordant_pairs": {
+        "baseline_only_correct": 764,
+        "candidate_only_correct": 524,
+        "both_correct": 5290,
+        "both_wrong": 3422
+      }
+    },
+    {
+      "variant": "gptqmodel",
+      "task_format": "mmlu",
+      "baseline_variant": "fp16",
+      "shared_tasks": 10000,
+      "baseline_accuracy": 0.6054,
+      "candidate_accuracy": 0.5553,
+      "accuracy_delta_candidate_minus_baseline": -0.05010000000000003,
+      "accuracy_drop_baseline_minus_candidate": 0.05010000000000003,
+      "paired_bootstrap_delta_ci_95": {
+        "samples": 4000,
+        "mean": -0.050109925,
+        "low": -0.0582025,
+        "high": -0.0415,
+        "probability_nonnegative": 0.0
+      },
+      "discordant_pairs": {
+        "baseline_only_correct": 1165,
+        "candidate_only_correct": 664,
+        "both_correct": 4889,
+        "both_wrong": 3282
+      }
+    }
+  ],
+  "failures": [],
+  "claim_boundary": "Valid claim: this gate reports statistical uncertainty for an already-guarded local official-PTQ task matrix, including Wilson accuracy intervals, paired bootstrap candidate-minus-baseline deltas, and discordant-pair counts. Invalid claim: this does not prove leaderboard-scale retention, statistical superiority, SOTA PTQ quality, production speedup, mobile deployment, or energy savings."
+}
