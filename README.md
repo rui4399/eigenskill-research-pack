@@ -22,9 +22,9 @@ out of the GitHub tree.
 Read the public artifact in this order:
 
 1. [`docs/README.md`](docs/README.md) for the documentation map.
-2. [`docs/MENTOR_NOTION_REPORT_2026_06_08.md`](docs/MENTOR_NOTION_REPORT_2026_06_08.md)
-   for a mentor-facing, Notion-ready explanation of the principle, progress,
-   evidence links, and next steps.
+2. [`docs/PERSONAL_IDEA_BRIEF_2026_06_08.md`](docs/PERSONAL_IDEA_BRIEF_2026_06_08.md)
+   for a first-discussion brief explaining the personal idea, principle,
+   completed work, evidence links, and next steps.
 3. [`docs/PAPER_CLAIM_MATRIX.md`](docs/PAPER_CLAIM_MATRIX.md) for every
    supported claim and its evidence boundary.
 4. [`docs/SYSTEM_EVIDENCE_GATES.md`](docs/SYSTEM_EVIDENCE_GATES.md) for the
@@ -78,7 +78,7 @@ Current ledger status: **70 / 70 gates pass**.
 
 - GitHub contains reproducible code, gate scripts, compact documentation, and
   committed artifacts that are referenced by the claim matrix.
-- Obsidian is the place for strategy, criticism, mentor-facing notes, and
+- Obsidian is the place for strategy, criticism, private discussion notes, and
   private work logs.
 - New files should not be added to the public tree unless a gate, runbook row,
   or claim-matrix row needs them.
@@ -104,7 +104,7 @@ You should not cite it as:
 
 ```bash
 python -m unittest discover -s train_python -p "test_*.py"
-python train_python/build_current_evidence_ledger.py --expected-gate-count 64
+python train_python/build_current_evidence_ledger.py --expected-gate-count 70
 python train_python/gate_public_repo_hygiene.py \
   --out-json outputs/real_system_packer_2026-06-05/public_repo_hygiene_gate_2026_06_06.json \
   --out-md outputs/real_system_packer_2026-06-05/PUBLIC_REPO_HYGIENE_GATE_2026_06_06.md

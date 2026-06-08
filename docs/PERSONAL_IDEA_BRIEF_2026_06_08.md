@@ -1,23 +1,23 @@
-# EigenSkill-Q 导师版阶段报告
+# EigenSkill-Q 个人原创想法阶段说明
 
 Date: 2026-06-08
 Public repository: <https://github.com/rui4399/eigenskill-research-pack>
-Latest pushed commit for this report cycle: `6ff1d3c`
 
-> 这份文档是 Notion-ready 版本：导师不需要访问本机，只需要打开 GitHub
-> 链接即可看到当前研究定位、数学原理、实验进展、证据边界和后续工作。
+> 这份文档用于首次向老师介绍一个个人原创研究想法。老师目前并不了解这个
+> idea 和已完成工作，因此本文只说明：这个想法是什么、为什么值得做、目前已经
+> 做了哪些实验和工程验证、证据边界在哪里，以及下一步准备怎么补。
 
 ## 1. 一句话定位
 
-本项目当前已经从早期“跨介质/蜂群/微内核”的宏大设想，收敛为一个更清晰、
-更可验证的技术问题：
+这是一个围绕大模型量化可靠性的个人研究想法。当前已经从早期较发散的系统设想，
+收敛为一个更清晰、更可验证的技术问题：
 
 ```text
 当混合精度 LLM 量化依赖很小的校准集时，模块敏感度排序会有多不稳定？
 这种不稳定会如何影响 bit allocation？能否用跨校准集共识降低错误分配风险？
 ```
 
-因此，当前项目不再声称“提出新的 SOTA 量化器”，而是聚焦：
+因此，当前项目不把重点放在“直接提出一个新的 SOTA 量化器”，而是先聚焦：
 
 1. 发现并形式化 **Calibration Split Instability, CSI**；
 2. 给出校准噪声、秩翻转风险、bootstrap 置信区间和置换检验；
@@ -25,7 +25,8 @@ Latest pushed commit for this report cycle: `6ff1d3c`
 4. 在有限 GPU 条件下完成 Qwen2.5-1.5B 的全量 MMLU 本地匹配基线。
 
 这个定位的优点是问题边界清楚、结果可复现、证据链容易检查；当前阶段更接近
-“量化鲁棒性诊断与工具链”，还不是完整 production quantizer。
+“量化鲁棒性诊断与工具链”，还不是完整 production quantizer。换句话说，我现在
+想先把一个被忽略的可靠性问题讲清楚、测扎实，再逐步扩展到更完整的量化系统。
 
 ## 2. 为什么这个问题值得做
 
@@ -398,7 +399,7 @@ permutation null test、Holm adjustment 对趋势进行消解。
 - 报告 TTFT、tokens/s、peak VRAM；
 - 如果端到端仍慢，诚实写成 integration-risk finding。
 
-## 8. 给导师看的当前结论
+## 8. 当前阶段总结
 
 项目目前已经从“想法很大但容易发散”的状态，收敛成一个可复现、有统计支撑、
 可以持续推进的研究问题。最关键的进展不是又写了一份草稿，而是已经补上了：

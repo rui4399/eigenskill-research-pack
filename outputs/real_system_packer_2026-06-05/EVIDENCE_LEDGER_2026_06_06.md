@@ -1,8 +1,8 @@
 # Evidence Ledger
 
-Date: `2026-06-07T23:25:59+00:00`
+Date: `2026-06-08T16:41:19+00:00`
 Status: **PASS**
-Gates: `64 / 64` passed
+Gates: `70 / 70` passed
 Categories: `allocation comparator, artifact integrity, c++ runtime, calibration robustness, capability retention, decode integration, evidence, kernel, matched PTQ baseline, official PTQ readiness, paper alignment, ptq comparator, qkv replacement, quality, repo hygiene, rotation comparator, runtime profile, runtime wiring, selected-row, task execution smoke, task execution subset, task retention, theory`
 
 ## Gate Summary
@@ -68,6 +68,12 @@ Categories: `allocation comparator, artifact integrity, c++ runtime, calibration
 | `official_ptq_task_qwen25_1p5b_mmlu_broad20x20_fp16_awq_gptqmodel` | task execution smoke | **PASS** | cases 3; tasks 1200; passes 616; accuracy 0.5133; max drop 0.0400; mean tok/s 8.8340; mean TTFT 0.256271s; VRAM 0.8201 | `outputs/official_ptq_task_qwen25_1p5b_mmlu_broad20x20_fp16_awq_gptqmodel_matrix_2026_06_08.json` |
 | `official_ptq_qwen25_1p5b_mmlu_broad20x20_fp16_awq_gptqmodel_runtime_profile` | runtime profile | **PASS** | tasks 1200; cases 3; mean tok/s 8.8340; mean TTFT 0.256271s; VRAM MiB 6685; VRAM 0.8201 | `outputs/official_ptq_qwen25_1p5b_mmlu_broad20x20_fp16_awq_gptqmodel_runtime_profile_2026_06_08.json` |
 | `official_ptq_qwen25_1p5b_mmlu_broad20x20_fp16_awq_gptqmodel_statistics` | ptq comparator | **PASS** | cases 3; tasks 1200; passes 616 | `outputs/official_ptq_task_qwen25_1p5b_mmlu_broad20x20_fp16_awq_gptqmodel_statistics_2026_06_08.json` |
+| `official_ptq_task_qwen25_1p5b_mmlu_full_prefix12000_fp16_awq_gptqmodel` | task execution smoke | **PASS** | cases 3; tasks 36000; passes 20051; accuracy 0.5570; max drop 0.0483; mean tok/s 8.3343; mean TTFT 0.248223s; VRAM 0.8794 | `outputs/official_ptq_task_qwen25_1p5b_mmlu_full_prefix12000_fp16_awq_gptqmodel_matrix_2026_06_08.json` |
+| `official_ptq_qwen25_1p5b_mmlu_full_prefix12000_fp16_awq_gptqmodel_runtime_profile` | runtime profile | **PASS** | tasks 36000; cases 3; mean tok/s 8.3343; mean TTFT 0.248223s; VRAM MiB 7168; VRAM 0.8794 | `outputs/official_ptq_qwen25_1p5b_mmlu_full_prefix12000_fp16_awq_gptqmodel_runtime_profile_2026_06_08.json` |
+| `official_ptq_qwen25_1p5b_mmlu_full_prefix12000_fp16_awq_gptqmodel_statistics` | ptq comparator | **PASS** | cases 3; tasks 36000; passes 20051 | `outputs/official_ptq_task_qwen25_1p5b_mmlu_full_prefix12000_fp16_awq_gptqmodel_statistics_2026_06_08.json` |
+| `official_ptq_task_qwen25_1p5b_mmlu_full_prefix14042_fp16_awq_gptqmodel` | task execution smoke | **PASS** | cases 3; tasks 42126; passes 23694; accuracy 0.5625; max drop 0.0502; mean tok/s 8.3292; mean TTFT 0.244417s; VRAM 0.8794 | `outputs/official_ptq_task_qwen25_1p5b_mmlu_full_prefix14042_fp16_awq_gptqmodel_matrix_2026_06_08.json` |
+| `official_ptq_qwen25_1p5b_mmlu_full_prefix14042_fp16_awq_gptqmodel_runtime_profile` | runtime profile | **PASS** | tasks 42126; cases 3; mean tok/s 8.3292; mean TTFT 0.244417s; VRAM MiB 7168; VRAM 0.8794 | `outputs/official_ptq_qwen25_1p5b_mmlu_full_prefix14042_fp16_awq_gptqmodel_runtime_profile_2026_06_08.json` |
+| `official_ptq_qwen25_1p5b_mmlu_full_prefix14042_fp16_awq_gptqmodel_statistics` | ptq comparator | **PASS** | cases 3; tasks 42126; passes 23694 | `outputs/official_ptq_task_qwen25_1p5b_mmlu_full_prefix14042_fp16_awq_gptqmodel_statistics_2026_06_08.json` |
 | `allocation_family_proxy` | allocation comparator | **PASS** | cases 6; min budget util 0.9999; finite lambdas 6; nontrivial hists 6; records 1126; max avg bits 4.4999; target bits 4.5000 | `outputs/q_palette_style_allocation_family_gate_2026_06_06.json` |
 | `robust_lcb_consensus` | allocation comparator | **PASS** | cases 3; high-bit modules 99; consistent selected 80; selected modules 80; max avg bits 4.4997 | `outputs/robust_lcb_consensus_family_gate_2026_06_06.json` |
 | `robust_lcb_quality` | quality | **PASS** | cases 2; wins/uniform 2; wins/mean 0; margin vs uniform 5.6188; margin vs mean -2.8834; VRAM 0.7032 | `outputs/qwen3_0p6b_robust_lcb_quality_gate_2026_06_07.json` |

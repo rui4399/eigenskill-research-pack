@@ -9,7 +9,7 @@ is intentionally short.
 
 | Need | File |
 |---|---|
-| Mentor/Notion-ready progress report | `docs/MENTOR_NOTION_REPORT_2026_06_08.md` |
+| Personal idea brief for first discussion | `docs/PERSONAL_IDEA_BRIEF_2026_06_08.md` |
 | One-line project scope and non-claims | `docs/scope-and-claims.md` |
 | Paper-facing claim firewall | `docs/PAPER_CLAIM_MATRIX.md` |
 | Short gate index | `docs/SYSTEM_EVIDENCE_GATES.md` |
@@ -26,6 +26,7 @@ is intentionally short.
 | Quantization related-work map | `docs/RELATED_WORK_QUANTIZATION_2026.md` |
 | Paper targets and readiness | `docs/paper-targets-and-readiness.md` |
 | Multi-paper/repository split plan | `docs/RESEARCH_PORTFOLIO_SPLIT.md` |
+| RTX 3090 7B/14B scale-up plan | `docs/RTX3090_7B_14B_SCALEUP_PLAN_2026_06_09.md` |
 
 ## Workbench And Historical Notes
 
