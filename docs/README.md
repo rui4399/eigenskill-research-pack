@@ -9,6 +9,7 @@ is intentionally short.
 
 | Need | File |
 |---|---|
+| Mentor/Notion-ready progress report | `docs/MENTOR_NOTION_REPORT_2026_06_08.md` |
 | One-line project scope and non-claims | `docs/scope-and-claims.md` |
 | Paper-facing claim firewall | `docs/PAPER_CLAIM_MATRIX.md` |
 | Short gate index | `docs/SYSTEM_EVIDENCE_GATES.md` |

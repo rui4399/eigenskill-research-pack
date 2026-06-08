@@ -22,13 +22,16 @@ out of the GitHub tree.
 Read the public artifact in this order:
 
 1. [`docs/README.md`](docs/README.md) for the documentation map.
-2. [`docs/PAPER_CLAIM_MATRIX.md`](docs/PAPER_CLAIM_MATRIX.md) for every
+2. [`docs/MENTOR_NOTION_REPORT_2026_06_08.md`](docs/MENTOR_NOTION_REPORT_2026_06_08.md)
+   for a mentor-facing, Notion-ready explanation of the principle, progress,
+   evidence links, and next steps.
+3. [`docs/PAPER_CLAIM_MATRIX.md`](docs/PAPER_CLAIM_MATRIX.md) for every
    supported claim and its evidence boundary.
-3. [`docs/SYSTEM_EVIDENCE_GATES.md`](docs/SYSTEM_EVIDENCE_GATES.md) for the
+4. [`docs/SYSTEM_EVIDENCE_GATES.md`](docs/SYSTEM_EVIDENCE_GATES.md) for the
    short gate index.
-4. [`outputs/real_system_packer_2026-06-05/EVIDENCE_LEDGER_2026_06_06.md`](outputs/real_system_packer_2026-06-05/EVIDENCE_LEDGER_2026_06_06.md)
+5. [`outputs/real_system_packer_2026-06-05/EVIDENCE_LEDGER_2026_06_06.md`](outputs/real_system_packer_2026-06-05/EVIDENCE_LEDGER_2026_06_06.md)
    for the current paper-facing gate ledger.
-5. [`docs/ARTIFACT_MANIFEST.md`](docs/ARTIFACT_MANIFEST.md) if you need a map
+6. [`docs/ARTIFACT_MANIFEST.md`](docs/ARTIFACT_MANIFEST.md) if you need a map
    through the committed `outputs/` tree.
 
 Do not treat raw `outputs/` browsing as the evidence boundary. A result is
