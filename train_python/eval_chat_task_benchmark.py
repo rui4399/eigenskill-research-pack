@@ -155,15 +155,16 @@ def _convert_task(record: dict[str, Any], idx: int, task_format: str) -> dict[st
 
 def load_tasks(path: Path, task_format: str = "native") -> list[dict[str, Any]]:
     tasks: list[dict[str, Any]] = []
-    for line_no, raw in enumerate(path.read_text(encoding="utf-8").splitlines(), start=1):
-        line = raw.strip()
-        if not line or line.startswith("#"):
-            continue
-        record = json.loads(line)
-        try:
-            tasks.append(_convert_task(record, line_no - 1, task_format))
-        except ValueError as exc:
-            raise ValueError(f"{path}:{line_no}: {exc}") from exc
+    with path.open(encoding="utf-8") as handle:
+        for line_no, raw in enumerate(handle, start=1):
+            line = raw.strip()
+            if not line or line.startswith("#"):
+                continue
+            record = json.loads(line)
+            try:
+                tasks.append(_convert_task(record, line_no - 1, task_format))
+            except ValueError as exc:
+                raise ValueError(f"{path}:{line_no}: {exc}") from exc
     if not tasks:
         raise ValueError(f"no tasks found in {path}")
     return tasks

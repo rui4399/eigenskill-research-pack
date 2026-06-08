@@ -80,6 +80,21 @@ class EvalChatTaskBenchmarkTests(unittest.TestCase):
         self.assertIn("A. BLEU", tasks[0]["prompt"])
         self.assertIn("D. perplexity", tasks[0]["prompt"])
 
+    def test_load_jsonl_keeps_unicode_line_separator_inside_record(self) -> None:
+        row = {
+            "question": "Functional structures help\u2028create robust fixtures.",
+            "choices": ["No", "Yes", "Maybe", "N/A"],
+            "answer": 1,
+            "subject": "management",
+        }
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "mmlu.jsonl"
+            path.write_text(json.dumps(row, ensure_ascii=False) + "\n", encoding="utf-8")
+            tasks = bench.load_tasks(path, task_format="mmlu")
+        self.assertEqual(len(tasks), 1)
+        self.assertIn("Functional structures help", tasks[0]["prompt"])
+        self.assertEqual(tasks[0]["answer"], "B")
+
     def test_load_gsm8k_style_jsonl_extracts_final_answer(self) -> None:
         row = {"question": "How many bytes?", "answer": "Two per byte. #### 4096"}
         with tempfile.TemporaryDirectory() as tmp:

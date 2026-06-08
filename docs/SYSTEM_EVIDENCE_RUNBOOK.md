@@ -882,9 +882,68 @@ python train_python/plan_mmlu_ptq_shards.py \
 This produces `outputs/MMLU_PTQ_SHARD_PLAN_MMLU_FULL_2026_06_08.md` and a
 57-subject, 14,042-row fixture manifest at
 `outputs/PUBLIC_TASK_BENCHMARK_MMLU_MMLU_FULL_MANIFEST_2026_06_08.md`. It is a
-run plan and input fixture only. Full-MMLU retention evidence requires all
-FP16/AutoAWQ/GPTQModel shards, merged summaries, guard logs, and the generated
-task-retention/runtime/statistics gates.
+run plan and input fixture. The first 500-row shard now has matched local
+FP16/AutoAWQ/GPTQModel gates; full-MMLU retention evidence still requires the
+remaining FP16/AutoAWQ/GPTQModel shards, merged summaries, guard logs, and the
+final task-retention/runtime/statistics gates.
+
+Full-MMLU first-shard gates:
+
+```bash
+python train_python/gate_official_ptq_task_retention.py \
+  --case fp16:mmlu=outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_0_500_2026_06_08.json=outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_0_500_2026_06_08_gpu_guard.json \
+  --case autoawq:mmlu=outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_0_500_2026_06_08.json=outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_0_500_2026_06_08_gpu_guard.json \
+  --case gptqmodel:mmlu=outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_0_500_2026_06_08.json=outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_0_500_2026_06_08_gpu_guard.json \
+  --baseline-variant fp16 \
+  --required-variant fp16 \
+  --required-variant autoawq \
+  --required-variant gptqmodel \
+  --required-format mmlu \
+  --min-tasks-per-case 500 \
+  --max-memory-ratio 0.90 \
+  --max-accuracy-drop 0.06 \
+  --matrix-title "Qwen2.5-1.5B FP16 vs AutoAWQ vs GPTQModel full-MMLU first-shard task matrix" \
+  --evidence-label "local full-MMLU first 500-row task evidence" \
+  --out-json outputs/official_ptq_task_qwen25_1p5b_mmlu_full_shard0_500_fp16_awq_gptqmodel_matrix_2026_06_08.json \
+  --out-md outputs/OFFICIAL_PTQ_TASK_QWEN25_1P5B_MMLU_FULL_SHARD0_500_FP16_AWQ_GPTQMODEL_MATRIX_2026_06_08.md
+
+python train_python/gate_official_ptq_task_statistics.py \
+  --case fp16:mmlu=outputs/shards/official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_0_500_2026_06_08.json \
+  --case autoawq:mmlu=outputs/shards/official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_0_500_2026_06_08.json \
+  --case gptqmodel:mmlu=outputs/shards/official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_0_500_2026_06_08.json \
+  --baseline-variant fp16 \
+  --min-tasks-per-case 500 \
+  --min-shared-tasks 500 \
+  --max-ci-accuracy-drop 0.09 \
+  --bootstrap-samples 4000 \
+  --bootstrap-seed 20260608 \
+  --matrix-title "Qwen2.5-1.5B FP16 vs AutoAWQ vs GPTQModel full-MMLU first-shard task statistics" \
+  --out-json outputs/official_ptq_task_qwen25_1p5b_mmlu_full_shard0_500_fp16_awq_gptqmodel_statistics_2026_06_08.json \
+  --out-md outputs/OFFICIAL_PTQ_TASK_QWEN25_1P5B_MMLU_FULL_SHARD0_500_FP16_AWQ_GPTQMODEL_STATISTICS_2026_06_08.md
+
+python train_python/gate_official_ptq_runtime_profile.py \
+  --matrix-json outputs/official_ptq_task_qwen25_1p5b_mmlu_full_shard0_500_fp16_awq_gptqmodel_matrix_2026_06_08.json \
+  --baseline-variant fp16 \
+  --required-variant fp16 \
+  --required-variant autoawq \
+  --required-variant gptqmodel \
+  --min-cases-per-variant 1 \
+  --max-memory-ratio 0.90 \
+  --min-mean-tokens-per-second 1.0 \
+  --max-mean-ttft-seconds 1.0 \
+  --out-json outputs/official_ptq_qwen25_1p5b_mmlu_full_shard0_500_fp16_awq_gptqmodel_runtime_profile_2026_06_08.json \
+  --out-md outputs/OFFICIAL_PTQ_QWEN25_1P5B_MMLU_FULL_SHARD0_500_FP16_AWQ_GPTQMODEL_RUNTIME_PROFILE_2026_06_08.md
+```
+
+Current full-MMLU first-shard result: 1500 guarded task executions across FP16,
+AutoAWQ, and GPTQModel on offset 0, limit 500. FP16 gets 284/500, AutoAWQ gets
+271/500, and GPTQModel gets 260/500. The task gate records max measured drop
+`0.0480` versus FP16 and peak guard VRAM ratio `0.8730`. The runtime profile
+reports FP16 `4.8933` tok/s and `0.399046` s TTFT, AutoAWQ `10.5848` tok/s and
+`0.144740` s TTFT, and GPTQModel `8.4550` tok/s and `0.186795` s TTFT. The
+paired statistics gate reports AutoAWQ delta `-0.0260` with CI
+`[-0.0620, +0.0120]` and GPTQModel delta `-0.0480` with CI
+`[-0.0880, -0.0080]`.
 
 The earlier GSM8K200/MMLU100 statistical gate reports paired bootstrap
 candidate-minus-FP16 deltas:
