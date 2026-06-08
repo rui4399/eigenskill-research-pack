@@ -882,7 +882,7 @@ python train_python/plan_mmlu_ptq_shards.py \
 This produces `outputs/MMLU_PTQ_SHARD_PLAN_MMLU_FULL_2026_06_08.md` and a
 57-subject, 14,042-row fixture manifest at
 `outputs/PUBLIC_TASK_BENCHMARK_MMLU_MMLU_FULL_MANIFEST_2026_06_08.md`. It is a
-run plan and input fixture. The first 500-row shard now has matched local
+run plan and input fixture. The first 1000-row prefix now has matched local
 FP16/AutoAWQ/GPTQModel gates; full-MMLU retention evidence still requires the
 remaining FP16/AutoAWQ/GPTQModel shards, merged summaries, guard logs, and the
 final task-retention/runtime/statistics gates.
@@ -944,6 +944,16 @@ reports FP16 `4.8933` tok/s and `0.399046` s TTFT, AutoAWQ `10.5848` tok/s and
 paired statistics gate reports AutoAWQ delta `-0.0260` with CI
 `[-0.0620, +0.0120]` and GPTQModel delta `-0.0480` with CI
 `[-0.0880, -0.0080]`.
+
+Current full-MMLU prefix1000 result: the first two 500-row shards are merged
+per variant and gated as a 1000-row prefix. FP16 gets 584/1000, AutoAWQ gets
+559/1000, and GPTQModel gets 540/1000. The prefix task gate records max
+measured drop `0.0440` versus FP16 and peak guard VRAM ratio `0.8730`. The
+runtime profile reports FP16 `4.7503` tok/s and `0.409682` s TTFT, AutoAWQ
+`10.3844` tok/s and `0.146696` s TTFT, and GPTQModel `8.4331` tok/s and
+`0.184150` s TTFT. The paired statistics gate reports AutoAWQ delta `-0.0250`
+with CI `[-0.0480, -0.0010]` and GPTQModel delta `-0.0440` with CI
+`[-0.0710, -0.0180]`.
 
 The earlier GSM8K200/MMLU100 statistical gate reports paired bootstrap
 candidate-minus-FP16 deltas:
