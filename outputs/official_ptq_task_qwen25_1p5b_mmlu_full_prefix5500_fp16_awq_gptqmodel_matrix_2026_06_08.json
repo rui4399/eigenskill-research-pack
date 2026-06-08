@@ -1,0 +1,112 @@
+{
+  "date": "2026-06-08T04:00:32+00:00",
+  "passed": true,
+  "matrix_title": "Qwen2.5-1.5B FP16 vs AutoAWQ vs GPTQModel full-MMLU prefix5500 task matrix",
+  "evidence_label": "matched Qwen2.5-1.5B local full-MMLU prefix5500 task evidence for FP16, AutoAWQ, and GPTQModel",
+  "summary": {
+    "case_count": 3,
+    "variant_count": 3,
+    "format_count": 1,
+    "variants": [
+      "autoawq",
+      "fp16",
+      "gptqmodel"
+    ],
+    "task_formats": [
+      "mmlu"
+    ],
+    "baseline_variant": "fp16",
+    "total_tasks": 16500,
+    "total_passes": 9429,
+    "mean_accuracy": 0.5714545454545454,
+    "max_accuracy_drop_vs_fp16": 0.053636363636363704,
+    "baseline_zero_accuracy_formats": [],
+    "max_guard_vram_ratio": 0.8730217151269782,
+    "mean_tokens_per_second": 8.178168086936486,
+    "mean_ttft_seconds": 0.25459138443218154
+  },
+  "cases": [
+    {
+      "variant": "fp16",
+      "task_format": "mmlu",
+      "summary_path": "outputs\\shards\\official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_prefix5500_2026_06_08.json",
+      "guard_path": "outputs\\shards\\official_ptq_task_fp16_qwen25_1p5b_mmlu_mmlu_full_prefix5500_2026_06_08_gpu_guard.json",
+      "model": "Qwen/Qwen2.5-1.5B-Instruct",
+      "tasks": 5500,
+      "passes": 3295,
+      "accuracy": 0.5990909090909091,
+      "mean_tokens_per_second": 4.845945655797855,
+      "mean_ttft_seconds": 0.41769891555290944,
+      "guard_returncode": 0,
+      "killed_by_guard": false,
+      "killed_by_timeout": false,
+      "guard_max_memory_used_ratio": 0.8730217151269782,
+      "guard_max_memory_used_mib": 7116,
+      "guard_memory_total_mib": 8151
+    },
+    {
+      "variant": "autoawq",
+      "task_format": "mmlu",
+      "summary_path": "outputs\\shards\\official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_prefix5500_2026_06_08.json",
+      "guard_path": "outputs\\shards\\official_ptq_task_autoawq_qwen25_1p5b_mmlu_mmlu_full_prefix5500_2026_06_08_gpu_guard.json",
+      "model": "/home/rui/eigenskill_artifacts/qwen25_1p5b_awq_model_2026_06_07",
+      "tasks": 5500,
+      "passes": 3134,
+      "accuracy": 0.5698181818181818,
+      "mean_tokens_per_second": 10.90498327493169,
+      "mean_ttft_seconds": 0.1570345364621823,
+      "guard_returncode": 0,
+      "killed_by_guard": false,
+      "killed_by_timeout": false,
+      "guard_max_memory_used_ratio": 0.7693534535639799,
+      "guard_max_memory_used_mib": 6271,
+      "guard_memory_total_mib": 8151
+    },
+    {
+      "variant": "gptqmodel",
+      "task_format": "mmlu",
+      "summary_path": "outputs\\shards\\official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_prefix5500_2026_06_08.json",
+      "guard_path": "outputs\\shards\\official_ptq_task_gptqmodel_qwen25_1p5b_mmlu_mmlu_full_prefix5500_2026_06_08_gpu_guard.json",
+      "model": "/home/rui/eigenskill_artifacts/qwen25_1p5b_gptq_model_smoke4_2026_06_08",
+      "tasks": 5500,
+      "passes": 3000,
+      "accuracy": 0.5454545454545454,
+      "mean_tokens_per_second": 8.783575330079913,
+      "mean_ttft_seconds": 0.18904070128145298,
+      "guard_returncode": 0,
+      "killed_by_guard": false,
+      "killed_by_timeout": false,
+      "guard_max_memory_used_ratio": 0.7232241442767758,
+      "guard_max_memory_used_mib": 5895,
+      "guard_memory_total_mib": 8151
+    }
+  ],
+  "comparisons": [
+    {
+      "variant": "autoawq",
+      "task_format": "mmlu",
+      "baseline_variant": "fp16",
+      "baseline_accuracy": 0.5990909090909091,
+      "accuracy": 0.5698181818181818,
+      "accuracy_drop_vs_baseline": 0.02927272727272734,
+      "baseline_passes": 3295,
+      "passes": 3134,
+      "baseline_tasks": 5500,
+      "tasks": 5500
+    },
+    {
+      "variant": "gptqmodel",
+      "task_format": "mmlu",
+      "baseline_variant": "fp16",
+      "baseline_accuracy": 0.5990909090909091,
+      "accuracy": 0.5454545454545454,
+      "accuracy_drop_vs_baseline": 0.053636363636363704,
+      "baseline_passes": 3295,
+      "passes": 3000,
+      "baseline_tasks": 5500,
+      "tasks": 5500
+    }
+  ],
+  "failures": [],
+  "claim_boundary": "Valid claim: FP16 and official-package quantized artifacts are loadable and evaluated on the same matched Qwen2.5-1.5B local full-MMLU prefix5500 task evidence for FP16, AutoAWQ, and GPTQModel under GPU guard. Formats with zero FP16 accuracy are execution-only evidence. Invalid claim: this is leaderboard-scale task retention, SOTA PTQ quality, or a production inference benchmark."
+}
