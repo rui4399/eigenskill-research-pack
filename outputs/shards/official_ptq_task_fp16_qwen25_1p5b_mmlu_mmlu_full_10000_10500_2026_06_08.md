@@ -1,0 +1,518 @@
+# Chat Task Benchmark
+
+Model: `Qwen/Qwen2.5-1.5B-Instruct`
+Tasks: `500`
+Task format: `mmlu`
+Chat template: `True`
+No-think prompt: `True`
+
+## Aggregate
+
+| split | passes | accuracy | mean tok/s | mean TTFT s |
+|---|---:|---:|---:|---:|
+| baseline | 297 / 500 | 0.5940 | 5.1983 | 0.370209 |
+
+## Rows
+
+| split | id | type | passed | expected | generated |
+|---|---|---|---:|---|---|
+| baseline | `mmlu_10000` | `mcq` | false | `A` | `D.` |
+| baseline | `mmlu_10001` | `mcq` | false | `C` | `A.` |
+| baseline | `mmlu_10002` | `mcq` | false | `C` | `D. whether or not one's maxim can be universalized.` |
+| baseline | `mmlu_10003` | `mcq` | true | `A` | `A.` |
+| baseline | `mmlu_10004` | `mcq` | true | `D` | `D. All of the above.` |
+| baseline | `mmlu_10005` | `mcq` | true | `B` | `B` |
+| baseline | `mmlu_10006` | `mcq` | true | `C` | `C.` |
+| baseline | `mmlu_10007` | `mcq` | false | `C` | `A.` |
+| baseline | `mmlu_10008` | `mcq` | false | `B` | `C.` |
+| baseline | `mmlu_10009` | `mcq` | true | `A` | `A.` |
+| baseline | `mmlu_10010` | `mcq` | true | `C` | `C. both a and b.` |
+| baseline | `mmlu_10011` | `mcq` | false | `A` | `D` |
+| baseline | `mmlu_10012` | `mcq` | false | `C` | `D.` |
+| baseline | `mmlu_10013` | `mcq` | false | `D` | `C.` |
+| baseline | `mmlu_10014` | `mcq` | true | `C` | `C. identity theory` |
+| baseline | `mmlu_10015` | `mcq` | false | `D` | `A` |
+| baseline | `mmlu_10016` | `mcq` | true | `B` | `B.` |
+| baseline | `mmlu_10017` | `mcq` | false | `B` | `D. very inefficiently, and are therefore not worth donating to.` |
+| baseline | `mmlu_10018` | `mcq` | true | `C` | `C.` |
+| baseline | `mmlu_10019` | `mcq` | false | `B` | `A` |
+| baseline | `mmlu_10020` | `mcq` | true | `D` | `D.` |
+| baseline | `mmlu_10021` | `mcq` | false | `D` | `A` |
+| baseline | `mmlu_10022` | `mcq` | false | `D` | `B.` |
+| baseline | `mmlu_10023` | `mcq` | false | `C` | `D.` |
+| baseline | `mmlu_10024` | `mcq` | true | `D` | `D. All of the above` |
+| baseline | `mmlu_10025` | `mcq` | false | `D` | `C` |
+| baseline | `mmlu_10026` | `mcq` | false | `A` | `D. all of the above.` |
+| baseline | `mmlu_10027` | `mcq` | false | `A` | `D. All of the above` |
+| baseline | `mmlu_10028` | `mcq` | false | `A` | `C. parietal art.` |
+| baseline | `mmlu_10029` | `mcq` | false | `C` | `B. 500` |
+| baseline | `mmlu_10030` | `mcq` | false | `B` | `A` |
+| baseline | `mmlu_10031` | `mcq` | false | `C` | `B. random scratches and not a meaningful script or written language.` |
+| baseline | `mmlu_10032` | `mcq` | true | `C` | `C.` |
+| baseline | `mmlu_10033` | `mcq` | false | `C` | `D` |
+| baseline | `mmlu_10034` | `mcq` | true | `D` | `D.` |
+| baseline | `mmlu_10035` | `mcq` | false | `C` | `A` |
+| baseline | `mmlu_10036` | `mcq` | false | `B` | `A` |
+| baseline | `mmlu_10037` | `mcq` | true | `C` | `C.` |
+| baseline | `mmlu_10038` | `mcq` | true | `C` | `C.` |
+| baseline | `mmlu_10039` | `mcq` | true | `C` | `C. Lapita` |
+| baseline | `mmlu_10040` | `mcq` | false | `D` | `B` |
+| baseline | `mmlu_10041` | `mcq` | false | `A` | `C` |
+| baseline | `mmlu_10042` | `mcq` | true | `A` | `A.` |
+| baseline | `mmlu_10043` | `mcq` | true | `C` | `C.` |
+| baseline | `mmlu_10044` | `mcq` | true | `B` | `B.` |
+| baseline | `mmlu_10045` | `mcq` | false | `A` | `C` |
+| baseline | `mmlu_10046` | `mcq` | true | `B` | `B. Denali Complex` |
+| baseline | `mmlu_10047` | `mcq` | true | `D` | `D. all of the above` |
+| baseline | `mmlu_10048` | `mcq` | true | `B` | `B.` |
+| baseline | `mmlu_10049` | `mcq` | true | `A` | `A` |
+| baseline | `mmlu_10050` | `mcq` | false | `B` | `C.` |
+| baseline | `mmlu_10051` | `mcq` | false | `D` | `A.` |
+| baseline | `mmlu_10052` | `mcq` | false | `A` | `B. 12,000 B.P.` |
+| baseline | `mmlu_10053` | `mcq` | true | `D` | `D. all of the above.` |
+| baseline | `mmlu_10054` | `mcq` | false | `C` | `B` |
+| baseline | `mmlu_10055` | `mcq` | true | `A` | `A` |
+| baseline | `mmlu_10056` | `mcq` | true | `D` | `D.` |
+| baseline | `mmlu_10057` | `mcq` | true | `C` | `C. primatology` |
+| baseline | `mmlu_10058` | `mcq` | true | `C` | `C` |
+| baseline | `mmlu_10059` | `mcq` | false | `A` | `D. all of the above` |
+| baseline | `mmlu_10060` | `mcq` | true | `D` | `D.` |
+| baseline | `mmlu_10061` | `mcq` | true | `B` | `B. Aztec; Tenochtitlán.` |
+| baseline | `mmlu_10062` | `mcq` | true | `C` | `C.` |
+| baseline | `mmlu_10063` | `mcq` | true | `D` | `D. modern Homo sapiens` |
+| baseline | `mmlu_10064` | `mcq` | true | `D` | `D. all of the above.` |
+| baseline | `mmlu_10065` | `mcq` | true | `B` | `B` |
+| baseline | `mmlu_10066` | `mcq` | true | `B` | `B` |
+| baseline | `mmlu_10067` | `mcq` | true | `B` | `B` |
+| baseline | `mmlu_10068` | `mcq` | true | `C` | `C.` |
+| baseline | `mmlu_10069` | `mcq` | false | `A` | `D. all of the above` |
+| baseline | `mmlu_10070` | `mcq` | true | `A` | `A.` |
+| baseline | `mmlu_10071` | `mcq` | false | `B` | `D. both a and c.` |
+| baseline | `mmlu_10072` | `mcq` | false | `B` | `A.` |
+| baseline | `mmlu_10073` | `mcq` | true | `A` | `A` |
+| baseline | `mmlu_10074` | `mcq` | false | `B` | `A` |
+| baseline | `mmlu_10075` | `mcq` | false | `A` | `C.` |
+| baseline | `mmlu_10076` | `mcq` | true | `B` | `B. potatoes` |
+| baseline | `mmlu_10077` | `mcq` | false | `C` | `D` |
+| baseline | `mmlu_10078` | `mcq` | true | `A` | `A. Potlatch.` |
+| baseline | `mmlu_10079` | `mcq` | true | `D` | `D` |
+| baseline | `mmlu_10080` | `mcq` | true | `C` | `C. Scapulimancy` |
+| baseline | `mmlu_10081` | `mcq` | true | `D` | `D.` |
+| baseline | `mmlu_10082` | `mcq` | false | `D` | `A` |
+| baseline | `mmlu_10083` | `mcq` | true | `C` | `C. Mississippian` |
+| baseline | `mmlu_10084` | `mcq` | true | `B` | `B. drought.` |
+| baseline | `mmlu_10085` | `mcq` | true | `C` | `C. teosinte` |
+| baseline | `mmlu_10086` | `mcq` | false | `B` | `D.` |
+| baseline | `mmlu_10087` | `mcq` | true | `A` | `A` |
+| baseline | `mmlu_10088` | `mcq` | true | `D` | `D. all the above` |
+| baseline | `mmlu_10089` | `mcq` | false | `B` | `A` |
+| baseline | `mmlu_10090` | `mcq` | true | `C` | `C.` |
+| baseline | `mmlu_10091` | `mcq` | true | `B` | `B` |
+| baseline | `mmlu_10092` | `mcq` | false | `C` | `A` |
+| baseline | `mmlu_10093` | `mcq` | true | `B` | `B.` |
+| baseline | `mmlu_10094` | `mcq` | true | `D` | `D. all of the above` |
+| baseline | `mmlu_10095` | `mcq` | true | `A` | `A` |
+| baseline | `mmlu_10096` | `mcq` | true | `B` | `B. petroglyph.` |
+| baseline | `mmlu_10097` | `mcq` | false | `C` | `B` |
+| baseline | `mmlu_10098` | `mcq` | false | `C` | `A` |
+| baseline | `mmlu_10099` | `mcq` | false | `B` | `D. all of the above` |
+| baseline | `mmlu_10100` | `mcq` | true | `B` | `B. atlatl.` |
+| baseline | `mmlu_10101` | `mcq` | true | `B` | `B. artificial selection.` |
+| baseline | `mmlu_10102` | `mcq` | true | `C` | `C.` |
+| baseline | `mmlu_10103` | `mcq` | false | `B` | `D` |
+| baseline | `mmlu_10104` | `mcq` | false | `C` | `A. 3100 B.P.` |
+| baseline | `mmlu_10105` | `mcq` | true | `C` | `C. playing ritual ball games` |
+| baseline | `mmlu_10106` | `mcq` | false | `B` | `C.` |
+| baseline | `mmlu_10107` | `mcq` | true | `A` | `A` |
+| baseline | `mmlu_10108` | `mcq` | false | `C` | `A` |
+| baseline | `mmlu_10109` | `mcq` | false | `A` | `D` |
+| baseline | `mmlu_10110` | `mcq` | false | `C` | `A` |
+| baseline | `mmlu_10111` | `mcq` | true | `C` | `C.` |
+| baseline | `mmlu_10112` | `mcq` | false | `C` | `D. All of the above.` |
+| baseline | `mmlu_10113` | `mcq` | true | `C` | `C. a change in the environment.` |
+| baseline | `mmlu_10114` | `mcq` | true | `B` | `B` |
+| baseline | `mmlu_10115` | `mcq` | true | `D` | `D. catastrophist.` |
+| baseline | `mmlu_10116` | `mcq` | true | `D` | `D. All of the above.` |
+| baseline | `mmlu_10117` | `mcq` | true | `C` | `C.` |
+| baseline | `mmlu_10118` | `mcq` | true | `C` | `C.` |
+| baseline | `mmlu_10119` | `mcq` | true | `A` | `A.` |
+| baseline | `mmlu_10120` | `mcq` | true | `D` | `D. All of the above.` |
+| baseline | `mmlu_10121` | `mcq` | true | `A` | `A` |
+| baseline | `mmlu_10122` | `mcq` | false | `A` | `D. all of the above.` |
+| baseline | `mmlu_10123` | `mcq` | true | `A` | `A. Mississippian` |
+| baseline | `mmlu_10124` | `mcq` | true | `C` | `C` |
+| baseline | `mmlu_10125` | `mcq` | true | `C` | `C` |
+| baseline | `mmlu_10126` | `mcq` | false | `C` | `D.` |
+| baseline | `mmlu_10127` | `mcq` | true | `B` | `B. brachiation.` |
+| baseline | `mmlu_10128` | `mcq` | true | `A` | `A` |
+| baseline | `mmlu_10129` | `mcq` | true | `A` | `A` |
+| baseline | `mmlu_10130` | `mcq` | true | `A` | `A.` |
+| baseline | `mmlu_10131` | `mcq` | false | `C` | `D.` |
+| baseline | `mmlu_10132` | `mcq` | true | `A` | `A.` |
+| baseline | `mmlu_10133` | `mcq` | true | `D` | `D. China.` |
+| baseline | `mmlu_10134` | `mcq` | true | `D` | `D. tens of millions` |
+| baseline | `mmlu_10135` | `mcq` | true | `C` | `C.` |
+| baseline | `mmlu_10136` | `mcq` | true | `B` | `B` |
+| baseline | `mmlu_10137` | `mcq` | true | `B` | `B. Mit'a` |
+| baseline | `mmlu_10138` | `mcq` | true | `B` | `B.` |
+| baseline | `mmlu_10139` | `mcq` | false | `A` | `C` |
+| baseline | `mmlu_10140` | `mcq` | true | `A` | `A.` |
+| baseline | `mmlu_10141` | `mcq` | false | `A` | `D.` |
+| baseline | `mmlu_10142` | `mcq` | true | `C` | `C.` |
+| baseline | `mmlu_10143` | `mcq` | true | `D` | `D.` |
+| baseline | `mmlu_10144` | `mcq` | true | `B` | `B. phylogeny.` |
+| baseline | `mmlu_10145` | `mcq` | true | `D` | `D.` |
+| baseline | `mmlu_10146` | `mcq` | true | `B` | `B. Acheulean` |
+| baseline | `mmlu_10147` | `mcq` | true | `D` | `D.` |
+| baseline | `mmlu_10148` | `mcq` | true | `B` | `B` |
+| baseline | `mmlu_10149` | `mcq` | false | `A` | `B. A forest fire burned away the dense vegetation that concealed the cemetery.` |
+| baseline | `mmlu_10150` | `mcq` | true | `A` | `A` |
+| baseline | `mmlu_10151` | `mcq` | true | `B` | `B` |
+| baseline | `mmlu_10152` | `mcq` | false | `A` | `B` |
+| baseline | `mmlu_10153` | `mcq` | true | `B` | `B.` |
+| baseline | `mmlu_10154` | `mcq` | true | `A` | `A.` |
+| baseline | `mmlu_10155` | `mcq` | true | `C` | `C` |
+| baseline | `mmlu_10156` | `mcq` | false | `C` | `A.` |
+| baseline | `mmlu_10157` | `mcq` | false | `B` | `D.` |
+| baseline | `mmlu_10158` | `mcq` | true | `B` | `B. Neandertals used caves in Europe where their remains were preserved.` |
+| baseline | `mmlu_10159` | `mcq` | true | `B` | `B. "if you've got it, flaunt it."` |
+| baseline | `mmlu_10160` | `mcq` | true | `C` | `C` |
+| baseline | `mmlu_10161` | `mcq` | true | `C` | `C. three-age system` |
+| baseline | `mmlu_10162` | `mcq` | false | `D` | `A` |
+| baseline | `mmlu_10163` | `mcq` | true | `B` | `B` |
+| baseline | `mmlu_10164` | `mcq` | false | `B` | `C` |
+| baseline | `mmlu_10165` | `mcq` | true | `A` | `A` |
+| baseline | `mmlu_10166` | `mcq` | false | `C` | `D` |
+| baseline | `mmlu_10167` | `mcq` | true | `B` | `B` |
+| baseline | `mmlu_10168` | `mcq` | true | `A` | `A. Hang-t'u` |
+| baseline | `mmlu_10169` | `mcq` | true | `B` | `B. Lacustrine; Pelagic` |
+| baseline | `mmlu_10170` | `mcq` | true | `C` | `C. Thule` |
+| baseline | `mmlu_10171` | `mcq` | false | `A` | `D. both b and c` |
+| baseline | `mmlu_10172` | `mcq` | true | `D` | `D` |
+| baseline | `mmlu_10173` | `mcq` | false | `B` | `A.` |
+| baseline | `mmlu_10174` | `mcq` | true | `D` | `D` |
+| baseline | `mmlu_10175` | `mcq` | true | `D` | `D` |
+| baseline | `mmlu_10176` | `mcq` | true | `B` | `B.` |
+| baseline | `mmlu_10177` | `mcq` | false | `C` | `A.` |
+| baseline | `mmlu_10178` | `mcq` | true | `B` | `B` |
+| baseline | `mmlu_10179` | `mcq` | true | `D` | `D. all of the above.` |
+| baseline | `mmlu_10180` | `mcq` | true | `B` | `B` |
+| baseline | `mmlu_10181` | `mcq` | false | `D` | `B. about half way through the film` |
+| baseline | `mmlu_10182` | `mcq` | true | `A` | `A.` |
+| baseline | `mmlu_10183` | `mcq` | true | `C` | `C. Anasazi` |
+| baseline | `mmlu_10184` | `mcq` | false | `C` | `A. 80,000 B.P.` |
+| baseline | `mmlu_10185` | `mcq` | false | `B` | `D.` |
+| baseline | `mmlu_10186` | `mcq` | false | `B` | `A.` |
+| baseline | `mmlu_10187` | `mcq` | true | `D` | `D. Both B and C.` |
+| baseline | `mmlu_10188` | `mcq` | true | `C` | `C. ceremonial pathways and effigies of spirits and gods.` |
+| baseline | `mmlu_10189` | `mcq` | false | `A` | `D.` |
+| baseline | `mmlu_10190` | `mcq` | true | `A` | `A` |
+| baseline | `mmlu_10191` | `mcq` | true | `B` | `B` |
+| baseline | `mmlu_10192` | `mcq` | true | `B` | `B` |
+| baseline | `mmlu_10193` | `mcq` | true | `D` | `D.` |
+| baseline | `mmlu_10194` | `mcq` | false | `C` | `A` |
+| baseline | `mmlu_10195` | `mcq` | true | `C` | `C. Luminescence dating and optically stimulated luminescence` |
+| baseline | `mmlu_10196` | `mcq` | false | `C` | `D. both b and c` |
+| baseline | `mmlu_10197` | `mcq` | true | `C` | `C. internal; external` |
+| baseline | `mmlu_10198` | `mcq` | true | `C` | `C` |
+| baseline | `mmlu_10199` | `mcq` | false | `D` | `A` |
+| baseline | `mmlu_10200` | `mcq` | false | `A` | `D` |
+| baseline | `mmlu_10201` | `mcq` | true | `A` | `A. colder; Pleistocene epoch.` |
+| baseline | `mmlu_10202` | `mcq` | false | `D` | `B. stars and comets.` |
+| baseline | `mmlu_10203` | `mcq` | true | `D` | `D` |
+| baseline | `mmlu_10204` | `mcq` | true | `B` | `B.` |
+| baseline | `mmlu_10205` | `mcq` | true | `B` | `B` |
+| baseline | `mmlu_10206` | `mcq` | true | `D` | `D` |
+| baseline | `mmlu_10207` | `mcq` | true | `B` | `B.` |
+| baseline | `mmlu_10208` | `mcq` | false | `D` | `A. 10th century.` |
+| baseline | `mmlu_10209` | `mcq` | false | `A` | `D. all the above` |
+| baseline | `mmlu_10210` | `mcq` | true | `B` | `B. It tested the ability of human beings to adapt.` |
+| baseline | `mmlu_10211` | `mcq` | false | `C` | `A` |
+| baseline | `mmlu_10212` | `mcq` | true | `D` | `D` |
+| baseline | `mmlu_10213` | `mcq` | false | `B` | `D` |
+| baseline | `mmlu_10214` | `mcq` | true | `B` | `B. glacials.` |
+| baseline | `mmlu_10215` | `mcq` | false | `B` | `D.` |
+| baseline | `mmlu_10216` | `mcq` | false | `A` | `D.` |
+| baseline | `mmlu_10217` | `mcq` | true | `B` | `B.` |
+| baseline | `mmlu_10218` | `mcq` | true | `C` | `C. Thule` |
+| baseline | `mmlu_10219` | `mcq` | false | `C` | `D.` |
+| baseline | `mmlu_10220` | `mcq` | false | `D` | `A` |
+| baseline | `mmlu_10221` | `mcq` | true | `B` | `B` |
+| baseline | `mmlu_10222` | `mcq` | true | `B` | `B` |
+| baseline | `mmlu_10223` | `mcq` | true | `C` | `C.` |
+| baseline | `mmlu_10224` | `mcq` | false | `D` | `A` |
+| baseline | `mmlu_10225` | `mcq` | true | `C` | `C. site.` |
+| baseline | `mmlu_10226` | `mcq` | true | `B` | `B. terracing` |
+| baseline | `mmlu_10227` | `mcq` | true | `C` | `C. increasing awareness and importance of individual identity` |
+| baseline | `mmlu_10228` | `mcq` | true | `C` | `C` |
+| baseline | `mmlu_10229` | `mcq` | true | `B` | `B` |
+| baseline | `mmlu_10230` | `mcq` | true | `D` | `D. khipu.` |
+| baseline | `mmlu_10231` | `mcq` | true | `A` | `A.地中海` |
+| baseline | `mmlu_10232` | `mcq` | false | `B` | `C.` |
+| baseline | `mmlu_10233` | `mcq` | true | `C` | `C` |
+| baseline | `mmlu_10234` | `mcq` | true | `A` | `A. finely crafted large jade disks called bi` |
+| baseline | `mmlu_10235` | `mcq` | true | `D` | `D. closed to visitors because of light and moisture damage.` |
+| baseline | `mmlu_10236` | `mcq` | true | `C` | `C` |
+| baseline | `mmlu_10237` | `mcq` | true | `B` | `B. south` |
+| baseline | `mmlu_10238` | `mcq` | true | `D` | `D. An 8,000-member life-sized terra cotta army.` |
+| baseline | `mmlu_10239` | `mcq` | false | `D` | `A` |
+| baseline | `mmlu_10240` | `mcq` | true | `D` | `D.` |
+| baseline | `mmlu_10241` | `mcq` | false | `D` | `A. chimpanzees` |
+| baseline | `mmlu_10242` | `mcq` | false | `D` | `C. sorghum, emmer, and legumes.` |
+| baseline | `mmlu_10243` | `mcq` | true | `B` | `B.` |
+| baseline | `mmlu_10244` | `mcq` | true | `A` | `A.` |
+| baseline | `mmlu_10245` | `mcq` | false | `B` | `C. associations that can be established between artifacts, ecofacts, and bone.` |
+| baseline | `mmlu_10246` | `mcq` | true | `D` | `D. All of the above.` |
+| baseline | `mmlu_10247` | `mcq` | false | `C` | `B` |
+| baseline | `mmlu_10248` | `mcq` | true | `D` | `D. Mesopotamia` |
+| baseline | `mmlu_10249` | `mcq` | false | `B` | `A` |
+| baseline | `mmlu_10250` | `mcq` | true | `C` | `C. the foramen magnum` |
+| baseline | `mmlu_10251` | `mcq` | false | `C` | `A. 4.5 million; 3.2 million` |
+| baseline | `mmlu_10252` | `mcq` | false | `A` | `D. Both a and b.` |
+| baseline | `mmlu_10253` | `mcq` | false | `C` | `D. slowly increased brain size and the first stone tools.` |
+| baseline | `mmlu_10254` | `mcq` | true | `C` | `C. creationist` |
+| baseline | `mmlu_10255` | `mcq` | true | `D` | `D` |
+| baseline | `mmlu_10256` | `mcq` | true | `B` | `B.` |
+| baseline | `mmlu_10257` | `mcq` | false | `B` | `A.` |
+| baseline | `mmlu_10258` | `mcq` | false | `D` | `B. Africa` |
+| baseline | `mmlu_10259` | `mcq` | true | `A` | `A. argon/argon and potassium argon dating` |
+| baseline | `mmlu_10260` | `mcq` | true | `C` | `C. both humans and environmental changes.` |
+| baseline | `mmlu_10261` | `mcq` | false | `C` | `A` |
+| baseline | `mmlu_10262` | `mcq` | true | `C` | `C` |
+| baseline | `mmlu_10263` | `mcq` | true | `A` | `A. Wallace Trench` |
+| baseline | `mmlu_10264` | `mcq` | true | `A` | `A. Sheep` |
+| baseline | `mmlu_10265` | `mcq` | true | `C` | `C` |
+| baseline | `mmlu_10266` | `mcq` | false | `B` | `D` |
+| baseline | `mmlu_10267` | `mcq` | true | `C` | `C. uniformitarianism` |
+| baseline | `mmlu_10268` | `mcq` | false | `D` | `B` |
+| baseline | `mmlu_10269` | `mcq` | true | `D` | `D` |
+| baseline | `mmlu_10270` | `mcq` | true | `C` | `C` |
+| baseline | `mmlu_10271` | `mcq` | false | `B` | `C` |
+| baseline | `mmlu_10272` | `mcq` | false | `C` | `A. steadily improved.` |
+| baseline | `mmlu_10273` | `mcq` | true | `B` | `B.` |
+| baseline | `mmlu_10274` | `mcq` | false | `D` | `B` |
+| baseline | `mmlu_10275` | `mcq` | true | `D` | `D.` |
+| baseline | `mmlu_10276` | `mcq` | true | `D` | `D` |
+| baseline | `mmlu_10277` | `mcq` | true | `A` | `A.` |
+| baseline | `mmlu_10278` | `mcq` | true | `C` | `C.` |
+| baseline | `mmlu_10279` | `mcq` | true | `C` | `C. 1450 A.D.` |
+| baseline | `mmlu_10280` | `mcq` | true | `D` | `D. Sunda; Sahul` |
+| baseline | `mmlu_10281` | `mcq` | true | `D` | `D.` |
+| baseline | `mmlu_10282` | `mcq` | true | `D` | `D. all the above` |
+| baseline | `mmlu_10283` | `mcq` | false | `C` | `D. all of the above` |
+| baseline | `mmlu_10284` | `mcq` | true | `D` | `D.` |
+| baseline | `mmlu_10285` | `mcq` | false | `A` | `D. All of the above.` |
+| baseline | `mmlu_10286` | `mcq` | false | `C` | `B. Inca` |
+| baseline | `mmlu_10287` | `mcq` | true | `B` | `B` |
+| baseline | `mmlu_10288` | `mcq` | false | `B` | `A.` |
+| baseline | `mmlu_10289` | `mcq` | true | `B` | `B.` |
+| baseline | `mmlu_10290` | `mcq` | true | `A` | `A.` |
+| baseline | `mmlu_10291` | `mcq` | true | `C` | `C` |
+| baseline | `mmlu_10292` | `mcq` | true | `A` | `A.` |
+| baseline | `mmlu_10293` | `mcq` | true | `A` | `A. sacrificed adults and occasionally children` |
+| baseline | `mmlu_10294` | `mcq` | true | `D` | `D.` |
+| baseline | `mmlu_10295` | `mcq` | true | `D` | `D. foraging` |
+| baseline | `mmlu_10296` | `mcq` | false | `C` | `D. all of the above.` |
+| baseline | `mmlu_10297` | `mcq` | true | `C` | `C` |
+| baseline | `mmlu_10298` | `mcq` | true | `A` | `A. forensic anthropologist` |
+| baseline | `mmlu_10299` | `mcq` | true | `B` | `B` |
+| baseline | `mmlu_10300` | `mcq` | true | `A` | `A. Miocene.` |
+| baseline | `mmlu_10301` | `mcq` | true | `B` | `B. intelligence` |
+| baseline | `mmlu_10302` | `mcq` | false | `A` | `D.` |
+| baseline | `mmlu_10303` | `mcq` | true | `A` | `A` |
+| baseline | `mmlu_10304` | `mcq` | true | `A` | `A. chimpanzees` |
+| baseline | `mmlu_10305` | `mcq` | false | `A` | `D.` |
+| baseline | `mmlu_10306` | `mcq` | true | `A` | `A` |
+| baseline | `mmlu_10307` | `mcq` | false | `C` | `A. the height and size of its monumental architecture` |
+| baseline | `mmlu_10308` | `mcq` | false | `C` | `A` |
+| baseline | `mmlu_10309` | `mcq` | true | `D` | `D` |
+| baseline | `mmlu_10310` | `mcq` | true | `D` | `D.` |
+| baseline | `mmlu_10311` | `mcq` | true | `C` | `C.` |
+| baseline | `mmlu_10312` | `mcq` | false | `C` | `A` |
+| baseline | `mmlu_10313` | `mcq` | true | `D` | `D` |
+| baseline | `mmlu_10314` | `mcq` | false | `B` | `A. the founding of the Minos dynasty and the invasion of the Mycenaeans` |
+| baseline | `mmlu_10315` | `mcq` | true | `D` | `D. Clovis` |
+| baseline | `mmlu_10316` | `mcq` | true | `A` | `A` |
+| baseline | `mmlu_10317` | `mcq` | true | `B` | `B. Australopithecus afarensis` |
+| baseline | `mmlu_10318` | `mcq` | true | `D` | `D. cave paintings` |
+| baseline | `mmlu_10319` | `mcq` | true | `B` | `B. just after A.D. 1000` |
+| baseline | `mmlu_10320` | `mcq` | true | `A` | `A. chiefdom` |
+| baseline | `mmlu_10321` | `mcq` | true | `D` | `D.` |
+| baseline | `mmlu_10322` | `mcq` | false | `C` | `B. simple foragers.` |
+| baseline | `mmlu_10323` | `mcq` | true | `C` | `C. how societies respond to challenges` |
+| baseline | `mmlu_10324` | `mcq` | true | `D` | `D. the Adena` |
+| baseline | `mmlu_10325` | `mcq` | true | `A` | `A. the Adena` |
+| baseline | `mmlu_10326` | `mcq` | true | `C` | `C.` |
+| baseline | `mmlu_10327` | `mcq` | true | `D` | `D.` |
+| baseline | `mmlu_10328` | `mcq` | true | `C` | `C.` |
+| baseline | `mmlu_10329` | `mcq` | true | `B` | `B.` |
+| baseline | `mmlu_10330` | `mcq` | true | `C` | `C.` |
+| baseline | `mmlu_10331` | `mcq` | true | `A` | `A. Europe` |
+| baseline | `mmlu_10332` | `mcq` | true | `C` | `C. Intelligence and cultural adaptations.` |
+| baseline | `mmlu_10333` | `mcq` | true | `B` | `B.` |
+| baseline | `mmlu_10334` | `mcq` | false | `A` | `B. oppressive social and religious control based on military conquest.` |
+| baseline | `mmlu_10335` | `mcq` | true | `D` | `D` |
+| baseline | `mmlu_10336` | `mcq` | true | `D` | `D. All the above` |
+| baseline | `mmlu_10337` | `mcq` | true | `B` | `B. dendrochronology` |
+| baseline | `mmlu_10338` | `mcq` | true | `D` | `D. Asia` |
+| baseline | `mmlu_10339` | `mcq` | false | `C` | `B. 100,000 years` |
+| baseline | `mmlu_10340` | `mcq` | false | `C` | `A. New Guinea` |
+| baseline | `mmlu_10341` | `mcq` | true | `A` | `A` |
+| baseline | `mmlu_10342` | `mcq` | true | `C` | `C` |
+| baseline | `mmlu_10343` | `mcq` | true | `D` | `D` |
+| baseline | `mmlu_10344` | `mcq` | true | `B` | `B` |
+| baseline | `mmlu_10345` | `mcq` | true | `B` | `B. a much colder climate during that time.` |
+| baseline | `mmlu_10346` | `mcq` | true | `A` | `A` |
+| baseline | `mmlu_10347` | `mcq` | false | `B` | `C. 5100 B.P.` |
+| baseline | `mmlu_10348` | `mcq` | false | `C` | `A` |
+| baseline | `mmlu_10349` | `mcq` | true | `A` | `A. 164%` |
+| baseline | `mmlu_10350` | `mcq` | true | `B` | `B. No effect Understated` |
+| baseline | `mmlu_10351` | `mcq` | false | `B` | `A` |
+| baseline | `mmlu_10352` | `mcq` | true | `D` | `D.` |
+| baseline | `mmlu_10353` | `mcq` | true | `A` | `A.` |
+| baseline | `mmlu_10354` | `mcq` | false | `C` | `B. -$27` |
+| baseline | `mmlu_10355` | `mcq` | false | `D` | `B. Understated Overstated` |
+| baseline | `mmlu_10356` | `mcq` | false | `D` | `B. $104.29` |
+| baseline | `mmlu_10357` | `mcq` | true | `D` | `D` |
+| baseline | `mmlu_10358` | `mcq` | false | `C` | `B. $132,000` |
+| baseline | `mmlu_10359` | `mcq` | false | `D` | `A. $100` |
+| baseline | `mmlu_10360` | `mcq` | false | `B` | `A. $0` |
+| baseline | `mmlu_10361` | `mcq` | true | `A` | `A. Engagement performance.` |
+| baseline | `mmlu_10362` | `mcq` | true | `B` | `B. $22,500` |
+| baseline | `mmlu_10363` | `mcq` | false | `C` | `A. $100 billion` |
+| baseline | `mmlu_10364` | `mcq` | true | `B` | `B` |
+| baseline | `mmlu_10365` | `mcq` | false | `C` | `B. $25,000` |
+| baseline | `mmlu_10366` | `mcq` | true | `C` | `C` |
+| baseline | `mmlu_10367` | `mcq` | false | `C` | `A` |
+| baseline | `mmlu_10368` | `mcq` | false | `B` | `C` |
+| baseline | `mmlu_10369` | `mcq` | true | `B` | `B` |
+| baseline | `mmlu_10370` | `mcq` | false | `D` | `A. 600` |
+| baseline | `mmlu_10371` | `mcq` | true | `B` | `B` |
+| baseline | `mmlu_10372` | `mcq` | true | `C` | `C. $830,000` |
+| baseline | `mmlu_10373` | `mcq` | false | `D` | `C. A contract was formed on the day Jackson received Sands' acceptance  This answer is based on the understanding that u` |
+| baseline | `mmlu_10374` | `mcq` | true | `B` | `B. $1600 $2800` |
+| baseline | `mmlu_10375` | `mcq` | true | `D` | `D` |
+| baseline | `mmlu_10376` | `mcq` | true | `D` | `D` |
+| baseline | `mmlu_10377` | `mcq` | true | `B` | `B` |
+| baseline | `mmlu_10378` | `mcq` | true | `C` | `C. $82` |
+| baseline | `mmlu_10379` | `mcq` | true | `B` | `B. $492,500` |
+| baseline | `mmlu_10380` | `mcq` | false | `B` | `A` |
+| baseline | `mmlu_10381` | `mcq` | false | `A` | `D. A B and C.` |
+| baseline | `mmlu_10382` | `mcq` | true | `A` | `A. Not refer to the change in the auditor’s report.` |
+| baseline | `mmlu_10383` | `mcq` | true | `D` | `D` |
+| baseline | `mmlu_10384` | `mcq` | false | `B` | `C` |
+| baseline | `mmlu_10385` | `mcq` | true | `B` | `B.` |
+| baseline | `mmlu_10386` | `mcq` | false | `C` | `B. 8.50%` |
+| baseline | `mmlu_10387` | `mcq` | false | `D` | `B. 6.25 percent` |
+| baseline | `mmlu_10388` | `mcq` | false | `D` | `A. $25000 $25000 $0` |
+| baseline | `mmlu_10389` | `mcq` | false | `C` | `B. $5,000` |
+| baseline | `mmlu_10390` | `mcq` | true | `D` | `D. $242,000` |
+| baseline | `mmlu_10391` | `mcq` | false | `A` | `C` |
+| baseline | `mmlu_10392` | `mcq` | true | `A` | `A. January.` |
+| baseline | `mmlu_10393` | `mcq` | true | `A` | `A.` |
+| baseline | `mmlu_10394` | `mcq` | true | `A` | `A. Zero.` |
+| baseline | `mmlu_10395` | `mcq` | false | `C` | `B.` |
+| baseline | `mmlu_10396` | `mcq` | false | `B` | `A. $0` |
+| baseline | `mmlu_10397` | `mcq` | true | `C` | `C.` |
+| baseline | `mmlu_10398` | `mcq` | false | `C` | `B` |
+| baseline | `mmlu_10399` | `mcq` | false | `A` | `B. (2,2),(2,3),(4,2)` |
+| baseline | `mmlu_10400` | `mcq` | true | `A` | `A. $2,500` |
+| baseline | `mmlu_10401` | `mcq` | true | `B` | `B` |
+| baseline | `mmlu_10402` | `mcq` | false | `D` | `C. Six months.` |
+| baseline | `mmlu_10403` | `mcq` | true | `C` | `C. The procedures to be applied on a particular engagement are a matter of the auditor's professional judgment.` |
+| baseline | `mmlu_10404` | `mcq` | true | `D` | `D. Studio did not terminate.` |
+| baseline | `mmlu_10405` | `mcq` | true | `D` | `D` |
+| baseline | `mmlu_10406` | `mcq` | false | `D` | `B. $5,000,000` |
+| baseline | `mmlu_10407` | `mcq` | false | `D` | `B. Developing a new fixed asset system to manage the assets and related depreciation` |
+| baseline | `mmlu_10408` | `mcq` | false | `D` | `C.` |
+| baseline | `mmlu_10409` | `mcq` | true | `C` | `C` |
+| baseline | `mmlu_10410` | `mcq` | true | `A` | `A. Make inquiries of management concerning restrictions on the availability of cash balances.` |
+| baseline | `mmlu_10411` | `mcq` | false | `D` | `B. $280,000` |
+| baseline | `mmlu_10412` | `mcq` | false | `A` | `B. $19,000` |
+| baseline | `mmlu_10413` | `mcq` | false | `B` | `A. $0` |
+| baseline | `mmlu_10414` | `mcq` | true | `C` | `C. Greater than the initial investment.` |
+| baseline | `mmlu_10415` | `mcq` | true | `C` | `C. $14,000` |
+| baseline | `mmlu_10416` | `mcq` | false | `C` | `B. $150,000` |
+| baseline | `mmlu_10417` | `mcq` | false | `D` | `C. Facts known to the predecessor auditor that might bear on the integrity of management.` |
+| baseline | `mmlu_10418` | `mcq` | false | `C` | `A. Current liabilities of $1,000,000; long-term liabilities of $1,050,000` |
+| baseline | `mmlu_10419` | `mcq` | false | `B` | `A. 36000` |
+| baseline | `mmlu_10420` | `mcq` | false | `C` | `B. $100,276` |
+| baseline | `mmlu_10421` | `mcq` | false | `A` | `B. $16,000` |
+| baseline | `mmlu_10422` | `mcq` | true | `D` | `D.` |
+| baseline | `mmlu_10423` | `mcq` | true | `B` | `B. $10.00` |
+| baseline | `mmlu_10424` | `mcq` | true | `A` | `A. Variable sampling.` |
+| baseline | `mmlu_10425` | `mcq` | true | `A` | `A` |
+| baseline | `mmlu_10426` | `mcq` | false | `B` | `D.` |
+| baseline | `mmlu_10427` | `mcq` | false | `D` | `C. The estimated remaining useful lives of plant assets were revised upward.` |
+| baseline | `mmlu_10428` | `mcq` | true | `C` | `C. Depreciation.` |
+| baseline | `mmlu_10429` | `mcq` | false | `B` | `D` |
+| baseline | `mmlu_10430` | `mcq` | false | `B` | `A` |
+| baseline | `mmlu_10431` | `mcq` | true | `A` | `A` |
+| baseline | `mmlu_10432` | `mcq` | true | `B` | `B. $2.87` |
+| baseline | `mmlu_10433` | `mcq` | true | `C` | `C. $5,333` |
+| baseline | `mmlu_10434` | `mcq` | true | `D` | `D. Disclose the departure from GAAP in a separate paragraph of the accountant's report.` |
+| baseline | `mmlu_10435` | `mcq` | false | `A` | `C. $62.50` |
+| baseline | `mmlu_10436` | `mcq` | false | `C` | `B. $7,000` |
+| baseline | `mmlu_10437` | `mcq` | true | `A` | `A. Single.` |
+| baseline | `mmlu_10438` | `mcq` | false | `B` | `A. $23.22` |
+| baseline | `mmlu_10439` | `mcq` | false | `D` | `A. September 15, year 2.` |
+| baseline | `mmlu_10440` | `mcq` | false | `D` | `A.` |
+| baseline | `mmlu_10441` | `mcq` | false | `C` | `B.` |
+| baseline | `mmlu_10442` | `mcq` | false | `A` | `D` |
+| baseline | `mmlu_10443` | `mcq` | false | `A` | `C` |
+| baseline | `mmlu_10444` | `mcq` | true | `C` | `C` |
+| baseline | `mmlu_10445` | `mcq` | true | `A` | `A.` |
+| baseline | `mmlu_10446` | `mcq` | true | `B` | `B. Sunk costs` |
+| baseline | `mmlu_10447` | `mcq` | false | `D` | `C. Notes to the financial statements.` |
+| baseline | `mmlu_10448` | `mcq` | false | `C` | `D.` |
+| baseline | `mmlu_10449` | `mcq` | true | `A` | `A. Option contract.` |
+| baseline | `mmlu_10450` | `mcq` | true | `C` | `C.` |
+| baseline | `mmlu_10451` | `mcq` | true | `C` | `C. $480,000.00` |
+| baseline | `mmlu_10452` | `mcq` | false | `D` | `C.` |
+| baseline | `mmlu_10453` | `mcq` | true | `A` | `A. $10,000` |
+| baseline | `mmlu_10454` | `mcq` | false | `C` | `A` |
+| baseline | `mmlu_10455` | `mcq` | false | `C` | `A` |
+| baseline | `mmlu_10456` | `mcq` | true | `A` | `A. 9.4% and 11.2%` |
+| baseline | `mmlu_10457` | `mcq` | true | `B` | `B. $644,000` |
+| baseline | `mmlu_10458` | `mcq` | false | `A` | `B. Yes No` |
+| baseline | `mmlu_10459` | `mcq` | true | `B` | `B` |
+| baseline | `mmlu_10460` | `mcq` | false | `D` | `A.` |
+| baseline | `mmlu_10461` | `mcq` | true | `D` | `D. Monitoring.` |
+| baseline | `mmlu_10462` | `mcq` | false | `B` | `A. $50` |
+| baseline | `mmlu_10463` | `mcq` | true | `C` | `C` |
+| baseline | `mmlu_10464` | `mcq` | false | `D` | `C` |
+| baseline | `mmlu_10465` | `mcq` | false | `A` | `B. Yes No` |
+| baseline | `mmlu_10466` | `mcq` | true | `B` | `B` |
+| baseline | `mmlu_10467` | `mcq` | false | `C` | `A. $40,000` |
+| baseline | `mmlu_10468` | `mcq` | false | `D` | `C` |
+| baseline | `mmlu_10469` | `mcq` | true | `D` | `D. Possible effects on the entity’s financial statements.` |
+| baseline | `mmlu_10470` | `mcq` | true | `A` | `A.` |
+| baseline | `mmlu_10471` | `mcq` | false | `C` | `B.` |
+| baseline | `mmlu_10472` | `mcq` | false | `C` | `B. $20.18` |
+| baseline | `mmlu_10473` | `mcq` | true | `D` | `D.` |
+| baseline | `mmlu_10474` | `mcq` | false | `D` | `B. 6.4` |
+| baseline | `mmlu_10475` | `mcq` | true | `A` | `A.` |
+| baseline | `mmlu_10476` | `mcq` | true | `A` | `A. Lower Lower` |
+| baseline | `mmlu_10477` | `mcq` | true | `B` | `B` |
+| baseline | `mmlu_10478` | `mcq` | false | `B` | `C. Three years.` |
+| baseline | `mmlu_10479` | `mcq` | true | `A` | `A. Acceptance of a client relationship.` |
+| baseline | `mmlu_10480` | `mcq` | true | `D` | `D` |
+| baseline | `mmlu_10481` | `mcq` | false | `C` | `B. $61,250` |
+| baseline | `mmlu_10482` | `mcq` | false | `C` | `A. $0` |
+| baseline | `mmlu_10483` | `mcq` | false | `D` | `A. $0` |
+| baseline | `mmlu_10484` | `mcq` | false | `B` | `A. $0` |
+| baseline | `mmlu_10485` | `mcq` | false | `C` | `B. $560,000` |
+| baseline | `mmlu_10486` | `mcq` | false | `D` | `A. Strict liability.` |
+| baseline | `mmlu_10487` | `mcq` | false | `B` | `A. -$9,500` |
+| baseline | `mmlu_10488` | `mcq` | false | `D` | `C` |
+| baseline | `mmlu_10489` | `mcq` | false | `C` | `D. Tracking warranty expenses over time.` |
+| baseline | `mmlu_10490` | `mcq` | true | `A` | `A` |
+| baseline | `mmlu_10491` | `mcq` | false | `C` | `B.` |
+| baseline | `mmlu_10492` | `mcq` | false | `B` | `A. $520,000` |
+| baseline | `mmlu_10493` | `mcq` | false | `D` | `C` |
+| baseline | `mmlu_10494` | `mcq` | false | `A` | `B` |
+| baseline | `mmlu_10495` | `mcq` | false | `D` | `A. Disclaim an opinion on the financial statements and advise the board of directors that the financial statements shoul` |
+| baseline | `mmlu_10496` | `mcq` | false | `C` | `A` |
+| baseline | `mmlu_10497` | `mcq` | true | `C` | `C. Benchmarking` |
+| baseline | `mmlu_10498` | `mcq` | true | `A` | `A. $12.20` |
+| baseline | `mmlu_10499` | `mcq` | false | `A` | `B. $118,500` |
