@@ -1,6 +1,6 @@
 # Evidence Ledger
 
-Date: `2026-06-08T16:41:19+00:00`
+Date: `2026-06-09T00:18:20+00:00`
 Status: **PASS**
 Gates: `70 / 70` passed
 Categories: `allocation comparator, artifact integrity, c++ runtime, calibration robustness, capability retention, decode integration, evidence, kernel, matched PTQ baseline, official PTQ readiness, paper alignment, ptq comparator, qkv replacement, quality, repo hygiene, rotation comparator, runtime profile, runtime wiring, selected-row, task execution smoke, task execution subset, task retention, theory`
@@ -20,7 +20,7 @@ Categories: `allocation comparator, artifact integrity, c++ runtime, calibration
 | `calibration_robustness_stress` | calibration robustness | **PASS** | cases 11; wins/uniform 11; wins/best-random 11; wins/random-mean 11; mean margin/uniform 4.2942; mean margin/uniform CI [3.0664, 5.6886]; worst margin/uniform 1.3608; mean margin/best-random 1.1622; mean margin/best-random CI [0.6143, 1.7982]; worst margin/best-random 0.1120; mean margin/random-mean 2.7444; mean margin/random-mean CI [1.7921, 3.5862]; worst margin/random-mean 0.5656; mean FP16 regret 4.1683; max FP16 regret 11.6693; sign p/uniform 0.00048828; sign p/best-random 0.00048828; sign p/random-mean 0.00048828 | `outputs/calibration_robustness_stress_gate_2026_06_07.json` |
 | `consensus_transfer_boundary` | allocation comparator | **PASS** | cases 2; slices 4; wins/left-single 4; wins/right-single 2; wins/best-single 2; wins/worst-single 4; min margin/worst-single 0.8726; mean regret/best-single 0.0043; max regret/best-single 0.3046 | `outputs/consensus_transfer_boundary_gate_2026_06_07.json` |
 | `interaction_swap_boundary` | allocation comparator | **PASS** | cases 3; trials 16; improved cases 1; improved trials 5; interaction counterexamples 5; max best improvement 0.0502; transfer positives 1; transfer max regret 0.0087; VRAM 0.8487 | `outputs/interaction_swap_boundary_gate_2026_06_07.json` |
-| `paper_evidence_alignment` | paper alignment | **PASS** | required refs 51; missing refs 0; paper paths 60; missing paths 0; unsafe claims 0; stale tokens 0; ledger gates 64 | `outputs/paper_evidence_alignment_gate_2026_06_08.json` |
+| `paper_evidence_alignment` | paper alignment | **PASS** | required refs 57; missing refs 0; paper paths 66; missing paths 0; unsafe claims 0; stale tokens 0; ledger gates 70 | `outputs/paper_evidence_alignment_gate_2026_06_08.json` |
 | `esmp_package` | artifact integrity | **PASS** | checked modules 8/8; missing files 0; failed modules 0; checked compression 6.2797x | `outputs/real_system_packer_2026-06-05/esmp_package_verify_qwen3_0p6b_limit8_2026_06_06.json` |
 | `triton_shape_family` | kernel | **PASS** | configs 96/96; FP16 wins 10; best FP16 2.7647x; VRAM 0.4514 | `outputs/real_system_packer_2026-06-05/triton_qwen_shape_family_gate_2026_06_06.json` |
 | `w4a8_activation_reconstruction` | evidence | **PASS** | compression 7.6411x | `outputs/w4a8_activation_reconstruction_2026_06_08/w4a8_activation_reconstruction_gate.json` |

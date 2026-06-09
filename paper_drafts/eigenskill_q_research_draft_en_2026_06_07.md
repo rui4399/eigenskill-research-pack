@@ -22,7 +22,7 @@ fake-quant loss sensitivity on multiple calibration views, allocates a fixed
 `{4,8}`-bit budget through cross-split consensus sensitivity, and records every
 paper-facing result through executable evidence gates. Across Qwen3-0.6B,
 Qwen3-1.7B, OLMo2-0425-1B-Instruct, and SmolLM2-1.7B short-slice diagnostics,
-the current evidence ledger passes 64/64 gates. The calibration-instability
+the current evidence ledger passes 70/70 gates. The calibration-instability
 gate finds 3/3 unstable model/dataset cases with mean score/cost Spearman
 0.0713 and mean top-20 Jaccard 0.1022. A Qwen2.5 perturbation matrix further
 separates calibration sample-size and model-scale effects: within-model
@@ -133,6 +133,17 @@ is 0.8201, mean throughput is 8.8340 tokens/s, mean TTFT is 0.256271 s, and the
 minimum paired-bootstrap lower bound is -0.0825 under 4,000 samples. This
 further improves subject breadth, but is still not full MMLU or
 leaderboard-scale retention.
+The latest matched local MMLU evidence completes the same protocol over the
+57-subject, 14,042-row full-MMLU fixture, after a 12,000-row prefix checkpoint.
+On the complete row, FP16 obtains 8234/14042, AutoAWQ obtains 7931/14042, and
+GPTQModel obtains 7529/14042; max measured drop versus FP16 is 0.0502, peak
+guarded VRAM ratio is 0.8794, mean throughput is 8.3292 tokens/s, and mean TTFT
+is 0.244417 s across the three local loaders. Paired bootstrap deltas versus
+FP16 are -0.0216 for AutoAWQ with CI [-0.0273, -0.0155] and -0.0502 for
+GPTQModel with CI [-0.0570, -0.0432]. This closes the local full-MMLU execution
+gap for these three variants, but it remains guarded PC-side evidence rather
+than official leaderboard submission; it is not PTQ superiority, production
+runtime, mobile deployment, or energy evidence.
 ESMP packaging, Triton shape tuning, selected-row
 execution, shallow fused-QKV generation, and C++ audit tools are executable.
 The repository does not claim a production LLM runtime.
@@ -172,7 +183,7 @@ offers three narrower contributions:
    consensus allocator that protects modules that are consistently sensitive or
    have high average sensitivity under a fixed `{4,8}` budget.
 3. **Gated evidence discipline.** We convert scattered fake-quant, runtime,
-   task-smoke, paper-alignment, and repository-hygiene outputs into 64 executable gates, each
+   task-smoke, paper-alignment, and repository-hygiene outputs into 70 executable gates, each
    with an explicit claim boundary.
 
 The paper is intentionally conservative. It keeps negative results visible:
@@ -505,7 +516,7 @@ future allocator.
 ## 7. Evidence Gates
 
 Every paper-facing claim is indexed by a gate JSON and a Markdown report. The
-current ledger passes 64/64 gates. The most important gates are:
+current ledger passes 70/70 gates. The most important gates are:
 
 | Gate | Evidence | Valid claim | Non-claim |
 |---|---|---|---|
@@ -549,6 +560,9 @@ current ledger passes 64/64 gates. The most important gates are:
 | Qwen2.5-1.5B MMLU Broad10x20 runtime/statistics | PC-side runtime and paired bootstrap reports over the same 600 task executions; see `outputs/OFFICIAL_PTQ_QWEN25_1P5B_MMLU_BROAD10X20_FP16_AWQ_GPTQMODEL_RUNTIME_PROFILE_2026_06_08.md` and `outputs/OFFICIAL_PTQ_TASK_QWEN25_1P5B_MMLU_BROAD10X20_FP16_AWQ_GPTQMODEL_STATISTICS_2026_06_08.md`. | The runtime profile reports mean 8.8134 tokens/s, mean TTFT 0.245115 s, and max guarded VRAM 0.8189; the statistics gate reports minimum paired-bootstrap lower bound -0.0950. | Local subset uncertainty disclosure only, not statistical superiority, full MMLU retention, or production speed evidence. |
 | Qwen2.5-1.5B MMLU Broad20x20 task evidence | FP16, AutoAWQ, and GPTQModel Qwen2.5-1.5B on a twenty-subject 400-row MMLU fixture; see `outputs/OFFICIAL_PTQ_TASK_QWEN25_1P5B_MMLU_BROAD20X20_FP16_AWQ_GPTQMODEL_MATRIX_2026_06_08.md`. | The row records FP16 at 214/400, AutoAWQ at 204/400, GPTQModel at 198/400, max measured drop 0.0400 versus FP16, and peak guard VRAM ratio 0.8201. | Twenty-subject local subset only, not full MMLU, leaderboard-scale retention, complete PTQ baseline coverage, production runtime, mobile deployment, or SOTA PTQ. |
 | Qwen2.5-1.5B MMLU Broad20x20 runtime/statistics | PC-side runtime and paired bootstrap reports over the same 1200 task executions; see `outputs/OFFICIAL_PTQ_QWEN25_1P5B_MMLU_BROAD20X20_FP16_AWQ_GPTQMODEL_RUNTIME_PROFILE_2026_06_08.md` and `outputs/OFFICIAL_PTQ_TASK_QWEN25_1P5B_MMLU_BROAD20X20_FP16_AWQ_GPTQMODEL_STATISTICS_2026_06_08.md`. | The runtime profile reports mean 8.8340 tokens/s, mean TTFT 0.256271 s, and max guarded VRAM 0.8201; the statistics gate reports minimum paired-bootstrap lower bound -0.0825. | Local subset uncertainty disclosure only, not statistical superiority, full MMLU retention, or production speed evidence. |
+| Qwen2.5-1.5B full-MMLU prefix12000 task/runtime/statistics | FP16, AutoAWQ, and GPTQModel Qwen2.5-1.5B on the first 12,000 rows of the 57-subject MMLU fixture; see `outputs/OFFICIAL_PTQ_TASK_QWEN25_1P5B_MMLU_FULL_PREFIX12000_FP16_AWQ_GPTQMODEL_MATRIX_2026_06_08.md`, `outputs/OFFICIAL_PTQ_QWEN25_1P5B_MMLU_FULL_PREFIX12000_FP16_AWQ_GPTQMODEL_RUNTIME_PROFILE_2026_06_08.md`, and `outputs/OFFICIAL_PTQ_TASK_QWEN25_1P5B_MMLU_FULL_PREFIX12000_FP16_AWQ_GPTQMODEL_STATISTICS_2026_06_08.md`. | The prefix checkpoint records FP16 6968/12000, AutoAWQ 6694/12000, GPTQModel 6389/12000, max measured drop 0.0483, peak guard VRAM ratio 0.8794, and minimum paired-bootstrap lower bound -0.0558. | Prefix-only local evidence, not complete MMLU, not leaderboard-scale retention, not official PTQ competitiveness, not production runtime, not mobile deployment, and not SOTA PTQ. |
+| Qwen2.5-1.5B complete full-MMLU task evidence | FP16, AutoAWQ, and GPTQModel Qwen2.5-1.5B on all 14,042 rows of the 57-subject MMLU fixture; see `outputs/OFFICIAL_PTQ_TASK_QWEN25_1P5B_MMLU_FULL_PREFIX14042_FP16_AWQ_GPTQMODEL_MATRIX_2026_06_08.md`. | The complete row records FP16 8234/14042, AutoAWQ 7931/14042, GPTQModel 7529/14042, max measured drop 0.0502, and peak guard VRAM ratio 0.8794. | Guarded local full-MMLU execution only, not official leaderboard submission, not PTQ superiority, not production runtime, not mobile deployment, and not SOTA PTQ. |
+| Qwen2.5-1.5B complete full-MMLU runtime/statistics | PC-side runtime and paired bootstrap reports over the same 42,126 task executions; see `outputs/OFFICIAL_PTQ_QWEN25_1P5B_MMLU_FULL_PREFIX14042_FP16_AWQ_GPTQMODEL_RUNTIME_PROFILE_2026_06_08.md` and `outputs/OFFICIAL_PTQ_TASK_QWEN25_1P5B_MMLU_FULL_PREFIX14042_FP16_AWQ_GPTQMODEL_STATISTICS_2026_06_08.md`. | The runtime profile reports mean 8.3292 tokens/s, mean TTFT 0.244417 s, and max guarded VRAM 0.8794; paired deltas versus FP16 are -0.0216 for AutoAWQ and -0.0502 for GPTQModel. | Local PC-side profile and uncertainty disclosure only, not production speed evidence, mobile deployment, energy improvement, or official AWQ/GPTQ competitiveness. |
 | W4A8 activation reconstruction | Selected Qwen3-0.6B self-attention modules from the ESMP package; see `outputs/w4a8_activation_reconstruction_2026_06_08/W4A8_ACTIVATION_RECONSTRUCTION_GATE.md`. | A8 activation quantization adds bounded module-output drift on sampled real activations: max activation-added rel-L2 0.048561 versus W4A16. | Does not prove full-model quality retention, downstream task retention, end-to-end speed, mobile deployment, energy, or SOTA quantization. |
 | W4A8 extended activation reconstruction | Selected Qwen3-0.6B attention and MLP modules from layers 0/7/14/21; see `outputs/w4a8_activation_reconstruction_extended_2026_06_08/W4A8_ACTIVATION_RECONSTRUCTION_EXTENDED_GATE.md`. | The broader 24-module audit passes with median W4A8 rel-L2 0.144851 and max activation-added rel-L2 0.084533 versus W4A16, exposing MLP down projections as the worst integration-risk cases. | Does not prove full-model quality retention, downstream task retention, end-to-end speed, mobile deployment, energy, or SOTA quantization. |
 | Packed-system gates | ESMP, Triton, selected-row, sidecar, QKV smoke | Prototype components are executable and audited. | Production Tensor Core/mobile runtime. |
@@ -1089,6 +1103,12 @@ outputs/OFFICIAL_PTQ_TASK_QWEN25_1P5B_MMLU_BROAD10X20_FP16_AWQ_GPTQMODEL_STATIST
 outputs/OFFICIAL_PTQ_TASK_QWEN25_1P5B_MMLU_BROAD20X20_FP16_AWQ_GPTQMODEL_MATRIX_2026_06_08.md
 outputs/OFFICIAL_PTQ_QWEN25_1P5B_MMLU_BROAD20X20_FP16_AWQ_GPTQMODEL_RUNTIME_PROFILE_2026_06_08.md
 outputs/OFFICIAL_PTQ_TASK_QWEN25_1P5B_MMLU_BROAD20X20_FP16_AWQ_GPTQMODEL_STATISTICS_2026_06_08.md
+outputs/OFFICIAL_PTQ_TASK_QWEN25_1P5B_MMLU_FULL_PREFIX12000_FP16_AWQ_GPTQMODEL_MATRIX_2026_06_08.md
+outputs/OFFICIAL_PTQ_QWEN25_1P5B_MMLU_FULL_PREFIX12000_FP16_AWQ_GPTQMODEL_RUNTIME_PROFILE_2026_06_08.md
+outputs/OFFICIAL_PTQ_TASK_QWEN25_1P5B_MMLU_FULL_PREFIX12000_FP16_AWQ_GPTQMODEL_STATISTICS_2026_06_08.md
+outputs/OFFICIAL_PTQ_TASK_QWEN25_1P5B_MMLU_FULL_PREFIX14042_FP16_AWQ_GPTQMODEL_MATRIX_2026_06_08.md
+outputs/OFFICIAL_PTQ_QWEN25_1P5B_MMLU_FULL_PREFIX14042_FP16_AWQ_GPTQMODEL_RUNTIME_PROFILE_2026_06_08.md
+outputs/OFFICIAL_PTQ_TASK_QWEN25_1P5B_MMLU_FULL_PREFIX14042_FP16_AWQ_GPTQMODEL_STATISTICS_2026_06_08.md
 outputs/OFFICIAL_GPTQMODEL_PUBLIC_CALIB_QWEN25_0P5B_BUDGET8_16_GATE_2026_06_07.md
 outputs/OFFICIAL_GPTQMODEL_PUBLIC_CALIB_QWEN25_1P5B_16_GATE_2026_06_08.md
 outputs/BASELINE_GAP_DASHBOARD_2026_06_06.md

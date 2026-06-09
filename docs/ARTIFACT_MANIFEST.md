@@ -30,7 +30,7 @@ paper claims.
 | Calibration robustness stress gate | `outputs/CALIBRATION_ROBUSTNESS_STRESS_GATE_2026_06_07.md` |
 | Consensus transfer boundary gate | `outputs/CONSENSUS_TRANSFER_BOUNDARY_GATE_2026_06_07.md` |
 | Interaction-aware swap boundary gate | `outputs/INTERACTION_SWAP_BOUNDARY_GATE_2026_06_07.md` |
-| Paper evidence alignment gate | `outputs/PAPER_EVIDENCE_ALIGNMENT_GATE_2026_06_07.md` |
+| Paper evidence alignment gate | `outputs/PAPER_EVIDENCE_ALIGNMENT_GATE_2026_06_08.md` |
 | Mean consensus evidence matrix | `outputs/cross_model_quant_evidence_matrix_extended_auto.md` |
 | Q-Palette-style allocation proxy gate | `outputs/Q_PALETTE_STYLE_ALLOCATION_FAMILY_GATE_2026_06_06.md` |
 | Robust-LCB allocation gate | `outputs/ROBUST_LCB_CONSENSUS_FAMILY_GATE_2026_06_06.md` |

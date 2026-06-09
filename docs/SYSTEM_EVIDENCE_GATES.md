@@ -42,7 +42,7 @@ Invalid claim:
 | gate | category | primary artifact | paper-facing claim boundary |
 |---|---|---|---|
 | `public_hygiene` | repo hygiene | `outputs/real_system_packer_2026-06-05/PUBLIC_REPO_HYGIENE_GATE_2026_06_06.md` | Public tree excludes private/process artifacts, generated delivery bundles, blank placeholders, stale positioning, root clutter, and risky root README terms. |
-| `paper_evidence_alignment` | paper alignment | `outputs/PAPER_EVIDENCE_ALIGNMENT_GATE_2026_06_07.md` | Current paper draft cites required evidence and avoids unsafe non-negated high-risk claims. |
+| `paper_evidence_alignment` | paper alignment | `outputs/PAPER_EVIDENCE_ALIGNMENT_GATE_2026_06_08.md` | Current paper draft cites required evidence and avoids unsafe non-negated high-risk claims. |
 | `calibration_instability` | calibration robustness | `outputs/CALIBRATION_INSTABILITY_BENCHMARK_2026_06_06.md` | Small calibration splits induce unstable module-sensitivity rankings in the measured model/dataset cases. |
 | `sensitivity_perturbation_matrix` | calibration robustness | `outputs/SENSITIVITY_PERTURBATION_MATRIX_QWEN25_2026_06_07.md` | Qwen2.5 sensitivity rankings are more stable under within-model calibration sample-size changes than under cross-model-scale transfer; this is not downstream quality evidence. |
 | `calibration_seed_stability` | calibration robustness | `outputs/CALIBRATION_SEED_STABILITY_QWEN25_0P5B_2026_06_07.md` | Qwen2.5-0.5B deterministic six-seed prompt-sensitivity runs over the same 16-prompt pool show moderate mean rank agreement with pair-bootstrap CIs but drifting top-sensitive module sets; this is not quality-retention or deployment evidence. |
