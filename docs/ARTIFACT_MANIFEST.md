@@ -29,6 +29,7 @@ paper claims.
 | Qwen2.5-1.5B CSI vs calibration size gate | `outputs/CSI_VS_N_CURVE_QWEN25_1P5B_2026_06_11.md` |
 | Qwen2.5-1.5B CSI trend significance gate | `outputs/CSI_TREND_SIGNIFICANCE_QWEN25_1P5B_2026_06_11.md` |
 | Qwen2.5-1.5B CSI null permutation gate | `outputs/CSI_NULL_PERMUTATION_QWEN25_1P5B_2026_06_11.md` |
+| Qwen2.5 0.5B-vs-1.5B CSI cross-scale gate | `outputs/CSI_CROSS_SCALE_QWEN25_0P5B_VS_1P5B_2026_06_11.md` |
 | Rank-inversion theory gate | `outputs/RANK_INVERSION_THEORY_QWEN25_0P5B_2026_06_07.md` |
 | Calibration robustness stress gate | `outputs/CALIBRATION_ROBUSTNESS_STRESS_GATE_2026_06_07.md` |
 | Consensus transfer boundary gate | `outputs/CONSENSUS_TRANSFER_BOUNDARY_GATE_2026_06_07.md` |

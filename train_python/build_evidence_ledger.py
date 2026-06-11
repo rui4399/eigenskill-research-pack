@@ -211,6 +211,14 @@ def metric_parts(summary: dict[str, Any]) -> list[str]:
         parts.append(f"margin bound final {value:.4f}")
     if "mean_score_spearman_monotonic" in summary:
         parts.append(f"rho monotonic {summary.get('mean_score_spearman_monotonic')}")
+    if "common_n_count" in summary:
+        parts.append(f"common n {summary.get('common_n_count')}")
+    if "right_lower_all_same_n_metrics" in summary:
+        parts.append(f"right lower all metrics {summary.get('right_lower_all_same_n_metrics')}")
+    if isinstance(summary.get("right_gain_larger_by_metric"), dict):
+        gain_flags = summary["right_gain_larger_by_metric"]
+        true_count = sum(1 for value in gain_flags.values() if value)
+        parts.append(f"right larger gains {true_count}/{len(gain_flags)}")
     if "mean_empirical_inversion_rate_decreasing" in summary:
         parts.append(f"mean inversion decreasing {summary.get('mean_empirical_inversion_rate_decreasing')}")
     if "margin_empirical_inversion_rate_decreasing" in summary:

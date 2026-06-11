@@ -1,0 +1,110 @@
+{
+  "date": "2026-06-11T14:30:59+00:00",
+  "passed": true,
+  "left": {
+    "label": "qwen25_0p5b",
+    "path": "outputs/csi_vs_n_curve_qwen25_0p5b_2026_06_07.json"
+  },
+  "right": {
+    "label": "qwen25_1p5b",
+    "path": "outputs/csi_vs_n_curve_qwen25_1p5b_2026_06_11.json"
+  },
+  "summary": {
+    "common_n_count": 3,
+    "common_n": [
+      2,
+      4,
+      8
+    ],
+    "right_lower_all_same_n_metrics": true,
+    "right_gain_larger_by_metric": {
+      "mean_score_spearman": true,
+      "mean_top20_jaccard": false,
+      "mean_positive_jaccard": false
+    }
+  },
+  "same_n_comparison": [
+    {
+      "n": 2,
+      "mean_score_spearman": {
+        "left": 0.37252470808903665,
+        "right": 0.14100928988623568,
+        "right_minus_left": -0.23151541820280097
+      },
+      "mean_top20_jaccard": {
+        "left": 0.37970393168216454,
+        "right": 0.26040621339864506,
+        "right_minus_left": -0.11929771828351948
+      },
+      "mean_positive_jaccard": {
+        "left": 0.5484857397719989,
+        "right": 0.4244359543531185,
+        "right_minus_left": -0.1240497854188804
+      }
+    },
+    {
+      "n": 4,
+      "mean_score_spearman": {
+        "left": 0.4324065883419552,
+        "right": 0.28693935395322245,
+        "right_minus_left": -0.14546723438873277
+      },
+      "mean_top20_jaccard": {
+        "left": 0.4671577889968694,
+        "right": 0.3312596987050083,
+        "right_minus_left": -0.13589809029186106
+      },
+      "mean_positive_jaccard": {
+        "left": 0.573419457112976,
+        "right": 0.5188740020650368,
+        "right_minus_left": -0.054545455047939284
+      }
+    },
+    {
+      "n": 8,
+      "mean_score_spearman": {
+        "left": 0.6645281776612284,
+        "right": 0.4918109101971662,
+        "right_minus_left": -0.17271726746406219
+      },
+      "mean_top20_jaccard": {
+        "left": 0.6448538900712814,
+        "right": 0.4400799498500648,
+        "right_minus_left": -0.20477394022121653
+      },
+      "mean_positive_jaccard": {
+        "left": 0.7282076150889316,
+        "right": 0.5991554587573344,
+        "right_minus_left": -0.12905215633159717
+      }
+    }
+  ],
+  "gain_comparison": [
+    {
+      "metric": "mean_score_spearman",
+      "min_n": 2,
+      "max_n": 8,
+      "left_gain": 0.29200346957219175,
+      "right_gain": 0.35080162031093054,
+      "right_minus_left_gain": 0.058798150738738786
+    },
+    {
+      "metric": "mean_top20_jaccard",
+      "min_n": 2,
+      "max_n": 8,
+      "left_gain": 0.2651499583891168,
+      "right_gain": 0.17967373645141976,
+      "right_minus_left_gain": -0.08547622193769705
+    },
+    {
+      "metric": "mean_positive_jaccard",
+      "min_n": 2,
+      "max_n": 8,
+      "left_gain": 0.17972187531693273,
+      "right_gain": 0.17471950440421596,
+      "right_minus_left_gain": -0.005002370912716769
+    }
+  ],
+  "failures": [],
+  "claim_boundary": "Valid claim: for the supplied same-prompt-pool Qwen2.5 curve artifacts, the right-hand scale has lower measured stability than the left-hand scale at the shared n values, while both curves improve from the smallest to the largest n. Invalid claim: this proves that model size alone causes lower stability, a universal scaling law, downstream retention, or SOTA quantization."
+}

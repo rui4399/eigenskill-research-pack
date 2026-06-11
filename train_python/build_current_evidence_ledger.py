@@ -30,6 +30,7 @@ CURRENT_GATE_SPECS: tuple[tuple[str, str], ...] = (
     ("csi_vs_n_curve_qwen25_1p5b", "outputs/csi_vs_n_curve_qwen25_1p5b_2026_06_11.json"),
     ("csi_trend_significance_qwen25_1p5b", "outputs/csi_trend_significance_qwen25_1p5b_2026_06_11.json"),
     ("csi_null_permutation_qwen25_1p5b", "outputs/csi_null_permutation_qwen25_1p5b_2026_06_11.json"),
+    ("csi_cross_scale_qwen25", "outputs/csi_cross_scale_qwen25_0p5b_vs_1p5b_2026_06_11.json"),
     ("rank_inversion_theory", "outputs/rank_inversion_theory_qwen25_0p5b_2026_06_07.json"),
     ("calibration_robustness_stress", "outputs/calibration_robustness_stress_gate_2026_06_07.json"),
     ("consensus_transfer_boundary", "outputs/consensus_transfer_boundary_gate_2026_06_07.json"),

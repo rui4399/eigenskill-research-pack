@@ -159,6 +159,24 @@ class BuildEvidenceLedgerTests(unittest.TestCase):
         self.assertIn("Holm significant True", joined)
         self.assertEqual(ledger.infer_category("csi_null_permutation"), "calibration robustness")
 
+    def test_csi_cross_scale_metrics_are_reported(self) -> None:
+        metrics = ledger.metric_parts(
+            {
+                "common_n_count": 3,
+                "right_lower_all_same_n_metrics": True,
+                "right_gain_larger_by_metric": {
+                    "mean_score_spearman": True,
+                    "mean_top20_jaccard": False,
+                    "mean_positive_jaccard": False,
+                },
+            }
+        )
+        joined = "; ".join(metrics)
+        self.assertIn("common n 3", joined)
+        self.assertIn("right lower all metrics True", joined)
+        self.assertIn("right larger gains 1/3", joined)
+        self.assertEqual(ledger.infer_category("csi_cross_scale_qwen25"), "calibration robustness")
+
     def test_allocation_family_metrics_are_reported(self) -> None:
         metrics = ledger.metric_parts(
             {

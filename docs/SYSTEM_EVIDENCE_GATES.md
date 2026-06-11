@@ -25,7 +25,7 @@ Current ledger artifact:
 outputs/real_system_packer_2026-06-05/EVIDENCE_LEDGER_2026_06_06.md
 ```
 
-Current status: **73 / 73 gates pass**.
+Current status: **74 / 74 gates pass**.
 
 Valid claim:
 
@@ -52,6 +52,7 @@ Invalid claim:
 | `csi_vs_n_curve_qwen25_1p5b` | calibration robustness | `outputs/CSI_VS_N_CURVE_QWEN25_1P5B_2026_06_11.md` | Qwen2.5-1.5B six-seed sensitivity gates at n=2, n=4, and n=8 show monotonic stability gains in mean Spearman, top-20 Jaccard, and positive-set Jaccard; this is a same-model scale-up diagnostic, not downstream retention. |
 | `csi_trend_significance_qwen25_1p5b` | calibration robustness | `outputs/CSI_TREND_SIGNIFICANCE_QWEN25_1P5B_2026_06_11.md` | Independent bootstrap trend checks show positive n=8-vs-n=2 mean-gain CIs for all audited Qwen2.5-1.5B CSI stability metrics and minimum random pair dominance probability 0.9156; this is local trend evidence, not a universal scaling law. |
 | `csi_null_permutation_qwen25_1p5b` | calibration robustness | `outputs/CSI_NULL_PERMUTATION_QWEN25_1P5B_2026_06_11.md` | Monte-Carlo label-shuffle permutation tests over Qwen2.5-1.5B pooled n=2/n=8 seed-pair metrics give max Holm-adjusted p-value 0.00015 for the audited stability gains; this is local null-test evidence, not downstream retention. |
+| `csi_cross_scale_qwen25` | calibration robustness | `outputs/CSI_CROSS_SCALE_QWEN25_0P5B_VS_1P5B_2026_06_11.md` | Qwen2.5-1.5B has lower measured stability than Qwen2.5-0.5B at every shared n and audited metric, while both curves improve with n; this is cross-scale artifact comparison, not proof that model size causes the gap. |
 | `rank_inversion_theory` | theory | `outputs/RANK_INVERSION_THEORY_QWEN25_0P5B_2026_06_07.md` | A Chebyshev-style plug-in rank-inversion analysis over the same Qwen2.5 seed artifacts shows decreasing empirical inversion risk and variance/gap^2 bound proxies from n=2 to n=8; this is not a tight-bound proof. |
 | `calibration_robustness_stress` | calibration robustness | `outputs/CALIBRATION_ROBUSTNESS_STRESS_GATE_2026_06_07.md` | Current target policies beat uniform INT4, best random seed, and random mean across committed short fake-quant PPL slices. |
 | `consensus_transfer_boundary` | allocation boundary | `outputs/CONSENSUS_TRANSFER_BOUNDARY_GATE_2026_06_07.md` | Consensus avoids the worse single-split policy on paired Qwen3 transfer slices with bounded best-single regret. |

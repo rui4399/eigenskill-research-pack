@@ -1,8 +1,8 @@
 {
-  "date": "2026-06-11T14:22:15+00:00",
+  "date": "2026-06-11T14:34:58+00:00",
   "passed": true,
-  "gate_count": 73,
-  "passed_count": 73,
+  "gate_count": 74,
+  "passed_count": 74,
   "failed_count": 0,
   "categories": [
     "allocation comparator",
@@ -234,6 +234,28 @@
         "max_holm_adjusted_p_value": 0.00014999250037498125,
         "all_observed_gains_positive": true,
         "all_holm_significant": true
+      }
+    },
+    {
+      "label": "csi_cross_scale_qwen25",
+      "category": "calibration robustness",
+      "path": "outputs/csi_cross_scale_qwen25_0p5b_vs_1p5b_2026_06_11.json",
+      "passed": true,
+      "failures": [],
+      "metrics": "common n 3; right lower all metrics True; right larger gains 1/3",
+      "summary": {
+        "common_n_count": 3,
+        "common_n": [
+          2,
+          4,
+          8
+        ],
+        "right_lower_all_same_n_metrics": true,
+        "right_gain_larger_by_metric": {
+          "mean_score_spearman": true,
+          "mean_top20_jaccard": false,
+          "mean_positive_jaccard": false
+        }
       }
     },
     {
