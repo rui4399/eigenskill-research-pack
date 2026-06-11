@@ -7,8 +7,8 @@ not a new result.
 Current tracked output footprint:
 
 ```text
-outputs/ tracked-or-staged artifact files:       2729
-outputs/real_system_packer_2026-06-05 files:     744
+outputs/ tracked-or-staged artifact files:       3955
+outputs/real_system_packer_2026-06-05 files:     1945
 ```
 
 ## Paper-Facing Artifacts
@@ -30,6 +30,7 @@ paper claims.
 | Qwen2.5-1.5B CSI trend significance gate | `outputs/CSI_TREND_SIGNIFICANCE_QWEN25_1P5B_2026_06_11.md` |
 | Qwen2.5-1.5B CSI null permutation gate | `outputs/CSI_NULL_PERMUTATION_QWEN25_1P5B_2026_06_11.md` |
 | Qwen2.5 0.5B-vs-1.5B CSI cross-scale gate | `outputs/CSI_CROSS_SCALE_QWEN25_0P5B_VS_1P5B_2026_06_11.md` |
+| Qwen2.5 0.5B-vs-1.5B CSI paper figure/table | `outputs/CSI_CROSS_SCALE_PAPER_ARTIFACTS_QWEN25_0P5B_VS_1P5B_2026_06_12.md` |
 | Rank-inversion theory gate | `outputs/RANK_INVERSION_THEORY_QWEN25_0P5B_2026_06_07.md` |
 | Calibration robustness stress gate | `outputs/CALIBRATION_ROBUSTNESS_STRESS_GATE_2026_06_07.md` |
 | Consensus transfer boundary gate | `outputs/CONSENSUS_TRANSFER_BOUNDARY_GATE_2026_06_07.md` |
