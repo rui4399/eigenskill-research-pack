@@ -254,11 +254,12 @@ def build_gate(
         "full_range": full_range,
         "failures": failures,
         "claim_boundary": (
-            "Valid claim: for Qwen2.5-0.5B-Instruct under the fixed public prompt pool, "
-            "the n=8 seed-pair stability distribution dominates n=2 for the audited CSI "
-            "metrics, and independent bootstrap confidence intervals for mean gain are "
-            "positive. Invalid claim: this proves a universal scaling law, downstream "
-            "quality retention, SOTA quantization, or deployment speed."
+            "Valid claim: for the supplied same-model calibration-seed-stability artifacts "
+            "under a fixed prompt pool, the largest-n seed-pair stability distribution "
+            "dominates the smallest-n distribution for the audited CSI metrics, and "
+            "independent bootstrap confidence intervals for mean gain are positive. Invalid "
+            "claim: this proves a universal scaling law, downstream quality retention, SOTA "
+            "quantization, or deployment speed."
         ),
     }
 

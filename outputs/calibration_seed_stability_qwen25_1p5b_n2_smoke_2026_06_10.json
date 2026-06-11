@@ -1,0 +1,239 @@
+{
+  "date": "2026-06-10T11:11:34+00:00",
+  "passed": true,
+  "summary": {
+    "case_count": 3,
+    "pair_count": 3,
+    "finite_pair_count": 3,
+    "unique_prompt_selection_count": 3,
+    "mean_score_spearman": 0.094176761313245,
+    "mean_score_spearman_ci": {
+      "samples": 2000,
+      "low": 0.03773628991970675,
+      "high": 0.1864255380709313
+    },
+    "min_score_spearman": 0.03773628991970675,
+    "max_score_spearman": 0.1864255380709313,
+    "mean_top20_jaccard": 0.20023767082590613,
+    "mean_top20_jaccard_ci": {
+      "samples": 2000,
+      "low": 0.17647058823529413,
+      "high": 0.21212121212121213
+    },
+    "min_top20_jaccard": 0.17647058823529413,
+    "mean_positive_jaccard": 0.4066671851102989,
+    "mean_positive_jaccard_ci": {
+      "samples": 2000,
+      "low": 0.38922155688622756,
+      "high": 0.44155844155844154
+    },
+    "min_positive_jaccard": 0.38922155688622756
+  },
+  "prompt_selections": [
+    {
+      "label": "seed21",
+      "path": "outputs/qwen25_1p5b_n2_seed21_module_loss_sensitivity_group128_smoke_2026_06_10.json",
+      "source": "data_eval/public_ppl_prompts_16_2026_06_07/wikitext2_test_ppl_prompts.txt",
+      "pool_size": 16,
+      "sample_size": 2,
+      "seed": 20260621,
+      "selected_indices": [
+        5,
+        11
+      ]
+    },
+    {
+      "label": "seed22",
+      "path": "outputs/qwen25_1p5b_n2_seed22_module_loss_sensitivity_group128_smoke_2026_06_10.json",
+      "source": "data_eval/public_ppl_prompts_16_2026_06_07/wikitext2_test_ppl_prompts.txt",
+      "pool_size": 16,
+      "sample_size": 2,
+      "seed": 20260622,
+      "selected_indices": [
+        3,
+        13
+      ]
+    },
+    {
+      "label": "seed23",
+      "path": "outputs/qwen25_1p5b_n2_seed23_module_loss_sensitivity_group128_smoke_2026_06_10.json",
+      "source": "data_eval/public_ppl_prompts_16_2026_06_07/wikitext2_test_ppl_prompts.txt",
+      "pool_size": 16,
+      "sample_size": 2,
+      "seed": 20260623,
+      "selected_indices": [
+        9,
+        10
+      ]
+    }
+  ],
+  "pairs": [
+    {
+      "left": "seed21",
+      "right": "seed22",
+      "shared_modules": 197,
+      "positive_jaccard": 0.38922155688622756,
+      "score_spearman": 0.05836845594909697,
+      "score_kendall_tau_a": 0.05862798428528256,
+      "top20_jaccard": 0.21212121212121213,
+      "result": {
+        "left_path": "outputs/qwen25_1p5b_n2_seed21_module_loss_sensitivity_group128_smoke_2026_06_10.json",
+        "right_path": "outputs/qwen25_1p5b_n2_seed22_module_loss_sensitivity_group128_smoke_2026_06_10.json",
+        "left_name": "seed21",
+        "right_name": "seed22",
+        "epsilon": 1e-12,
+        "shared_modules": 197,
+        "left_positive_count": 121,
+        "right_positive_count": 111,
+        "both_positive_count": 65,
+        "either_positive_count": 167,
+        "positive_jaccard": 0.38922155688622756,
+        "sign_agreement_count": 95,
+        "sign_agreement_ratio": 0.48223350253807107,
+        "positive_delta_pearson": 0.8458125215462066,
+        "positive_delta_spearman": 0.088781884534914,
+        "score_pearson": 0.3478781145808092,
+        "score_spearman": 0.05836845594909697,
+        "score_kendall_tau_a": 0.05862798428528256,
+        "top_overlap": [
+          {
+            "k": 10,
+            "left_count": 10,
+            "right_count": 10,
+            "overlap": 2,
+            "union": 18,
+            "jaccard": 0.1111111111111111
+          },
+          {
+            "k": 20,
+            "left_count": 20,
+            "right_count": 20,
+            "overlap": 7,
+            "union": 33,
+            "jaccard": 0.21212121212121213
+          },
+          {
+            "k": 40,
+            "left_count": 40,
+            "right_count": 40,
+            "overlap": 16,
+            "union": 64,
+            "jaccard": 0.25
+          }
+        ]
+      }
+    },
+    {
+      "left": "seed21",
+      "right": "seed23",
+      "shared_modules": 197,
+      "positive_jaccard": 0.38922155688622756,
+      "score_spearman": 0.03773628991970675,
+      "score_kendall_tau_a": 0.04140223632517377,
+      "top20_jaccard": 0.17647058823529413,
+      "result": {
+        "left_path": "outputs/qwen25_1p5b_n2_seed21_module_loss_sensitivity_group128_smoke_2026_06_10.json",
+        "right_path": "outputs/qwen25_1p5b_n2_seed23_module_loss_sensitivity_group128_smoke_2026_06_10.json",
+        "left_name": "seed21",
+        "right_name": "seed23",
+        "epsilon": 1e-12,
+        "shared_modules": 197,
+        "left_positive_count": 121,
+        "right_positive_count": 111,
+        "both_positive_count": 65,
+        "either_positive_count": 167,
+        "positive_jaccard": 0.38922155688622756,
+        "sign_agreement_count": 95,
+        "sign_agreement_ratio": 0.48223350253807107,
+        "positive_delta_pearson": 0.6442037122136586,
+        "positive_delta_spearman": 0.06559929608337935,
+        "score_pearson": 0.174298482097716,
+        "score_spearman": 0.03773628991970675,
+        "score_kendall_tau_a": 0.04140223632517377,
+        "top_overlap": [
+          {
+            "k": 10,
+            "left_count": 10,
+            "right_count": 10,
+            "overlap": 3,
+            "union": 17,
+            "jaccard": 0.17647058823529413
+          },
+          {
+            "k": 20,
+            "left_count": 20,
+            "right_count": 20,
+            "overlap": 6,
+            "union": 34,
+            "jaccard": 0.17647058823529413
+          },
+          {
+            "k": 40,
+            "left_count": 40,
+            "right_count": 40,
+            "overlap": 13,
+            "union": 67,
+            "jaccard": 0.19402985074626866
+          }
+        ]
+      }
+    },
+    {
+      "left": "seed22",
+      "right": "seed23",
+      "shared_modules": 197,
+      "positive_jaccard": 0.44155844155844154,
+      "score_spearman": 0.1864255380709313,
+      "score_kendall_tau_a": 0.18691371424141406,
+      "top20_jaccard": 0.21212121212121213,
+      "result": {
+        "left_path": "outputs/qwen25_1p5b_n2_seed22_module_loss_sensitivity_group128_smoke_2026_06_10.json",
+        "right_path": "outputs/qwen25_1p5b_n2_seed23_module_loss_sensitivity_group128_smoke_2026_06_10.json",
+        "left_name": "seed22",
+        "right_name": "seed23",
+        "epsilon": 1e-12,
+        "shared_modules": 197,
+        "left_positive_count": 111,
+        "right_positive_count": 111,
+        "both_positive_count": 68,
+        "either_positive_count": 154,
+        "positive_jaccard": 0.44155844155844154,
+        "sign_agreement_count": 111,
+        "sign_agreement_ratio": 0.5634517766497462,
+        "positive_delta_pearson": 0.8309190125351347,
+        "positive_delta_spearman": 0.2322575481445402,
+        "score_pearson": 0.25792087965585286,
+        "score_spearman": 0.1864255380709313,
+        "score_kendall_tau_a": 0.18691371424141406,
+        "top_overlap": [
+          {
+            "k": 10,
+            "left_count": 10,
+            "right_count": 10,
+            "overlap": 1,
+            "union": 19,
+            "jaccard": 0.05263157894736842
+          },
+          {
+            "k": 20,
+            "left_count": 20,
+            "right_count": 20,
+            "overlap": 7,
+            "union": 33,
+            "jaccard": 0.21212121212121213
+          },
+          {
+            "k": 40,
+            "left_count": 40,
+            "right_count": 40,
+            "overlap": 19,
+            "union": 61,
+            "jaccard": 0.3114754098360656
+          }
+        ]
+      }
+    }
+  ],
+  "failures": [],
+  "claim_boundary": "Valid claim: deterministic prompt-seed sensitivity artifacts can be audited for pairwise ranking stability under the same model and prompt pool. Invalid claim: this alone proves downstream quality retention, SOTA quantization, or deployment speed."
+}

@@ -1,0 +1,935 @@
+{
+  "date": "2026-06-10T11:24:32+00:00",
+  "passed": true,
+  "summary": {
+    "case_count": 6,
+    "pair_count": 15,
+    "finite_pair_count": 15,
+    "unique_prompt_selection_count": 6,
+    "mean_score_spearman": 0.14100928988623568,
+    "mean_score_spearman_ci": {
+      "samples": 5000,
+      "low": 0.07789649254702857,
+      "high": 0.21328006804319713
+    },
+    "min_score_spearman": -0.014000996735255268,
+    "max_score_spearman": 0.4310297749614824,
+    "mean_top20_jaccard": 0.26040621339864506,
+    "mean_top20_jaccard_ci": {
+      "samples": 5000,
+      "low": 0.22133236523449495,
+      "high": 0.30602711613066247
+    },
+    "min_top20_jaccard": 0.17647058823529413,
+    "mean_positive_jaccard": 0.4244359543531185,
+    "mean_positive_jaccard_ci": {
+      "samples": 5000,
+      "low": 0.3954337307141342,
+      "high": 0.45642292783965716
+    },
+    "min_positive_jaccard": 0.33544303797468356
+  },
+  "prompt_selections": [
+    {
+      "label": "seed21",
+      "path": "outputs/qwen25_1p5b_n2_seed21_module_loss_sensitivity_group128_smoke_2026_06_10.json",
+      "source": "data_eval/public_ppl_prompts_16_2026_06_07/wikitext2_test_ppl_prompts.txt",
+      "pool_size": 16,
+      "sample_size": 2,
+      "seed": 20260621,
+      "selected_indices": [
+        5,
+        11
+      ]
+    },
+    {
+      "label": "seed22",
+      "path": "outputs/qwen25_1p5b_n2_seed22_module_loss_sensitivity_group128_smoke_2026_06_10.json",
+      "source": "data_eval/public_ppl_prompts_16_2026_06_07/wikitext2_test_ppl_prompts.txt",
+      "pool_size": 16,
+      "sample_size": 2,
+      "seed": 20260622,
+      "selected_indices": [
+        3,
+        13
+      ]
+    },
+    {
+      "label": "seed23",
+      "path": "outputs/qwen25_1p5b_n2_seed23_module_loss_sensitivity_group128_smoke_2026_06_10.json",
+      "source": "data_eval/public_ppl_prompts_16_2026_06_07/wikitext2_test_ppl_prompts.txt",
+      "pool_size": 16,
+      "sample_size": 2,
+      "seed": 20260623,
+      "selected_indices": [
+        9,
+        10
+      ]
+    },
+    {
+      "label": "seed24",
+      "path": "outputs/qwen25_1p5b_n2_seed24_module_loss_sensitivity_group128_smoke_2026_06_10.json",
+      "source": "data_eval/public_ppl_prompts_16_2026_06_07/wikitext2_test_ppl_prompts.txt",
+      "pool_size": 16,
+      "sample_size": 2,
+      "seed": 20260624,
+      "selected_indices": [
+        4,
+        12
+      ]
+    },
+    {
+      "label": "seed25",
+      "path": "outputs/qwen25_1p5b_n2_seed25_module_loss_sensitivity_group128_smoke_2026_06_10.json",
+      "source": "data_eval/public_ppl_prompts_16_2026_06_07/wikitext2_test_ppl_prompts.txt",
+      "pool_size": 16,
+      "sample_size": 2,
+      "seed": 20260625,
+      "selected_indices": [
+        4,
+        7
+      ]
+    },
+    {
+      "label": "seed26",
+      "path": "outputs/qwen25_1p5b_n2_seed26_module_loss_sensitivity_group128_smoke_2026_06_10.json",
+      "source": "data_eval/public_ppl_prompts_16_2026_06_07/wikitext2_test_ppl_prompts.txt",
+      "pool_size": 16,
+      "sample_size": 2,
+      "seed": 20260626,
+      "selected_indices": [
+        0,
+        3
+      ]
+    }
+  ],
+  "pairs": [
+    {
+      "left": "seed21",
+      "right": "seed22",
+      "shared_modules": 197,
+      "positive_jaccard": 0.38922155688622756,
+      "score_spearman": 0.05836845594909697,
+      "score_kendall_tau_a": 0.05862798428528256,
+      "top20_jaccard": 0.21212121212121213,
+      "result": {
+        "left_path": "outputs/qwen25_1p5b_n2_seed21_module_loss_sensitivity_group128_smoke_2026_06_10.json",
+        "right_path": "outputs/qwen25_1p5b_n2_seed22_module_loss_sensitivity_group128_smoke_2026_06_10.json",
+        "left_name": "seed21",
+        "right_name": "seed22",
+        "epsilon": 1e-12,
+        "shared_modules": 197,
+        "left_positive_count": 121,
+        "right_positive_count": 111,
+        "both_positive_count": 65,
+        "either_positive_count": 167,
+        "positive_jaccard": 0.38922155688622756,
+        "sign_agreement_count": 95,
+        "sign_agreement_ratio": 0.48223350253807107,
+        "positive_delta_pearson": 0.8458125215462066,
+        "positive_delta_spearman": 0.088781884534914,
+        "score_pearson": 0.3478781145808092,
+        "score_spearman": 0.05836845594909697,
+        "score_kendall_tau_a": 0.05862798428528256,
+        "top_overlap": [
+          {
+            "k": 10,
+            "left_count": 10,
+            "right_count": 10,
+            "overlap": 2,
+            "union": 18,
+            "jaccard": 0.1111111111111111
+          },
+          {
+            "k": 20,
+            "left_count": 20,
+            "right_count": 20,
+            "overlap": 7,
+            "union": 33,
+            "jaccard": 0.21212121212121213
+          },
+          {
+            "k": 40,
+            "left_count": 40,
+            "right_count": 40,
+            "overlap": 16,
+            "union": 64,
+            "jaccard": 0.25
+          }
+        ]
+      }
+    },
+    {
+      "left": "seed21",
+      "right": "seed23",
+      "shared_modules": 197,
+      "positive_jaccard": 0.38922155688622756,
+      "score_spearman": 0.03773628991970675,
+      "score_kendall_tau_a": 0.04140223632517377,
+      "top20_jaccard": 0.17647058823529413,
+      "result": {
+        "left_path": "outputs/qwen25_1p5b_n2_seed21_module_loss_sensitivity_group128_smoke_2026_06_10.json",
+        "right_path": "outputs/qwen25_1p5b_n2_seed23_module_loss_sensitivity_group128_smoke_2026_06_10.json",
+        "left_name": "seed21",
+        "right_name": "seed23",
+        "epsilon": 1e-12,
+        "shared_modules": 197,
+        "left_positive_count": 121,
+        "right_positive_count": 111,
+        "both_positive_count": 65,
+        "either_positive_count": 167,
+        "positive_jaccard": 0.38922155688622756,
+        "sign_agreement_count": 95,
+        "sign_agreement_ratio": 0.48223350253807107,
+        "positive_delta_pearson": 0.6442037122136586,
+        "positive_delta_spearman": 0.06559929608337935,
+        "score_pearson": 0.174298482097716,
+        "score_spearman": 0.03773628991970675,
+        "score_kendall_tau_a": 0.04140223632517377,
+        "top_overlap": [
+          {
+            "k": 10,
+            "left_count": 10,
+            "right_count": 10,
+            "overlap": 3,
+            "union": 17,
+            "jaccard": 0.17647058823529413
+          },
+          {
+            "k": 20,
+            "left_count": 20,
+            "right_count": 20,
+            "overlap": 6,
+            "union": 34,
+            "jaccard": 0.17647058823529413
+          },
+          {
+            "k": 40,
+            "left_count": 40,
+            "right_count": 40,
+            "overlap": 13,
+            "union": 67,
+            "jaccard": 0.19402985074626866
+          }
+        ]
+      }
+    },
+    {
+      "left": "seed21",
+      "right": "seed24",
+      "shared_modules": 197,
+      "positive_jaccard": 0.47058823529411764,
+      "score_spearman": 0.20176072473201379,
+      "score_kendall_tau_a": 0.19673879914660164,
+      "top20_jaccard": 0.17647058823529413,
+      "result": {
+        "left_path": "outputs/qwen25_1p5b_n2_seed21_module_loss_sensitivity_group128_smoke_2026_06_10.json",
+        "right_path": "outputs/qwen25_1p5b_n2_seed24_module_loss_sensitivity_group128_smoke_2026_06_10.json",
+        "left_name": "seed21",
+        "right_name": "seed24",
+        "epsilon": 1e-12,
+        "shared_modules": 197,
+        "left_positive_count": 121,
+        "right_positive_count": 104,
+        "both_positive_count": 72,
+        "either_positive_count": 153,
+        "positive_jaccard": 0.47058823529411764,
+        "sign_agreement_count": 116,
+        "sign_agreement_ratio": 0.5888324873096447,
+        "positive_delta_pearson": 0.6343014335204331,
+        "positive_delta_spearman": 0.23306042301689808,
+        "score_pearson": 0.20293726339323095,
+        "score_spearman": 0.20176072473201379,
+        "score_kendall_tau_a": 0.19673879914660164,
+        "top_overlap": [
+          {
+            "k": 10,
+            "left_count": 10,
+            "right_count": 10,
+            "overlap": 2,
+            "union": 18,
+            "jaccard": 0.1111111111111111
+          },
+          {
+            "k": 20,
+            "left_count": 20,
+            "right_count": 20,
+            "overlap": 6,
+            "union": 34,
+            "jaccard": 0.17647058823529413
+          },
+          {
+            "k": 40,
+            "left_count": 40,
+            "right_count": 40,
+            "overlap": 18,
+            "union": 62,
+            "jaccard": 0.2903225806451613
+          }
+        ]
+      }
+    },
+    {
+      "left": "seed21",
+      "right": "seed25",
+      "shared_modules": 197,
+      "positive_jaccard": 0.4258064516129032,
+      "score_spearman": 0.17540583109632427,
+      "score_kendall_tau_a": 0.17052365531948505,
+      "top20_jaccard": 0.25,
+      "result": {
+        "left_path": "outputs/qwen25_1p5b_n2_seed21_module_loss_sensitivity_group128_smoke_2026_06_10.json",
+        "right_path": "outputs/qwen25_1p5b_n2_seed25_module_loss_sensitivity_group128_smoke_2026_06_10.json",
+        "left_name": "seed21",
+        "right_name": "seed25",
+        "epsilon": 1e-12,
+        "shared_modules": 197,
+        "left_positive_count": 121,
+        "right_positive_count": 100,
+        "both_positive_count": 66,
+        "either_positive_count": 155,
+        "positive_jaccard": 0.4258064516129032,
+        "sign_agreement_count": 108,
+        "sign_agreement_ratio": 0.5482233502538071,
+        "positive_delta_pearson": 0.6920370439269737,
+        "positive_delta_spearman": 0.2130394950379402,
+        "score_pearson": 0.17013219368676258,
+        "score_spearman": 0.17540583109632427,
+        "score_kendall_tau_a": 0.17052365531948505,
+        "top_overlap": [
+          {
+            "k": 10,
+            "left_count": 10,
+            "right_count": 10,
+            "overlap": 1,
+            "union": 19,
+            "jaccard": 0.05263157894736842
+          },
+          {
+            "k": 20,
+            "left_count": 20,
+            "right_count": 20,
+            "overlap": 8,
+            "union": 32,
+            "jaccard": 0.25
+          },
+          {
+            "k": 40,
+            "left_count": 40,
+            "right_count": 40,
+            "overlap": 19,
+            "union": 61,
+            "jaccard": 0.3114754098360656
+          }
+        ]
+      }
+    },
+    {
+      "left": "seed21",
+      "right": "seed26",
+      "shared_modules": 197,
+      "positive_jaccard": 0.4539877300613497,
+      "score_spearman": 0.13136921278177563,
+      "score_kendall_tau_a": 0.12070842708862597,
+      "top20_jaccard": 0.21212121212121213,
+      "result": {
+        "left_path": "outputs/qwen25_1p5b_n2_seed21_module_loss_sensitivity_group128_smoke_2026_06_10.json",
+        "right_path": "outputs/qwen25_1p5b_n2_seed26_module_loss_sensitivity_group128_smoke_2026_06_10.json",
+        "left_name": "seed21",
+        "right_name": "seed26",
+        "epsilon": 1e-12,
+        "shared_modules": 197,
+        "left_positive_count": 121,
+        "right_positive_count": 116,
+        "both_positive_count": 74,
+        "either_positive_count": 163,
+        "positive_jaccard": 0.4539877300613497,
+        "sign_agreement_count": 108,
+        "sign_agreement_ratio": 0.5482233502538071,
+        "positive_delta_pearson": 0.84797489724384,
+        "positive_delta_spearman": 0.16304061920460233,
+        "score_pearson": 0.3494439904702429,
+        "score_spearman": 0.13136921278177563,
+        "score_kendall_tau_a": 0.12070842708862597,
+        "top_overlap": [
+          {
+            "k": 10,
+            "left_count": 10,
+            "right_count": 10,
+            "overlap": 2,
+            "union": 18,
+            "jaccard": 0.1111111111111111
+          },
+          {
+            "k": 20,
+            "left_count": 20,
+            "right_count": 20,
+            "overlap": 7,
+            "union": 33,
+            "jaccard": 0.21212121212121213
+          },
+          {
+            "k": 40,
+            "left_count": 40,
+            "right_count": 40,
+            "overlap": 17,
+            "union": 63,
+            "jaccard": 0.2698412698412698
+          }
+        ]
+      }
+    },
+    {
+      "left": "seed22",
+      "right": "seed23",
+      "shared_modules": 197,
+      "positive_jaccard": 0.44155844155844154,
+      "score_spearman": 0.1864255380709313,
+      "score_kendall_tau_a": 0.18691371424141406,
+      "top20_jaccard": 0.21212121212121213,
+      "result": {
+        "left_path": "outputs/qwen25_1p5b_n2_seed22_module_loss_sensitivity_group128_smoke_2026_06_10.json",
+        "right_path": "outputs/qwen25_1p5b_n2_seed23_module_loss_sensitivity_group128_smoke_2026_06_10.json",
+        "left_name": "seed22",
+        "right_name": "seed23",
+        "epsilon": 1e-12,
+        "shared_modules": 197,
+        "left_positive_count": 111,
+        "right_positive_count": 111,
+        "both_positive_count": 68,
+        "either_positive_count": 154,
+        "positive_jaccard": 0.44155844155844154,
+        "sign_agreement_count": 111,
+        "sign_agreement_ratio": 0.5634517766497462,
+        "positive_delta_pearson": 0.8309190125351347,
+        "positive_delta_spearman": 0.2322575481445402,
+        "score_pearson": 0.25792087965585286,
+        "score_spearman": 0.1864255380709313,
+        "score_kendall_tau_a": 0.18691371424141406,
+        "top_overlap": [
+          {
+            "k": 10,
+            "left_count": 10,
+            "right_count": 10,
+            "overlap": 1,
+            "union": 19,
+            "jaccard": 0.05263157894736842
+          },
+          {
+            "k": 20,
+            "left_count": 20,
+            "right_count": 20,
+            "overlap": 7,
+            "union": 33,
+            "jaccard": 0.21212121212121213
+          },
+          {
+            "k": 40,
+            "left_count": 40,
+            "right_count": 40,
+            "overlap": 19,
+            "union": 61,
+            "jaccard": 0.3114754098360656
+          }
+        ]
+      }
+    },
+    {
+      "left": "seed22",
+      "right": "seed24",
+      "shared_modules": 197,
+      "positive_jaccard": 0.36942675159235666,
+      "score_spearman": 0.08216940963831994,
+      "score_kendall_tau_a": 0.08072080967662305,
+      "top20_jaccard": 0.2903225806451613,
+      "result": {
+        "left_path": "outputs/qwen25_1p5b_n2_seed22_module_loss_sensitivity_group128_smoke_2026_06_10.json",
+        "right_path": "outputs/qwen25_1p5b_n2_seed24_module_loss_sensitivity_group128_smoke_2026_06_10.json",
+        "left_name": "seed22",
+        "right_name": "seed24",
+        "epsilon": 1e-12,
+        "shared_modules": 197,
+        "left_positive_count": 111,
+        "right_positive_count": 104,
+        "both_positive_count": 58,
+        "either_positive_count": 157,
+        "positive_jaccard": 0.36942675159235666,
+        "sign_agreement_count": 98,
+        "sign_agreement_ratio": 0.49746192893401014,
+        "positive_delta_pearson": 0.8282007169667381,
+        "positive_delta_spearman": 0.11894206389315917,
+        "score_pearson": 0.3680016813660978,
+        "score_spearman": 0.08216940963831994,
+        "score_kendall_tau_a": 0.08072080967662305,
+        "top_overlap": [
+          {
+            "k": 10,
+            "left_count": 10,
+            "right_count": 10,
+            "overlap": 2,
+            "union": 18,
+            "jaccard": 0.1111111111111111
+          },
+          {
+            "k": 20,
+            "left_count": 20,
+            "right_count": 20,
+            "overlap": 9,
+            "union": 31,
+            "jaccard": 0.2903225806451613
+          },
+          {
+            "k": 40,
+            "left_count": 40,
+            "right_count": 40,
+            "overlap": 17,
+            "union": 63,
+            "jaccard": 0.2698412698412698
+          }
+        ]
+      }
+    },
+    {
+      "left": "seed22",
+      "right": "seed25",
+      "shared_modules": 197,
+      "positive_jaccard": 0.3790849673202614,
+      "score_spearman": 0.0030281631741191526,
+      "score_kendall_tau_a": 8.374507997655137e-05,
+      "top20_jaccard": 0.21212121212121213,
+      "result": {
+        "left_path": "outputs/qwen25_1p5b_n2_seed22_module_loss_sensitivity_group128_smoke_2026_06_10.json",
+        "right_path": "outputs/qwen25_1p5b_n2_seed25_module_loss_sensitivity_group128_smoke_2026_06_10.json",
+        "left_name": "seed22",
+        "right_name": "seed25",
+        "epsilon": 1e-12,
+        "shared_modules": 197,
+        "left_positive_count": 111,
+        "right_positive_count": 100,
+        "both_positive_count": 58,
+        "either_positive_count": 153,
+        "positive_jaccard": 0.3790849673202614,
+        "sign_agreement_count": 102,
+        "sign_agreement_ratio": 0.5177664974619289,
+        "positive_delta_pearson": 0.8355070203326436,
+        "positive_delta_spearman": 0.1019382613829306,
+        "score_pearson": 0.14253547233240738,
+        "score_spearman": 0.0030281631741191526,
+        "score_kendall_tau_a": 8.374507997655137e-05,
+        "top_overlap": [
+          {
+            "k": 10,
+            "left_count": 10,
+            "right_count": 10,
+            "overlap": 1,
+            "union": 19,
+            "jaccard": 0.05263157894736842
+          },
+          {
+            "k": 20,
+            "left_count": 20,
+            "right_count": 20,
+            "overlap": 7,
+            "union": 33,
+            "jaccard": 0.21212121212121213
+          },
+          {
+            "k": 40,
+            "left_count": 40,
+            "right_count": 40,
+            "overlap": 16,
+            "union": 64,
+            "jaccard": 0.25
+          }
+        ]
+      }
+    },
+    {
+      "left": "seed22",
+      "right": "seed26",
+      "shared_modules": 197,
+      "positive_jaccard": 0.54421768707483,
+      "score_spearman": 0.4310297749614824,
+      "score_kendall_tau_a": 0.4130243473159284,
+      "top20_jaccard": 0.48148148148148145,
+      "result": {
+        "left_path": "outputs/qwen25_1p5b_n2_seed22_module_loss_sensitivity_group128_smoke_2026_06_10.json",
+        "right_path": "outputs/qwen25_1p5b_n2_seed26_module_loss_sensitivity_group128_smoke_2026_06_10.json",
+        "left_name": "seed22",
+        "right_name": "seed26",
+        "epsilon": 1e-12,
+        "shared_modules": 197,
+        "left_positive_count": 111,
+        "right_positive_count": 116,
+        "both_positive_count": 80,
+        "either_positive_count": 147,
+        "positive_jaccard": 0.54421768707483,
+        "sign_agreement_count": 130,
+        "sign_agreement_ratio": 0.6598984771573604,
+        "positive_delta_pearson": 0.9676855821896666,
+        "positive_delta_spearman": 0.5252512882017473,
+        "score_pearson": 0.6794200223852213,
+        "score_spearman": 0.4310297749614824,
+        "score_kendall_tau_a": 0.4130243473159284,
+        "top_overlap": [
+          {
+            "k": 10,
+            "left_count": 10,
+            "right_count": 10,
+            "overlap": 5,
+            "union": 15,
+            "jaccard": 0.3333333333333333
+          },
+          {
+            "k": 20,
+            "left_count": 20,
+            "right_count": 20,
+            "overlap": 13,
+            "union": 27,
+            "jaccard": 0.48148148148148145
+          },
+          {
+            "k": 40,
+            "left_count": 40,
+            "right_count": 40,
+            "overlap": 26,
+            "union": 54,
+            "jaccard": 0.48148148148148145
+          }
+        ]
+      }
+    },
+    {
+      "left": "seed23",
+      "right": "seed24",
+      "shared_modules": 197,
+      "positive_jaccard": 0.34375,
+      "score_spearman": -0.006825283290496211,
+      "score_kendall_tau_a": -0.013373203754464656,
+      "top20_jaccard": 0.25,
+      "result": {
+        "left_path": "outputs/qwen25_1p5b_n2_seed23_module_loss_sensitivity_group128_smoke_2026_06_10.json",
+        "right_path": "outputs/qwen25_1p5b_n2_seed24_module_loss_sensitivity_group128_smoke_2026_06_10.json",
+        "left_name": "seed23",
+        "right_name": "seed24",
+        "epsilon": 1e-12,
+        "shared_modules": 197,
+        "left_positive_count": 111,
+        "right_positive_count": 104,
+        "both_positive_count": 55,
+        "either_positive_count": 160,
+        "positive_jaccard": 0.34375,
+        "sign_agreement_count": 92,
+        "sign_agreement_ratio": 0.467005076142132,
+        "positive_delta_pearson": 0.8333008224755538,
+        "positive_delta_spearman": 0.05488300668021201,
+        "score_pearson": 0.3246899961091184,
+        "score_spearman": -0.006825283290496211,
+        "score_kendall_tau_a": -0.013373203754464656,
+        "top_overlap": [
+          {
+            "k": 10,
+            "left_count": 10,
+            "right_count": 10,
+            "overlap": 2,
+            "union": 18,
+            "jaccard": 0.1111111111111111
+          },
+          {
+            "k": 20,
+            "left_count": 20,
+            "right_count": 20,
+            "overlap": 8,
+            "union": 32,
+            "jaccard": 0.25
+          },
+          {
+            "k": 40,
+            "left_count": 40,
+            "right_count": 40,
+            "overlap": 14,
+            "union": 66,
+            "jaccard": 0.21212121212121213
+          }
+        ]
+      }
+    },
+    {
+      "left": "seed23",
+      "right": "seed25",
+      "shared_modules": 197,
+      "positive_jaccard": 0.33544303797468356,
+      "score_spearman": -0.014000996735255268,
+      "score_kendall_tau_a": -0.011247443762781187,
+      "top20_jaccard": 0.21212121212121213,
+      "result": {
+        "left_path": "outputs/qwen25_1p5b_n2_seed23_module_loss_sensitivity_group128_smoke_2026_06_10.json",
+        "right_path": "outputs/qwen25_1p5b_n2_seed25_module_loss_sensitivity_group128_smoke_2026_06_10.json",
+        "left_name": "seed23",
+        "right_name": "seed25",
+        "epsilon": 1e-12,
+        "shared_modules": 197,
+        "left_positive_count": 111,
+        "right_positive_count": 100,
+        "both_positive_count": 53,
+        "either_positive_count": 158,
+        "positive_jaccard": 0.33544303797468356,
+        "sign_agreement_count": 92,
+        "sign_agreement_ratio": 0.467005076142132,
+        "positive_delta_pearson": 0.8028941422134455,
+        "positive_delta_spearman": 0.03243112974278,
+        "score_pearson": 0.201838641764177,
+        "score_spearman": -0.014000996735255268,
+        "score_kendall_tau_a": -0.011247443762781187,
+        "top_overlap": [
+          {
+            "k": 10,
+            "left_count": 10,
+            "right_count": 10,
+            "overlap": 2,
+            "union": 18,
+            "jaccard": 0.1111111111111111
+          },
+          {
+            "k": 20,
+            "left_count": 20,
+            "right_count": 20,
+            "overlap": 7,
+            "union": 33,
+            "jaccard": 0.21212121212121213
+          },
+          {
+            "k": 40,
+            "left_count": 40,
+            "right_count": 40,
+            "overlap": 14,
+            "union": 66,
+            "jaccard": 0.21212121212121213
+          }
+        ]
+      }
+    },
+    {
+      "left": "seed23",
+      "right": "seed26",
+      "shared_modules": 197,
+      "positive_jaccard": 0.43670886075949367,
+      "score_spearman": 0.08111914207147396,
+      "score_kendall_tau_a": 0.08348540145985402,
+      "top20_jaccard": 0.25,
+      "result": {
+        "left_path": "outputs/qwen25_1p5b_n2_seed23_module_loss_sensitivity_group128_smoke_2026_06_10.json",
+        "right_path": "outputs/qwen25_1p5b_n2_seed26_module_loss_sensitivity_group128_smoke_2026_06_10.json",
+        "left_name": "seed23",
+        "right_name": "seed26",
+        "epsilon": 1e-12,
+        "shared_modules": 197,
+        "left_positive_count": 111,
+        "right_positive_count": 116,
+        "both_positive_count": 69,
+        "either_positive_count": 158,
+        "positive_jaccard": 0.43670886075949367,
+        "sign_agreement_count": 108,
+        "sign_agreement_ratio": 0.5482233502538071,
+        "positive_delta_pearson": 0.8369856360831275,
+        "positive_delta_spearman": 0.08090586741755913,
+        "score_pearson": 0.1535488682835434,
+        "score_spearman": 0.08111914207147396,
+        "score_kendall_tau_a": 0.08348540145985402,
+        "top_overlap": [
+          {
+            "k": 10,
+            "left_count": 10,
+            "right_count": 10,
+            "overlap": 1,
+            "union": 19,
+            "jaccard": 0.05263157894736842
+          },
+          {
+            "k": 20,
+            "left_count": 20,
+            "right_count": 20,
+            "overlap": 8,
+            "union": 32,
+            "jaccard": 0.25
+          },
+          {
+            "k": 40,
+            "left_count": 40,
+            "right_count": 40,
+            "overlap": 18,
+            "union": 62,
+            "jaccard": 0.2903225806451613
+          }
+        ]
+      }
+    },
+    {
+      "left": "seed24",
+      "right": "seed25",
+      "shared_modules": 197,
+      "positive_jaccard": 0.5454545454545454,
+      "score_spearman": 0.4284415965780483,
+      "score_kendall_tau_a": 0.4261162865403148,
+      "top20_jaccard": 0.3793103448275862,
+      "result": {
+        "left_path": "outputs/qwen25_1p5b_n2_seed24_module_loss_sensitivity_group128_smoke_2026_06_10.json",
+        "right_path": "outputs/qwen25_1p5b_n2_seed25_module_loss_sensitivity_group128_smoke_2026_06_10.json",
+        "left_name": "seed24",
+        "right_name": "seed25",
+        "epsilon": 1e-12,
+        "shared_modules": 197,
+        "left_positive_count": 104,
+        "right_positive_count": 100,
+        "both_positive_count": 72,
+        "either_positive_count": 132,
+        "positive_jaccard": 0.5454545454545454,
+        "sign_agreement_count": 137,
+        "sign_agreement_ratio": 0.6954314720812182,
+        "positive_delta_pearson": 0.9696066107204027,
+        "positive_delta_spearman": 0.4917239178862111,
+        "score_pearson": 0.5538793413542863,
+        "score_spearman": 0.4284415965780483,
+        "score_kendall_tau_a": 0.4261162865403148,
+        "top_overlap": [
+          {
+            "k": 10,
+            "left_count": 10,
+            "right_count": 10,
+            "overlap": 6,
+            "union": 14,
+            "jaccard": 0.42857142857142855
+          },
+          {
+            "k": 20,
+            "left_count": 20,
+            "right_count": 20,
+            "overlap": 11,
+            "union": 29,
+            "jaccard": 0.3793103448275862
+          },
+          {
+            "k": 40,
+            "left_count": 40,
+            "right_count": 40,
+            "overlap": 22,
+            "union": 58,
+            "jaccard": 0.3793103448275862
+          }
+        ]
+      }
+    },
+    {
+      "left": "seed24",
+      "right": "seed26",
+      "shared_modules": 197,
+      "positive_jaccard": 0.3924050632911392,
+      "score_spearman": 0.10702764191319161,
+      "score_kendall_tau_a": 0.10894724239763748,
+      "top20_jaccard": 0.21212121212121213,
+      "result": {
+        "left_path": "outputs/qwen25_1p5b_n2_seed24_module_loss_sensitivity_group128_smoke_2026_06_10.json",
+        "right_path": "outputs/qwen25_1p5b_n2_seed26_module_loss_sensitivity_group128_smoke_2026_06_10.json",
+        "left_name": "seed24",
+        "right_name": "seed26",
+        "epsilon": 1e-12,
+        "shared_modules": 197,
+        "left_positive_count": 104,
+        "right_positive_count": 116,
+        "both_positive_count": 62,
+        "either_positive_count": 158,
+        "positive_jaccard": 0.3924050632911392,
+        "sign_agreement_count": 101,
+        "sign_agreement_ratio": 0.5126903553299492,
+        "positive_delta_pearson": 0.8690170030244357,
+        "positive_delta_spearman": 0.07659084453599152,
+        "score_pearson": 0.24061829069475166,
+        "score_spearman": 0.10702764191319161,
+        "score_kendall_tau_a": 0.10894724239763748,
+        "top_overlap": [
+          {
+            "k": 10,
+            "left_count": 10,
+            "right_count": 10,
+            "overlap": 4,
+            "union": 16,
+            "jaccard": 0.25
+          },
+          {
+            "k": 20,
+            "left_count": 20,
+            "right_count": 20,
+            "overlap": 7,
+            "union": 33,
+            "jaccard": 0.21212121212121213
+          },
+          {
+            "k": 40,
+            "left_count": 40,
+            "right_count": 40,
+            "overlap": 17,
+            "union": 63,
+            "jaccard": 0.2698412698412698
+          }
+        ]
+      }
+    },
+    {
+      "left": "seed25",
+      "right": "seed26",
+      "shared_modules": 197,
+      "positive_jaccard": 0.44966442953020136,
+      "score_spearman": 0.21208384743280242,
+      "score_kendall_tau_a": 0.2147072898388898,
+      "top20_jaccard": 0.3793103448275862,
+      "result": {
+        "left_path": "outputs/qwen25_1p5b_n2_seed25_module_loss_sensitivity_group128_smoke_2026_06_10.json",
+        "right_path": "outputs/qwen25_1p5b_n2_seed26_module_loss_sensitivity_group128_smoke_2026_06_10.json",
+        "left_name": "seed25",
+        "right_name": "seed26",
+        "epsilon": 1e-12,
+        "shared_modules": 197,
+        "left_positive_count": 100,
+        "right_positive_count": 116,
+        "both_positive_count": 67,
+        "either_positive_count": 149,
+        "positive_jaccard": 0.44966442953020136,
+        "sign_agreement_count": 115,
+        "sign_agreement_ratio": 0.583756345177665,
+        "positive_delta_pearson": 0.8792877481859029,
+        "positive_delta_spearman": 0.2301638254985836,
+        "score_pearson": 0.37495342819995414,
+        "score_spearman": 0.21208384743280242,
+        "score_kendall_tau_a": 0.2147072898388898,
+        "top_overlap": [
+          {
+            "k": 10,
+            "left_count": 10,
+            "right_count": 10,
+            "overlap": 5,
+            "union": 15,
+            "jaccard": 0.3333333333333333
+          },
+          {
+            "k": 20,
+            "left_count": 20,
+            "right_count": 20,
+            "overlap": 11,
+            "union": 29,
+            "jaccard": 0.3793103448275862
+          },
+          {
+            "k": 40,
+            "left_count": 40,
+            "right_count": 40,
+            "overlap": 19,
+            "union": 61,
+            "jaccard": 0.3114754098360656
+          }
+        ]
+      }
+    }
+  ],
+  "failures": [],
+  "claim_boundary": "Valid claim: deterministic prompt-seed sensitivity artifacts can be audited for pairwise ranking stability under the same model and prompt pool. Invalid claim: this alone proves downstream quality retention, SOTA quantization, or deployment speed."
+}

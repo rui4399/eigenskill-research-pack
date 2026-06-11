@@ -153,10 +153,11 @@ def build_curve(cases: list[CurveCase], *, min_points: int = 3) -> dict[str, Any
         "ci_separation": ci_separation,
         "failures": failures,
         "claim_boundary": (
-            "Valid claim: on Qwen2.5-0.5B-Instruct and this public WikiText2 prompt pool, "
-            "six deterministic prompt seeds show that sensitivity-ranking stability improves "
-            "as calibration prompt count increases from n=2 to n=8. Invalid claim: this curve "
-            "alone proves downstream task retention, real quantized runtime speed, or large-model universality."
+            "Valid claim: for the supplied same-model calibration-seed-stability artifacts, "
+            "the audited prompt-seed sensitivity rankings become more stable as calibration "
+            "prompt count increases across the provided n values. Invalid claim: this curve "
+            "alone proves downstream task retention, real quantized runtime speed, SOTA "
+            "quantization, or large-model universality."
         ),
     }
 

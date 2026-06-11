@@ -239,9 +239,10 @@ def build_gate(
         "failures": failures,
         "claim_boundary": (
             "Valid claim: under a Monte-Carlo permutation label-shuffle null, the measured "
-            "Qwen2.5-0.5B n=8 stability metrics are unlikely to arise by chance from the "
-            "pooled n=2/n=8 seed-pair values. Invalid claim: this proves a universal scaling "
-            "law, downstream quality retention, SOTA quantization, or deployment speed."
+            "largest-n stability metrics are unlikely to arise by chance from the pooled "
+            "smallest-n/largest-n seed-pair values for the supplied artifacts. Invalid claim: "
+            "this proves a universal scaling law, downstream quality retention, SOTA "
+            "quantization, or deployment speed."
         ),
     }
 
