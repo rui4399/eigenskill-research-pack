@@ -1,8 +1,8 @@
 # Evidence Ledger
 
-Date: `2026-06-09T00:18:20+00:00`
+Date: `2026-06-11T14:22:15+00:00`
 Status: **PASS**
-Gates: `70 / 70` passed
+Gates: `73 / 73` passed
 Categories: `allocation comparator, artifact integrity, c++ runtime, calibration robustness, capability retention, decode integration, evidence, kernel, matched PTQ baseline, official PTQ readiness, paper alignment, ptq comparator, qkv replacement, quality, repo hygiene, rotation comparator, runtime profile, runtime wiring, selected-row, task execution smoke, task execution subset, task retention, theory`
 
 ## Gate Summary
@@ -16,6 +16,9 @@ Categories: `allocation comparator, artifact integrity, c++ runtime, calibration
 | `csi_vs_n_curve` | calibration robustness | **PASS** | points 3; n 2->8; rho gain 0.2920; top20 gain 0.2651; positive gain 0.1797; rho monotonic True | `outputs/csi_vs_n_curve_qwen25_0p5b_2026_06_07.json` |
 | `csi_trend_significance` | calibration robustness | **PASS** | points 3; n 2->8; min gain CI low 0.1352; min dominance 0.9422; gain CI positive True; dominance high True | `outputs/csi_trend_significance_qwen25_0p5b_2026_06_07.json` |
 | `csi_null_permutation` | calibration robustness | **PASS** | points 3; n 2->8; min observed gain 0.1797; max Holm p 0.000149993; all gains positive True; Holm significant True | `outputs/csi_null_permutation_qwen25_0p5b_2026_06_07.json` |
+| `csi_vs_n_curve_qwen25_1p5b` | calibration robustness | **PASS** | points 3; n 2->8; rho gain 0.3508; top20 gain 0.1797; positive gain 0.1747; rho monotonic True | `outputs/csi_vs_n_curve_qwen25_1p5b_2026_06_11.json` |
+| `csi_trend_significance_qwen25_1p5b` | calibration robustness | **PASS** | points 3; n 2->8; min gain CI low 0.1197; min dominance 0.9156; gain CI positive True; dominance high True | `outputs/csi_trend_significance_qwen25_1p5b_2026_06_11.json` |
+| `csi_null_permutation_qwen25_1p5b` | calibration robustness | **PASS** | points 3; n 2->8; min observed gain 0.1747; max Holm p 0.000149993; all gains positive True; Holm significant True | `outputs/csi_null_permutation_qwen25_1p5b_2026_06_11.json` |
 | `rank_inversion_theory` | theory | **PASS** | points 3; n 2->8; mean inversion init 0.2418; mean inversion final 0.1442; margin inversion init 0.0969; margin inversion final 0.0427; mean bound final 0.6097; margin bound final 0.2713; mean inversion decreasing True; margin inversion decreasing True | `outputs/rank_inversion_theory_qwen25_0p5b_2026_06_07.json` |
 | `calibration_robustness_stress` | calibration robustness | **PASS** | cases 11; wins/uniform 11; wins/best-random 11; wins/random-mean 11; mean margin/uniform 4.2942; mean margin/uniform CI [3.0664, 5.6886]; worst margin/uniform 1.3608; mean margin/best-random 1.1622; mean margin/best-random CI [0.6143, 1.7982]; worst margin/best-random 0.1120; mean margin/random-mean 2.7444; mean margin/random-mean CI [1.7921, 3.5862]; worst margin/random-mean 0.5656; mean FP16 regret 4.1683; max FP16 regret 11.6693; sign p/uniform 0.00048828; sign p/best-random 0.00048828; sign p/random-mean 0.00048828 | `outputs/calibration_robustness_stress_gate_2026_06_07.json` |
 | `consensus_transfer_boundary` | allocation comparator | **PASS** | cases 2; slices 4; wins/left-single 4; wins/right-single 2; wins/best-single 2; wins/worst-single 4; min margin/worst-single 0.8726; mean regret/best-single 0.0043; max regret/best-single 0.3046 | `outputs/consensus_transfer_boundary_gate_2026_06_07.json` |
