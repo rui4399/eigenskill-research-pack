@@ -144,6 +144,12 @@ Recommended route mapping:
    shows AutoAWQ and GPTQModel execute the 8-row deterministic IFEval fixture,
    but the FP16 row timed out while materializing/loading the incomplete local
    Hugging Face cache.
+   Follow-up on 2026-06-13: the FP16 cache was inspected. Tokenizer/config files
+   are present under `/home/rui/models/Qwen2.5-1.5B-Instruct`, but
+   `model.safetensors` is still incomplete. A low-memory `curl -C -` resume
+   attempt was used instead of Python `snapshot_download`; it was stopped after
+   very slow transfer and left a resumable partial file. Do not rerun FP16
+   IFEval until the local safetensors file is complete.
 2. Run the cheapest downstream-retention gate:
    `Qwen2.5-1.5B`, CSI `n=8` or robust consensus allocation, Broad20x20 plus
    GSM8K500 if disk/GPU budget is acceptable.
