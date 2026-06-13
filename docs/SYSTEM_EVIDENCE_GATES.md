@@ -120,7 +120,7 @@ Invalid claim:
 ## Non-Ledger Readiness Probes
 
 These probes are tracked because they reduce environment uncertainty, but they
-are not counted in the current 70-gate paper-facing ledger.
+are not counted in the current 75-gate paper-facing ledger.
 
 | probe | category | primary artifact | boundary |
 |---|---|---|---|

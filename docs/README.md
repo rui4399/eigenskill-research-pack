@@ -9,6 +9,7 @@ is intentionally short.
 
 | Need | File |
 |---|---|
+| Current unified progress and next experiment queue | `docs/PROGRESS_SYNC_2026_06_12.md` |
 | Personal idea brief for first discussion | `docs/PERSONAL_IDEA_BRIEF_2026_06_08.md` |
 | One-line project scope and non-claims | `docs/scope-and-claims.md` |
 | Paper-facing claim firewall | `docs/PAPER_CLAIM_MATRIX.md` |

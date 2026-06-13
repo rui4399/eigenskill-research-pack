@@ -22,16 +22,19 @@ out of the GitHub tree.
 Read the public artifact in this order:
 
 1. [`docs/README.md`](docs/README.md) for the documentation map.
-2. [`docs/PERSONAL_IDEA_BRIEF_2026_06_08.md`](docs/PERSONAL_IDEA_BRIEF_2026_06_08.md)
+2. [`docs/PROGRESS_SYNC_2026_06_12.md`](docs/PROGRESS_SYNC_2026_06_12.md)
+   for the current one-page progress map, latest CSI results, draft status,
+   and next experiment queue.
+3. [`docs/PERSONAL_IDEA_BRIEF_2026_06_08.md`](docs/PERSONAL_IDEA_BRIEF_2026_06_08.md)
    for a first-discussion brief explaining the personal idea, principle,
    completed work, evidence links, and next steps.
-3. [`docs/PAPER_CLAIM_MATRIX.md`](docs/PAPER_CLAIM_MATRIX.md) for every
+4. [`docs/PAPER_CLAIM_MATRIX.md`](docs/PAPER_CLAIM_MATRIX.md) for every
    supported claim and its evidence boundary.
-4. [`docs/SYSTEM_EVIDENCE_GATES.md`](docs/SYSTEM_EVIDENCE_GATES.md) for the
+5. [`docs/SYSTEM_EVIDENCE_GATES.md`](docs/SYSTEM_EVIDENCE_GATES.md) for the
    short gate index.
-5. [`outputs/real_system_packer_2026-06-05/EVIDENCE_LEDGER_2026_06_06.md`](outputs/real_system_packer_2026-06-05/EVIDENCE_LEDGER_2026_06_06.md)
+6. [`outputs/real_system_packer_2026-06-05/EVIDENCE_LEDGER_2026_06_06.md`](outputs/real_system_packer_2026-06-05/EVIDENCE_LEDGER_2026_06_06.md)
    for the current paper-facing gate ledger.
-6. [`docs/ARTIFACT_MANIFEST.md`](docs/ARTIFACT_MANIFEST.md) if you need a map
+7. [`docs/ARTIFACT_MANIFEST.md`](docs/ARTIFACT_MANIFEST.md) if you need a map
    through the committed `outputs/` tree.
 
 Do not treat raw `outputs/` browsing as the evidence boundary. A result is
@@ -60,10 +63,11 @@ claim.
 | Area | Current Evidence | Boundary |
 |---|---|---|
 | Calibration instability | Qwen3/OLMo2/SmolLM2 distribution-split diagnostics plus Qwen2.5 sample-size/model-scale perturbation matrix | problem evidence |
-| Calibration seed stability | Qwen2.5-0.5B six-seed prompt sampling over one public WikiText2 pool with pair-bootstrap CIs | same-model diagnostic, not quality retention |
-| CSI vs calibration size | Qwen2.5-0.5B n=2/4/8 six-seed curve; mean Spearman rises 0.3725 -> 0.4324 -> 0.6645 | local calibration-size evidence, not a universal scaling law |
-| CSI trend significance | Independent bootstrap gain CIs from n=2 to n=8 are positive for Spearman/top-20/positive-set stability; minimum random pair dominance probability is 0.9422 | local trend evidence, not a universal scaling law |
-| CSI null permutation | Monte-Carlo label-shuffle null over n=2/n=8 seed-pair metrics; max Holm-adjusted p-value 0.00015 | local null-test evidence, not downstream retention |
+| Calibration seed stability | Qwen2.5-0.5B and Qwen2.5-1.5B six-seed prompt sampling over one public WikiText2 pool with pair-bootstrap CIs | same-model diagnostic, not quality retention |
+| CSI vs calibration size | Qwen2.5-0.5B and Qwen2.5-1.5B n=2/4/8 six-seed curves; 1.5B mean Spearman rises 0.1410 -> 0.2869 -> 0.4918 | local calibration-size evidence, not a universal scaling law |
+| CSI trend significance | Independent bootstrap gain CIs from n=2 to n=8 are positive for Spearman/top-20/positive-set stability on both 0.5B and 1.5B; 1.5B minimum random pair dominance probability is 0.9156 | local trend evidence, not a universal scaling law |
+| CSI null permutation | Monte-Carlo label-shuffle null over n=2/n=8 seed-pair metrics; max Holm-adjusted p-value is 0.00015 for the audited 0.5B and 1.5B gains | local null-test evidence, not downstream retention |
+| CSI cross-scale comparison | Qwen2.5-1.5B is lower than Qwen2.5-0.5B at every shared n and audited metric, while both curves improve with n | cross-scale artifact comparison, not proof that model size causes the gap |
 | Rank-inversion theory | Chebyshev-style plug-in inversion-risk gate over the same n=2/4/8 Qwen2.5 seed artifacts; margin inversion rate falls 0.0969 -> 0.0427 | theory-aligned diagnostic, not a tight bound proof |
 | Consensus allocation | gated robustness and transfer diagnostics under fixed bit budgets | allocation diagnostic, not a production PTQ method |
 | Official PTQ probes | AutoAWQ/GPTQModel Qwen2.5-0.5B W4/G128 readiness, aligned expanded 16-prompt public PPL gates, tiny task smoke, matched 50-row and true 100-row task subset paths, deterministic IFEval-style execution smoke, a matched local baseline pack, guarded Qwen2.5-1.5B AutoAWQ/GPTQModel public-calibration scale-up smokes, Qwen2.5-1.5B GPTQModel MMLU100/GSM8K100 task-execution subset, Qwen2.5-1.5B FP16/AutoAWQ/GPTQModel matched MMLU/GSM8K matrices through GSM8K200/MMLU100, sharded GSM8K500 evidence, a full GSM8K1319 matched-retention row, MMLU Broad5x20/Broad10x20/Broad20x20 retention rows, and complete 57-subject full-MMLU 14042-row matched FP16/AutoAWQ/GPTQModel task/runtime/statistics gates | local evidence only; quantized paths save VRAM and improve PC-side guarded throughput here, but this is not mobile or production deployment evidence |
@@ -72,7 +76,7 @@ claim.
 | Runtime probes | ESMP/Triton/C++ module-level gates plus PC-side smoke/subset50/subset100 runtime profiles | not end-to-end deployment |
 | Mobile evidence | Redmi K80 Pro harness exists, but no real TTFT/tokens/s/memory log is complete | no mobile claim |
 
-Current ledger status: **70 / 70 gates pass**.
+Current ledger status: **75 / 75 gates pass**.
 
 ## Curation Contract
 
@@ -104,7 +108,7 @@ You should not cite it as:
 
 ```bash
 python -m unittest discover -s train_python -p "test_*.py"
-python train_python/build_current_evidence_ledger.py --expected-gate-count 70
+python train_python/build_current_evidence_ledger.py --expected-gate-count 75
 python train_python/gate_public_repo_hygiene.py \
   --out-json outputs/real_system_packer_2026-06-05/public_repo_hygiene_gate_2026_06_06.json \
   --out-md outputs/real_system_packer_2026-06-05/PUBLIC_REPO_HYGIENE_GATE_2026_06_06.md
