@@ -139,10 +139,13 @@ Recommended route mapping:
 
 ## Immediate Execution Queue
 
-1. Verify the updated `75 / 75` ledger and paper-alignment gate.
-2. Push the synchronized progress/doc state.
-3. Run the cheapest downstream-retention gate:
+1. Complete the matched Qwen2.5-1.5B IFEval row:
+   `outputs/OFFICIAL_PTQ_TASK_QWEN25_1P5B_IFEVAL_PARTIAL_2026_06_13.md`
+   shows AutoAWQ and GPTQModel execute the 8-row deterministic IFEval fixture,
+   but the FP16 row timed out while materializing/loading the incomplete local
+   Hugging Face cache.
+2. Run the cheapest downstream-retention gate:
    `Qwen2.5-1.5B`, CSI `n=8` or robust consensus allocation, Broad20x20 plus
    GSM8K500 if disk/GPU budget is acceptable.
-4. Then decide whether to spend the next long run on second prompt pool or
+3. Then decide whether to spend the next long run on second prompt pool or
    faithful baseline breadth.

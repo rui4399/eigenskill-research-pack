@@ -55,6 +55,18 @@ Evidence boundary:
 | Are official baselines present? | AutoAWQ/GPTQModel task/runtime evidence exists for Qwen2.5-1.5B | medium |
 | Is there production runtime evidence? | no | high |
 
+## 2026-06-13 IFEval Probe
+
+A small Qwen2.5-1.5B IFEval probe was attempted after this gap map was created.
+AutoAWQ and GPTQModel completed the 8-row deterministic IFEval fixture under
+GPU guard, but the matched FP16 row timed out while loading/materializing the
+incomplete local Hugging Face cache. The partial result is recorded at:
+
+- `outputs/OFFICIAL_PTQ_TASK_QWEN25_1P5B_IFEVAL_PARTIAL_2026_06_13.md`
+
+This does not close the IFEval retention gap. It narrows the next action to
+materializing a complete FP16 local snapshot and rerunning the same fixture.
+
 ## Priority Experiments
 
 1. Downstream-retention gate:
@@ -91,4 +103,3 @@ We achieve state-of-the-art quantization or deployment speed.
 
 The next writing milestone is not more prose. It is a table that links each
 venue-facing claim to a gate, a result artifact, and a reviewer objection.
-
