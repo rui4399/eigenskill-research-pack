@@ -38,3 +38,7 @@ portfolio ambitions when time or GPU budget conflicts.
 
 Use `docs/VENUE_GAP_ANALYSIS_2026_06_13.md` for the current venue-fit and
 reviewer-gap map.
+
+Use `docs/RELATED_WORK_AND_GAP_SCAN_2026_06_14.md` and
+`docs/NOTEBOOKLM_REVIEW_PACKET_2026_06_14.md` for the current related-work
+positioning pass and manual NotebookLM review handoff.

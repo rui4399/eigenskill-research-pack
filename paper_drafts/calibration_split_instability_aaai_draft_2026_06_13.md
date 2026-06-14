@@ -76,7 +76,26 @@ Current ledger status:
 6. Report only bounded diagnostic claims unless downstream retention evidence
    is present.
 
-## 4. Main Results To Present
+## 4. Related Work Position
+
+CSI should be positioned beside calibration-aware PTQ work, not above it. GPTQ,
+AWQ, SmoothQuant, and OmniQuant are algorithm families for producing accurate
+quantized models under practical calibration or reconstruction constraints.
+QuaRot and SpinQuant represent a rotation/outlier-mitigation family that changes
+the quantization surface itself. Recent calibration-data studies and
+benchmark-toolkit work show that calibration choices and standardized settings
+matter for compression evaluation.
+
+The missing measurement targeted here is narrower: before claiming that a
+small calibration set supports a mixed-precision allocation, measure whether
+equally plausible calibration prompt splits induce stable module-sensitivity
+rankings. This makes CSI a diagnostic and falsification tool, not a replacement
+for faithful AWQ/GPTQ/SmoothQuant/rotation baselines.
+
+The current related-work and gap scan is tracked in
+`docs/RELATED_WORK_AND_GAP_SCAN_2026_06_14.md`.
+
+## 5. Main Results To Present
 
 | Model | n | Mean Spearman | Top-20 Jaccard | Positive-set Jaccard |
 |---|---:|---:|---:|---:|
@@ -96,10 +115,10 @@ Invalid wording:
 
 - CSI proves a universal scaling law.
 - CSI-derived allocation improves downstream retention.
-- The method is SOTA PTQ.
+- Do not claim that the method is SOTA PTQ.
 - The current artifact is production or mobile deployment evidence.
 
-## 5. Venue Positioning
+## 6. Venue Positioning
 
 AAAI / IJCAI / TMLR:
 position as a reliable AI measurement and robustness paper. The title should
@@ -115,9 +134,10 @@ on MMLU/GSM8K or another NLP task suite in a way that changes conclusions.
 
 MLSys:
 do not use this draft as the systems submission. Systems claims belong in an
-ESMP/W4A8 runtime draft after end-to-end latency and memory evidence exists.
+ESMP/W4A8 runtime draft; no current end-to-end latency or memory evidence is
+claimed here.
 
-## 6. Critical Missing Experiments
+## 7. Critical Missing Experiments
 
 1. Downstream retention:
    compare a CSI-informed or robust-consensus allocation against FP16, AutoAWQ,
@@ -135,7 +155,7 @@ ESMP/W4A8 runtime draft after end-to-end latency and memory evidence exists.
    convert gate outputs into paper tables with confidence intervals, not only
    pass/fail reports.
 
-## 7. Submission Risk
+## 8. Falsification And Submission Risk
 
 The current draft is defensible as a measurement artifact, but not as a top-tier
 main-track submission yet. The main reviewer objection is predictable: the
@@ -143,3 +163,11 @@ diagnostic is interesting, but the paper must show that acting on the diagnostic
 changes downstream quantization outcomes. The next experiment should therefore
 be a downstream-retention gate before more writing polish.
 
+Concrete falsification checks:
+
+- a second prompt pool fails to reproduce the n=2/4/8 stability trend;
+- another model family shows stable rankings even at very small n;
+- downstream task retention is insensitive to the CSI ranking instability;
+- faithful AWQ/GPTQ/SmoothQuant/rotation baselines make the same allocation
+  decision across calibration splits;
+- CSI-informed allocation fails against a simpler matched-budget heuristic.

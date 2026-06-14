@@ -55,6 +55,24 @@ Evidence boundary:
 | Are official baselines present? | AutoAWQ/GPTQModel task/runtime evidence exists for Qwen2.5-1.5B | medium |
 | Is there production runtime evidence? | no | high |
 
+## 2026-06-14 Related-Work Scan
+
+The current online scan is recorded in:
+
+- `docs/RELATED_WORK_AND_GAP_SCAN_2026_06_14.md`
+
+Main update:
+
+```text
+The closest defensible gap is not "a better quantizer." It is an auditable
+diagnostic for calibration split instability in module-sensitivity rankings,
+positioned beside GPTQ/AWQ/SmoothQuant/OmniQuant, rotation-family PTQ,
+calibration-data impact studies, and LLMC-style benchmark/toolkit work.
+```
+
+This strengthens the reviewer answer to question 4, but it does not close the
+downstream-retention, second-prompt-pool, or faithful-baseline gaps.
+
 ## 2026-06-13 IFEval Probe
 
 A small Qwen2.5-1.5B IFEval probe was attempted after this gap map was created.

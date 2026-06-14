@@ -16,6 +16,9 @@ experiment queue. It is a coordination artifact; paper claims still follow
 - codegraph index: `231` files, `4276` nodes, `8416` edges
 - current evidence ledger: `75 / 75` gates pass by
   `train_python/build_current_evidence_ledger.py`
+- 2026-06-14 review-prep companions:
+  `docs/RELATED_WORK_AND_GAP_SCAN_2026_06_14.md` and
+  `docs/NOTEBOOKLM_REVIEW_PACKET_2026_06_14.md`
 
 ## Tooling Health
 
@@ -105,7 +108,13 @@ Boundary:
 Committed drafts right now:
 
 - `paper_drafts/eigenskill_q_research_draft_en_2026_06_07.md`
+- `paper_drafts/calibration_split_instability_aaai_draft_2026_06_13.md`
 - `paper_drafts/eigenskill_q_ccf_style_draft_zh.md`
+
+Current review-prep companions:
+
+- `docs/RELATED_WORK_AND_GAP_SCAN_2026_06_14.md`
+- `docs/NOTEBOOKLM_REVIEW_PACKET_2026_06_14.md`
 
 The five split tracks in `docs/PAPER_DRAFT_INDEX.md` are still planning routes,
 not five completed committed drafts. The next writing pass should create or

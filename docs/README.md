@@ -11,6 +11,8 @@ is intentionally short.
 |---|---|
 | Current unified progress and next experiment queue | `docs/PROGRESS_SYNC_2026_06_12.md` |
 | Venue fit and top-tier reviewer gap analysis | `docs/VENUE_GAP_ANALYSIS_2026_06_13.md` |
+| Current related-work and falsification gap scan | `docs/RELATED_WORK_AND_GAP_SCAN_2026_06_14.md` |
+| NotebookLM/manual review packet | `docs/NOTEBOOKLM_REVIEW_PACKET_2026_06_14.md` |
 | Personal idea brief for first discussion | `docs/PERSONAL_IDEA_BRIEF_2026_06_08.md` |
 | One-line project scope and non-claims | `docs/scope-and-claims.md` |
 | Paper-facing claim firewall | `docs/PAPER_CLAIM_MATRIX.md` |
@@ -26,6 +28,7 @@ is intentionally short.
 | Consensus allocation method | `docs/consensus-allocation-method.md` |
 | Calibration instability framing | `docs/calibration_split_instability_position_2026_06_05.md` |
 | Quantization related-work map | `docs/RELATED_WORK_QUANTIZATION_2026.md` |
+| Route-specific online related-work scan | `docs/RELATED_WORK_AND_GAP_SCAN_2026_06_14.md` |
 | Paper targets and readiness | `docs/paper-targets-and-readiness.md` |
 | Multi-paper/repository split plan | `docs/RESEARCH_PORTFOLIO_SPLIT.md` |
 | RTX 3090 7B/14B scale-up plan | `docs/RTX3090_7B_14B_SCALEUP_PLAN_2026_06_09.md` |

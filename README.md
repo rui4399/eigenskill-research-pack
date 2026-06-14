@@ -13,9 +13,10 @@ runtime, or a claim of state-of-the-art quality. It is organized so reviewers
 can separate supported evidence from exploratory material.
 
 The public branch is now curated as an evidence artifact, not as a running lab
-notebook. Local planning notes, Obsidian summaries, NotebookLM material, Notion
-drafts, delivery bundles, and speculative concept text are deliberately kept
-out of the GitHub tree.
+notebook. Local planning notes, Obsidian summaries, raw NotebookLM sessions,
+Notion drafts, delivery bundles, and speculative concept text are deliberately
+kept out of the GitHub tree. A compact public review packet may be committed
+when it directly helps reviewers audit claim boundaries.
 
 ## Start Here
 
@@ -28,13 +29,17 @@ Read the public artifact in this order:
 3. [`docs/PERSONAL_IDEA_BRIEF_2026_06_08.md`](docs/PERSONAL_IDEA_BRIEF_2026_06_08.md)
    for a first-discussion brief explaining the personal idea, principle,
    completed work, evidence links, and next steps.
-4. [`docs/PAPER_CLAIM_MATRIX.md`](docs/PAPER_CLAIM_MATRIX.md) for every
+4. [`docs/RELATED_WORK_AND_GAP_SCAN_2026_06_14.md`](docs/RELATED_WORK_AND_GAP_SCAN_2026_06_14.md)
+   for the current related-work and falsification gap scan.
+5. [`docs/NOTEBOOKLM_REVIEW_PACKET_2026_06_14.md`](docs/NOTEBOOKLM_REVIEW_PACKET_2026_06_14.md)
+   for a compact manual NotebookLM/reviewer prompt packet.
+6. [`docs/PAPER_CLAIM_MATRIX.md`](docs/PAPER_CLAIM_MATRIX.md) for every
    supported claim and its evidence boundary.
-5. [`docs/SYSTEM_EVIDENCE_GATES.md`](docs/SYSTEM_EVIDENCE_GATES.md) for the
+7. [`docs/SYSTEM_EVIDENCE_GATES.md`](docs/SYSTEM_EVIDENCE_GATES.md) for the
    short gate index.
-6. [`outputs/real_system_packer_2026-06-05/EVIDENCE_LEDGER_2026_06_06.md`](outputs/real_system_packer_2026-06-05/EVIDENCE_LEDGER_2026_06_06.md)
+8. [`outputs/real_system_packer_2026-06-05/EVIDENCE_LEDGER_2026_06_06.md`](outputs/real_system_packer_2026-06-05/EVIDENCE_LEDGER_2026_06_06.md)
    for the current paper-facing gate ledger.
-7. [`docs/ARTIFACT_MANIFEST.md`](docs/ARTIFACT_MANIFEST.md) if you need a map
+9. [`docs/ARTIFACT_MANIFEST.md`](docs/ARTIFACT_MANIFEST.md) if you need a map
    through the committed `outputs/` tree.
 
 Do not treat raw `outputs/` browsing as the evidence boundary. A result is
