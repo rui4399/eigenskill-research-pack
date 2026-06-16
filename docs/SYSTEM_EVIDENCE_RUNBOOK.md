@@ -100,7 +100,7 @@ The current ledger passes with 75/75 gates across repo hygiene, calibration
 robustness, CSI trend significance, CSI null permutation, rank-inversion theory, artifact integrity, kernel, runtime wiring, selected-row, C++
 runtime, decode integration, QKV replacement, quality, task-retention, runtime profile, and
 capability-retention/model-ladder, allocation-comparator, rotation-comparator, and
-matched PTQ baseline, true subset100 official PTQ task/runtime evidence, deterministic IFEval-style PTQ execution, expanded AutoAWQ public PPL, Qwen2.5-1.5B GPTQModel task-execution subset evidence, Qwen2.5-1.5B FP16/AutoAWQ/GPTQModel subset100 plus GSM8K200/MMLU100 plus sharded GSM8K500 plus full GSM8K1319 plus MMLU Broad5x20/Broad10x20/Broad20x20 plus full-MMLU prefix12000/complete 14042 task/runtime/statistical-interval evidence, full-GSM8K local 7B public-task coverage, PTQ-comparator, and
+matched PTQ baseline, true subset100 official PTQ task/runtime evidence, deterministic IFEval-style PTQ execution, expanded AutoAWQ public PPL, Qwen2.5-1.5B GPTQModel task-execution subset evidence, Qwen2.5-1.5B FP16/AutoAWQ/GPTQModel subset100 plus GSM8K200/MMLU100 plus sharded GSM8K500 plus full GSM8K1319 plus MMLU Broad5x20/Broad10x20/Broad20x20 plus full-MMLU prefix12000/complete 14042 task/runtime/statistical-interval evidence plus 8-row deterministic IFEval-style execution/runtime evidence, full-GSM8K local 7B public-task coverage, PTQ-comparator, and
 paper-alignment evidence categories, plus extended W4A8 attention/MLP real-activation reconstruction.
 
 Valid claim:
@@ -1208,6 +1208,83 @@ Invalid claim:
 
 - this proves broad IFEval retention, instruction-following superiority,
   leaderboard-scale task quality, or official AWQ/GPTQ competitiveness.
+
+## Qwen2.5-1.5B Official PTQ IFEval-Style Execution Matrix
+
+This gate completes the matched Qwen2.5-1.5B FP16/AutoAWQ/GPTQModel row for
+the same 8-row deterministic IFEval-style fixture used as instruction-format
+smoke evidence. The FP16 baseline is 0/8, so the row is execution-path evidence
+rather than instruction-following retention evidence.
+
+Current gate:
+
+```bash
+python train_python/gate_official_ptq_task_retention.py \
+  --case fp16:ifeval=outputs/official_ptq_task_fp16_qwen25_1p5b_ifeval_deterministic_v2_summary_2026_06_16.json=outputs/official_ptq_task_fp16_qwen25_1p5b_ifeval_deterministic_v2_gpu_guard_2026_06_16.json \
+  --case autoawq:ifeval=outputs/official_ptq_task_autoawq_qwen25_1p5b_ifeval_deterministic_v2_summary_2026_06_13.json=outputs/official_ptq_task_autoawq_qwen25_1p5b_ifeval_deterministic_v2_gpu_guard_2026_06_13.json \
+  --case gptqmodel:ifeval=outputs/official_ptq_task_gptqmodel_qwen25_1p5b_ifeval_deterministic_v2_summary_2026_06_13.json=outputs/official_ptq_task_gptqmodel_qwen25_1p5b_ifeval_deterministic_v2_gpu_guard_2026_06_13.json \
+  --baseline-variant fp16 \
+  --required-variant fp16 \
+  --required-variant autoawq \
+  --required-variant gptqmodel \
+  --required-format ifeval \
+  --min-tasks-per-case 8 \
+  --max-memory-ratio 0.90 \
+  --max-accuracy-drop 1.0 \
+  --matrix-title "Qwen2.5-1.5B Deterministic IFEval FP16/AutoAWQ/GPTQModel Matrix" \
+  --evidence-label "8-row deterministic IFEval-style fixture" \
+  --out-json outputs/official_ptq_task_qwen25_1p5b_ifeval_deterministic_v2_fp16_awq_gptqmodel_matrix_2026_06_16.json \
+  --out-md outputs/OFFICIAL_PTQ_TASK_QWEN25_1P5B_IFEVAL_DETERMINISTIC_V2_FP16_AWQ_GPTQMODEL_MATRIX_2026_06_16.md
+```
+
+Current result: 3 variants, 24 total executions, 1 total pass, mean accuracy
+`0.0417`, peak guarded VRAM ratio `0.8762`, and `ifeval` marked as a
+zero-accuracy FP16 baseline format.
+
+Valid claim:
+
+- FP16, AutoAWQ, and GPTQModel Qwen2.5-1.5B variants load and execute the same
+  8-row deterministic IFEval-style fixture under GPU guard.
+
+Invalid claim:
+
+- this proves broad IFEval retention, instruction-following superiority,
+  leaderboard-scale task quality, production inference speed, or official
+  AWQ/GPTQ competitiveness.
+
+## Qwen2.5-1.5B Official PTQ IFEval-Style Runtime Profile Gate
+
+Current gate:
+
+```bash
+python train_python/gate_official_ptq_runtime_profile.py \
+  --matrix-json outputs/official_ptq_task_qwen25_1p5b_ifeval_deterministic_v2_fp16_awq_gptqmodel_matrix_2026_06_16.json \
+  --baseline-variant fp16 \
+  --required-variant fp16 \
+  --required-variant autoawq \
+  --required-variant gptqmodel \
+  --min-cases-per-variant 1 \
+  --max-memory-ratio 0.90 \
+  --min-mean-tokens-per-second 1.0 \
+  --max-mean-ttft-seconds 2.0 \
+  --out-json outputs/official_ptq_qwen25_1p5b_ifeval_deterministic_v2_fp16_awq_gptqmodel_runtime_profile_2026_06_16.json \
+  --out-md outputs/OFFICIAL_PTQ_QWEN25_1P5B_IFEVAL_DETERMINISTIC_V2_FP16_AWQ_GPTQMODEL_RUNTIME_PROFILE_2026_06_16.md
+```
+
+Current result: 3 variants, 3 cases, 24 tasks, mean `19.2650` tokens/s, mean
+TTFT `0.446351` s, peak guarded VRAM ratio `0.8762`, and peak guarded VRAM
+`7142` MiB.
+
+Valid claim:
+
+- the Qwen2.5-1.5B deterministic IFEval-style execution path exposes PC-side
+  TTFT, tokens/s, and peak VRAM for FP16, AutoAWQ, and GPTQModel on the same
+  fixture.
+
+Invalid claim:
+
+- this proves production runtime speedup, mobile deployment, energy
+  improvement, or official AWQ/GPTQ competitiveness.
 
 ## Official PTQ IFEval-Style Runtime Profile Gate
 
