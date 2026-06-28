@@ -415,17 +415,49 @@ The current paper can report the following completed evidence:
 5. Quant-skill deterministic bypass and LoRA smoke as boundary evidence for the
    separate HybridSkill line, not as the main quantization method.
 
-### 6.2 Required Baselines Before AAAI Submission
+### 6.2 AAAI Acceptance Experiment Package
 
-AAAI-level method superiority requires the following baseline coverage:
+AAAI-level method superiority requires an experiment package that separates PTQ
+quality baselines, allocation-policy baselines, optional surrogate-learning
+baselines, and runtime claims. The table below is the acceptance-level package,
+not a list of claims already proven by the current artifacts.
 
-| Family | Required baselines | Current status |
-|---|---|---|
-| Native PTQ | FP16, uniform W4, AutoAWQ W4/G128, GPTQModel W4/G128 | partially measured; needs direct CSI-allocation row |
-| Calibration-aware PTQ | SmoothQuant, OmniQuant or equivalent official/fair implementation | not complete |
-| Rotation/outlier methods | QuaRot or SpinQuant family baseline | not complete |
-| Allocation heuristics | random budget-matched, single-split top-k, mean consensus, confidence-adjusted consensus | partially measured in existing gates |
-| Runtime | FP16 loader, AWQ/GPTQ loader, ESMP packed path if claimed | ESMP not ready for main speed claim |
+| Layer | Required comparison | Purpose | Current status |
+|---|---|---|---|
+| Native PTQ quality | FP16, uniform W4, AutoAWQ W4/G128, GPTQModel W4/G128 | prove retention against standard deployment paths | partially measured; needs direct CSI-allocation row |
+| Calibration-aware PTQ | SmoothQuant, OmniQuant or equivalent fair implementation | test against methods that already exploit calibration | not complete |
+| Rotation/outlier PTQ | QuaRot or SpinQuant family baseline | test against modern outlier-handling methods | not complete |
+| Allocation policy | random budget-matched, single-split top-k, mean-only consensus, confidence-adjusted consensus, soft stability-risk objective | isolate whether stability-aware allocation changes decisions | partially measured in existing gates |
+| Surrogate ranking/regression | XGBoost, LightGBM, RankNet, LambdaMART | only needed if the paper claims learned module ranking beyond the closed-form score | not yet claimed; optional unless learned ranker is introduced |
+| Runtime | FP16 loader, AWQ/GPTQ loader, ESMP packed path if claimed | test speed/quality Pareto rather than speed alone | ESMP not ready for main speed claim |
+
+The main SOTA table reports win/loss and average rank over model-task
+pairs rather than only mean accuracy. A reviewer-convincing table has the form:
+
+| Method | MMLU win/loss | GSM8K win/loss | PPL win/loss | Stability pass rate | Retention pass rate | Avg. rank | Claim status |
+|---|---:|---:|---:|---:|---:|---:|---|
+| Uniform W4 | pending | pending | pending | n/a | pending | pending | baseline |
+| AWQ W4/G128 | pending | pending | pending | n/a | pending | pending | baseline |
+| GPTQ W4/G128 | pending | pending | pending | n/a | pending | pending | baseline |
+| Single-split allocation | pending | pending | pending | pending | pending | pending | allocation baseline |
+| Mean-only consensus | pending | pending | pending | pending | pending | pending | allocation baseline |
+| Soft stability-risk allocation | pending | pending | pending | pending | pending | pending | proposed |
+
+The dominance narrative is allowed only if the proposed row improves average
+rank or pass rate consistently across model-task pairs while staying within the
+same memory budget. If it wins only on CSI but not retention, the paper remains
+a robustness-audit paper. If it wins retention but fails stability, the paper
+cannot claim robust calibration. If it wins both but loses memory/runtime, the
+claim must be restricted to quality-stability allocation, not deployment speed.
+
+The reviewer-facing dominance statement is therefore conservative: "The
+proposed framework does not replace PTQ kernels such as AWQ or GPTQ. It defines
+a stability-aware allocation layer that can be placed above native PTQ methods.
+The relevant dominance test is whether this layer improves the
+retention-stability-memory frontier against budget-matched allocation policies
+and native PTQ baselines. Current artifacts establish the stability measurement
+pipeline and local RTX3090 feasibility; the full SOTA dominance claim requires
+the pending rows in Table 6.2."
 
 ### 6.3 Objective-Aligned Ablation Design
 
@@ -451,7 +483,36 @@ wins. A competitive AAAI version shows that the full objective improves the
 Pareto frontier of retention, stability, and memory against single-split,
 mean-only, random budget-matched, and native PTQ baselines.
 
-### 6.4 Reporting Format
+The mechanistic ablation must report isolated effects, not only removed-module
+scores. Each ablation should include a primary metric, an expected direction,
+and a failure diagnosis:
+
+| Mechanism | Intervention | Primary metric | Expected direction | Reviewer interpretation |
+|---|---|---|---|---|
+| Calibration sensitivity | remove \(\mathcal{L}_{cal}\) | retention at fixed memory | decreases | sensitivity estimates carry task-relevant signal |
+| Stability risk | set \(\lambda_s=0\) | CSI pass rate / seed variance | worsens | cross-split constraint prevents prompt overfitting |
+| Uncertainty risk | set \(\lambda_u=0\) | low-margin flip rate | increases | confidence adjustment suppresses unstable rankings |
+| Budget constraint | relax \(M\) or \(\lambda_b\) | average bits / memory | increases | gains are invalid if bought by extra precision |
+| Retention gate | remove \(\phi_r\) | task regression rate | increases | stable calibration alone is insufficient |
+
+### 6.4 Empirical-Theory Alignment
+
+The final paper should include a compact alignment figure or table connecting
+the theory to observed effects. In text form, the mapping is:
+
+| Theory object | Empirical intervention | Observable effect | Required result pattern |
+|---|---|---|---|
+| Soft stability risk \(\phi_s\) | compare full vs no-stability | CSI pass rate, rank variance | full improves stability without memory increase |
+| Retention risk \(\phi_r\) | compare full vs no-retention | MMLU/GSM8K/PPL regression | full reduces task regressions |
+| Uncertainty penalty \(\mathcal{R}_{uncert}\) | compare full vs mean-only | low-margin module flips | full reduces unstable bit flips |
+| Budget penalty \(\mathcal{R}_{budget}\) | fixed-budget comparison | average bits, VRAM | full stays budget-matched |
+| Finite-descent proposition | track accepted allocation moves | soft objective curve | objective decreases until local stop |
+
+This alignment table is important for reviewer trust. It prevents the theory
+from reading as decorative math and prevents the experiments from reading as a
+loose benchmark sweep.
+
+### 6.5 Reporting Format
 
 Every benchmark table reports:
 
