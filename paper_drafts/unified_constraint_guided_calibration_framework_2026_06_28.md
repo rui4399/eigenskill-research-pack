@@ -90,132 +90,183 @@ paper keeps one learning objective and one claim boundary.
    allocation reliability, and strong PTQ baselines must be confronted directly
    before any SOTA claim is made.
 
-## 2. Problem Formulation
+## 2. Unified Mathematical Formulation
 
 Let a transformer model contain quantizable modules
-\(\mathcal{M}=\{m_1,\ldots,m_L\}\). Let \(b_i \in \mathcal{B}\) denote the bit
-assignment for module \(m_i\), where \(\mathcal{B}\) may be \(\{4,8\}\) in the
-current artifacts. Let \(a=(b_1,\ldots,b_L)\) be a mixed-precision allocation.
-Let \(C=\{C_1,\ldots,C_S\}\) be a set of calibration splits sampled from a prompt
-pool, and let \(D\) be the downstream evaluation distribution.
+\(\mathcal{M}=\{m_1,\ldots,m_L\}\). For each module \(m_i\), let
+\(b_i \in \mathcal{B}\) be its assigned bit width and let
+\(a=(b_1,\ldots,b_L)\) denote a complete mixed-precision allocation. The
+current artifacts mostly instantiate \(\mathcal{B}=\{4,8\}\), but the
+formulation allows any finite bit set. Let \(C=\{C_1,\ldots,C_S\}\) be
+calibration splits sampled from a prompt pool, and let \(D\) be the downstream
+evaluation distribution.
 
-The allocation problem is:
+We formulate mixed-precision allocation as one constrained learning problem:
 
 \[
-\min_{a \in \mathcal{A}} \quad
+\begin{aligned}
+\min_{a \in \mathcal{B}^L} \quad
 \mathcal{J}(a)
-=
-\mathcal{L}_{ret}(a;D)
+&= \mathcal{L}_{task}(a;D)
++ \lambda_c \mathcal{L}_{cal}(a;C)
 + \lambda_s \mathcal{R}_{stab}(a;C)
-+ \lambda_b \mathcal{R}_{budget}(a)
-+ \lambda_u \mathcal{R}_{uncert}(a;C),
++ \lambda_u \mathcal{R}_{uncert}(a;C) \\
+&\quad + \lambda_b \mathcal{R}_{budget}(a) \\
+\text{s.t.} \quad
+&\sum_{i=1}^{L} \mathrm{mem}(m_i,b_i) \leq M, \\
+&\mathcal{G}_{stab}(a;C) \geq \tau_s, \\
+&\mathcal{G}_{ret}(a;D_{val}) \geq \tau_r.
+\end{aligned}
 \]
 
-subject to:
+Here \(\mathcal{L}_{task}\) is downstream retention loss relative to an
+unquantized or native PTQ reference, \(\mathcal{L}_{cal}\) is calibration loss
+estimated on prompt splits, \(\mathcal{R}_{stab}\) penalizes allocations whose
+supporting sensitivity evidence changes across splits, \(\mathcal{R}_{uncert}\)
+penalizes high-variance or low-margin sensitivity ranks, and
+\(\mathcal{R}_{budget}\) penalizes memory-budget violation or inefficient use of
+high precision. The two gates \(\mathcal{G}_{stab}\) and \(\mathcal{G}_{ret}\)
+are reviewer-facing constraints: an allocation is not promoted to a method claim
+unless calibration stability and downstream retention exceed predeclared
+thresholds.
+
+This turns the earlier multi-module language into a single objective. Former
+component names are not independent contributions in this formulation.
+They become terms and operators inside \(\mathcal{J}\): split-conditioned
+inference estimates \(\mathcal{L}_{cal}\), stability constraints define
+\(\mathcal{R}_{stab}\), allocation search optimizes \(\mathcal{R}_{budget}\), and
+adaptive weighting appears only through the coefficients or confidence scores
+used inside the same objective.
+
+A Lagrangian form makes the coupling explicit:
 
 \[
-\frac{1}{L}\sum_{i=1}^{L} b_i \leq B,\quad b_i \in \mathcal{B}.
+\mathcal{L}_{lag}(a,\eta_s,\eta_r)
+= \mathcal{J}(a)
++ \eta_s \max(0,\tau_s-\mathcal{G}_{stab}(a;C))
++ \eta_r \max(0,\tau_r-\mathcal{G}_{ret}(a;D_{val})).
 \]
 
-Here \(\mathcal{L}_{ret}\) measures downstream quality loss relative to the
-unquantized or native baseline path, \(\mathcal{R}_{stab}\) penalizes decisions
-whose supporting sensitivity estimates are unstable across calibration splits,
-\(\mathcal{R}_{budget}\) enforces the memory/bit budget, and
-\(\mathcal{R}_{uncert}\) penalizes allocations driven by high-variance or
-low-margin rankings.
+This is the mathematical claim reviewers can test. The current evidence does
+not fully optimize this objective end to end. It provides a partial but
+auditable instantiation: sensitivity measurement, seed-stability testing,
+CSI-vs-n trend gates, permutation-null checks, and guarded downstream probes.
+The resulting claim is a unified constrained framework plus verified
+components, not broad SOTA quantization.
 
-The present evidence does not fully optimize this objective end to end. It
-instantiates the components as executable gates: sensitivity measurement,
-seed-stability testing, CSI-vs-n trends, permutation-null checks, and matched
-task/PPL probes. This distinction matters. The current paper can claim a
-unified framework and a reproducible partial instantiation; it cannot yet claim
-that the final objective beats all official PTQ methods at scale.
+## 3. Method: One Objective, Three Operators
 
-## 3. Method
+The method consists of operators that estimate or optimize the
+single objective above, rather than three standalone modules.
 
-### 3.1 Split-Conditioned Sensitivity Estimation
+### 3.1 Split-Conditioned Calibration Estimator
 
-For each calibration split \(C_s\), we estimate a per-module sensitivity score
-\(\hat{\Delta}_{i,s}\), such as the change in negative log-likelihood when
-module \(m_i\) is quantized under a probe bit width. This produces a score
-matrix:
+For each calibration split \(C_s\), estimate the loss impact of assigning a
+module to a lower precision:
 
 \[
-\hat{\Delta} \in \mathbb{R}^{L \times S}.
+\hat{\Delta}_{i,s}
+= \ell(f_{a^{(i\downarrow)}};C_s)-\ell(f_{a^{ref}};C_s),
 \]
 
-A naive allocation uses one column of this matrix. The unified framework instead
-uses the distribution across splits. A module is considered reliable only when
-its sensitivity is both large and stable:
+where \(a^{ref}\) is a reference allocation and \(a^{(i\downarrow)}\) is the
+allocation with module \(m_i\) quantized under the probe setting. This produces
+\(\hat{\Delta} \in \mathbb{R}^{L\times S}\). A single-split method would choose
+high-bit modules from one column of this matrix. The unified estimator instead
+uses cross-split evidence:
 
 \[
-q_i = \mu_i - \alpha \sigma_i,
-\quad
 \mu_i = \frac{1}{S}\sum_{s=1}^{S}\hat{\Delta}_{i,s},
+\qquad
+\sigma_i^2 = \frac{1}{S-1}\sum_{s=1}^{S}(\hat{\Delta}_{i,s}-\mu_i)^2,
+\]
+
+\[
+q_i = \mu_i - \alpha\sigma_i - \beta\,\mathrm{margin}^{-1}_i.
+\]
+
+The score \(q_i\) is not a separate heuristic. It is a surrogate for the part of
+\(\mathcal{J}\) that combines calibration loss, instability, and uncertainty.
+Large \(\mu_i\) favors protecting sensitive modules; large \(\sigma_i\) or small
+rank margin reduces confidence.
+
+### 3.2 CSI as a Constraint, Not a Diagnostic
+
+Calibration Split Instability (CSI) is used to constrain allocation evidence.
+For each pair of splits \((s,t)\), compute rank and set agreement metrics:
+
+\[
+\rho_{s,t}=\mathrm{Spearman}(\hat{\Delta}_{:,s},\hat{\Delta}_{:,t}),
+\]
+
+\[
+J^k_{s,t}=\frac{|\mathrm{TopK}(s)\cap\mathrm{TopK}(t)|}
+{|\mathrm{TopK}(s)\cup\mathrm{TopK}(t)|}.
+\]
+
+The stability gate aggregates these values:
+
+\[
+\mathcal{G}_{stab}(a;C)
+= w_\rho \, \overline{\rho}
++ w_k \, \overline{J^k}
++ w_p \, \overline{J^{pos}}.
+\]
+
+The allocation is claim-eligible only if \(\mathcal{G}_{stab}(a;C)\geq\tau_s\).
+Otherwise the correct output is not a new mixed-precision model; it is a
+negative audit result saying that the calibration evidence is under-supported.
+The strict second-pool RTX3090 closure is a concrete measurement of this gate:
+with SmolLM2-360M, mean score Spearman increases from 0.3133 at n=4 to 0.4136
+at n=8 and 0.6959 at n=16, and the CSI trend/null gates pass.
+
+### 3.3 Budget-Constrained Allocation Operator
+
+Given \(q_i\), the allocation step solves a discrete constrained optimization
+problem:
+
+\[
+\max_{z_i\in\{0,1\}} \sum_i z_i q_i
 \quad
-\sigma_i^2 = \frac{1}{S-1}\sum_{s=1}^{S}(\hat{\Delta}_{i,s}-\mu_i)^2.
+\text{s.t.}\quad
+\sum_i \left[\mathrm{mem}(m_i,b_H)-\mathrm{mem}(m_i,b_L)\right]z_i
+\leq M-M_L.
 \]
 
-This confidence-adjusted score is one concrete estimator. Other robust
-estimators, such as trimmed means, median-of-means, or interaction-aware swap
-scores, can be substituted under the same objective.
+Here \(z_i=1\) means module \(m_i\) is assigned the higher bit width \(b_H\)
+instead of the lower bit width \(b_L\), and \(M_L\) is the memory use of the
+all-low-bit allocation. This can be solved by dynamic programming, greedy
+budgeted ranking, or beam search, but the solver is not the contribution. The
+contribution is that the solver optimizes a stability-adjusted surrogate of the
+single objective rather than a one-split sensitivity list.
 
-### 3.2 Calibration Split Instability Constraint
+### 3.4 Retention Gate and Claim Promotion
 
-CSI measures whether calibration splits agree about the sensitivity ordering.
-For every pair of splits \((s,t)\), the current artifacts compute:
-
-- Spearman correlation between module scores;
-- top-k Jaccard overlap between the most sensitive modules;
-- positive-set Jaccard overlap for modules with positive measured loss impact.
-
-Let \(G(C)\) be an aggregate stability score over all split pairs. A robust
-allocation should satisfy:
+The downstream gate tests whether the selected allocation preserves task quality
+relative to baselines:
 
 \[
-G(C) \geq \tau,
+\mathcal{G}_{ret}(a;D_{val})
+= \mathrm{Perf}(f_a,D_{val}) - \mathrm{Perf}(f_{base},D_{val}).
 \]
 
-or else report that the allocation is under-supported by calibration evidence.
-The strict second-pool RTX3090 closure gives a concrete example: with
-SmolLM2-360M, mean score Spearman increases from 0.3133 at n=4 to 0.4136 at n=8
-and 0.6959 at n=16, and the CSI trend/null gates pass. This supports the
-claim that larger calibration samples improve ranking stability in that
-measured setting.
+The baseline \(f_{base}\) must be chosen according to the claim. If the claim is
+"better than uniform W4," the baseline can be uniform W4. If the claim is SOTA
+PTQ, the baseline must include official or fair AWQ, GPTQ, SmoothQuant,
+OmniQuant, and rotation-family methods. The current RTX3090 FP16/AWQ/GPTQ rows
+support feasibility and guarded comparison only. They do not yet satisfy the
+full SOTA gate.
 
-### 3.3 Budget-Constrained Allocation
-
-Given robust scores \(q_i\), the allocation module chooses high-bit modules
-under an average-bit or memory budget:
-
-\[
-\max_{z_i \in \{0,1\}} \sum_i z_i q_i
-\quad \text{s.t.} \quad
-\sum_i \mathrm{cost}(z_i) \leq B.
-\]
-
-Here \(z_i=1\) can denote assigning module \(m_i\) to 8-bit rather than 4-bit.
-This is a knapsack-style subproblem, not a separate model. It is the optimizer
-for the unified objective after stability-adjusted scores have been estimated.
-
-### 3.4 Retention and Runtime Evidence Gates
-
-An allocation should not be promoted from diagnostic to method claim unless it
-is evaluated against downstream and native PTQ baselines. The current evidence
-contains guarded FP16/AWQ/GPTQ task comparisons, including RTX3090 7B MMLU/GSM8K
-rows and a 14B AWQ feasibility smoke. These are valuable system feasibility and
-comparison rows, but they are not yet sufficient to claim broad SOTA retention.
-
-Runtime artifacts such as ESMP packed kernels are treated as separate evidence
-gates. They can support future systems claims only when they show end-to-end
-TTFT, tokens/s, memory, and file-size advantages against strong baselines. Until
-then, they should remain appendix or separate-track material.
+Runtime artifacts such as ESMP packed kernels remain separate evidence gates.
+They can support a future systems claim only when end-to-end TTFT, tokens/s,
+VRAM, file size, and retention improve under the same allocation. Without that
+coupled evidence, runtime speed is not evidence for the calibration framework.
 
 ## 4. Repository-Level Evidence Synthesis
 
 The public GitHub portfolio contains thirteen visible repositories. A strict
-paper synthesis should not treat all of them as contributions to one method.
-Instead, the portfolio should be read as a layered evidence stack: three
+paper synthesis does not treat all of them as contributions to one method.
+Instead, the portfolio is read as a layered evidence stack: three
 repositories form the quantization paper core, three repositories define
 adjacent research boundaries, one repository is the broader agent platform, four
 repositories document skill/workflow process, and one repository is unrelated to
@@ -237,13 +288,13 @@ the PTQ claim.
 | Agent operations | `rui4399/rui-agent-ops-runbooks` | Operational runbooks; not experimental evidence |
 | Game optimization | `rui4399/game-reshade-optimizer` | Unrelated workflow artifact |
 
-The synthesis rule is strict: the AAAI/KBS paper should include only the first
+The synthesis rule is strict: the AAAI/KBS paper includes only the first
 three tracks as main evidence. ESMP, HybridSkill, and EigenSwarm can motivate a
 larger research program, but including them as core contributions would recreate
 the "hybrid system without unified learning theory" failure mode.
 
 This portfolio-level reading also changes the paper framing. The central paper
-should not be "EigenSkill as a universal agent platform." That claim is too
+is not "EigenSkill as a universal agent platform." That claim is too
 broad and would collapse unrelated artifacts into one story. The defensible
 paper is narrower and stronger: calibration-driven mixed-precision quantization
 needs a unified objective that connects sensitivity, split-stability, global
@@ -269,7 +320,7 @@ The current paper can report the following completed evidence:
 
 ### 5.2 Required Baselines Before AAAI Submission
 
-The paper should not claim AAAI-level method superiority until it includes:
+AAAI-level method superiority requires the following baseline coverage:
 
 | Family | Required baselines | Current status |
 |---|---|---|
@@ -279,22 +330,33 @@ The paper should not claim AAAI-level method superiority until it includes:
 | Allocation heuristics | random budget-matched, single-split top-k, mean consensus, confidence-adjusted consensus | partially measured in existing gates |
 | Runtime | FP16 loader, AWQ/GPTQ loader, ESMP packed path if claimed | ESMP not ready for main speed claim |
 
-### 5.3 Ablation Design
+### 5.3 Objective-Aligned Ablation Design
 
-The unified objective must be falsified through ablations:
+The ablation table must map directly onto the unified objective. Each row removes
+one term, gate, or operator from \(\mathcal{J}\) and tests whether the predicted
+failure appears. This is the key difference between a unified framework paper
+and a renamed hybrid-system paper.
 
-| Variant | Removed term | Expected failure mode |
-|---|---|---|
-| Full framework | none | best stability/retention trade-off |
-| No stability constraint | \(\mathcal{R}_{stab}\) | split-sensitive allocations |
-| No uncertainty penalty | \(\mathcal{R}_{uncert}\) | overconfident low-margin rankings |
-| No budget optimization | \(\mathcal{R}_{budget}\) / knapsack step | invalid or inefficient bit use |
-| Single split only | cross-split aggregation | high variance across prompt seeds |
-| Runtime-only promotion | retention gates | speed evidence detached from quality |
+| Variant | Objective change | Test statistic | Expected failure mode |
+|---|---|---|---|
+| Full framework | all terms and gates active | retention, CSI, memory, average rank | best feasible stability/retention trade-off |
+| No calibration term | remove \(\mathcal{L}_{cal}\) from scoring | downstream retention vs budget | allocation no longer tracks measured module sensitivity |
+| No stability regularizer | set \(\lambda_s=0\), remove \(\mathcal{G}_{stab}\) gate | seed-to-seed rank variance, CSI fail rate | split-sensitive allocations |
+| No uncertainty penalty | set \(\lambda_u=0\) | low-margin module flips, confidence interval width | overconfident low-margin rankings |
+| No budget regularizer | set \(\lambda_b=0\) or relax memory constraint | memory, average bits, invalid allocations | quality gains come from extra precision rather than better allocation |
+| Single split only | set \(S=1\), no cross-split aggregation | variance across prompt seeds | high prompt-seed dependence |
+| Mean-only consensus | use \(q_i=\mu_i\) | CSI and downstream retention | instability remains hidden by averaging |
+| No retention gate | remove \(\mathcal{G}_{ret}\) | task/PPL regression frequency | stable rankings do not necessarily preserve task quality |
+| Runtime-only promotion | report speed without retention coupling | speed/quality Pareto | systems evidence detached from model quality |
+
+A result table reports not only whether the full method wins, but why it
+wins. A competitive AAAI version shows that the full objective improves the
+Pareto frontier of retention, stability, and memory against single-split,
+mean-only, random budget-matched, and native PTQ baselines.
 
 ### 5.4 Reporting Format
 
-Every benchmark table should report:
+Every benchmark table reports:
 
 - model family and size;
 - calibration prompt source and n;
@@ -335,7 +397,7 @@ that the allocation decision is constrained by independent evidence about
 sensitivity, stability, budget, and retention.
 
 First, stability constraints reduce calibration overfitting. A module that
-appears sensitive in one small prompt sample but disappears under another should
+appears sensitive in one small prompt sample but disappears under another does
 not dominate a high-bit budget. Second, confidence-adjusted aggregation reduces
 rank variance by rewarding modules with both high mean sensitivity and low
 split variance. Third, the budget constraint prevents the method from hiding
@@ -349,17 +411,17 @@ loses its central claim.
 
 ## 8. Related Work Positioning
 
-The method should be positioned beside calibration-aware PTQ and robust
+The method is positioned beside calibration-aware PTQ and robust
 evaluation work. GPTQ, AWQ, SmoothQuant, OmniQuant, QuaRot, and SpinQuant are
 not strawman baselines; they are the methods that must be confronted before any
 quality claim is promoted. The current contribution is complementary: it asks
 whether the calibration evidence used to drive allocation is stable enough to
-trust, and how that stability should constrain the allocation objective.
+trust, and how that stability constrains the allocation objective.
 
 The CSI benchmark-suite track supports the measurement side of this claim. The
 ESMP runtime track supports a future systems paper only if end-to-end runtime
 evidence closes. The HybridSkill bypass track is a separate negative/edge-AI
-line about deterministic delegation and should not be used as proof of
+line about deterministic delegation and is not used as proof of
 quantization quality.
 
 ## 9. Threats To Validity
