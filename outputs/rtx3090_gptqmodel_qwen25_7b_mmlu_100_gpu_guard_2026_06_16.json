@@ -1,0 +1,122 @@
+{
+  "command": [
+    "/home/dell/anaconda3/envs/zr3090/bin/python3",
+    "train_python/eval_chat_task_benchmark.py",
+    "--tasks-jsonl",
+    "data_eval/public_task_benchmark_v1/mmlu_broad5x20_test.jsonl",
+    "--task-format",
+    "mmlu",
+    "--model",
+    "/mnt/e/models/Qwen2.5-7B-Instruct-GPTQ-Int4",
+    "--loader",
+    "gptqmodel",
+    "--gptq-backend",
+    "gptq_torch",
+    "--device",
+    "cuda",
+    "--dtype",
+    "float16",
+    "--max-new-tokens",
+    "16",
+    "--max-seq-len",
+    "512",
+    "--limit",
+    "100",
+    "--chat-template",
+    "--no-think",
+    "--local-files-only",
+    "--out-json",
+    "outputs/rtx3090_gptqmodel_qwen25_7b_mmlu_100_summary_2026_06_16.json",
+    "--out-md",
+    "outputs/RTX3090_GPTQMODEL_QWEN25_7B_MMLU_100_2026_06_16.md"
+  ],
+  "returncode": 1,
+  "killed_by_guard": false,
+  "killed_by_timeout": false,
+  "timeout_seconds": 7200.0,
+  "max_memory_used_mib": 1353,
+  "memory_total_mib": 24576,
+  "max_memory_used_ratio": 0.0550537109375,
+  "max_utilization_gpu_pct": 0,
+  "start_state": {
+    "utilization_gpu_pct": 0,
+    "memory_used_mib": 1349,
+    "memory_total_mib": 24576,
+    "memory_used_ratio": 0.054890950520833336
+  },
+  "end_state": {
+    "utilization_gpu_pct": 0,
+    "memory_used_mib": 1343,
+    "memory_total_mib": 24576,
+    "memory_used_ratio": 0.054646809895833336
+  },
+  "start_disk_state": {
+    "path": "/mnt/e/eigenskill-rtx3090-experiments-2026-06-16",
+    "total_bytes": 2000381014016,
+    "used_bytes": 592027676672,
+    "free_bytes": 1408353337344,
+    "total_gb": 1862.9999961853027,
+    "used_gb": 551.3687400817871,
+    "free_gb": 1311.6312561035156
+  },
+  "end_disk_state": {
+    "path": "/mnt/e/eigenskill-rtx3090-experiments-2026-06-16",
+    "total_bytes": 2000381014016,
+    "used_bytes": 592027676672,
+    "free_bytes": 1408353337344,
+    "total_gb": 1862.9999961853027,
+    "used_gb": 551.3687400817871,
+    "free_gb": 1311.6312561035156
+  },
+  "post_cleanup": {
+    "root": "/mnt/e/eigenskill-rtx3090-experiments-2026-06-16",
+    "dry_run": false,
+    "target_count": 1,
+    "estimated_bytes": 247003,
+    "estimated_mib": 0.23556041717529297,
+    "targets": [
+      {
+        "path": "/mnt/e/eigenskill-rtx3090-experiments-2026-06-16/train_python/__pycache__",
+        "bytes": 247003
+      }
+    ],
+    "errors": []
+  },
+  "samples": [
+    {
+      "utilization_gpu_pct": 0,
+      "memory_used_mib": 1349,
+      "memory_total_mib": 24576,
+      "memory_used_ratio": 0.054890950520833336,
+      "t_seconds": 1781612295.7891774
+    },
+    {
+      "utilization_gpu_pct": 0,
+      "memory_used_mib": 1349,
+      "memory_total_mib": 24576,
+      "memory_used_ratio": 0.054890950520833336,
+      "t_seconds": 1781612297.872453
+    },
+    {
+      "utilization_gpu_pct": 0,
+      "memory_used_mib": 1349,
+      "memory_total_mib": 24576,
+      "memory_used_ratio": 0.054890950520833336,
+      "t_seconds": 1781612299.931895
+    },
+    {
+      "utilization_gpu_pct": 0,
+      "memory_used_mib": 1349,
+      "memory_total_mib": 24576,
+      "memory_used_ratio": 0.054890950520833336,
+      "t_seconds": 1781612302.0079262
+    },
+    {
+      "utilization_gpu_pct": 0,
+      "memory_used_mib": 1353,
+      "memory_total_mib": 24576,
+      "memory_used_ratio": 0.0550537109375,
+      "t_seconds": 1781612304.0590572
+    }
+  ]
+}

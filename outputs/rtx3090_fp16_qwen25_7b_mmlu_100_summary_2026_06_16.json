@@ -1,0 +1,1425 @@
+{
+  "model": "/mnt/e/models/Qwen2.5-7B-Instruct",
+  "loader": "hf",
+  "hf_device_map": "",
+  "hf_max_gpu_memory_mib": 0,
+  "task_file": "data_eval/public_task_benchmark_v1/mmlu_broad5x20_test.jsonl",
+  "task_format": "mmlu",
+  "task_count": 100,
+  "task_limit": 100,
+  "task_offset": 0,
+  "chat_template": true,
+  "no_think": true,
+  "max_new_tokens": 16,
+  "baseline": {
+    "aggregate": {
+      "tasks": 100,
+      "passes": 71,
+      "accuracy": 0.71,
+      "mean_tokens_per_second": 8.37618481362397,
+      "mean_ttft_seconds": 0.13197412146004353
+    },
+    "rows": [
+      {
+        "id": "mmlu_0",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Find the degree for the given field extension Q(sqrt(2), sqrt(3), sqrt(18)) over Q.\nA. 0\nB. 4\nC. 2\nD. 6\n/no_think",
+        "answer": "B",
+        "generated_text": "D",
+        "score": {
+          "passed": false,
+          "predicted": "D",
+          "expected": "B"
+        },
+        "ttft_seconds": 0.9472895519993472,
+        "tokens_per_second": 1.0552358332254352
+      },
+      {
+        "id": "mmlu_1",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Let p = (1, 2, 5, 4)(2, 3) in S_5 . Find the index of <p> in S_5.\nA. 8\nB. 2\nC. 24\nD. 120\n/no_think",
+        "answer": "C",
+        "generated_text": "A",
+        "score": {
+          "passed": false,
+          "predicted": "A",
+          "expected": "C"
+        },
+        "ttft_seconds": 0.13162477900004887,
+        "tokens_per_second": 7.563550749745516
+      },
+      {
+        "id": "mmlu_2",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Find all zeros in the indicated finite field of the given polynomial with coefficients in that field. x^5 + 3x^3 + x^2 + 2x in Z_5\nA. 0\nB. 1\nC. 0,1\nD. 0,4\n/no_think",
+        "answer": "D",
+        "generated_text": "D",
+        "score": {
+          "passed": true,
+          "predicted": "D",
+          "expected": "D"
+        },
+        "ttft_seconds": 0.16757829999914975,
+        "tokens_per_second": 5.94986277919554
+      },
+      {
+        "id": "mmlu_3",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Statement 1 | A factor group of a non-Abelian group is non-Abelian. Statement 2 | If K is a normal subgroup of H and H is a normal subgroup of G, then K is a normal subgroup of G.\nA. True, True\nB. False, False\nC. True, False\nD. False, True\n/no_think",
+        "answer": "B",
+        "generated_text": "D",
+        "score": {
+          "passed": false,
+          "predicted": "D",
+          "expected": "B"
+        },
+        "ttft_seconds": 0.19186829299906094,
+        "tokens_per_second": 5.199333422576892
+      },
+      {
+        "id": "mmlu_4",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Find the product of the given polynomials in the given polynomial ring. f(x) = 4x - 5, g(x) = 2x^2 - 4x + 2 in Z_8[x].\nA. 2x^2 + 5\nB. 6x^2 + 4x + 6\nC. 0\nD. x^2 + 1\n/no_think",
+        "answer": "B",
+        "generated_text": "C",
+        "score": {
+          "passed": false,
+          "predicted": "C",
+          "expected": "B"
+        },
+        "ttft_seconds": 0.14181016000111413,
+        "tokens_per_second": 7.029867834563768
+      },
+      {
+        "id": "mmlu_5",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Statement 1 | If a group has an element of order 15 it must have at least 8 elements of order 15. Statement 2 | If a group has more than 8 elements of order 15, it must have at least 16 elements of order 15.\nA. True, True\nB. False, False\nC. True, False\nD. False, True\n/no_think",
+        "answer": "A",
+        "generated_text": "B",
+        "score": {
+          "passed": false,
+          "predicted": "B",
+          "expected": "A"
+        },
+        "ttft_seconds": 0.10699220500100637,
+        "tokens_per_second": 9.299778566634645
+      },
+      {
+        "id": "mmlu_6",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Statement 1 | Every homomorphic image of a group G is isomorphic to a factor group of G. Statement 2 | The homomorphic images of a group G are the same (up to isomorphism) as the factor groups of G.\nA. True, True\nB. False, False\nC. True, False\nD. False, True\n/no_think",
+        "answer": "A",
+        "generated_text": "D",
+        "score": {
+          "passed": false,
+          "predicted": "D",
+          "expected": "A"
+        },
+        "ttft_seconds": 0.1021552160000283,
+        "tokens_per_second": 9.75563071849067
+      },
+      {
+        "id": "mmlu_7",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Statement 1 | A ring homomorphism is one to one if and only if the kernel is {0}. Statement 2 | Q is an ideal in R.\nA. True, True\nB. False, False\nC. True, False\nD. False, True\n/no_think",
+        "answer": "D",
+        "generated_text": "C",
+        "score": {
+          "passed": false,
+          "predicted": "C",
+          "expected": "D"
+        },
+        "ttft_seconds": 0.1307960770009231,
+        "tokens_per_second": 7.622388867753311
+      },
+      {
+        "id": "mmlu_8",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Find the degree for the given field extension Q(sqrt(2) + sqrt(3)) over Q.\nA. 0\nB. 4\nC. 2\nD. 6\n/no_think",
+        "answer": "B",
+        "generated_text": "B",
+        "score": {
+          "passed": true,
+          "predicted": "B",
+          "expected": "B"
+        },
+        "ttft_seconds": 0.14201573399986955,
+        "tokens_per_second": 7.0201289913338165
+      },
+      {
+        "id": "mmlu_9",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Find all zeros in the indicated finite field of the given polynomial with coefficients in that field. x^3 + 2x + 2 in Z_7\nA. 1\nB. 2\nC. 2,3\nD. 6\n/no_think",
+        "answer": "C",
+        "generated_text": "C",
+        "score": {
+          "passed": true,
+          "predicted": "C",
+          "expected": "C"
+        },
+        "ttft_seconds": 0.1330057350005518,
+        "tokens_per_second": 7.496584837117381
+      },
+      {
+        "id": "mmlu_10",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Statement 1 | If H is a subgroup of G and a belongs to G then |aH| = |Ha|. Statement 2 | If H is a subgroup of G and a and b belong to G, then aH and Hb are identical or disjoint.\nA. True, True\nB. False, False\nC. True, False\nD. False, True\n/no_think",
+        "answer": "C",
+        "generated_text": "A",
+        "score": {
+          "passed": false,
+          "predicted": "A",
+          "expected": "C"
+        },
+        "ttft_seconds": 0.1421762600002694,
+        "tokens_per_second": 7.012412840288152
+      },
+      {
+        "id": "mmlu_11",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: If A = {1, 2, 3} then relation S = {(1, 1), (2, 2)} is\nA. symmetric only\nB. anti-symmetric only\nC. both symmetric and anti-symmetric\nD. an equivalence relation\n/no_think",
+        "answer": "C",
+        "generated_text": "C",
+        "score": {
+          "passed": true,
+          "predicted": "C",
+          "expected": "C"
+        },
+        "ttft_seconds": 0.12283953200130782,
+        "tokens_per_second": 8.107065933750775
+      },
+      {
+        "id": "mmlu_12",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Find the order of the factor group (Z_11 x Z_15)/(<1, 1>)\nA. 1\nB. 2\nC. 5\nD. 11\n/no_think",
+        "answer": "A",
+        "generated_text": "C",
+        "score": {
+          "passed": false,
+          "predicted": "C",
+          "expected": "A"
+        },
+        "ttft_seconds": 0.10630355700050131,
+        "tokens_per_second": 9.35736499293408
+      },
+      {
+        "id": "mmlu_13",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: The polynomial x^3 + 2x^2 + 2x + 1 can be factored into linear factors in Z_7[x]. Find this factorization.\nA. (x − 2)(x + 2)(x − 1)\nB. (x + 1)(x + 4)(x − 2)\nC. (x + 1)(x − 4)(x − 2)\nD. (x - 1)(x − 4)(x − 2)\n/no_think",
+        "answer": "C",
+        "generated_text": "B",
+        "score": {
+          "passed": false,
+          "predicted": "B",
+          "expected": "C"
+        },
+        "ttft_seconds": 0.14513631200134114,
+        "tokens_per_second": 6.861699260702474
+      },
+      {
+        "id": "mmlu_14",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Find the maximum possible order for an element of S_n for n = 10.\nA. 6\nB. 12\nC. 30\nD. 105\n/no_think",
+        "answer": "C",
+        "generated_text": "C",
+        "score": {
+          "passed": true,
+          "predicted": "C",
+          "expected": "C"
+        },
+        "ttft_seconds": 0.12269171600019035,
+        "tokens_per_second": 8.116752669133852
+      },
+      {
+        "id": "mmlu_15",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Statement 1 | R is a splitting field of some polynomial over Q. Statement 2 | There is a field with 60 elements.\nA. True, True\nB. False, False\nC. True, False\nD. False, True\n/no_think",
+        "answer": "B",
+        "generated_text": "A",
+        "score": {
+          "passed": false,
+          "predicted": "A",
+          "expected": "B"
+        },
+        "ttft_seconds": 0.13528421500086552,
+        "tokens_per_second": 7.363594565178917
+      },
+      {
+        "id": "mmlu_16",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: The inverse of -i in the multiplicative group, {1, -1, i , -i} is\nA. 1\nB. -1\nC. i\nD. -i\n/no_think",
+        "answer": "C",
+        "generated_text": "C",
+        "score": {
+          "passed": true,
+          "predicted": "C",
+          "expected": "C"
+        },
+        "ttft_seconds": 0.12981695700000273,
+        "tokens_per_second": 7.678674618917114
+      },
+      {
+        "id": "mmlu_17",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Compute the product in the given ring. (2,3)(3,5) in Z_5 x Z_9\nA. (1,1)\nB. (3,1)\nC. (1,6)\nD. (3,6)\n/no_think",
+        "answer": "C",
+        "generated_text": "C",
+        "score": {
+          "passed": true,
+          "predicted": "C",
+          "expected": "C"
+        },
+        "ttft_seconds": 0.14075887199942372,
+        "tokens_per_second": 7.082416408242947
+      },
+      {
+        "id": "mmlu_18",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: The set of all real numbers under the usual multiplication operation is not a group since\nA. multiplication is not a binary operation\nB. multiplication is not associative\nC. identity element does not exist\nD. zero has no inverse\n/no_think",
+        "answer": "D",
+        "generated_text": "D",
+        "score": {
+          "passed": true,
+          "predicted": "D",
+          "expected": "D"
+        },
+        "ttft_seconds": 0.13001582600008987,
+        "tokens_per_second": 7.662235950630823
+      },
+      {
+        "id": "mmlu_19",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Statement 1| Every group of order p^2 where p is prime is Abelian. Statement 2 | For a fixed prime p a Sylow p-subgroup of a group G is a normal subgroup of G if and only if it is the only Sylow p-subgroup of G.\nA. True, True\nB. False, False\nC. True, False\nD. False, True\n/no_think",
+        "answer": "A",
+        "generated_text": "A",
+        "score": {
+          "passed": true,
+          "predicted": "A",
+          "expected": "A"
+        },
+        "ttft_seconds": 0.16408522699930472,
+        "tokens_per_second": 6.080407330866353
+      },
+      {
+        "id": "mmlu_20",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: A lesion causing compression of the facial nerve at the stylomastoid foramen will cause ipsilateral\nA. paralysis of the facial muscles.\nB. paralysis of the facial muscles and loss of taste.\nC. paralysis of the facial muscles, loss of taste and lacrimation.\nD. paralysis of the facial muscles, loss of taste, lacrimation and decreased salivation.\n/no_think",
+        "answer": "A",
+        "generated_text": "A",
+        "score": {
+          "passed": true,
+          "predicted": "A",
+          "expected": "A"
+        },
+        "ttft_seconds": 0.16564528000162682,
+        "tokens_per_second": 6.0224514581385185
+      },
+      {
+        "id": "mmlu_21",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: A \"dished face\" profile is often associated with\nA. a protruding mandible due to reactivation of the condylar cartilage by acromegaly.\nB. a recessive maxilla due to failure of elongation of the cranial base.\nC. an enlarged frontal bone due to hydrocephaly.\nD. defective development of the maxillary air sinus.\n/no_think",
+        "answer": "B",
+        "generated_text": "A",
+        "score": {
+          "passed": false,
+          "predicted": "A",
+          "expected": "B"
+        },
+        "ttft_seconds": 0.144785155000136,
+        "tokens_per_second": 6.882290858104603
+      },
+      {
+        "id": "mmlu_22",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Which of the following best describes the structure that collects urine in the body?\nA. Bladder\nB. Kidney\nC. Ureter\nD. Urethra\n/no_think",
+        "answer": "A",
+        "generated_text": "A",
+        "score": {
+          "passed": true,
+          "predicted": "A",
+          "expected": "A"
+        },
+        "ttft_seconds": 0.11478528999941773,
+        "tokens_per_second": 8.68473116221949
+      },
+      {
+        "id": "mmlu_23",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Which of the following structures is derived from ectomesenchyme?\nA. Motor neurons\nB. Skeletal muscles\nC. Melanocytes\nD. Sweat glands\n/no_think",
+        "answer": "C",
+        "generated_text": "D",
+        "score": {
+          "passed": false,
+          "predicted": "D",
+          "expected": "C"
+        },
+        "ttft_seconds": 0.12075077700137626,
+        "tokens_per_second": 8.252124655968625
+      },
+      {
+        "id": "mmlu_24",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Which of the following describes the cluster of blood capillaries found in each nephron in the kidney?\nA. Afferent arteriole\nB. Glomerulus\nC. Loop of Henle\nD. Renal pelvis\n/no_think",
+        "answer": "B",
+        "generated_text": "B",
+        "score": {
+          "passed": true,
+          "predicted": "B",
+          "expected": "B"
+        },
+        "ttft_seconds": 0.16959589399994002,
+        "tokens_per_second": 5.878595619475778
+      },
+      {
+        "id": "mmlu_25",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: A patient suffers a broken neck with damage to the spinal cord at the level of the sixth cervical vertebra.\nA. They will be unable to breathe without life support.\nB. They will only be able to breathe quietly.\nC. It is impossible to predict an effect on breathing.\nD. Breathing will be unaffected.\n/no_think",
+        "answer": "B",
+        "generated_text": "D",
+        "score": {
+          "passed": false,
+          "predicted": "D",
+          "expected": "B"
+        },
+        "ttft_seconds": 0.11102124499848287,
+        "tokens_per_second": 8.979720558342782
+      },
+      {
+        "id": "mmlu_26",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Which of the following anatomical regions of abdomen lies just distal to the sternum?\nA. Epigastric\nB. Hypochondriac\nC. Hypogastric\nD. Lumbar\n/no_think",
+        "answer": "A",
+        "generated_text": "A",
+        "score": {
+          "passed": true,
+          "predicted": "A",
+          "expected": "A"
+        },
+        "ttft_seconds": 0.10678904399901512,
+        "tokens_per_second": 9.321160134386846
+      },
+      {
+        "id": "mmlu_27",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Which of the following best describes the human body's defense mechanism against environmental bacteria?\nA. Hair in the nose\nB. Mucous membranes\nC. Osteoblasts\nD. Saliva\n/no_think",
+        "answer": "B",
+        "generated_text": "B",
+        "score": {
+          "passed": true,
+          "predicted": "B",
+          "expected": "B"
+        },
+        "ttft_seconds": 0.10250298100072541,
+        "tokens_per_second": 9.700916947074692
+      },
+      {
+        "id": "mmlu_28",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: The palatine processes begin to fuse at\nA. six weeks post-fertilization.\nB. eight weeks post-fertilization.\nC. ten weeks post-fertilization.\nD. twelve weeks post-fertilization.\n/no_think",
+        "answer": "C",
+        "generated_text": "B",
+        "score": {
+          "passed": false,
+          "predicted": "B",
+          "expected": "C"
+        },
+        "ttft_seconds": 0.0977671040000132,
+        "tokens_per_second": 10.186536259517071
+      },
+      {
+        "id": "mmlu_29",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Primary motor cortex activity results in\nA. bilateral contraction of antigravity limb muscles.\nB. bilateral contraction of limb musculature.\nC. contraction of ipsilateral limb musculature.\nD. contraction of contralateral limb musculature.\n/no_think",
+        "answer": "D",
+        "generated_text": "D",
+        "score": {
+          "passed": true,
+          "predicted": "D",
+          "expected": "D"
+        },
+        "ttft_seconds": 0.09517325299930235,
+        "tokens_per_second": 10.466554298481293
+      },
+      {
+        "id": "mmlu_30",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: You notice that your patient's submandibular lymph nodes are enlarged. You would look for potential infection sites in the\nA. hard palate.\nB. hard palate and upper lip.\nC. hard palate, upper lip and upper central incisor.\nD. hard palate, upper lip, upper central incisor and lower first molar.\n/no_think",
+        "answer": "D",
+        "generated_text": "D",
+        "score": {
+          "passed": true,
+          "predicted": "D",
+          "expected": "D"
+        },
+        "ttft_seconds": 0.11767381800018484,
+        "tokens_per_second": 8.473520886976498
+      },
+      {
+        "id": "mmlu_31",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: A patient suffers damage to the orbit in a road traffic incident resulting in damage to the third cranial nerve. Which of the following signs will be present?\nA. Pupillary constriction and a medial strabismus\nB. Pupillary dilatation and a medial strabismus\nC. Pupillary constriction and a lateral strabismus\nD. Pupillary dilatation and a lateral strabismus\n/no_think",
+        "answer": "D",
+        "generated_text": "D",
+        "score": {
+          "passed": true,
+          "predicted": "D",
+          "expected": "D"
+        },
+        "ttft_seconds": 0.11783155599914608,
+        "tokens_per_second": 8.455215761812799
+      },
+      {
+        "id": "mmlu_32",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Which of the following statements is true of the temporomandibular joint?\nA. It has an articular disc of hyaline cartilage\nB. Its articular surfaces are covered by hyaline cartilage\nC. Proprioceptive information is carried by the chorda tympani and deep temporal nerves\nD. Proprioceptive information is carried by the masseteric and auriculotemporal nerves.\n/no_think",
+        "answer": "D",
+        "generated_text": "B",
+        "score": {
+          "passed": false,
+          "predicted": "B",
+          "expected": "D"
+        },
+        "ttft_seconds": 0.1213378130014462,
+        "tokens_per_second": 8.208976168986286
+      },
+      {
+        "id": "mmlu_33",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Laryngoscopic examination of the vocal folds after suspected recurrent laryngeal nerve damage usually shows that the vocal fold on the injured side is tensed and in an intermediate position between adduction and abduction. This is because\nA. cricothyroid muscle is still functional but the interarytenoid muscles are fully active.\nB. cricothyroid muscle is still functional but the interarytenoids are weak.\nC. cricothyroid muscle is paralyzed but the interarytenoids are fully active.\nD. cricothyroid muscle is paralyzed but the interarytenoids are weak.\n/no_think",
+        "answer": "B",
+        "generated_text": "B",
+        "score": {
+          "passed": true,
+          "predicted": "B",
+          "expected": "B"
+        },
+        "ttft_seconds": 0.11883037100051297,
+        "tokens_per_second": 8.375511431721455
+      },
+      {
+        "id": "mmlu_34",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Which one of the following statements about the growth of the mandible is correct?\nA. The mental symphysis closes at about 1 year postnatally\nB. The condylar growth cartilage ceases activity at puberty\nC. The ossification centre appears about 8 weeks I.U.L medial to Meckel's cartilage\nD. The functional matrix acting on the angle of the mandible is the lateral pterygoid muscle\n/no_think",
+        "answer": "A",
+        "generated_text": "C",
+        "score": {
+          "passed": false,
+          "predicted": "C",
+          "expected": "A"
+        },
+        "ttft_seconds": 0.11225985499913804,
+        "tokens_per_second": 8.876586177215515
+      },
+      {
+        "id": "mmlu_35",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Which of the following statements is true of the pupillary light reflex?\nA. Its efferent limb is carried in the optic nerve\nB. It is mediated by the inferior colliculi in the midbrain\nC. It is a consensual reflex\nD. Its afferent limb is carried in the oculomotor nerve\n/no_think",
+        "answer": "C",
+        "generated_text": "C",
+        "score": {
+          "passed": true,
+          "predicted": "C",
+          "expected": "C"
+        },
+        "ttft_seconds": 0.09885620699969877,
+        "tokens_per_second": 10.073939999599023
+      },
+      {
+        "id": "mmlu_36",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Which muscles are normally active during quiet inspiration?\nA. External and internal intercostal muscles\nB. External intercostal muscles and diaphragm\nC. Internal intercostal muscles and diaphragm\nD. External and internal intercostal muscles and diaphragm\n/no_think",
+        "answer": "B",
+        "generated_text": "B",
+        "score": {
+          "passed": true,
+          "predicted": "B",
+          "expected": "B"
+        },
+        "ttft_seconds": 0.09022909000123036,
+        "tokens_per_second": 10.996773623506346
+      },
+      {
+        "id": "mmlu_37",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Male hormones are produced by which of the following?\nA. Glans penis\nB. Prepuce\nC. Prostate\nD. Testes\n/no_think",
+        "answer": "D",
+        "generated_text": "D",
+        "score": {
+          "passed": true,
+          "predicted": "D",
+          "expected": "D"
+        },
+        "ttft_seconds": 0.09767154899964225,
+        "tokens_per_second": 10.194697725473969
+      },
+      {
+        "id": "mmlu_38",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Oxygenated blood is carried to the heart by which of the following structures?\nA. Aorta\nB. Carotid arteries\nC. Inferior vena cava\nD. Pulmonary veins\n/no_think",
+        "answer": "D",
+        "generated_text": "D",
+        "score": {
+          "passed": true,
+          "predicted": "D",
+          "expected": "D"
+        },
+        "ttft_seconds": 0.12751261399898794,
+        "tokens_per_second": 7.820260019659081
+      },
+      {
+        "id": "mmlu_39",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Which of the following allows air to pass into the lungs?\nA. Aorta\nB. Esophagus\nC. Trachea\nD. Pancreas\n/no_think",
+        "answer": "C",
+        "generated_text": "C",
+        "score": {
+          "passed": true,
+          "predicted": "C",
+          "expected": "C"
+        },
+        "ttft_seconds": 0.12469485899964639,
+        "tokens_per_second": 7.990559888573361
+      },
+      {
+        "id": "mmlu_40",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: _______ such as bitcoin are becoming increasingly mainstream and have a whole host of associated ethical implications, for example, they are______ and more ______. However, they have also been used to engage in _______.\nA. Cryptocurrencies, Expensive, Secure, Financial Crime\nB. Traditional currency, Cheap, Unsecure, Charitable giving\nC. Cryptocurrencies, Cheap, Secure, Financial crime\nD. Traditional currency, Expensive, Unsecure, Charitable giving\n/no_think",
+        "answer": "C",
+        "generated_text": "A",
+        "score": {
+          "passed": false,
+          "predicted": "A",
+          "expected": "C"
+        },
+        "ttft_seconds": 0.1716131650009629,
+        "tokens_per_second": 5.815214105043035
+      },
+      {
+        "id": "mmlu_41",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Typical advertising regulatory bodies suggest, for example that adverts must not: encourage _________, cause unnecessary ________ or _____, and must not cause _______ offence.\nA. Unsafe practices, Wants, Fear, Trivial\nB. Unsafe practices, Distress, Fear, Serious\nC. Safe practices, Wants, Jealousy, Trivial\nD. Safe practices, Distress, Jealousy, Serious\n/no_think",
+        "answer": "B",
+        "generated_text": "B",
+        "score": {
+          "passed": true,
+          "predicted": "B",
+          "expected": "B"
+        },
+        "ttft_seconds": 0.13461174900112383,
+        "tokens_per_second": 7.397852395988716
+      },
+      {
+        "id": "mmlu_42",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: ______ are the obligations of workers towards their employer, based on individual contracts and wider employment laws.\nA. Employee rights\nB. Employee rights\nC. Employer duties\nD. Employee duties\n/no_think",
+        "answer": "D",
+        "generated_text": "D",
+        "score": {
+          "passed": true,
+          "predicted": "D",
+          "expected": "D"
+        },
+        "ttft_seconds": 0.14768899499904364,
+        "tokens_per_second": 6.740915741423386
+      },
+      {
+        "id": "mmlu_43",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: ______ is an employee's preferred ratio between work-related and non-work-related activities which, due to intensification of work and technological shifts, has become a hotly contested issue in recent years.\nA. Presenteeism\nB. Absenteeism\nC. Work-play balance\nD. Work-life balance\n/no_think",
+        "answer": "D",
+        "generated_text": "D",
+        "score": {
+          "passed": true,
+          "predicted": "D",
+          "expected": "D"
+        },
+        "ttft_seconds": 0.1333655100006581,
+        "tokens_per_second": 7.475790009126574
+      },
+      {
+        "id": "mmlu_44",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: _______ can be a likened to their natural counterparts, comprising of a balanced network of interdependent organisms and their environments thus adding value to sustainability thinking due to the consideration of companies and industries as being bound together, and interdependent due to all kinds of resources and wastes.\nA. Industrial supply loops\nB. Industrial ecosystems\nC. Ecological ecosystems\nD. Corporate ecosystems\n/no_think",
+        "answer": "B",
+        "generated_text": "B",
+        "score": {
+          "passed": true,
+          "predicted": "B",
+          "expected": "B"
+        },
+        "ttft_seconds": 0.1235773499993229,
+        "tokens_per_second": 8.06382641178304
+      },
+      {
+        "id": "mmlu_45",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: ________, where for example one party possess more resources, unfair distribution of ________, where one party gains more from the relationship, and CSOs being ________, are all limitations and risks of business-CSO collaborations.\nA. Power imbalance, Benefits, Hoodwinked\nB. Power imbalance, Resources, Co-opted\nC. Informational asymmetries, Benefits, Hoodwinked\nD. Informational asymmetries, Resources, Co-opted\n/no_think",
+        "answer": "B",
+        "generated_text": "B",
+        "score": {
+          "passed": true,
+          "predicted": "B",
+          "expected": "B"
+        },
+        "ttft_seconds": 0.10656272999949579,
+        "tokens_per_second": 9.351123221896717
+      },
+      {
+        "id": "mmlu_46",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Although corporate profit maximization is not directly prescribed by major normative theories to which normative theory is it most similar?\nA. hedonistic utilitarianism\nB. preference utilitarianism\nC. The Categorical Imperative\nD. ethics of care\n/no_think",
+        "answer": "B",
+        "generated_text": "B",
+        "score": {
+          "passed": true,
+          "predicted": "B",
+          "expected": "B"
+        },
+        "ttft_seconds": 0.10659554799894977,
+        "tokens_per_second": 9.347194637234754
+      },
+      {
+        "id": "mmlu_47",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: What does Milton Friedman believe to be the sole responsibility of business?\nA. The only social responsibility of business is to its shareholders\nB. Managers should act in ways that balance the interest of society and shareholders\nC. The primary responsibility organizations have is to its employees\nD. The primary responsibility organizations have is to its stakeholders\n/no_think",
+        "answer": "A",
+        "generated_text": "A",
+        "score": {
+          "passed": true,
+          "predicted": "A",
+          "expected": "A"
+        },
+        "ttft_seconds": 0.09292221299983794,
+        "tokens_per_second": 10.694664900227123
+      },
+      {
+        "id": "mmlu_48",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: ______ regulation goes further than the ______ that CSOs have with businesses, as it also concerns _______of such processes.\nA. Legal, Interactions, Mechanics\nB. Civil, Relations, Outcomes\nC. Political, Interactions, Outcomes\nD. Environmental, Relations, Mechanics\n/no_think",
+        "answer": "B",
+        "generated_text": "A",
+        "score": {
+          "passed": false,
+          "predicted": "A",
+          "expected": "B"
+        },
+        "ttft_seconds": 0.09710516900122457,
+        "tokens_per_second": 10.258564133978606
+      },
+      {
+        "id": "mmlu_49",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: _______ working practices refer to working patterns which involve temporal, spatial and task related fluidity.\nA. Dynamic\nB. Fluid\nC. Flexible\nD. Modern\n/no_think",
+        "answer": "C",
+        "generated_text": "C",
+        "score": {
+          "passed": true,
+          "predicted": "C",
+          "expected": "C"
+        },
+        "ttft_seconds": 0.09261832800075354,
+        "tokens_per_second": 10.755534687850778
+      },
+      {
+        "id": "mmlu_50",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: What, according to Schnackenberg and Tomlinson (2014), are the three criteria which can be used to assess the quality of corporate transparency?\nA. Breadth, Clarity, Accuracy\nB. Disclosure, Detail, Accuracy\nC. Disclosure, Clarity, Accuracy\nD. Disclosure, Clarity, Efficiency\n/no_think",
+        "answer": "C",
+        "generated_text": "C",
+        "score": {
+          "passed": true,
+          "predicted": "C",
+          "expected": "C"
+        },
+        "ttft_seconds": 0.09693830200012599,
+        "tokens_per_second": 10.269720551586435
+      },
+      {
+        "id": "mmlu_51",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: A corporation is ________ from its managers, employees, investors and customers. It therefore has _______ succession and also ________.\nA. Indistinguishable, Perpetual, Does not own its own assets\nB. Independent, Limited, Owns its own assets\nC. Independent, Perpetual, Owns its own assets\nD. Indistinguishable, Perpetual, Owns its own assets\n/no_think",
+        "answer": "C",
+        "generated_text": "C",
+        "score": {
+          "passed": true,
+          "predicted": "C",
+          "expected": "C"
+        },
+        "ttft_seconds": 0.10906060799970874,
+        "tokens_per_second": 9.1308553378326
+      },
+      {
+        "id": "mmlu_52",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: The UK Public Services (Social Value) Act 2013 requires those procuring ______ to consider how they can secure wider _____, _____and _____ benefits.\nA. Private services, social, economic and environmental\nB. Public services, social, cultural and environmental\nC. Private services, cultural, economic and environmental\nD. Public services, social, economic and environmental\n/no_think",
+        "answer": "D",
+        "generated_text": "D",
+        "score": {
+          "passed": true,
+          "predicted": "D",
+          "expected": "D"
+        },
+        "ttft_seconds": 0.09971761300039361,
+        "tokens_per_second": 9.993919399580518
+      },
+      {
+        "id": "mmlu_53",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: When the true cost an item is deliberately obscured by a company this is known as?\nA. Predatory pricing\nB. Deceptive pricing\nC. Price fixing\nD. Skimming\n/no_think",
+        "answer": "B",
+        "generated_text": "B",
+        "score": {
+          "passed": true,
+          "predicted": "B",
+          "expected": "B"
+        },
+        "ttft_seconds": 0.09395915899949614,
+        "tokens_per_second": 10.59347193404201
+      },
+      {
+        "id": "mmlu_54",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: What are the three differing types of stakeholder theory according to Donaldson and Preston (1995)?\nA. Normative, Descriptive and Economic\nB. Normative, Moral and Instrumental\nC. Political, Descriptive and Instrumental\nD. Normative, Descriptive and Instrumental\n/no_think",
+        "answer": "D",
+        "generated_text": "D",
+        "score": {
+          "passed": true,
+          "predicted": "D",
+          "expected": "D"
+        },
+        "ttft_seconds": 0.09149365000121179,
+        "tokens_per_second": 10.891355267554708
+      },
+      {
+        "id": "mmlu_55",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: The Right to _______ has been a long-standing ethical concern for employees which today are addressed in most developed countries through a dense network of occupational health, safety and environmental regulations companies must abide by.\nA. Work-life balance\nB. Healthy and safe working conditions\nC. Employee privacy\nD. Free Speech\n/no_think",
+        "answer": "B",
+        "generated_text": "B",
+        "score": {
+          "passed": true,
+          "predicted": "B",
+          "expected": "B"
+        },
+        "ttft_seconds": 0.09552297399932286,
+        "tokens_per_second": 10.431671539530281
+      },
+      {
+        "id": "mmlu_56",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Which of the following would most effectively act as the primary objective of a business organisation?\nA. To make a profit\nB. To procure resources\nC. To communicate with shareholders\nD. To mediate between the organisation and the environment\n/no_think",
+        "answer": "A",
+        "generated_text": "A",
+        "score": {
+          "passed": true,
+          "predicted": "A",
+          "expected": "A"
+        },
+        "ttft_seconds": 0.09102685099969676,
+        "tokens_per_second": 10.940048142265333
+      },
+      {
+        "id": "mmlu_57",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: What is the enlightened self-interest model of CSR?\nA. That it is in an organization's own best interest to put itself first rather than its ethics\nB. That it is in an organization's best interest to consider what a shareholder would want\nC. That it is in an organization's own best interest to act in an ethical way\nD. That it is in an organization's own best interest to follow the legislation and abide by the law\n/no_think",
+        "answer": "C",
+        "generated_text": "C",
+        "score": {
+          "passed": true,
+          "predicted": "C",
+          "expected": "C"
+        },
+        "ttft_seconds": 0.10154345500086492,
+        "tokens_per_second": 9.806093714473894
+      },
+      {
+        "id": "mmlu_58",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: ________ is the right of a consumer to control what information companies can collect about them and how it is stored, used and shared.\nA. Consumer inclusion\nB. Consumer control\nC. Consumer privacy\nD. Consumer exclusion\n/no_think",
+        "answer": "C",
+        "generated_text": "C",
+        "score": {
+          "passed": true,
+          "predicted": "C",
+          "expected": "C"
+        },
+        "ttft_seconds": 0.08628499999940686,
+        "tokens_per_second": 11.534224795912143
+      },
+      {
+        "id": "mmlu_59",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: The Anglo-American model being considered the best model in light of the recession in the late 2000s.\nA. 1,2,3\nB. 1,3,4\nC. 2,3,4\nD. 1,2,3,4\n/no_think",
+        "answer": "A",
+        "generated_text": "A",
+        "score": {
+          "passed": true,
+          "predicted": "A",
+          "expected": "A"
+        },
+        "ttft_seconds": 0.09500183399904927,
+        "tokens_per_second": 10.467130118523237
+      },
+      {
+        "id": "mmlu_60",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Which of the following styles of fuzzer is more likely to explore paths covering every line of code in the following program?\nA. Generational\nB. Blackbox\nC. Whitebox\nD. Mutation-based\n/no_think",
+        "answer": "C",
+        "generated_text": "C",
+        "score": {
+          "passed": true,
+          "predicted": "C",
+          "expected": "C"
+        },
+        "ttft_seconds": 0.09726456099997449,
+        "tokens_per_second": 10.237174238474221
+      },
+      {
+        "id": "mmlu_61",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Assume that a TLS connection has been established successfully between a client and a server. Establishing the session included checking the server certificate and executing a DiffieHelmann exchange, but the client did not provide a client certificate. Further, assume that the client and server are honest, that the client and server don’t leak their keys, and that the cryptography is good. Which of the following attacks does TLS protect against?\n1. An attacker replaying bytes that a client sent earlier.\n2. An attacker impersonating the server.\nA. True, True\nB. False, False\nC. True, False\nD. False, True\n/no_think",
+        "answer": "A",
+        "generated_text": "D",
+        "score": {
+          "passed": false,
+          "predicted": "D",
+          "expected": "A"
+        },
+        "ttft_seconds": 0.15445396900031483,
+        "tokens_per_second": 6.455150575638769
+      },
+      {
+        "id": "mmlu_62",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: MIT’s Kerberos KDC server has a maximum ticket lifetime of 24 hours (for most user principals). What ensures that an expired Kerberos ticket can no longer be used?\nA. The Kerberos server (KDC) refuses to establish new connections between clients and servers for expired tickets.\nB. When a client connects to a server, the server sets a 24-hour timer to terminate the connection, which ensures a client cannot remain connected past the ticket’s maximum lifetime.\nC. When a client connects to a server, the server compares the ticket’s expiration time to the server’s current clock, and refuses to authenticate the user if the ticket expiration time is in the past.\nD. When a client connects to a server, the server sends a query to the KDC to check if the ticket is still valid with respect to the KDC’s clock, and refuses to authenticate the user if the KDC reports that the ticket is expired.\n/no_think",
+        "answer": "C",
+        "generated_text": "A",
+        "score": {
+          "passed": false,
+          "predicted": "A",
+          "expected": "C"
+        },
+        "ttft_seconds": 0.1473232440002903,
+        "tokens_per_second": 6.764339306922131
+      },
+      {
+        "id": "mmlu_63",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: In Message Condentiality, the transmitted message must make sense to only intended\nA. Receiver\nB. Sender\nC. Modulor\nD. Translator\n/no_think",
+        "answer": "A",
+        "generated_text": "A",
+        "score": {
+          "passed": true,
+          "predicted": "A",
+          "expected": "A"
+        },
+        "ttft_seconds": 0.11902561699935177,
+        "tokens_per_second": 8.373850698489987
+      },
+      {
+        "id": "mmlu_64",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Which of the following is a remote Trojan?\nA. Troya\nB. DaCryptic\nC. BankerA\nD. Game-Troj\n/no_think",
+        "answer": "A",
+        "generated_text": "D",
+        "score": {
+          "passed": false,
+          "predicted": "D",
+          "expected": "A"
+        },
+        "ttft_seconds": 0.09323375200074224,
+        "tokens_per_second": 10.677359743513904
+      },
+      {
+        "id": "mmlu_65",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: ______________ is a widespread app’s coding mistake made by developers which could be exploited by an attacker for gaining access or malfunctioning your system.\nA. Memory leakage\nB. Buffer-overrun\nC. Less processing power\nD. Inefficient programming\n/no_think",
+        "answer": "B",
+        "generated_text": "B",
+        "score": {
+          "passed": true,
+          "predicted": "B",
+          "expected": "B"
+        },
+        "ttft_seconds": 0.0962336550001055,
+        "tokens_per_second": 10.326478537817707
+      },
+      {
+        "id": "mmlu_66",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Consider the paper Native Client: A Sandbox for Portable, Untrusted x86 Native Code by Yee et al. Ben Bitdiddle notes that NaCl uses Intel x86 segmentation to ensure that the sandboxed module does not read or write memory outside its own data area, and does not execute instructions outside its own code. Ben thinks that with these restrictions alone, executing the sandboxed module must be safe; that is, he thinks validation is not needed. Ben is wrong. Circle the types of x86 machine instructions that the validator always forbids in sandboxed code. Please ignore trampoline and springboard code.\nA. all instructions that modify segment state\nB. all loads or stores to addresses that are not 0 mod 32\nC. all indirect loads or stores (via an address in a register or variable)\nD. all indirect jumps (via an address in a register or variable)\n/no_think",
+        "answer": "A",
+        "generated_text": "A",
+        "score": {
+          "passed": true,
+          "predicted": "A",
+          "expected": "A"
+        },
+        "ttft_seconds": 0.13086869799917622,
+        "tokens_per_second": 7.612437471359582
+      },
+      {
+        "id": "mmlu_67",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: ____________ is also a part of darknet that is employed for transferring files anonymously.\nA. Freenet\nB. ARPANET\nC. Stuxnet\nD. Internet\n/no_think",
+        "answer": "A",
+        "generated_text": "A",
+        "score": {
+          "passed": true,
+          "predicted": "A",
+          "expected": "A"
+        },
+        "ttft_seconds": 0.1099795059999451,
+        "tokens_per_second": 9.06300180133422
+      },
+      {
+        "id": "mmlu_68",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Why apps developed in languages like C, C++ is prone to Buffer-overflow?\nA. No string boundary checks in predefined functions\nB. No storage check in the external memory\nC. No processing power check\nD. No database check\n/no_think",
+        "answer": "A",
+        "generated_text": "A",
+        "score": {
+          "passed": true,
+          "predicted": "A",
+          "expected": "A"
+        },
+        "ttft_seconds": 0.10220141500030877,
+        "tokens_per_second": 9.747904470981243
+      },
+      {
+        "id": "mmlu_69",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Man in the middle attack can endanger the security of Diffie Hellman method if two parties are not\nA. Joined\nB. Authenticated\nC. Submitted\nD. Shared\n/no_think",
+        "answer": "B",
+        "generated_text": "B",
+        "score": {
+          "passed": true,
+          "predicted": "B",
+          "expected": "B"
+        },
+        "ttft_seconds": 0.09607883800163108,
+        "tokens_per_second": 10.366630397120424
+      },
+      {
+        "id": "mmlu_70",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: An integer overflow occurs when\nA. an integer expression's result \"wraps around\"; instead of creating a very large number, a very small (or negative) number ends up getting created\nB. an integer is used as if it was a pointer\nC. an integer is used to access a buffer outside of the buffer's bounds\nD. there is no more space to hold integers in the program\n/no_think",
+        "answer": "D",
+        "generated_text": "A",
+        "score": {
+          "passed": false,
+          "predicted": "A",
+          "expected": "D"
+        },
+        "ttft_seconds": 0.09578714800045418,
+        "tokens_per_second": 10.396413694674717
+      },
+      {
+        "id": "mmlu_71",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Let HH be a Merkle-Damgard hash function is H:X^{\\leq L} \\to TH:X^≤L  →T. Construct a MAC from this HH as follows: \\ \\ S(k,m) = H(k \\| m)  S(k,m)=H(k∥m). This mac is insecure because:\nA. Given H(k \\| m)H(k∥m) anyone can compute H(w \\| k \\| m \\| \\text{PB})H(w∥k∥m∥PB) for any ww\nB. Given H(k \\| m)H(k∥m) anyone can compute H(k \\| m \\| w)H(k∥m∥w) for any ww\nC. Given H(k \\| m)H(k∥m) anyone can compute H(k \\| m \\| \\text{PB} \\| w)H(k∥m∥PB∥w) for any ww\nD. Anyone can compute H( k \\| m )H(k∥m) for any mm\n/no_think",
+        "answer": "C",
+        "generated_text": "B",
+        "score": {
+          "passed": false,
+          "predicted": "B",
+          "expected": "C"
+        },
+        "ttft_seconds": 0.1265633910006727,
+        "tokens_per_second": 7.880873907898846
+      },
+      {
+        "id": "mmlu_72",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Suppose that Alice and Bob sent confidential text messages to one another last month through an encrypted messaging system. Alice and Bob are worried that an adversary might compromise one of their computers today, while they are taking the 6.858 final exam, and would then be able to decrypt those messages. Which of the following security properties can address Alice and Bob’s concern?\nA. Authentication.\nB. Deniability.\nC. Forward secrecy\nD. Backward secrecy.\n/no_think",
+        "answer": "C",
+        "generated_text": "C",
+        "score": {
+          "passed": true,
+          "predicted": "C",
+          "expected": "C"
+        },
+        "ttft_seconds": 0.10527004799951101,
+        "tokens_per_second": 9.451970229167452
+      },
+      {
+        "id": "mmlu_73",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: The AH Protocol provides source authentication and data integrity, but not\nA. Integrity\nB. Privacy\nC. Nonrepudiation\nD. Both A & C\n/no_think",
+        "answer": "B",
+        "generated_text": "B",
+        "score": {
+          "passed": true,
+          "predicted": "B",
+          "expected": "B"
+        },
+        "ttft_seconds": 0.08381384399945091,
+        "tokens_per_second": 11.864425963939635
+      },
+      {
+        "id": "mmlu_74",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Which of the following is not a security exploit?\nA. Eavesdropping\nB. Cross-site scripting\nC. Authentication\nD. SQL Injection\n/no_think",
+        "answer": "C",
+        "generated_text": "C",
+        "score": {
+          "passed": true,
+          "predicted": "C",
+          "expected": "C"
+        },
+        "ttft_seconds": 0.08829033700021682,
+        "tokens_per_second": 11.273148339134218
+      },
+      {
+        "id": "mmlu_75",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: _______________ is the central node of 802.11 wireless operations.\nA. WPA\nB. Access Point\nC. WAP\nD. Access Port\n/no_think",
+        "answer": "B",
+        "generated_text": "B",
+        "score": {
+          "passed": true,
+          "predicted": "B",
+          "expected": "B"
+        },
+        "ttft_seconds": 0.09031948600022588,
+        "tokens_per_second": 11.017019278567794
+      },
+      {
+        "id": "mmlu_76",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: In MD-5 the length of the message digest is\nA. 160\nB. 128\nC. 64\nD. 54\n/no_think",
+        "answer": "B",
+        "generated_text": "B",
+        "score": {
+          "passed": true,
+          "predicted": "B",
+          "expected": "B"
+        },
+        "ttft_seconds": 0.08616391999930784,
+        "tokens_per_second": 11.551148120170689
+      },
+      {
+        "id": "mmlu_77",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: What is Nmap?\nA. It is a scanner which works by injecting packets to a range of addresses, and inferring what hosts and services might be at those addresses, based on the responses\nB. It is a network fuzz testing tool\nC. It is a map of the Internet\nD. It is a suite of tools for scripting attacks: probe, construct, encode, inject, wait for response\n/no_think",
+        "answer": "A",
+        "generated_text": "A",
+        "score": {
+          "passed": true,
+          "predicted": "A",
+          "expected": "A"
+        },
+        "ttft_seconds": 0.08807471099862596,
+        "tokens_per_second": 11.27964097895559
+      },
+      {
+        "id": "mmlu_78",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: How do you prevent SQL injection?\nA. Escape queries\nB. Interrupt requests\nC. Merge tables\nD. All of the above\n/no_think",
+        "answer": "A",
+        "generated_text": "D",
+        "score": {
+          "passed": false,
+          "predicted": "D",
+          "expected": "A"
+        },
+        "ttft_seconds": 0.09150760699958482,
+        "tokens_per_second": 10.874428569110936
+      },
+      {
+        "id": "mmlu_79",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: What does it mean to \"be stealthy\" during a penetration test?\nA. Performing the tests from an undisclosed location\nB. Using encryption during tests to make the source of attacks impossible to determine\nC. Performing penetration testing without the target organization knowing\nD. Taking care to avoid activities during a penetration test that might attract attention, e.g., by operators or IDS services\n/no_think",
+        "answer": "D",
+        "generated_text": "D",
+        "score": {
+          "passed": true,
+          "predicted": "D",
+          "expected": "D"
+        },
+        "ttft_seconds": 0.0974422550007148,
+        "tokens_per_second": 10.21978161563761
+      },
+      {
+        "id": "mmlu_80",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: This question refers to the following information.\n\"The far-reaching, the boundless future will be the era of American greatness. In its magnificent domain of space and time, the nation of many nations is destined to manifest to mankind the excellence of divine principles; to establish on earth the noblest temple ever dedicated to the worship of the Most High—the Sacred and the True. Its floor shall be a hemisphere—its roof the firmament of the star-studded heavens, and its congregation a Union of many Republics, comprising hundreds of happy millions, calling, owning no man master, but governed by God's natural and moral law of equality, the law of brotherhood—of 'peace and good will amongst men.'\"\nJohn L. O'Sullivan, \"The Great Nation of Futurity,\" 1839\nBy what means did the United States take possession of the Oregon Territory?\nA. The United States was granted the territory in a postwar treaty with France.\nB. The United States bought it from the Native Americans who lived there.\nC. U.S. settlers were the first to arrive in the region; they claimed it for their country.\nD. Great Britain ceded it to the United States as part of a negotiated treaty.\n/no_think",
+        "answer": "D",
+        "generated_text": "D",
+        "score": {
+          "passed": true,
+          "predicted": "D",
+          "expected": "D"
+        },
+        "ttft_seconds": 0.13785052700040978,
+        "tokens_per_second": 7.234310872238638
+      },
+      {
+        "id": "mmlu_81",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: This question refers to the following information.\nBECAUSE no People can be truly happy, though under the greatest Enjoyment of Civil Liberties, if abridged of the Freedom of their Consciences, as to their Religious Profession and Worship: And Almighty God being the only Lord of Conscience, Father of Lights and Spirits; and the Author as well as Object of all divine Knowledge, Faith and Worship, who only doth enlighten the Minds, and persuade and convince the Understanding of People, I do hereby grant and declare, That no Person or Persons, inhabiting in this Province or Territories, who shall confess and acknowledge One almighty God, the Creator, Upholder and Ruler of the World; and profess him or themselves obliged to live quietly under the Civil Government, shall be in any Case molested or prejudiced, in his or their Person or Estate, because of his or their conscientious Persuasion or Practice, nor be compelled to frequent or maintain any religious Worship, Place or Ministry, contrary to his or their Mind.…\n—William Penn, Charter of Privileges Granted by William Penn,\nesq. to the Inhabitants of Pennsylvania and Territories, October 28, 1701\nBecause of Penn's Charter of Privileges, Pennsylvania became\nA. one of the most religiously diverse colonies in British America.\nB. one of the least religiously diverse colonies in America.\nC. notorious for witch hunting and popular superstition.\nD. known for its hostility to traditional religious practices.\n/no_think",
+        "answer": "A",
+        "generated_text": "A",
+        "score": {
+          "passed": true,
+          "predicted": "A",
+          "expected": "A"
+        },
+        "ttft_seconds": 0.13975801000015053,
+        "tokens_per_second": 7.122922372604278
+      },
+      {
+        "id": "mmlu_82",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: This question refers to the following information.\n\"We conclude that, in the field of public education, the doctrine of \"separate but equal\" has no place. Separate educational facilities are inherently unequal. Therefore, we hold that the plaintiffs and others similarly situated for whom the actions have been brought are, by reason of the segregation complained of, deprived of the equal protection of the laws guaranteed by the Fourteenth Amendment.\"\nBrown v. Board of Education, 1954\nDesegregation of schools was, in part, a response to unfulfilled promises from which of the following initiatives?\nA. The Great Society\nB. The Square Deal\nC. The New Deal\nD. Reconstruction\n/no_think",
+        "answer": "D",
+        "generated_text": "D",
+        "score": {
+          "passed": true,
+          "predicted": "D",
+          "expected": "D"
+        },
+        "ttft_seconds": 0.10978014600004826,
+        "tokens_per_second": 9.077420703914864
+      },
+      {
+        "id": "mmlu_83",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: This question refers to the following information.\n\"Since the foundations of the American commonwealth were laid in colonial times over 300 years ago, vigorous complaint and more or less bitter persecution have been aimed at newcomers to our shores. Also the congressional reports of about 1840 are full of abuse of English, Scotch, Welsh immigrants as paupers, criminals, and so forth. Old citizens in Detroit of Irish and German descent have told me of the fierce tirades and propaganda directed against the great waves of Irish and Germans who came over from 1840 on for a few decades to escape civil, racial, and religious persecution in their native lands. The \"Know-Nothings,\" lineal ancestors of the Ku-Klux Klan, bitterly denounced the Irish and Germans as mongrels, scum, foreigners, and a menace to our institutions, much as other great branches of the Caucasian race of glorious history and antecedents are berated to-day….But to-day it is the Italians, Spanish, Poles, Jews, Greeks, Russians, Balkanians, and so forth, who are the racial lepers…..In this bill we find racial discrimination at its worst—a deliberate attempt to go back 84 years in our census taken every 10 years so that a blow may be aimed at peoples of eastern and southern Europe, particularly at our recent allies in the Great War—Poland and Italy.\"\nRobert H. Clancy, Congressional Record, 68th Congress, 1st Session, 1924\nWhich one of the following legislative acts is most closely an example of nativism?\nA. The Wagner Act of 1935\nB. The Alien and Sedition Acts of 1798\nC. The Espionage Act of 1917\nD. The Immigration and Nationality Act of 1965\n/no_think",
+        "answer": "B",
+        "generated_text": "B",
+        "score": {
+          "passed": true,
+          "predicted": "B",
+          "expected": "B"
+        },
+        "ttft_seconds": 0.23240033900037815,
+        "tokens_per_second": 4.297109175666581
+      },
+      {
+        "id": "mmlu_84",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: This question refers to the following information.\nNow, we have organized a society, and we call it \"Share Our Wealth Society,\" a society with the motto \"Every Man a King.\"…\nWe propose to limit the wealth of big men in the country. There is an average of $15,000 in wealth to every family in America. That is right here today.\nWe do not propose to divide it up equally. We do not propose a division of wealth, but we do propose to limit poverty that we will allow to be inflicted on any man's family. We will not say we are going to try to guarantee any equality … but we do say that one third of the average is low enough for any one family to hold, that there should be a guarantee of a family wealth of around $5,000; enough for a home, an automobile, a radio, and the ordinary conveniences, and the opportunity to educate their children.…\nWe will have to limit fortunes. Our present plan is that we will allow no man to own more than $50,000,000. We think that with that limit we will be able to carry out the balance of the program.\n—Senator Huey P. Long of Louisiana, Radio Address, February 23, 1934\nPresident Franklin D. Roosevelt responded to political challenges like that of Senator Long by doing which of the following?\nA. Announcing that he would not run for re-election\nB. Launching the Second New Deal, a series of legislative acts including Social Security\nC. Diverting people's attention by allowing the Japanese to bomb Pearl Harbor\nD. Urging Congress to cut taxes and deregulate the economy\n/no_think",
+        "answer": "B",
+        "generated_text": "B",
+        "score": {
+          "passed": true,
+          "predicted": "B",
+          "expected": "B"
+        },
+        "ttft_seconds": 0.1886426199998823,
+        "tokens_per_second": 5.290133230734231
+      },
+      {
+        "id": "mmlu_85",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: This question refers to the following information.\n\"I was once a tool of oppression\nAnd as green as a sucker could be\nAnd monopolies banded together\nTo beat a poor hayseed like me.\n\"The railroads and old party bosses\nTogether did sweetly agree;\nAnd they thought there would be little trouble\nIn working a hayseed like me. . . .\"\n—\"The Hayseed\"\nThe song, and the movement that it was connected to, highlight which of the following developments in the broader society in the late 1800s?\nA. Corruption in government—especially as it related to big business—energized the public to demand increased popular control and reform of local, state, and national governments.\nB. A large-scale movement of struggling African American and white farmers, as well as urban factory workers, was able to exert a great deal of leverage over federal legislation.\nC. The two-party system of the era broke down and led to the emergence of an additional major party that was able to win control of Congress within ten years of its founding.\nD. Continued skirmishes on the frontier in the 1890s with American Indians created a sense of fear and bitterness among western farmers.\n/no_think",
+        "answer": "A",
+        "generated_text": "A",
+        "score": {
+          "passed": true,
+          "predicted": "A",
+          "expected": "A"
+        },
+        "ttft_seconds": 0.13448415000129899,
+        "tokens_per_second": 7.406402276239963
+      },
+      {
+        "id": "mmlu_86",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: This question refers to the following information.\n\"Some men look at constitutions with sanctimonious reverence, and deem them like the ark of the covenant, too sacred to be touched. They ascribe to the men of the preceding age a wisdom more than human, and suppose what they did to be beyond amendment….But I know also, that laws and institutions must go hand in hand with the progress of the human mind. As that becomes more developed, more enlightened, as new discoveries are made, new truths disclosed, and manners and opinions change with the change of circumstances, institutions must advance also, and keep pace with the times.\"\nThomas Jefferson, 1816\nWhich of the following statements is most accurate regarding the existence of political parties in the early United States?\nA. After the drafting of the Constitution, continued debates about states' rights and competing economic interests led to the formation of political parties, such as the Federalists and the Democratic-Republicans.\nB. Although Washington warned against the influence of political parties, he reluctantly accepted the endorsement of the Federalist party.\nC. Political parties did not exist until the War of 1812, when Federalists asserted control over foreign policies with France and Britain.\nD. Two major political parties dominated early presidential elections until John Quincy Adams founded the Whig party in 1824.\n/no_think",
+        "answer": "B",
+        "generated_text": "A",
+        "score": {
+          "passed": false,
+          "predicted": "A",
+          "expected": "B"
+        },
+        "ttft_seconds": 0.13974455500101612,
+        "tokens_per_second": 7.134559700810361
+      },
+      {
+        "id": "mmlu_87",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: This question refers to the following information.\nAt a meeting of working girls held at Hull House during a strike in a large shoe factory, the discussions made it clear that the strikers who had been most easily frightened, and therefore the first to capitulate, were naturally those girls who were paying board and were afraid of being put out if they fell too far behind. After a recital of a case of peculiar hardship one of them exclaimed: \"Wouldn't it be fine if we had a boarding club of our own, and then we could stand behind each other in a time like this?\" After that events moved quickly. We … discussed all the difficulties and fascinations of such an undertaking, and on the first of May, 1891, two comfortable apartments near Hull House were rented and furnished. The Settlement was responsible for the furniture and paid the first month's rent, but beyond that the members managed the club themselves.… At the end of the third year the club occupied all of the six apartments which the original building contained, and numbered fifty members.\n—Jane Addams, Twenty Years at Hull House, 1912\nA settlement house worker was most likely to be motivated by which of the following?\nA. The Social Gospel\nB. Social Darwinism\nC. Communism\nD. The support of an urban political machine\n/no_think",
+        "answer": "A",
+        "generated_text": "A",
+        "score": {
+          "passed": true,
+          "predicted": "A",
+          "expected": "A"
+        },
+        "ttft_seconds": 0.15592635100074403,
+        "tokens_per_second": 6.396012899513934
+      },
+      {
+        "id": "mmlu_88",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: This question refers to the following information.\n\"Lincoln was strongly anti-slavery, but he was not an abolitionist or a Radical Republican and never claimed to be one. He made a sharp distinction between his frequently reiterated personal wish that 'all men everywhere could be free' and his official duties as a legislator, congressman, and president in a legal and constitutional system that recognized the South's right to property in slaves. Even after issuing the Emancipation Proclamation he continued to declare his preference for gradual abolition. While his racial views changed during the Civil War, he never became a principled egalitarian in the manner of abolitionists such as Frederick Douglass or Wendell Phillips or Radical Republicans like Charles Sumner.\"\n—Eric Foner, The Fiery Trial, 2010\nHow did President Lincoln's issuance of the Emancipation Proclamation alter the course of the Civil War?\nA. The war came to a swift conclusion because the Proclamation made the Confederacy realize the futility of their cause.\nB. The war grew in scope because the Proclamation caused Great Britain to join the fight on the side of the Union.\nC. President Jefferson Davis of the Confederacy vowed massive resistance to any Union effort to free the slaves.\nD. The war aims of the United States were no longer exclusively focused on the preservation of the Union.\n/no_think",
+        "answer": "D",
+        "generated_text": "D",
+        "score": {
+          "passed": true,
+          "predicted": "D",
+          "expected": "D"
+        },
+        "ttft_seconds": 0.13950474400007806,
+        "tokens_per_second": 7.149823624552441
+      },
+      {
+        "id": "mmlu_89",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: This question refers to the following information.\n\"Yesterday, December 7, 1941—a date which will live in infamy—the United States of America was suddenly and deliberately attacked by naval and air forces of the Empire of Japan. The United States was at peace with that nation and, at the solicitation of Japan, was still in conversation with its Government and its Emperor looking toward the maintenance of peace in the Pacific. Indeed, one hour after Japanese air squadrons had commenced bombing…the Japanese Ambassador to the United States and his colleague delivered to the Secretary of State a formal reply to a recent American message. While this reply stated that it seemed useless to continue the existing diplomatic negotiations, it contained no threat or hint of war or armed attack….The attack yesterday…has caused severe damage to American naval and military forces. Very many American lives have been lost. In addition American ships have been reported torpedoed on the high seas….As Commander-in-Chief of the Army and Navy, I have directed that all measures be taken for our defense.\"\nPresident Franklin D. Roosevelt, radio address, December 8, 1941\nWhich of the following statements best characterizes the economic consequences of the declaration of war described above?\nA. Decreased trade with Asian nations precipitated economic recession in both the United States and Europe.\nB. The war-ravaged condition of Asia and Europe allowed the United States to emerge as one of the most prosperous nations on Earth.\nC. Cold War tensions isolated the economies of both the Soviet Union and the United States, leading to economic struggle for both nations.\nD. Japan was subsequently required to pay reparations to the United States, forcing it into a prolonged depression.\n/no_think",
+        "answer": "B",
+        "generated_text": "B",
+        "score": {
+          "passed": true,
+          "predicted": "B",
+          "expected": "B"
+        },
+        "ttft_seconds": 0.1887793789992429,
+        "tokens_per_second": 5.285169401342036
+      },
+      {
+        "id": "mmlu_90",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: This question refers to the following information.\n\"If any person or persons shall, from and after the passing of this act, by force and violence, take and carry away, or cause to be taken or carried away, and shall, by fraud or false pretense, seduce, or cause to be seduced, or shall attempt so to take, carry away or seduce, any negro or mulatto, from any part or parts of this commonwealth, to any other place or places whatsoever, out of this commonwealth, with a design and intention of selling and disposing of, or of causing to be sold, or of keeping and detaining, or of causing to be kept and detained, such negro or mulatto, as a slave or servant for life, or for any term whatsoever, every such person or persons, his or their aiders or abettors, shall on conviction thereof, in any court of this commonwealth having competent jurisdiction, be deemed guilty of a felony.\"\n—Excerpt from Pennsylvania law, 1826\nThe passage and implementation of this Pennsylvania law reflected an ongoing conflict between\nA. rural and urban interests.\nB. federal law and state law.\nC. those who favored gradual emancipation and those who favored immediate emancipation.\nD. supporters and opponents of government regulation of commerce.\n/no_think",
+        "answer": "B",
+        "generated_text": "C",
+        "score": {
+          "passed": false,
+          "predicted": "C",
+          "expected": "B"
+        },
+        "ttft_seconds": 0.13690413999938755,
+        "tokens_per_second": 7.272531099498258
+      },
+      {
+        "id": "mmlu_91",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: This question refers to the following information.\n\"The far-reaching, the boundless future will be the era of American greatness. In its magnificent domain of space and time, the nation of many nations is destined to manifest to mankind the excellence of divine principles; to establish on earth the noblest temple ever dedicated to the worship of the Most High—the Sacred and the True. Its floor shall be a hemisphere—its roof the firmament of the star-studded heavens, and its congregation a Union of many Republics, comprising hundreds of happy millions, calling, owning no man master, but governed by God's natural and moral law of equality, the law of brotherhood—of 'peace and good will amongst men.'\"\nJohn L. O'Sullivan, \"The Great Nation of Futurity,\" 1839\nWhich of the following best states the principle described above?\nA. Colonists were destined to leave the British Empire because of the distance between the New World and England.\nB. Women are biologically predestined to lives of child rearing and domestic labor.\nC. America's expansion to the West Coast was inevitable and divinely sanctioned.\nD. The abolition of slavery in the United States was certain to come about because slavery was immoral.\n/no_think",
+        "answer": "C",
+        "generated_text": "C",
+        "score": {
+          "passed": true,
+          "predicted": "C",
+          "expected": "C"
+        },
+        "ttft_seconds": 0.14170509699943068,
+        "tokens_per_second": 7.035637841534034
+      },
+      {
+        "id": "mmlu_92",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: This question refers to the following information.\n\"I observe the great and wonderful mistake, both our own and our fathers, as to the civil powers of this world, acting in spiritual matters. I have read…the last will and testament of the Lord Jesus over many times, and yet I cannot find by one tittle of that testament that if He had been pleased to have accepted of a temporal crown and government that ever He would have put forth the least finger of temporal or civil power in the matters of His spiritual affairs and Kingdom. Hence must it lamentably be against the testimony of Christ Jesus for the civil state to impose upon the souls of the people a religion, a worship, a ministry, oaths (in religious and civil affairs), tithes, times, days, marryings, and buryings in holy ground…\"\nRoger Williams, The Hireling Ministry None of Christ's, 1652\nThe Puritans believed that the freedom to practice religion should be extended to\nA. Puritans only\nB. all Protestants only\nC. all Christians only\nD. all Jews and Christians only\n/no_think",
+        "answer": "A",
+        "generated_text": "C",
+        "score": {
+          "passed": false,
+          "predicted": "C",
+          "expected": "A"
+        },
+        "ttft_seconds": 0.1395263039994461,
+        "tokens_per_second": 7.150005462991202
+      },
+      {
+        "id": "mmlu_93",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: This question refers to the following information.\nTonight, the daughter of a woman whose highest goal was a future for her children talks to our nation's oldest political party about a future for us all. Tonight, the daughter of working Americans tells all Americans that the future is within our reach, if we're willing to reach for it. Tonight, the daughter of an immigrant from Italy has been chosen to run for (vice) president in the new land my father came to love.… Americans want to live by the same set of rules. But under this administration, the rules are rigged against too many of our people. It isn't right that every year the share of taxes paid by individual citizens is going up, while the share paid by large corporations is getting smaller and smaller.… It isn't right that young couples question whether to bring children into a world of 50,000 nuclear warheads. That isn't the vision for which Americans have struggled for more than two centuries.… Tonight, we reclaim our dream. We're going to make the rules of American life work for all Americans again.… The issue is not what America can do for women, but what women can do for America.\n—Geraldine Ferraro, Vice Presidential Nomination Acceptance Address, July 19, 1984\nThe ideas expressed in the passage above would most directly have strengthened which of the following during the 1980s?\nA. Opposition to the administration's arms buildup\nB. Efforts to deregulate many industries\nC. Efforts to reform the welfare system\nD. Support for the administration's cold war policies\n/no_think",
+        "answer": "A",
+        "generated_text": "A",
+        "score": {
+          "passed": true,
+          "predicted": "A",
+          "expected": "A"
+        },
+        "ttft_seconds": 0.141693427998689,
+        "tokens_per_second": 7.041267148756549
+      },
+      {
+        "id": "mmlu_94",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: This question refers to the following information.\nI appeal to any white man to say, if ever he entered Logan's cabin hungry, and he gave him not meat: if ever he came cold and naked, and he clothed him not? During the course of the last long and bloody war, Logan remained idle in his cabin, an advocate for peace. Such was my love for the whites, that my countrymen pointed as they passed, and said, \"Logan is the friend of the white man.\" I had even thought to have lived with you but for the injuries of one man. Colonel Cresap, the last spring, in cold blood and unprovoked; murdered all the relations of Logan, not even sparing my women and children. There runs not a drop of my blood in the veins of any living creature. This called on me for revenge. I have sought it: I have killed many; I have fully glutted my vengeance. For my country, I rejoice at the beams of peace. But do not harbor a thought that mine is the joy of fear. Logan never felt fear. He will not turn on his heel to save his life. Who is there to mourn for Logan? Not one.\n—Address attributed to Logan, an Indian leader, 1774\nWhich of the following best expresses the perspective of Logan in the passage above?\nA. Logan believes the expansion of British settlements must be stopped\nB. Logan laments the loss of his family\nC. Logan opposes a new peace treaty\nD. Logan believes that Indians need to find strength in unity\n/no_think",
+        "answer": "B",
+        "generated_text": "B",
+        "score": {
+          "passed": true,
+          "predicted": "B",
+          "expected": "B"
+        },
+        "ttft_seconds": 0.13816369800042594,
+        "tokens_per_second": 7.220194554947972
+      },
+      {
+        "id": "mmlu_95",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: This question refers to the following information.\nThose who came before us made certain that this country rode the first waves of the industrial revolutions, the first waves of modern invention, and the first wave of nuclear power, and this generation does not intend to flounder in the backwash of the coming age of space. We mean to be a part of it—we mean to lead it. For the eyes of the world now look into space, to the moon, and the planets beyond, and we have vowed that we shall not see it governed by a hostile flag of conquest, but by a banner of freedom and peace. We have vowed that we shall not see space filled with weapons of mass destruction, but with instruments of knowledge and understanding.… We choose to go to the moon. We choose to go to the moon in this decade and do the other things, not because they are easy, but because they are hard, because that goal will serve to organize and measure the best of our energies and skills, because that challenge is one that we are willing to accept, one we are unwilling to postpone, and one which we intend to win, and the others, too.\n—John F. Kennedy, September 12, 1962\nKennedy's speech most directly led to which of the following?\nA. The Vietnam War\nB. The Mutually Assured Destruction (MAD) nuclear strategy\nC. The Apollo space program\nD. The Great Society social programs\n/no_think",
+        "answer": "C",
+        "generated_text": "C",
+        "score": {
+          "passed": true,
+          "predicted": "C",
+          "expected": "C"
+        },
+        "ttft_seconds": 0.13614370199866244,
+        "tokens_per_second": 7.31710795382928
+      },
+      {
+        "id": "mmlu_96",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: This question refers to the following information.\nThe 1980s have been born in turmoil, strife, and change. This is a time of challenge to our interests and our values and it's a time that tests our wisdom and skills.\nAt this time in Iran, 50 Americans are still held captive, innocent victims of terrorism and anarchy. Also at this moment, massive Soviet troops are attempting to subjugate the fiercely independent and deeply religious people of Afghanistan. These two acts—one of international terrorism and one of military aggression—present a serious challenge to the United States of America and indeed to all the nations of the world. Together we will meet these threats to peace.…\nThree basic developments have helped to shape our challenges: the steady growth and increased projection of Soviet military power beyond its own borders; the overwhelming dependence of the Western democracies on oil supplies from the Middle East; and the press of social and religious and economic and political change in the many nations of the developing world, exemplified by the revolution in Iran.\nEach of these factors is important in its own right. Each interacts with the others. All must be faced together, squarely and courageously. We will face these challenges, and we will meet them with the best that is in us. And we will not fail.\n—Jimmy Carter, State of the Union Address, January 23, 1980\nThe situation Carter described led most directly to which of the following?\nA. The creation of the North Atlantic Treaty Organization (NATO)\nB. Carter's defeat in the next presidential election\nC. An American invasion in the Middle East\nD. Carter's victory in the next presidential election\n/no_think",
+        "answer": "B",
+        "generated_text": "B",
+        "score": {
+          "passed": true,
+          "predicted": "B",
+          "expected": "B"
+        },
+        "ttft_seconds": 0.1373021740000695,
+        "tokens_per_second": 7.263108645510218
+      },
+      {
+        "id": "mmlu_97",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: This question refers to the following information.\n\"Americans have more freedom and broader rights than citizens of almost any other nation in the world, including the capacity to criticize their government and their elected officials. But we do not have the right to resort to violence—or the threat of violence—when we don't get our way. Our founders constructed a system of government so that reason could prevail over fear. Oklahoma City proved once again that without the law there is no freedom. Criticism is part of the lifeblood of democracy. No one is right all the time. But we should remember that there is a big difference between criticizing a policy or a politician and demonizing the government that guarantees our freedoms and the public servants who enforce our laws.\"\nPresident Bill Clinton, \"What We Learned in Oklahoma City,\" 2010\n(Written on the 15th anniversary of the Oklahoma City bombing)\n\"If there would not have been a Waco, I would have put down roots somewhere and not been so unsettled with the fact that my government…was a threat to me. Everything that Waco implies was on the forefront of my thoughts. That sort of guided my path for the next couple of years.\"\nTimothy McVeigh, Oklahoma City bomber, 2001\nU.S. Representative John Conyers, Events Surrounding the Branch Davidian Cult Standoff in Waco, Texas: Hearing Before the Committee on the Judiciary, House of Representatives, 1993\nIn the third excerpt, Representative Conyers refers to \"Wounded Knee\" as an example of\nA. a violent cult\nB. a federal misuse of power\nC. the site of a bombing\nD. a recent conflict between federal agents and Lakota Indians\n/no_think",
+        "answer": "B",
+        "generated_text": "D",
+        "score": {
+          "passed": false,
+          "predicted": "D",
+          "expected": "B"
+        },
+        "ttft_seconds": 0.20816218100117112,
+        "tokens_per_second": 4.795536682731302
+      },
+      {
+        "id": "mmlu_98",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: This question refers to the following information.\n\"If any person or persons shall, from and after the passing of this act, by force and violence, take and carry away, or cause to be taken or carried away, and shall, by fraud or false pretense, seduce, or cause to be seduced, or shall attempt so to take, carry away or seduce, any negro or mulatto, from any part or parts of this commonwealth, to any other place or places whatsoever, out of this commonwealth, with a design and intention of selling and disposing of, or of causing to be sold, or of keeping and detaining, or of causing to be kept and detained, such negro or mulatto, as a slave or servant for life, or for any term whatsoever, every such person or persons, his or their aiders or abettors, shall on conviction thereof, in any court of this commonwealth having competent jurisdiction, be deemed guilty of a felony.\"\n—Excerpt from Pennsylvania law, 1826\nDebate and conflict over the Pennsylvania law, excerpted above, reflected the fact that the framers of the Constitution\nA. specifically declared that the institution of slavery would be protected \"in perpetuity\" in the original 13 states.\nB. allowed for a state to be exempt from federal laws that went against that state's constitution.\nC. postponed a solution to the problems of slavery.\nD. declared that slaves could be both citizens and property.\n/no_think",
+        "answer": "C",
+        "generated_text": "C",
+        "score": {
+          "passed": true,
+          "predicted": "C",
+          "expected": "C"
+        },
+        "ttft_seconds": 0.15070552499855694,
+        "tokens_per_second": 6.620688676240685
+      },
+      {
+        "id": "mmlu_99",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: This question refers to the following information.\n\"Whereas the laws and treaties of the United States, without interfering with the free expression of opinion and sympathy, or with the commercial manufacture or sale of arms or munitions of war, nevertheless impose upon all persons who may be within their territory and jurisdiction the duty of an impartial neutrality during the existence of the contest; And Whereas it is the duty of a neutral government not to permit or suffer the making of its waters subservient to the purposes of war;\n\"Now, Therefore, I, Woodrow Wilson, President of the United States of America, in order to preserve the neutrality of the United States…do hereby declare and proclaim….\n\"That the statutes and the treaties of the United States and the law of nations alike require that no person, within the territory and jurisdiction of the United States, shall take part, directly or indirectly, in the said wars, but shall remain at peace with all of the said belligerents, and shall maintain a strict and impartial neutrality….\"\nWoodrow Wilson, 1914\nAll of the following increased federal government power during World War I EXCEPT the\nA. War Industries Board\nB. Food Administration\nC. Espionage Act\nD. Dawes Plan\n/no_think",
+        "answer": "D",
+        "generated_text": "D",
+        "score": {
+          "passed": true,
+          "predicted": "D",
+          "expected": "D"
+        },
+        "ttft_seconds": 0.14317059099994367,
+        "tokens_per_second": 6.9600792474600714
+      }
+    ]
+  }
+}

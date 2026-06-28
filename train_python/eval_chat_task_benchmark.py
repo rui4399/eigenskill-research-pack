@@ -413,6 +413,10 @@ def place_model(model: Any, device: Any) -> None:
         model.model.to(device)
     elif hasattr(model, "to"):
         model.to(device)
+    for head_name in ("lm_head", "embed_out", "score"):
+        head = getattr(model, head_name, None)
+        if hasattr(head, "to"):
+            head.to(device)
 
 
 def render_markdown(result: dict[str, Any]) -> str:

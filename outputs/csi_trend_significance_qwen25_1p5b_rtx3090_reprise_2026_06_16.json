@@ -1,0 +1,212 @@
+{
+  "date": "2026-06-16T14:23:38+00:00",
+  "passed": true,
+  "summary": {
+    "point_count": 3,
+    "min_n": 2,
+    "max_n": 8,
+    "bootstrap_samples": 5000,
+    "min_full_range_gain_low": 0.11967357140223518,
+    "min_full_range_dominance_probability": 0.9155555555555556,
+    "all_full_range_gain_ci_positive": true,
+    "all_full_range_dominance_high": true
+  },
+  "points": [
+    {
+      "n": 2,
+      "path": "outputs/calibration_seed_stability_qwen25_1p5b_n2_2026_06_10.json",
+      "source_passed": true,
+      "pair_count": 15,
+      "metric_means": {
+        "score_spearman": 0.14100928988623568,
+        "top20_jaccard": 0.26040621339864506,
+        "positive_jaccard": 0.4244359543531185
+      }
+    },
+    {
+      "n": 4,
+      "path": "outputs/calibration_seed_stability_qwen25_1p5b_n4_2026_06_11.json",
+      "source_passed": true,
+      "pair_count": 15,
+      "metric_means": {
+        "score_spearman": 0.2869393539532225,
+        "top20_jaccard": 0.3312596987050083,
+        "positive_jaccard": 0.5188740020650369
+      }
+    },
+    {
+      "n": 8,
+      "path": "outputs/calibration_seed_stability_qwen25_1p5b_n8_2026_06_11.json",
+      "source_passed": true,
+      "pair_count": 15,
+      "metric_means": {
+        "score_spearman": 0.4918109101971662,
+        "top20_jaccard": 0.4400799498500648,
+        "positive_jaccard": 0.5991554587573344
+      }
+    }
+  ],
+  "adjacent_steps": [
+    {
+      "left_n": 2,
+      "right_n": 4,
+      "left_path": "outputs/calibration_seed_stability_qwen25_1p5b_n2_2026_06_10.json",
+      "right_path": "outputs/calibration_seed_stability_qwen25_1p5b_n4_2026_06_11.json",
+      "metrics": [
+        {
+          "metric": "score_spearman",
+          "label": "score/cost Spearman",
+          "left_mean": 0.14100928988623568,
+          "right_mean": 0.2869393539532225,
+          "mean_gain": 0.14593006406698683,
+          "bootstrap_gain_ci": {
+            "samples": 5000,
+            "mean": 0.14633872594751,
+            "low": 0.0549816069121878,
+            "high": 0.23741939567806283,
+            "probability_positive": 0.9988
+          },
+          "dominance_probability": 0.7866666666666666
+        },
+        {
+          "metric": "top20_jaccard",
+          "label": "top-20 Jaccard",
+          "left_mean": 0.26040621339864506,
+          "right_mean": 0.3312596987050083,
+          "mean_gain": 0.07085348530636326,
+          "bootstrap_gain_ci": {
+            "samples": 5000,
+            "mean": 0.07122841880384262,
+            "low": 0.013884926331517403,
+            "high": 0.12532088755997672,
+            "probability_positive": 0.9926
+          },
+          "dominance_probability": 0.7822222222222223
+        },
+        {
+          "metric": "positive_jaccard",
+          "label": "positive-set Jaccard",
+          "left_mean": 0.4244359543531185,
+          "right_mean": 0.5188740020650369,
+          "mean_gain": 0.09443804771191838,
+          "bootstrap_gain_ci": {
+            "samples": 5000,
+            "mean": 0.09466594398667098,
+            "low": 0.052822256425725675,
+            "high": 0.13530565798188773,
+            "probability_positive": 1.0
+          },
+          "dominance_probability": 0.8977777777777778
+        }
+      ]
+    },
+    {
+      "left_n": 4,
+      "right_n": 8,
+      "left_path": "outputs/calibration_seed_stability_qwen25_1p5b_n4_2026_06_11.json",
+      "right_path": "outputs/calibration_seed_stability_qwen25_1p5b_n8_2026_06_11.json",
+      "metrics": [
+        {
+          "metric": "score_spearman",
+          "label": "score/cost Spearman",
+          "left_mean": 0.2869393539532225,
+          "right_mean": 0.4918109101971662,
+          "mean_gain": 0.2048715562439437,
+          "bootstrap_gain_ci": {
+            "samples": 5000,
+            "mean": 0.20515649095849112,
+            "low": 0.12335915287806264,
+            "high": 0.28400921054161105,
+            "probability_positive": 1.0
+          },
+          "dominance_probability": 0.9022222222222223
+        },
+        {
+          "metric": "top20_jaccard",
+          "label": "top-20 Jaccard",
+          "left_mean": 0.3312596987050083,
+          "right_mean": 0.4400799498500648,
+          "mean_gain": 0.1088202511450565,
+          "bootstrap_gain_ci": {
+            "samples": 5000,
+            "mean": 0.10878519526285926,
+            "low": 0.05224892285237118,
+            "high": 0.16129339149500446,
+            "probability_positive": 1.0
+          },
+          "dominance_probability": 0.8333333333333334
+        },
+        {
+          "metric": "positive_jaccard",
+          "label": "positive-set Jaccard",
+          "left_mean": 0.5188740020650369,
+          "right_mean": 0.5991554587573344,
+          "mean_gain": 0.08028145669229758,
+          "bootstrap_gain_ci": {
+            "samples": 5000,
+            "mean": 0.0800654823306407,
+            "low": 0.04443501731685315,
+            "high": 0.11428704639858873,
+            "probability_positive": 1.0
+          },
+          "dominance_probability": 0.8622222222222222
+        }
+      ]
+    }
+  ],
+  "full_range": {
+    "left_n": 2,
+    "right_n": 8,
+    "left_path": "outputs/calibration_seed_stability_qwen25_1p5b_n2_2026_06_10.json",
+    "right_path": "outputs/calibration_seed_stability_qwen25_1p5b_n8_2026_06_11.json",
+    "metrics": [
+      {
+        "metric": "score_spearman",
+        "label": "score/cost Spearman",
+        "left_mean": 0.14100928988623568,
+        "right_mean": 0.4918109101971662,
+        "mean_gain": 0.35080162031093054,
+        "bootstrap_gain_ci": {
+          "samples": 5000,
+          "mean": 0.35032504648445645,
+          "low": 0.2640700742782494,
+          "high": 0.43201161624347406,
+          "probability_positive": 1.0
+        },
+        "dominance_probability": 0.9644444444444444
+      },
+      {
+        "metric": "top20_jaccard",
+        "label": "top-20 Jaccard",
+        "left_mean": 0.26040621339864506,
+        "right_mean": 0.4400799498500648,
+        "mean_gain": 0.17967373645141976,
+        "bootstrap_gain_ci": {
+          "samples": 5000,
+          "mean": 0.17967551746047947,
+          "low": 0.11967357140223518,
+          "high": 0.2347722958003171,
+          "probability_positive": 1.0
+        },
+        "dominance_probability": 0.9155555555555556
+      },
+      {
+        "metric": "positive_jaccard",
+        "label": "positive-set Jaccard",
+        "left_mean": 0.4244359543531185,
+        "right_mean": 0.5991554587573344,
+        "mean_gain": 0.17471950440421596,
+        "bootstrap_gain_ci": {
+          "samples": 5000,
+          "mean": 0.174395169978128,
+          "low": 0.1354340830451427,
+          "high": 0.2125563212058747,
+          "probability_positive": 1.0
+        },
+        "dominance_probability": 0.9866666666666667
+      }
+    ]
+  },
+  "failures": [],
+  "claim_boundary": "Valid claim: for the supplied same-model calibration-seed-stability artifacts under a fixed prompt pool, the largest-n seed-pair stability distribution dominates the smallest-n distribution for the audited CSI metrics, and independent bootstrap confidence intervals for mean gain are positive. Invalid claim: this proves a universal scaling law, downstream quality retention, SOTA quantization, or deployment speed."
+}

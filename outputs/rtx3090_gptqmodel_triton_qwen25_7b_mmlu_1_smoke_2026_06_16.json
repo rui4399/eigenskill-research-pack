@@ -1,0 +1,39 @@
+{
+  "model": "/mnt/e/models/Qwen2.5-7B-Instruct-GPTQ-Int4",
+  "loader": "gptqmodel",
+  "hf_device_map": "",
+  "hf_max_gpu_memory_mib": 0,
+  "task_file": "data_eval/public_task_benchmark_v1/mmlu_broad5x20_test.jsonl",
+  "task_format": "mmlu",
+  "task_count": 1,
+  "task_limit": 1,
+  "task_offset": 0,
+  "chat_template": true,
+  "no_think": true,
+  "max_new_tokens": 16,
+  "baseline": {
+    "aggregate": {
+      "tasks": 1,
+      "passes": 0,
+      "accuracy": 0.0,
+      "mean_tokens_per_second": 0.13289172776089858,
+      "mean_ttft_seconds": 7.524481423999987
+    },
+    "rows": [
+      {
+        "id": "mmlu_0",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Find the degree for the given field extension Q(sqrt(2), sqrt(3), sqrt(18)) over Q.\nA. 0\nB. 4\nC. 2\nD. 6\n/no_think",
+        "answer": "B",
+        "generated_text": "D",
+        "score": {
+          "passed": false,
+          "predicted": "D",
+          "expected": "B"
+        },
+        "ttft_seconds": 7.524481423999987,
+        "tokens_per_second": 0.13289172776089858
+      }
+    ]
+  }
+}

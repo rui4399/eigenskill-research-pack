@@ -1,0 +1,144 @@
+{
+  "date": "2026-06-16T14:23:38+00:00",
+  "passed": true,
+  "summary": {
+    "point_count": 3,
+    "min_n": 2,
+    "max_n": 8,
+    "mean_score_spearman_gain": 0.35080162031093054,
+    "mean_top20_jaccard_gain": 0.17967373645141976,
+    "mean_positive_jaccard_gain": 0.17471950440421596,
+    "mean_score_spearman_monotonic": true,
+    "mean_top20_jaccard_monotonic": true,
+    "mean_positive_jaccard_monotonic": true
+  },
+  "points": [
+    {
+      "n": 2,
+      "path": "outputs/calibration_seed_stability_qwen25_1p5b_n2_2026_06_10.json",
+      "source_passed": true,
+      "case_count": 6,
+      "pair_count": 15,
+      "unique_prompt_selection_count": 6,
+      "mean_score_spearman": 0.14100928988623568,
+      "mean_score_spearman_ci": {
+        "samples": 5000,
+        "low": 0.07789649254702857,
+        "high": 0.21328006804319713
+      },
+      "mean_top20_jaccard": 0.26040621339864506,
+      "mean_top20_jaccard_ci": {
+        "samples": 5000,
+        "low": 0.22133236523449495,
+        "high": 0.30602711613066247
+      },
+      "mean_positive_jaccard": 0.4244359543531185,
+      "mean_positive_jaccard_ci": {
+        "samples": 5000,
+        "low": 0.3954337307141342,
+        "high": 0.45642292783965716
+      },
+      "min_score_spearman": -0.014000996735255268,
+      "min_top20_jaccard": 0.17647058823529413,
+      "min_positive_jaccard": 0.33544303797468356
+    },
+    {
+      "n": 4,
+      "path": "outputs/calibration_seed_stability_qwen25_1p5b_n4_2026_06_11.json",
+      "source_passed": true,
+      "case_count": 6,
+      "pair_count": 15,
+      "unique_prompt_selection_count": 6,
+      "mean_score_spearman": 0.28693935395322245,
+      "mean_score_spearman_ci": {
+        "samples": 1000,
+        "low": 0.2312218323436141,
+        "high": 0.3505642419459238
+      },
+      "mean_top20_jaccard": 0.3312596987050083,
+      "mean_top20_jaccard_ci": {
+        "samples": 1000,
+        "low": 0.2973303670745272,
+        "high": 0.36969858484736123
+      },
+      "mean_positive_jaccard": 0.5188740020650368,
+      "mean_positive_jaccard_ci": {
+        "samples": 1000,
+        "low": 0.49543184378179617,
+        "high": 0.5448934661312064
+      },
+      "min_score_spearman": 0.1490466914136076,
+      "min_top20_jaccard": 0.25,
+      "min_positive_jaccard": 0.4585987261146497
+    },
+    {
+      "n": 8,
+      "path": "outputs/calibration_seed_stability_qwen25_1p5b_n8_2026_06_11.json",
+      "source_passed": true,
+      "case_count": 6,
+      "pair_count": 15,
+      "unique_prompt_selection_count": 6,
+      "mean_score_spearman": 0.4918109101971662,
+      "mean_score_spearman_ci": {
+        "samples": 5000,
+        "low": 0.4431964212339591,
+        "high": 0.5457584496702724
+      },
+      "mean_top20_jaccard": 0.4400799498500648,
+      "mean_top20_jaccard_ci": {
+        "samples": 5000,
+        "low": 0.39787152821635585,
+        "high": 0.47770920171782233
+      },
+      "mean_positive_jaccard": 0.5991554587573344,
+      "mean_positive_jaccard_ci": {
+        "samples": 5000,
+        "low": 0.5772787354290778,
+        "high": 0.6220613229332187
+      },
+      "min_score_spearman": 0.3092163540611468,
+      "min_top20_jaccard": 0.25,
+      "min_positive_jaccard": 0.5094339622641509
+    }
+  ],
+  "ci_separation": {
+    "mean_score_spearman": [
+      {
+        "left_n": 2,
+        "right_n": 4,
+        "separated": true
+      },
+      {
+        "left_n": 4,
+        "right_n": 8,
+        "separated": true
+      }
+    ],
+    "mean_top20_jaccard": [
+      {
+        "left_n": 2,
+        "right_n": 4,
+        "separated": false
+      },
+      {
+        "left_n": 4,
+        "right_n": 8,
+        "separated": true
+      }
+    ],
+    "mean_positive_jaccard": [
+      {
+        "left_n": 2,
+        "right_n": 4,
+        "separated": true
+      },
+      {
+        "left_n": 4,
+        "right_n": 8,
+        "separated": true
+      }
+    ]
+  },
+  "failures": [],
+  "claim_boundary": "Valid claim: for the supplied same-model calibration-seed-stability artifacts, the audited prompt-seed sensitivity rankings become more stable as calibration prompt count increases across the provided n values. Invalid claim: this curve alone proves downstream task retention, real quantized runtime speed, SOTA quantization, or large-model universality."
+}

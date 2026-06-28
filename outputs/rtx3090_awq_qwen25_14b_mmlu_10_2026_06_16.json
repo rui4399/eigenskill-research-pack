@@ -1,0 +1,165 @@
+{
+  "model": "/mnt/e/models/Qwen2.5-14B-Instruct-AWQ",
+  "loader": "autoawq",
+  "hf_device_map": "",
+  "hf_max_gpu_memory_mib": 0,
+  "task_file": "data_eval/public_task_benchmark_v1/mmlu_broad5x20_test.jsonl",
+  "task_format": "mmlu",
+  "task_count": 10,
+  "task_limit": 10,
+  "task_offset": 0,
+  "chat_template": true,
+  "no_think": true,
+  "max_new_tokens": 16,
+  "baseline": {
+    "aggregate": {
+      "tasks": 10,
+      "passes": 5,
+      "accuracy": 0.5,
+      "mean_tokens_per_second": 3.8508990089369015,
+      "mean_ttft_seconds": 0.3299506092999763
+    },
+    "rows": [
+      {
+        "id": "mmlu_0",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Find the degree for the given field extension Q(sqrt(2), sqrt(3), sqrt(18)) over Q.\nA. 0\nB. 4\nC. 2\nD. 6\n/no_think",
+        "answer": "B",
+        "generated_text": "B",
+        "score": {
+          "passed": true,
+          "predicted": "B",
+          "expected": "B"
+        },
+        "ttft_seconds": 1.1368345119999503,
+        "tokens_per_second": 0.8793509296936377
+      },
+      {
+        "id": "mmlu_1",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Let p = (1, 2, 5, 4)(2, 3) in S_5 . Find the index of <p> in S_5.\nA. 8\nB. 2\nC. 24\nD. 120\n/no_think",
+        "answer": "C",
+        "generated_text": "C",
+        "score": {
+          "passed": true,
+          "predicted": "C",
+          "expected": "C"
+        },
+        "ttft_seconds": 0.2400808769998548,
+        "tokens_per_second": 4.160415832573223
+      },
+      {
+        "id": "mmlu_2",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Find all zeros in the indicated finite field of the given polynomial with coefficients in that field. x^5 + 3x^3 + x^2 + 2x in Z_5\nA. 0\nB. 1\nC. 0,1\nD. 0,4\n/no_think",
+        "answer": "D",
+        "generated_text": "C",
+        "score": {
+          "passed": false,
+          "predicted": "C",
+          "expected": "D"
+        },
+        "ttft_seconds": 0.2466723899997305,
+        "tokens_per_second": 4.044083600923902
+      },
+      {
+        "id": "mmlu_3",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Statement 1 | A factor group of a non-Abelian group is non-Abelian. Statement 2 | If K is a normal subgroup of H and H is a normal subgroup of G, then K is a normal subgroup of G.\nA. True, True\nB. False, False\nC. True, False\nD. False, True\n/no_think",
+        "answer": "B",
+        "generated_text": "D",
+        "score": {
+          "passed": false,
+          "predicted": "D",
+          "expected": "B"
+        },
+        "ttft_seconds": 0.2579786830001467,
+        "tokens_per_second": 3.871450244515958
+      },
+      {
+        "id": "mmlu_4",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Find the product of the given polynomials in the given polynomial ring. f(x) = 4x - 5, g(x) = 2x^2 - 4x + 2 in Z_8[x].\nA. 2x^2 + 5\nB. 6x^2 + 4x + 6\nC. 0\nD. x^2 + 1\n/no_think",
+        "answer": "B",
+        "generated_text": "C",
+        "score": {
+          "passed": false,
+          "predicted": "C",
+          "expected": "B"
+        },
+        "ttft_seconds": 0.2591073619996678,
+        "tokens_per_second": 3.853675732066703
+      },
+      {
+        "id": "mmlu_5",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Statement 1 | If a group has an element of order 15 it must have at least 8 elements of order 15. Statement 2 | If a group has more than 8 elements of order 15, it must have at least 16 elements of order 15.\nA. True, True\nB. False, False\nC. True, False\nD. False, True\n/no_think",
+        "answer": "A",
+        "generated_text": "D",
+        "score": {
+          "passed": false,
+          "predicted": "D",
+          "expected": "A"
+        },
+        "ttft_seconds": 0.25068168100006005,
+        "tokens_per_second": 3.980940990224449
+      },
+      {
+        "id": "mmlu_6",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Statement 1 | Every homomorphic image of a group G is isomorphic to a factor group of G. Statement 2 | The homomorphic images of a group G are the same (up to isomorphism) as the factor groups of G.\nA. True, True\nB. False, False\nC. True, False\nD. False, True\n/no_think",
+        "answer": "A",
+        "generated_text": "A",
+        "score": {
+          "passed": true,
+          "predicted": "A",
+          "expected": "A"
+        },
+        "ttft_seconds": 0.24809504500080948,
+        "tokens_per_second": 4.0237717999796665
+      },
+      {
+        "id": "mmlu_7",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Statement 1 | A ring homomorphism is one to one if and only if the kernel is {0}. Statement 2 | Q is an ideal in R.\nA. True, True\nB. False, False\nC. True, False\nD. False, True\n/no_think",
+        "answer": "D",
+        "generated_text": "C",
+        "score": {
+          "passed": false,
+          "predicted": "C",
+          "expected": "D"
+        },
+        "ttft_seconds": 0.2446536979996381,
+        "tokens_per_second": 4.082462426055621
+      },
+      {
+        "id": "mmlu_8",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Find the degree for the given field extension Q(sqrt(2) + sqrt(3)) over Q.\nA. 0\nB. 4\nC. 2\nD. 6\n/no_think",
+        "answer": "B",
+        "generated_text": "B",
+        "score": {
+          "passed": true,
+          "predicted": "B",
+          "expected": "B"
+        },
+        "ttft_seconds": 0.20876571999997395,
+        "tokens_per_second": 4.780832967487673
+      },
+      {
+        "id": "mmlu_9",
+        "type": "mcq",
+        "prompt": "Answer with only the option letter.\nQuestion: Find all zeros in the indicated finite field of the given polynomial with coefficients in that field. x^3 + 2x + 2 in Z_7\nA. 1\nB. 2\nC. 2,3\nD. 6\n/no_think",
+        "answer": "C",
+        "generated_text": "C",
+        "score": {
+          "passed": true,
+          "predicted": "C",
+          "expected": "C"
+        },
+        "ttft_seconds": 0.20663612499993178,
+        "tokens_per_second": 4.832005565848181
+      }
+    ]
+  }
+}

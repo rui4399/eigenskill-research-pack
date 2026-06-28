@@ -1,0 +1,104 @@
+{
+  "date": "2026-06-28T10:47:58+00:00",
+  "passed": true,
+  "summary": {
+    "min_n": 4,
+    "max_n": 16,
+    "point_count": 3,
+    "permutation_samples": 5000,
+    "min_observed_gain": 0.19820219742355444,
+    "max_holm_adjusted_p_value": 0.0005998800239952009,
+    "all_observed_gains_positive": true,
+    "all_holm_significant": true
+  },
+  "points": [
+    {
+      "n": 4,
+      "path": "outputs/calibration_seed_stability_smollm2_360m_n4_second_pool_2026_06_16.json",
+      "source_passed": true,
+      "pair_count": 15,
+      "metric_means": {
+        "score_spearman": 0.31332351717770573,
+        "top20_jaccard": 0.3778661786448216,
+        "positive_jaccard": 0.539026090338272
+      }
+    },
+    {
+      "n": 8,
+      "path": "outputs/calibration_seed_stability_smollm2_360m_n8_second_pool_2026_06_16.json",
+      "source_passed": true,
+      "pair_count": 15,
+      "metric_means": {
+        "score_spearman": 0.4136376914194569,
+        "top20_jaccard": 0.4363341894376377,
+        "positive_jaccard": 0.5990658813429734
+      }
+    },
+    {
+      "n": 16,
+      "path": "outputs/calibration_seed_stability_smollm2_360m_n16_second_pool_2026_06_16.json",
+      "source_passed": true,
+      "pair_count": 15,
+      "metric_means": {
+        "score_spearman": 0.6958525306876662,
+        "top20_jaccard": 0.576068376068376,
+        "positive_jaccard": 0.7512405941556313
+      }
+    }
+  ],
+  "comparison": [
+    {
+      "metric": "score_spearman",
+      "label": "score/cost Spearman",
+      "left_n": 4,
+      "right_n": 16,
+      "left_mean": 0.31332351717770573,
+      "right_mean": 0.6958525306876662,
+      "observed_gain": 0.38252901350996044,
+      "dominance_probability": 1.0,
+      "permutation": {
+        "samples": 5000,
+        "observed_gain": 0.38252901350996044,
+        "extreme_count": 0,
+        "p_value": 0.0001999600079984003
+      },
+      "holm_adjusted_p_value": 0.0005998800239952009
+    },
+    {
+      "metric": "top20_jaccard",
+      "label": "top-20 Jaccard",
+      "left_n": 4,
+      "right_n": 16,
+      "left_mean": 0.3778661786448216,
+      "right_mean": 0.576068376068376,
+      "observed_gain": 0.19820219742355444,
+      "dominance_probability": 0.9644444444444444,
+      "permutation": {
+        "samples": 5000,
+        "observed_gain": 0.19820219742355444,
+        "extreme_count": 0,
+        "p_value": 0.0001999600079984003
+      },
+      "holm_adjusted_p_value": 0.0005998800239952009
+    },
+    {
+      "metric": "positive_jaccard",
+      "label": "positive-set Jaccard",
+      "left_n": 4,
+      "right_n": 16,
+      "left_mean": 0.539026090338272,
+      "right_mean": 0.7512405941556313,
+      "observed_gain": 0.2122145038173593,
+      "dominance_probability": 1.0,
+      "permutation": {
+        "samples": 5000,
+        "observed_gain": 0.2122145038173593,
+        "extreme_count": 0,
+        "p_value": 0.0001999600079984003
+      },
+      "holm_adjusted_p_value": 0.0005998800239952009
+    }
+  ],
+  "failures": [],
+  "claim_boundary": "Valid claim: under a Monte-Carlo permutation label-shuffle null, the measured largest-n stability metrics are unlikely to arise by chance from the pooled smallest-n/largest-n seed-pair values for the supplied artifacts. Invalid claim: this proves a universal scaling law, downstream quality retention, SOTA quantization, or deployment speed."
+}
