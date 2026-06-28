@@ -33,7 +33,10 @@ ideas into claim-safe tracks. The resulting paper contribution is not a new
 standalone quantizer; it is a mathematically unified, auditable framework for
 deciding when calibration-driven mixed-precision allocation is supported, when
 it is unstable, and which evidence is still required before claiming quality or
-systems superiority.
+systems superiority. The final submission should claim dominance only if the
+completed win/loss, average-rank, seed-stability, and worst-case tables show
+that the framework consistently outperforms strong baselines under multiple
+evaluation regimes.
 
 ## 1. Introduction
 
@@ -512,7 +515,25 @@ This alignment table is important for reviewer trust. It prevents the theory
 from reading as decorative math and prevents the experiments from reading as a
 loose benchmark sweep.
 
-### 6.5 Reporting Format
+### 6.5 Stability and Efficiency Reporting
+
+The final submission must report consistency, not only peak performance:
+
+| Report item | Required statistic | Reviewer question answered |
+|---|---|---|
+| Win/loss matrix | win / loss / tie per model-task pair | does the method win consistently? |
+| Average rank | rank over all compared methods | is the method robust across datasets? |
+| Seed stability | mean, standard deviation, worst case | is the improvement stable? |
+| Gate behavior | distribution of \(p_s(a)\) and \(p_r(a)\) | are gates informative or saturated? |
+| Sensitivity | \(\lambda_s\), \(\lambda_r\), \(\lambda_u\), \(\lambda_b\) sweep | is the method brittle to hyperparameters? |
+| Efficiency | calibration time, allocation time, inference tokens/s, peak VRAM | is stability purchased by impractical cost? |
+
+The lightweight visualization package is therefore: a win/loss heatmap, an
+average-rank bar chart, a seed-variance/worst-case table, a lambda-sensitivity
+curve, and histograms of stability and retention confidence. These figures are
+not decorative; each removes a specific reviewer objection.
+
+### 6.6 Reporting Format
 
 Every benchmark table reports:
 
@@ -614,6 +635,30 @@ These limitations do not invalidate the framework, but they determine the venue
 position. The paper is currently a strong KBS/ESWA-style framework and evidence
 synthesis candidate, and an AAAI candidate only after direct CSI-allocation
 retention baselines and stronger official PTQ comparisons are added.
+
+### Failure Cases and When Not To Use The Method
+
+The method should not be used when calibration evidence is intrinsically
+unstable and cannot be repaired by increasing calibration size, because the
+stability gate will either reject the allocation or force overly conservative
+high-bit choices. It can also fail under constraint conflicts, such as a memory
+budget so tight that the modules with stable high sensitivity cannot be
+protected. In that case the budget term dominates and the method should report a
+failed retention gate rather than a successful compression result.
+
+A second failure mode is gate misfire. If the calibration pool is narrow,
+\(p_s(a)\) may be high while downstream retention still fails under broader task
+distributions. This is why \(p_r(a)\) and held-out retention tests are not
+optional. A third failure mode is calibration over-smoothing: if the stability
+penalty is too strong, the allocator may prefer modules with stable but weak
+signals over modules with high but variable sensitivity. The lambda-sensitivity
+curve is the intended audit for this failure.
+
+The method is therefore inappropriate for settings where no reliable
+calibration pool exists, where the deployment task distribution is unknown, or
+where the memory budget is so aggressive that every allocation violates the
+retention threshold. These are negative outcomes the framework is designed to
+surface, not cases to hide behind aggregate accuracy.
 
 ## 11. Conclusion
 
