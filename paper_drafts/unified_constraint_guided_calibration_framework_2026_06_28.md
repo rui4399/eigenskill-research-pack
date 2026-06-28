@@ -79,13 +79,19 @@ paper keeps one learning objective and one claim boundary.
 1. We propose a unified constraint-guided formulation for mixed-precision
    calibration, combining sensitivity, calibration stability, bit-budget
    feasibility, and retention evidence in one allocation objective.
-2. We formalize calibration split instability as a constraint, not only a
+2. We replace hard-only evidence gates with soft stability and retention risks,
+   giving the framework both thresholded claim promotion and a smooth energy
+   objective for search and ablation.
+3. We provide a finite-descent guarantee for the soft objective over the finite
+   mixed-precision allocation space, yielding an epsilon-local optimum under a
+   monotone allocation update.
+4. We formalize calibration split instability as a constraint, not only a
    post-hoc diagnostic, using rank agreement, top-k set overlap, positive-set
    overlap, bootstrap trend checks, and permutation-null tests.
-3. We synthesize the current EigenSkill-Q and RTX3090 evidence into a
+5. We synthesize the current EigenSkill-Q and RTX3090 evidence into a
    reviewer-facing experimental matrix while explicitly separating completed
    results from required AAAI/KBS baselines.
-4. We define an ablation and baseline protocol that can falsify the framework:
+6. We define an ablation and baseline protocol that can falsify the framework:
    removing stability, budget, consensus, or retention constraints must degrade
    allocation reliability, and strong PTQ baselines must be confronted directly
    before any SOTA claim is made.
@@ -138,7 +144,7 @@ inference estimates \(\mathcal{L}_{cal}\), stability constraints define
 adaptive weighting appears only through the coefficients or confidence scores
 used inside the same objective.
 
-A Lagrangian form makes the coupling explicit:
+A hard-constrained Lagrangian makes the coupling explicit:
 
 \[
 \mathcal{L}_{lag}(a,\eta_s,\eta_r)
@@ -146,6 +152,41 @@ A Lagrangian form makes the coupling explicit:
 + \eta_s \max(0,\tau_s-\mathcal{G}_{stab}(a;C))
 + \eta_r \max(0,\tau_r-\mathcal{G}_{ret}(a;D_{val})).
 \]
+
+For optimization and reviewer-facing ablations, we also define a smooth risk
+relaxation:
+
+\[
+\widetilde{\mathcal{J}}(a)
+= \mathcal{L}_{task}(a;D)
++ \lambda_c \mathcal{L}_{cal}(a;C)
++ \lambda_s \phi_s(a)
++ \lambda_r \phi_r(a)
++ \lambda_u \mathcal{R}_{uncert}(a;C)
++ \lambda_b \mathcal{R}_{budget}(a),
+\]
+
+where
+
+\[
+\phi_s(a)=\log\left(1+\exp\left(\gamma_s(\tau_s-\mathcal{G}_{stab}(a;C))\right)\right),
+\]
+
+\[
+\phi_r(a)=\log\left(1+\exp\left(\gamma_r(\tau_r-\mathcal{G}_{ret}(a;D_{val}))\right)\right).
+\]
+
+The softplus penalties are differentiable upper envelopes of the hard gate
+violations. Large \(\gamma_s\) and \(\gamma_r\) recover hard-threshold behavior;
+smaller values yield a smoother energy landscape for search, hyperparameter
+selection, and ablation. A probabilistic interpretation is also available:
+using the sigmoid function \(\sigma(x)=1/(1+\exp(-x))\),
+\(\sigma(\gamma_s(\mathcal{G}_{stab}-\tau_s))\) estimates the confidence that an
+allocation is stability-admissible, while
+\(\sigma(\gamma_r(\mathcal{G}_{ret}-\tau_r))\) estimates the confidence that it is
+retention-admissible. Thus the gates are not arbitrary stop rules; they are
+soft risks attached to two failure events: unstable calibration evidence and
+unacceptable downstream retention loss.
 
 This is the mathematical claim reviewers can test. The current evidence does
 not fully optimize this objective end to end. It provides a partial but
@@ -204,7 +245,7 @@ J^k_{s,t}=\frac{|\mathrm{TopK}(s)\cap\mathrm{TopK}(t)|}
 {|\mathrm{TopK}(s)\cup\mathrm{TopK}(t)|}.
 \]
 
-The stability gate aggregates these values:
+The stability score aggregates these values:
 
 \[
 \mathcal{G}_{stab}(a;C)
@@ -213,12 +254,20 @@ The stability gate aggregates these values:
 + w_p \, \overline{J^{pos}}.
 \]
 
-The allocation is claim-eligible only if \(\mathcal{G}_{stab}(a;C)\geq\tau_s\).
-Otherwise the correct output is not a new mixed-precision model; it is a
-negative audit result saying that the calibration evidence is under-supported.
-The strict second-pool RTX3090 closure is a concrete measurement of this gate:
-with SmolLM2-360M, mean score Spearman increases from 0.3133 at n=4 to 0.4136
-at n=8 and 0.6959 at n=16, and the CSI trend/null gates pass.
+The hard constraint is \(\mathcal{G}_{stab}(a;C)\geq\tau_s\), but the optimization
+uses the soft risk \(\phi_s(a)\). This distinction is important. The threshold
+is used for reporting and claim promotion; the smooth penalty is used to rank
+near-miss allocations without discarding gradient-free search signal. The
+probability-like score
+\(p_s(a)=\sigma(\gamma_s(\mathcal{G}_{stab}(a;C)-\tau_s))\) can be reported as
+stability confidence.
+
+If \(p_s(a)\) is low, the correct output is not a new mixed-precision model; it
+is a negative audit result saying that the calibration evidence is
+under-supported. The strict second-pool RTX3090 closure is a concrete
+measurement of this gate: with SmolLM2-360M, mean score Spearman increases from
+0.3133 at n=4 to 0.4136 at n=8 and 0.6959 at n=16, and the CSI trend/null gates
+pass.
 
 ### 3.3 Budget-Constrained Allocation Operator
 
@@ -243,26 +292,74 @@ single objective rather than a one-split sensitivity list.
 ### 3.4 Retention Gate and Claim Promotion
 
 The downstream gate tests whether the selected allocation preserves task quality
-relative to baselines:
+relative to the correct baseline class:
 
 \[
 \mathcal{G}_{ret}(a;D_{val})
 = \mathrm{Perf}(f_a,D_{val}) - \mathrm{Perf}(f_{base},D_{val}).
 \]
 
-The baseline \(f_{base}\) must be chosen according to the claim. If the claim is
-"better than uniform W4," the baseline can be uniform W4. If the claim is SOTA
-PTQ, the baseline must include official or fair AWQ, GPTQ, SmoothQuant,
-OmniQuant, and rotation-family methods. The current RTX3090 FP16/AWQ/GPTQ rows
-support feasibility and guarded comparison only. They do not yet satisfy the
-full SOTA gate.
+The hard gate is \(\mathcal{G}_{ret}(a;D_{val})\geq\tau_r\). The soft objective
+uses \(\phi_r(a)\), and the report can include
+\(p_r(a)=\sigma(\gamma_r(\mathcal{G}_{ret}(a;D_{val})-\tau_r))\) as retention
+confidence. This makes claim promotion explicit: an allocation can be stable but
+not retention-admissible, and such a result is a failed method claim rather than
+a hidden negative.
+
+The baseline \(f_{base}\) is chosen according to the claim. If the claim is
+"better than uniform W4," the baseline can be uniform W4. If the claim is
+robust calibration-aware PTQ, the baseline class must include official or fair
+AWQ, GPTQ, SmoothQuant, OmniQuant, and rotation-family methods. The current
+RTX3090 FP16/AWQ/GPTQ rows support feasibility and guarded comparison only. They
+do not yet satisfy the full SOTA gate.
 
 Runtime artifacts such as ESMP packed kernels remain separate evidence gates.
 They can support a future systems claim only when end-to-end TTFT, tokens/s,
 VRAM, file size, and retention improve under the same allocation. Without that
 coupled evidence, runtime speed is not evidence for the calibration framework.
 
-## 4. Repository-Level Evidence Synthesis
+## 4. Theoretical Closure
+
+The framework does not need an overstated convergence theorem. A weak but useful
+guarantee is enough to close the methodological gap: optimizing the smooth
+objective over a finite mixed-precision allocation space monotonically improves
+the unified energy until a discrete local optimum is reached.
+
+**Assumption 1 (finite allocation space).** The bit set \(\mathcal{B}\) is
+finite and the model has a finite number of quantizable modules.
+
+**Assumption 2 (bounded empirical losses).** For the fixed calibration and
+validation fixtures used during allocation, \(\mathcal{L}_{task}\),
+\(\mathcal{L}_{cal}\), \(\mathcal{R}_{uncert}\), and \(\mathcal{R}_{budget}\)
+are finite for every allocation \(a\in\mathcal{B}^L\).
+
+**Assumption 3 (descent update).** The allocation operator accepts a candidate
+move \(a\rightarrow a'\) only when
+\(\widetilde{\mathcal{J}}(a') \leq \widetilde{\mathcal{J}}(a)-\epsilon\) for a
+fixed \(\epsilon>0\), or when no candidate move in the neighborhood decreases
+\(\widetilde{\mathcal{J}}\).
+
+**Proposition 1 (finite descent and local optimality).** Under Assumptions 1--3,
+the allocation procedure terminates after finitely many accepted moves. At
+termination, the returned allocation is an \(\epsilon\)-local optimum of the
+soft unified objective over the chosen move neighborhood.
+
+**Proof sketch.** By Assumption 1, the allocation space is finite. By Assumption
+2, \(\widetilde{\mathcal{J}}\) is finite on this space because the softplus gate
+penalties are finite for finite gate scores. Each accepted move decreases
+\(\widetilde{\mathcal{J}}\) by at least \(\epsilon\), so the procedure cannot
+cycle. Because there are only finitely many allocations, only finitely many
+accepted decreasing moves are possible. When the procedure stops, no neighbor
+improves the objective by at least \(\epsilon\), which is exactly
+\(\epsilon\)-local optimality over the selected neighborhood.
+
+This guarantee is intentionally modest. It does not prove global optimality or
+SOTA quality. It proves that the proposed allocation procedure is not merely a
+collection of gates: it is descent on a single, bounded, soft-constrained
+objective. The empirical section must still show whether the resulting local
+optima improve the retention-stability-memory Pareto frontier.
+
+## 5. Repository-Level Evidence Synthesis
 
 The public GitHub portfolio contains thirteen visible repositories. A strict
 paper synthesis does not treat all of them as contributions to one method.
@@ -303,9 +400,9 @@ show engineering maturity, reproducibility habits, and future deployment
 directions, but they must stay outside the main empirical claim unless they add
 direct evidence for that objective.
 
-## 5. Experimental Protocol
+## 6. Experimental Protocol
 
-### 5.1 Completed Evidence To Report
+### 6.1 Completed Evidence To Report
 
 The current paper can report the following completed evidence:
 
@@ -318,7 +415,7 @@ The current paper can report the following completed evidence:
 5. Quant-skill deterministic bypass and LoRA smoke as boundary evidence for the
    separate HybridSkill line, not as the main quantization method.
 
-### 5.2 Required Baselines Before AAAI Submission
+### 6.2 Required Baselines Before AAAI Submission
 
 AAAI-level method superiority requires the following baseline coverage:
 
@@ -330,7 +427,7 @@ AAAI-level method superiority requires the following baseline coverage:
 | Allocation heuristics | random budget-matched, single-split top-k, mean consensus, confidence-adjusted consensus | partially measured in existing gates |
 | Runtime | FP16 loader, AWQ/GPTQ loader, ESMP packed path if claimed | ESMP not ready for main speed claim |
 
-### 5.3 Objective-Aligned Ablation Design
+### 6.3 Objective-Aligned Ablation Design
 
 The ablation table must map directly onto the unified objective. Each row removes
 one term, gate, or operator from \(\mathcal{J}\) and tests whether the predicted
@@ -354,7 +451,7 @@ wins. A competitive AAAI version shows that the full objective improves the
 Pareto frontier of retention, stability, and memory against single-split,
 mean-only, random budget-matched, and native PTQ baselines.
 
-### 5.4 Reporting Format
+### 6.4 Reporting Format
 
 Every benchmark table reports:
 
@@ -368,7 +465,7 @@ Every benchmark table reports:
 - win/loss and average rank across datasets;
 - exact artifact paths.
 
-## 6. Results Summary From Current Evidence
+## 7. Results Summary From Current Evidence
 
 The strictest new result is the second-pool CSI closure. For SmolLM2-360M:
 
@@ -390,7 +487,7 @@ slice reports 0.24/0.24/0.16. Qwen2.5-14B-AWQ completes a 10-example MMLU smoke
 with 0.50 accuracy and 3.851 mean generated tokens/s. These rows support local
 RTX3090 feasibility and comparison, not broad leaderboard claims.
 
-## 7. Why The Framework Can Work
+## 8. Why The Framework Can Work
 
 The mechanism is not that several heuristics are assembled. The mechanism is
 that the allocation decision is constrained by independent evidence about
@@ -409,22 +506,39 @@ calibration size, if confidence-adjusted allocation does not beat single-split
 allocation, or if downstream retention is insensitive to CSI, the framework
 loses its central claim.
 
-## 8. Related Work Positioning
+## 9. Related Work and Baseline-Class Reframing
 
-The method is positioned beside calibration-aware PTQ and robust
-evaluation work. GPTQ, AWQ, SmoothQuant, OmniQuant, QuaRot, and SpinQuant are
-not strawman baselines; they are the methods that must be confronted before any
-quality claim is promoted. The current contribution is complementary: it asks
-whether the calibration evidence used to drive allocation is stable enough to
-trust, and how that stability constrains the allocation objective.
+The baseline question is not only whether this method beats a single PTQ system.
+The stronger framing is that calibration-driven mixed-precision PTQ needs a new
+baseline class: stability-aware allocation. Existing PTQ systems such as GPTQ,
+AWQ, SmoothQuant, OmniQuant, QuaRot, and SpinQuant primarily define how weights
+are transformed, rounded, smoothed, or rotated. They do not by themselves answer
+whether the calibration evidence used for allocation is stable across plausible
+prompt subsets.
+
+This reframes the comparison set into three layers. The first layer is native
+PTQ quality: FP16, uniform W4, AWQ, GPTQ, SmoothQuant, OmniQuant, and
+rotation-family methods. The second layer is allocation policy: random
+budget-matched, single-split top-k, mean consensus, confidence-adjusted
+consensus, and the proposed soft stability-risk objective. The third layer is
+claim promotion: whether the chosen allocation passes stability and retention
+confidence thresholds. A competitive result must show that the proposed method
+improves the retention-stability-memory Pareto frontier over all three layers,
+not merely that one handpicked row wins.
+
+Under this reframing, the contribution is complementary rather than hostile to
+SOTA PTQ. Strong PTQ methods remain required baselines, but the proposed
+framework defines an additional question they can be evaluated under: are their
+calibration-dependent allocation decisions stable enough to trust? This is the
+paper's category-level claim.
 
 The CSI benchmark-suite track supports the measurement side of this claim. The
 ESMP runtime track supports a future systems paper only if end-to-end runtime
 evidence closes. The HybridSkill bypass track is a separate negative/edge-AI
-line about deterministic delegation and is not used as proof of
-quantization quality.
+line about deterministic delegation and is not used as proof of quantization
+quality.
 
-## 9. Threats To Validity
+## 10. Threats To Validity
 
 The current evidence is still limited in several ways. First, many rows are
 local guarded subsets rather than full benchmark submissions. Second, the
@@ -440,7 +554,7 @@ position. The paper is currently a strong KBS/ESWA-style framework and evidence
 synthesis candidate, and an AAAI candidate only after direct CSI-allocation
 retention baselines and stronger official PTQ comparisons are added.
 
-## 10. Conclusion
+## 11. Conclusion
 
 This draft reframes EigenSkill-Q as a unified constraint-guided calibration
 framework rather than a collection of heuristics. The key move is to make
