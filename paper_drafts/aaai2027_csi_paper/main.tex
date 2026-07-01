@@ -51,9 +51,10 @@ examples), FP16/AutoAWQ/GPTQModel reach 0.5864/0.5648/0.5362, and on GSM8K
 (1,319 examples), 0.0811/0.0788/0.0728. We also add local GPU fake-quant
 allocation smoke tests in which CSI/consensus 4-to-8 allocation improves PPL
 over uniform INT4 on Qwen2.5-0.5B slices and a Qwen2.5-1.5B single-slice
-feasibility run. These rows move the paper beyond a calibration-only diagnosis
-while still separating measured evidence from state-of-the-art or production
-inference claims.
+feasibility run. The resulting empirical organization is a dominance audit:
+which regimes are already measured, which failure modes are separated, and
+which same-budget downstream rows remain required before claiming method
+superiority.
 \end{abstract}
 \keywords{post-training quantization, calibration robustness, mixed precision, large language models, reproducibility}
 \vspace{0.7em}
@@ -256,6 +257,14 @@ satisfaction, and interaction-aware swaps. The third layer is a stress/failure
 layer: extreme low-bit distortion, calibration collapse at small $n$, and cases
 where a gate or proxy is not enough to justify a stronger claim.
 
+\paragraph{Dominance audit.}
+To make the empirical story falsifiable, we organize results as a dominance
+audit rather than a flat list of tables. A regime cell is filled only if the
+corresponding artifact measures that regime under the stated claim boundary.
+This prevents a local PPL smoke from being treated as a full MMLU/GSM8K win,
+while still making visible where the method changes behavior and where the
+submission-critical gaps remain.
+
 \paragraph{Mechanism chain.}
 The intended causal chain is not ``more components give better numbers.'' It is
 \emph{calibration sampling} $\rightarrow$ \emph{ranking stability}
@@ -268,6 +277,30 @@ unstable calibration decision, and prevents a stable ranking from being
 misreported as downstream superiority before retention is measured.
 
 \section{Results}
+
+\subsection{Empirical Dominance Audit}
+
+Figure~\ref{fig:dominance-map} summarizes the current evidence hierarchy. The
+full-benchmark row is populated for FP16, AutoAWQ, and GPTQModel on
+Qwen2.5-1.5B, but the CSI-informed downstream cells remain intentionally empty.
+The local PPL row shows the allocation-path evidence now available on
+Qwen2.5-0.5B and Qwen2.5-1.5B: CSI/consensus allocation is below uniform INT4
+on all five local GPU fake-quant smoke cases. The low-bit scaffold row shows why
+the missing 2--3 bit downstream experiment is not cosmetic: INT3 and INT2 enter
+different failure regimes in the current distortion proxy. Thus the current
+claim is not ``Ours dominates every bit-width.'' It is that CSI provides a
+controlled audit for deciding when a calibration-derived allocation may be
+promoted from a local/proxy result to a downstream method claim.
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=\linewidth]{figures/regime_dominance_map.png}
+\caption{Regime dominance audit. Measured cells show committed evidence; empty
+cells are the next required downstream experiments. This map turns the reviewer
+question from ``is there a baseline list?'' into ``which regimes are measured,
+and which dominance claims are still blocked?''}
+\label{fig:dominance-map}
+\end{figure*}
 
 \subsection{Calibration Size Improves CSI Stability}
 
@@ -423,6 +456,18 @@ Model & Slice & FP16 & INT4 & INT3 & CSI alloc. \\
 \end{tabular}
 \end{table}
 
+\begin{figure*}[t]
+\centering
+\includegraphics[width=\linewidth]{figures/constraint_effect_landscape.png}
+\caption{Constraint effect landscape. Left: increasing calibration size improves
+rank stability on two evidence lines. Middle: Q-Palette-style Lagrangian proxy
+allocations satisfy the target budget in all six committed cases. Right:
+CSI/consensus allocation lowers fake-quant PPL relative to uniform INT4 in five
+local GPU smoke cases. Together these panels expose controlled-system behavior
+without upgrading it to a full downstream superiority claim.}
+\label{fig:constraint-landscape}
+\end{figure*}
+
 \subsection{Consensus Allocation Stress Evidence}
 
 The calibration-robustness stress gate evaluates consensus-style target
@@ -457,6 +502,24 @@ Claim gate & overstated SOTA & RTX3090 as feasibility \\
 \bottomrule
 \end{tabular*}
 \end{table}
+
+Figure~\ref{fig:failure-separation} turns the same logic into a baseline-facing
+failure separation map. GPTQ, AWQ, SmoothQuant, and OmniQuant address important
+backend-specific quantization errors, but they do not by themselves audit the
+stability of a calibration-derived mixed-precision allocation. CSI is therefore
+positioned as an orthogonal gate: it lowers split-drift, ranking-collapse, and
+constraint-conflict risks, while explicitly leaving the downstream retention
+gap open until same-budget task rows are measured.
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=\linewidth]{figures/failure_separation_map.png}
+\caption{Failure separation map for calibration-driven mixed-precision
+allocation. Darker cells indicate higher un-audited risk in the allocation
+pipeline, not that a backend is weak in its native setting. CSI is complementary:
+it audits the calibration/allocation decision above the quantizer.}
+\label{fig:failure-separation}
+\end{figure*}
 
 \subsection{Extreme-Bit and Failure-Mode Stress}
 

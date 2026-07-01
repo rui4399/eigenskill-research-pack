@@ -56,11 +56,27 @@ review notes:
 - one-sentence novelty anchor: PTQ allocation as constrained
   calibration-driven optimization;
 - framework overview figure;
+- empirical dominance audit figure that separates measured cells from missing
+  downstream dominance cells;
+- failure-separation map for GPTQ/AWQ/SmoothQuant/OmniQuant versus CSI's
+  orthogonal allocation gate;
+- constraint-effect landscape linking calibration size, budget satisfaction,
+  and local PPL-smoke gains;
 - strict mechanism mapping from objective terms to ablation/failure hooks;
 - stress/failure section covering calibration collapse, constraint conflict,
   and gate misfire;
 - explicit boundary between existing INT2/INT3 scaffolds and missing downstream
   2/3-bit task-retention curves.
+
+The dominance figures are generated with:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\make_dominance_figures.ps1
+```
+
+They are intentionally written as audit figures. They must not be interpreted as
+a completed 2/3-bit SOTA dominance curve until the missing same-budget
+downstream rows are measured.
 
 The strongest next experiment is now a direct CSI-informed downstream-retention
 row:
