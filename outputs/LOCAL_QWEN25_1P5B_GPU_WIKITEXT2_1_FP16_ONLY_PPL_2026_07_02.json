@@ -1,0 +1,37 @@
+{
+  "model": "Qwen/Qwen2.5-1.5B-Instruct",
+  "prompt_count": 1,
+  "max_length": 64,
+  "device": "cuda",
+  "dtype": "float16",
+  "results": [
+    {
+      "name": "fp16",
+      "mode": "fp16",
+      "allocation": "",
+      "method": "",
+      "quant_meta": {
+        "linear_modules_touched": 197,
+        "bit_hist": {
+          "16": 197
+        },
+        "group_size": 128
+      },
+      "metrics": {
+        "prompt_count": 1,
+        "tokens": 63,
+        "mean_nll": 2.3814284801483154,
+        "ppl": 10.820348482430093,
+        "per_prompt": [
+          {
+            "tokens": 63,
+            "loss": 2.3814284801483154,
+            "ppl": 10.820348482430093
+          }
+        ]
+      },
+      "delta_nll_vs_fp16": 0.0,
+      "ppl_ratio_vs_fp16": 1.0
+    }
+  ]
+}

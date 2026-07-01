@@ -1,0 +1,35 @@
+{
+  "artifact": "LOCAL_QWEN25_1P5B_GPU_WIKITEXT2_1_FAKE_QUANT_PPL_SUMMARY_2026_07_02",
+  "model": "Qwen/Qwen2.5-1.5B-Instruct",
+  "device": "cuda",
+  "dtype": "float16",
+  "prompt_source": "data_eval/public_ppl_prompts_16_2026_06_07/wikitext2_test_ppl_prompts.txt",
+  "prompt_count": 1,
+  "max_length": 64,
+  "group_size": 128,
+  "results": {
+    "fp16_ppl": 10.820348482430093,
+    "uniform_int4_ppl": 15.631708282446162,
+    "consensus_4to8_ppl": 13.506259285370522,
+    "consensus_over_uniform_int4_ppl_ratio": 0.8640359883662367,
+    "consensus_avg_bits": 4.499337953946006,
+    "uniform_int4_avg_bits": 4.0
+  },
+  "consensus_allocation": {
+    "path": "outputs/qwen25_1p5b_loss_sensitive_consensus_alloc_4to8_group128_summary.json",
+    "method": "loss_sensitive_consensus_4to8",
+    "linear_modules_touched": 197,
+    "bit_hist": {
+      "4": 132,
+      "8": 65
+    },
+    "budget_used": 0.9998528786546682,
+    "positive_delta_nll_protected_ratio": 0.5380855764777412
+  },
+  "sources": [
+    "outputs/LOCAL_QWEN25_1P5B_GPU_WIKITEXT2_1_FP16_ONLY_PPL_2026_07_02.json",
+    "outputs/LOCAL_QWEN25_1P5B_GPU_WIKITEXT2_1_UNIFORM_INT4_ONLY_PPL_2026_07_02.json",
+    "outputs/LOCAL_QWEN25_1P5B_GPU_WIKITEXT2_1_CONSENSUS_ONLY_PPL_2026_07_02.json"
+  ],
+  "claim_boundary": "Local GPU single-prompt fake-quant PPL smoke for Qwen2.5-1.5B. Directional feasibility evidence only; not full downstream retention, not same-budget versus INT4, and not AutoAWQ+CSI."
+}

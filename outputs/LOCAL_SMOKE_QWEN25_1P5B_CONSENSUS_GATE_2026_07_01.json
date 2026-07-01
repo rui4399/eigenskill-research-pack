@@ -1,0 +1,36 @@
+{
+  "date": "2026-07-01T15:28:16+00:00",
+  "passed": true,
+  "summary": {
+    "case_count": 1,
+    "max_avg_bits": 4.499337953946006,
+    "target_bits": 4.5,
+    "total_high_bit_modules": 65,
+    "consistent_selected_modules": 30,
+    "selected_modules": 30
+  },
+  "cases": [
+    {
+      "label": "local",
+      "path": "outputs/LOCAL_SMOKE_QWEN25_1P5B_CONSENSUS_ALLOC_2026_07_01.json",
+      "model": "/mnt/c/Users/18042/models/Qwen2.5-1.5B-Instruct",
+      "policy": "mean_consensus",
+      "policy_name": "loss_sensitive_consensus_4to8",
+      "score_key": "consensus_score_delta_per_cost",
+      "allocation_key": "loss_sensitive_consensus_4to8",
+      "avg_bits": 4.499337953946006,
+      "budget_avg_bits": 4.5,
+      "bit_hist": {
+        "8": 65,
+        "4": 132
+      },
+      "high_bit_modules": 65,
+      "selected_modules": 30,
+      "robust_field_rows": 30,
+      "consistent_selected_modules": 30,
+      "protected_ratio": 0.5445310420518551
+    }
+  ],
+  "failures": [],
+  "claim_boundary": "Valid claim: robust-LCB consensus allocation artifacts exist across the gated model family, respect the configured average-bit budget, and expose selected-module consistency evidence. Invalid claim: this gate proves downstream PPL, task accuracy, mobile deployment, or SOTA quality."
+}

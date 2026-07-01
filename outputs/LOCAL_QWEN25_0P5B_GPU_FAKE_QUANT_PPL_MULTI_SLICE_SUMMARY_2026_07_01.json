@@ -1,0 +1,65 @@
+{
+  "model": "Qwen/Qwen2.5-0.5B-Instruct",
+  "device": "cuda",
+  "dtype": "float16",
+  "allocation": "loss_sensitive_consensus_4to8",
+  "allocation_avg_bits": 4.499707718107588,
+  "uniform_int4_avg_bits": 4.0,
+  "cases": [
+    {
+      "case": "WikiText2-8",
+      "source": "outputs/LOCAL_QWEN25_0P5B_GPU_WIKITEXT2_8_FAKE_QUANT_PPL_2026_07_01.json",
+      "prompts": 8,
+      "fp16_ppl": 24.733323135400873,
+      "uniform_int4_ppl": 41.4981568355712,
+      "uniform_int3_ppl": 915.6022210027808,
+      "allocation_ppl": 32.78323840754717,
+      "alloc_vs_int4_ratio": 0.7899926384066817,
+      "alloc_delta_nll": 0.28176591142279195,
+      "int4_delta_nll": 0.517497563459834,
+      "int3_delta_nll": 3.6114305646204556
+    },
+    {
+      "case": "C4-8",
+      "source": "outputs/LOCAL_QWEN25_0P5B_GPU_C4_8_FAKE_QUANT_PPL_2026_07_01.json",
+      "prompts": 8,
+      "fp16_ppl": 30.63942694812319,
+      "uniform_int4_ppl": 47.264366123448006,
+      "uniform_int3_ppl": 1138.7431472146054,
+      "allocation_ppl": 40.35458998565875,
+      "alloc_vs_int4_ratio": 0.8538058011876881,
+      "alloc_delta_nll": 0.2754175005778494,
+      "int4_delta_nll": 0.4334690107081558,
+      "int3_delta_nll": 3.6153927887823243
+    },
+    {
+      "case": "WikiText2-16",
+      "source": "outputs/LOCAL_QWEN25_0P5B_GPU_WIKITEXT2_16_FAKE_QUANT_PPL_2026_07_01.json",
+      "prompts": 16,
+      "fp16_ppl": 25.00740276478401,
+      "uniform_int4_ppl": 42.22843934137253,
+      "uniform_int3_ppl": 804.8319805409245,
+      "allocation_ppl": 32.34094717408092,
+      "alloc_vs_int4_ratio": 0.7658570309131807,
+      "alloc_delta_nll": 0.25716225009757876,
+      "int4_delta_nll": 0.5239220204757049,
+      "int3_delta_nll": 3.4714616441811383
+    },
+    {
+      "case": "C4-16",
+      "source": "outputs/LOCAL_QWEN25_0P5B_GPU_C4_16_FAKE_QUANT_PPL_2026_07_01.json",
+      "prompts": 16,
+      "fp16_ppl": 28.84556046445268,
+      "uniform_int4_ppl": 44.8635017210544,
+      "uniform_int3_ppl": 962.401022182178,
+      "allocation_ppl": 38.21067323894229,
+      "alloc_vs_int4_ratio": 0.8517095583961084,
+      "alloc_delta_nll": 0.2811587830155924,
+      "int4_delta_nll": 0.4416684871872292,
+      "int3_delta_nll": 3.507475129046056
+    }
+  ],
+  "allocation_beats_uniform_int4_cases": 4,
+  "case_count": 4,
+  "claim_boundary": "Local GPU fake-quant PPL smoke over public WikiText2/C4 prompt slices. It supports feasibility/directional evidence for CSI/consensus allocation. It is not full downstream retention, not same-budget versus INT4, not AutoAWQ+CSI, and not SOTA evidence."
+}

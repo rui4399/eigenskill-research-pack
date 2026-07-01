@@ -1,0 +1,138 @@
+{
+  "model": "Qwen/Qwen2.5-0.5B-Instruct",
+  "prompt_count": 1,
+  "max_length": 64,
+  "device": "cuda",
+  "dtype": "float16",
+  "results": [
+    {
+      "name": "fp16",
+      "mode": "fp16",
+      "allocation": "",
+      "method": "",
+      "quant_meta": {
+        "linear_modules_touched": 169,
+        "bit_hist": {
+          "16": 169
+        },
+        "group_size": 128
+      },
+      "metrics": {
+        "prompt_count": 1,
+        "tokens": 17,
+        "mean_nll": 3.8624088764190674,
+        "ppl": 47.579827358388904,
+        "per_prompt": [
+          {
+            "tokens": 17,
+            "loss": 3.8624088764190674,
+            "ppl": 47.579827358388904
+          }
+        ]
+      },
+      "delta_nll_vs_fp16": 0.0,
+      "ppl_ratio_vs_fp16": 1.0
+    },
+    {
+      "name": "uniform_int4",
+      "mode": "uniform_int4",
+      "allocation": "",
+      "method": "",
+      "quant_meta": {
+        "linear_modules_touched": 169,
+        "bit_hist": {
+          "4": 169
+        },
+        "group_size": 128
+      },
+      "metrics": {
+        "prompt_count": 1,
+        "tokens": 17,
+        "mean_nll": 4.822447776794434,
+        "ppl": 124.26890133087012,
+        "per_prompt": [
+          {
+            "tokens": 17,
+            "loss": 4.822447776794434,
+            "ppl": 124.26890133087012
+          }
+        ]
+      },
+      "delta_nll_vs_fp16": 0.9600389003753662,
+      "ppl_ratio_vs_fp16": 2.611798071372363
+    },
+    {
+      "name": "uniform_int3",
+      "mode": "uniform_int3",
+      "allocation": "",
+      "method": "",
+      "quant_meta": {
+        "linear_modules_touched": 169,
+        "bit_hist": {
+          "3": 169
+        },
+        "group_size": 128
+      },
+      "metrics": {
+        "prompt_count": 1,
+        "tokens": 17,
+        "mean_nll": 9.424906730651855,
+        "ppl": 12393.2435816902,
+        "per_prompt": [
+          {
+            "tokens": 17,
+            "loss": 9.424906730651855,
+            "ppl": 12393.2435816902
+          }
+        ]
+      },
+      "delta_nll_vs_fp16": 5.562497854232788,
+      "ppl_ratio_vs_fp16": 260.4726471229013
+    },
+    {
+      "name": "allocation_loss_sensitive_consensus_4to8",
+      "mode": "allocation",
+      "allocation": "outputs/qwen25_0p5b_loss_sensitive_consensus_alloc_4to8_group128_summary.json",
+      "method": "loss_sensitive_consensus_4to8",
+      "quant_meta": {
+        "linear_modules_touched": 169,
+        "bit_hist": {
+          "4": 109,
+          "8": 60
+        },
+        "group_size": 128
+      },
+      "metrics": {
+        "prompt_count": 1,
+        "tokens": 17,
+        "mean_nll": 4.222578048706055,
+        "ppl": 68.20910420664151,
+        "per_prompt": [
+          {
+            "tokens": 17,
+            "loss": 4.222578048706055,
+            "ppl": 68.20910420664151
+          }
+        ]
+      },
+      "allocation_summary": {
+        "name": "loss_sensitive_consensus_4to8",
+        "groups": 169,
+        "budget_avg_bits": 4.5,
+        "memory": 2222805504.0,
+        "budget": 2222949888.0,
+        "budget_used": 0.999935048468353,
+        "avg_bits": 4.499707718107588,
+        "bit_hist": {
+          "4": 109,
+          "8": 60
+        },
+        "positive_delta_nll_total": 0.5824639300874477,
+        "positive_delta_nll_protected": 0.3366190537791778,
+        "positive_delta_nll_protected_ratio": 0.5779225740701914
+      },
+      "delta_nll_vs_fp16": 0.3601691722869873,
+      "ppl_ratio_vs_fp16": 1.4335719146869794
+    }
+  ]
+}

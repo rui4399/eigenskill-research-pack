@@ -1,0 +1,35 @@
+{
+  "model": "Qwen/Qwen2.5-0.5B-Instruct",
+  "device": "cuda",
+  "dtype": "float16",
+  "allocation": "loss_sensitive_consensus_4to8",
+  "allocation_avg_bits": 4.499707718107588,
+  "uniform_int4_avg_bits": 4.0,
+  "cases": [
+    {
+      "case": "WikiText2-8",
+      "source": "outputs/LOCAL_QWEN25_0P5B_GPU_WIKITEXT2_8_FAKE_QUANT_PPL_2026_07_01.json",
+      "fp16_ppl": 24.733323135400873,
+      "uniform_int4_ppl": 41.4981568355712,
+      "uniform_int3_ppl": 915.6022210027808,
+      "allocation_ppl": 32.78323840754717,
+      "alloc_vs_int4_ratio": 0.7900046854977636,
+      "alloc_delta_nll": 0.28176591142279195,
+      "int4_delta_nll": 0.517497563459834,
+      "int3_delta_nll": 3.6114305646204556
+    },
+    {
+      "case": "C4-8",
+      "source": "outputs/LOCAL_QWEN25_0P5B_GPU_C4_8_FAKE_QUANT_PPL_2026_07_01.json",
+      "fp16_ppl": 30.63942694812319,
+      "uniform_int4_ppl": 47.264366123448006,
+      "uniform_int3_ppl": 1138.7431472146054,
+      "allocation_ppl": 40.35458998565875,
+      "alloc_vs_int4_ratio": 0.8538065522174943,
+      "alloc_delta_nll": 0.2754175005778494,
+      "int4_delta_nll": 0.4334690107081558,
+      "int3_delta_nll": 3.6153927887823243
+    }
+  ],
+  "claim_boundary": "Local GPU fake-quant PPL smoke over two 8-prompt public slices. This supports feasibility and directional evidence for CSI/consensus allocation, but is not full downstream retention, not same-budget versus INT4, not AutoAWQ+CSI, and not SOTA evidence."
+}

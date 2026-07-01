@@ -1,0 +1,52 @@
+{
+  "model": "Qwen/Qwen2.5-1.5B-Instruct",
+  "prompt_count": 1,
+  "max_length": 64,
+  "device": "cuda",
+  "dtype": "float16",
+  "results": [
+    {
+      "name": "allocation_loss_sensitive_consensus_4to8",
+      "mode": "allocation",
+      "allocation": "outputs/qwen25_1p5b_loss_sensitive_consensus_alloc_4to8_group128_summary.json",
+      "method": "loss_sensitive_consensus_4to8",
+      "quant_meta": {
+        "linear_modules_touched": 197,
+        "bit_hist": {
+          "4": 132,
+          "8": 65
+        },
+        "group_size": 128
+      },
+      "metrics": {
+        "prompt_count": 1,
+        "tokens": 63,
+        "mean_nll": 2.6031532287597656,
+        "ppl": 13.506259285370522,
+        "per_prompt": [
+          {
+            "tokens": 63,
+            "loss": 2.6031532287597656,
+            "ppl": 13.506259285370522
+          }
+        ]
+      },
+      "allocation_summary": {
+        "name": "loss_sensitive_consensus_4to8",
+        "groups": 197,
+        "budget_avg_bits": 4.5,
+        "memory": 6945298432.0,
+        "budget": 6946320384.0,
+        "budget_used": 0.9998528786546682,
+        "avg_bits": 4.499337953946006,
+        "bit_hist": {
+          "4": 132,
+          "8": 65
+        },
+        "positive_delta_nll_total": 0.5061538751240269,
+        "positive_delta_nll_protected": 0.27235409968255464,
+        "positive_delta_nll_protected_ratio": 0.5380855764777412
+      }
+    }
+  ]
+}

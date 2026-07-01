@@ -1,0 +1,278 @@
+{
+  "model": "Qwen/Qwen2.5-0.5B-Instruct",
+  "prompt_count": 8,
+  "max_length": 128,
+  "device": "cuda",
+  "dtype": "float16",
+  "results": [
+    {
+      "name": "fp16",
+      "mode": "fp16",
+      "allocation": "",
+      "method": "",
+      "quant_meta": {
+        "linear_modules_touched": 169,
+        "bit_hist": {
+          "16": 169
+        },
+        "group_size": 128
+      },
+      "metrics": {
+        "prompt_count": 8,
+        "tokens": 838,
+        "mean_nll": 3.4222876419599983,
+        "ppl": 30.63942694812319,
+        "per_prompt": [
+          {
+            "tokens": 123,
+            "loss": 2.8804385662078857,
+            "ppl": 17.82208763129879
+          },
+          {
+            "tokens": 109,
+            "loss": 3.6588215827941895,
+            "ppl": 38.8155749683905
+          },
+          {
+            "tokens": 127,
+            "loss": 2.354285955429077,
+            "ppl": 10.53060685383813
+          },
+          {
+            "tokens": 117,
+            "loss": 3.7563111782073975,
+            "ppl": 42.79028873842355
+          },
+          {
+            "tokens": 86,
+            "loss": 3.9556849002838135,
+            "ppl": 52.23145503502067
+          },
+          {
+            "tokens": 82,
+            "loss": 4.169395446777344,
+            "ppl": 64.67633999614355
+          },
+          {
+            "tokens": 110,
+            "loss": 2.5201168060302734,
+            "ppl": 12.43004848340469
+          },
+          {
+            "tokens": 84,
+            "loss": 4.964245796203613,
+            "ppl": 143.20050716905425
+          }
+        ]
+      },
+      "delta_nll_vs_fp16": 0.0,
+      "ppl_ratio_vs_fp16": 1.0
+    },
+    {
+      "name": "uniform_int4",
+      "mode": "uniform_int4",
+      "allocation": "",
+      "method": "",
+      "quant_meta": {
+        "linear_modules_touched": 169,
+        "bit_hist": {
+          "4": 169
+        },
+        "group_size": 128
+      },
+      "metrics": {
+        "prompt_count": 8,
+        "tokens": 838,
+        "mean_nll": 3.855756652668154,
+        "ppl": 47.264366123448006,
+        "per_prompt": [
+          {
+            "tokens": 123,
+            "loss": 3.268298625946045,
+            "ppl": 26.26661197296538
+          },
+          {
+            "tokens": 109,
+            "loss": 4.111100196838379,
+            "ppl": 61.013807855094505
+          },
+          {
+            "tokens": 127,
+            "loss": 2.8239049911499023,
+            "ppl": 16.842492206930306
+          },
+          {
+            "tokens": 117,
+            "loss": 4.2863359451293945,
+            "ppl": 72.69960455596274
+          },
+          {
+            "tokens": 86,
+            "loss": 4.3390703201293945,
+            "ppl": 76.63625902212065
+          },
+          {
+            "tokens": 82,
+            "loss": 4.630870342254639,
+            "ppl": 102.60332527042858
+          },
+          {
+            "tokens": 110,
+            "loss": 2.890329599380493,
+            "ppl": 17.99924116271375
+          },
+          {
+            "tokens": 84,
+            "loss": 5.357720375061035,
+            "ppl": 212.24056566949818
+          }
+        ]
+      },
+      "delta_nll_vs_fp16": 0.4334690107081558,
+      "ppl_ratio_vs_fp16": 1.5425995467693683
+    },
+    {
+      "name": "uniform_int3",
+      "mode": "uniform_int3",
+      "allocation": "",
+      "method": "",
+      "quant_meta": {
+        "linear_modules_touched": 169,
+        "bit_hist": {
+          "3": 169
+        },
+        "group_size": 128
+      },
+      "metrics": {
+        "prompt_count": 8,
+        "tokens": 838,
+        "mean_nll": 7.037680430742323,
+        "ppl": 1138.7431472146054,
+        "per_prompt": [
+          {
+            "tokens": 123,
+            "loss": 7.3143630027771,
+            "ppl": 1501.7149030812009
+          },
+          {
+            "tokens": 109,
+            "loss": 7.180963039398193,
+            "ppl": 1314.173249645076
+          },
+          {
+            "tokens": 127,
+            "loss": 6.165314197540283,
+            "ppl": 475.9506619721714
+          },
+          {
+            "tokens": 117,
+            "loss": 6.952225685119629,
+            "ppl": 1045.4740366377437
+          },
+          {
+            "tokens": 86,
+            "loss": 7.101744174957275,
+            "ppl": 1214.082801675771
+          },
+          {
+            "tokens": 82,
+            "loss": 7.307855606079102,
+            "ppl": 1491.974375590616
+          },
+          {
+            "tokens": 110,
+            "loss": 5.677540302276611,
+            "ppl": 292.22974833912434
+          },
+          {
+            "tokens": 84,
+            "loss": 9.336377143859863,
+            "ppl": 11343.238787418593
+          }
+        ]
+      },
+      "delta_nll_vs_fp16": 3.6153927887823243,
+      "ppl_ratio_vs_fp16": 37.165941423860694
+    },
+    {
+      "name": "allocation_loss_sensitive_consensus_4to8",
+      "mode": "allocation",
+      "allocation": "outputs/qwen25_0p5b_loss_sensitive_consensus_alloc_4to8_group128_summary.json",
+      "method": "loss_sensitive_consensus_4to8",
+      "quant_meta": {
+        "linear_modules_touched": 169,
+        "bit_hist": {
+          "4": 109,
+          "8": 60
+        },
+        "group_size": 128
+      },
+      "metrics": {
+        "prompt_count": 8,
+        "tokens": 838,
+        "mean_nll": 3.6977051425378478,
+        "ppl": 40.35458998565875,
+        "per_prompt": [
+          {
+            "tokens": 123,
+            "loss": 3.105644941329956,
+            "ppl": 22.32361175338186
+          },
+          {
+            "tokens": 109,
+            "loss": 3.853020429611206,
+            "ppl": 47.13521704600808
+          },
+          {
+            "tokens": 127,
+            "loss": 2.5815563201904297,
+            "ppl": 13.217693123135557
+          },
+          {
+            "tokens": 117,
+            "loss": 4.188138961791992,
+            "ppl": 65.90003428669358
+          },
+          {
+            "tokens": 86,
+            "loss": 4.133726119995117,
+            "ppl": 62.4100375114897
+          },
+          {
+            "tokens": 82,
+            "loss": 4.571950912475586,
+            "ppl": 96.73264272689359
+          },
+          {
+            "tokens": 110,
+            "loss": 2.7325968742370605,
+            "ppl": 15.37275634459427
+          },
+          {
+            "tokens": 84,
+            "loss": 5.331516265869141,
+            "ppl": 206.75122643747162
+          }
+        ]
+      },
+      "allocation_summary": {
+        "name": "loss_sensitive_consensus_4to8",
+        "groups": 169,
+        "budget_avg_bits": 4.5,
+        "memory": 2222805504.0,
+        "budget": 2222949888.0,
+        "budget_used": 0.999935048468353,
+        "avg_bits": 4.499707718107588,
+        "bit_hist": {
+          "4": 109,
+          "8": 60
+        },
+        "positive_delta_nll_total": 0.5824639300874477,
+        "positive_delta_nll_protected": 0.3366190537791778,
+        "positive_delta_nll_protected_ratio": 0.5779225740701914
+      },
+      "delta_nll_vs_fp16": 0.2754175005778494,
+      "ppl_ratio_vs_fp16": 1.317080441941185
+    }
+  ]
+}

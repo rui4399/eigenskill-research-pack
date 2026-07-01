@@ -1,0 +1,19 @@
+% Lightweight local fallback for drafting when the official AAAI-27 kit is not
+% present. Replace this by placing the official aaai2027.sty and bibliography
+% style in this directory before submission.
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{aaai2027_fallback}[2026/07/01 local AAAI-like draft fallback]
+\RequirePackage[letterpaper,margin=0.75in]{geometry}
+\RequirePackage{times}
+\RequirePackage{helvet}
+\RequirePackage{courier}
+\RequirePackage{titlesec}
+\RequirePackage{authblk}
+\setlength{\columnsep}{0.25in}
+\titleformat{\section}{\large\bfseries}{\thesection}{0.45em}{}
+\titleformat{\subsection}{\normalsize\bfseries}{\thesubsection}{0.45em}{}
+\titlespacing*{\section}{0pt}{1.0ex plus 0.4ex minus 0.2ex}{0.6ex}
+\titlespacing*{\subsection}{0pt}{0.8ex plus 0.3ex minus 0.2ex}{0.4ex}
+\renewcommand\Authfont{\normalsize}
+\renewcommand\Affilfont{\small}
+\newcommand{\keywords}[1]{\par\noindent\textbf{Keywords: }#1\par}

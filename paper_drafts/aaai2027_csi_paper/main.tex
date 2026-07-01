@@ -1,0 +1,608 @@
+% AAAI-27 anonymous submission draft.
+% Place the official AAAI-27 author kit files in this directory before final
+% submission. Without them, this file uses aaai2027_fallback.sty only so the
+% current text can be built and reviewed locally.
+\documentclass[letterpaper]{article}
+\IfFileExists{aaai2027.sty}{\usepackage{aaai2027}}{\usepackage{aaai2027_fallback}}
+
+\usepackage{amsmath,amssymb,booktabs,multirow}
+\usepackage{graphicx}
+\usepackage{url}
+\usepackage{microtype}
+\usepackage[numbers,sort&compress]{natbib}
+\usepackage{enumitem}
+
+\setlist[itemize]{leftmargin=*,topsep=2pt,itemsep=1pt}
+\setlist[enumerate]{leftmargin=*,topsep=2pt,itemsep=1pt}
+
+\newcommand{\csi}{\mathrm{CSI}}
+\newcommand{\TopK}{\mathrm{TopK}}
+\newcommand{\Jacc}{\mathrm{J}}
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\Var}{\mathrm{Var}}
+
+\title{Calibration Split Instability in Mixed-Precision LLM Quantization}
+\author{Anonymous Submission}
+\affil{Paper ID withheld for double-blind review}
+
+\begin{document}
+\twocolumn[
+\maketitle
+\begin{abstract}
+Mixed-precision post-training quantization (PTQ) often relies on a small
+calibration set to rank modules by sensitivity and allocate scarce high-bit
+precision. We reformulate this practice as a constrained calibration-driven
+optimization problem rather than a one-shot ranking heuristic. The central
+failure mode is calibration split instability, where equally plausible small
+prompt samples induce materially different module-sensitivity rankings. We
+introduce Calibration Split Instability (CSI), an auditable diagnostic and soft
+constraint for calibration-driven allocation. CSI evaluates seed-pair agreement
+using rank correlation, top-$k$ overlap, positive-set overlap, bootstrap trend
+tests, and permutation-null tests before a calibration-derived allocation is
+promoted to a method claim. Across Qwen2.5 same-prompt-pool artifacts,
+increasing calibration size improves stability: for Qwen2.5-1.5B, mean
+Spearman rises from 0.1410 at $n=2$ to 0.4918 at $n=8$, with positive
+bootstrap gain intervals and Holm-adjusted permutation $p \leq 0.00015$. A
+stricter second-pool SmolLM2-360M replication shows the same trend from $n=4$
+to $n=16$, with mean Spearman improving from 0.3133 to 0.6959 and
+Holm-adjusted permutation $p=0.0005999$. We further confront native PTQ
+baselines on full Qwen2.5-1.5B downstream benchmarks: on MMLU (14,042
+examples), FP16/AutoAWQ/GPTQModel reach 0.5864/0.5648/0.5362, and on GSM8K
+(1,319 examples), 0.0811/0.0788/0.0728. We also add local GPU fake-quant
+allocation smoke tests in which CSI/consensus 4-to-8 allocation improves PPL
+over uniform INT4 on Qwen2.5-0.5B slices and a Qwen2.5-1.5B single-slice
+feasibility run. These rows move the paper beyond a calibration-only diagnosis
+while still separating measured evidence from state-of-the-art or production
+inference claims.
+\end{abstract}
+\keywords{post-training quantization, calibration robustness, mixed precision, large language models, reproducibility}
+\vspace{0.7em}
+]
+
+\section{Introduction}
+
+Low-bit post-training quantization is a practical route for running large
+language models under memory and bandwidth constraints. Uniform low-bit
+quantization is simple, but it spends the same precision on modules that may
+have very different sensitivity to quantization error. Mixed-precision PTQ
+addresses this by reserving higher precision for selected modules while
+compressing the rest. The central decision is therefore an allocation problem:
+which modules deserve scarce high-bit budget?
+
+Our novelty anchor is the following: \emph{we treat calibration-driven PTQ
+allocation as a constrained learning problem whose claims are gated by
+stability, retention, and resource constraints}. Under this view, a low-bit
+allocation is not justified merely because a calibration split yields a
+plausible sensitivity order. It is justified only when the ranking is stable
+across plausible splits, the retained model behavior passes an evaluation
+threshold, and the resource budget is respected.
+
+Many calibration-driven pipelines answer this question by estimating module
+sensitivity on a small prompt set, ranking modules, and protecting those that
+appear most sensitive. This decomposition is convenient, but it hides a
+failure mode. If two small calibration samples drawn from the same prompt pool
+produce different sensitivity rankings, a single-split allocation can look
+principled while encoding sampling noise. Such instability matters even when
+the final quantization backend is strong: GPTQ, AWQ, SmoothQuant, OmniQuant,
+QuaRot, and SpinQuant define powerful ways to transform or quantize weights and
+activations \citep{frantar2023gptq,lin2024awq,xiao2023smoothquant,shao2024omniquant,ashkboos2024quarot,liu2024spinquant},
+but a mixed-precision allocation layer still needs evidence that its
+calibration-derived ranking is stable enough to trust.
+
+This paper studies \emph{calibration split instability} (CSI). CSI is not a new
+quantization backend and not a claim of state-of-the-art PTQ quality. It is a
+measurement and gating framework for asking whether small calibration splits
+support robust module-sensitivity decisions before those decisions are used to
+allocate precision. CSI is deliberately positioned between calibration-data
+studies and final task-retention benchmarking: calibration data can affect
+compression outcomes \citep{calibrationimpact2023}, and benchmark toolkits
+emphasize standardized evaluation \citep{llmc2024}; CSI targets the
+intermediate ranking/allocation instability that can make those outcomes
+difficult to interpret.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\linewidth]{figures/framework_overview.png}
+\caption{CSI casts mixed-precision PTQ as constrained calibration-driven
+allocation. Calibration splits produce stability evidence; soft gates decide
+whether an allocation can be promoted to a paper-facing claim.}
+\label{fig:framework}
+\end{figure}
+
+\paragraph{Contributions.}
+First, we formalize CSI as a split-conditioned stability diagnostic for
+mixed-precision module rankings. Second, we turn CSI into a claim-promotion
+constraint: unstable rankings produce a negative audit rather than a hidden
+method claim. Third, we report two evidence lines: Qwen2.5 same-prompt-pool
+curves at $n=2,4,8$ and a stricter SmolLM2-360M second-pool replication at
+$n=4,8,16$. Fourth, we add a reviewer-facing stress and failure analysis that
+separates calibration collapse, constraint conflict, and gate misfire cases
+from positive allocation evidence. Fifth, we report full-benchmark Qwen2.5-1.5B
+downstream retention under native FP16, AutoAWQ, and GPTQModel variants. Sixth,
+we add local GPU CSI/consensus allocation smoke tests, including a Qwen2.5-1.5B
+single-slice run, while keeping systems and SOTA claims outside the paper
+boundary.
+
+\section{Problem Setup}
+
+Let a transformer have quantizable modules
+$\mathcal{M}=\{m_1,\ldots,m_L\}$. A mixed-precision allocation is
+$a=(b_1,\ldots,b_L)$, where each bit width $b_i$ belongs to a finite set
+$\mathcal{B}$, such as $\{4,8\}$. Let
+$C=\{C_1,\ldots,C_S\}$ be calibration splits sampled from a prompt pool. For
+split $C_s$, a sensitivity probe estimates the loss increase caused by lowering
+the precision of module $m_i$:
+\begin{equation}
+\hat{\Delta}_{i,s}
+= \ell(f_{a^{(i\downarrow)}};C_s)-\ell(f_{a^{ref}};C_s),
+\end{equation}
+where $a^{ref}$ is a reference allocation and $a^{(i\downarrow)}$ modifies the
+probe precision of module $m_i$. A single-split method ranks modules using one
+column of $\hat{\Delta}$. CSI asks whether those columns agree.
+
+For each split pair $(s,t)$, we compute a rank agreement score and two set
+overlaps:
+\begin{align}
+\rho_{s,t} &= \mathrm{Spearman}(\hat{\Delta}_{:,s},\hat{\Delta}_{:,t}),\\
+\Jacc^k_{s,t} &=
+\frac{|\TopK_s(k)\cap\TopK_t(k)|}{|\TopK_s(k)\cup\TopK_t(k)|},\\
+\Jacc^{pos}_{s,t} &=
+\frac{|P_s\cap P_t|}{|P_s\cup P_t|},
+\end{align}
+where $P_s=\{i:\hat{\Delta}_{i,s}>0\}$. We report pairwise means and bootstrap
+confidence intervals over seed pairs. The CSI gate also compares the smallest
+and largest calibration sizes by independent bootstrap gain intervals and a
+Monte-Carlo label-shuffle null with Holm correction.
+
+\paragraph{Why not a single baseline ranking?}
+Strong PTQ systems such as GPTQ, AWQ, SmoothQuant, and OmniQuant solve
+important reconstruction, scaling, or transformation subproblems. They do not,
+by themselves, certify that a small calibration split supports the
+mixed-precision ranking used by an upstream allocation layer. In the notation
+above, a single-split ranking is the degenerate case $S=1$ with no cross-split
+constraint. Uniform quantization is the degenerate case where $a_i$ is constant
+and the ranking is ignored. Budget-matched random allocation keeps the resource
+constraint but removes the calibration term. CSI is needed precisely for the
+remaining common case: the method uses calibration to decide \emph{which}
+modules to protect, so the calibration-derived order must be audited.
+
+\section{CSI as an Allocation Constraint}
+
+The diagnostic can be used as a hard gate or as a soft allocation risk. Let
+\begin{equation}
+\mathcal{G}_{stab}(a;C)=
+w_{\rho}\bar{\rho}+w_k\overline{\Jacc^k}+w_p\overline{\Jacc^{pos}}.
+\end{equation}
+An allocation is stability-admissible only if
+$\mathcal{G}_{stab}(a;C)\geq\tau_s$. A smooth risk version is
+\begin{equation}
+\phi_s(a)=\log\!\left(1+\exp\left(\gamma_s(\tau_s-\mathcal{G}_{stab}(a;C))\right)\right).
+\end{equation}
+Equivalently, one may read
+$p_s(a)=\sigma(\gamma_s(\mathcal{G}_{stab}(a;C)-\tau_s))$ as a soft
+probability that the stability gate accepts the allocation. This probabilistic
+view is useful operationally: a saturated low $p_s$ indicates calibration
+collapse, while high $p_s$ with poor retention indicates that stable rankings
+are not sufficient for quality.
+The full constrained calibration objective can be written as
+\begin{align}
+\min_{a\in\mathcal{B}^L}\quad
+\mathcal{J}(a) &=
+\mathcal{L}_{task}(a;D)+\lambda_c\mathcal{L}_{cal}(a;C)
+\nonumber\\
+&\quad + \lambda_s\phi_s(a)+\lambda_u\mathcal{R}_{uncert}(a;C)
+\nonumber\\
+&\quad + \lambda_b\mathcal{R}_{budget}(a)\\
+\text{s.t.}\quad
+&\sum_i \mathrm{mem}(m_i,b_i)\leq M,\quad
+\mathcal{G}_{ret}(a;D_{val})\geq\tau_r.
+\end{align}
+This objective separates three outcomes. If the stability gate fails, the
+calibration evidence is under-supported. If the stability gate passes but the
+retention gate fails, the ranking is stable but not useful for the claimed
+task. If both pass under a fixed budget, the allocation can be promoted to a
+method claim. The current paper establishes the first part of this pipeline at
+scale and reports matched native-PTQ downstream retention rows. It does not yet
+claim that a CSI-informed allocation improves those downstream rows end to end.
+
+\paragraph{Finite descent.}
+Because the allocation space $\mathcal{B}^L$ is finite, any search procedure
+that accepts a candidate move $a\to a'$ only when a soft objective decreases by
+at least $\epsilon>0$ must terminate in finitely many accepted moves. At
+termination, no neighbor improves the objective by $\epsilon$, so the returned
+allocation is an $\epsilon$-local optimum over the chosen move neighborhood.
+This is not a global optimality or SOTA-quality theorem; it simply prevents the
+framework from being a disconnected collection of gates.
+
+\section{Experimental Protocol}
+
+\paragraph{Prompt pools and models.}
+The Qwen2.5 evidence uses deterministic prompt subsets over a fixed public
+WikiText2-style prompt pool \citep{merity2017wikitext,qwen25}. The second-pool
+replication uses HuggingFaceTB/SmolLM2-360M-Instruct on a 32-prompt
+WikiText2-validation pool \citep{smollm2}. Stress and feasibility rows also
+include C4-style text slices \citep{c4}, MMLU \citep{hendrycks2021mmlu}, and
+GSM8K \citep{cobbe2021gsm8k}.
+
+\paragraph{Metrics.}
+For each calibration size $n$, six deterministic prompt seeds are evaluated.
+This yields $15$ seed pairs per $n$. We report mean Spearman, top-20 Jaccard,
+and positive-set Jaccard with bootstrap confidence intervals. Trend gates
+compare the smallest and largest $n$ values by bootstrap mean-gain intervals
+and dominance probabilities. Null gates shuffle the small/large $n$ labels and
+apply Holm correction across the three audited metrics.
+
+\paragraph{Native PTQ downstream retention.}
+To avoid a purely diagnostic evaluation, we include matched downstream rows for
+Qwen2.5-1.5B FP16, AutoAWQ, and GPTQModel variants. MMLU uses all 14,042 test
+examples across 57 subjects, and GSM8K uses all 1,319 examples. For each PTQ
+candidate, we report accuracy, Wilson intervals, paired bootstrap
+candidate-minus-FP16 deltas, and discordant-pair counts from the same task
+fixture. These rows confront hard native PTQ baselines, but they are not
+CSI-informed allocation rows.
+
+\paragraph{Claim boundary.}
+The evidence ledger treats a result as paper-facing only when it has a JSON
+artifact, a generated Markdown gate report, a runnable command in the runbook,
+and a claim-matrix boundary. Results outside that boundary are discussed only
+as future work or local feasibility evidence.
+
+\paragraph{Three-layer evaluation.}
+Following the claim boundary, experiments are organized into three layers. The
+first layer checks full-benchmark native PTQ retention and local 7B/14B PTQ
+feasibility under matched guards rather than claiming SOTA. The second layer
+checks the mechanism: calibration-size trends, consensus transfer, budget
+satisfaction, and interaction-aware swaps. The third layer is a stress/failure
+layer: extreme low-bit distortion, calibration collapse at small $n$, and cases
+where a gate or proxy is not enough to justify a stronger claim.
+
+\paragraph{Mechanism chain.}
+The intended causal chain is not ``more components give better numbers.'' It is
+\emph{calibration sampling} $\rightarrow$ \emph{ranking stability}
+$\rightarrow$ \emph{admissible allocation} $\rightarrow$ \emph{retention under a
+fixed budget}. Each arrow has a falsification hook: seed-pair CSI tests the
+first arrow, consensus and budget gates test the second, fake-quant PPL stress
+tests the third, and full MMLU/GSM8K rows test final retention for native PTQ
+baselines. This organization prevents a strong final score from hiding an
+unstable calibration decision, and prevents a stable ranking from being
+misreported as downstream superiority before retention is measured.
+
+\section{Results}
+
+\subsection{Calibration Size Improves CSI Stability}
+
+Table~\ref{tab:qwen15} shows the Qwen2.5-1.5B same-prompt-pool curve. All three
+metrics increase monotonically from $n=2$ to $n=8$. Mean Spearman improves by
+0.3508, top-20 Jaccard by 0.1797, and positive-set Jaccard by 0.1747. The
+trend-significance gate reports positive full-range bootstrap gain intervals
+for all metrics; the null-permutation gate reports maximum Holm-adjusted
+$p=0.00015$.
+
+\begin{table}[t]
+\centering
+\small
+\caption{Qwen2.5-1.5B CSI stability over calibration size. Each row uses six
+calibration seeds and 15 seed pairs.}
+\label{tab:qwen15}
+\begin{tabular}{rrrr}
+\toprule
+$n$ & Spearman & Top-20 Jaccard & Positive Jaccard \\
+\midrule
+2 & 0.1410 & 0.2604 & 0.4244 \\
+4 & 0.2869 & 0.3313 & 0.5189 \\
+8 & 0.4918 & 0.4401 & 0.5992 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\linewidth]{figures/csi_stability_curves.png}
+\caption{Mean Spearman agreement increases with calibration size on the
+Qwen2.5 same-prompt-pool artifacts and the stricter SmolLM2 second-pool
+replication.}
+\label{fig:csi-curves}
+\end{figure}
+
+Table~\ref{tab:crossscale} compares Qwen2.5-0.5B and Qwen2.5-1.5B at matched
+$n$. The 1.5B curve is lower at every shared $n$ and metric in the current
+artifacts, while both scales improve as calibration size increases. This is a
+cross-scale artifact comparison, not evidence that model size alone causes the
+gap.
+
+\begin{table}[t]
+\centering
+\small
+\caption{Same-$n$ Qwen2.5 cross-scale CSI comparison. Entries are mean seed-pair
+scores.}
+\label{tab:crossscale}
+\begin{tabular}{rlrrr}
+\toprule
+$n$ & Metric & 0.5B & 1.5B & Diff. \\
+\midrule
+2 & Spearman & 0.3725 & 0.1410 & -0.2315 \\
+2 & Top-20 & 0.3797 & 0.2604 & -0.1193 \\
+2 & Positive & 0.5485 & 0.4244 & -0.1240 \\
+4 & Spearman & 0.4324 & 0.2869 & -0.1455 \\
+4 & Top-20 & 0.4672 & 0.3313 & -0.1359 \\
+4 & Positive & 0.5734 & 0.5189 & -0.0545 \\
+8 & Spearman & 0.6645 & 0.4918 & -0.1727 \\
+8 & Top-20 & 0.6449 & 0.4401 & -0.2048 \\
+8 & Positive & 0.7282 & 0.5992 & -0.1291 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Second-Pool Replication}
+
+Table~\ref{tab:smollm2} reports the stricter second-pool SmolLM2-360M run. It
+uses $n=4,8,16$, six independent seeds per $n$, and all 225 Linear modules per
+seed. Mean Spearman rises from 0.3133 to 0.6959. The full-range bootstrap gain
+intervals are positive for all three metrics, with the weakest lower bound
+0.1395. The permutation-null gate reports maximum Holm-adjusted
+$p=0.0005999$.
+
+\begin{table}[t]
+\centering
+\small
+\caption{SmolLM2-360M second-pool CSI stability.}
+\label{tab:smollm2}
+\begin{tabular}{rrrr}
+\toprule
+$n$ & Spearman & Top-20 Jaccard & Positive Jaccard \\
+\midrule
+4 & 0.3133 & 0.3779 & 0.5390 \\
+8 & 0.4136 & 0.4363 & 0.5991 \\
+16 & 0.6959 & 0.5761 & 0.7512 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Full Downstream Retention under Native PTQ}
+
+Table~\ref{tab:full-retention} addresses the most direct downstream-evaluation
+risk. On Qwen2.5-1.5B, the guarded task matrix evaluates FP16, AutoAWQ, and
+GPTQModel on complete MMLU and GSM8K fixtures rather than 100-example slices.
+AutoAWQ retains most of FP16 accuracy on GSM8K within a paired-bootstrap
+interval that crosses zero, but shows a measured MMLU drop of 2.16 points. The
+GPTQModel row drops more on MMLU and slightly on GSM8K. These rows do not show
+that CSI allocation improves final quality, but they establish a stronger
+native-baseline confrontation than a calibration-only or subset-only study.
+
+\begin{table*}[t]
+\centering
+\small
+\caption{Full downstream retention for Qwen2.5-1.5B under matched native PTQ
+task fixtures. Deltas are candidate-minus-FP16 paired bootstrap intervals.}
+\label{tab:full-retention}
+\begin{tabular}{llrrrrr}
+\toprule
+Task & Variant & $N$ & Acc. & Wilson CI & $\Delta$ vs FP16 & $\Delta$ CI \\
+\midrule
+MMLU & FP16 & 14042 & 0.5864 & [0.5782, 0.5945] & -- & -- \\
+MMLU & AutoAWQ & 14042 & 0.5648 & [0.5566, 0.5730] & -0.0216 & [-0.0273, -0.0155] \\
+MMLU & GPTQModel & 14042 & 0.5362 & [0.5279, 0.5444] & -0.0502 & [-0.0570, -0.0432] \\
+GSM8K & FP16 & 1319 & 0.0811 & [0.0676, 0.0971] & -- & -- \\
+GSM8K & AutoAWQ & 1319 & 0.0788 & [0.0655, 0.0946] & -0.0023 & [-0.0190, 0.0144] \\
+GSM8K & GPTQModel & 1319 & 0.0728 & [0.0600, 0.0881] & -0.0083 & [-0.0243, 0.0076] \\
+\bottomrule
+\end{tabular}
+\end{table*}
+
+\subsection{Local GPU CSI-Allocation Smoke}
+
+To check that the CSI/consensus allocation path produces a measurable quality
+signal on the local 8GB GPU, we ran bounded fake-quant PPL smokes on
+Qwen2.5-0.5B and Qwen2.5-1.5B. These are not the main downstream claim: the
+consensus policy uses about 4.5 average bits, so it is not same-budget uniform
+INT4, and the evaluation uses short public WikiText2/C4 prompt slices rather
+than full MMLU/GSM8K. Nevertheless, it exercises the actual allocation path.
+Across four 0.5B local GPU PPL slices, consensus 4-to-8 allocation improves
+over uniform INT4 in all four cases, with allocation/uniform-INT4 PPL ratios
+between 0.7900 and 0.8538. A split-config 1.5B WikiText2 single-slice run shows
+the same direction: FP16 10.82, uniform INT4 15.63, and CSI/consensus allocation
+13.51 PPL.
+
+\begin{table}[t]
+\centering
+\small
+\caption{Local GPU fake-quant PPL smoke. Lower is better. The consensus
+allocation uses about 4.5 average bits, so these rows are directional
+feasibility evidence rather than same-budget downstream claims.}
+\label{tab:local-smoke}
+\begin{tabular}{llrrrr}
+\toprule
+Model & Slice & FP16 & INT4 & INT3 & CSI alloc. \\
+\midrule
+0.5B & WikiText2-8 & 24.73 & 41.50 & 915.60 & 32.78 \\
+0.5B & C4-8 & 30.64 & 47.26 & 1138.74 & 40.35 \\
+0.5B & WikiText2-16 & 25.01 & 42.23 & 804.83 & 32.34 \\
+0.5B & C4-16 & 28.85 & 44.86 & 962.40 & 38.21 \\
+1.5B & WikiText2-1 & 10.82 & 15.63 & -- & 13.51 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Consensus Allocation Stress Evidence}
+
+The calibration-robustness stress gate evaluates consensus-style target
+policies on eleven fake-quant PPL slices spanning Qwen3, OLMo2, and SmolLM2
+artifacts. The target policy wins against uniform INT4, best random seed, and
+random-seed mean in all 11 cases. Mean margins are 4.2942 PPL versus uniform,
+1.1622 versus best random, and 2.7444 versus random mean, each with one-sided
+sign-test $p=0.000488$. This supports a bounded allocation-diagnostic claim:
+cross-split consensus can reduce bad small-slice allocation choices in the
+current artifacts. It is not a production PTQ or downstream task-retention
+claim.
+
+Table~\ref{tab:ablation} maps objective components to the evidence that would
+fail or weaken if the component were removed. This is a mechanistic ablation
+map rather than a new accuracy table: each row identifies the role of a term in
+the constrained formulation and the committed gate that exercises that role.
+
+\begin{table}[t]
+\centering
+\small
+\caption{Mechanistic ablation map for the constrained formulation.}
+\label{tab:ablation}
+\begin{tabular*}{\linewidth}{@{\extracolsep{\fill}}lll}
+\toprule
+Removed part & Failure mode & Evidence hook \\
+\midrule
+CSI gate & rank noise & $n=2$ $\rho=0.1410$ \\
+Consensus & bad split & $+2.1855$ PPL vs worst \\
+Budget term & resource drift & 6 budget-pass cases \\
+Interaction & additive miss & 5 swap counterexamples \\
+Claim gate & overstated SOTA & RTX3090 as feasibility \\
+\bottomrule
+\end{tabular*}
+\end{table}
+
+\subsection{Extreme-Bit and Failure-Mode Stress}
+
+The reviewer-critical stress layer asks when the framework should refuse to
+promote a claim. We separate three failure types. First, \emph{calibration
+collapse}: at Qwen2.5-1.5B $n=2$, mean Spearman is only 0.1410, so a
+single-split allocation is under-supported. Second, \emph{constraint conflict}:
+in the rate-distortion scaffold, uniform INT2 and INT3 produce 16.0$\times$
+and 4.0$\times$ the distortion of uniform INT4, while a 2.6-bit
+rate-distortion allocation still has 4.904$\times$ uniform-INT4 distortion.
+Third, \emph{gate misfire}: in a later random-seed audit, one best random seed
+beats the target on a WikiText2 slice by 1.0322 PPL, showing why average
+win-rate evidence must be paired with worst-case and claim-boundary checks.
+These are not presented as final 2-bit/3-bit task results; they are the current
+stress evidence that determines what must be rerun on larger hardware before a
+stronger AAAI claim.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\linewidth]{figures/stress_failure_margins.png}
+\caption{Left: committed robustness gate margins over 11 fake-quant PPL cases.
+Right: extreme-bit scaffold showing why 2--3 bit regimes require explicit
+stress testing before downstream task claims.}
+\label{fig:stress}
+\end{figure}
+
+\subsection{Guarded RTX3090 Feasibility Rows}
+
+Table~\ref{tab:rtx3090} summarizes local RTX3090 comparisons for
+Qwen2.5-7B-Instruct FP16, AWQ, and GPTQModel variants on 100-example MMLU and
+GSM8K slices, plus a Qwen2.5-14B-AWQ 10-example smoke. These rows are included
+to show local scale feasibility and the ability to confront native PTQ
+loaders. They do not establish leaderboard quality, SOTA PTQ, or production
+runtime acceleration.
+
+\begin{table}[t]
+\centering
+\small
+\caption{Local RTX3090 guarded task rows.}
+\label{tab:rtx3090}
+\begin{tabular}{llrrr}
+\toprule
+Variant & Task & Limit & Acc. & Tok/s \\
+\midrule
+7B FP16 & MMLU & 100 & 0.71 & 8.376 \\
+7B AWQ & MMLU & 100 & 0.70 & 6.765 \\
+7B GPTQ & MMLU & 100 & 0.74 & 7.231 \\
+7B FP16 & GSM8K & 100 & 0.24 & 15.263 \\
+7B AWQ & GSM8K & 100 & 0.24 & 11.416 \\
+7B GPTQ & GSM8K & 100 & 0.16 & 10.828 \\
+14B AWQ & MMLU & 10 & 0.50 & 3.851 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Related Work}
+
+\paragraph{PTQ algorithms.}
+GPTQ uses approximate second-order information for one-shot quantization
+\citep{frantar2023gptq}. AWQ protects salient channels using activation-aware
+statistics \citep{lin2024awq}. SmoothQuant migrates activation outlier
+difficulty into weights for W8A8 inference \citep{xiao2023smoothquant}.
+OmniQuant learns clipping and equivalent transforms under calibration samples
+\citep{shao2024omniquant}. CSI is orthogonal to these backends: it audits the
+calibration-dependent allocation or protection decision that can sit above a
+native quantizer. Our full Qwen2.5-1.5B rows therefore confront AutoAWQ and
+GPTQModel as native PTQ baselines while leaving broader SOTA comparison to
+future expanded backends and scales.
+
+\begin{table}[t]
+\centering
+\small
+\caption{Failure contrast: what each baseline family primarily leaves
+un-audited in a calibration-driven mixed-precision allocation pipeline.}
+\label{tab:failure-contrast}
+\begin{tabular}{lll}
+\toprule
+Family & Strength & Unchecked failure \\
+\midrule
+GPTQ & reconstruction & split drift \\
+AWQ & salient channels & ranking collapse \\
+SmoothQuant & outlier smoothing & allocation drift \\
+OmniQuant & learned transforms & gate conflict \\
+CSI & stability gate & retention gap \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{Rotation and outlier handling.}
+QuaRot and SpinQuant alter the quantization surface through fixed or learned
+rotations \citep{ashkboos2024quarot,liu2024spinquant}. CSI is complementary:
+it asks whether calibration-dependent sensitivity or protection decisions are
+stable across plausible prompt samples.
+
+\paragraph{Calibration and benchmarking.}
+Calibration data has been shown to affect post-training compression outcomes
+\citep{calibrationimpact2023}. Benchmarking work such as LLMC argues for
+standardized quantization settings \citep{llmc2024}. CSI contributes a narrower
+pre-allocation audit: before arguing about final task scores, test whether the
+module ranking used for allocation is stable.
+
+\section{Limitations and Falsification}
+
+The strongest current evidence is a reproducible CSI measurement and gating
+pipeline plus matched native-PTQ downstream retention on full Qwen2.5-1.5B
+MMLU/GSM8K fixtures. Local GPU fake-quant smokes now provide directional
+allocation-path evidence on Qwen2.5-0.5B and a Qwen2.5-1.5B single-slice run.
+The paper should not claim SOTA quantization. More specifically, it should not
+claim that \emph{CSI-derived allocation} improves full downstream quality until
+direct CSI-allocation retention rows are measured against FP16, uniform W4,
+AutoAWQ, GPTQModel, and calibration-aware or rotation-family baselines under
+matched budgets.
+
+Before submission, the most important missing row is a direct CSI-informed
+downstream retention stress test in the 2--3 bit regime. The current artifacts
+contain full 1.5B MMLU/GSM8K native-PTQ retention and local 7B/14B feasibility,
+plus uniform INT3 and synthetic INT2/INT3 distortion scaffolds, but they do not
+yet contain a full task-retention curve over 2, 3, 4, and 8 bits for FP16,
+uniform, native PTQ, and CSI-informed allocations. That experiment should be
+run before upgrading the paper from a robustness-plus-retention claim to a
+method-superiority claim.
+
+Several results could weaken the story. A second public prompt pool could fail
+to reproduce the stability trend. Another model family could show stable
+rankings even at very small $n$. Downstream task retention could be insensitive
+to the measured ranking instability once CSI-informed allocations are directly
+evaluated. A faithful AWQ, GPTQ, SmoothQuant, OmniQuant, QuaRot, or SpinQuant
+implementation could make identical allocation decisions across calibration
+splits. Finally, a simpler budget-matched heuristic could beat CSI-informed
+allocation once direct retention rows are available.
+
+\section{Conclusion}
+
+This paper isolates calibration split instability as a concrete failure mode in
+mixed-precision LLM quantization. Small calibration samples can produce
+unstable sensitivity rankings, and the audited artifacts show that increasing
+calibration size improves rank and set agreement under two evidence lines.
+CSI turns this observation into a reproducible gate: if the calibration ranking
+is unstable, the correct output is an audit warning rather than an overstated
+allocation claim. Full Qwen2.5-1.5B MMLU/GSM8K rows show how this gate can be
+paired with native PTQ retention evidence rather than left as a standalone
+diagnostic. The immediate next step is direct downstream retention testing of
+CSI-informed allocations against strong native PTQ and calibration-aware
+baselines under matched memory budgets.
+
+\IfFileExists{aaai2027.bst}{\bibliographystyle{aaai2027}}{\bibliographystyle{plainnat}}
+\bibliography{references}
+
+\end{document}

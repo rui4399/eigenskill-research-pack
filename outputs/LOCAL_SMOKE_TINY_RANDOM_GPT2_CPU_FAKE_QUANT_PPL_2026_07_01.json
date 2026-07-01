@@ -1,0 +1,93 @@
+{
+  "model": "hf-internal-testing/tiny-random-gpt2",
+  "prompt_count": 1,
+  "max_length": 32,
+  "device": "cpu",
+  "dtype": "float32",
+  "results": [
+    {
+      "name": "fp16",
+      "mode": "fp16",
+      "allocation": "",
+      "method": "",
+      "quant_meta": {
+        "linear_modules_touched": 1,
+        "bit_hist": {
+          "16": 1
+        },
+        "group_size": 0
+      },
+      "metrics": {
+        "prompt_count": 1,
+        "tokens": 31,
+        "mean_nll": 6.877700328826904,
+        "ppl": 970.3922088809076,
+        "per_prompt": [
+          {
+            "tokens": 31,
+            "loss": 6.877700328826904,
+            "ppl": 970.3922088809076
+          }
+        ]
+      },
+      "delta_nll_vs_fp16": 0.0,
+      "ppl_ratio_vs_fp16": 1.0
+    },
+    {
+      "name": "uniform_int4",
+      "mode": "uniform_int4",
+      "allocation": "",
+      "method": "",
+      "quant_meta": {
+        "linear_modules_touched": 1,
+        "bit_hist": {
+          "4": 1
+        },
+        "group_size": 0
+      },
+      "metrics": {
+        "prompt_count": 1,
+        "tokens": 31,
+        "mean_nll": 6.874239444732666,
+        "ppl": 967.0395987639173,
+        "per_prompt": [
+          {
+            "tokens": 31,
+            "loss": 6.874239444732666,
+            "ppl": 967.0395987639173
+          }
+        ]
+      },
+      "delta_nll_vs_fp16": -0.0034608840942382812,
+      "ppl_ratio_vs_fp16": 0.9965450978621762
+    },
+    {
+      "name": "uniform_int3",
+      "mode": "uniform_int3",
+      "allocation": "",
+      "method": "",
+      "quant_meta": {
+        "linear_modules_touched": 1,
+        "bit_hist": {
+          "3": 1
+        },
+        "group_size": 0
+      },
+      "metrics": {
+        "prompt_count": 1,
+        "tokens": 31,
+        "mean_nll": 6.884318828582764,
+        "ppl": 976.8360502372544,
+        "per_prompt": [
+          {
+            "tokens": 31,
+            "loss": 6.884318828582764,
+            "ppl": 976.8360502372544
+          }
+        ]
+      },
+      "delta_nll_vs_fp16": 0.006618499755859375,
+      "ppl_ratio_vs_fp16": 1.0066404504254811
+    }
+  ]
+}
