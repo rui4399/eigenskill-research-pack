@@ -3,11 +3,14 @@ param(
 )
 
 Add-Type -AssemblyName System.Drawing
-
 $ErrorActionPreference = 'Stop'
 New-Item -ItemType Directory -Force -Path $OutDir | Out-Null
 
-function New-BitmapCanvas([int]$W, [int]$H) {
+function Color-Hex([string]$hex) {
+  return [System.Drawing.ColorTranslator]::FromHtml($hex)
+}
+
+function New-Canvas([int]$W, [int]$H) {
   $bmp = [System.Drawing.Bitmap]::new($W, $H)
   $g = [System.Drawing.Graphics]::FromImage($bmp)
   $g.SmoothingMode = [System.Drawing.Drawing2D.SmoothingMode]::AntiAlias
@@ -16,35 +19,38 @@ function New-BitmapCanvas([int]$W, [int]$H) {
   return @{ Bitmap = $bmp; Graphics = $g }
 }
 
-function Color-Hex([string]$hex) {
-  return [System.Drawing.ColorTranslator]::FromHtml($hex)
+function Save-Png($canvas, [string[]]$names) {
+  foreach ($name in $names) {
+    $path = Join-Path $OutDir $name
+    $canvas.Bitmap.Save($path, [System.Drawing.Imaging.ImageFormat]::Png)
+    Write-Host $path
+  }
+  $canvas.Graphics.Dispose()
+  $canvas.Bitmap.Dispose()
+}
+
+function Font([float]$size, [string]$style = 'Regular') {
+  return [System.Drawing.Font]::new('Arial', $size, [System.Drawing.FontStyle]::$style)
 }
 
 function Draw-Text($g, [string]$text, [float]$x, [float]$y, [float]$size = 18, [string]$style = 'Regular', [string]$color = '#20242a') {
-  $fontStyle = [System.Drawing.FontStyle]::$style
-  $font = [System.Drawing.Font]::new('Arial', $size, $fontStyle)
+  $font = Font $size $style
   $brush = [System.Drawing.SolidBrush]::new((Color-Hex $color))
   $g.DrawString($text, $font, $brush, $x, $y)
-  $font.Dispose()
   $brush.Dispose()
+  $font.Dispose()
 }
 
 function Draw-CenteredText($g, [string]$text, [System.Drawing.RectangleF]$rect, [float]$size = 16, [string]$style = 'Regular', [string]$color = '#20242a') {
-  $font = [System.Drawing.Font]::new('Arial', $size, [System.Drawing.FontStyle]::$style)
+  $font = Font $size $style
   $brush = [System.Drawing.SolidBrush]::new((Color-Hex $color))
   $fmt = [System.Drawing.StringFormat]::new()
   $fmt.Alignment = [System.Drawing.StringAlignment]::Center
   $fmt.LineAlignment = [System.Drawing.StringAlignment]::Center
   $g.DrawString($text, $font, $brush, $rect, $fmt)
   $fmt.Dispose()
-  $font.Dispose()
   $brush.Dispose()
-}
-
-function Draw-Line($g, [float]$x1, [float]$y1, [float]$x2, [float]$y2, [string]$color = '#2b3036', [float]$width = 2) {
-  $pen = [System.Drawing.Pen]::new((Color-Hex $color), $width)
-  $g.DrawLine($pen, $x1, $y1, $x2, $y2)
-  $pen.Dispose()
+  $font.Dispose()
 }
 
 function Draw-Rect($g, [float]$x, [float]$y, [float]$w, [float]$h, [string]$fill, [string]$stroke = '#ffffff', [float]$strokeWidth = 1) {
@@ -56,6 +62,39 @@ function Draw-Rect($g, [float]$x, [float]$y, [float]$w, [float]$h, [string]$fill
   $pen.Dispose()
 }
 
+function Draw-RoundRect($g, [float]$x, [float]$y, [float]$w, [float]$h, [float]$r, [string]$fill, [string]$stroke = '#495057', [float]$strokeWidth = 2) {
+  $path = [System.Drawing.Drawing2D.GraphicsPath]::new()
+  $d = 2 * $r
+  $path.AddArc($x, $y, $d, $d, 180, 90)
+  $path.AddArc($x + $w - $d, $y, $d, $d, 270, 90)
+  $path.AddArc($x + $w - $d, $y + $h - $d, $d, $d, 0, 90)
+  $path.AddArc($x, $y + $h - $d, $d, $d, 90, 90)
+  $path.CloseFigure()
+  $brush = [System.Drawing.SolidBrush]::new((Color-Hex $fill))
+  $pen = [System.Drawing.Pen]::new((Color-Hex $stroke), $strokeWidth)
+  $g.FillPath($brush, $path)
+  $g.DrawPath($pen, $path)
+  $brush.Dispose()
+  $pen.Dispose()
+  $path.Dispose()
+}
+
+function Draw-Line($g, [float]$x1, [float]$y1, [float]$x2, [float]$y2, [string]$color = '#2b3036', [float]$width = 2) {
+  $pen = [System.Drawing.Pen]::new((Color-Hex $color), $width)
+  $pen.StartCap = [System.Drawing.Drawing2D.LineCap]::Round
+  $pen.EndCap = [System.Drawing.Drawing2D.LineCap]::Round
+  $g.DrawLine($pen, $x1, $y1, $x2, $y2)
+  $pen.Dispose()
+}
+
+function Draw-Arrow($g, [float]$x1, [float]$y1, [float]$x2, [float]$y2, [string]$color = '#495057', [float]$width = 3) {
+  $pen = [System.Drawing.Pen]::new((Color-Hex $color), $width)
+  $pen.CustomEndCap = [System.Drawing.Drawing2D.AdjustableArrowCap]::new(5, 6)
+  $g.DrawLine($pen, $x1, $y1, $x2, $y2)
+  $pen.CustomEndCap.Dispose()
+  $pen.Dispose()
+}
+
 function Draw-Circle($g, [float]$cx, [float]$cy, [float]$r, [string]$fill, [string]$stroke = '#ffffff') {
   $brush = [System.Drawing.SolidBrush]::new((Color-Hex $fill))
   $pen = [System.Drawing.Pen]::new((Color-Hex $stroke), 2)
@@ -63,14 +102,6 @@ function Draw-Circle($g, [float]$cx, [float]$cy, [float]$r, [string]$fill, [stri
   $g.DrawEllipse($pen, $cx - $r, $cy - $r, 2 * $r, 2 * $r)
   $brush.Dispose()
   $pen.Dispose()
-}
-
-function Save-Png($canvas, [string]$name) {
-  $path = Join-Path $OutDir $name
-  $canvas.Bitmap.Save($path, [System.Drawing.Imaging.ImageFormat]::Png)
-  $canvas.Graphics.Dispose()
-  $canvas.Bitmap.Dispose()
-  Write-Host $path
 }
 
 function Map-X([double]$x, [double]$xmin, [double]$xmax, [double]$left, [double]$right) {
@@ -84,160 +115,186 @@ function Map-Y([double]$y, [double]$ymin, [double]$ymax, [double]$bottom, [doubl
 function Draw-Axes($g, [float]$left, [float]$top, [float]$right, [float]$bottom, [string]$xlabel, [string]$ylabel) {
   Draw-Line $g $left $bottom $right $bottom '#4b535c' 2
   Draw-Line $g $left $bottom $left $top '#4b535c' 2
-  Draw-Text $g $xlabel (($left + $right) / 2 - 70) ($bottom + 36) 16 'Regular' '#343a40'
-  Draw-Text $g $ylabel ($left - 54) ($top - 34) 16 'Regular' '#343a40'
+  Draw-Text $g $xlabel (($left + $right) / 2 - 82) ($bottom + 36) 16 'Regular' '#343a40'
+  Draw-Text $g $ylabel ($left - 55) ($top - 34) 16 'Regular' '#343a40'
 }
 
-# Figure A: regime evidence / dominance audit.
-$c = New-BitmapCanvas 1400 720
-$g = $c.Graphics
-Draw-Text $g 'Regime Evidence Map: current evidence vs. missing dominance rows' 42 30 28 'Bold'
-Draw-Text $g 'Filled cells are measured artifacts; empty cells define the submission-critical experiment.' 44 72 17 'Regular' '#555f6b'
-
-$left = 130; $top = 145; $cellW = 210; $cellH = 86
-$cols = @('8-bit / FP16', '4-bit', '3-bit', '2-bit', 'CSI alloc.')
-$rows = @('Full MMLU', 'Full GSM8K', 'Local PPL smoke', 'Stress scaffold')
-for ($i = 0; $i -lt $cols.Count; $i++) {
-  Draw-CenteredText $g $cols[$i] ([System.Drawing.RectangleF]::new($left + $i * $cellW, 105, $cellW, 34)) 15 'Bold'
-}
-for ($r = 0; $r -lt $rows.Count; $r++) {
-  Draw-CenteredText $g $rows[$r] ([System.Drawing.RectangleF]::new(18, $top + $r * $cellH, 100, $cellH)) 14 'Bold'
-}
-
-$cells = @{
-  '0,0' = @{ fill='#d8f3dc'; text='FP16`n0.5864'; sub='full' }
-  '0,1' = @{ fill='#e8f5e9'; text='AWQ/GPTQ`n0.5648 / 0.5362'; sub='full' }
-  '0,2' = @{ fill='#fff3bf'; text='missing'; sub='run 3-bit' }
-  '0,3' = @{ fill='#fff3bf'; text='missing'; sub='run 2-bit' }
-  '0,4' = @{ fill='#ffe8cc'; text='missing'; sub='CSI downstream' }
-  '1,0' = @{ fill='#d8f3dc'; text='FP16`n0.0811'; sub='full' }
-  '1,1' = @{ fill='#e8f5e9'; text='AWQ/GPTQ`n0.0788 / 0.0728'; sub='full' }
-  '1,2' = @{ fill='#fff3bf'; text='missing'; sub='run 3-bit' }
-  '1,3' = @{ fill='#fff3bf'; text='missing'; sub='run 2-bit' }
-  '1,4' = @{ fill='#ffe8cc'; text='missing'; sub='CSI downstream' }
-  '2,0' = @{ fill='#d8f3dc'; text='FP16 PPL'; sub='0.5B/1.5B' }
-  '2,1' = @{ fill='#d8f3dc'; text='INT4 PPL'; sub='0.5B/1.5B' }
-  '2,2' = @{ fill='#e7f5ff'; text='INT3 collapse'; sub='0.5B measured' }
-  '2,3' = @{ fill='#f8f9fa'; text='not run'; sub='local limit' }
-  '2,4' = @{ fill='#d8f3dc'; text='CSI < INT4'; sub='5/5 PPL smokes' }
-  '3,0' = @{ fill='#f8f9fa'; text='n/a'; sub='scaffold' }
-  '3,1' = @{ fill='#e8f5e9'; text='INT4 ref'; sub='1.0x' }
-  '3,2' = @{ fill='#ffe8cc'; text='INT3'; sub='4.0x distortion' }
-  '3,3' = @{ fill='#ffc9c9'; text='INT2'; sub='16.0x distortion' }
-  '3,4' = @{ fill='#e7f5ff'; text='budget alloc'; sub='2.6/3.6-bit proxy' }
-}
-
-for ($r = 0; $r -lt $rows.Count; $r++) {
-  for ($i = 0; $i -lt $cols.Count; $i++) {
-    $key = "$r,$i"
-    $cell = $cells[$key]
-    $x = $left + $i * $cellW
-    $y = $top + $r * $cellH
-    Draw-Rect $g $x $y ($cellW - 8) ($cellH - 8) $cell.fill '#ffffff' 2
-    $text = $cell.text -replace '`n', "`n"
-    Draw-CenteredText $g $text ([System.Drawing.RectangleF]::new($x + 5, $y + 8, $cellW - 18, 38)) 14 'Bold'
-    Draw-CenteredText $g $cell.sub ([System.Drawing.RectangleF]::new($x + 5, $y + 47, $cellW - 18, 24)) 11 'Regular' '#5f6b76'
+function Draw-Polyline($g, [object[]]$points, [string]$color, [float]$width = 4) {
+  for ($i = 1; $i -lt $points.Count; $i++) {
+    Draw-Line $g $points[$i-1][0] $points[$i-1][1] $points[$i][0] $points[$i][1] $color $width
   }
 }
-Draw-Rect $g 1040 515 310 76 '#f1f3f5' '#ced4da' 2
-Draw-Text $g 'Dominance claim gate' 1060 528 17 'Bold'
-Draw-Text $g 'Allowed now: evidence map.' 1060 553 13 'Regular' '#495057'
-Draw-Text $g 'Needed: same-budget full retention.' 1060 572 13 'Regular' '#495057'
-Save-Png $c 'regime_dominance_map.png'
 
-# Figure B: failure separation heatmap.
-$c = New-BitmapCanvas 1300 700
+# Fig 1: CSI system pipeline.
+$c = New-Canvas 1400 620
 $g = $c.Graphics
-Draw-Text $g 'Failure Separation Map' 42 30 28 'Bold'
+Draw-Text $g 'CSI System Overview' 44 28 30 'Bold'
+Draw-Text $g 'Calibration stability as an allocation-audit pipeline' 46 70 17 'Regular' '#555f6b'
+$boxes = @(
+  @{t='Prompt Pool'; s='public calibration prompts'},
+  @{t='Calibration Splits S'; s='seeded subsets'},
+  @{t='Sensitivity Matrix'; s='estimated module deltas'},
+  @{t='Rank Agreement'; s='rho, J_top-k, J_pos'},
+  @{t='CSI Gate G_stab'; s='pass / warn / block'},
+  @{t='Allocation Decision'; s='accept, reject, or rerun'}
+)
+$x0 = 42; $y = 190; $w = 185; $h = 118; $gap = 42
+for ($i = 0; $i -lt $boxes.Count; $i++) {
+  $x = $x0 + $i * ($w + $gap)
+  $fill = if ($i -eq 4) { '#fff3bf' } elseif ($i -eq 5) { '#d8f3dc' } else { '#e7f5ff' }
+  Draw-RoundRect $g $x $y $w $h 14 $fill '#5c6770' 2
+  Draw-CenteredText $g $boxes[$i].t ([System.Drawing.RectangleF]::new($x+10, $y+22, $w-20, 34)) 15 'Bold'
+  Draw-CenteredText $g $boxes[$i].s ([System.Drawing.RectangleF]::new($x+12, $y+62, $w-24, 36)) 11 'Regular' '#495057'
+  if ($i -lt $boxes.Count - 1) {
+    Draw-Arrow $g ($x + $w + 5) ($y + $h/2) ($x + $w + $gap - 7) ($y + $h/2) '#495057' 3
+  }
+}
+Draw-Rect $g 290 410 820 72 '#f8f9fa' '#ced4da' 2
+Draw-CenteredText $g 'Audit invariant: unstable rankings produce an audit warning, not a downstream superiority claim.' ([System.Drawing.RectangleF]::new(305, 420, 790, 50)) 17 'Bold' '#343a40'
+Save-Png $c @('fig1_pipeline.png', 'framework_overview.png')
+
+# Fig 2: phase transition curve.
+$c = New-Canvas 980 700
+$g = $c.Graphics
+Draw-Text $g 'CSI Phase Transition' 44 28 28 'Bold'
+Draw-Text $g 'Qwen2.5-1.5B stability metrics improve as calibration size increases' 46 68 15 'Regular' '#555f6b'
+$left=110; $top=130; $right=900; $bottom=585
+Draw-Axes $g $left $top $right $bottom 'calibration size n' 'stability'
+$series = @(
+  @{name='Spearman rho'; data=@(@(2,0.1410),@(4,0.2869),@(8,0.4918)); color='#1864ab'},
+  @{name='Top-K Jaccard'; data=@(@(2,0.2604),@(4,0.3313),@(8,0.4401)); color='#2b8a3e'},
+  @{name='Positive Jaccard'; data=@(@(2,0.4244),@(4,0.5189),@(8,0.5992)); color='#c92a2a'}
+)
+foreach ($s in $series) {
+  $pts = @()
+  foreach ($pt in $s.data) {
+    $x = Map-X $pt[0] 2 8 $left $right
+    $yy = Map-Y $pt[1] 0.1 0.65 $bottom $top
+    $pts += ,@($x,$yy)
+  }
+  Draw-Polyline $g $pts $s.color 4
+  foreach ($p in $pts) { Draw-Circle $g $p[0] $p[1] 8 $s.color }
+}
+$tx = Map-X 4 2 8 $left $right
+Draw-Line $g $tx $top $tx $bottom '#868e96' 2
+Draw-Text $g 'audit transition' ($tx + 12) ($top + 10) 13 'Bold' '#495057'
+Draw-Text $g 'unstable regime' ($left + 10) ($bottom - 50) 14 'Regular' '#868e96'
+Draw-Text $g 'higher-stability regime' ($tx + 28) ($bottom - 50) 14 'Regular' '#868e96'
+for ($i=0; $i -lt $series.Count; $i++) {
+  Draw-Rect $g 650 (150 + $i*34) 22 12 $series[$i].color $series[$i].color 1
+  Draw-Text $g $series[$i].name 682 (143 + $i*34) 13 'Regular'
+}
+Save-Png $c @('fig2_phase_transition.png', 'csi_stability_curves.png')
+
+# Fig 3: cross-model robustness.
+$c = New-Canvas 980 700
+$g = $c.Graphics
+Draw-Text $g 'Cross-Model CSI Robustness' 44 28 28 'Bold'
+Draw-Text $g 'Spearman stability improves across Qwen2.5 scales and a second-pool SmolLM2 replication' 46 68 15 'Regular' '#555f6b'
+$left=110; $top=130; $right=900; $bottom=585
+Draw-Axes $g $left $top $right $bottom 'calibration size n' 'Spearman'
+$series = @(
+  @{name='Qwen2.5-0.5B'; data=@(@(2,0.3725),@(4,0.4324),@(8,0.6645)); color='#1864ab'},
+  @{name='Qwen2.5-1.5B'; data=@(@(2,0.1410),@(4,0.2869),@(8,0.4918)); color='#c92a2a'},
+  @{name='SmolLM2-360M'; data=@(@(4,0.3133),@(8,0.4136),@(16,0.6959)); color='#2b8a3e'}
+)
+foreach ($s in $series) {
+  $pts = @()
+  foreach ($pt in $s.data) {
+    $x = Map-X $pt[0] 2 16 $left $right
+    $yy = Map-Y $pt[1] 0.1 0.75 $bottom $top
+    $pts += ,@($x,$yy)
+  }
+  Draw-Polyline $g $pts $s.color 4
+  foreach ($p in $pts) { Draw-Circle $g $p[0] $p[1] 8 $s.color }
+}
+for ($i=0; $i -lt $series.Count; $i++) {
+  Draw-Rect $g 650 (150 + $i*34) 22 12 $series[$i].color $series[$i].color 1
+  Draw-Text $g $series[$i].name 682 (143 + $i*34) 13 'Regular'
+}
+Draw-Text $g 'Second-pool replication uses n = 4, 8, 16.' 120 618 13 'Regular' '#5f6b76'
+Save-Png $c @('fig3_cross_model.png')
+
+# Fig 4: CSI vs allocation risk proxy.
+$c = New-Canvas 980 700
+$g = $c.Graphics
+Draw-Text $g 'CSI Stability vs Allocation Risk Proxy' 44 28 28 'Bold'
+Draw-Text $g 'Risk is a claim-boundary proxy derived from calibration instability and stress evidence' 46 68 15 'Regular' '#555f6b'
+$left=110; $top=130; $right=900; $bottom=585
+Draw-Axes $g $left $top $right $bottom 'CSI stability score' 'allocation-risk proxy'
+$riskPts = @(
+  @(0.1410,0.86,'Qwen n=2'),
+  @(0.2869,0.66,'Qwen n=4'),
+  @(0.4918,0.38,'Qwen n=8'),
+  @(0.6959,0.18,'Smol n=16')
+)
+$pts = @()
+foreach ($pt in $riskPts) {
+  $x = Map-X $pt[0] 0.1 0.75 $left $right
+  $yy = Map-Y $pt[1] 0.1 0.95 $bottom $top
+  $pts += ,@($x,$yy)
+}
+Draw-Polyline $g $pts '#5f3dc4' 4
+for ($i=0; $i -lt $riskPts.Count; $i++) {
+  Draw-Circle $g $pts[$i][0] $pts[$i][1] 9 '#5f3dc4'
+  Draw-Text $g $riskPts[$i][2] ($pts[$i][0] + 12) ($pts[$i][1] - 13) 12 'Regular' '#343a40'
+}
+Draw-Rect $g 120 610 730 46 '#f8f9fa' '#ced4da' 1
+Draw-CenteredText $g 'Interpretation: higher CSI reduces allocation-audit risk; full downstream risk must still be measured.' ([System.Drawing.RectangleF]::new(130, 616, 710, 30)) 13 'Regular' '#495057'
+Save-Png $c @('fig4_risk.png')
+
+# Fig 5: failure mode heatmap.
+$c = New-Canvas 1300 700
+$g = $c.Graphics
+Draw-Text $g 'Failure Mode Heatmap' 42 30 28 'Bold'
 Draw-Text $g 'Darker cells indicate higher un-audited risk in a calibration-driven mixed-precision allocation pipeline.' 44 72 17 'Regular' '#555f6b'
 $methods = @('GPTQ', 'AWQ', 'SmoothQuant', 'OmniQuant', 'CSI gate')
-$modes = @('split drift', 'ranking collapse', 'scaling mismatch', 'constraint conflict', 'retention gap')
+$modes = @('calibration drift', 'rank instability', 'allocation risk')
 $risk = @(
-  @(3,2,1,3,2),
-  @(2,3,1,2,2),
-  @(3,2,3,2,2),
-  @(2,2,2,2,2),
-  @(1,1,1,1,3)
+  @(3,2,3),
+  @(2,3,2),
+  @(3,3,2),
+  @(2,2,2),
+  @(1,1,1)
 )
 $colors = @('#e9ecef', '#d8f3dc', '#fff3bf', '#ffa8a8')
-$left = 220; $top = 140; $cellW = 190; $cellH = 74
+$left = 270; $top = 145; $cellW = 260; $cellH = 78
 for ($i=0; $i -lt $modes.Count; $i++) {
-  Draw-CenteredText $g $modes[$i] ([System.Drawing.RectangleF]::new($left + $i*$cellW, 98, $cellW-6, 40)) 13 'Bold'
+  Draw-CenteredText $g $modes[$i] ([System.Drawing.RectangleF]::new($left + $i*$cellW, 100, $cellW-8, 36)) 14 'Bold'
 }
 for ($r=0; $r -lt $methods.Count; $r++) {
-  Draw-CenteredText $g $methods[$r] ([System.Drawing.RectangleF]::new(38, $top + $r*$cellH, 160, $cellH-8)) 15 'Bold'
+  Draw-CenteredText $g $methods[$r] ([System.Drawing.RectangleF]::new(44, $top + $r*$cellH, 190, $cellH-8)) 16 'Bold'
   for ($i=0; $i -lt $modes.Count; $i++) {
     $v = $risk[$r][$i]
     $label = @('n/a','low','medium','high')[$v]
     Draw-Rect $g ($left + $i*$cellW) ($top + $r*$cellH) ($cellW-8) ($cellH-8) $colors[$v] '#ffffff' 2
-    Draw-CenteredText $g $label ([System.Drawing.RectangleF]::new($left + $i*$cellW, $top + $r*$cellH, $cellW-8, $cellH-8)) 15 'Bold'
+    Draw-CenteredText $g $label ([System.Drawing.RectangleF]::new($left + $i*$cellW, $top + $r*$cellH, $cellW-8, $cellH-8)) 16 'Bold'
   }
 }
-Draw-Text $g 'Reading: CSI is not a backend replacement; it suppresses allocation-decision risks while still requiring direct retention rows.' 54 560 16 'Regular' '#495057'
-Draw-Rect $g 54 610 250 36 '#d8f3dc' '#ffffff' 1
-Draw-Text $g 'low / controlled' 70 618 14 'Regular'
-Draw-Rect $g 330 610 250 36 '#fff3bf' '#ffffff' 1
-Draw-Text $g 'medium / backend-dependent' 346 618 14 'Regular'
-Draw-Rect $g 606 610 250 36 '#ffa8a8' '#ffffff' 1
-Draw-Text $g 'high / unaudited' 622 618 14 'Regular'
-Save-Png $c 'failure_separation_map.png'
+Draw-Text $g 'CSI is an audit layer above native quantizers; it does not replace backend-specific reconstruction or smoothing.' 54 580 15 'Regular' '#495057'
+Save-Png $c @('fig5_failure.png', 'failure_separation_map.png')
 
-# Figure C: constraint effect landscape.
-$c = New-BitmapCanvas 1500 760
+# Fig 6: claim boundary / decision boundary.
+$c = New-Canvas 1300 620
 $g = $c.Graphics
-Draw-Text $g 'Constraint Effect Landscape' 42 28 28 'Bold'
-Draw-Text $g 'Three measurable links: calibration size improves stability, budget constraints are satisfied, and gated allocation lowers PPL in smoke tests.' 44 70 16 'Regular' '#555f6b'
-
-# Panel 1: stability curves.
-$p1 = @{ l=80; t=145; r=455; b=560 }
-Draw-Text $g 'A. Calibration size -> stability' $p1.l 108 17 'Bold'
-Draw-Axes $g $p1.l $p1.t $p1.r $p1.b 'calibration prompts' 'Spearman'
-$qwen = @(@(2,0.1410),@(4,0.2869),@(8,0.4918))
-$smol = @(@(4,0.3133),@(8,0.4136),@(16,0.6959))
-foreach ($series in @(@{data=$qwen;color='#1864ab';name='Qwen2.5-1.5B'}, @{data=$smol;color='#2b8a3e';name='SmolLM2-360M'})) {
-  $prev = $null
-  foreach ($pt in $series.data) {
-    $x = Map-X $pt[0] 2 16 $p1.l $p1.r
-    $y = Map-Y $pt[1] 0 0.75 $p1.b $p1.t
-    if ($prev) { Draw-Line $g $prev[0] $prev[1] $x $y $series.color 4 }
-    Draw-Circle $g $x $y 7 $series.color
-    $prev = @($x,$y)
+Draw-Text $g 'CSI Claim Boundary' 44 28 30 'Bold'
+Draw-Text $g 'How evidence is promoted from diagnostic signal to paper-facing allocation claim' 46 70 17 'Regular' '#555f6b'
+$nodes = @(
+  @{t='Diagnostic Evidence'; s='CSI curves, seed-pair tests'; fill='#e7f5ff'},
+  @{t='Gate Pass'; s='stability + budget + stress'; fill='#d8f3dc'},
+  @{t='Paper-facing Claim'; s='bounded audit claim'; fill='#fff3bf'},
+  @{t='Downstream Required'; s='same-budget MMLU/GSM8K'; fill='#ffe8cc'}
+)
+$x=80; $y=205; $w=245; $h=118; $gap=60
+for ($i=0; $i -lt $nodes.Count; $i++) {
+  $xx = $x + $i*($w+$gap)
+  Draw-RoundRect $g $xx $y $w $h 14 $nodes[$i].fill '#5c6770' 2
+  Draw-CenteredText $g $nodes[$i].t ([System.Drawing.RectangleF]::new($xx+12, $y+22, $w-24, 32)) 16 'Bold'
+  Draw-CenteredText $g $nodes[$i].s ([System.Drawing.RectangleF]::new($xx+14, $y+64, $w-28, 34)) 12 'Regular' '#495057'
+  if ($i -lt $nodes.Count - 1) {
+    Draw-Arrow $g ($xx+$w+8) ($y+$h/2) ($xx+$w+$gap-8) ($y+$h/2) '#495057' 3
   }
 }
-Draw-Text $g 'Qwen2.5' 300 165 13 'Regular' '#1864ab'
-Draw-Text $g 'SmolLM2' 300 187 13 'Regular' '#2b8a3e'
-
-# Panel 2: budget gate.
-$p2 = @{ l=570; t=145; r=940; b=560 }
-Draw-Text $g 'B. Lagrangian budget gate' $p2.l 108 17 'Bold'
-Draw-Axes $g $p2.l $p2.t $p2.r $p2.b 'case index' 'budget use'
-$budget = @(0.999927,0.999927,0.999982,0.999980,0.999965,0.999967)
-$prev = $null
-for ($i=0; $i -lt $budget.Count; $i++) {
-  $x = Map-X ($i+1) 1 6 $p2.l $p2.r
-  $y = Map-Y $budget[$i] 0.9998 1.00005 $p2.b $p2.t
-  if ($prev) { Draw-Line $g $prev[0] $prev[1] $x $y '#862e9c' 4 }
-  Draw-Circle $g $x $y 7 '#862e9c'
-  $prev = @($x,$y)
-}
-$targetY = Map-Y 1.0 0.9998 1.00005 $p2.b $p2.t
-Draw-Line $g $p2.l $targetY $p2.r $targetY '#868e96' 2
-Draw-Text $g 'target = 1.0' ($p2.r - 115) ($targetY - 28) 12 'Regular' '#495057'
-
-# Panel 3: PPL smoke ratios.
-$p3 = @{ l=1060; t=145; r=1430; b=560 }
-Draw-Text $g 'C. Allocation PPL / INT4 PPL' $p3.l 108 17 'Bold'
-Draw-Axes $g $p3.l $p3.t $p3.r $p3.b 'smoke case' 'ratio'
-$ratios = @(0.7900,0.8538,0.7659,0.8517,0.8640)
-for ($i=0; $i -lt $ratios.Count; $i++) {
-  $x = Map-X ($i+1) 1 5 $p3.l $p3.r
-  $y = Map-Y $ratios[$i] 0.70 1.02 $p3.b $p3.t
-  Draw-Rect $g ($x-22) $y 44 ($p3.b-$y) '#339af0' '#ffffff' 1
-  Draw-CenteredText $g ($ratios[$i].ToString('0.00')) ([System.Drawing.RectangleF]::new($x-32, $y-28, 64, 22)) 11 'Regular' '#1c3d5a'
-}
-$oneY = Map-Y 1.0 0.70 1.02 $p3.b $p3.t
-Draw-Line $g $p3.l $oneY $p3.r $oneY '#868e96' 2
-Draw-Text $g 'uniform INT4' ($p3.r - 118) ($oneY - 28) 12 'Regular' '#495057'
-
-Draw-Text $g 'Claim boundary: these panels support controlled-system behavior, not full downstream CSI superiority.' 86 685 16 'Regular' '#495057'
-Save-Png $c 'constraint_effect_landscape.png'
+Draw-Rect $g 120 420 1060 76 '#f8f9fa' '#ced4da' 2
+Draw-CenteredText $g 'Boundary rule: diagnostic and local PPL evidence can justify an audit system, but only direct same-budget downstream rows justify method-superiority claims.' ([System.Drawing.RectangleF]::new(140, 430, 1020, 52)) 16 'Bold' '#343a40'
+Save-Png $c @('fig6_boundary.png', 'regime_dominance_map.png')

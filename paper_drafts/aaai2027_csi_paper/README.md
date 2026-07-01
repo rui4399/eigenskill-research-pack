@@ -55,28 +55,34 @@ review notes:
 
 - one-sentence novelty anchor: PTQ allocation as constrained
   calibration-driven optimization;
-- framework overview figure;
-- empirical dominance audit figure that separates measured cells from missing
-  downstream dominance cells;
-- failure-separation map for GPTQ/AWQ/SmoothQuant/OmniQuant versus CSI's
+- final six-figure audit narrative:
+  `fig1_pipeline.png`, `fig2_phase_transition.png`, `fig3_cross_model.png`,
+  `fig4_risk.png`, `fig5_failure.png`, and `fig6_boundary.png`;
+- claim-boundary figure that separates diagnostic evidence, gate-passing audit
+  claims, and missing same-budget downstream method-superiority rows;
+- failure-separation heatmap for GPTQ/AWQ/SmoothQuant/OmniQuant versus CSI's
   orthogonal allocation gate;
-- constraint-effect landscape linking calibration size, budget satisfaction,
-  and local PPL-smoke gains;
+- CSI-versus-allocation-risk proxy figure linking calibration stability to
+  allocation audit risk;
 - strict mechanism mapping from objective terms to ablation/failure hooks;
 - stress/failure section covering calibration collapse, constraint conflict,
   and gate misfire;
 - explicit boundary between existing INT2/INT3 scaffolds and missing downstream
   2/3-bit task-retention curves.
 
-The dominance figures are generated with:
+The final audit figures are generated with:
 
 ```powershell
 powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\make_dominance_figures.ps1
 ```
 
-They are intentionally written as audit figures. They must not be interpreted as
-a completed 2/3-bit SOTA dominance curve until the missing same-budget
-downstream rows are measured.
+They are intentionally written as audit figures. In particular,
+`fig4_risk.png` is an allocation-risk proxy derived from calibration stability
+and committed stress evidence, not a measured downstream error rate, and
+`fig5_failure.png` is a structured failure-mode interpretation rather than a
+measured accuracy table. None of these figures should be interpreted as a
+completed 2/3-bit SOTA dominance curve until the missing same-budget downstream
+rows are measured.
 
 The strongest next experiment is now a direct CSI-informed downstream-retention
 row:
