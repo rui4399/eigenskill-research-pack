@@ -32,16 +32,16 @@
 Mixed-precision post-training quantization (PTQ) often turns a small
 calibration set into a high-stakes allocation decision: which modules should
 receive scarce high-bit precision? We argue that a key failure mode is not only
-low final accuracy, but \emph{decision instability}: equally plausible
-calibration splits can induce materially different sensitivity rankings and
-therefore different allocations under the same bit budget. We introduce
-Calibration Split Instability (CSI) as a pre-allocation constraint layer and
-decision-boundary estimator, rather than as a standalone metric or a new
-quantization backend. CSI audits seed-pair agreement using rank correlation,
-top-$k$ overlap, positive-set overlap, bootstrap trend tests, and
+low final accuracy, but behavior associated with \emph{decision instability}:
+equally plausible calibration splits can induce materially different
+sensitivity rankings and therefore different allocations under the same bit
+budget. Calibration Split Instability (CSI) provides a signal for estimating
+calibration-induced instability in PTQ systems, rather than a standalone metric
+or a new quantization backend. CSI audits seed-pair agreement using rank
+correlation, top-$k$ overlap, positive-set overlap, bootstrap trend tests, and
 permutation-null tests before a calibration-derived allocation is promoted from
-diagnostic evidence to a method claim. Across Qwen2.5 same-prompt-pool
-artifacts, increasing calibration size improves stability: for Qwen2.5-1.5B,
+diagnostic evidence to a stronger method claim. Across Qwen2.5 same-prompt-pool
+artifacts, increasing calibration size correlates with higher stability: for Qwen2.5-1.5B,
 mean Spearman rises from 0.1410 at $n=2$ to 0.4918 at $n=8$, with positive
 bootstrap gain intervals and Holm-adjusted permutation $p \leq 0.00015$. A
 stricter second-pool SmolLM2-360M replication shows the same trend from $n=4$
@@ -52,9 +52,9 @@ full Qwen2.5-1.5B downstream benchmarks: on MMLU (14,042 examples),
 FP16/AutoAWQ/GPTQModel reach 0.5864/0.5648/0.5362, and on GSM8K (1,319
 examples), 0.0811/0.0788/0.0728. Local GPU fake-quant smokes exercise the
 CSI/consensus allocation path without upgrading it to a SOTA claim. The result
-is a claim-boundary system: detect calibration regime shift, classify
-allocations as admissible or under-supported, and route each claim to the
-evidence required before downstream superiority can be asserted.
+is an audit framework that characterizes calibration regime shift, provides
+indication of allocation risk, and routes each claim to the evidence required
+before stronger downstream claims can be asserted.
 \end{abstract}
 \keywords{post-training quantization, calibration robustness, mixed precision, large language models, reproducibility}
 \vspace{0.7em}
@@ -68,23 +68,23 @@ however, compression quality depends on a discrete decision made before the
 final task score is known: which modules deserve scarce high-bit budget? Uniform
 quantization avoids that decision by treating every module equally, but
 calibration-driven allocation must infer a module ordering from a small prompt
-sample. When the ordering changes under another plausible split, the failure is
-not merely a noisy statistic; it is an unstable system decision under the same
-resource constraint.
+sample. When the ordering changes under another plausible split, PTQ failure
+can be viewed as being associated with decision instability under calibration
+shift and the same resource constraint.
 
-This makes calibration instability a necessity problem for any method whose
+This makes calibration instability a reliability concern for any method whose
 claim depends on \emph{which} layers, blocks, or channels are protected.
-Existing PTQ backends can be strong while still leaving this decision boundary
-undefined: they may optimize reconstruction, rescale activations, learn
-transforms, or protect salient channels, but they do not necessarily answer
-whether the upstream calibration-derived allocation would be the same under a
-nearby calibration draw. Our novelty anchor is therefore the following:
-\emph{we treat calibration-driven PTQ allocation as a constrained decision
-system whose claims are gated by stability, retention, and resource
-constraints}. A low-bit allocation is not justified merely because one
-calibration split yields a plausible sensitivity order. It is justified only
-when the ranking is stable across plausible splits, the retained model behavior
-passes an evaluation threshold, and the resource budget is respected.
+Existing PTQ backends can be strong while still not explicitly modeling
+instability boundaries in calibration-driven allocation: they may optimize
+reconstruction, rescale activations, learn transforms, or protect salient
+channels, but they do not necessarily characterize whether the upstream
+calibration-derived allocation would be similar under a nearby calibration draw.
+Our novelty anchor is therefore the following: \emph{we treat
+calibration-driven PTQ allocation as an auditable process whose claims are
+checked against stability, retention, and resource evidence}. A low-bit
+allocation is more credible when the ranking is stable across plausible splits,
+the retained model behavior passes an evaluation threshold, and the resource
+budget is respected.
 
 Many calibration-driven pipelines answer this question by estimating module
 sensitivity on a small prompt set, ranking modules, and protecting those that
@@ -95,14 +95,14 @@ principled while encoding sampling noise. Such instability matters even when
 the final quantization backend is strong: GPTQ, AWQ, SmoothQuant, OmniQuant,
 QuaRot, and SpinQuant define powerful ways to transform or quantize weights and
 activations \citep{frantar2023gptq,lin2024awq,xiao2023smoothquant,shao2024omniquant,ashkboos2024quarot,liu2024spinquant},
-but a mixed-precision allocation layer still needs evidence that its
-calibration-derived ranking is stable enough to trust.
+but a mixed-precision allocation layer still benefits from evidence that its
+calibration-derived ranking is consistent enough to support stronger claims.
 
-This paper studies \emph{calibration split instability} (CSI) as that missing
-decision boundary. CSI is not a new quantization backend and not a direct claim
-of state-of-the-art PTQ quality. It is a decision operator for asking whether
-small calibration splits support robust module-sensitivity decisions before
-those decisions are used to allocate precision. CSI is deliberately positioned
+This paper studies \emph{calibration split instability} (CSI) as such an
+instability signal. CSI is not a new quantization backend and not a direct claim
+of state-of-the-art PTQ quality. It is a scoring function used to quantify
+calibration-induced instability before calibration-derived decisions are used to
+allocate precision. CSI is deliberately positioned
 between calibration-data studies and final task-retention benchmarking:
 calibration data can affect compression outcomes \citep{calibrationimpact2023},
 and benchmark toolkits emphasize standardized evaluation \citep{llmc2024}; CSI
@@ -112,24 +112,24 @@ outcomes difficult to interpret.
 \begin{figure}[t]
 \centering
 \includegraphics[width=\linewidth]{figures/fig1_pipeline.png}
-\caption{CSI decision feedback loop. Calibration splits feed a CSI estimator,
-which maps evidence to a decision state before an allocation policy is executed.
-Downstream outcomes do not retroactively justify unstable calibration evidence;
-they update the claim boundary and future thresholds.}
+\caption{CSI audit loop. Calibration splits feed an instability score that
+informs an allocation policy before stronger claims are made. Downstream
+outcomes do not retroactively prove calibration stability; they update the claim
+boundary and future thresholds.}
 \label{fig:framework}
 \end{figure}
 
 \paragraph{Contributions.}
-We make three claims. First, we identify calibration regime shift as a
-fundamental instability boundary for mixed-precision PTQ allocation: below the
-boundary, a single calibration ranking can encode sampling noise while still
-appearing methodologically precise. Second, we propose CSI as a decision
-operator that estimates this boundary and maps evidence into three states:
-reject, audit-only, or eligible for downstream method validation. Third, we
-establish a failure-space closure for the current evidence: native PTQ backends,
-CSI allocation smokes, low-bit scaffolds, and failure heatmaps are organized by
-what they can and cannot certify, preventing metric evidence from being
-misreported as downstream superiority.
+We make three claims. First, we characterize calibration regime shift as an
+instability pattern associated with mixed-precision PTQ allocation: at small
+calibration sizes, a single calibration ranking can encode sampling noise while
+still appearing methodologically precise. Second, we propose CSI as a scoring
+function that provides indication of this instability and supports operational
+states such as reject, audit-only, or downstream-validation candidate. Third, we
+organize the current evidence into a failure-space audit: native PTQ backends,
+CSI allocation smokes, low-bit scaffolds, and failure heatmaps are separated by
+what they can and cannot support, reducing the risk that metric evidence is
+misreported as downstream quality evidence.
 
 \section{Problem Setup}
 
@@ -162,60 +162,42 @@ confidence intervals over seed pairs. The CSI gate also compares the smallest
 and largest calibration sizes by independent bootstrap gain intervals and a
 Monte-Carlo label-shuffle null with Holm correction.
 
-\paragraph{Decision necessity.}
-The statistic above is necessary only for a specific class of claims: claims
-that use calibration to choose a non-uniform allocation. If an allocation
-ignores calibration, CSI may be irrelevant; if a method uses calibration only
-inside a backend reconstruction objective, CSI audits only the external
-allocation or protection decision. This restriction is important. It makes CSI
-a decision-boundary estimator for calibration-derived allocation, not a
-universal quality metric for every PTQ algorithm.
+\paragraph{Intended use.}
+The statistic above is most relevant for claims that use calibration to choose a
+non-uniform allocation. If an allocation ignores calibration, CSI may be less
+informative; if a method uses calibration only inside a backend reconstruction
+objective, CSI audits only the external allocation or protection decision. This
+restriction makes CSI a calibration-instability signal for allocation studies,
+not a universal quality metric for every PTQ algorithm.
 
-\paragraph{Minimal audit statistic.}
-Within this decision class, CSI is not meant to be an arbitrary heuristic. Let a
-calibration-driven allocation policy depend on three observable decisions: the
-relative module order, the protected top-$k$ set, and the sign of measured
-sensitivity. The CSI tuple $(\rho,\Jacc^k,\Jacc^{pos})$ is the minimal
-sufficient \emph{audit} statistic for calibration-induced allocation
-instability in this policy class. It is sufficient because the policy sees no
-other calibration information before it chooses which modules to protect. It is
-minimal because no strict subset can certify all allocation-changing
-perturbations: a pure rank statistic can report moderate agreement while the
-protected top-$k$ set changes; a top-$k$ overlap can hide sign flips among
-marginal modules; and a sign-only statistic can miss large order changes inside
-the protected budget. This claim is about decision instability, not about final
-task quality, and is the reason CSI is used before allocation rather than as a
-post-hoc descriptive score.
+\paragraph{Composite audit signal.}
+Within this decision class, CSI is a composite scoring function rather than a
+theoretically exact boundary estimator. A calibration-driven allocation policy
+often depends on three observable decisions: the relative module order, the
+protected top-$k$ set, and the sign of measured sensitivity. Reporting
+$(\rho,\Jacc^k,\Jacc^{pos})$ characterizes these complementary views: rank
+agreement, protected-set overlap, and sign consistency. The tuple therefore
+indicates allocation-changing perturbations without claiming complete detection
+or final task conclusions.
 
 \paragraph{Baseline class framing.}
-The comparison classes in this paper are not interchangeable. GPTQ, AWQ,
-SmoothQuant, OmniQuant, QuaRot, and SpinQuant are quantization or
-transformation backends: they define how weights and activations are represented
-once a policy is chosen. Uniform quantization is a no-allocation baseline:
-$a_i$ is constant and the ranking is ignored. Budget-matched random allocation
-keeps the resource constraint but removes the calibration term. A single-split
-calibration ranking is the degenerate decision layer $S=1$ with no cross-split
-constraint. CSI addresses the remaining common class: the pipeline uses
-calibration to decide \emph{which} modules to protect, so the
-calibration-derived order must be audited before the resulting allocation is
-treated as a method contribution. This framing prevents an unfair reading in
-which CSI is asked to replace GPTQ or AWQ; it is a decision layer that can sit
-above, or be reported alongside, native PTQ backends.
+The comparison classes are not interchangeable. GPTQ, AWQ, SmoothQuant,
+OmniQuant, QuaRot, and SpinQuant are backend families; uniform quantization is a
+no-allocation baseline; and budget-matched random allocation removes the
+calibration term. CSI addresses the remaining class: pipelines that use
+calibration to decide \emph{which} modules to protect. It is therefore reported
+as an instability signal alongside native PTQ backends, not as their
+replacement.
 
-\section{CSI as a Decision Operator}
+\section{CSI as an Instability Score}
 
-CSI maps calibration evidence to an allocation decision state. The simplest
-operator is
-\begin{equation}
-\mathcal{D}_{CSI}(a;C,D_{val},M)\in
-\{\textsc{Reject},\textsc{AuditOnly},\textsc{Validate}\}.
-\end{equation}
-The state \textsc{Reject} means the calibration ranking is too unstable to use;
-\textsc{AuditOnly} means the ranking is stable enough to report as an
-allocation audit but still lacks direct downstream retention; and
-\textsc{Validate} means the allocation is eligible for a method-superiority
-claim after fixed-budget downstream evaluation. The scalar CSI score is only
-one input to this operator, not the contribution by itself.
+CSI summarizes calibration evidence as an instability score that can inform
+operational decisions. We use three non-exclusive reporting states:
+\textsc{Reject} for evidence with high measured instability, \textsc{AuditOnly}
+for evidence that supports a bounded audit claim but lacks direct downstream
+retention, and \textsc{Validate} for candidates that have also passed
+fixed-budget downstream evaluation. These states are implementation choices for
+claim management, not theoretically exact stability regions.
 
 The stability part of the operator can be used as a hard gate or as a soft
 allocation risk. Let
@@ -233,7 +215,7 @@ $p_s(a)=\sigma(\gamma_s(\mathcal{G}_{stab}(a;C)-\tau_s))$ as a soft
 probability that the stability gate accepts the allocation. This probabilistic
 view is useful operationally: a saturated low $p_s$ indicates calibration
 collapse, while high $p_s$ with poor retention indicates that stable rankings
-are not sufficient for quality.
+are not enough for quality.
 The full constrained calibration objective can be written as
 \begin{align}
 \min_{a\in\mathcal{B}^L}\quad
@@ -247,38 +229,32 @@ The full constrained calibration objective can be written as
 &\sum_i \mathrm{mem}(m_i,b_i)\leq M,\quad
 \mathcal{G}_{ret}(a;D_{val})\geq\tau_r.
 \end{align}
-This objective separates the same three outcomes as $\mathcal{D}_{CSI}$. If the
-stability gate fails, the calibration evidence is rejected. If the stability
-gate passes but direct retention is missing, the evidence remains audit-only.
-If both pass under a fixed budget, the allocation can be validated as a method
-claim. The current paper establishes the first two parts of this pipeline at
+This objective separates evidence into the same practical reporting states. If
+the stability score is weak, the calibration evidence is treated as
+under-supported. If the stability score is stronger but direct retention is
+missing, the evidence remains audit-only. If both stability and retention pass
+under a fixed budget, the allocation can be discussed as a downstream-validated
+candidate. The current paper establishes the first two parts of this pipeline at
 scale and reports matched native-PTQ downstream retention rows. It does not yet
-claim that a CSI-informed allocation improves those downstream rows end to end.
+claim that a CSI-informed allocation changes those downstream rows end to end.
 
 \paragraph{Propagation argument.}
-CSI matters because calibration instability propagates through the allocation
+CSI matters because calibration instability can propagate through the allocation
 map. Let $\pi_s$ be the module order induced by split $C_s$ and let
-$A(\pi_s,M)$ be the set of modules protected under budget $M$. If calibration
-size decreases, rank disagreement can increase; when rank disagreement
-increases, $A(\pi_s,M)$ and $A(\pi_t,M)$ can differ even though the budget is
-identical; when the protected set differs, the quantized model changes in the
-modules whose precision is protected or degraded; and those module-level
-changes create retention risk that must be measured downstream. In short,
-calibration size $\downarrow$ can imply rank instability $\uparrow$, allocation
+$A(\pi_s,M)$ be the set of modules protected under budget $M$. Low split
+agreement can make $A(\pi_s,M)$ and $A(\pi_t,M)$ differ under the same budget,
+changing which modules are protected or degraded. Thus calibration size
+$\downarrow$ can be associated with rank instability $\uparrow$, allocation
 variance $\uparrow$, and downstream-risk exposure $\uparrow$. High CSI does not
-prove task success; it blocks this propagation path by showing that nearby
-calibration draws induce compatible allocation decisions. Low CSI, in contrast,
-is actionable: rerun calibration, enlarge the prompt pool, fall back to a
-uniform or backend-native policy, or report only an audit failure.
+establish task success; low CSI suggests rerunning calibration, enlarging the
+prompt pool, falling back to a uniform/backend-native policy, or reporting only
+an audit failure.
 
-\paragraph{Finite descent.}
-Because the allocation space $\mathcal{B}^L$ is finite, any search procedure
-that accepts a candidate move $a\to a'$ only when a soft objective decreases by
-at least $\epsilon>0$ must terminate in finitely many accepted moves. At
-termination, no neighbor improves the objective by $\epsilon$, so the returned
-allocation is an $\epsilon$-local optimum over the chosen move neighborhood.
-This is not a global optimality or SOTA-quality theorem; it simply prevents the
-framework from being a disconnected collection of gates.
+\paragraph{Monotonic stabilization.}
+Because $\mathcal{B}^L$ is finite, a search that accepts only improving moves
+exhibits monotonic behavior under bounded updates and settles into a local
+stable region for the chosen neighborhood. This is a stabilization observation,
+not a SOTA-quality theorem.
 
 \section{Experimental Protocol}
 
@@ -314,16 +290,16 @@ and a claim-matrix boundary. Results outside that boundary are discussed only
 as future work or local feasibility evidence.
 
 \paragraph{Detect--classify--route protocol.}
-Following the claim boundary, experiments are organized around the decision
-operator rather than around a flat leaderboard. The first layer \emph{detects}
+Following the claim boundary, experiments are organized around the instability
+score rather than around a flat leaderboard. The first layer \emph{detects}
 calibration regime shift by measuring how rank and set agreement change with
-calibration size. The second layer \emph{classifies} evidence into
-\textsc{Reject}, \textsc{AuditOnly}, or \textsc{Validate}-eligible states using
-the CSI gate, budget checks, and failure hooks. The third layer \emph{routes}
-claims to the evidence they require: native full-benchmark PTQ rows test
-downstream retention for backend baselines, local allocation smokes test the
-allocation path, and extreme-bit scaffolds mark regimes that still require
-direct same-budget downstream evaluation.
+calibration size. The second layer \emph{classifies} evidence into practical
+reporting states such as \textsc{Reject}, \textsc{AuditOnly}, or
+\textsc{Validate}-candidate using the CSI score, budget checks, and failure
+hooks. The third layer \emph{routes} claims to the evidence they require:
+native full-benchmark PTQ rows test downstream retention for backend baselines,
+local allocation smokes test the allocation path, and extreme-bit scaffolds mark
+regimes that still require direct same-budget downstream evaluation.
 
 \paragraph{Decision-system audit.}
 To make the empirical story falsifiable, a claim is promoted only if the
@@ -336,54 +312,52 @@ allocation claim is unsafe to promote, while high agreement only permits the
 next validation step.
 
 \paragraph{Policy feedback loop.}
-The decision loop in Figure~\ref{fig:framework} is actionable by construction.
-The input is a calibration prompt pool; CSI estimates whether the induced
-ranking is stable; the decision state chooses an action
-(\textsc{Reject}, \textsc{AuditOnly}, or \textsc{Validate}); the allocation
-policy is executed only for admissible states; and downstream outcomes feed
-back into thresholds, claim boundaries, or rerun decisions. This loop is the
-system-level difference between CSI and a post-hoc correlation plot.
+In Figure~\ref{fig:framework}, a calibration pool produces a CSI score, the
+score suggests a reporting state, the allocation policy is executed only for
+better supported states, and downstream outcomes update thresholds, claim maps,
+or rerun decisions.
 
 \paragraph{Mechanism chain.}
-The intended causal chain is not ``more components give better numbers.'' It is
-\emph{calibration sampling} $\rightarrow$ \emph{ranking stability}
-$\rightarrow$ \emph{decision-state classification} $\rightarrow$
+The intended explanatory chain is not ``more components give better numbers.''
+It is \emph{calibration sampling} $\rightarrow$ \emph{ranking stability}
+$\rightarrow$ \emph{reporting-state classification} $\rightarrow$
 \emph{retention under a fixed budget}. Each arrow has a falsification hook:
-seed-pair CSI tests the first arrow, the decision operator tests the second,
+seed-pair CSI tests the first arrow, the instability score informs the second,
 fake-quant PPL stress tests whether an allocation path is plausible, and full
 MMLU/GSM8K rows test final retention for native PTQ baselines. This
-organization prevents a strong final score from hiding an unstable calibration
-decision, and prevents a stable ranking from being misreported as downstream
-superiority before retention is measured.
+organization prevents a strong final score from hiding unstable calibration
+evidence, and prevents a stable ranking from being misreported as downstream
+quality evidence before retention is measured.
 
 \section{Results}
 
 \subsection{Claim Boundary and Evidence Promotion}
 
-Figure~\ref{fig:boundary} states the decision boundary used throughout the
-paper. The boundary operationalizes $\mathcal{D}_{CSI}$: unstable calibration
-rankings map to \textsc{Reject}; stable rankings without direct task retention
-map to \textsc{AuditOnly}; and only fixed-budget downstream retention can move a
-candidate into \textsc{Validate}. Thus diagnostic evidence can establish that
-calibration rankings are stable or unstable, but it cannot by itself establish
-that a downstream task score will improve. This framing is deliberately
-stricter than a standard result table because it exposes the exact point where
-an attractive allocation result remains under-supported.
+Figure~\ref{fig:boundary} states the claim-promotion map used throughout the
+paper. The map interprets CSI evidence in practical reporting states: unstable
+calibration rankings suggest \textsc{Reject}; more stable rankings without
+direct task retention suggest \textsc{AuditOnly}; and fixed-budget downstream
+retention can move a candidate into a \textsc{Validate} report. Thus diagnostic
+evidence can characterize calibration stability, but it cannot by itself
+establish that a downstream task score will improve. This framing is
+deliberately stricter than a standard result table because it exposes the point
+where an attractive allocation result remains under-supported.
 
 \begin{figure*}[t]
 \centering
 \includegraphics[width=\linewidth]{figures/fig6_boundary.png}
-\caption{CSI decision boundary for reliable allocation claims. The framework
-maps evidence into \textsc{Reject}, \textsc{AuditOnly}, and
-\textsc{Validate}-eligible states. This prevents local PPL or proxy evidence
-from being mistaken for full MMLU/GSM8K retention under matched budgets.}
+\caption{CSI claim-promotion map for allocation evidence. The framework uses
+\textsc{Reject}, \textsc{AuditOnly}, and \textsc{Validate} as practical
+reporting states rather than exact theoretical regions. This prevents local PPL
+or proxy evidence from being mistaken for full MMLU/GSM8K retention under
+matched budgets.}
 \label{fig:boundary}
 \end{figure*}
 
-\subsection{Calibration Size Improves CSI Stability}
+\subsection{Calibration Size Correlates with CSI Stability}
 
 Table~\ref{tab:qwen15} shows the Qwen2.5-1.5B same-prompt-pool curve. All three
-metrics increase monotonically from $n=2$ to $n=8$. Mean Spearman improves by
+metrics increase monotonically from $n=2$ to $n=8$. Mean Spearman changes by
 0.3508, top-20 Jaccard by 0.1797, and positive-set Jaccard by 0.1747. The
 trend-significance gate reports positive full-range bootstrap gain intervals
 for all metrics; the null-permutation gate reports maximum Holm-adjusted
@@ -410,7 +384,7 @@ $n$ & Spearman & Top-20 Jaccard & Positive Jaccard \\
 \centering
 \includegraphics[width=\linewidth]{figures/fig2_phase_transition.png}
 \caption{Phase-transition behavior of CSI stability metrics as calibration size
-increases on Qwen2.5-1.5B. All three metrics improve from $n=2$ to $n=8$; the
+increases on Qwen2.5-1.5B. All three metrics rise from $n=2$ to $n=8$; the
 $n=4$ region marks the audit transition where rankings begin moving out of the
 low-agreement regime.}
 \label{fig:phase-transition}
@@ -427,7 +401,7 @@ gap.
 \includegraphics[width=\linewidth]{figures/fig3_cross_model.png}
 \caption{Cross-model CSI robustness across Qwen2.5 scales and a second-pool
 SmolLM2 replication. The curves are not claimed to be universal, but they show
-that increasing calibration size improves Spearman stability across the current
+that increasing calibration size correlates with higher Spearman stability across the current
 model and prompt-pool evidence lines.}
 \label{fig:cross-model}
 \end{figure}
@@ -488,7 +462,7 @@ GPTQModel on complete MMLU and GSM8K fixtures rather than 100-example slices.
 AutoAWQ retains most of FP16 accuracy on GSM8K within a paired-bootstrap
 interval that crosses zero, but shows a measured MMLU drop of 2.16 points. The
 GPTQModel row drops more on MMLU and slightly on GSM8K. These rows do not show
-that CSI allocation improves final quality, but they establish a stronger
+that CSI allocation raises final quality, but they provide a broader
 native-baseline confrontation than a calibration-only or subset-only study.
 
 \begin{table*}[t]
@@ -519,8 +493,8 @@ Qwen2.5-0.5B and Qwen2.5-1.5B. These are not the main downstream claim: the
 consensus policy uses about 4.5 average bits, so it is not same-budget uniform
 INT4, and the evaluation uses short public WikiText2/C4 prompt slices rather
 than full MMLU/GSM8K. Nevertheless, it exercises the actual allocation path.
-Across four 0.5B local GPU PPL slices, consensus 4-to-8 allocation improves
-over uniform INT4 in all four cases, with allocation/uniform-INT4 PPL ratios
+Across four 0.5B local GPU PPL slices, consensus 4-to-8 allocation gives lower
+PPL than uniform INT4 in all four cases, with allocation/uniform-INT4 PPL ratios
 between 0.7900 and 0.8538. A split-config 1.5B WikiText2 single-slice run shows
 the same direction: FP16 10.82, uniform INT4 15.63, and CSI/consensus allocation
 13.51 PPL.
@@ -548,11 +522,11 @@ Model & Slice & FP16 & INT4 & INT3 & CSI alloc. \\
 \begin{figure}[t]
 \centering
 \includegraphics[width=\linewidth]{figures/fig4_risk.png}
-\caption{Instability propagation chain and allocation-risk proxy. Calibration
-split noise can propagate into rank instability, allocation variance, and
-retention risk. CSI acts as a pre-allocation constraint: low split agreement
-blocks claim promotion, while high agreement only permits downstream
-validation.}
+\caption{Instability propagation schematic and allocation-risk proxy.
+Calibration split noise can propagate into rank instability, allocation
+variance, and retention risk. CSI provides a pre-allocation signal: low split
+agreement suggests caution, while high agreement indicates that downstream
+validation remains the next required step.}
 \label{fig:risk}
 \end{figure}
 
@@ -570,8 +544,8 @@ claim.
 
 Table~\ref{tab:ablation} maps objective components to the evidence that would
 fail or weaken if the component were removed. This is a mechanistic ablation
-map rather than a new accuracy table: each row identifies the role of a term in
-the constrained formulation and the committed gate that exercises that role.
+map rather than a new accuracy table: each row lists the role of a term in the
+constrained formulation and the committed gate that exercises that role.
 
 \begin{table}[t]
 \centering
@@ -623,7 +597,7 @@ Third, \emph{gate misfire}: in a later random-seed audit, one best random seed
 beats the target on a WikiText2 slice by 1.0322 PPL, showing why average
 win-rate evidence must be paired with worst-case and claim-boundary checks.
 These are not presented as final 2-bit/3-bit task results; they are the current
-stress evidence that determines what must be rerun on larger hardware before a
+stress evidence that indicates what should be rerun on larger hardware before a
 stronger AAAI claim.
 
 \subsection{Guarded RTX3090 Feasibility Rows}
@@ -666,10 +640,11 @@ OmniQuant learns clipping and equivalent transforms under calibration samples
 \citep{shao2024omniquant}. These are backend families: they answer how to
 quantize once a representation or protection policy is chosen. CSI answers a
 different question before that policy is executed: whether a
-calibration-derived allocation or protection decision is stable enough to be
-trusted. Our full Qwen2.5-1.5B rows therefore confront AutoAWQ and GPTQModel as
-native PTQ baselines, while CSI is framed as a pre-allocation constraint layer
-that can gate such backends rather than as a drop-in replacement for them.
+calibration-derived allocation or protection decision shows signs of
+instability. Our full Qwen2.5-1.5B rows therefore confront AutoAWQ and GPTQModel
+as native PTQ baselines, while CSI is framed as a pre-allocation stability
+signal that can be used with such backends rather than as a drop-in replacement
+for them.
 
 \begin{table}[t]
 \centering
@@ -685,7 +660,7 @@ GPTQ & reconstruction backend & split drift \\
 AWQ & salient-channel backend & ranking collapse \\
 SmoothQuant & outlier-scaling backend & allocation drift \\
 OmniQuant & learned-transform backend & gate conflict \\
-CSI & decision boundary & retention gap \\
+CSI & stability signal & retention gap \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -700,8 +675,8 @@ stable across plausible prompt samples.
 Calibration data has been shown to affect post-training compression outcomes
 \citep{calibrationimpact2023}. Benchmarking work such as LLMC argues for
 standardized quantization settings \citep{llmc2024}. CSI contributes a narrower
-pre-allocation audit: before arguing about final task scores, test whether the
-module ranking used for allocation is stable.
+pre-allocation audit signal: before arguing about final task scores, characterize
+whether the module ranking used for allocation appears stable.
 
 \section{Limitations and Falsification}
 
@@ -710,9 +685,9 @@ pipeline plus matched native-PTQ downstream retention on full Qwen2.5-1.5B
 MMLU/GSM8K fixtures. Local GPU fake-quant smokes now provide directional
 allocation-path evidence on Qwen2.5-0.5B and a Qwen2.5-1.5B single-slice run.
 We therefore make a system-level audit claim rather than a broad PTQ SOTA
-claim: CSI identifies when calibration-derived allocation evidence is stable
-enough to trust, and it marks the exact evidence still needed before claiming
-end-to-end downstream superiority.
+claim: CSI provides indication of whether calibration-derived allocation
+evidence appears stable, and it marks the evidence still needed before making
+stronger downstream claims.
 
 Before submission, the most important missing row is a direct CSI-informed
 downstream retention stress test in the 2--3 bit regime. The current artifacts
@@ -721,7 +696,7 @@ plus uniform INT3 and synthetic INT2/INT3 distortion scaffolds, but they do not
 yet contain a full task-retention curve over 2, 3, 4, and 8 bits for FP16,
 uniform, native PTQ, and CSI-informed allocations. That experiment should be
 run before upgrading the paper from a robustness-plus-retention claim to a
-method-superiority claim.
+method-quality claim.
 
 Several results could weaken the story. A second public prompt pool could fail
 to reproduce the stability trend. Another model family could show stable
@@ -732,19 +707,22 @@ implementation could make identical allocation decisions across calibration
 splits. Finally, a simpler budget-matched heuristic could beat CSI-informed
 allocation once direct retention rows are available.
 
+CSI should be interpreted as an empirical signal rather than a theoretically
+exact boundary estimator.
+
 \section{Conclusion}
 
 This paper isolates calibration split instability as a concrete failure mode in
 mixed-precision LLM quantization. Small calibration samples can produce
 unstable sensitivity rankings, and the audited artifacts show that increasing
-calibration size improves rank and set agreement under two evidence lines.
-CSI turns this observation into a reproducible decision operator: if the
-calibration ranking is unstable, the correct output is \textsc{Reject}; if it
-is stable but lacks direct retention, the correct output is \textsc{AuditOnly};
-and only fixed-budget downstream retention can justify \textsc{Validate}. Full
-Qwen2.5-1.5B MMLU/GSM8K rows show how this operator can be paired with native
-PTQ retention evidence rather than left as a standalone diagnostic. The
-immediate next step is direct downstream retention testing of CSI-informed
+calibration size correlates with improved rank and set agreement under two
+evidence lines. CSI provides a practical signal for improving robustness in PTQ
+decision processes: highly unstable calibration rankings suggest caution,
+stable rankings without direct retention support only audit-level reporting,
+and fixed-budget downstream retention remains required for stronger method
+claims. Full Qwen2.5-1.5B MMLU/GSM8K rows show how this signal can be paired
+with native PTQ retention evidence rather than left as a standalone diagnostic.
+The immediate next step is direct downstream retention testing of CSI-informed
 allocations against strong native PTQ and calibration-aware baselines under
 matched memory budgets.
 

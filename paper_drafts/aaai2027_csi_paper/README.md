@@ -28,7 +28,7 @@ paper. It does not claim:
 - production inference acceleration;
 - mobile deployment;
 - universal scaling laws;
-- downstream superiority of CSI-derived allocations.
+- downstream quality gains from CSI-derived allocations.
 
 The current revision does include full downstream native-PTQ retention evidence
 for Qwen2.5-1.5B:
@@ -53,28 +53,28 @@ uniform INT4 comparisons.
 The current revision adds the reviewer-critical AAAI structure requested in the
 review notes:
 
-- one-sentence novelty anchor: PTQ allocation as constrained
-  calibration-driven decision system;
-- CSI reframed as a decision-boundary operator with `Reject`, `AuditOnly`, and
-  `Validate` states, not as a standalone metric;
-- minimal sufficient audit-statistic argument for the policy class that depends
-  on rank order, protected top-k set, and positive-sensitivity set; no strict
-  subset certifies all allocation-changing perturbations;
-- policy-driven feedback loop: calibration -> CSI -> decision state ->
+- one-sentence novelty anchor: PTQ allocation as an auditable
+  calibration-driven process;
+- CSI reframed as an empirical instability score with `Reject`, `AuditOnly`,
+  and `Validate` used as practical reporting states, not exact theoretical
+  regions;
+- composite audit-signal argument for using rank order, protected top-k set, and
+  positive-sensitivity set together without claiming theoretical completeness;
+- policy-driven audit loop: calibration -> CSI score -> reporting state ->
   allocation action -> downstream check -> threshold/claim-boundary update;
-- propagation argument explaining how calibration instability becomes
-  allocation variance and then retention risk;
-- Figure 4 rewritten as the causal propagation chain plus allocation-risk proxy;
-- CSI positioned as a pre-allocation constraint layer rather than a post-hoc
-  filter or backend replacement;
+- propagation argument explaining how calibration instability can be associated
+  with allocation variance and retention risk;
+- Figure 4 rewritten as a propagation schematic plus allocation-risk proxy;
+- CSI positioned as a pre-allocation stability signal rather than a post-hoc
+  filter, exact boundary estimator, or backend replacement;
 - baseline class framing: GPTQ/AWQ/SmoothQuant/OmniQuant are native quantization
-  backends, while CSI is an allocation decision layer that can audit such
+  backends, while CSI is a stability signal that can be reported alongside such
   backends rather than replace them;
 - final six-figure audit narrative:
   `fig1_pipeline.png`, `fig2_phase_transition.png`, `fig3_cross_model.png`,
   `fig4_risk.png`, `fig5_failure.png`, and `fig6_boundary.png`;
-- claim-boundary figure that separates diagnostic evidence, gate-passing audit
-  claims, and missing same-budget downstream method-superiority rows;
+- claim-promotion figure that separates diagnostic evidence, gate-passing audit
+  claims, and missing same-budget downstream method-quality rows;
 - failure-separation heatmap for GPTQ/AWQ/SmoothQuant/OmniQuant versus CSI's
   orthogonal allocation gate;
 - CSI-versus-allocation-risk proxy figure linking calibration stability to

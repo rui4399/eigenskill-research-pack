@@ -99,14 +99,15 @@ The current paper-facing narrative uses six audit-system figures:
   `paper_drafts/aaai2027_csi_paper/figures/fig2_phase_transition.png`
 - Figure 3, cross-model CSI robustness:
   `paper_drafts/aaai2027_csi_paper/figures/fig3_cross_model.png`
-- Figure 4, CSI stability versus allocation-risk proxy:
+- Figure 4, instability propagation schematic plus allocation-risk proxy:
   `paper_drafts/aaai2027_csi_paper/figures/fig4_risk.png`
-  This is an audit-risk proxy derived from calibration instability and
-  committed stress evidence, not a measured downstream error rate.
+  This combines a qualitative propagation schematic with an audit-risk proxy
+  derived from calibration instability and committed stress evidence; it is not
+  a measured downstream error rate.
 - Figure 5, failure-mode heatmap:
   `paper_drafts/aaai2027_csi_paper/figures/fig5_failure.png`
   This is a structured interpretation figure, not a measured accuracy table.
-- Figure 6, claim/decision boundary:
+- Figure 6, claim-promotion map:
   `paper_drafts/aaai2027_csi_paper/figures/fig6_boundary.png`
 
 Compatibility aliases are also emitted for earlier drafts:
@@ -122,9 +123,9 @@ Compatibility aliases are also emitted for earlier drafts:
   0.5B and 1.5B GPU fake-quant smokes are directional evidence only and should
   not be promoted to the main Table 4 claim without broader task/PPL coverage
   and matched-budget controls.
-- The claim-boundary map is therefore an audit map, not a dominance claim. It
-  should not be rewritten as "Ours dominates at 2/3-bit" until the missing cells
-  have direct same-budget downstream artifacts.
+- The claim-promotion map is therefore an audit map, not a dominance claim. It
+  should not be rewritten as a 2/3-bit method-quality claim until the missing
+  cells have direct same-budget downstream artifacts.
 
 ## Draft sources integrated
 

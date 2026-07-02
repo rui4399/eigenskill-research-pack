@@ -198,7 +198,7 @@ Save-Png $c @('fig2_phase_transition.png', 'csi_stability_curves.png')
 $c = New-Canvas 980 700
 $g = $c.Graphics
 Draw-Text $g 'Cross-Model CSI Robustness' 44 28 28 'Bold'
-Draw-Text $g 'Spearman stability improves across Qwen2.5 scales and a second-pool SmolLM2 replication' 46 68 15 'Regular' '#555f6b'
+Draw-Text $g 'Spearman stability rises across Qwen2.5 scales and a second-pool SmolLM2 replication' 46 68 15 'Regular' '#555f6b'
 $left=110; $top=130; $right=900; $bottom=585
 Draw-Axes $g $left $top $right $bottom 'calibration size n' 'Spearman'
 $series = @(
@@ -298,10 +298,10 @@ for ($r=0; $r -lt $methods.Count; $r++) {
 Draw-Text $g 'CSI is an audit layer above native quantizers; it does not replace backend-specific reconstruction or smoothing.' 54 580 15 'Regular' '#495057'
 Save-Png $c @('fig5_failure.png', 'failure_separation_map.png')
 
-# Fig 6: claim boundary / decision boundary.
+# Fig 6: claim-promotion map.
 $c = New-Canvas 1300 620
 $g = $c.Graphics
-Draw-Text $g 'CSI Claim Boundary' 44 28 30 'Bold'
+Draw-Text $g 'CSI Claim-Promotion Map' 44 28 30 'Bold'
 Draw-Text $g 'How evidence is promoted from diagnostic signal to paper-facing allocation claim' 46 70 17 'Regular' '#555f6b'
 $nodes = @(
   @{t='Diagnostic Evidence'; s='CSI curves, seed-pair tests'; fill='#e7f5ff'},
