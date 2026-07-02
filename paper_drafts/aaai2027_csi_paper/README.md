@@ -54,7 +54,12 @@ The current revision adds the reviewer-critical AAAI structure requested in the
 review notes:
 
 - one-sentence novelty anchor: PTQ allocation as constrained
-  calibration-driven optimization;
+  calibration-driven decision system;
+- CSI reframed as a decision-boundary operator with `Reject`, `AuditOnly`, and
+  `Validate` states, not as a standalone metric;
+- baseline class framing: GPTQ/AWQ/SmoothQuant/OmniQuant are native quantization
+  backends, while CSI is an allocation decision layer that can audit such
+  backends rather than replace them;
 - final six-figure audit narrative:
   `fig1_pipeline.png`, `fig2_phase_transition.png`, `fig3_cross_model.png`,
   `fig4_risk.png`, `fig5_failure.png`, and `fig6_boundary.png`;
