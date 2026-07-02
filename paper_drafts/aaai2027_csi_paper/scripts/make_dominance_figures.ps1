@@ -125,32 +125,40 @@ function Draw-Polyline($g, [object[]]$points, [string]$color, [float]$width = 4)
   }
 }
 
-# Fig 1: CSI system pipeline.
+# Fig 1: CSI policy-driven feedback loop.
 $c = New-Canvas 1400 620
 $g = $c.Graphics
-Draw-Text $g 'CSI System Overview' 44 28 30 'Bold'
-Draw-Text $g 'Calibration stability as an allocation-audit pipeline' 46 70 17 'Regular' '#555f6b'
+Draw-Text $g 'CSI Decision Feedback Loop' 44 28 30 'Bold'
+Draw-Text $g 'Calibration stability as a policy-driven allocation audit' 46 70 17 'Regular' '#555f6b'
 $boxes = @(
-  @{t='Prompt Pool'; s='public calibration prompts'},
-  @{t='Calibration Splits S'; s='seeded subsets'},
-  @{t='Sensitivity Matrix'; s='estimated module deltas'},
-  @{t='Rank Agreement'; s='rho, J_top-k, J_pos'},
-  @{t='CSI Gate G_stab'; s='pass / warn / block'},
-  @{t='Allocation Decision'; s='accept, reject, or rerun'}
+  @{t='Calibration Splits'; s='seeded prompt subsets'; x=70; y=180; fill='#e7f5ff'},
+  @{t='CSI Estimator'; s='rank + set agreement'; x=350; y=180; fill='#fff3bf'},
+  @{t='Decision State'; s='Reject / AuditOnly / Validate'; x=630; y=180; fill='#ffe3e3'},
+  @{t='Allocation Policy'; s='protect modules or rerun'; x=910; y=180; fill='#d8f3dc'},
+  @{t='Downstream Check'; s='fixed-budget retention'; x=910; y=410; fill='#e6fcf5'},
+  @{t='Evidence Update'; s='thresholds + claim boundary'; x=350; y=410; fill='#f1f3f5'}
 )
-$x0 = 42; $y = 190; $w = 185; $h = 118; $gap = 42
+$w = 205; $h = 108
 for ($i = 0; $i -lt $boxes.Count; $i++) {
-  $x = $x0 + $i * ($w + $gap)
-  $fill = if ($i -eq 4) { '#fff3bf' } elseif ($i -eq 5) { '#d8f3dc' } else { '#e7f5ff' }
+  $x = $boxes[$i].x
+  $y = $boxes[$i].y
+  $fill = $boxes[$i].fill
   Draw-RoundRect $g $x $y $w $h 14 $fill '#5c6770' 2
   Draw-CenteredText $g $boxes[$i].t ([System.Drawing.RectangleF]::new($x+10, $y+22, $w-20, 34)) 15 'Bold'
   Draw-CenteredText $g $boxes[$i].s ([System.Drawing.RectangleF]::new($x+12, $y+62, $w-24, 36)) 11 'Regular' '#495057'
-  if ($i -lt $boxes.Count - 1) {
-    Draw-Arrow $g ($x + $w + 5) ($y + $h/2) ($x + $w + $gap - 7) ($y + $h/2) '#495057' 3
-  }
 }
-Draw-Rect $g 290 410 820 72 '#f8f9fa' '#ced4da' 2
-Draw-CenteredText $g 'Audit invariant: unstable rankings produce an audit warning, not a downstream superiority claim.' ([System.Drawing.RectangleF]::new(305, 420, 790, 50)) 17 'Bold' '#343a40'
+Draw-Arrow $g 280 234 345 234 '#495057' 3
+Draw-Arrow $g 560 234 625 234 '#495057' 3
+Draw-Arrow $g 840 234 905 234 '#495057' 3
+Draw-Arrow $g 1012 292 1012 405 '#495057' 3
+Draw-Arrow $g 910 464 560 464 '#495057' 3
+Draw-Arrow $g 350 464 170 292 '#495057' 3
+Draw-Text $g 'action' 873 206 13 'Bold' '#495057'
+Draw-Text $g 'outcome' 1026 340 13 'Bold' '#495057'
+Draw-Text $g 'feedback' 627 435 13 'Bold' '#495057'
+Draw-Text $g 'update / rerun' 158 395 13 'Bold' '#495057'
+Draw-Rect $g 86 532 1110 52 '#f8f9fa' '#ced4da' 2
+Draw-CenteredText $g 'Policy invariant: CSI gates allocation claims before action, then downstream outcomes update thresholds and claim boundaries.' ([System.Drawing.RectangleF]::new(100, 540, 1080, 36)) 15 'Bold' '#343a40'
 Save-Png $c @('fig1_pipeline.png', 'framework_overview.png')
 
 # Fig 2: phase transition curve.

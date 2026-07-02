@@ -57,6 +57,12 @@ review notes:
   calibration-driven decision system;
 - CSI reframed as a decision-boundary operator with `Reject`, `AuditOnly`, and
   `Validate` states, not as a standalone metric;
+- minimal sufficient audit-statistic argument for the policy class that depends
+  on rank order, protected top-k set, and positive-sensitivity set;
+- policy-driven feedback loop: calibration -> CSI -> decision state ->
+  allocation action -> downstream check -> threshold/claim-boundary update;
+- propagation argument explaining how calibration instability becomes
+  allocation variance and then retention risk;
 - baseline class framing: GPTQ/AWQ/SmoothQuant/OmniQuant are native quantization
   backends, while CSI is an allocation decision layer that can audit such
   backends rather than replace them;

@@ -112,11 +112,10 @@ outcomes difficult to interpret.
 \begin{figure}[t]
 \centering
 \includegraphics[width=\linewidth]{figures/fig1_pipeline.png}
-\caption{CSI system overview. We model calibration instability as an audit
-pipeline: prompt sampling, split-conditioned sensitivity estimation, rank
-agreement computation, CSI gating, and final allocation decision. The output is
-not always an allocation; under instability, the correct output is a warning or
-rerun request.}
+\caption{CSI decision feedback loop. Calibration splits feed a CSI estimator,
+which maps evidence to a decision state before an allocation policy is executed.
+Downstream outcomes do not retroactively justify unstable calibration evidence;
+they update the claim boundary and future thresholds.}
 \label{fig:framework}
 \end{figure}
 
@@ -171,6 +170,22 @@ inside a backend reconstruction objective, CSI audits only the external
 allocation or protection decision. This restriction is important. It makes CSI
 a decision-boundary estimator for calibration-derived allocation, not a
 universal quality metric for every PTQ algorithm.
+
+\paragraph{Minimal audit statistic.}
+Within this decision class, CSI is not meant to be an arbitrary heuristic. Let a
+calibration-driven allocation policy depend on three observable decisions: the
+relative module order, the protected top-$k$ set, and the sign of measured
+sensitivity. Any split-stability audit that omits one of these decisions can
+miss an allocation-changing failure mode. A pure rank statistic can report
+moderate agreement while the protected top-$k$ set changes; a top-$k$ overlap
+can hide sign flips among marginal modules; and a sign-only statistic can miss
+large order changes inside the protected budget. The CSI tuple
+$(\rho,\Jacc^k,\Jacc^{pos})$ is therefore a minimal sufficient \emph{audit}
+statistic for detecting calibration-induced allocation instability in this
+policy class: minimal because each component catches a distinct
+allocation-changing perturbation, and sufficient because the policy sees no
+other calibration information before it chooses which modules to protect. This
+claim is about decision instability, not about final task quality.
 
 \paragraph{Baseline class framing.}
 The comparison classes in this paper are not interchangeable. GPTQ, AWQ,
@@ -240,6 +255,19 @@ claim. The current paper establishes the first two parts of this pipeline at
 scale and reports matched native-PTQ downstream retention rows. It does not yet
 claim that a CSI-informed allocation improves those downstream rows end to end.
 
+\paragraph{Propagation argument.}
+CSI matters because calibration instability propagates through the allocation
+map. Let $\pi_s$ be the module order induced by split $C_s$ and let
+$A(\pi_s,M)$ be the set of modules protected under budget $M$. If two plausible
+splits have low agreement, then $A(\pi_s,M)$ and $A(\pi_t,M)$ can differ even
+though the budget is identical. The quantized model then changes in exactly the
+modules whose precision is protected or degraded, so calibration noise becomes
+allocation variance and allocation variance becomes retention risk. High CSI
+does not prove task success; it blocks this propagation path by showing that
+nearby calibration draws induce compatible allocation decisions. Low CSI, in
+contrast, is actionable: rerun calibration, enlarge the prompt pool, fall back
+to a uniform or backend-native policy, or report only an audit failure.
+
 \paragraph{Finite descent.}
 Because the allocation space $\mathcal{B}^L$ is finite, any search procedure
 that accepts a candidate move $a\to a'$ only when a soft objective decreases by
@@ -303,6 +331,15 @@ submission-critical rows remain. In this sense, CSI predicts \emph{claim risk}
 rather than downstream accuracy directly: low split agreement predicts that an
 allocation claim is unsafe to promote, while high agreement only permits the
 next validation step.
+
+\paragraph{Policy feedback loop.}
+The decision loop in Figure~\ref{fig:framework} is actionable by construction.
+The input is a calibration prompt pool; CSI estimates whether the induced
+ranking is stable; the decision state chooses an action
+(\textsc{Reject}, \textsc{AuditOnly}, or \textsc{Validate}); the allocation
+policy is executed only for admissible states; and downstream outcomes feed
+back into thresholds, claim boundaries, or rerun decisions. This loop is the
+system-level difference between CSI and a post-hoc correlation plot.
 
 \paragraph{Mechanism chain.}
 The intended causal chain is not ``more components give better numbers.'' It is
