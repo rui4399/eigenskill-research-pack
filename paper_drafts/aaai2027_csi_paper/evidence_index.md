@@ -124,7 +124,7 @@ Compatibility aliases are also emitted for earlier drafts:
   not be promoted to the main Table 4 claim without broader task/PPL coverage
   and matched-budget controls.
 - The claim-promotion map is therefore an audit map, not a dominance claim. It
-  should not be rewritten as a 2/3-bit method-quality claim until the missing
+  should not be rewritten beyond the current evaluation scope until the missing
   cells have direct same-budget downstream artifacts.
 
 ## Draft sources integrated

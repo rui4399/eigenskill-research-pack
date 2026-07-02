@@ -680,8 +680,8 @@ whether the module ranking used for allocation appears stable.
 
 \section{Limitations and Falsification}
 
-The strongest current evidence is a reproducible CSI measurement and gating
-pipeline plus matched native-PTQ downstream retention on full Qwen2.5-1.5B
+The current evidence is based on reproducible CSI measurements and a lightweight
+evaluation pipeline plus matched native-PTQ downstream retention on full Qwen2.5-1.5B
 MMLU/GSM8K fixtures. Local GPU fake-quant smokes now provide directional
 allocation-path evidence on Qwen2.5-0.5B and a Qwen2.5-1.5B single-slice run.
 We therefore make a system-level audit claim rather than a broad PTQ SOTA
@@ -695,8 +695,8 @@ contain full 1.5B MMLU/GSM8K native-PTQ retention and local 7B/14B feasibility,
 plus uniform INT3 and synthetic INT2/INT3 distortion scaffolds, but they do not
 yet contain a full task-retention curve over 2, 3, 4, and 8 bits for FP16,
 uniform, native PTQ, and CSI-informed allocations. That experiment should be
-run before upgrading the paper from a robustness-plus-retention claim to a
-method-quality claim.
+run before extending the paper beyond its current robustness-plus-retention
+evaluation scope.
 
 Several results could weaken the story. A second public prompt pool could fail
 to reproduce the stability trend. Another model family could show stable
@@ -716,7 +716,7 @@ This paper isolates calibration split instability as a concrete failure mode in
 mixed-precision LLM quantization. Small calibration samples can produce
 unstable sensitivity rankings, and the audited artifacts show that increasing
 calibration size correlates with improved rank and set agreement under two
-evidence lines. CSI provides a practical signal for improving robustness in PTQ
+evidence lines. CSI provides a diagnostic signal for analyzing robustness in PTQ
 decision processes: highly unstable calibration rankings suggest caution,
 stable rankings without direct retention support only audit-level reporting,
 and fixed-budget downstream retention remains required for stronger method
