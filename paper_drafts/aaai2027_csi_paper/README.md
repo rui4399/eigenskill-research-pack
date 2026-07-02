@@ -58,11 +58,15 @@ review notes:
 - CSI reframed as a decision-boundary operator with `Reject`, `AuditOnly`, and
   `Validate` states, not as a standalone metric;
 - minimal sufficient audit-statistic argument for the policy class that depends
-  on rank order, protected top-k set, and positive-sensitivity set;
+  on rank order, protected top-k set, and positive-sensitivity set; no strict
+  subset certifies all allocation-changing perturbations;
 - policy-driven feedback loop: calibration -> CSI -> decision state ->
   allocation action -> downstream check -> threshold/claim-boundary update;
 - propagation argument explaining how calibration instability becomes
   allocation variance and then retention risk;
+- Figure 4 rewritten as the causal propagation chain plus allocation-risk proxy;
+- CSI positioned as a pre-allocation constraint layer rather than a post-hoc
+  filter or backend replacement;
 - baseline class framing: GPTQ/AWQ/SmoothQuant/OmniQuant are native quantization
   backends, while CSI is an allocation decision layer that can audit such
   backends rather than replace them;

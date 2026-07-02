@@ -223,12 +223,30 @@ for ($i=0; $i -lt $series.Count; $i++) {
 Draw-Text $g 'Second-pool replication uses n = 4, 8, 16.' 120 618 13 'Regular' '#5f6b76'
 Save-Png $c @('fig3_cross_model.png')
 
-# Fig 4: CSI vs allocation risk proxy.
+# Fig 4: causal propagation chain plus risk proxy.
 $c = New-Canvas 980 700
 $g = $c.Graphics
-Draw-Text $g 'CSI Stability vs Allocation Risk Proxy' 44 28 28 'Bold'
-Draw-Text $g 'Risk is a claim-boundary proxy derived from calibration instability and stress evidence' 46 68 15 'Regular' '#555f6b'
-$left=110; $top=130; $right=900; $bottom=585
+Draw-Text $g 'Instability Propagation Chain' 44 28 28 'Bold'
+Draw-Text $g 'Calibration noise becomes allocation variance before it can become retention risk' 46 68 15 'Regular' '#555f6b'
+$chain = @(
+  @{t='Calibration split'; s='small prompt sample'; fill='#e7f5ff'},
+  @{t='Rank instability'; s='order / top-k / sign drift'; fill='#fff3bf'},
+  @{t='Allocation variance'; s='different modules protected'; fill='#ffe3e3'},
+  @{t='Retention risk'; s='task loss must be measured'; fill='#e6fcf5'}
+)
+$x0=50; $y0=120; $w=205; $h=95; $gap=30
+for ($i=0; $i -lt $chain.Count; $i++) {
+  $x = $x0 + $i*($w+$gap)
+  Draw-RoundRect $g $x $y0 $w $h 12 $chain[$i].fill '#5c6770' 2
+  Draw-CenteredText $g $chain[$i].t ([System.Drawing.RectangleF]::new($x+8, $y0+18, $w-16, 30)) 14 'Bold'
+  Draw-CenteredText $g $chain[$i].s ([System.Drawing.RectangleF]::new($x+10, $y0+52, $w-20, 30)) 10 'Regular' '#495057'
+  if ($i -lt $chain.Count - 1) {
+    Draw-Arrow $g ($x+$w+5) ($y0+$h/2) ($x+$w+$gap-8) ($y0+$h/2) '#495057' 3
+  }
+}
+Draw-Rect $g 70 245 840 52 '#f8f9fa' '#ced4da' 1
+Draw-CenteredText $g 'CSI intervenes before allocation: low agreement blocks promotion; high agreement only permits downstream validation.' ([System.Drawing.RectangleF]::new(82, 252, 816, 38)) 13 'Bold' '#343a40'
+$left=115; $top=365; $right=880; $bottom=620
 Draw-Axes $g $left $top $right $bottom 'CSI stability score' 'allocation-risk proxy'
 $riskPts = @(
   @(0.1410,0.86,'Qwen n=2'),
@@ -247,8 +265,6 @@ for ($i=0; $i -lt $riskPts.Count; $i++) {
   Draw-Circle $g $pts[$i][0] $pts[$i][1] 9 '#5f3dc4'
   Draw-Text $g $riskPts[$i][2] ($pts[$i][0] + 12) ($pts[$i][1] - 13) 12 'Regular' '#343a40'
 }
-Draw-Rect $g 120 610 730 46 '#f8f9fa' '#ced4da' 1
-Draw-CenteredText $g 'Interpretation: higher CSI reduces allocation-audit risk; full downstream risk must still be measured.' ([System.Drawing.RectangleF]::new(130, 616, 710, 30)) 13 'Regular' '#495057'
 Save-Png $c @('fig4_risk.png')
 
 # Fig 5: failure mode heatmap.

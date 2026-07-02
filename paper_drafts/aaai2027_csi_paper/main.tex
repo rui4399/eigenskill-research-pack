@@ -35,8 +35,8 @@ receive scarce high-bit precision? We argue that a key failure mode is not only
 low final accuracy, but \emph{decision instability}: equally plausible
 calibration splits can induce materially different sensitivity rankings and
 therefore different allocations under the same bit budget. We introduce
-Calibration Split Instability (CSI) as a decision-boundary estimator for
-calibration-driven allocation, rather than as a standalone metric or a new
+Calibration Split Instability (CSI) as a pre-allocation constraint layer and
+decision-boundary estimator, rather than as a standalone metric or a new
 quantization backend. CSI audits seed-pair agreement using rank correlation,
 top-$k$ overlap, positive-set overlap, bootstrap trend tests, and
 permutation-null tests before a calibration-derived allocation is promoted from
@@ -175,17 +175,17 @@ universal quality metric for every PTQ algorithm.
 Within this decision class, CSI is not meant to be an arbitrary heuristic. Let a
 calibration-driven allocation policy depend on three observable decisions: the
 relative module order, the protected top-$k$ set, and the sign of measured
-sensitivity. Any split-stability audit that omits one of these decisions can
-miss an allocation-changing failure mode. A pure rank statistic can report
-moderate agreement while the protected top-$k$ set changes; a top-$k$ overlap
-can hide sign flips among marginal modules; and a sign-only statistic can miss
-large order changes inside the protected budget. The CSI tuple
-$(\rho,\Jacc^k,\Jacc^{pos})$ is therefore a minimal sufficient \emph{audit}
-statistic for detecting calibration-induced allocation instability in this
-policy class: minimal because each component catches a distinct
-allocation-changing perturbation, and sufficient because the policy sees no
-other calibration information before it chooses which modules to protect. This
-claim is about decision instability, not about final task quality.
+sensitivity. The CSI tuple $(\rho,\Jacc^k,\Jacc^{pos})$ is the minimal
+sufficient \emph{audit} statistic for calibration-induced allocation
+instability in this policy class. It is sufficient because the policy sees no
+other calibration information before it chooses which modules to protect. It is
+minimal because no strict subset can certify all allocation-changing
+perturbations: a pure rank statistic can report moderate agreement while the
+protected top-$k$ set changes; a top-$k$ overlap can hide sign flips among
+marginal modules; and a sign-only statistic can miss large order changes inside
+the protected budget. This claim is about decision instability, not about final
+task quality, and is the reason CSI is used before allocation rather than as a
+post-hoc descriptive score.
 
 \paragraph{Baseline class framing.}
 The comparison classes in this paper are not interchangeable. GPTQ, AWQ,
@@ -258,15 +258,18 @@ claim that a CSI-informed allocation improves those downstream rows end to end.
 \paragraph{Propagation argument.}
 CSI matters because calibration instability propagates through the allocation
 map. Let $\pi_s$ be the module order induced by split $C_s$ and let
-$A(\pi_s,M)$ be the set of modules protected under budget $M$. If two plausible
-splits have low agreement, then $A(\pi_s,M)$ and $A(\pi_t,M)$ can differ even
-though the budget is identical. The quantized model then changes in exactly the
-modules whose precision is protected or degraded, so calibration noise becomes
-allocation variance and allocation variance becomes retention risk. High CSI
-does not prove task success; it blocks this propagation path by showing that
-nearby calibration draws induce compatible allocation decisions. Low CSI, in
-contrast, is actionable: rerun calibration, enlarge the prompt pool, fall back
-to a uniform or backend-native policy, or report only an audit failure.
+$A(\pi_s,M)$ be the set of modules protected under budget $M$. If calibration
+size decreases, rank disagreement can increase; when rank disagreement
+increases, $A(\pi_s,M)$ and $A(\pi_t,M)$ can differ even though the budget is
+identical; when the protected set differs, the quantized model changes in the
+modules whose precision is protected or degraded; and those module-level
+changes create retention risk that must be measured downstream. In short,
+calibration size $\downarrow$ can imply rank instability $\uparrow$, allocation
+variance $\uparrow$, and downstream-risk exposure $\uparrow$. High CSI does not
+prove task success; it blocks this propagation path by showing that nearby
+calibration draws induce compatible allocation decisions. Low CSI, in contrast,
+is actionable: rerun calibration, enlarge the prompt pool, fall back to a
+uniform or backend-native policy, or report only an audit failure.
 
 \paragraph{Finite descent.}
 Because the allocation space $\mathcal{B}^L$ is finite, any search procedure
@@ -545,11 +548,11 @@ Model & Slice & FP16 & INT4 & INT3 & CSI alloc. \\
 \begin{figure}[t]
 \centering
 \includegraphics[width=\linewidth]{figures/fig4_risk.png}
-\caption{CSI stability versus allocation-risk proxy. The risk value is an audit
-proxy derived from calibration instability and committed stress evidence, not a
-measured downstream error rate. The curve summarizes the decision principle used
-by CSI: higher split agreement lowers allocation-audit risk, while downstream
-retention still requires direct task measurement.}
+\caption{Instability propagation chain and allocation-risk proxy. Calibration
+split noise can propagate into rank instability, allocation variance, and
+retention risk. CSI acts as a pre-allocation constraint: low split agreement
+blocks claim promotion, while high agreement only permits downstream
+validation.}
 \label{fig:risk}
 \end{figure}
 
@@ -662,11 +665,11 @@ difficulty into weights for W8A8 inference \citep{xiao2023smoothquant}.
 OmniQuant learns clipping and equivalent transforms under calibration samples
 \citep{shao2024omniquant}. These are backend families: they answer how to
 quantize once a representation or protection policy is chosen. CSI answers a
-different question: whether a calibration-derived allocation or protection
-decision is stable enough to be trusted. Our full Qwen2.5-1.5B rows therefore
-confront AutoAWQ and GPTQModel as native PTQ baselines, while CSI is framed as a
-decision layer that can audit allocations above such backends rather than as a
-drop-in replacement for them.
+different question before that policy is executed: whether a
+calibration-derived allocation or protection decision is stable enough to be
+trusted. Our full Qwen2.5-1.5B rows therefore confront AutoAWQ and GPTQModel as
+native PTQ baselines, while CSI is framed as a pre-allocation constraint layer
+that can gate such backends rather than as a drop-in replacement for them.
 
 \begin{table}[t]
 \centering
