@@ -23,13 +23,16 @@ Sprint output root:
 | Priority | Experiment | Reviewer objection removed | Required artifact |
 |---|---|---|---|
 | P0 | CSI-guided allocation downstream retention | "CSI is only an observation; it does not guide decisions." | Pareto curve plus retention table for uniform, sensitivity-only, and CSI-guided allocation |
-| P0 | Calibration size scaling | "Stability may not scale into downstream accuracy." | dual-axis CSI/accuracy curve for 32--2048 calibration samples |
+| P0 | CSI vs simple heuristics | "Variance, entropy, or raw sensitivity may be enough." | Pearson/Spearman table predicting future retention drop |
+| P0 | Calibration size scaling | "Stability may not scale into downstream accuracy." | dual-axis CSI/accuracy curve for 16--2048 calibration samples |
 | P0 | Seed robustness | "The result may be a lucky seed." | mean, standard deviation, and worst-case table across seeds 0--4 |
-| P1 | CSI vs simple heuristics | "Variance or raw sensitivity may be enough." | Pearson/Spearman correlation with future accuracy drop |
+| P0 | Bit-width sweep | "The method is not stress-tested at low bits." | INT2/INT3/INT4/INT8/FP16 retention curve on Qwen2.5-1.5B |
 | P1 | Objective-aligned ablation | "Terms in the objective are decorative." | ablation table with CSI and accuracy columns |
-| P2 | Bit-width sweep | "The method is not stress-tested at low bits." | INT2/INT3/INT4/INT8/FP16 retention curve |
+| P1 | Model-family generalization | "This may be Qwen-specific." | at least one Llama-3.2, Phi-3, or Mistral row |
+| P1 | 7B scale check | "The method may not scale beyond small models." | Qwen2.5-7B CSI stability and calibration audit |
 | P2 | Dataset shift | "Calibration stability may fail under domain mismatch." | WikiText/C4 calibration vs MMLU/GSM8K evaluation table |
 | P2 | Efficiency | "The method may be too expensive." | calibration time, CSI time, inference time, and peak VRAM table |
+| P2 | Layer visualization | "The mechanism is not interpretable." | layer id vs CSI score plot for stable and unstable settings |
 
 ## Must Complete Before AAAI Submission
 
@@ -38,6 +41,7 @@ Sprint output root:
 | Win/loss matrix | table over model-task pairs | proposed method wins or ties most rows under fixed memory |
 | Average rank | rank table over all methods | proposed method has best or near-best average rank |
 | Seed stability | mean, standard deviation, worst-case table | gains are stable across seeds and no severe worst-case collapse |
+| Bit-width sweep | INT2/INT3/INT4/INT8/FP16 retention curve | low-bit behavior is explicit rather than hidden in limitations |
 | Native PTQ baselines | FP16, uniform W4, AWQ W4/G128, GPTQ W4/G128 | fair comparison under same fixtures |
 | Calibration-aware baselines | SmoothQuant plus OmniQuant or equivalent | calibration-aware methods are confronted directly |
 | Rotation/outlier baseline | QuaRot or SpinQuant family | modern outlier-handling method is included |

@@ -18,6 +18,7 @@ The target is reviewer-risk removal:
 - CSI-guided allocation must be tied to downstream retention.
 - Calibration size must be tied to both stability and accuracy.
 - Seed robustness must show mean, standard deviation, and worst case.
+- INT2/INT3/INT4/INT8/FP16 bit-width retention must close the low-bit limitation.
 - Heuristic comparison must show CSI is more predictive than simpler metrics.
 - All tables must keep pending rows visibly pending until the experiment has run.
 
@@ -76,6 +77,7 @@ def test_matrix_contains_p0_experiments(tmp_path: Path):
     assert "p0_csi_allocation_retention" in ids
     assert "p0_calibration_size_scaling" in ids
     assert "p0_seed_robustness" in ids
+    assert "p0_bit_width_sweep" in ids
     assert "p1_csi_vs_heuristics" in ids
 
 
@@ -122,14 +124,26 @@ MODELS = ["qwen25_0p5b", "qwen25_1p5b", "qwen25_3b", "qwen25_7b"]
 PRIMARY_MODELS = ["qwen25_0p5b", "qwen25_1p5b"]
 TASKS = ["mmlu", "gsm8k"]
 SEEDS = [0, 1, 2, 3, 4]
-CALIBRATION_SIZES = [32, 64, 128, 256, 512, 1024, 2048]
+CALIBRATION_SIZES = [16, 32, 64, 128, 256, 512, 1024, 2048]
+BIT_WIDTHS = [2, 3, 4, 8, 16]
 ALLOCATION_POLICIES = ["uniform", "sensitivity_only", "csi_guided"]
 PTQ_BASELINES = ["fp16", "uniform_int4", "uniform_int3", "gptq_int4", "awq_int4", "smoothquant_int4"]
+BIT_SWEEP_METHODS = ["uniform", "gptq", "awq", "csi_guided"]
 HEURISTICS = ["variance", "entropy", "layer_sensitivity", "random", "csi"]
 
 
-def add_run(runs: list[dict], *, experiment_id: str, model: str, task: str, method: str, seed: int | None = None, calibration_size: int | None = None) -> None:
-    run_key = [experiment_id, model, task, method, str(seed), str(calibration_size)]
+def add_run(
+    runs: list[dict],
+    *,
+    experiment_id: str,
+    model: str,
+    task: str,
+    method: str,
+    seed: int | None = None,
+    calibration_size: int | None = None,
+    bit_width: int | None = None,
+) -> None:
+    run_key = [experiment_id, model, task, method, str(seed), str(calibration_size), str(bit_width)]
     runs.append(
         {
             "experiment_id": experiment_id,
@@ -138,6 +152,7 @@ def add_run(runs: list[dict], *, experiment_id: str, model: str, task: str, meth
             "method": method,
             "seed": seed,
             "calibration_size": calibration_size,
+            "bit_width": bit_width,
             "run_key": run_key,
             "status": "pending",
             "expected_summary": f"outputs/aaai_sprint_2026_07_07/{'_'.join(run_key)}.json",
@@ -163,6 +178,11 @@ def build_payload() -> dict:
             "required_outputs": ["mean_std_worst_case", "seed_rank_correlation", "seed_accuracy"],
         },
         {
+            "experiment_id": "p0_bit_width_sweep",
+            "reviewer_objection": "The method is not stress-tested at low bits.",
+            "required_outputs": ["int2_int3_int4_int8_fp16_retention_curve", "uniform_vs_gptq_vs_awq_vs_csi"],
+        },
+        {
             "experiment_id": "p1_csi_vs_heuristics",
             "reviewer_objection": "A simpler variance or sensitivity heuristic may be enough.",
             "required_outputs": ["pearson_correlation", "spearman_correlation", "future_accuracy_drop_prediction"],
@@ -178,6 +198,17 @@ def build_payload() -> dict:
             for method in ["uniform", "gptq_int4", "awq_int4", "csi_guided"]:
                 for seed in SEEDS:
                     add_run(runs, experiment_id="p0_seed_robustness", model=model, task=task, method=method, seed=seed)
+            if model == "qwen25_1p5b":
+                for method in BIT_SWEEP_METHODS:
+                    for bit_width in BIT_WIDTHS:
+                        add_run(
+                            runs,
+                            experiment_id="p0_bit_width_sweep",
+                            model=model,
+                            task=task,
+                            method=method,
+                            bit_width=bit_width,
+                        )
             for heuristic in HEURISTICS:
                 add_run(runs, experiment_id="p1_csi_vs_heuristics", model=model, task=task, method=heuristic)
     return {
@@ -524,6 +555,7 @@ The figure is x-axis `bits_per_weight` or `model_size_mb`, y-axis `accuracy`, se
 Run sizes:
 
 ```text
+16
 32
 64
 128
@@ -604,9 +636,62 @@ Use table columns:
 method, accuracy_mean, accuracy_std, accuracy_worst, csi_mean, csi_std, rank_corr_mean, rank_corr_std
 ```
 
+### Task 6: Bit-Width Retention Sweep
+
+**Files:**
+- Use: `train_python/gate_official_ptq_task_retention.py`
+- Use: `train_python/eval_weight_quant_ppl.py`
+- Output: `outputs/aaai_sprint_2026_07_07/p0_bit_width_sweep_*.json`
+
+- [ ] **Step 1: Use the fixed model and bit widths**
+
+Run the first sweep on:
+
+```text
+model: Qwen2.5-1.5B
+bit_widths: INT2, INT3, INT4, INT8, FP16
+tasks: MMLU, GSM8K
+methods: uniform, GPTQ, AWQ, CSI-guided
+```
+
+- [ ] **Step 2: Report retention at each bit width**
+
+Each result row must contain:
+
+```json
+{
+  "model": "qwen25_1p5b",
+  "method": "csi_guided",
+  "bit_width": 4,
+  "task": "mmlu",
+  "accuracy": 0.0,
+  "bits_per_weight": 4.0,
+  "model_size_mb": 0.0,
+  "seed": 0
+}
+```
+
+- [ ] **Step 3: Build the bit-width figure data**
+
+The figure is x-axis `bit_width`, y-axis `accuracy`, with one line each for:
+
+```text
+uniform
+GPTQ
+AWQ
+CSI-guided
+```
+
+- [ ] **Step 4: Pass criterion**
+
+CSI-guided allocation does not need to win every bit width. It must avoid
+catastrophic low-bit collapse and improve or tie the retention frontier at one
+or more constrained bit-widths. If INT2 and INT3 are uniformly poor, report them
+as failure-boundary evidence rather than hiding them.
+
 ## Phase 2: P1 Experiments
 
-### Task 6: CSI vs Simple Heuristics
+### Task 7: CSI vs Simple Heuristics
 
 **Files:**
 - Use: `train_python/gate_sensitivity_perturbation_matrix.py`
@@ -638,7 +723,7 @@ The CSI predictor must be best or statistically tied for best. If it is not,
 the final paper must weaken the claim from "CSI-guided allocation" to
 "CSI-assisted audit".
 
-### Task 7: Objective-Aligned Ablation
+### Task 8: Objective-Aligned Ablation
 
 **Files:**
 - Use: `train_python/build_consensus_allocation.py`
@@ -668,12 +753,11 @@ explain why that term is redundant or remove that term from the core claim.
 
 ## Phase 3: P2/P3 Backlog
 
-### Task 8: Generalization and Efficiency Backlog
+### Task 9: Generalization and Efficiency Backlog
 
 Run only after P0 and P1 are closed:
 
 ```text
-bit_width_sweep: INT2, INT3, INT4, INT8, FP16 on Qwen2.5-1.5B
 model_scale: Qwen2.5-3B and Qwen2.5-7B
 extra_family: one of Llama-3.2, Phi-3, Mistral
 dataset_shift: calibration WikiText/C4, evaluation MMLU/GSM8K
@@ -690,7 +774,7 @@ pareto_frontier: memory vs accuracy across all complete methods
 The sprint is complete only when:
 
 - `outputs/aaai_sprint_2026_07_07/experiment_matrix.json` exists.
-- P0 retention, calibration scaling, and seed robustness have result JSON files.
+- P0 retention, calibration scaling, seed robustness, and bit-width sweep have result JSON files.
 - `train_python/summarize_aaai_sprint_results.py` produces win/loss and average-rank summaries.
 - The paper draft contains verified numbers instead of pending rows.
 - `docs/AAAI_FINAL_SUBMISSION_CHECKLIST_2026_06_28.md` marks every must-do item with an artifact path.
