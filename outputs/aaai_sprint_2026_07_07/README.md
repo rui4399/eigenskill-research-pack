@@ -29,6 +29,8 @@ Completed so far:
   runs and a matching CSI consensus allocation.
 - Completed Qwen2.5-1.5B WikiText2 n=64 seed0/seed1 full-module sensitivity
   runs and a matching CSI consensus allocation.
+- Completed Qwen2.5-1.5B WikiText2 n=128 full-pool sensitivity upper-bound
+  runs and a matching CSI consensus allocation.
 
 Not yet completed:
 
@@ -83,9 +85,12 @@ evidence that CSI improves downstream retention.
 | 16 | 0.6767 |
 | 32 | 0.7398 |
 | 64 | 0.8491 |
+| 128 | 0.9903 |
 
 For the measured seed0/seed1 pair, increasing calibration samples from 16 to 32
-to 64 improves consensus agreement with both single-split high-bit sets.
+to 64 improves consensus agreement with both single-split high-bit sets. The
+128-row case is a full-pool upper bound: both seeds select the same 128-prompt
+pool, so it should not be interpreted as independent seed robustness.
 
 ## Key Files
 
