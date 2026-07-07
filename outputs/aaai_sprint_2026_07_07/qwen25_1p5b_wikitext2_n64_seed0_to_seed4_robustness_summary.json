@@ -1,0 +1,148 @@
+{
+  "schema_version": 1,
+  "model": "Qwen2.5-1.5B-Instruct",
+  "calibration_n": 64,
+  "seeds": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
+  "contended_gpu_note": "Seeds 2--4 were run under intentional GPU contention with a concurrent 7B job; use as stability evidence, not efficiency evidence.",
+  "seed_rows": [
+    {
+      "seed": 0,
+      "complete": true,
+      "measured_modules": 197,
+      "linear_modules": 197,
+      "avg_bits": 2.9998726324224783,
+      "bit_hist": {
+        "2": 99,
+        "4": 98
+      },
+      "positive_delta_nll_total": 0.38743090870179353,
+      "positive_delta_nll_protected_ratio": 0.9217460850547283,
+      "source": "outputs\\aaai_sprint_2026_07_07\\qwen25_1p5b_wikitext2_n64_seed0_sensitivity_2to4_budget3.json"
+    },
+    {
+      "seed": 1,
+      "complete": true,
+      "measured_modules": 197,
+      "linear_modules": 197,
+      "avg_bits": 2.9998686521856808,
+      "bit_hist": {
+        "2": 99,
+        "4": 98
+      },
+      "positive_delta_nll_total": 0.3914470936867467,
+      "positive_delta_nll_protected_ratio": 0.9298234880471147,
+      "source": "outputs\\aaai_sprint_2026_07_07\\qwen25_1p5b_wikitext2_n64_seed1_sensitivity_2to4_budget3.json"
+    },
+    {
+      "seed": 2,
+      "complete": true,
+      "measured_modules": 197,
+      "linear_modules": 197,
+      "avg_bits": 2.999370459213187,
+      "bit_hist": {
+        "4": 106,
+        "2": 91
+      },
+      "positive_delta_nll_total": 0.40148091914540496,
+      "positive_delta_nll_protected_ratio": 0.936946919786507,
+      "source": "outputs\\aaai_sprint_2026_07_07\\qwen25_1p5b_wikitext2_n64_seed2_sensitivity_2to4_budget3.json"
+    },
+    {
+      "seed": 3,
+      "complete": true,
+      "measured_modules": 197,
+      "linear_modules": 197,
+      "avg_bits": 2.9993608403075926,
+      "bit_hist": {
+        "2": 95,
+        "4": 102
+      },
+      "positive_delta_nll_total": 0.40526497956837515,
+      "positive_delta_nll_protected_ratio": 0.9243591002825237,
+      "source": "outputs\\aaai_sprint_2026_07_07\\qwen25_1p5b_wikitext2_n64_seed3_sensitivity_2to4_budget3.json"
+    },
+    {
+      "seed": 4,
+      "complete": true,
+      "measured_modules": 197,
+      "linear_modules": 197,
+      "avg_bits": 2.9973196422032466,
+      "bit_hist": {
+        "2": 94,
+        "4": 103
+      },
+      "positive_delta_nll_total": 0.3827099157147478,
+      "positive_delta_nll_protected_ratio": 0.9358266120100515,
+      "source": "outputs\\aaai_sprint_2026_07_07\\qwen25_1p5b_wikitext2_n64_seed4_sensitivity_2to4_budget3.json"
+    }
+  ],
+  "pairwise_high_jaccard": [
+    {
+      "left_seed": 0,
+      "right_seed": 1,
+      "high_jaccard": 0.7345132743362832
+    },
+    {
+      "left_seed": 0,
+      "right_seed": 2,
+      "high_jaccard": 0.6859504132231405
+    },
+    {
+      "left_seed": 0,
+      "right_seed": 3,
+      "high_jaccard": 0.7094017094017094
+    },
+    {
+      "left_seed": 0,
+      "right_seed": 4,
+      "high_jaccard": 0.717948717948718
+    },
+    {
+      "left_seed": 1,
+      "right_seed": 2,
+      "high_jaccard": 0.6585365853658537
+    },
+    {
+      "left_seed": 1,
+      "right_seed": 3,
+      "high_jaccard": 0.7241379310344828
+    },
+    {
+      "left_seed": 1,
+      "right_seed": 4,
+      "high_jaccard": 0.7478260869565218
+    },
+    {
+      "left_seed": 2,
+      "right_seed": 3,
+      "high_jaccard": 0.7049180327868853
+    },
+    {
+      "left_seed": 2,
+      "right_seed": 4,
+      "high_jaccard": 0.6854838709677419
+    },
+    {
+      "left_seed": 3,
+      "right_seed": 4,
+      "high_jaccard": 0.7982456140350878
+    }
+  ],
+  "aggregate": {
+    "avg_bits_mean": 2.999158445266437,
+    "avg_bits_std": 0.0009467383517630538,
+    "protected_ratio_mean": 0.929740441036185,
+    "protected_ratio_std": 0.006030758920289722,
+    "pairwise_high_jaccard_mean": 0.7166962236056424,
+    "pairwise_high_jaccard_std": 0.03672568797152696,
+    "pairwise_high_jaccard_min": 0.6585365853658537,
+    "pairwise_high_jaccard_max": 0.7982456140350878
+  },
+  "interpretation": "This extends Qwen2.5-1.5B n64 seed robustness from the original seed0/seed1 pair to seeds 0--4. The pairwise high-bit agreement quantifies allocation stability across repeated calibration sampling."
+}

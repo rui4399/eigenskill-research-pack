@@ -35,6 +35,10 @@ Completed so far:
   runs and a matching CSI consensus allocation.
 - Completed Qwen2.5-7B WikiText2 n=32 seed0/seed1 full-module sensitivity
   runs and a matching CSI consensus allocation.
+- Completed Qwen2.5-7B WikiText2 n=64 seed0/seed1 full-module sensitivity
+  runs and a matching CSI consensus allocation.
+- Extended Qwen2.5-1.5B WikiText2 n=64 seed robustness from seed0/seed1 to
+  seeds 0--4.
 - Completed Qwen2.5-1.5B C4 n=64 seed0/seed1 full-module sensitivity runs,
   a matching CSI consensus allocation, and a WikiText2-vs-C4 domain-shift
   summary.
@@ -113,10 +117,34 @@ resulting CSI consensus allocation has average bits `2.9997`, bit histogram
 |---:|---:|---:|
 | 16 | 0.6823 | 2.9997 |
 | 32 | 0.6995 | 2.9997 |
+| 64 | 0.8254 | 2.9997 |
 
-The n=32 run slightly improves agreement over n=16, but remains far from a
-saturated consensus. This strengthens the scale-level claim that 7B allocation
-decisions remain sensitive to calibration perturbations.
+The n=64 run improves agreement substantially over n=16/n=32, while the lower
+budget rows remain far from saturated. This strengthens the scale-level claim
+that 7B allocation decisions remain sensitive to calibration perturbations
+under smaller calibration budgets.
+
+## Seed Robustness Check
+
+Qwen2.5-1.5B WikiText2 n=64 now covers seeds 0--4. Seeds 2--4 were run under
+intentional GPU contention with a concurrent 7B job, so these rows are stability
+evidence rather than efficiency evidence.
+
+| Metric | Value |
+|---|---:|
+| Avg bits mean | 2.9992 |
+| Avg bits std | 0.0009 |
+| Protected-ratio mean | 0.9297 |
+| Protected-ratio std | 0.0060 |
+| Pairwise high-bit Jaccard mean | 0.7167 |
+| Pairwise high-bit Jaccard std | 0.0367 |
+| Pairwise high-bit Jaccard min | 0.6585 |
+| Pairwise high-bit Jaccard max | 0.7982 |
+
+This is the first formal five-seed stability slice for the AAAI sprint. It
+shows that equal-budget allocations keep a tight average-bit distribution, but
+the selected high-bit layer sets still vary meaningfully across calibration
+sampling seeds.
 
 ## Calibration Domain-Shift Check
 
