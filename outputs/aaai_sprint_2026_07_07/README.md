@@ -33,6 +33,9 @@ Completed so far:
   runs and a matching CSI consensus allocation.
 - Completed Qwen2.5-7B WikiText2 n=16 seed0/seed1 full-module sensitivity
   runs and a matching CSI consensus allocation.
+- Completed Qwen2.5-1.5B C4 n=64 seed0/seed1 full-module sensitivity runs,
+  a matching CSI consensus allocation, and a WikiText2-vs-C4 domain-shift
+  summary.
 
 Not yet completed:
 
@@ -43,7 +46,7 @@ Not yet completed:
 - Calibration size scaling from 16 to 4096 samples.
 - Seed robustness with seeds 0--4.
 - INT2/INT3/INT4/INT8/FP16 bit-width sweep.
-- 7B/14B scale support runs.
+- 7B/14B scale support beyond the current 7B n=16 pair.
 
 ## Matrix Scope
 
@@ -99,6 +102,20 @@ pool, so it should not be interpreted as independent seed robustness.
 Qwen2.5-7B n=16 seed0/seed1 full-module sensitivity completed. The resulting
 CSI consensus allocation has average bits `2.9997`, bit histogram `{2: 115,
 4: 82}`, and mean high-bit Jaccard `0.6823`.
+
+## Calibration Domain-Shift Check
+
+Qwen2.5-1.5B n=64 seed0/seed1 was repeated with C4 calibration prompts and
+compared against the matched WikiText2 n=64 pair.
+
+| Calibration source | Mean high-bit Jaccard | Avg bits |
+|---|---:|---:|
+| WikiText2 | 0.8491 | 2.9999 |
+| C4 | 0.7873 | 2.9999 |
+
+In this measured pair, C4 produces lower cross-split agreement than WikiText2.
+This is useful domain-shift evidence: the allocation policy remains equal
+budget, while the calibration source changes the stability profile.
 
 ## Key Files
 

@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "model": "Qwen2.5-1.5B-Instruct",
+  "calibration_n": 64,
+  "split_pair": "seed0 vs seed1",
+  "rows": [
+    {
+      "calibration": "wikitext2",
+      "avg_bits": 2.9998706423040793,
+      "bit_hist": {
+        "2": 99,
+        "4": 98
+      },
+      "left_high_jaccard": 0.8490566037735849,
+      "right_high_jaccard": 0.8490566037735849,
+      "mean_high_jaccard": 0.8490566037735849,
+      "source": "outputs\\aaai_sprint_2026_07_07\\qwen25_1p5b_wikitext2_n64_seed0_seed1_csi_consensus_2to4_budget3.json"
+    },
+    {
+      "calibration": "c4",
+      "avg_bits": 2.9998746225408772,
+      "bit_hist": {
+        "4": 103,
+        "2": 94
+      },
+      "left_high_jaccard": 0.7338709677419355,
+      "right_high_jaccard": 0.8407079646017699,
+      "mean_high_jaccard": 0.7872894661718527,
+      "source": "outputs\\aaai_sprint_2026_07_07\\qwen25_1p5b_c4_n64_seed0_seed1_csi_consensus_2to4_budget3.json"
+    }
+  ],
+  "interpretation": "C4 n64 stability is lower than WikiText2 n64 in this measured pair, showing calibration-source sensitivity/domain-shift risk."
+}
