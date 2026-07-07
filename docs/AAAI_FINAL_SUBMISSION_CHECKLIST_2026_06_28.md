@@ -12,6 +12,25 @@ stability, failure, and efficiency evidence below is complete. The current draft
 is a theory-closed framework draft with partial RTX3090 evidence, not a finished
 leaderboard paper.
 
+## 2026-07-07 Sprint Mapping
+
+Execution plan:
+`docs/superpowers/plans/2026-07-07-aaai-experiment-sprint.md`
+
+Sprint output root:
+`outputs/aaai_sprint_2026_07_07/`
+
+| Priority | Experiment | Reviewer objection removed | Required artifact |
+|---|---|---|---|
+| P0 | CSI-guided allocation downstream retention | "CSI is only an observation; it does not guide decisions." | Pareto curve plus retention table for uniform, sensitivity-only, and CSI-guided allocation |
+| P0 | Calibration size scaling | "Stability may not scale into downstream accuracy." | dual-axis CSI/accuracy curve for 32--2048 calibration samples |
+| P0 | Seed robustness | "The result may be a lucky seed." | mean, standard deviation, and worst-case table across seeds 0--4 |
+| P1 | CSI vs simple heuristics | "Variance or raw sensitivity may be enough." | Pearson/Spearman correlation with future accuracy drop |
+| P1 | Objective-aligned ablation | "Terms in the objective are decorative." | ablation table with CSI and accuracy columns |
+| P2 | Bit-width sweep | "The method is not stress-tested at low bits." | INT2/INT3/INT4/INT8/FP16 retention curve |
+| P2 | Dataset shift | "Calibration stability may fail under domain mismatch." | WikiText/C4 calibration vs MMLU/GSM8K evaluation table |
+| P2 | Efficiency | "The method may be too expensive." | calibration time, CSI time, inference time, and peak VRAM table |
+
 ## Must Complete Before AAAI Submission
 
 | Item | Required artifact | Pass condition |
@@ -76,4 +95,3 @@ Until then, use the conservative version:
 > The framework provides an auditable path for deciding when calibration-driven
 > mixed-precision allocation is stable enough to trust and which evidence is
 > still required before claiming SOTA quality or deployment superiority.
-
