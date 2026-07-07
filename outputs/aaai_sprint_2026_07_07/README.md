@@ -27,6 +27,8 @@ Completed so far:
   average-3bit allocation.
 - Completed Qwen2.5-1.5B WikiText2 n=32 seed0/seed1 full-module sensitivity
   runs and a matching CSI consensus allocation.
+- Completed Qwen2.5-1.5B WikiText2 n=64 seed0/seed1 full-module sensitivity
+  runs and a matching CSI consensus allocation.
 
 Not yet completed:
 
@@ -80,9 +82,10 @@ evidence that CSI improves downstream retention.
 |---:|---:|
 | 16 | 0.6767 |
 | 32 | 0.7398 |
+| 64 | 0.8491 |
 
 For the measured seed0/seed1 pair, increasing calibration samples from 16 to 32
-improves consensus agreement with both single-split high-bit sets.
+to 64 improves consensus agreement with both single-split high-bit sets.
 
 ## Key Files
 
