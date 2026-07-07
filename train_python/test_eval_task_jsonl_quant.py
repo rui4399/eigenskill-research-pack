@@ -53,3 +53,20 @@ def test_normalize_task_row_supports_gsm8k_question_answer_schema():
     assert "A duck lays" in normalized["prompt"]
     assert normalized["answer"] == "9"
     assert normalized["answer_type"] == "number"
+
+
+def test_normalize_task_row_supports_mmlu_choice_schema():
+    row = {
+        "question": "Find the degree for the given field extension.",
+        "subject": "abstract_algebra",
+        "choices": ["0", "4", "2", "6"],
+        "answer": 1,
+    }
+
+    normalized = task_eval.normalize_task_row(row)
+
+    assert "A. 0" in normalized["prompt"]
+    assert "D. 6" in normalized["prompt"]
+    assert normalized["task"] == "abstract_algebra"
+    assert normalized["answer"] == "B"
+    assert normalized["answer_type"] == "choice"

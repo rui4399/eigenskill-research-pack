@@ -1,0 +1,113 @@
+{
+  "schema_version": 1,
+  "model": "Qwen2.5-1.5B-Instruct",
+  "task": "mmlu_broad5x20_test",
+  "limit": 100,
+  "rows": [
+    {
+      "method": "fp16",
+      "accuracy": 0.54,
+      "exact": 54,
+      "total": 100,
+      "quant_mode": "fp16",
+      "bit_hist": {
+        "16": 197
+      },
+      "allocation_summary": null,
+      "source": "outputs\\aaai_sprint_2026_07_07\\qwen25_1p5b_mmlu100_fp16_v2.json"
+    },
+    {
+      "method": "uniform_int2",
+      "accuracy": 0.0,
+      "exact": 0,
+      "total": 100,
+      "quant_mode": "uniform_int2",
+      "bit_hist": {
+        "2": 197
+      },
+      "allocation_summary": null,
+      "source": "outputs\\aaai_sprint_2026_07_07\\qwen25_1p5b_mmlu100_uniform_int2_v2.json"
+    },
+    {
+      "method": "uniform_int3",
+      "accuracy": 0.04,
+      "exact": 4,
+      "total": 100,
+      "quant_mode": "uniform_int3",
+      "bit_hist": {
+        "3": 197
+      },
+      "allocation_summary": null,
+      "source": "outputs\\aaai_sprint_2026_07_07\\qwen25_1p5b_mmlu100_uniform_int3_v2.json"
+    },
+    {
+      "method": "uniform_int4",
+      "accuracy": 0.41,
+      "exact": 41,
+      "total": 100,
+      "quant_mode": "uniform_int4",
+      "bit_hist": {
+        "4": 197
+      },
+      "allocation_summary": null,
+      "source": "outputs\\aaai_sprint_2026_07_07\\qwen25_1p5b_mmlu100_uniform_int4_v2.json"
+    },
+    {
+      "method": "single_n64_budget3",
+      "accuracy": 0.0,
+      "exact": 0,
+      "total": 100,
+      "quant_mode": "allocation",
+      "bit_hist": {
+        "2": 99,
+        "4": 98
+      },
+      "allocation_summary": {
+        "name": "loss_sensitive_4to8",
+        "groups": 197,
+        "budget_avg_bits": 3.0,
+        "memory": 4630683648.0,
+        "budget": 4630880256.0,
+        "budget_used": 0.999957544140826,
+        "avg_bits": 2.9998726324224783,
+        "bit_hist": {
+          "2": 99,
+          "4": 98
+        },
+        "positive_delta_nll_total": 0.38743090870179353,
+        "positive_delta_nll_protected": 0.35711292332507405,
+        "positive_delta_nll_protected_ratio": 0.9217460850547283
+      },
+      "source": "outputs\\aaai_sprint_2026_07_07\\qwen25_1p5b_mmlu100_single_n64_budget3_v2.json"
+    },
+    {
+      "method": "csi_n64_budget3",
+      "accuracy": 0.01,
+      "exact": 1,
+      "total": 100,
+      "quant_mode": "allocation",
+      "bit_hist": {
+        "2": 99,
+        "4": 98
+      },
+      "allocation_summary": {
+        "name": "loss_sensitive_robust_lcb_consensus_4to8",
+        "groups": 197,
+        "budget_avg_bits": 3.0,
+        "memory": 4630680576.0,
+        "budget": 4630880256.0,
+        "budget_used": 0.9999568807680265,
+        "avg_bits": 2.9998706423040793,
+        "bit_hist": {
+          "2": 99,
+          "4": 98
+        },
+        "positive_delta_nll_total": 0.3914470936867467,
+        "positive_delta_nll_protected": 0.36097875300481386,
+        "positive_delta_nll_protected_ratio": 0.9221648565711029
+      },
+      "source": "outputs\\aaai_sprint_2026_07_07\\qwen25_1p5b_mmlu100_csi_n64_budget3_v2.json"
+    }
+  ],
+  "interpretation": "Corrected MMLU choice-schema downstream slice. Uniform INT4 retains 41/54 FP16-correct scale on this slice, while INT2/INT3 and 2-to-4 average-3bit mixed allocations collapse. CSI slightly exceeds the single-split average-3bit allocation (1/100 vs 0/100) but does not yet provide positive downstream dominance; use as pressure-boundary/failure evidence pending stronger allocation policies."
+}

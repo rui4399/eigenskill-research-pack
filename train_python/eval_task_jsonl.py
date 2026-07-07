@@ -74,6 +74,24 @@ def normalize_task_row(row: dict) -> dict:
             "answer": str(row["answer"]),
             "answer_type": row.get("answer_type", "exact"),
         }
+    if "question" in row and "choices" in row and "answer" in row:
+        letters = "ABCD"
+        choices = list(row["choices"])
+        answer = row["answer"]
+        if isinstance(answer, int):
+            answer_text = letters[answer]
+        else:
+            answer_text = str(answer)
+            if answer_text.isdigit():
+                answer_text = letters[int(answer_text)]
+        choice_lines = "\n".join(f"{letters[i]}. {choice}" for i, choice in enumerate(choices[:4]))
+        return {
+            "id": row.get("id", ""),
+            "task": row.get("task", row.get("subject", "mmlu")),
+            "prompt": f"{row['question']}\n{choice_lines}\nAnswer:",
+            "answer": answer_text,
+            "answer_type": row.get("answer_type", "choice"),
+        }
     if "question" in row and "answer" in row:
         answer_text = str(row["answer"])
         final_answer = answer_text.split("####")[-1].strip() if "####" in answer_text else answer_text

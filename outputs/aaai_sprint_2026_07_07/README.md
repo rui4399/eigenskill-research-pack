@@ -18,6 +18,8 @@ Completed so far:
   Qwen2.5-7B/14B calibration-size plus seed-robustness curves.
 - Added fake-quant allocation support to the downstream JSONL task evaluator so
   MMLU/GSM8K subsets can be run under uniform or allocation-based bit policies.
+- Fixed MMLU `question`/`choices` row normalization so public MMLU JSONL rows
+  are evaluated as A/B/C/D choice tasks rather than GSM8K-style numeric tasks.
 - Completed one Qwen2.5-1.5B full-module sensitivity path check over the
   available 8-prompt public WikiText2 pool and saved it as `n8_effective`.
 - Completed two formal Qwen2.5-1.5B WikiText2 n=16 calibration splits under
@@ -41,14 +43,17 @@ Completed so far:
   seeds 0--4.
 - Added a Qwen2.5-1.5B n=64 CSI-vs-heuristic future-split sensitivity
   prediction check using seeds 0/1 to predict held-out seeds 2--4.
+- Ran a corrected Qwen2.5-1.5B MMLU broad5x20 100-row retention slice covering
+  FP16, uniform INT2/INT3/INT4, single-split average-3bit allocation, and CSI
+  average-3bit allocation.
 - Completed Qwen2.5-1.5B C4 n=64 seed0/seed1 full-module sensitivity runs,
   a matching CSI consensus allocation, and a WikiText2-vs-C4 domain-shift
   summary.
 
 Not yet completed:
 
-- CSI-guided allocation downstream retention.
-- Larger downstream retention slices after prompt/scoring cleanup.
+- Larger CSI-guided allocation downstream retention slices beyond the current
+  corrected 100-row MMLU slice.
 - Formal n=16/32/... calibration runs from the 128-prompt WikiText2/C4 pools.
 - Downstream-retention version of CSI vs simple heuristic prediction.
 - Calibration size scaling from 16 to 4096 samples.
@@ -90,6 +95,27 @@ runtime should not be used as efficiency evidence.
 
 This is currently a collapse-boundary/failure-analysis result, not positive
 evidence that CSI improves downstream retention.
+
+## Corrected MMLU100 Retention Slice
+
+The MMLU broad5x20 100-row slice uses corrected A/B/C/D choice normalization.
+The earlier uncorrected `qwen25_1p5b_mmlu100_fp16.json` artifact should not be
+used as evidence because public MMLU rows were being interpreted as numeric
+GSM8K-style rows.
+
+| Method | Bits | MMLU100 |
+|---|---:|---:|
+| FP16 | 16 | 54/100 |
+| Uniform INT2 | 2 | 0/100 |
+| Uniform INT3 | 3 | 4/100 |
+| Uniform INT4 | 4 | 41/100 |
+| Single-split n64 2-to-4 allocation | 2.9999 avg | 0/100 |
+| CSI n64 2-to-4 allocation | 2.9999 avg | 1/100 |
+
+This is pressure-boundary evidence. Uniform INT4 retains a substantial fraction
+of FP16 performance, while INT2/INT3 and average-3bit mixed allocations collapse
+on this slice. CSI slightly exceeds the single-split average-3bit allocation,
+but this is not yet positive downstream-dominance evidence.
 
 ## Calibration Scaling Check
 
