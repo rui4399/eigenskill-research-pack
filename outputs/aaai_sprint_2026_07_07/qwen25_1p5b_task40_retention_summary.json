@@ -1,8 +1,9 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "model": "Qwen2.5-1.5B-Instruct",
   "task_slice": "first 40 rows of gsm8k_test_gsm8k200_mmlu100.jsonl",
-  "gpu_condition": "contended RTX3090 run; runtime is not efficiency evidence",
+  "gpu_condition": "contended/partly contended RTX3090 runs; runtime is not efficiency evidence",
+  "interpretation": "INT2/INT3 and mixed policies retaining 2-bit layers collapse on this slice; all-INT4/CSI-budget4 partially recovers to 1/40 vs FP16 2/40. This is failure-boundary evidence, not positive CSI dominance.",
   "rows": [
     {
       "method": "fp16",
@@ -77,6 +78,31 @@
         "4": 89
       },
       "source": "outputs\\aaai_sprint_2026_07_07\\qwen25_1p5b_task40_csi_consensus_2to4_budget3.json"
+    },
+    {
+      "method": "single_split_seed0_2to4_budget4",
+      "task": "gsm8k_task40",
+      "total": 40,
+      "exact": 0,
+      "accuracy": 0.0,
+      "quant_mode": "allocation",
+      "bit_hist": {
+        "2": 63,
+        "4": 134
+      },
+      "source": "outputs\\aaai_sprint_2026_07_07\\qwen25_1p5b_task40_single_split_seed0_2to4_budget4.json"
+    },
+    {
+      "method": "csi_consensus_2to4_budget4",
+      "task": "gsm8k_task40",
+      "total": 40,
+      "exact": 1,
+      "accuracy": 0.025,
+      "quant_mode": "allocation",
+      "bit_hist": {
+        "4": 197
+      },
+      "source": "outputs\\aaai_sprint_2026_07_07\\qwen25_1p5b_task40_csi_consensus_2to4_budget4.json"
     }
   ]
 }

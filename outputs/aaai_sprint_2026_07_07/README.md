@@ -66,6 +66,8 @@ runtime should not be used as efficiency evidence.
 | Uniform INT4 | 4 | 1/40 |
 | Single-split 2-to-4 allocation | 2.9984 avg | 0/40 |
 | CSI consensus 2-to-4 allocation | 2.9999 avg | 0/40 |
+| Single-split 2-to-4 allocation | 3.5038 avg | 0/40 |
+| CSI consensus 2-to-4 allocation | 4.0000 avg | 1/40 |
 
 This is currently a collapse-boundary/failure-analysis result, not positive
 evidence that CSI improves downstream retention.
