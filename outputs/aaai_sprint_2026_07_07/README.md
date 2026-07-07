@@ -47,7 +47,8 @@ Completed so far:
   FP16, uniform INT2/INT3/INT4, single-split average-3bit allocation, and CSI
   average-3bit allocation.
 - Ran a corrected Qwen2.5-7B MMLU broad5x20 100-row retention slice covering
-  FP16, uniform INT3/INT4, and CSI average-3bit allocation.
+  FP16, uniform INT3/INT4, single-split average-3bit allocation, and CSI
+  average-3bit allocation.
 - Completed Qwen2.5-1.5B C4 n=64 seed0/seed1 full-module sensitivity runs,
   a matching CSI consensus allocation, and a WikiText2-vs-C4 domain-shift
   summary.
@@ -128,12 +129,13 @@ but this is not yet positive downstream-dominance evidence.
 | FP16 | 16 | 65/100 |
 | Uniform INT3 | 3 | 8/100 |
 | Uniform INT4 | 4 | 63/100 |
+| Single-split n64 2-to-4 allocation | 2.9997 avg | 0/100 |
 | CSI n64 2-to-4 allocation | 2.9997 avg | 1/100 |
 
 For 7B, uniform INT4 nearly matches FP16 on this slice, but uniform INT3 and the
-current average-3bit CSI allocation collapse. This strengthens the conclusion
-that the current 2-to-4 average-3bit fake-quant allocation is a severe
-low-bit-pressure setting, not yet a downstream-dominant policy.
+current average-3bit single/CSI allocations collapse. CSI slightly exceeds the
+single-split allocation at the collapse boundary, but this is not positive
+downstream-dominance evidence.
 
 ## Calibration Scaling Check
 
