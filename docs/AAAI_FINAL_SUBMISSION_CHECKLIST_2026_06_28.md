@@ -23,16 +23,17 @@ Sprint output root:
 | Priority | Experiment | Reviewer objection removed | Required artifact |
 |---|---|---|---|
 | P0 | CSI-guided allocation downstream retention | "CSI is only an observation; it does not guide decisions." | Pareto curve plus retention table for uniform, sensitivity-only, and CSI-guided allocation |
-| P0 | CSI vs simple heuristics | "Variance, entropy, or raw sensitivity may be enough." | Pearson/Spearman table predicting future retention drop |
-| P0 | Calibration size scaling | "Stability may not scale into downstream accuracy." | dual-axis CSI/accuracy curve for 16--2048 calibration samples |
+| P0 | CSI vs simple heuristics | "Rank variance, entropy, sensitivity, or calibration loss may be enough." | Pearson/Spearman/Kendall table predicting future retention drop |
+| P0 | Calibration size scaling | "Stability may not scale into downstream accuracy." | dual-axis CSI/accuracy curve for 16--4096 calibration samples |
 | P0 | Seed robustness | "The result may be a lucky seed." | mean, standard deviation, and worst-case table across seeds 0--4 |
-| P0 | Bit-width sweep | "The method is not stress-tested at low bits." | INT2/INT3/INT4/INT8/FP16 retention curve on Qwen2.5-1.5B |
+| P1 | Bit-width sweep | "The method is not stress-tested at low bits." | INT2/INT3/INT4/INT8/FP16 retention curve on Qwen2.5-1.5B |
+| P1 | Cross-model generalization | "This may be Qwen-specific." | at least one Llama-3.2-1B, Phi-3-mini, or Mistral row |
+| P1 | Calibration domain shift | "CSI may not detect distribution mismatch." | WikiText/C4 calibration vs MMLU/GSM8K evaluation table |
+| P1 | Layer-level mechanism visualization | "The mechanism is not interpretable." | layer id vs CSI score plot for stable and unstable settings |
 | P1 | Objective-aligned ablation | "Terms in the objective are decorative." | ablation table with CSI and accuracy columns |
-| P1 | Model-family generalization | "This may be Qwen-specific." | at least one Llama-3.2, Phi-3, or Mistral row |
-| P1 | 7B scale check | "The method may not scale beyond small models." | Qwen2.5-7B CSI stability and calibration audit |
-| P2 | Dataset shift | "Calibration stability may fail under domain mismatch." | WikiText/C4 calibration vs MMLU/GSM8K evaluation table |
+| P2 | Failure recovery | "Failure taxonomy is descriptive, not actionable." | 2048-to-128 calibration reduction with CSI rejection/audit |
 | P2 | Efficiency | "The method may be too expensive." | calibration time, CSI time, inference time, and peak VRAM table |
-| P2 | Layer visualization | "The mechanism is not interpretable." | layer id vs CSI score plot for stable and unstable settings |
+| P2 | 7B scale check | "The method may not scale beyond small models." | Qwen2.5-7B CSI stability and calibration audit |
 
 ## Must Complete Before AAAI Submission
 

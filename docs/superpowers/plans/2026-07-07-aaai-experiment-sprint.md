@@ -18,8 +18,8 @@ The target is reviewer-risk removal:
 - CSI-guided allocation must be tied to downstream retention.
 - Calibration size must be tied to both stability and accuracy.
 - Seed robustness must show mean, standard deviation, and worst case.
-- INT2/INT3/INT4/INT8/FP16 bit-width retention must close the low-bit limitation.
 - Heuristic comparison must show CSI is more predictive than simpler metrics.
+- INT2/INT3/INT4/INT8/FP16 bit-width retention must close the low-bit limitation after the four P0 experiments are running.
 - All tables must keep pending rows visibly pending until the experiment has run.
 
 ## Files
@@ -77,8 +77,8 @@ def test_matrix_contains_p0_experiments(tmp_path: Path):
     assert "p0_csi_allocation_retention" in ids
     assert "p0_calibration_size_scaling" in ids
     assert "p0_seed_robustness" in ids
-    assert "p0_bit_width_sweep" in ids
-    assert "p1_csi_vs_heuristics" in ids
+    assert "p0_csi_vs_heuristics" in ids
+    assert "p1_bit_width_sweep" in ids
 
 
 def test_matrix_has_no_duplicate_run_keys(tmp_path: Path):
@@ -122,14 +122,15 @@ from pathlib import Path
 
 MODELS = ["qwen25_0p5b", "qwen25_1p5b", "qwen25_3b", "qwen25_7b"]
 PRIMARY_MODELS = ["qwen25_0p5b", "qwen25_1p5b"]
+ALLOCATION_MODELS = ["qwen25_1p5b", "qwen25_3b"]
 TASKS = ["mmlu", "gsm8k"]
 SEEDS = [0, 1, 2, 3, 4]
-CALIBRATION_SIZES = [16, 32, 64, 128, 256, 512, 1024, 2048]
+CALIBRATION_SIZES = [16, 32, 64, 128, 256, 512, 1024, 2048, 4096]
 BIT_WIDTHS = [2, 3, 4, 8, 16]
 ALLOCATION_POLICIES = ["uniform", "sensitivity_only", "csi_guided"]
 PTQ_BASELINES = ["fp16", "uniform_int4", "uniform_int3", "gptq_int4", "awq_int4", "smoothquant_int4"]
 BIT_SWEEP_METHODS = ["uniform", "gptq", "awq", "csi_guided"]
-HEURISTICS = ["variance", "entropy", "layer_sensitivity", "random", "csi"]
+HEURISTICS = ["rank_variance", "entropy", "layer_sensitivity", "calibration_loss", "random", "csi"]
 
 
 def add_run(
@@ -178,21 +179,23 @@ def build_payload() -> dict:
             "required_outputs": ["mean_std_worst_case", "seed_rank_correlation", "seed_accuracy"],
         },
         {
-            "experiment_id": "p0_bit_width_sweep",
+            "experiment_id": "p1_bit_width_sweep",
             "reviewer_objection": "The method is not stress-tested at low bits.",
             "required_outputs": ["int2_int3_int4_int8_fp16_retention_curve", "uniform_vs_gptq_vs_awq_vs_csi"],
         },
         {
-            "experiment_id": "p1_csi_vs_heuristics",
-            "reviewer_objection": "A simpler variance or sensitivity heuristic may be enough.",
-            "required_outputs": ["pearson_correlation", "spearman_correlation", "future_accuracy_drop_prediction"],
+            "experiment_id": "p0_csi_vs_heuristics",
+            "reviewer_objection": "A simpler variance, entropy, sensitivity, or calibration-loss heuristic may be enough.",
+            "required_outputs": ["pearson_correlation", "spearman_correlation", "kendall_tau", "future_accuracy_drop_prediction"],
         },
     ]
     runs: list[dict] = []
-    for model in PRIMARY_MODELS:
+    for model in ALLOCATION_MODELS:
         for task in TASKS:
             for method in PTQ_BASELINES + ALLOCATION_POLICIES:
                 add_run(runs, experiment_id="p0_csi_allocation_retention", model=model, task=task, method=method)
+    for model in PRIMARY_MODELS:
+        for task in TASKS:
             for n in CALIBRATION_SIZES:
                 add_run(runs, experiment_id="p0_calibration_size_scaling", model=model, task=task, method="csi_guided", calibration_size=n)
             for method in ["uniform", "gptq_int4", "awq_int4", "csi_guided"]:
@@ -203,14 +206,14 @@ def build_payload() -> dict:
                     for bit_width in BIT_WIDTHS:
                         add_run(
                             runs,
-                            experiment_id="p0_bit_width_sweep",
+                            experiment_id="p1_bit_width_sweep",
                             model=model,
                             task=task,
                             method=method,
                             bit_width=bit_width,
                         )
             for heuristic in HEURISTICS:
-                add_run(runs, experiment_id="p1_csi_vs_heuristics", model=model, task=task, method=heuristic)
+                add_run(runs, experiment_id="p0_csi_vs_heuristics", model=model, task=task, method=heuristic)
     return {
         "schema_version": 1,
         "created_for": "AAAI experiment sprint 2026-07-07",
@@ -556,6 +559,7 @@ Run sizes:
 
 ```text
 16
+16
 32
 64
 128
@@ -563,6 +567,7 @@ Run sizes:
 512
 1024
 2048
+4096
 ```
 
 - [ ] **Step 2: Compute CSI metrics for each size**
@@ -636,12 +641,49 @@ Use table columns:
 method, accuracy_mean, accuracy_std, accuracy_worst, csi_mean, csi_std, rank_corr_mean, rank_corr_std
 ```
 
-### Task 6: Bit-Width Retention Sweep
+### Task 6: CSI vs Simple Heuristics
+
+**Files:**
+- Use: `train_python/gate_sensitivity_perturbation_matrix.py`
+- Use: `train_python/gate_rank_inversion_theory.py`
+- Output: `outputs/aaai_sprint_2026_07_07/p0_csi_vs_heuristics_*.json`
+
+- [ ] **Step 1: Compare these predictors**
+
+```text
+rank_variance
+entropy
+layer_sensitivity
+calibration_loss
+random
+csi
+```
+
+- [ ] **Step 2: Predict future accuracy drop**
+
+For each predictor, compute:
+
+```text
+Pearson correlation with future accuracy drop
+Spearman correlation with future accuracy drop
+Kendall tau with future accuracy drop
+```
+
+- [ ] **Step 3: Pass criterion**
+
+The CSI predictor must be best or statistically tied for best. If it is not,
+the final paper must weaken the claim from "CSI-guided allocation" to
+"CSI-assisted audit".
+
+
+## Phase 2: P1 Experiments
+
+### Task 7: Bit-Width Retention Sweep
 
 **Files:**
 - Use: `train_python/gate_official_ptq_task_retention.py`
 - Use: `train_python/eval_weight_quant_ppl.py`
-- Output: `outputs/aaai_sprint_2026_07_07/p0_bit_width_sweep_*.json`
+- Output: `outputs/aaai_sprint_2026_07_07/p1_bit_width_sweep_*.json`
 
 - [ ] **Step 1: Use the fixed model and bit widths**
 
@@ -689,40 +731,6 @@ catastrophic low-bit collapse and improve or tie the retention frontier at one
 or more constrained bit-widths. If INT2 and INT3 are uniformly poor, report them
 as failure-boundary evidence rather than hiding them.
 
-## Phase 2: P1 Experiments
-
-### Task 7: CSI vs Simple Heuristics
-
-**Files:**
-- Use: `train_python/gate_sensitivity_perturbation_matrix.py`
-- Use: `train_python/gate_rank_inversion_theory.py`
-- Output: `outputs/aaai_sprint_2026_07_07/p1_csi_vs_heuristics_*.json`
-
-- [ ] **Step 1: Compare these predictors**
-
-```text
-variance
-entropy
-layer_sensitivity
-random
-csi
-```
-
-- [ ] **Step 2: Predict future accuracy drop**
-
-For each predictor, compute:
-
-```text
-Pearson correlation with future accuracy drop
-Spearman correlation with future accuracy drop
-```
-
-- [ ] **Step 3: Pass criterion**
-
-The CSI predictor must be best or statistically tied for best. If it is not,
-the final paper must weaken the claim from "CSI-guided allocation" to
-"CSI-assisted audit".
-
 ### Task 8: Objective-Aligned Ablation
 
 **Files:**
@@ -753,13 +761,13 @@ explain why that term is redundant or remove that term from the core claim.
 
 ## Phase 3: P2/P3 Backlog
 
-### Task 9: Generalization and Efficiency Backlog
+### Task 9: Generalization, Shift, Visualization, and Efficiency Backlog
 
-Run only after P0 and P1 are closed:
+Run after the four P0 experiments are launched and at least one P0 result table has been generated:
 
 ```text
-model_scale: Qwen2.5-3B and Qwen2.5-7B
-extra_family: one of Llama-3.2, Phi-3, Mistral
+model_family_generalization: one of Llama-3.2-1B, Phi-3-mini, or Mistral
+model_scale_light: Qwen2.5-7B CSI calculation and rank-stability audit only
 dataset_shift: calibration WikiText/C4, evaluation MMLU/GSM8K
 failure_recovery: 2048 -> 128 calibration reduction with CSI reject/audit
 efficiency: calibration time, CSI time, memory, inference time
@@ -774,7 +782,7 @@ pareto_frontier: memory vs accuracy across all complete methods
 The sprint is complete only when:
 
 - `outputs/aaai_sprint_2026_07_07/experiment_matrix.json` exists.
-- P0 retention, calibration scaling, seed robustness, and bit-width sweep have result JSON files.
+- P0 allocation retention, CSI-vs-heuristic, calibration scaling, and seed robustness have result JSON files.
 - `train_python/summarize_aaai_sprint_results.py` produces win/loss and average-rank summaries.
 - The paper draft contains verified numbers instead of pending rows.
 - `docs/AAAI_FINAL_SUBMISSION_CHECKLIST_2026_06_28.md` marks every must-do item with an artifact path.
