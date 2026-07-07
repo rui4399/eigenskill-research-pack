@@ -10,9 +10,12 @@ from pathlib import Path
 
 try:
     import torch
-    from transformers import AutoModelForCausalLM, AutoTokenizer
 except ModuleNotFoundError:
     torch = None
+
+try:
+    from transformers import AutoModelForCausalLM, AutoTokenizer
+except ModuleNotFoundError:
     AutoModelForCausalLM = None
     AutoTokenizer = None
 
@@ -62,6 +65,66 @@ def score_prediction(prediction: str, answer: str, answer_type: str) -> dict:
     return {"normalized_prediction": pred, "normalized_answer": gold, "exact": pred == gold}
 
 
+def load_allocation(path: str, method: str) -> tuple[dict[str, int], dict]:
+    data = json.loads(Path(path).read_text(encoding="utf-8"))
+    groups = data["groups"]
+    alloc = data["allocations"][method]
+    module_bits = {}
+    for item, bits in zip(groups, alloc):
+        module = item.get("module")
+        if module:
+            module_bits[module] = int(bits)
+    return module_bits, data
+
+
+def quantize_weight_inplace(weight: torch.Tensor, bits: int, group_size: int = 0) -> None:
+    if bits >= 16:
+        return
+    qmax = (2 ** (bits - 1)) - 1
+    if qmax <= 0:
+        raise ValueError(f"unsupported bits: {bits}")
+    flat = weight.data.reshape(weight.shape[0], -1)
+    if group_size and group_size > 0 and group_size < flat.shape[1]:
+        ranges = [(start, min(start + group_size, flat.shape[1])) for start in range(0, flat.shape[1], group_size)]
+    else:
+        ranges = [(0, flat.shape[1])]
+    for start, end in ranges:
+        chunk = flat[:, start:end]
+        chunk_fp32 = chunk.detach().float()
+        scale = chunk_fp32.abs().amax(dim=1, keepdim=True).clamp_min(1.0e-8) / qmax
+        q = torch.round(chunk_fp32 / scale).clamp(-qmax, qmax)
+        chunk.copy_((q * scale).to(dtype=weight.dtype, device=weight.device))
+
+
+def apply_fake_quant(
+    model: torch.nn.Module,
+    mode: str,
+    module_bits: dict[str, int] | None = None,
+    group_size: int = 0,
+) -> dict:
+    bit_hist: dict[str, int] = {}
+    touched = 0
+    with torch.no_grad():
+        for name, module in model.named_modules():
+            if not isinstance(module, torch.nn.Linear):
+                continue
+            if mode == "fp16":
+                bits = 16
+            elif mode.startswith("uniform_int"):
+                bits = int(mode.replace("uniform_int", ""))
+            elif mode == "allocation":
+                if module_bits is None or name not in module_bits:
+                    continue
+                bits = int(module_bits[name])
+            else:
+                raise ValueError(f"unknown quant mode: {mode}")
+            if bits < 16:
+                quantize_weight_inplace(module.weight, bits, group_size=group_size)
+            bit_hist[str(bits)] = bit_hist.get(str(bits), 0) + 1
+            touched += 1
+    return {"linear_modules_touched": touched, "bit_hist": bit_hist, "group_size": group_size}
+
+
 def generate(model, tokenizer, prompt: str, args) -> str:
     batch = tokenizer(prompt, return_tensors="pt", truncation=True, max_length=args.max_input_length)
     input_ids = batch["input_ids"].to(args.device)
@@ -90,6 +153,10 @@ def main() -> None:
     parser.add_argument("--dtype", choices=["float16", "bfloat16", "float32"], default="float16")
     parser.add_argument("--max-input-length", type=int, default=256)
     parser.add_argument("--max-new-tokens", type=int, default=32)
+    parser.add_argument("--quant-mode", default="fp16")
+    parser.add_argument("--allocation", default="")
+    parser.add_argument("--allocation-method", default="csi_guided")
+    parser.add_argument("--group-size", type=int, default=0)
     parser.add_argument("--out", default="outputs/task_eval_smoke_summary.json")
     args = parser.parse_args()
 
@@ -105,6 +172,12 @@ def main() -> None:
     model = AutoModelForCausalLM.from_pretrained(args.model, torch_dtype=dtype)
     model.eval()
     model.to(args.device)
+
+    module_bits = None
+    allocation_meta = None
+    if args.quant_mode == "allocation":
+        module_bits, allocation_meta = load_allocation(args.allocation, args.allocation_method)
+    quant_meta = apply_fake_quant(model, args.quant_mode, module_bits, group_size=args.group_size)
 
     rows = read_jsonl(Path(args.tasks), args.limit)
     results = []
@@ -145,12 +218,21 @@ def main() -> None:
         "tasks": args.tasks,
         "device": args.device,
         "dtype": args.dtype,
+        "quant_mode": args.quant_mode,
+        "allocation": args.allocation,
+        "allocation_method": args.allocation_method,
+        "quant_meta": quant_meta,
         "total": total,
         "exact": exact,
         "accuracy": exact / max(total, 1),
         "by_task": by_task,
         "results": results,
     }
+    if allocation_meta:
+        output["allocation_summary"] = next(
+            (item for item in allocation_meta.get("summaries", []) if item.get("name") == args.allocation_method),
+            None,
+        )
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(json.dumps(output, ensure_ascii=False, indent=2), encoding="utf-8")
     print(json.dumps({k: output[k] for k in ["out", "total", "exact", "accuracy"] if k in output}, ensure_ascii=False))

@@ -16,10 +16,15 @@ Completed so far:
 - Expanded the matrix to the stricter AAAI closure requirements: equal-budget
   INT2/INT3/INT4 allocation, Qwen2.5-7B downstream allocation retention, and
   Qwen2.5-7B/14B calibration-size plus seed-robustness curves.
+- Added fake-quant allocation support to the downstream JSONL task evaluator so
+  MMLU/GSM8K subsets can be run under uniform or allocation-based bit policies.
+- Completed one Qwen2.5-1.5B full-module sensitivity path check over the
+  available 8-prompt public WikiText2 pool and saved it as `n8_effective`.
 
 Not yet completed:
 
 - CSI-guided allocation downstream retention.
+- Formal n=16/32/... calibration runs from the 128-prompt WikiText2/C4 pools.
 - CSI vs simple heuristic prediction of future retention drop.
 - Calibration size scaling from 16 to 4096 samples.
 - Seed robustness with seeds 0--4.
