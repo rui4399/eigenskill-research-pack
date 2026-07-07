@@ -31,6 +31,8 @@ Completed so far:
   runs and a matching CSI consensus allocation.
 - Completed Qwen2.5-1.5B WikiText2 n=128 full-pool sensitivity upper-bound
   runs and a matching CSI consensus allocation.
+- Completed Qwen2.5-7B WikiText2 n=16 seed0/seed1 full-module sensitivity
+  runs and a matching CSI consensus allocation.
 
 Not yet completed:
 
@@ -91,6 +93,12 @@ For the measured seed0/seed1 pair, increasing calibration samples from 16 to 32
 to 64 improves consensus agreement with both single-split high-bit sets. The
 128-row case is a full-pool upper bound: both seeds select the same 128-prompt
 pool, so it should not be interpreted as independent seed robustness.
+
+## 7B Scale Check
+
+Qwen2.5-7B n=16 seed0/seed1 full-module sensitivity completed. The resulting
+CSI consensus allocation has average bits `2.9997`, bit histogram `{2: 115,
+4: 82}`, and mean high-bit Jaccard `0.6823`.
 
 ## Key Files
 
