@@ -1,0 +1,82 @@
+{
+  "schema_version": 1,
+  "model": "Qwen2.5-1.5B-Instruct",
+  "task_slice": "first 40 rows of gsm8k_test_gsm8k200_mmlu100.jsonl",
+  "gpu_condition": "contended RTX3090 run; runtime is not efficiency evidence",
+  "rows": [
+    {
+      "method": "fp16",
+      "task": "gsm8k_task40",
+      "total": 40,
+      "exact": 2,
+      "accuracy": 0.05,
+      "quant_mode": "fp16",
+      "bit_hist": {
+        "16": 197
+      },
+      "source": "outputs\\aaai_sprint_2026_07_07\\qwen25_1p5b_task40_fp16.json"
+    },
+    {
+      "method": "uniform_int2",
+      "task": "gsm8k_task40",
+      "total": 40,
+      "exact": 0,
+      "accuracy": 0.0,
+      "quant_mode": "uniform_int2",
+      "bit_hist": {
+        "2": 197
+      },
+      "source": "outputs\\aaai_sprint_2026_07_07\\qwen25_1p5b_task40_uniform_int2.json"
+    },
+    {
+      "method": "uniform_int3",
+      "task": "gsm8k_task40",
+      "total": 40,
+      "exact": 0,
+      "accuracy": 0.0,
+      "quant_mode": "uniform_int3",
+      "bit_hist": {
+        "3": 197
+      },
+      "source": "outputs\\aaai_sprint_2026_07_07\\qwen25_1p5b_task40_uniform_int3.json"
+    },
+    {
+      "method": "uniform_int4",
+      "task": "gsm8k_task40",
+      "total": 40,
+      "exact": 1,
+      "accuracy": 0.025,
+      "quant_mode": "uniform_int4",
+      "bit_hist": {
+        "4": 197
+      },
+      "source": "outputs\\aaai_sprint_2026_07_07\\qwen25_1p5b_task40_uniform_int4.json"
+    },
+    {
+      "method": "single_split_seed0_2to4_budget3",
+      "task": "gsm8k_task40",
+      "total": 40,
+      "exact": 0,
+      "accuracy": 0.0,
+      "quant_mode": "allocation",
+      "bit_hist": {
+        "2": 93,
+        "4": 104
+      },
+      "source": "outputs\\aaai_sprint_2026_07_07\\qwen25_1p5b_task40_single_split_seed0_2to4_budget3.json"
+    },
+    {
+      "method": "csi_consensus_2to4_budget3",
+      "task": "gsm8k_task40",
+      "total": 40,
+      "exact": 0,
+      "accuracy": 0.0,
+      "quant_mode": "allocation",
+      "bit_hist": {
+        "2": 108,
+        "4": 89
+      },
+      "source": "outputs\\aaai_sprint_2026_07_07\\qwen25_1p5b_task40_csi_consensus_2to4_budget3.json"
+    }
+  ]
+}

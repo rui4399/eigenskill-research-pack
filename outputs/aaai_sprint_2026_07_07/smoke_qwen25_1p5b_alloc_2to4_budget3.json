@@ -1,0 +1,110 @@
+{
+  "date": "2026-07-07",
+  "model": "E:\\models\\Qwen2.5-1.5B-Instruct",
+  "prompt_count": 1,
+  "prompt_selection": {
+    "source": "data_eval\\public_calib_prompts_2026_06_07\\wikitext2_test_ppl_prompts.txt",
+    "pool_size": 8,
+    "limit": 1,
+    "sample_size": 1,
+    "seed": 0,
+    "selected_indices": [
+      6
+    ]
+  },
+  "max_length": 128,
+  "device": "cuda",
+  "dtype": "float16",
+  "probe_bits": 4,
+  "group_size": 128,
+  "base_bits": 2,
+  "high_bits": 4,
+  "budget_avg_bits": 3.0,
+  "lowmem_row_chunk": 16,
+  "complete": true,
+  "linear_modules": 1,
+  "measured_modules": 1,
+  "baseline": {
+    "prompt_count": 1,
+    "tokens": 98,
+    "mean_nll": 3.4662973880767822,
+    "ppl": 32.01797257406147,
+    "per_prompt": [
+      {
+        "tokens": 98,
+        "loss": 3.4662973880767822,
+        "ppl": 32.01797257406147
+      }
+    ]
+  },
+  "groups": [
+    {
+      "index": 0,
+      "module": "model.layers.0.self_attn.q_proj",
+      "name": "model.layers.0.self_attn.q_proj",
+      "layer": 0,
+      "group": 0,
+      "shape": [
+        1536,
+        1536
+      ],
+      "param_count": 2360832,
+      "weight_params": 2359296,
+      "bias_params": 1536,
+      "cost": 2360832.0,
+      "quant_bits": 4,
+      "group_size": 128,
+      "quantized_mean_nll": 3.4622702598571777,
+      "quantized_ppl": 31.88929137492816,
+      "delta_nll": -0.004027128219604492,
+      "positive_delta_nll": 0.0,
+      "extra_cost_to_keep_fp16": 28329984.0,
+      "score_delta_per_param": 0.0,
+      "score_delta_per_extra_fp16_cost": 0.0,
+      "sensitivity_rank": 1,
+      "sensitivity": 0.0,
+      "variance": 1.0,
+      "outlier": 31.88929137492816
+    }
+  ],
+  "allocations": {
+    "uniform_int2": [
+      2
+    ],
+    "loss_sensitive_4to8": [
+      2
+    ]
+  },
+  "summaries": [
+    {
+      "name": "uniform_int2",
+      "groups": 1,
+      "budget_avg_bits": 3.0,
+      "memory": 4721664.0,
+      "budget": 7082496.0,
+      "budget_used": 0.6666666666666666,
+      "avg_bits": 2.0,
+      "bit_hist": {
+        "2": 1
+      },
+      "positive_delta_nll_total": 0.0,
+      "positive_delta_nll_protected": 0,
+      "positive_delta_nll_protected_ratio": 0.0
+    },
+    {
+      "name": "loss_sensitive_4to8",
+      "groups": 1,
+      "budget_avg_bits": 3.0,
+      "memory": 4721664.0,
+      "budget": 7082496.0,
+      "budget_used": 0.6666666666666666,
+      "avg_bits": 2.0,
+      "bit_hist": {
+        "2": 1
+      },
+      "positive_delta_nll_total": 0.0,
+      "positive_delta_nll_protected": 0,
+      "positive_delta_nll_protected_ratio": 0.0
+    }
+  ]
+}

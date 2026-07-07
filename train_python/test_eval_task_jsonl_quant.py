@@ -40,3 +40,16 @@ def test_apply_fake_quant_reports_uniform_bit_histogram():
 
     assert meta["linear_modules_touched"] == 2
     assert meta["bit_hist"] == {"3": 2}
+
+
+def test_normalize_task_row_supports_gsm8k_question_answer_schema():
+    row = {
+        "question": "A duck lays 16 eggs and 7 are used. How many remain?",
+        "answer": "16 - 7 = <<16-7=9>>9\n#### 9",
+    }
+
+    normalized = task_eval.normalize_task_row(row)
+
+    assert "A duck lays" in normalized["prompt"]
+    assert normalized["answer"] == "9"
+    assert normalized["answer_type"] == "number"

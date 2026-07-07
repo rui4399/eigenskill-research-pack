@@ -20,10 +20,16 @@ Completed so far:
   MMLU/GSM8K subsets can be run under uniform or allocation-based bit policies.
 - Completed one Qwen2.5-1.5B full-module sensitivity path check over the
   available 8-prompt public WikiText2 pool and saved it as `n8_effective`.
+- Completed two formal Qwen2.5-1.5B WikiText2 n=16 calibration splits under
+  contended RTX3090 load and built a robust-LCB CSI consensus allocation.
+- Ran a 40-row GSM8K downstream retention slice for FP16, uniform INT2/INT3/INT4,
+  single-split 2-to-4 average-3bit allocation, and CSI consensus 2-to-4
+  average-3bit allocation.
 
 Not yet completed:
 
 - CSI-guided allocation downstream retention.
+- Larger downstream retention slices after prompt/scoring cleanup.
 - Formal n=16/32/... calibration runs from the 128-prompt WikiText2/C4 pools.
 - CSI vs simple heuristic prediction of future retention drop.
 - Calibration size scaling from 16 to 4096 samples.
@@ -46,6 +52,23 @@ The current matrix contains 624 runs:
 
 The allocation-retention block now covers Qwen2.5-1.5B, Qwen2.5-3B, and
 Qwen2.5-7B under average 2-bit, 3-bit, and 4-bit budgets.
+
+## Early Contended-GPU Results
+
+The first downstream slice is intentionally recorded as a contended-GPU run:
+runtime should not be used as efficiency evidence.
+
+| Method | Bits | GSM8K task40 |
+|---|---:|---:|
+| FP16 | 16 | 2/40 |
+| Uniform INT2 | 2 | 0/40 |
+| Uniform INT3 | 3 | 0/40 |
+| Uniform INT4 | 4 | 1/40 |
+| Single-split 2-to-4 allocation | 2.9984 avg | 0/40 |
+| CSI consensus 2-to-4 allocation | 2.9999 avg | 0/40 |
+
+This is currently a collapse-boundary/failure-analysis result, not positive
+evidence that CSI improves downstream retention.
 
 ## Key Files
 

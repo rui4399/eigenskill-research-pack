@@ -65,6 +65,28 @@ def score_prediction(prediction: str, answer: str, answer_type: str) -> dict:
     return {"normalized_prediction": pred, "normalized_answer": gold, "exact": pred == gold}
 
 
+def normalize_task_row(row: dict) -> dict:
+    if "prompt" in row:
+        return {
+            "id": row.get("id", ""),
+            "task": row.get("task", ""),
+            "prompt": row["prompt"],
+            "answer": str(row["answer"]),
+            "answer_type": row.get("answer_type", "exact"),
+        }
+    if "question" in row and "answer" in row:
+        answer_text = str(row["answer"])
+        final_answer = answer_text.split("####")[-1].strip() if "####" in answer_text else answer_text
+        return {
+            "id": row.get("id", ""),
+            "task": row.get("task", "gsm8k"),
+            "prompt": f"{row['question']}\nAnswer:",
+            "answer": final_answer,
+            "answer_type": row.get("answer_type", "number"),
+        }
+    raise KeyError("task row must contain either prompt/answer or question/answer")
+
+
 def load_allocation(path: str, method: str) -> tuple[dict[str, int], dict]:
     data = json.loads(Path(path).read_text(encoding="utf-8"))
     groups = data["groups"]
@@ -182,19 +204,20 @@ def main() -> None:
     rows = read_jsonl(Path(args.tasks), args.limit)
     results = []
     for row in rows:
-        prediction = generate(model, tokenizer, row["prompt"], args)
-        scored = score_prediction(prediction, str(row["answer"]), row.get("answer_type", "exact"))
+        normalized = normalize_task_row(row)
+        prediction = generate(model, tokenizer, normalized["prompt"], args)
+        scored = score_prediction(prediction, normalized["answer"], normalized["answer_type"])
         results.append(
             {
-                "id": row.get("id", ""),
-                "task": row.get("task", ""),
-                "answer_type": row.get("answer_type", "exact"),
-                "answer": str(row["answer"]),
+                "id": normalized["id"],
+                "task": normalized["task"],
+                "answer_type": normalized["answer_type"],
+                "answer": normalized["answer"],
                 "prediction": prediction,
                 **scored,
             }
         )
-        print(json.dumps(results[-1], ensure_ascii=False), flush=True)
+        print(json.dumps(results[-1], ensure_ascii=True), flush=True)
 
     del model
     if args.device == "cuda":
@@ -235,7 +258,7 @@ def main() -> None:
         )
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(json.dumps(output, ensure_ascii=False, indent=2), encoding="utf-8")
-    print(json.dumps({k: output[k] for k in ["out", "total", "exact", "accuracy"] if k in output}, ensure_ascii=False))
+    print(json.dumps({k: output[k] for k in ["out", "total", "exact", "accuracy"] if k in output}, ensure_ascii=True))
 
 
 if __name__ == "__main__":
