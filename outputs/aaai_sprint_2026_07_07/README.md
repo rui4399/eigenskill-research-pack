@@ -39,6 +39,8 @@ Completed so far:
   runs and a matching CSI consensus allocation.
 - Extended Qwen2.5-1.5B WikiText2 n=64 seed robustness from seed0/seed1 to
   seeds 0--4.
+- Added a Qwen2.5-1.5B n=64 CSI-vs-heuristic future-split sensitivity
+  prediction check using seeds 0/1 to predict held-out seeds 2--4.
 - Completed Qwen2.5-1.5B C4 n=64 seed0/seed1 full-module sensitivity runs,
   a matching CSI consensus allocation, and a WikiText2-vs-C4 domain-shift
   summary.
@@ -48,7 +50,7 @@ Not yet completed:
 - CSI-guided allocation downstream retention.
 - Larger downstream retention slices after prompt/scoring cleanup.
 - Formal n=16/32/... calibration runs from the 128-prompt WikiText2/C4 pools.
-- CSI vs simple heuristic prediction of future retention drop.
+- Downstream-retention version of CSI vs simple heuristic prediction.
 - Calibration size scaling from 16 to 4096 samples.
 - Seed robustness with seeds 0--4.
 - INT2/INT3/INT4/INT8/FP16 bit-width sweep.
@@ -145,6 +147,28 @@ This is the first formal five-seed stability slice for the AAAI sprint. It
 shows that equal-budget allocations keep a tight average-bit distribution, but
 the selected high-bit layer sets still vary meaningfully across calibration
 sampling seeds.
+
+## CSI-vs-Heuristic Future-Split Check
+
+Using Qwen2.5-1.5B WikiText2 n=64, seed0/seed1 scores were used to predict the
+mean per-module positive delta-NLL on held-out seeds 2--4. This is a
+calibration-sensitivity prediction check, not downstream task-retention
+evidence.
+
+| Score | Pearson | Spearman | Kendall tau |
+|---|---:|---:|---:|
+| Two-split mean | 0.9951 | 0.8959 | 0.7664 |
+| Single split seed0 | 0.9939 | 0.8715 | 0.7434 |
+| Two-split min / CSI LCB proxy | 0.9950 | 0.8696 | 0.7627 |
+| Single split seed1 | 0.9948 | 0.8505 | 0.7192 |
+| CSI LCB per parameter | 0.1780 | 0.7209 | 0.5676 |
+| Parameter count | 0.7562 | 0.2905 | 0.2671 |
+| Random fixed | -0.0071 | 0.1485 | 0.1244 |
+
+The strongest ranking signal in this slice is the two-split mean, which beats
+both single-split scores on Spearman and Kendall tau. The conservative LCB
+proxy is close to the stronger single split but does not dominate the mean
+score in this setting.
 
 ## Calibration Domain-Shift Check
 

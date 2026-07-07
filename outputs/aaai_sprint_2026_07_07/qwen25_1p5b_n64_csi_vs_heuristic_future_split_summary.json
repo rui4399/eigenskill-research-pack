@@ -1,0 +1,78 @@
+{
+  "schema_version": 1,
+  "model": "Qwen2.5-1.5B-Instruct",
+  "calibration_n": 64,
+  "train_splits": [
+    0,
+    1
+  ],
+  "future_splits": [
+    2,
+    3,
+    4
+  ],
+  "target": "mean per-module positive_delta_nll over future calibration seeds 2--4",
+  "note": "This is a calibration-sensitivity prediction check, not downstream task-retention evidence. Seeds 2--4 were run under intentional GPU contention; use for stability ranking evidence, not efficiency evidence.",
+  "metrics": [
+    {
+      "score": "two_split_mean",
+      "pearson": 0.9950559968799486,
+      "spearman": 0.8958971701089025,
+      "kendall_tau": 0.7664225598426058
+    },
+    {
+      "score": "single_split_seed0",
+      "pearson": 0.9939103425184243,
+      "spearman": 0.8715491265008792,
+      "kendall_tau": 0.7433688506007708
+    },
+    {
+      "score": "two_split_min",
+      "pearson": 0.9949736087658213,
+      "spearman": 0.8696383686386788,
+      "kendall_tau": 0.7626797656388709
+    },
+    {
+      "score": "csi_lcb_proxy",
+      "pearson": 0.9949736087658213,
+      "spearman": 0.8696383686386788,
+      "kendall_tau": 0.7626797656388709
+    },
+    {
+      "score": "single_split_seed1",
+      "pearson": 0.9947538662798218,
+      "spearman": 0.8505356005911184,
+      "kendall_tau": 0.7192270857979832
+    },
+    {
+      "score": "csi_lcb_per_param",
+      "pearson": 0.17801088059573952,
+      "spearman": 0.7209452752068636,
+      "kendall_tau": 0.5676155530567556
+    },
+    {
+      "score": "param_count",
+      "pearson": 0.7561732489853276,
+      "spearman": 0.2904969141650307,
+      "kendall_tau": 0.267118592428974
+    },
+    {
+      "score": "random_fixed",
+      "pearson": -0.0070772474671509725,
+      "spearman": 0.14849626481733835,
+      "kendall_tau": 0.1244416958702673
+    },
+    {
+      "score": "split_agreement_proxy",
+      "pearson": -0.47376169083879266,
+      "spearman": -0.618455182186181,
+      "kendall_tau": -0.4640944365504427
+    }
+  ],
+  "top_line": {
+    "score": "two_split_mean",
+    "pearson": 0.9950559968799486,
+    "spearman": 0.8958971701089025,
+    "kendall_tau": 0.7664225598426058
+  }
+}
