@@ -1,0 +1,73 @@
+{
+  "schema_version": 1,
+  "model": "Qwen2.5-7B-Instruct",
+  "task": "mmlu_broad5x20_test",
+  "limit": 100,
+  "rows": [
+    {
+      "method": "fp16",
+      "accuracy": 0.65,
+      "exact": 65,
+      "total": 100,
+      "quant_mode": "fp16",
+      "bit_hist": {
+        "16": 197
+      },
+      "allocation_summary": null,
+      "source": "outputs\\aaai_sprint_2026_07_07\\qwen25_7b_mmlu100_fp16_v2.json"
+    },
+    {
+      "method": "uniform_int3",
+      "accuracy": 0.08,
+      "exact": 8,
+      "total": 100,
+      "quant_mode": "uniform_int3",
+      "bit_hist": {
+        "3": 197
+      },
+      "allocation_summary": null,
+      "source": "outputs\\aaai_sprint_2026_07_07\\qwen25_7b_mmlu100_uniform_int3_v2.json"
+    },
+    {
+      "method": "uniform_int4",
+      "accuracy": 0.63,
+      "exact": 63,
+      "total": 100,
+      "quant_mode": "uniform_int4",
+      "bit_hist": {
+        "4": 197
+      },
+      "allocation_summary": null,
+      "source": "outputs\\aaai_sprint_2026_07_07\\qwen25_7b_mmlu100_uniform_int4_v2.json"
+    },
+    {
+      "method": "csi_n64_budget3",
+      "accuracy": 0.01,
+      "exact": 1,
+      "total": 100,
+      "quant_mode": "allocation",
+      "bit_hist": {
+        "2": 103,
+        "4": 94
+      },
+      "allocation_summary": {
+        "name": "loss_sensitive_robust_lcb_consensus_4to8",
+        "groups": 197,
+        "budget_avg_bits": 3.0,
+        "memory": 21209377792.0,
+        "budget": 21211244544.0,
+        "budget_used": 0.9999119923399059,
+        "avg_bits": 2.999735977019718,
+        "bit_hist": {
+          "2": 103,
+          "4": 94
+        },
+        "positive_delta_nll_total": 0.21955244747499725,
+        "positive_delta_nll_protected": 0.21037131852585267,
+        "positive_delta_nll_protected_ratio": 0.9581825251563633
+      },
+      "source": "outputs\\aaai_sprint_2026_07_07\\qwen25_7b_mmlu100_csi_n64_budget3_v2.json"
+    }
+  ],
+  "interpretation": "Corrected MMLU choice-schema 7B downstream slice. Uniform INT4 retains nearly all FP16 performance on this slice (63/100 vs 65/100), while uniform INT3 and 2-to-4 average-3bit CSI allocation collapse. This supports a sharp low-bit pressure boundary at 7B and shows that the current average-3bit allocation policy is not yet downstream-dominant."
+}
