@@ -33,6 +33,8 @@ Completed so far:
   runs and a matching CSI consensus allocation.
 - Completed Qwen2.5-7B WikiText2 n=16 seed0/seed1 full-module sensitivity
   runs and a matching CSI consensus allocation.
+- Completed Qwen2.5-7B WikiText2 n=32 seed0/seed1 full-module sensitivity
+  runs and a matching CSI consensus allocation.
 - Completed Qwen2.5-1.5B C4 n=64 seed0/seed1 full-module sensitivity runs,
   a matching CSI consensus allocation, and a WikiText2-vs-C4 domain-shift
   summary.
@@ -102,6 +104,19 @@ pool, so it should not be interpreted as independent seed robustness.
 Qwen2.5-7B n=16 seed0/seed1 full-module sensitivity completed. The resulting
 CSI consensus allocation has average bits `2.9997`, bit histogram `{2: 115,
 4: 82}`, and mean high-bit Jaccard `0.6823`.
+
+Qwen2.5-7B n=32 seed0/seed1 full-module sensitivity also completed. The
+resulting CSI consensus allocation has average bits `2.9997`, bit histogram
+`{2: 115, 4: 82}`, and mean high-bit Jaccard `0.6995`.
+
+| Calibration n | Mean high-bit Jaccard | Avg bits |
+|---:|---:|---:|
+| 16 | 0.6823 | 2.9997 |
+| 32 | 0.6995 | 2.9997 |
+
+The n=32 run slightly improves agreement over n=16, but remains far from a
+saturated consensus. This strengthens the scale-level claim that 7B allocation
+decisions remain sensitive to calibration perturbations.
 
 ## Calibration Domain-Shift Check
 
