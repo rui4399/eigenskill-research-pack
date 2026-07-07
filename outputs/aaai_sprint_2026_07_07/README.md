@@ -25,6 +25,8 @@ Completed so far:
 - Ran a 40-row GSM8K downstream retention slice for FP16, uniform INT2/INT3/INT4,
   single-split 2-to-4 average-3bit allocation, and CSI consensus 2-to-4
   average-3bit allocation.
+- Completed Qwen2.5-1.5B WikiText2 n=32 seed0/seed1 full-module sensitivity
+  runs and a matching CSI consensus allocation.
 
 Not yet completed:
 
@@ -71,6 +73,16 @@ runtime should not be used as efficiency evidence.
 
 This is currently a collapse-boundary/failure-analysis result, not positive
 evidence that CSI improves downstream retention.
+
+## Calibration Scaling Check
+
+| Calibration n | Mean high-bit Jaccard |
+|---:|---:|
+| 16 | 0.6767 |
+| 32 | 0.7398 |
+
+For the measured seed0/seed1 pair, increasing calibration samples from 16 to 32
+improves consensus agreement with both single-split high-bit sets.
 
 ## Key Files
 

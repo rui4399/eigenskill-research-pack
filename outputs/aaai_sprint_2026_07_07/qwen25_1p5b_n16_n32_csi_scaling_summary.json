@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "model": "Qwen2.5-1.5B-Instruct",
+  "calibration_pool": "data_eval/text_prompts/wikitext2_validation_128.txt",
+  "split_pair": "seed0 vs seed1",
+  "metric": "consensus high-bit Jaccard against each split high-bit set",
+  "rows": [
+    {
+      "n": 16,
+      "avg_bits": 2.9998689838720805,
+      "bit_hist": {
+        "2": 108,
+        "4": 89
+      },
+      "left_high_jaccard": 0.7079646017699115,
+      "right_high_jaccard": 0.6454545454545455,
+      "mean_high_jaccard": 0.6767095736122285,
+      "left_high_overlap": 80,
+      "right_high_overlap": 71,
+      "source": "outputs\\aaai_sprint_2026_07_07\\qwen25_1p5b_wikitext2_n16_seed0_seed1_csi_consensus_2to4_budget3.json"
+    },
+    {
+      "n": 32,
+      "avg_bits": 2.999865003635283,
+      "bit_hist": {
+        "2": 108,
+        "4": 89
+      },
+      "left_high_jaccard": 0.7523809523809524,
+      "right_high_jaccard": 0.7272727272727273,
+      "mean_high_jaccard": 0.7398268398268398,
+      "left_high_overlap": 79,
+      "right_high_overlap": 80,
+      "source": "outputs\\aaai_sprint_2026_07_07\\qwen25_1p5b_wikitext2_n32_seed0_seed1_csi_consensus_2to4_budget3.json"
+    }
+  ],
+  "interpretation": "n=32 improves mean high-bit Jaccard over n=16 in this measured pair, supporting the calibration-size stability trend."
+}
