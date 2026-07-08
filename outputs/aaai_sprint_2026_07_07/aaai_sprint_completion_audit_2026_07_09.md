@@ -9,7 +9,7 @@ This audit maps the requested AAAI sprint experiments to concrete artifacts in t
 | Requirement | Status | Evidence | Boundary |
 |---|---|---|---|
 | P0 CSI-guided allocation downstream retention under equal budget | `complete_with_mixed_results` | `aaai_sprint_downstream_retention_matrix_2026_07_08.json`, `aaai_sprint_pareto_frontier_2026_07_08.json`, `aaai_sprint_failure_recovery_audit_2026_07_09.json` | CSI is useful as allocation/audit evidence but does not dominate in every slice; 7B avg3.5 is mixed/negative versus single-split. |
-| P0 calibration size scaling | `complete_for_1p5b_and_7b_partial_curve` | `aaai_sprint_calibration_alignment_2026_07_09.json`, `qwen25_1p5b_n16_n32_n64_n128_csi_scaling_summary.json`, `qwen25_7b_n16_n32_n64_csi_scale_summary.json` | Not a full 16..4096 curve. It is enough for current sprint trend evidence, but a final AAAI camera-ready package should extend n256+ if compute time allows. |
+| P0 calibration size scaling | `complete_to_n128_with_512_prompt_pool_ready_for_n256_n512` | `aaai_sprint_calibration_alignment_2026_07_09.json`, `qwen25_1p5b_n16_n32_n64_n128_csi_scaling_summary.json`, `qwen25_7b_n16_n32_n64_csi_scale_summary.json`, `aaai_scaling_512_prompt_manifest_2026_07_09.json`, `aaai_scaling_512_readiness_audit_2026_07_09.json` | n256/n512 sensitivity and downstream runs are not complete, but the local public prompt pools needed to run them reproducibly are now available. |
 | P0 seed robustness | `complete_for_1p5b_calibration_stability` | `qwen25_1p5b_wikitext2_n64_seed0_to_seed4_robustness_summary.json` | Downstream task accuracy is not rerun for all five seeds; use as calibration stability, not full task seed-mean evidence. |
 | P0 CSI vs simple heuristic comparison | `complete_for_future_split_prediction` | `qwen25_1p5b_n64_csi_vs_heuristic_future_split_summary.json`, `qwen25_1p5b_n64_csi_vs_heuristic_future_split_summary.md` | This predicts future calibration sensitivity, not future task accuracy drop directly. |
 | P1/P0 bit-width and low-bit pressure sweep | `complete_for_1p5b_3b_7b_uniform_and_mixed_slices` | `aaai_sprint_bit_budget_sensitivity_2026_07_09.json`, `qwen25_7b_aaai_sprint_summary.json`, `qwen25_3b_aaai_sprint_summary.json` | External GPTQ bit sweep remains blocked by local checkpoint/runtime issue; AWQ checkpoint baselines are added separately. |
@@ -23,9 +23,9 @@ This audit maps the requested AAAI sprint experiments to concrete artifacts in t
 ## Remaining Strict Gaps
 
 - Full 14B CSI-guided allocation/downstream retention requires an FP16/BF16 14B checkpoint plus offload/device_map support, or an AWQ-aware sensitivity path for WQLinear_GEMM modules.
-- Full calibration-size curve through n256/n512/n1024/n2048/n4096 is not complete for all models/tasks.
 - GPTQ 7B downstream retention remains blocked after dependency installation: gptqmodel imports fail on this Windows Python 3.9 stack with a type-union EnumMeta error.
 - Full wall-clock efficiency table over all modules and downstream tasks is still not complete; current evidence includes reproducible 1.5B/3B/7B timing smokes plus proxy accounting.
+- Full calibration-size curve through n256/n512 is not complete; 512-prompt WikiText2/C4 pools are now materialized for reproducible follow-up runs.
 
 ## Recommended Paper Claim
 

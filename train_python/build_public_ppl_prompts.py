@@ -13,7 +13,7 @@ import json
 import re
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any, Callable
+from typing import Any, Callable, Optional
 from urllib.parse import urlencode
 from urllib.request import urlopen
 
@@ -34,7 +34,7 @@ DATASETS = {
 }
 
 
-Loader = Callable[[str, str | None, str, int, int], list[dict[str, Any]]]
+Loader = Callable[[str, Optional[str], str, int, int], list[dict[str, Any]]]
 
 
 def normalize_text(text: str) -> str:
@@ -81,10 +81,10 @@ def collect_prompts(
     min_chars: int,
     max_chars: int,
     offset: int,
-    max_batches: int = 5,
+    max_batches: int = 50,
 ) -> tuple[list[str], int]:
     prompts: list[str] = []
-    batch_size = max(requested * 4, requested, 1)
+    batch_size = min(max(requested * 4, requested, 1), 100)
     rows_seen = 0
     next_offset = offset
     for _ in range(max_batches):

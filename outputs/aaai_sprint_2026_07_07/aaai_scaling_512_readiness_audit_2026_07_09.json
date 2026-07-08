@@ -1,0 +1,43 @@
+{
+  "generated_at": "2026-07-09",
+  "status": "prompt_pool_ready_sensitivity_not_rerun",
+  "existing_scaling_evidence": [
+    "qwen25_1p5b_n16_n32_n64_n128_csi_scaling_summary.json",
+    "qwen25_7b_n16_n32_n64_csi_scale_summary.json",
+    "aaai_sprint_calibration_alignment_2026_07_09.json"
+  ],
+  "new_prompt_pool_manifest": "aaai_scaling_512_prompt_manifest_2026_07_09.json",
+  "new_prompt_pools": [
+    {
+      "id": "wikitext2",
+      "dataset": "Salesforce/wikitext",
+      "config": "wikitext-2-raw-v1",
+      "split": "test",
+      "source": "datasets-server",
+      "path": "data_eval/text_prompts/aaai_scaling_512_2026_07_09/wikitext2_test_ppl_prompts.txt",
+      "requested_prompts": 512,
+      "prompts": 512,
+      "rows_seen": 1100,
+      "min_chars": 40,
+      "max_chars": 512,
+      "offset": 0
+    },
+    {
+      "id": "c4",
+      "dataset": "allenai/c4",
+      "config": "en",
+      "split": "validation",
+      "source": "datasets-server",
+      "path": "data_eval/text_prompts/aaai_scaling_512_2026_07_09/c4_validation_ppl_prompts.txt",
+      "requested_prompts": 512,
+      "prompts": 512,
+      "rows_seen": 600,
+      "min_chars": 40,
+      "max_chars": 512,
+      "offset": 0
+    }
+  ],
+  "what_this_closes": "The previous n256+ calibration-scaling gap was partly a data-preparation gap. Public WikiText2 and C4 prompt pools with 512 usable prompts each are now materialized in-repo, so n256/n512 scaling can be run reproducibly from local text files.",
+  "what_remains": "The expensive module sensitivity and downstream retention runs for n256/n512 have not been executed yet.",
+  "claim_boundary": "Use this as calibration-scaling readiness evidence, not as completed n256/n512 CSI stability results."
+}

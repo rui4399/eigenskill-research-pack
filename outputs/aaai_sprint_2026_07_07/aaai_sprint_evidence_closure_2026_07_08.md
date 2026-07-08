@@ -71,3 +71,6 @@ Added on 2026-07-09: `qwen25_7b_gptq_dependency_blocker_2026_07_09.{json,md}` re
 ## Multi-scale Efficiency Timing Smoke
 
 Added on 2026-07-09: `aaai_sprint_efficiency_timing_smoke_2026_07_09.{json,md}` aggregates reproducible 1.5B/3B/7B timing smokes under the same 4-prompt/1-module sensitivity protocol. Wall-clock times are 12.931s, 15.102s, and 37.691s respectively. This remains a smoke/protocol timing table, not a full all-module benchmark.
+## Calibration Scaling 512 Prompt Readiness
+
+Added on 2026-07-09: `aaai_scaling_512_prompt_manifest_2026_07_09.{json,md}` and `aaai_scaling_512_readiness_audit_2026_07_09.{json,md}` materialize public WikiText2/C4 prompt pools with 512 usable prompts each. This closes the prompt-pool preparation gap for n256/n512 scaling, but the expensive sensitivity/downstream runs for those sizes are still not claimed complete.

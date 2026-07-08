@@ -2,7 +2,7 @@
   "generated_at": "2026-07-09",
   "objective": "?????????????token???????????GitHub?",
   "remote_branch": "codex/rtx3090-experiments-2026-06-16",
-  "latest_pushed_commit_observed": "de08edb35a953d2d404a5e763847fa03f965fe0d",
+  "latest_pushed_commit_observed": "44a2b44dc1ea0cd19b27e5796dbdc6f2330c2fc9",
   "overall_status": "substantially_complete_with_explicit_14b_csi_and_true_efficiency_boundaries",
   "items": [
     {
@@ -30,7 +30,7 @@
     },
     {
       "requirement": "P0 calibration size scaling",
-      "status": "complete_for_1p5b_and_7b_partial_curve",
+      "status": "complete_to_n128_with_512_prompt_pool_ready_for_n256_n512",
       "evidence": [
         {
           "path": "outputs/aaai_sprint_2026_07_07/aaai_sprint_calibration_alignment_2026_07_09.json",
@@ -46,10 +46,20 @@
           "path": "outputs/aaai_sprint_2026_07_07/qwen25_7b_n16_n32_n64_csi_scale_summary.json",
           "exists": true,
           "bytes": 1579
+        },
+        {
+          "path": "outputs/aaai_sprint_2026_07_07/aaai_scaling_512_prompt_manifest_2026_07_09.json",
+          "exists": true,
+          "bytes": 1095
+        },
+        {
+          "path": "outputs/aaai_sprint_2026_07_07/aaai_scaling_512_readiness_audit_2026_07_09.json",
+          "exists": true,
+          "bytes": 1773
         }
       ],
-      "coverage": "n16/n32/n64/n128 for 1.5B; n16/n32/n64 for 7B; downstream attachment at n64.",
-      "claim_boundary": "Not a full 16..4096 curve. It is enough for current sprint trend evidence, but a final AAAI camera-ready package should extend n256+ if compute time allows."
+      "coverage": "n16/n32/n64/n128 for 1.5B; n16/n32/n64 for 7B; downstream attachment at n64; local 512-prompt WikiText2/C4 pools prepared for n256/n512 follow-up runs.",
+      "claim_boundary": "n256/n512 sensitivity and downstream runs are not complete, but the local public prompt pools needed to run them reproducibly are now available."
     },
     {
       "requirement": "P0 seed robustness",
@@ -271,9 +281,9 @@
   ],
   "remaining_strict_gaps": [
     "Full 14B CSI-guided allocation/downstream retention requires an FP16/BF16 14B checkpoint plus offload/device_map support, or an AWQ-aware sensitivity path for WQLinear_GEMM modules.",
-    "Full calibration-size curve through n256/n512/n1024/n2048/n4096 is not complete for all models/tasks.",
     "GPTQ 7B downstream retention remains blocked after dependency installation: gptqmodel imports fail on this Windows Python 3.9 stack with a type-union EnumMeta error.",
-    "Full wall-clock efficiency table over all modules and downstream tasks is still not complete; current evidence includes reproducible 1.5B/3B/7B timing smokes plus proxy accounting."
+    "Full wall-clock efficiency table over all modules and downstream tasks is still not complete; current evidence includes reproducible 1.5B/3B/7B timing smokes plus proxy accounting.",
+    "Full calibration-size curve through n256/n512 is not complete; 512-prompt WikiText2/C4 pools are now materialized for reproducible follow-up runs."
   ],
   "recommended_paper_claim": "The sprint supports a calibration-aware allocation/audit framework with downstream evidence across 1.5B/3B/7B and one cross-family model, plus 14B AWQ feasibility. It should not claim universal CSI dominance or completed 14B CSI allocation."
 }
