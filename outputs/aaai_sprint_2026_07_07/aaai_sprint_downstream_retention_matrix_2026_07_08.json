@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-07-08",
-  "note": "Consolidated downstream retention artifacts for AAAI sprint. GSM8K uses data_eval/public_task_benchmark_v1/gsm8k_test_subset100.jsonl; MMLU100 uses the broad 5x20 MMLU subset unless noted in artifact history.",
+  "generated_at": "2026-07-09",
+  "note": "Consolidated downstream retention artifacts for AAAI sprint. GSM8K uses data_eval/public_task_benchmark_v1/gsm8k_test_subset100.jsonl; MMLU100 uses the broad 5x20 MMLU subset unless noted in artifact history. Updated 2026-07-09 with Qwen2.5-7B AWQ checkpoint baseline rows and GPTQ blocker summary.",
   "rows": [
     {
       "model": "1p5b",
@@ -849,6 +849,36 @@
       ],
       "quant_mode": "uniform_int4",
       "allocation_method": "csi_guided"
+    },
+    {
+      "model": "7b_awq",
+      "task": "mmlu100",
+      "artifact": "qwen25_7b_awq_mmlu100_v2.json",
+      "exact": 64,
+      "total": 100,
+      "accuracy": 0.64,
+      "by_task": [
+        "abstract_algebra",
+        "anatomy",
+        "business_ethics",
+        "computer_security",
+        "high_school_us_history"
+      ],
+      "quant_mode": "awq_int4_checkpoint",
+      "allocation_method": "awq_int4_checkpoint"
+    },
+    {
+      "model": "7b_awq",
+      "task": "gsm8k100",
+      "artifact": "qwen25_7b_awq_gsm8k100_v2.json",
+      "exact": 2,
+      "total": 100,
+      "accuracy": 0.02,
+      "by_task": [
+        "gsm8k"
+      ],
+      "quant_mode": "awq_int4_checkpoint",
+      "allocation_method": "awq_int4_checkpoint"
     }
   ]
 }

@@ -56,3 +56,7 @@ These tables should be used as audit/positioning evidence rather than as new pos
 
 - Bit/budget sensitivity source: `aaai_sprint_bit_budget_sensitivity_2026_07_09.{json,md}`.
 - Calibration-size-to-retention alignment source: `aaai_sprint_calibration_alignment_2026_07_09.{json,md}`.
+## 7B Strong Quantizer Baseline Update
+
+Added on 2026-07-09: `qwen25_7b_quantizer_baseline_summary_2026_07_09.{json,md}` records AWQ checkpoint downstream retention for Qwen2.5-7B. MMLU100 is 64/100, compared with FP16 65/100 and local uniform INT4 63/100. GSM8K100 is 2/100, compared with FP16 4/100 and local uniform INT4 5/100 under the current first-number scoring protocol. GPTQ is explicitly blocked in this environment after `optimum` installation by `NameError("name 'QuantizeConfig' is not defined")`, so no GPTQ downstream score is claimed.
+

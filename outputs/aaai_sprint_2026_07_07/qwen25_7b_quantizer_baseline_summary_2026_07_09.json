@@ -1,0 +1,98 @@
+{
+  "generated_at": "2026-07-09",
+  "model": "Qwen2.5-7B-Instruct",
+  "purpose": "Reviewer-facing 7B strong quantizer baseline evidence for the AAAI sprint.",
+  "rows": [
+    {
+      "artifact": "qwen25_7b_mmlu100_fp16_v2.json",
+      "method": "fp16",
+      "role": "upper reference",
+      "exact": 65,
+      "total": 100,
+      "accuracy": 0.65,
+      "quant_mode": "fp16",
+      "allocation_method": "csi_guided",
+      "model_path": "E:\\models\\Qwen2.5-7B-Instruct",
+      "tasks": "data_eval\\public_task_benchmark_v1\\mmlu_broad5x20_test.jsonl"
+    },
+    {
+      "artifact": "qwen25_7b_mmlu100_uniform_int4_v2.json",
+      "method": "uniform_int4",
+      "role": "equal-bit local fake-quant reference",
+      "exact": 63,
+      "total": 100,
+      "accuracy": 0.63,
+      "quant_mode": "uniform_int4",
+      "allocation_method": "csi_guided",
+      "model_path": "E:\\models\\Qwen2.5-7B-Instruct",
+      "tasks": "data_eval\\public_task_benchmark_v1\\mmlu_broad5x20_test.jsonl"
+    },
+    {
+      "artifact": "qwen25_7b_awq_mmlu100_v2.json",
+      "method": "awq_int4_checkpoint",
+      "role": "external quantizer baseline",
+      "exact": 64,
+      "total": 100,
+      "accuracy": 0.64,
+      "quant_mode": "fp16",
+      "allocation_method": "csi_guided",
+      "model_path": "E:\\models\\Qwen2.5-7B-Instruct-AWQ",
+      "tasks": "data_eval\\public_task_benchmark_v1\\mmlu_broad5x20_test.jsonl"
+    },
+    {
+      "artifact": "qwen25_7b_gsm8k100_fp16_v2.json",
+      "method": "fp16",
+      "role": "upper reference",
+      "exact": 4,
+      "total": 100,
+      "accuracy": 0.04,
+      "quant_mode": "fp16",
+      "allocation_method": "csi_guided",
+      "model_path": "E:\\models\\Qwen2.5-7B-Instruct",
+      "tasks": "data_eval\\public_task_benchmark_v1\\gsm8k_test_subset100.jsonl"
+    },
+    {
+      "artifact": "qwen25_7b_gsm8k100_uniform_int4_v2.json",
+      "method": "uniform_int4",
+      "role": "equal-bit local fake-quant reference",
+      "exact": 5,
+      "total": 100,
+      "accuracy": 0.05,
+      "quant_mode": "uniform_int4",
+      "allocation_method": "csi_guided",
+      "model_path": "E:\\models\\Qwen2.5-7B-Instruct",
+      "tasks": "data_eval\\public_task_benchmark_v1\\gsm8k_test_subset100.jsonl"
+    },
+    {
+      "artifact": "qwen25_7b_awq_gsm8k100_v2.json",
+      "method": "awq_int4_checkpoint",
+      "role": "external quantizer baseline",
+      "exact": 2,
+      "total": 100,
+      "accuracy": 0.02,
+      "quant_mode": "fp16",
+      "allocation_method": "csi_guided",
+      "model_path": "E:\\models\\Qwen2.5-7B-Instruct-AWQ",
+      "tasks": "data_eval\\public_task_benchmark_v1\\gsm8k_test_subset100.jsonl"
+    }
+  ],
+  "awq_notes": {
+    "checkpoint": "E:/models/Qwen2.5-7B-Instruct-AWQ",
+    "compatibility": "Loads under the current Transformers stack; AWQ body modules are already quantized and expose only one standard torch.nn.Linear module to the local fake-quant traversal.",
+    "interpretation": "Use as an external AWQ checkpoint retention baseline, not as a CSI allocation path."
+  },
+  "gptq_blocker": {
+    "checkpoint": "E:/models/Qwen2.5-7B-Instruct-GPTQ-Int4",
+    "before_optimum_probe": {
+      "model": "E:\\models\\Qwen2.5-7B-Instruct-GPTQ-Int4",
+      "loaded": false,
+      "error": "ImportError('Loading a GPTQ quantized model requires optimum (`pip install optimum`)')"
+    },
+    "after_optimum_probe": {
+      "model": "E:\\models\\Qwen2.5-7B-Instruct-GPTQ-Int4",
+      "loaded": false,
+      "error": "NameError(\"name 'QuantizeConfig' is not defined\")"
+    },
+    "interpretation": "GPTQ remains blocked in the current environment by a QuantizeConfig schema/runtime issue after installing optimum; no downstream GPTQ score is claimed."
+  }
+}

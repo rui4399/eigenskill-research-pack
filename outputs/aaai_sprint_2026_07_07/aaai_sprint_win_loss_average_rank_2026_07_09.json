@@ -386,6 +386,22 @@
       "rank": 9
     },
     {
+      "model": "7b_awq",
+      "task": "gsm8k100",
+      "method": "awq_int4_checkpoint/awq_int4_checkpoint",
+      "artifact": "qwen25_7b_awq_gsm8k100_v2.json",
+      "accuracy": 0.02,
+      "rank": 1
+    },
+    {
+      "model": "7b_awq",
+      "task": "mmlu100",
+      "method": "awq_int4_checkpoint/awq_int4_checkpoint",
+      "artifact": "qwen25_7b_awq_mmlu100_v2.json",
+      "accuracy": 0.64,
+      "rank": 1
+    },
+    {
       "model": "phi3_mini",
       "task": "gsm8k100",
       "method": "fp16/csi_guided",
@@ -450,668 +466,53 @@
       "rank": 4
     }
   ],
-  "win_loss_rows": [
-    {
-      "model": "1p5b",
-      "task": "gsm8k100",
-      "ours": "qwen25_1p5b_gsm8k100_csi_n64_budget3_v2.json",
-      "baseline": "qwen25_1p5b_gsm8k100_fp16_v2.json",
-      "baseline_method": "fp16/csi_guided",
-      "result": "lose",
-      "ours_accuracy": 0.0,
-      "baseline_accuracy": 0.03
+  "average_rank": {
+    "allocation/loss_sensitive_4to8": 4.7,
+    "allocation/loss_sensitive_robust_lcb_consensus_4to8": 4.9,
+    "awq_checkpoint/csi_guided": 1.0,
+    "awq_int4_checkpoint/awq_int4_checkpoint": 1.0,
+    "fp16/csi_guided": 1.375,
+    "uniform_int2/csi_guided": 7.0,
+    "uniform_int3/csi_guided": 6.166666666666667,
+    "uniform_int4/csi_guided": 2.375,
+    "uniform_int8/csi_guided": 2.8333333333333335
+  },
+  "win_loss": {
+    "csi_guided_vs_fp16/csi_guided": {
+      "wins": 0,
+      "losses": 8,
+      "ties": 0
     },
-    {
-      "model": "1p5b",
-      "task": "gsm8k100",
-      "ours": "qwen25_1p5b_gsm8k100_csi_n64_budget3_v2.json",
-      "baseline": "qwen25_1p5b_gsm8k100_single_n64_budget3_v2.json",
-      "baseline_method": "allocation/loss_sensitive_4to8",
-      "result": "lose",
-      "ours_accuracy": 0.0,
-      "baseline_accuracy": 0.02
+    "csi_guided_vs_allocation/loss_sensitive_4to8": {
+      "wins": 5,
+      "losses": 4,
+      "ties": 1
     },
-    {
-      "model": "1p5b",
-      "task": "gsm8k100",
-      "ours": "qwen25_1p5b_gsm8k100_csi_n64_budget3_v2.json",
-      "baseline": "qwen25_1p5b_gsm8k100_uniform_int2_v2.json",
-      "baseline_method": "uniform_int2/csi_guided",
-      "result": "tie",
-      "ours_accuracy": 0.0,
-      "baseline_accuracy": 0.0
+    "csi_guided_vs_uniform_int2/csi_guided": {
+      "wins": 5,
+      "losses": 0,
+      "ties": 1
     },
-    {
-      "model": "1p5b",
-      "task": "gsm8k100",
-      "ours": "qwen25_1p5b_gsm8k100_csi_n64_budget3_v2.json",
-      "baseline": "qwen25_1p5b_gsm8k100_uniform_int3_v2.json",
-      "baseline_method": "uniform_int3/csi_guided",
-      "result": "tie",
-      "ours_accuracy": 0.0,
-      "baseline_accuracy": 0.0
+    "csi_guided_vs_uniform_int3/csi_guided": {
+      "wins": 4,
+      "losses": 1,
+      "ties": 1
     },
-    {
-      "model": "1p5b",
-      "task": "gsm8k100",
-      "ours": "qwen25_1p5b_gsm8k100_csi_n64_budget3_v2.json",
-      "baseline": "qwen25_1p5b_gsm8k100_uniform_int4_v2.json",
-      "baseline_method": "uniform_int4/csi_guided",
-      "result": "lose",
-      "ours_accuracy": 0.0,
-      "baseline_accuracy": 0.02
+    "csi_guided_vs_uniform_int4/csi_guided": {
+      "wins": 0,
+      "losses": 8,
+      "ties": 0
     },
-    {
-      "model": "1p5b",
-      "task": "gsm8k100",
-      "ours": "qwen25_1p5b_gsm8k100_csi_n64_budget3_v2.json",
-      "baseline": "qwen25_1p5b_gsm8k100_uniform_int8_v2.json",
-      "baseline_method": "uniform_int8/csi_guided",
-      "result": "tie",
-      "ours_accuracy": 0.0,
-      "baseline_accuracy": 0.0
+    "csi_guided_vs_uniform_int8/csi_guided": {
+      "wins": 0,
+      "losses": 5,
+      "ties": 1
     },
-    {
-      "model": "1p5b",
-      "task": "mmlu100",
-      "ours": "qwen25_1p5b_mmlu100_csi_n64_budget3_v2.json",
-      "baseline": "qwen25_1p5b_mmlu100_fp16_v2.json",
-      "baseline_method": "fp16/csi_guided",
-      "result": "lose",
-      "ours_accuracy": 0.01,
-      "baseline_accuracy": 0.54
-    },
-    {
-      "model": "1p5b",
-      "task": "mmlu100",
-      "ours": "qwen25_1p5b_mmlu100_csi_n64_budget3_v2.json",
-      "baseline": "qwen25_1p5b_mmlu100_single_n64_budget3_v2.json",
-      "baseline_method": "allocation/loss_sensitive_4to8",
-      "result": "win",
-      "ours_accuracy": 0.01,
-      "baseline_accuracy": 0.0
-    },
-    {
-      "model": "1p5b",
-      "task": "mmlu100",
-      "ours": "qwen25_1p5b_mmlu100_csi_n64_budget3_v2.json",
-      "baseline": "qwen25_1p5b_mmlu100_uniform_int2_v2.json",
-      "baseline_method": "uniform_int2/csi_guided",
-      "result": "win",
-      "ours_accuracy": 0.01,
-      "baseline_accuracy": 0.0
-    },
-    {
-      "model": "1p5b",
-      "task": "mmlu100",
-      "ours": "qwen25_1p5b_mmlu100_csi_n64_budget3_v2.json",
-      "baseline": "qwen25_1p5b_mmlu100_uniform_int3_v2.json",
-      "baseline_method": "uniform_int3/csi_guided",
-      "result": "lose",
-      "ours_accuracy": 0.01,
-      "baseline_accuracy": 0.04
-    },
-    {
-      "model": "1p5b",
-      "task": "mmlu100",
-      "ours": "qwen25_1p5b_mmlu100_csi_n64_budget3_v2.json",
-      "baseline": "qwen25_1p5b_mmlu100_uniform_int4_v2.json",
-      "baseline_method": "uniform_int4/csi_guided",
-      "result": "lose",
-      "ours_accuracy": 0.01,
-      "baseline_accuracy": 0.41
-    },
-    {
-      "model": "1p5b",
-      "task": "mmlu100",
-      "ours": "qwen25_1p5b_mmlu100_csi_n64_budget3_v2.json",
-      "baseline": "qwen25_1p5b_mmlu100_uniform_int8_v2.json",
-      "baseline_method": "uniform_int8/csi_guided",
-      "result": "lose",
-      "ours_accuracy": 0.01,
-      "baseline_accuracy": 0.55
-    },
-    {
-      "model": "3b",
-      "task": "gsm8k100",
-      "ours": "qwen25_3b_gsm8k100_csi_n64_3to4_budget3p5_v2.json",
-      "baseline": "qwen25_3b_gsm8k100_fp16_v2.json",
-      "baseline_method": "fp16/csi_guided",
-      "result": "lose",
-      "ours_accuracy": 0.03,
-      "baseline_accuracy": 0.06
-    },
-    {
-      "model": "3b",
-      "task": "gsm8k100",
-      "ours": "qwen25_3b_gsm8k100_csi_n64_3to4_budget3p5_v2.json",
-      "baseline": "qwen25_3b_gsm8k100_single_n64_3to4_budget3p5_v2.json",
-      "baseline_method": "allocation/loss_sensitive_4to8",
-      "result": "win",
-      "ours_accuracy": 0.03,
-      "baseline_accuracy": 0.02
-    },
-    {
-      "model": "3b",
-      "task": "gsm8k100",
-      "ours": "qwen25_3b_gsm8k100_csi_n64_3to4_budget3p5_v2.json",
-      "baseline": "qwen25_3b_gsm8k100_uniform_int2_v2.json",
-      "baseline_method": "uniform_int2/csi_guided",
-      "result": "win",
-      "ours_accuracy": 0.03,
-      "baseline_accuracy": 0.0
-    },
-    {
-      "model": "3b",
-      "task": "gsm8k100",
-      "ours": "qwen25_3b_gsm8k100_csi_n64_3to4_budget3p5_v2.json",
-      "baseline": "qwen25_3b_gsm8k100_uniform_int3_v2.json",
-      "baseline_method": "uniform_int3/csi_guided",
-      "result": "win",
-      "ours_accuracy": 0.03,
-      "baseline_accuracy": 0.0
-    },
-    {
-      "model": "3b",
-      "task": "gsm8k100",
-      "ours": "qwen25_3b_gsm8k100_csi_n64_3to4_budget3p5_v2.json",
-      "baseline": "qwen25_3b_gsm8k100_uniform_int4_v2.json",
-      "baseline_method": "uniform_int4/csi_guided",
-      "result": "lose",
-      "ours_accuracy": 0.03,
-      "baseline_accuracy": 0.05
-    },
-    {
-      "model": "3b",
-      "task": "gsm8k100",
-      "ours": "qwen25_3b_gsm8k100_csi_n64_3to4_budget3p5_v2.json",
-      "baseline": "qwen25_3b_gsm8k100_uniform_int8_v2.json",
-      "baseline_method": "uniform_int8/csi_guided",
-      "result": "lose",
-      "ours_accuracy": 0.03,
-      "baseline_accuracy": 0.06
-    },
-    {
-      "model": "3b",
-      "task": "mmlu100",
-      "ours": "qwen25_3b_mmlu100_csi_n64_3to4_budget3p5_v2.json",
-      "baseline": "qwen25_3b_mmlu100_csi_n64_budget3_v2.json",
-      "baseline_method": "allocation/loss_sensitive_robust_lcb_consensus_4to8",
-      "result": "win",
-      "ours_accuracy": 0.36,
-      "baseline_accuracy": 0.01
-    },
-    {
-      "model": "3b",
-      "task": "mmlu100",
-      "ours": "qwen25_3b_mmlu100_csi_n64_3to4_budget3p5_v2.json",
-      "baseline": "qwen25_3b_mmlu100_fp16_v2.json",
-      "baseline_method": "fp16/csi_guided",
-      "result": "lose",
-      "ours_accuracy": 0.36,
-      "baseline_accuracy": 0.52
-    },
-    {
-      "model": "3b",
-      "task": "mmlu100",
-      "ours": "qwen25_3b_mmlu100_csi_n64_3to4_budget3p5_v2.json",
-      "baseline": "qwen25_3b_mmlu100_single_n64_3to4_budget3p5_v2.json",
-      "baseline_method": "allocation/loss_sensitive_4to8",
-      "result": "win",
-      "ours_accuracy": 0.36,
-      "baseline_accuracy": 0.3
-    },
-    {
-      "model": "3b",
-      "task": "mmlu100",
-      "ours": "qwen25_3b_mmlu100_csi_n64_3to4_budget3p5_v2.json",
-      "baseline": "qwen25_3b_mmlu100_single_n64_budget3_v2.json",
-      "baseline_method": "allocation/loss_sensitive_4to8",
-      "result": "win",
-      "ours_accuracy": 0.36,
-      "baseline_accuracy": 0.04
-    },
-    {
-      "model": "3b",
-      "task": "mmlu100",
-      "ours": "qwen25_3b_mmlu100_csi_n64_3to4_budget3p5_v2.json",
-      "baseline": "qwen25_3b_mmlu100_uniform_int2_v2.json",
-      "baseline_method": "uniform_int2/csi_guided",
-      "result": "win",
-      "ours_accuracy": 0.36,
-      "baseline_accuracy": 0.0
-    },
-    {
-      "model": "3b",
-      "task": "mmlu100",
-      "ours": "qwen25_3b_mmlu100_csi_n64_3to4_budget3p5_v2.json",
-      "baseline": "qwen25_3b_mmlu100_uniform_int3_v2.json",
-      "baseline_method": "uniform_int3/csi_guided",
-      "result": "win",
-      "ours_accuracy": 0.36,
-      "baseline_accuracy": 0.02
-    },
-    {
-      "model": "3b",
-      "task": "mmlu100",
-      "ours": "qwen25_3b_mmlu100_csi_n64_3to4_budget3p5_v2.json",
-      "baseline": "qwen25_3b_mmlu100_uniform_int4_v2.json",
-      "baseline_method": "uniform_int4/csi_guided",
-      "result": "lose",
-      "ours_accuracy": 0.36,
-      "baseline_accuracy": 0.42
-    },
-    {
-      "model": "3b",
-      "task": "mmlu100",
-      "ours": "qwen25_3b_mmlu100_csi_n64_3to4_budget3p5_v2.json",
-      "baseline": "qwen25_3b_mmlu100_uniform_int8_v2.json",
-      "baseline_method": "uniform_int8/csi_guided",
-      "result": "lose",
-      "ours_accuracy": 0.36,
-      "baseline_accuracy": 0.52
-    },
-    {
-      "model": "3b",
-      "task": "mmlu100",
-      "ours": "qwen25_3b_mmlu100_csi_n64_budget3_v2.json",
-      "baseline": "qwen25_3b_mmlu100_csi_n64_3to4_budget3p5_v2.json",
-      "baseline_method": "allocation/loss_sensitive_robust_lcb_consensus_4to8",
-      "result": "lose",
-      "ours_accuracy": 0.01,
-      "baseline_accuracy": 0.36
-    },
-    {
-      "model": "3b",
-      "task": "mmlu100",
-      "ours": "qwen25_3b_mmlu100_csi_n64_budget3_v2.json",
-      "baseline": "qwen25_3b_mmlu100_fp16_v2.json",
-      "baseline_method": "fp16/csi_guided",
-      "result": "lose",
-      "ours_accuracy": 0.01,
-      "baseline_accuracy": 0.52
-    },
-    {
-      "model": "3b",
-      "task": "mmlu100",
-      "ours": "qwen25_3b_mmlu100_csi_n64_budget3_v2.json",
-      "baseline": "qwen25_3b_mmlu100_single_n64_3to4_budget3p5_v2.json",
-      "baseline_method": "allocation/loss_sensitive_4to8",
-      "result": "lose",
-      "ours_accuracy": 0.01,
-      "baseline_accuracy": 0.3
-    },
-    {
-      "model": "3b",
-      "task": "mmlu100",
-      "ours": "qwen25_3b_mmlu100_csi_n64_budget3_v2.json",
-      "baseline": "qwen25_3b_mmlu100_single_n64_budget3_v2.json",
-      "baseline_method": "allocation/loss_sensitive_4to8",
-      "result": "lose",
-      "ours_accuracy": 0.01,
-      "baseline_accuracy": 0.04
-    },
-    {
-      "model": "3b",
-      "task": "mmlu100",
-      "ours": "qwen25_3b_mmlu100_csi_n64_budget3_v2.json",
-      "baseline": "qwen25_3b_mmlu100_uniform_int2_v2.json",
-      "baseline_method": "uniform_int2/csi_guided",
-      "result": "win",
-      "ours_accuracy": 0.01,
-      "baseline_accuracy": 0.0
-    },
-    {
-      "model": "3b",
-      "task": "mmlu100",
-      "ours": "qwen25_3b_mmlu100_csi_n64_budget3_v2.json",
-      "baseline": "qwen25_3b_mmlu100_uniform_int3_v2.json",
-      "baseline_method": "uniform_int3/csi_guided",
-      "result": "lose",
-      "ours_accuracy": 0.01,
-      "baseline_accuracy": 0.02
-    },
-    {
-      "model": "3b",
-      "task": "mmlu100",
-      "ours": "qwen25_3b_mmlu100_csi_n64_budget3_v2.json",
-      "baseline": "qwen25_3b_mmlu100_uniform_int4_v2.json",
-      "baseline_method": "uniform_int4/csi_guided",
-      "result": "lose",
-      "ours_accuracy": 0.01,
-      "baseline_accuracy": 0.42
-    },
-    {
-      "model": "3b",
-      "task": "mmlu100",
-      "ours": "qwen25_3b_mmlu100_csi_n64_budget3_v2.json",
-      "baseline": "qwen25_3b_mmlu100_uniform_int8_v2.json",
-      "baseline_method": "uniform_int8/csi_guided",
-      "result": "lose",
-      "ours_accuracy": 0.01,
-      "baseline_accuracy": 0.52
-    },
-    {
-      "model": "7b",
-      "task": "gsm8k100",
-      "ours": "qwen25_7b_gsm8k100_csi_n64_3to4_budget3p5_v2.json",
-      "baseline": "qwen25_7b_gsm8k100_fp16_v2.json",
-      "baseline_method": "fp16/csi_guided",
-      "result": "lose",
-      "ours_accuracy": 0.02,
-      "baseline_accuracy": 0.04
-    },
-    {
-      "model": "7b",
-      "task": "gsm8k100",
-      "ours": "qwen25_7b_gsm8k100_csi_n64_3to4_budget3p5_v2.json",
-      "baseline": "qwen25_7b_gsm8k100_single_n64_3to4_budget3p5_v2.json",
-      "baseline_method": "allocation/loss_sensitive_4to8",
-      "result": "lose",
-      "ours_accuracy": 0.02,
-      "baseline_accuracy": 0.03
-    },
-    {
-      "model": "7b",
-      "task": "gsm8k100",
-      "ours": "qwen25_7b_gsm8k100_csi_n64_3to4_budget3p5_v2.json",
-      "baseline": "qwen25_7b_gsm8k100_uniform_int2_v2.json",
-      "baseline_method": "uniform_int2/csi_guided",
-      "result": "win",
-      "ours_accuracy": 0.02,
-      "baseline_accuracy": 0.0
-    },
-    {
-      "model": "7b",
-      "task": "gsm8k100",
-      "ours": "qwen25_7b_gsm8k100_csi_n64_3to4_budget3p5_v2.json",
-      "baseline": "qwen25_7b_gsm8k100_uniform_int3_v2.json",
-      "baseline_method": "uniform_int3/csi_guided",
-      "result": "win",
-      "ours_accuracy": 0.02,
-      "baseline_accuracy": 0.0
-    },
-    {
-      "model": "7b",
-      "task": "gsm8k100",
-      "ours": "qwen25_7b_gsm8k100_csi_n64_3to4_budget3p5_v2.json",
-      "baseline": "qwen25_7b_gsm8k100_uniform_int4_v2.json",
-      "baseline_method": "uniform_int4/csi_guided",
-      "result": "lose",
-      "ours_accuracy": 0.02,
-      "baseline_accuracy": 0.05
-    },
-    {
-      "model": "7b",
-      "task": "gsm8k100",
-      "ours": "qwen25_7b_gsm8k100_csi_n64_3to4_budget3p5_v2.json",
-      "baseline": "qwen25_7b_gsm8k100_uniform_int8_v2.json",
-      "baseline_method": "uniform_int8/csi_guided",
-      "result": "lose",
-      "ours_accuracy": 0.02,
-      "baseline_accuracy": 0.04
-    },
-    {
-      "model": "7b",
-      "task": "mmlu100",
-      "ours": "qwen25_7b_mmlu100_csi_n64_3to4_budget3p5_v2.json",
-      "baseline": "qwen25_7b_mmlu100_csi_n64_budget3_v2.json",
-      "baseline_method": "allocation/loss_sensitive_robust_lcb_consensus_4to8",
-      "result": "win",
-      "ours_accuracy": 0.53,
-      "baseline_accuracy": 0.01
-    },
-    {
-      "model": "7b",
-      "task": "mmlu100",
-      "ours": "qwen25_7b_mmlu100_csi_n64_3to4_budget3p5_v2.json",
-      "baseline": "qwen25_7b_mmlu100_fp16_v2.json",
-      "baseline_method": "fp16/csi_guided",
-      "result": "lose",
-      "ours_accuracy": 0.53,
-      "baseline_accuracy": 0.65
-    },
-    {
-      "model": "7b",
-      "task": "mmlu100",
-      "ours": "qwen25_7b_mmlu100_csi_n64_3to4_budget3p5_v2.json",
-      "baseline": "qwen25_7b_mmlu100_single_n64_3to4_budget3p5_v2.json",
-      "baseline_method": "allocation/loss_sensitive_4to8",
-      "result": "lose",
-      "ours_accuracy": 0.53,
-      "baseline_accuracy": 0.55
-    },
-    {
-      "model": "7b",
-      "task": "mmlu100",
-      "ours": "qwen25_7b_mmlu100_csi_n64_3to4_budget3p5_v2.json",
-      "baseline": "qwen25_7b_mmlu100_single_n64_budget3_v2.json",
-      "baseline_method": "allocation/loss_sensitive_4to8",
-      "result": "win",
-      "ours_accuracy": 0.53,
-      "baseline_accuracy": 0.0
-    },
-    {
-      "model": "7b",
-      "task": "mmlu100",
-      "ours": "qwen25_7b_mmlu100_csi_n64_3to4_budget3p5_v2.json",
-      "baseline": "qwen25_7b_mmlu100_uniform_int2_v2.json",
-      "baseline_method": "uniform_int2/csi_guided",
-      "result": "win",
-      "ours_accuracy": 0.53,
-      "baseline_accuracy": 0.0
-    },
-    {
-      "model": "7b",
-      "task": "mmlu100",
-      "ours": "qwen25_7b_mmlu100_csi_n64_3to4_budget3p5_v2.json",
-      "baseline": "qwen25_7b_mmlu100_uniform_int3_v2.json",
-      "baseline_method": "uniform_int3/csi_guided",
-      "result": "win",
-      "ours_accuracy": 0.53,
-      "baseline_accuracy": 0.08
-    },
-    {
-      "model": "7b",
-      "task": "mmlu100",
-      "ours": "qwen25_7b_mmlu100_csi_n64_3to4_budget3p5_v2.json",
-      "baseline": "qwen25_7b_mmlu100_uniform_int4_v2.json",
-      "baseline_method": "uniform_int4/csi_guided",
-      "result": "lose",
-      "ours_accuracy": 0.53,
-      "baseline_accuracy": 0.63
-    },
-    {
-      "model": "7b",
-      "task": "mmlu100",
-      "ours": "qwen25_7b_mmlu100_csi_n64_3to4_budget3p5_v2.json",
-      "baseline": "qwen25_7b_mmlu100_uniform_int8_v2.json",
-      "baseline_method": "uniform_int8/csi_guided",
-      "result": "lose",
-      "ours_accuracy": 0.53,
-      "baseline_accuracy": 0.65
-    },
-    {
-      "model": "7b",
-      "task": "mmlu100",
-      "ours": "qwen25_7b_mmlu100_csi_n64_budget3_v2.json",
-      "baseline": "qwen25_7b_mmlu100_csi_n64_3to4_budget3p5_v2.json",
-      "baseline_method": "allocation/loss_sensitive_robust_lcb_consensus_4to8",
-      "result": "lose",
-      "ours_accuracy": 0.01,
-      "baseline_accuracy": 0.53
-    },
-    {
-      "model": "7b",
-      "task": "mmlu100",
-      "ours": "qwen25_7b_mmlu100_csi_n64_budget3_v2.json",
-      "baseline": "qwen25_7b_mmlu100_fp16_v2.json",
-      "baseline_method": "fp16/csi_guided",
-      "result": "lose",
-      "ours_accuracy": 0.01,
-      "baseline_accuracy": 0.65
-    },
-    {
-      "model": "7b",
-      "task": "mmlu100",
-      "ours": "qwen25_7b_mmlu100_csi_n64_budget3_v2.json",
-      "baseline": "qwen25_7b_mmlu100_single_n64_3to4_budget3p5_v2.json",
-      "baseline_method": "allocation/loss_sensitive_4to8",
-      "result": "lose",
-      "ours_accuracy": 0.01,
-      "baseline_accuracy": 0.55
-    },
-    {
-      "model": "7b",
-      "task": "mmlu100",
-      "ours": "qwen25_7b_mmlu100_csi_n64_budget3_v2.json",
-      "baseline": "qwen25_7b_mmlu100_single_n64_budget3_v2.json",
-      "baseline_method": "allocation/loss_sensitive_4to8",
-      "result": "win",
-      "ours_accuracy": 0.01,
-      "baseline_accuracy": 0.0
-    },
-    {
-      "model": "7b",
-      "task": "mmlu100",
-      "ours": "qwen25_7b_mmlu100_csi_n64_budget3_v2.json",
-      "baseline": "qwen25_7b_mmlu100_uniform_int2_v2.json",
-      "baseline_method": "uniform_int2/csi_guided",
-      "result": "win",
-      "ours_accuracy": 0.01,
-      "baseline_accuracy": 0.0
-    },
-    {
-      "model": "7b",
-      "task": "mmlu100",
-      "ours": "qwen25_7b_mmlu100_csi_n64_budget3_v2.json",
-      "baseline": "qwen25_7b_mmlu100_uniform_int3_v2.json",
-      "baseline_method": "uniform_int3/csi_guided",
-      "result": "lose",
-      "ours_accuracy": 0.01,
-      "baseline_accuracy": 0.08
-    },
-    {
-      "model": "7b",
-      "task": "mmlu100",
-      "ours": "qwen25_7b_mmlu100_csi_n64_budget3_v2.json",
-      "baseline": "qwen25_7b_mmlu100_uniform_int4_v2.json",
-      "baseline_method": "uniform_int4/csi_guided",
-      "result": "lose",
-      "ours_accuracy": 0.01,
-      "baseline_accuracy": 0.63
-    },
-    {
-      "model": "7b",
-      "task": "mmlu100",
-      "ours": "qwen25_7b_mmlu100_csi_n64_budget3_v2.json",
-      "baseline": "qwen25_7b_mmlu100_uniform_int8_v2.json",
-      "baseline_method": "uniform_int8/csi_guided",
-      "result": "lose",
-      "ours_accuracy": 0.01,
-      "baseline_accuracy": 0.65
-    },
-    {
-      "model": "phi3_mini",
-      "task": "gsm8k100",
-      "ours": "phi3_mini_gsm8k100_csi_n64_budget3_v2.json",
-      "baseline": "phi3_mini_gsm8k100_fp16_v2.json",
-      "baseline_method": "fp16/csi_guided",
-      "result": "lose",
-      "ours_accuracy": 0.0,
-      "baseline_accuracy": 0.02
-    },
-    {
-      "model": "phi3_mini",
-      "task": "gsm8k100",
-      "ours": "phi3_mini_gsm8k100_csi_n64_budget3_v2.json",
-      "baseline": "phi3_mini_gsm8k100_single_n64_budget3_v2.json",
-      "baseline_method": "allocation/loss_sensitive_4to8",
-      "result": "tie",
-      "ours_accuracy": 0.0,
-      "baseline_accuracy": 0.0
-    },
-    {
-      "model": "phi3_mini",
-      "task": "gsm8k100",
-      "ours": "phi3_mini_gsm8k100_csi_n64_budget3_v2.json",
-      "baseline": "phi3_mini_gsm8k100_uniform_int4_v2.json",
-      "baseline_method": "uniform_int4/csi_guided",
-      "result": "lose",
-      "ours_accuracy": 0.0,
-      "baseline_accuracy": 0.02
-    },
-    {
-      "model": "phi3_mini",
-      "task": "mmlu100",
-      "ours": "phi3_mini_mmlu100_csi_n64_budget3_v2.json",
-      "baseline": "phi3_mini_mmlu100_fp16_v2.json",
-      "baseline_method": "fp16/csi_guided",
-      "result": "lose",
-      "ours_accuracy": 0.08,
-      "baseline_accuracy": 0.41
-    },
-    {
-      "model": "phi3_mini",
-      "task": "mmlu100",
-      "ours": "phi3_mini_mmlu100_csi_n64_budget3_v2.json",
-      "baseline": "phi3_mini_mmlu100_single_n64_budget3_v2.json",
-      "baseline_method": "allocation/loss_sensitive_4to8",
-      "result": "lose",
-      "ours_accuracy": 0.08,
-      "baseline_accuracy": 0.09
-    },
-    {
-      "model": "phi3_mini",
-      "task": "mmlu100",
-      "ours": "phi3_mini_mmlu100_csi_n64_budget3_v2.json",
-      "baseline": "phi3_mini_mmlu100_uniform_int4_v2.json",
-      "baseline_method": "uniform_int4/csi_guided",
-      "result": "lose",
-      "ours_accuracy": 0.08,
-      "baseline_accuracy": 0.42
+    "csi_guided_vs_allocation/loss_sensitive_robust_lcb_consensus_4to8": {
+      "wins": 2,
+      "losses": 0,
+      "ties": 0
     }
-  ],
-  "average_rank": [
-    {
-      "method": "awq_checkpoint/csi_guided",
-      "average_rank": 1.0,
-      "n": 2
-    },
-    {
-      "method": "fp16/csi_guided",
-      "average_rank": 1.375,
-      "n": 8
-    },
-    {
-      "method": "uniform_int4/csi_guided",
-      "average_rank": 2.375,
-      "n": 8
-    },
-    {
-      "method": "uniform_int8/csi_guided",
-      "average_rank": 2.8333333333333335,
-      "n": 6
-    },
-    {
-      "method": "allocation/loss_sensitive_4to8",
-      "average_rank": 4.7,
-      "n": 10
-    },
-    {
-      "method": "allocation/loss_sensitive_robust_lcb_consensus_4to8",
-      "average_rank": 4.9,
-      "n": 10
-    },
-    {
-      "method": "uniform_int3/csi_guided",
-      "average_rank": 6.166666666666667,
-      "n": 6
-    },
-    {
-      "method": "uniform_int2/csi_guided",
-      "average_rank": 7.0,
-      "n": 6
-    }
-  ]
+  },
+  "note": "Regenerated from downstream retention matrix after adding Qwen2.5-7B AWQ checkpoint rows."
 }
