@@ -51,3 +51,8 @@ Additional reviewer-facing closure artifacts generated on 2026-07-09:
 - Gate behavior distribution: `aaai_sprint_gate_behavior_distribution_2026_07_09.{json,md}`.
 
 These tables should be used as audit/positioning evidence rather than as new positive-only claims; they explicitly preserve loss cases and rejection boundaries.
+
+## Bit/Budget Sensitivity and Alignment
+
+- Bit/budget sensitivity source: `aaai_sprint_bit_budget_sensitivity_2026_07_09.{json,md}`.
+- Calibration-size-to-retention alignment source: `aaai_sprint_calibration_alignment_2026_07_09.{json,md}`.

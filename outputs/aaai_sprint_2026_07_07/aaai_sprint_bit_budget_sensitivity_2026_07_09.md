@@ -1,0 +1,60 @@
+# AAAI Sprint Bit/Budget Sensitivity
+
+Generated: 2026-07-09
+
+| Model | Task | Bits/Budget | Accuracy | Artifact |
+|---|---|---:|---:|---|
+| 1p5b | mmlu100 | mixed_csi | 0.01 | `qwen25_1p5b_mmlu100_csi_n64_budget3_v2.json` |
+| 1p5b | mmlu100 | 16 | 0.54 | `qwen25_1p5b_mmlu100_fp16_v2.json` |
+| 1p5b | mmlu100 | mixed_single | 0.00 | `qwen25_1p5b_mmlu100_single_n64_budget3_v2.json` |
+| 1p5b | mmlu100 | 2 | 0.00 | `qwen25_1p5b_mmlu100_uniform_int2_v2.json` |
+| 1p5b | mmlu100 | 3 | 0.04 | `qwen25_1p5b_mmlu100_uniform_int3_v2.json` |
+| 1p5b | mmlu100 | 4 | 0.41 | `qwen25_1p5b_mmlu100_uniform_int4_v2.json` |
+| 1p5b | mmlu100 | 8 | 0.55 | `qwen25_1p5b_mmlu100_uniform_int8_v2.json` |
+| 1p5b | gsm8k100 | mixed_csi | 0.00 | `qwen25_1p5b_gsm8k100_csi_n64_budget3_v2.json` |
+| 1p5b | gsm8k100 | 16 | 0.03 | `qwen25_1p5b_gsm8k100_fp16_v2.json` |
+| 1p5b | gsm8k100 | mixed_single | 0.02 | `qwen25_1p5b_gsm8k100_single_n64_budget3_v2.json` |
+| 1p5b | gsm8k100 | 2 | 0.00 | `qwen25_1p5b_gsm8k100_uniform_int2_v2.json` |
+| 1p5b | gsm8k100 | 3 | 0.00 | `qwen25_1p5b_gsm8k100_uniform_int3_v2.json` |
+| 1p5b | gsm8k100 | 4 | 0.02 | `qwen25_1p5b_gsm8k100_uniform_int4_v2.json` |
+| 1p5b | gsm8k100 | 8 | 0.00 | `qwen25_1p5b_gsm8k100_uniform_int8_v2.json` |
+| 3b | mmlu100 | mixed_csi | 0.36 | `qwen25_3b_mmlu100_csi_n64_3to4_budget3p5_v2.json` |
+| 3b | mmlu100 | mixed_csi | 0.01 | `qwen25_3b_mmlu100_csi_n64_budget3_v2.json` |
+| 3b | mmlu100 | 16 | 0.52 | `qwen25_3b_mmlu100_fp16_v2.json` |
+| 3b | mmlu100 | mixed_single | 0.30 | `qwen25_3b_mmlu100_single_n64_3to4_budget3p5_v2.json` |
+| 3b | mmlu100 | mixed_single | 0.04 | `qwen25_3b_mmlu100_single_n64_budget3_v2.json` |
+| 3b | mmlu100 | 2 | 0.00 | `qwen25_3b_mmlu100_uniform_int2_v2.json` |
+| 3b | mmlu100 | 3 | 0.02 | `qwen25_3b_mmlu100_uniform_int3_v2.json` |
+| 3b | mmlu100 | 4 | 0.42 | `qwen25_3b_mmlu100_uniform_int4_v2.json` |
+| 3b | mmlu100 | 8 | 0.52 | `qwen25_3b_mmlu100_uniform_int8_v2.json` |
+| 3b | gsm8k100 | mixed_csi | 0.03 | `qwen25_3b_gsm8k100_csi_n64_3to4_budget3p5_v2.json` |
+| 3b | gsm8k100 | 16 | 0.06 | `qwen25_3b_gsm8k100_fp16_v2.json` |
+| 3b | gsm8k100 | mixed_single | 0.02 | `qwen25_3b_gsm8k100_single_n64_3to4_budget3p5_v2.json` |
+| 3b | gsm8k100 | 2 | 0.00 | `qwen25_3b_gsm8k100_uniform_int2_v2.json` |
+| 3b | gsm8k100 | 3 | 0.00 | `qwen25_3b_gsm8k100_uniform_int3_v2.json` |
+| 3b | gsm8k100 | 4 | 0.05 | `qwen25_3b_gsm8k100_uniform_int4_v2.json` |
+| 3b | gsm8k100 | 8 | 0.06 | `qwen25_3b_gsm8k100_uniform_int8_v2.json` |
+| 7b | mmlu100 | mixed_csi | 0.53 | `qwen25_7b_mmlu100_csi_n64_3to4_budget3p5_v2.json` |
+| 7b | mmlu100 | mixed_csi | 0.01 | `qwen25_7b_mmlu100_csi_n64_budget3_v2.json` |
+| 7b | mmlu100 | 16 | 0.65 | `qwen25_7b_mmlu100_fp16_v2.json` |
+| 7b | mmlu100 | mixed_single | 0.55 | `qwen25_7b_mmlu100_single_n64_3to4_budget3p5_v2.json` |
+| 7b | mmlu100 | mixed_single | 0.00 | `qwen25_7b_mmlu100_single_n64_budget3_v2.json` |
+| 7b | mmlu100 | 2 | 0.00 | `qwen25_7b_mmlu100_uniform_int2_v2.json` |
+| 7b | mmlu100 | 3 | 0.08 | `qwen25_7b_mmlu100_uniform_int3_v2.json` |
+| 7b | mmlu100 | 4 | 0.63 | `qwen25_7b_mmlu100_uniform_int4_v2.json` |
+| 7b | mmlu100 | 8 | 0.65 | `qwen25_7b_mmlu100_uniform_int8_v2.json` |
+| 7b | gsm8k100 | mixed_csi | 0.02 | `qwen25_7b_gsm8k100_csi_n64_3to4_budget3p5_v2.json` |
+| 7b | gsm8k100 | 16 | 0.04 | `qwen25_7b_gsm8k100_fp16_v2.json` |
+| 7b | gsm8k100 | mixed_single | 0.03 | `qwen25_7b_gsm8k100_single_n64_3to4_budget3p5_v2.json` |
+| 7b | gsm8k100 | 2 | 0.00 | `qwen25_7b_gsm8k100_uniform_int2_v2.json` |
+| 7b | gsm8k100 | 3 | 0.00 | `qwen25_7b_gsm8k100_uniform_int3_v2.json` |
+| 7b | gsm8k100 | 4 | 0.05 | `qwen25_7b_gsm8k100_uniform_int4_v2.json` |
+| 7b | gsm8k100 | 8 | 0.04 | `qwen25_7b_gsm8k100_uniform_int8_v2.json` |
+| phi3_mini | gsm8k100 | mixed_csi | 0.00 | `phi3_mini_gsm8k100_csi_n64_budget3_v2.json` |
+| phi3_mini | gsm8k100 | 16 | 0.02 | `phi3_mini_gsm8k100_fp16_v2.json` |
+| phi3_mini | gsm8k100 | mixed_single | 0.00 | `phi3_mini_gsm8k100_single_n64_budget3_v2.json` |
+| phi3_mini | gsm8k100 | 4 | 0.02 | `phi3_mini_gsm8k100_uniform_int4_v2.json` |
+| phi3_mini | mmlu100 | mixed_csi | 0.08 | `phi3_mini_mmlu100_csi_n64_budget3_v2.json` |
+| phi3_mini | mmlu100 | 16 | 0.41 | `phi3_mini_mmlu100_fp16_v2.json` |
+| phi3_mini | mmlu100 | mixed_single | 0.09 | `phi3_mini_mmlu100_single_n64_budget3_v2.json` |
+| phi3_mini | mmlu100 | 4 | 0.42 | `phi3_mini_mmlu100_uniform_int4_v2.json` |
