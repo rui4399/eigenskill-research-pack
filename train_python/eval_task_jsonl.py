@@ -20,6 +20,15 @@ except ModuleNotFoundError:
     AutoTokenizer = None
 
 
+def patch_autoawq_activation_compat() -> None:
+    try:
+        import transformers.activations as activations
+    except ModuleNotFoundError:
+        return
+    if not hasattr(activations, "PytorchGELUTanh") and hasattr(activations, "GELUActivation"):
+        activations.PytorchGELUTanh = activations.GELUActivation
+
+
 def read_jsonl(path: Path, limit: int) -> list[dict]:
     rows = []
     for line in path.read_text(encoding="utf-8").splitlines():
@@ -205,6 +214,7 @@ def main() -> None:
     if args.device == "cuda" and not torch.cuda.is_available():
         raise SystemExit("CUDA requested but torch.cuda.is_available() is false")
 
+    patch_autoawq_activation_compat()
     dtype = {"float16": torch.float16, "bfloat16": torch.bfloat16, "float32": torch.float32}[args.dtype]
     tokenizer = AutoTokenizer.from_pretrained(args.model)
     if tokenizer.pad_token is None:
