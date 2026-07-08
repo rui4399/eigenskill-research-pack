@@ -59,4 +59,6 @@ These tables should be used as audit/positioning evidence rather than as new pos
 ## 7B Strong Quantizer Baseline Update
 
 Added on 2026-07-09: `qwen25_7b_quantizer_baseline_summary_2026_07_09.{json,md}` records AWQ checkpoint downstream retention for Qwen2.5-7B. MMLU100 is 64/100, compared with FP16 65/100 and local uniform INT4 63/100. GSM8K100 is 2/100, compared with FP16 4/100 and local uniform INT4 5/100 under the current first-number scoring protocol. GPTQ is explicitly blocked in this environment after `optimum` installation by `NameError("name 'QuantizeConfig' is not defined")`, so no GPTQ downstream score is claimed.
+## Completion Audit
 
+Added on 2026-07-09: `aaai_sprint_completion_audit_2026_07_09.{json,md}` maps the full AAAI sprint checklist to concrete artifacts and explicitly records remaining strict boundaries: full 14B CSI allocation, true wall-clock efficiency, extended n256+ calibration scaling, and GPTQ runtime compatibility.
