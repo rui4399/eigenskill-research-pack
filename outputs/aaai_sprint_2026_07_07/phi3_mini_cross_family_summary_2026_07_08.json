@@ -1,0 +1,95 @@
+{
+  "generated_at": "2026-07-08",
+  "model": "microsoft/Phi-3-mini-4k-instruct",
+  "purpose": "Cross-family validation beyond Qwen.",
+  "model_probe": {
+    "model": "microsoft/Phi-3-mini-4k-instruct",
+    "linear_modules": 129,
+    "parameters": 3821079552
+  },
+  "csi_consensus": {
+    "avg_bits": 2.9977288332541066,
+    "bit_hist": {
+      "2": 63,
+      "4": 66
+    },
+    "protected_delta_ratio": 0.8810088138812566,
+    "left_high_jaccard": 0.8985507246376812,
+    "right_high_jaccard": 0.9142857142857143
+  },
+  "results": [
+    {
+      "task": "GSM8K100",
+      "artifact": "phi3_mini_gsm8k100_csi_n64_budget3_v2.json",
+      "exact": 0,
+      "total": 100,
+      "accuracy": 0.0,
+      "quant_mode": "allocation",
+      "allocation_method": "loss_sensitive_robust_lcb_consensus_4to8"
+    },
+    {
+      "task": "GSM8K100",
+      "artifact": "phi3_mini_gsm8k100_fp16_v2.json",
+      "exact": 2,
+      "total": 100,
+      "accuracy": 0.02,
+      "quant_mode": "fp16",
+      "allocation_method": "csi_guided"
+    },
+    {
+      "task": "GSM8K100",
+      "artifact": "phi3_mini_gsm8k100_single_n64_budget3_v2.json",
+      "exact": 0,
+      "total": 100,
+      "accuracy": 0.0,
+      "quant_mode": "allocation",
+      "allocation_method": "loss_sensitive_4to8"
+    },
+    {
+      "task": "GSM8K100",
+      "artifact": "phi3_mini_gsm8k100_uniform_int4_v2.json",
+      "exact": 2,
+      "total": 100,
+      "accuracy": 0.02,
+      "quant_mode": "uniform_int4",
+      "allocation_method": "csi_guided"
+    },
+    {
+      "task": "MMLU100",
+      "artifact": "phi3_mini_mmlu100_csi_n64_budget3_v2.json",
+      "exact": 8,
+      "total": 100,
+      "accuracy": 0.08,
+      "quant_mode": "allocation",
+      "allocation_method": "loss_sensitive_robust_lcb_consensus_4to8"
+    },
+    {
+      "task": "MMLU100",
+      "artifact": "phi3_mini_mmlu100_fp16_v2.json",
+      "exact": 41,
+      "total": 100,
+      "accuracy": 0.41,
+      "quant_mode": "fp16",
+      "allocation_method": "csi_guided"
+    },
+    {
+      "task": "MMLU100",
+      "artifact": "phi3_mini_mmlu100_single_n64_budget3_v2.json",
+      "exact": 9,
+      "total": 100,
+      "accuracy": 0.09,
+      "quant_mode": "allocation",
+      "allocation_method": "loss_sensitive_4to8"
+    },
+    {
+      "task": "MMLU100",
+      "artifact": "phi3_mini_mmlu100_uniform_int4_v2.json",
+      "exact": 42,
+      "total": 100,
+      "accuracy": 0.42,
+      "quant_mode": "uniform_int4",
+      "allocation_method": "csi_guided"
+    }
+  ],
+  "interpretation": "Phi-3-mini confirms the pipeline works on a non-Qwen family with standard Linear modules. Uniform INT4 retains MMLU100/GSM8K100 in this protocol, while avg3 2-to-4 allocation collapses, making this cross-family evidence primarily a stress/failure-boundary result rather than a positive CSI dominance result."
+}

@@ -37,3 +37,7 @@ This file maps the AAAI reviewer-risk checklist to concrete artifacts already pr
 ## Claim Boundary
 
 The sprint now supports a stricter paper narrative: CSI can be used as an allocation decision framework and exposes both gains and failure boundaries under equal-budget quantization. The current evidence should not claim universal CSI dominance, especially at 7B and 14B. The strongest defensible claim is calibration-aware allocation with measured scale limits and explicit failure cases.
+
+## Cross-Family Evidence
+
+Phi-3-mini evidence is recorded in `phi3_mini_cross_family_summary_2026_07_08.{json,md}`. The model exposes 129 standard Linear modules, supports the existing sensitivity path, and provides MMLU/GSM8K FP16, INT4, single-split avg3, and CSI avg3 downstream slices. Results are a stress/failure-boundary case: INT4 retains while avg3 allocation collapses.

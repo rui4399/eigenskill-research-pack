@@ -58,3 +58,13 @@ Generated: 2026-07-08
 - 14B AWQ is retention feasibility, not full CSI allocation, because the checkpoint body exposes AWQ `WQLinear_GEMM` modules rather than standard Linear weights.
 - Corrected 7B GSM8K INT2/INT3/INT8 artifacts use `gsm8k_test_subset100.jsonl` and report `by_task=[gsm8k]`.
 - 1.5B GSM8K and 3B GSM8K bit-sweep endpoints were added to reduce downstream retention matrix gaps.
+| phi3_mini | gsm8k100 | `phi3_mini_gsm8k100_csi_n64_budget3_v2.json` | 0 / 100 | 0.00 | allocation / loss_sensitive_robust_lcb_consensus_4to8 |
+| phi3_mini | gsm8k100 | `phi3_mini_gsm8k100_fp16_v2.json` | 2 / 100 | 0.02 | fp16 / csi_guided |
+| phi3_mini | gsm8k100 | `phi3_mini_gsm8k100_single_n64_budget3_v2.json` | 0 / 100 | 0.00 | allocation / loss_sensitive_4to8 |
+| phi3_mini | gsm8k100 | `phi3_mini_gsm8k100_uniform_int4_v2.json` | 2 / 100 | 0.02 | uniform_int4 / csi_guided |
+| phi3_mini | mmlu100 | `phi3_mini_mmlu100_csi_n64_budget3_v2.json` | 8 / 100 | 0.08 | allocation / loss_sensitive_robust_lcb_consensus_4to8 |
+| phi3_mini | mmlu100 | `phi3_mini_mmlu100_fp16_v2.json` | 41 / 100 | 0.41 | fp16 / csi_guided |
+| phi3_mini | mmlu100 | `phi3_mini_mmlu100_single_n64_budget3_v2.json` | 9 / 100 | 0.09 | allocation / loss_sensitive_4to8 |
+| phi3_mini | mmlu100 | `phi3_mini_mmlu100_uniform_int4_v2.json` | 42 / 100 | 0.42 | uniform_int4 / csi_guided |
+
+- Phi-3-mini adds a non-Qwen cross-family check; avg3 allocation is a stress/failure-boundary case.
