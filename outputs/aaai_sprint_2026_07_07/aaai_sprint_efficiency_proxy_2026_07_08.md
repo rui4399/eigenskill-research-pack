@@ -2,10 +2,12 @@
 
 Generated: 2026-07-08
 
-Wall-clock timing was not logged uniformly in earlier runs, so this table records reproducible cost proxies: calibration sample count, measured module count, low-memory row chunk, and completion status.
+Wall-clock timing was not logged uniformly, so this table records reproducible cost proxies.
 
 | Artifact | Model | N | Modules | Complete | Row chunk |
 |---|---|---:|---:|---|---:|
+| `phi3_mini_wikitext2_n64_seed0_sensitivity_2to4_budget3.json` | microsoft/Phi-3-mini-4k-instruct | None | 129/129 | True | 16 |
+| `phi3_mini_wikitext2_n64_seed1_sensitivity_2to4_budget3.json` | microsoft/Phi-3-mini-4k-instruct | None | 129/129 | True | 16 |
 | `qwen25_1p5b_wikitext2_n128_seed0_sensitivity_2to4_budget3.json` | E:\models\Qwen2.5-1.5B-Instruct | None | 197/197 | True | 16 |
 | `qwen25_1p5b_wikitext2_n128_seed1_sensitivity_2to4_budget3.json` | E:\models\Qwen2.5-1.5B-Instruct | None | 197/197 | True | 16 |
 | `qwen25_1p5b_wikitext2_n16_seed0_sensitivity_2to4_budget3.json` | E:\models\Qwen2.5-1.5B-Instruct | None | 197/197 | True | 16 |
