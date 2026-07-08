@@ -2,12 +2,13 @@
   "generated_at": "2026-07-08",
   "model": "Qwen2.5-14B-Instruct-AWQ",
   "model_path": "E:\\models\\Qwen2.5-14B-Instruct-AWQ",
-  "note": "14B evidence is AWQ downstream task-retention feasibility on RTX 3090, not a full CSI allocation run. The local AWQ checkpoint loads through AutoAWQ with a Transformers activation compatibility patch; awq_ext is unavailable, so execution used the slower fallback path. Treat this as large-model retention support and scale feasibility, while CSI allocation at 14B remains a follow-up requiring FP16/custom-linear-compatible sensitivity measurement.",
+  "note": "14B evidence now includes AWQ downstream task-retention feasibility plus an AWQ-aware activation/scale CSI proxy over WQLinear_GEMM modules. It is still not a full FP16 fake-quant CSI downstream allocation run.",
   "runtime_caveats": [
     "AutoAWQ required a compatibility alias from PytorchGELUTanh to GELUActivation for the installed Transformers version.",
     "awq_ext was not available, so AutoAWQ used its slower fallback implementation.",
     "The result files use quant_mode=fp16 because no additional fake quantization is applied on top of the already-AWQ checkpoint.",
-    "These 14B runs do not establish CSI-guided allocation superiority; they establish 14B AWQ task-retention feasibility under the current RTX 3090 environment."
+    "These 14B runs do not establish CSI-guided allocation superiority; they establish 14B AWQ task-retention feasibility under the current RTX 3090 environment.",
+    "An AWQ-aware activation/scale proxy was added for all 336 WQLinear_GEMM body modules at n64 seed0/seed1; this measures split stability but does not re-quantize weights."
   ],
   "results": [
     {
@@ -36,8 +37,9 @@
     "mmlu100_awq_accuracy": 0.65,
     "gsm8k100_awq_exact": 13,
     "gsm8k100_awq_accuracy": 0.13,
-    "claim_boundary": "Use as 14B task-retention feasibility and scale evidence, not as complete 14B CSI allocation evidence.",
-    "awq_module_compatibility": "Only lm_head is torch.nn.Linear; transformer blocks are WQLinear_GEMM. Full 14B CSI allocation is not supported by the current standard-Linear fake-quant path."
+    "claim_boundary": "Use as 14B task-retention feasibility plus AWQ-aware calibration-stability proxy evidence, not as complete 14B fake-quant downstream CSI superiority evidence.",
+    "awq_module_compatibility": "Only lm_head is torch.nn.Linear; transformer blocks are WQLinear_GEMM. Full 14B CSI allocation is not supported by the current standard-Linear fake-quant path.",
+    "awq_activation_csi_proxy": "n64 seed0/seed1 over 336 WQLinear_GEMM modules: top-25% Jaccard 0.9765, Spearman 0.9998, avg bits 2.9996 under 2/4-bit proxy allocation."
   },
   "module_compatibility_probe": {
     "file": "outputs/aaai_sprint_2026_07_07/qwen25_14b_awq_module_compat_probe.json",
@@ -103,5 +105,24 @@
       ]
     ],
     "implication": "The existing CSI sensitivity/allocation scripts target torch.nn.Linear weights; the AWQ body is WQLinear_GEMM without standard .weight tensors, so full 14B CSI allocation requires an AWQ-aware sensitivity path or an FP16 14B checkpoint/offload path."
+  },
+  "awq_activation_csi_proxy": {
+    "file": "outputs/aaai_sprint_2026_07_07/qwen25_14b_awq_activation_csi_proxy_n64_seed0_seed1_2026_07_09.json",
+    "module_class": "WQLinear_GEMM",
+    "prompt_sample_size": 64,
+    "seeds": [
+      0,
+      1
+    ],
+    "shared_modules": 336,
+    "top_k": 84,
+    "top_jaccard": 0.9764705882352941,
+    "spearman": 0.9997836168880059,
+    "avg_bits": 2.9996031746031746,
+    "bit_hist": {
+      "4": 220,
+      "2": 116
+    },
+    "claim_boundary": "AWQ-aware activation/scale CSI proxy only; not full 14B fake-quant downstream CSI."
   }
 }

@@ -257,7 +257,7 @@
     },
     {
       "requirement": "14B downstream and CSI allocation",
-      "status": "partial_downstream_complete_csi_blocked",
+      "status": "partial_downstream_plus_awq_proxy_complete_full_fake_quant_blocked",
       "evidence": [
         {
           "path": "outputs/aaai_sprint_2026_07_07/qwen25_14b_awq_aaai_sprint_summary.json",
@@ -278,14 +278,19 @@
           "path": "outputs/aaai_sprint_2026_07_07/qwen25_14b_awq_module_compat_probe.json",
           "exists": true,
           "bytes": 2351
+        },
+        {
+          "path": "outputs/aaai_sprint_2026_07_07/qwen25_14b_awq_activation_csi_proxy_n64_seed0_seed1_2026_07_09.json",
+          "exists": true,
+          "bytes": 47256
         }
       ],
-      "coverage": "Qwen2.5-14B-Instruct-AWQ downstream MMLU100/GSM8K100 retention on RTX 3090.",
-      "claim_boundary": "Full 14B CSI allocation is not complete: only AWQ checkpoint is local; body modules are WQLinear_GEMM and the current CSI fake-quant path only traverses standard torch.nn.Linear. Loading FP16 14B into current all-cuda script would exceed the 24GB RTX 3090 memory budget."
+      "coverage": "Qwen2.5-14B-Instruct-AWQ downstream MMLU100/GSM8K100 retention plus AWQ-aware n64 split-stability proxy over all 336 WQLinear_GEMM modules.",
+      "claim_boundary": "Full 14B fake-quant CSI downstream allocation is not complete, but the local AWQ checkpoint now has module-compatible calibration-stability proxy evidence: top-25% Jaccard 0.9765 and Spearman 0.9998."
     }
   ],
   "remaining_strict_gaps": [
-    "Full 14B CSI-guided allocation/downstream retention requires an FP16/BF16 14B checkpoint plus offload/device_map support, or an AWQ-aware sensitivity path for WQLinear_GEMM modules.",
+    "Full 14B fake-quant CSI-guided downstream retention still requires an FP16/BF16 14B checkpoint plus offload/device_map support, or a stronger AWQ-aware perturbation/downstream path beyond the new activation/scale proxy.",
     "GPTQ 7B downstream retention remains blocked after dependency installation: gptqmodel imports fail on this Windows Python 3.9 stack with a type-union EnumMeta error.",
     "Full wall-clock efficiency table over all modules and downstream tasks is still not complete; current evidence includes reproducible 1.5B/3B/7B timing smokes plus proxy accounting.",
     "Full calibration-size curve through n512 and n256 downstream retention are not complete; 512-prompt WikiText2/C4 pools are materialized and n256 1.5B sensitivity/consensus evidence is now recorded."

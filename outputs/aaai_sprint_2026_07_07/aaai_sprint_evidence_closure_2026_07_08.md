@@ -77,3 +77,7 @@ Added on 2026-07-09: `aaai_scaling_512_prompt_manifest_2026_07_09.{json,md}` and
 ## Calibration Scaling n256 Evidence
 
 Added on 2026-07-09: `qwen25_1p5b_wikitext2_n256_seed0_seed1_csi_consensus_2to4_budget3.{json,md}` and `qwen25_1p5b_n16_n32_n64_n128_n256_csi_scaling_summary.{json,md}` record completed Qwen2.5-1.5B n256 sensitivity/consensus scaling from the 512-prompt WikiText2 pool. The n256 mean high-bit Jaccard is 0.908, with avg bits 2.9999 and 98/99 split across 2-bit/4-bit modules. This upgrades calibration scaling from readiness-only to completed n256 calibration evidence; n256 downstream retention and n512 remain unclaimed.
+## 14B AWQ-Aware CSI Proxy
+
+Added on 2026-07-09: `qwen25_14b_awq_activation_csi_proxy_n64_seed0_seed1_2026_07_09.{json,md}` records an AWQ-aware calibration-stability proxy over all 336 `WQLinear_GEMM` modules in the local Qwen2.5-14B-Instruct-AWQ checkpoint. At n64, seed0/seed1 top-25% Jaccard is 0.9765 and Spearman rank correlation is 0.9998; the proxy 2/4-bit allocation uses avg 2.9996 bits. This strengthens the 14B scale evidence while preserving the boundary that full 14B fake-quant downstream CSI remains unclaimed.
+
