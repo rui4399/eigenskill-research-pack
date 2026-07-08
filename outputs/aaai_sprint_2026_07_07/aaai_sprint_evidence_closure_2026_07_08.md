@@ -62,3 +62,6 @@ Added on 2026-07-09: `qwen25_7b_quantizer_baseline_summary_2026_07_09.{json,md}`
 ## Completion Audit
 
 Added on 2026-07-09: `aaai_sprint_completion_audit_2026_07_09.{json,md}` maps the full AAAI sprint checklist to concrete artifacts and explicitly records remaining strict boundaries: full 14B CSI allocation, true wall-clock efficiency, extended n256+ calibration scaling, and GPTQ runtime compatibility.
+## Efficiency Timing Smoke
+
+Added on 2026-07-09: `qwen25_1p5b_efficiency_timing_smoke_2026_07_09.{json,md}` and `qwen25_1p5b_efficiency_timing_smoke_wallclock_2026_07_09.json` record a reproducible wall-clock smoke for the sensitivity path: Qwen2.5-1.5B, 4 prompts, 1 Linear module, RTX 3090, 12.931 seconds end-to-end. This upgrades the efficiency evidence from proxy-only to proxy-plus-smoke, but it is still not a full timing table across all scales.

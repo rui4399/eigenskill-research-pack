@@ -2,7 +2,7 @@
   "generated_at": "2026-07-09",
   "objective": "?????????????token???????????GitHub?",
   "remote_branch": "codex/rtx3090-experiments-2026-06-16",
-  "latest_pushed_commit_observed": "191a496566a92a7c75a6d80591d8d988972fe2b7",
+  "latest_pushed_commit_observed": "144d08fad8e6f102d5bb077054d13e08369f6d7d",
   "overall_status": "substantially_complete_with_explicit_14b_csi_and_true_efficiency_boundaries",
   "items": [
     {
@@ -138,7 +138,7 @@
     },
     {
       "requirement": "P2 efficiency overhead",
-      "status": "partial_proxy_only",
+      "status": "partial_proxy_plus_reproducible_timing_smoke",
       "evidence": [
         {
           "path": "outputs/aaai_sprint_2026_07_07/aaai_sprint_efficiency_proxy_2026_07_08.json",
@@ -149,10 +149,20 @@
           "path": "outputs/aaai_sprint_2026_07_07/aaai_sprint_efficiency_proxy_2026_07_08.md",
           "exists": true,
           "bytes": 3645
+        },
+        {
+          "path": "outputs/aaai_sprint_2026_07_07/qwen25_1p5b_efficiency_timing_smoke_2026_07_09.json",
+          "exists": true,
+          "bytes": 3121
+        },
+        {
+          "path": "outputs/aaai_sprint_2026_07_07/qwen25_1p5b_efficiency_timing_smoke_wallclock_2026_07_09.json",
+          "exists": true,
+          "bytes": 568
         }
       ],
-      "coverage": "Proxy efficiency/memory accounting from artifacts.",
-      "claim_boundary": "Not a true wall-clock benchmark table; do not overclaim runtime overhead."
+      "coverage": "Proxy efficiency/memory accounting from artifacts plus a reproducible wall-clock smoke: Qwen2.5-1.5B, 4 prompts, 1 Linear module, RTX 3090, 12.931 seconds end-to-end.",
+      "claim_boundary": "This is not a full wall-clock efficiency table for all models; use as timing instrumentation evidence and keep broad runtime claims conservative."
     },
     {
       "requirement": "P2 layer-level mechanism visualization/data",
@@ -241,9 +251,9 @@
   ],
   "remaining_strict_gaps": [
     "Full 14B CSI-guided allocation/downstream retention requires an FP16/BF16 14B checkpoint plus offload/device_map support, or an AWQ-aware sensitivity path for WQLinear_GEMM modules.",
-    "True wall-clock efficiency overhead table is still proxy-only.",
     "Full calibration-size curve through n256/n512/n1024/n2048/n4096 is not complete for all models/tasks.",
-    "GPTQ 7B downstream retention is blocked by QuantizeConfig runtime/schema failure in this environment."
+    "GPTQ 7B downstream retention is blocked by QuantizeConfig runtime/schema failure in this environment.",
+    "Full wall-clock efficiency table across all model scales is still not complete; current evidence includes one reproducible 1.5B timing smoke plus proxy accounting."
   ],
   "recommended_paper_claim": "The sprint supports a calibration-aware allocation/audit framework with downstream evidence across 1.5B/3B/7B and one cross-family model, plus 14B AWQ feasibility. It should not claim universal CSI dominance or completed 14B CSI allocation."
 }
