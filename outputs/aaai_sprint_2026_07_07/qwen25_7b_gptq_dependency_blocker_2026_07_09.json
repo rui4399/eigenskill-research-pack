@@ -1,0 +1,39 @@
+{
+  "generated_at": "2026-07-09",
+  "model": "Qwen2.5-7B-Instruct-GPTQ-Int4",
+  "status": "blocked_after_dependency_install_attempt",
+  "initial_blocker": {
+    "artifact": "qwen25_7b_gptq_load_trace_2026_07_09.json",
+    "error_type": "NameError",
+    "error": "NameError(\"name 'QuantizeConfig' is not defined\")",
+    "packages": {
+      "torch": "2.5.1+cu121",
+      "transformers": "4.57.6",
+      "optimum": "2.2.0",
+      "auto-gptq": "missing: PackageNotFoundError: auto-gptq",
+      "gptqmodel": "missing: PackageNotFoundError: gptqmodel",
+      "accelerate": "1.10.1",
+      "safetensors": "0.7.0"
+    }
+  },
+  "dependency_action": "Installed gptqmodel 2.2.0+cu121torch2.5 after temporarily upgrading build tooling; restored numpy/pytest/setuptools/wheel to the project-compatible versions after the first post-install probe exposed numpy 2.0 binary incompatibility.",
+  "final_blocker": {
+    "artifact": "qwen25_7b_gptq_load_trace_after_env_restore_2026_07_09.json",
+    "error_type": "TypeError",
+    "error": "TypeError(\"unsupported operand type(s) for |: 'type' and 'EnumMeta'\")",
+    "packages": {
+      "torch": "2.5.1+cu121",
+      "transformers": "4.57.6",
+      "optimum": "2.2.0",
+      "gptqmodel": "2.2.0+cu121torch2.5",
+      "accelerate": "1.10.1",
+      "safetensors": "0.7.0",
+      "numpy": "1.24.4",
+      "pytest": "7.1.2",
+      "setuptools": "60.2.0",
+      "wheel": "0.37.1"
+    }
+  },
+  "interpretation": "The GPTQ checkpoint is present locally, but the current Windows Python 3.9 stack cannot import gptqmodel via optimum because gptqmodel uses PEP-604 type unions with an EnumMeta operand in runtime annotations. No GPTQ downstream score is claimed.",
+  "next_viable_path": "Use a Python 3.10+ environment or a gptqmodel/optimum combination that supports Python 3.9, then rerun the same load/eval commands."
+}

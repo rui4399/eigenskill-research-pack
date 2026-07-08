@@ -2,7 +2,7 @@
   "generated_at": "2026-07-09",
   "objective": "?????????????token???????????GitHub?",
   "remote_branch": "codex/rtx3090-experiments-2026-06-16",
-  "latest_pushed_commit_observed": "144d08fad8e6f102d5bb077054d13e08369f6d7d",
+  "latest_pushed_commit_observed": "52dc8097bf78280c7ab42bee8c5f673c26b91968",
   "overall_status": "substantially_complete_with_explicit_14b_csi_and_true_efficiency_boundaries",
   "items": [
     {
@@ -215,10 +215,15 @@
           "path": "outputs/aaai_sprint_2026_07_07/qwen25_7b_gptq_probe_after_optimum_2026_07_09.json",
           "exists": true,
           "bytes": 147
+        },
+        {
+          "path": "outputs/aaai_sprint_2026_07_07/qwen25_7b_gptq_dependency_blocker_2026_07_09.json",
+          "exists": true,
+          "bytes": 1887
         }
       ],
       "coverage": "Qwen2.5-7B FP16/uniform INT2/3/4/8/single/CSI/AWQ MMLU100 and GSM8K100 where feasible.",
-      "claim_boundary": "GPTQ downstream score is not claimed because the local GPTQ checkpoint fails after optimum with QuantizeConfig NameError."
+      "claim_boundary": "GPTQ downstream score is not claimed. After installing gptqmodel, the final blocker is Python 3.9/runtime incompatibility in gptqmodel type-union annotations, recorded in qwen25_7b_gptq_dependency_blocker_2026_07_09."
     },
     {
       "requirement": "14B downstream and CSI allocation",
@@ -252,8 +257,8 @@
   "remaining_strict_gaps": [
     "Full 14B CSI-guided allocation/downstream retention requires an FP16/BF16 14B checkpoint plus offload/device_map support, or an AWQ-aware sensitivity path for WQLinear_GEMM modules.",
     "Full calibration-size curve through n256/n512/n1024/n2048/n4096 is not complete for all models/tasks.",
-    "GPTQ 7B downstream retention is blocked by QuantizeConfig runtime/schema failure in this environment.",
-    "Full wall-clock efficiency table across all model scales is still not complete; current evidence includes one reproducible 1.5B timing smoke plus proxy accounting."
+    "Full wall-clock efficiency table across all model scales is still not complete; current evidence includes one reproducible 1.5B timing smoke plus proxy accounting.",
+    "GPTQ 7B downstream retention remains blocked after dependency installation: gptqmodel imports fail on this Windows Python 3.9 stack with a type-union EnumMeta error."
   ],
   "recommended_paper_claim": "The sprint supports a calibration-aware allocation/audit framework with downstream evidence across 1.5B/3B/7B and one cross-family model, plus 14B AWQ feasibility. It should not claim universal CSI dominance or completed 14B CSI allocation."
 }

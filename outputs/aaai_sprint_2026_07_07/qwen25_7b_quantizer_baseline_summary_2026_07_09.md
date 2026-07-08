@@ -26,3 +26,6 @@ This closes the reviewer-facing strong-quantizer baseline slot for the 7B sprint
 - Initial GPTQ load failed because `optimum` was missing.
 - After installing `optimum`, the same checkpoint still failed with `NameError("name 'QuantizeConfig' is not defined")`.
 - No GPTQ downstream number is claimed from this environment; the blocker is preserved for reproducibility.
+## GPTQ Dependency Follow-up
+
+A follow-up dependency attempt installed `gptqmodel 2.2.0+cu121torch2.5`. This moved the blocker past missing `QuantizeConfig`, but the current Windows Python 3.9 stack now fails in `gptqmodel.models._const.normalize_device` with `TypeError("unsupported operand type(s) for |: 'type' and 'EnumMeta'")`. See `qwen25_7b_gptq_dependency_blocker_2026_07_09.{json,md}`.

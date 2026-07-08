@@ -1,0 +1,20 @@
+{
+  "generated_at": "2026-07-09",
+  "model": "E:/models/Qwen2.5-7B-Instruct-GPTQ-Int4",
+  "packages": {
+    "torch": "2.5.1+cu121",
+    "transformers": "4.57.6",
+    "optimum": "2.2.0",
+    "gptqmodel": "2.2.0+cu121torch2.5",
+    "accelerate": "1.10.1",
+    "safetensors": "0.7.0",
+    "numpy": "1.24.4",
+    "pytest": "7.1.2",
+    "setuptools": "60.2.0",
+    "wheel": "0.37.1"
+  },
+  "loaded": false,
+  "error_type": "TypeError",
+  "error": "TypeError(\"unsupported operand type(s) for |: 'type' and 'EnumMeta'\")",
+  "traceback": "Traceback (most recent call last):\n  File \"<stdin>\", line 12, in <module>\n  File \"D:\\Anaconda\\lib\\site-packages\\transformers\\models\\auto\\auto_factory.py\", line 604, in from_pretrained\n    return model_class.from_pretrained(\n  File \"D:\\Anaconda\\lib\\site-packages\\transformers\\modeling_utils.py\", line 277, in _wrapper\n    return func(*args, **kwargs)\n  File \"D:\\Anaconda\\lib\\site-packages\\transformers\\modeling_utils.py\", line 4881, in from_pretrained\n    hf_quantizer, config, dtype, device_map = get_hf_quantizer(\n  File \"D:\\Anaconda\\lib\\site-packages\\transformers\\quantizers\\auto.py\", line 311, in get_hf_quantizer\n    hf_quantizer = AutoHfQuantizer.from_config(\n  File \"D:\\Anaconda\\lib\\site-packages\\transformers\\quantizers\\auto.py\", line 185, in from_config\n    return target_cls(quantization_config, **kwargs)\n  File \"D:\\Anaconda\\lib\\site-packages\\transformers\\quantizers\\quantizer_gptq.py\", line 50, in __init__\n    from optimum.gptq import GPTQQuantizer\n  File \"D:\\Anaconda\\lib\\site-packages\\optimum\\gptq\\__init__.py\", line 15, in <module>\n    from .quantizer import GPTQQuantizer, load_quantized_model\n  File \"D:\\Anaconda\\lib\\site-packages\\optimum\\gptq\\quantizer.py\", line 50, in <module>\n    from gptqmodel import BACKEND, QuantizeConfig\n  File \"D:\\Anaconda\\lib\\site-packages\\gptqmodel\\__init__.py\", line 19, in <module>\n    from .models import GPTQModel, get_best_device\n  File \"D:\\Anaconda\\lib\\site-packages\\gptqmodel\\models\\__init__.py\", line 17, in <module>\n    from ._const import get_best_device\n  File \"D:\\Anaconda\\lib\\site-packages\\gptqmodel\\models\\_const.py\", line 82, in <module>\n    def normalize_device(type_value: str | DEVICE | int | torch.device) -> DEVICE:\nTypeError: unsupported operand type(s) for |: 'type' and 'EnumMeta'\n"
+}

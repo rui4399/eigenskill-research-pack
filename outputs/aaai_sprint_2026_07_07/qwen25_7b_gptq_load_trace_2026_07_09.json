@@ -1,0 +1,17 @@
+{
+  "generated_at": "2026-07-09",
+  "model": "E:/models/Qwen2.5-7B-Instruct-GPTQ-Int4",
+  "packages": {
+    "torch": "2.5.1+cu121",
+    "transformers": "4.57.6",
+    "optimum": "2.2.0",
+    "auto-gptq": "missing: PackageNotFoundError: auto-gptq",
+    "gptqmodel": "missing: PackageNotFoundError: gptqmodel",
+    "accelerate": "1.10.1",
+    "safetensors": "0.7.0"
+  },
+  "loaded": false,
+  "error_type": "NameError",
+  "error": "NameError(\"name 'QuantizeConfig' is not defined\")",
+  "traceback": "Traceback (most recent call last):\n  File \"<stdin>\", line 12, in <module>\n  File \"D:\\Anaconda\\lib\\site-packages\\transformers\\models\\auto\\auto_factory.py\", line 604, in from_pretrained\n    return model_class.from_pretrained(\n  File \"D:\\Anaconda\\lib\\site-packages\\transformers\\modeling_utils.py\", line 277, in _wrapper\n    return func(*args, **kwargs)\n  File \"D:\\Anaconda\\lib\\site-packages\\transformers\\modeling_utils.py\", line 4881, in from_pretrained\n    hf_quantizer, config, dtype, device_map = get_hf_quantizer(\n  File \"D:\\Anaconda\\lib\\site-packages\\transformers\\quantizers\\auto.py\", line 311, in get_hf_quantizer\n    hf_quantizer = AutoHfQuantizer.from_config(\n  File \"D:\\Anaconda\\lib\\site-packages\\transformers\\quantizers\\auto.py\", line 185, in from_config\n    return target_cls(quantization_config, **kwargs)\n  File \"D:\\Anaconda\\lib\\site-packages\\transformers\\quantizers\\quantizer_gptq.py\", line 52, in __init__\n    self.optimum_quantizer = GPTQQuantizer.from_dict(self.quantization_config.to_dict_optimum())\n  File \"D:\\Anaconda\\lib\\site-packages\\optimum\\gptq\\quantizer.py\", line 251, in from_dict\n    return cls(**config_dict)\n  File \"D:\\Anaconda\\lib\\site-packages\\optimum\\gptq\\quantizer.py\", line 168, in __init__\n    self.quantizeConfig = QuantizeConfig(\nNameError: name 'QuantizeConfig' is not defined\n"
+}

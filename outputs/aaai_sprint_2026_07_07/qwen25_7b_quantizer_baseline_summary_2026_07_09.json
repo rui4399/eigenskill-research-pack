@@ -94,5 +94,11 @@
       "error": "NameError(\"name 'QuantizeConfig' is not defined\")"
     },
     "interpretation": "GPTQ remains blocked in the current environment by a QuantizeConfig schema/runtime issue after installing optimum; no downstream GPTQ score is claimed."
+  },
+  "gptq_blocker_after_dependency_attempt": {
+    "status": "blocked_after_gptqmodel_install",
+    "artifact": "qwen25_7b_gptq_dependency_blocker_2026_07_09.json",
+    "final_error": "TypeError(\"unsupported operand type(s) for |: 'type' and 'EnumMeta'\")",
+    "interpretation": "The GPTQ checkpoint is present locally, but the current Windows Python 3.9 stack cannot import gptqmodel via optimum because gptqmodel uses PEP-604 type unions with an EnumMeta operand in runtime annotations. No GPTQ downstream score is claimed."
   }
 }

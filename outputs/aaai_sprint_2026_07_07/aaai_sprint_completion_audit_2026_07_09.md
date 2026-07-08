@@ -17,15 +17,15 @@ This audit maps the requested AAAI sprint experiments to concrete artifacts in t
 | P1 calibration dataset/domain shift | `complete_for_1p5b_wikitext2_vs_c4` | `qwen25_1p5b_wikitext2_vs_c4_n64_domain_shift_summary.json` | Domain-shift downstream task retention is not separately rerun per calibration domain. |
 | P2 efficiency overhead | `partial_proxy_plus_reproducible_timing_smoke` | `aaai_sprint_efficiency_proxy_2026_07_08.json`, `aaai_sprint_efficiency_proxy_2026_07_08.md`, `qwen25_1p5b_efficiency_timing_smoke_2026_07_09.json`, `qwen25_1p5b_efficiency_timing_smoke_wallclock_2026_07_09.json` | This is not a full wall-clock efficiency table for all models; use as timing instrumentation evidence and keep broad runtime claims conservative. |
 | P2 layer-level mechanism visualization/data | `complete_data_artifact` | `aaai_sprint_layer_mechanism_2026_07_08.json`, `aaai_sprint_layer_mechanism_2026_07_08.csv`, `aaai_sprint_gate_behavior_distribution_2026_07_09.json` | Plots can be regenerated from CSV/JSON; current artifact is data-first. |
-| 7B full downstream and strong quantizer baseline | `complete_with_awq_and_gptq_blocker` | `qwen25_7b_aaai_sprint_summary.json`, `qwen25_7b_quantizer_baseline_summary_2026_07_09.json`, `qwen25_7b_awq_mmlu100_v2.json`, `qwen25_7b_awq_gsm8k100_v2.json`, `qwen25_7b_gptq_probe_after_optimum_2026_07_09.json` | GPTQ downstream score is not claimed because the local GPTQ checkpoint fails after optimum with QuantizeConfig NameError. |
+| 7B full downstream and strong quantizer baseline | `complete_with_awq_and_gptq_blocker` | `qwen25_7b_aaai_sprint_summary.json`, `qwen25_7b_quantizer_baseline_summary_2026_07_09.json`, `qwen25_7b_awq_mmlu100_v2.json`, `qwen25_7b_awq_gsm8k100_v2.json`, `qwen25_7b_gptq_probe_after_optimum_2026_07_09.json`, `qwen25_7b_gptq_dependency_blocker_2026_07_09.json` | GPTQ downstream score is not claimed. After installing gptqmodel, the final blocker is Python 3.9/runtime incompatibility in gptqmodel type-union annotations, recorded in qwen25_7b_gptq_dependency_blocker_2026_07_09. |
 | 14B downstream and CSI allocation | `partial_downstream_complete_csi_blocked` | `qwen25_14b_awq_aaai_sprint_summary.json`, `qwen25_14b_awq_mmlu100_v2.json`, `qwen25_14b_awq_gsm8k100_v2.json`, `qwen25_14b_awq_module_compat_probe.json` | Full 14B CSI allocation is not complete: only AWQ checkpoint is local; body modules are WQLinear_GEMM and the current CSI fake-quant path only traverses standard torch.nn.Linear. Loading FP16 14B into current all-cuda script would exceed the 24GB RTX 3090 memory budget. |
 
 ## Remaining Strict Gaps
 
 - Full 14B CSI-guided allocation/downstream retention requires an FP16/BF16 14B checkpoint plus offload/device_map support, or an AWQ-aware sensitivity path for WQLinear_GEMM modules.
 - Full calibration-size curve through n256/n512/n1024/n2048/n4096 is not complete for all models/tasks.
-- GPTQ 7B downstream retention is blocked by QuantizeConfig runtime/schema failure in this environment.
 - Full wall-clock efficiency table across all model scales is still not complete; current evidence includes one reproducible 1.5B timing smoke plus proxy accounting.
+- GPTQ 7B downstream retention remains blocked after dependency installation: gptqmodel imports fail on this Windows Python 3.9 stack with a type-union EnumMeta error.
 
 ## Recommended Paper Claim
 
