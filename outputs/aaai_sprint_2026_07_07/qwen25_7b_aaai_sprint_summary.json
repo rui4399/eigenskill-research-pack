@@ -1,0 +1,189 @@
+{
+  "allocation_overlap": {
+    "avg3": {
+      "consensus_high_count": 94,
+      "left_high_count": 94,
+      "left_high_jaccard": 0.8431372549019608,
+      "left_high_overlap": 86,
+      "right_high_count": 94,
+      "right_high_jaccard": 0.8076923076923077,
+      "right_high_overlap": 84
+    },
+    "avg3p5": {
+      "consensus_high_count": 94,
+      "left_high_count": 94,
+      "left_high_jaccard": 0.8431372549019608,
+      "left_high_overlap": 86,
+      "right_high_count": 94,
+      "right_high_jaccard": 0.8076923076923077,
+      "right_high_overlap": 84
+    }
+  },
+  "generated_at": "2026-07-08",
+  "gsm8k_main_findings": {
+    "avg3p5_csi_exact": 2,
+    "avg3p5_csi_gain_over_single_points": -1,
+    "avg3p5_single_exact": 3,
+    "fp16_exact": 4,
+    "uniform_int4_exact": 5
+  },
+  "mmlu_main_findings": {
+    "avg3_csi_exact": 1,
+    "avg3_single_exact": 0,
+    "avg3p5_csi_exact": 53,
+    "avg3p5_csi_gain_over_single_points": -2,
+    "avg3p5_single_exact": 55,
+    "fp16_exact": 65,
+    "uniform_int2_exact": 0,
+    "uniform_int3_exact": 8,
+    "uniform_int4_exact": 63,
+    "uniform_int8_exact": 65
+  },
+  "model": "Qwen2.5-7B-Instruct",
+  "note": "7B extension covers MMLU bit sweep plus MMLU/GSM8K equal-budget allocation slices. Results are mixed: CSI does not dominate single-split at 7B in this slice, so this should be framed as scale/failure-boundary evidence rather than a positive-only claim.",
+  "results": [
+    {
+      "accuracy": 0.65,
+      "allocation_method": "csi_guided",
+      "exact": 65,
+      "file": "outputs/aaai_sprint_2026_07_07/qwen25_7b_mmlu100_fp16_v2.json",
+      "method": "FP16",
+      "quant_mode": "fp16",
+      "role": "upper reference",
+      "task": "MMLU100",
+      "total": 100
+    },
+    {
+      "accuracy": 0.0,
+      "allocation_method": "csi_guided",
+      "exact": 0,
+      "file": "outputs/aaai_sprint_2026_07_07/qwen25_7b_mmlu100_uniform_int2_v2.json",
+      "method": "Uniform INT2",
+      "quant_mode": "uniform_int2",
+      "role": "bit sweep",
+      "task": "MMLU100",
+      "total": 100
+    },
+    {
+      "accuracy": 0.08,
+      "allocation_method": "csi_guided",
+      "exact": 8,
+      "file": "outputs/aaai_sprint_2026_07_07/qwen25_7b_mmlu100_uniform_int3_v2.json",
+      "method": "Uniform INT3",
+      "quant_mode": "uniform_int3",
+      "role": "bit sweep",
+      "task": "MMLU100",
+      "total": 100
+    },
+    {
+      "accuracy": 0.63,
+      "allocation_method": "csi_guided",
+      "exact": 63,
+      "file": "outputs/aaai_sprint_2026_07_07/qwen25_7b_mmlu100_uniform_int4_v2.json",
+      "method": "Uniform INT4",
+      "quant_mode": "uniform_int4",
+      "role": "bit sweep",
+      "task": "MMLU100",
+      "total": 100
+    },
+    {
+      "accuracy": 0.65,
+      "allocation_method": "csi_guided",
+      "exact": 65,
+      "file": "outputs/aaai_sprint_2026_07_07/qwen25_7b_mmlu100_uniform_int8_v2.json",
+      "method": "Uniform INT8",
+      "quant_mode": "uniform_int8",
+      "role": "bit sweep",
+      "task": "MMLU100",
+      "total": 100
+    },
+    {
+      "accuracy": 0.0,
+      "allocation_method": "loss_sensitive_4to8",
+      "exact": 0,
+      "file": "outputs/aaai_sprint_2026_07_07/qwen25_7b_mmlu100_single_n64_budget3_v2.json",
+      "method": "Single split 2-to-4 avg3",
+      "quant_mode": "allocation",
+      "role": "collapse-boundary allocation",
+      "task": "MMLU100",
+      "total": 100
+    },
+    {
+      "accuracy": 0.01,
+      "allocation_method": "loss_sensitive_robust_lcb_consensus_4to8",
+      "exact": 1,
+      "file": "outputs/aaai_sprint_2026_07_07/qwen25_7b_mmlu100_csi_n64_budget3_v2.json",
+      "method": "CSI consensus 2-to-4 avg3",
+      "quant_mode": "allocation",
+      "role": "collapse-boundary allocation",
+      "task": "MMLU100",
+      "total": 100
+    },
+    {
+      "accuracy": 0.55,
+      "allocation_method": "loss_sensitive_4to8",
+      "exact": 55,
+      "file": "outputs/aaai_sprint_2026_07_07/qwen25_7b_mmlu100_single_n64_3to4_budget3p5_v2.json",
+      "method": "Single split 3-to-4 avg3.5",
+      "quant_mode": "allocation",
+      "role": "equal-budget allocation",
+      "task": "MMLU100",
+      "total": 100
+    },
+    {
+      "accuracy": 0.53,
+      "allocation_method": "loss_sensitive_robust_lcb_consensus_4to8",
+      "exact": 53,
+      "file": "outputs/aaai_sprint_2026_07_07/qwen25_7b_mmlu100_csi_n64_3to4_budget3p5_v2.json",
+      "method": "CSI consensus 3-to-4 avg3.5",
+      "quant_mode": "allocation",
+      "role": "equal-budget allocation",
+      "task": "MMLU100",
+      "total": 100
+    },
+    {
+      "accuracy": 0.04,
+      "allocation_method": "csi_guided",
+      "exact": 4,
+      "file": "outputs/aaai_sprint_2026_07_07/qwen25_7b_gsm8k100_fp16_v2.json",
+      "method": "FP16",
+      "quant_mode": "fp16",
+      "role": "upper reference",
+      "task": "GSM8K100",
+      "total": 100
+    },
+    {
+      "accuracy": 0.05,
+      "allocation_method": "csi_guided",
+      "exact": 5,
+      "file": "outputs/aaai_sprint_2026_07_07/qwen25_7b_gsm8k100_uniform_int4_v2.json",
+      "method": "Uniform INT4",
+      "quant_mode": "uniform_int4",
+      "role": "bit sweep",
+      "task": "GSM8K100",
+      "total": 100
+    },
+    {
+      "accuracy": 0.03,
+      "allocation_method": "loss_sensitive_4to8",
+      "exact": 3,
+      "file": "outputs/aaai_sprint_2026_07_07/qwen25_7b_gsm8k100_single_n64_3to4_budget3p5_v2.json",
+      "method": "Single split 3-to-4 avg3.5",
+      "quant_mode": "allocation",
+      "role": "equal-budget allocation",
+      "task": "GSM8K100",
+      "total": 100
+    },
+    {
+      "accuracy": 0.02,
+      "allocation_method": "loss_sensitive_robust_lcb_consensus_4to8",
+      "exact": 2,
+      "file": "outputs/aaai_sprint_2026_07_07/qwen25_7b_gsm8k100_csi_n64_3to4_budget3p5_v2.json",
+      "method": "CSI consensus 3-to-4 avg3.5",
+      "quant_mode": "allocation",
+      "role": "equal-budget allocation",
+      "task": "GSM8K100",
+      "total": 100
+    }
+  ]
+}
