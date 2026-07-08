@@ -25,7 +25,11 @@
     "avg3p5_csi_gain_over_single_points": -1,
     "avg3p5_single_exact": 3,
     "fp16_exact": 4,
-    "uniform_int4_exact": 5
+    "uniform_int4_exact": 5,
+    "uniform_int2_exact": 0,
+    "uniform_int3_exact": 0,
+    "uniform_int8_exact": 4,
+    "corrected_bit_sweep_note": "Uniform INT2/INT3/INT8 were rerun on data_eval/public_task_benchmark_v1/gsm8k_test_subset100.jsonl after a mislabeled fallback run was detected and discarded."
   },
   "mmlu_main_findings": {
     "avg3_csi_exact": 1,
@@ -184,6 +188,39 @@
       "role": "equal-budget allocation",
       "task": "GSM8K100",
       "total": 100
+    },
+    {
+      "task": "GSM8K100",
+      "method": "Uniform INT2",
+      "quant_mode": "uniform_int2",
+      "allocation_method": "csi_guided",
+      "exact": 0,
+      "total": 100,
+      "accuracy": 0.0,
+      "role": "bit sweep",
+      "file": "outputs/aaai_sprint_2026_07_07/qwen25_7b_gsm8k100_uniform_int2_v2.json"
+    },
+    {
+      "task": "GSM8K100",
+      "method": "Uniform INT3",
+      "quant_mode": "uniform_int3",
+      "allocation_method": "csi_guided",
+      "exact": 0,
+      "total": 100,
+      "accuracy": 0.0,
+      "role": "bit sweep",
+      "file": "outputs/aaai_sprint_2026_07_07/qwen25_7b_gsm8k100_uniform_int3_v2.json"
+    },
+    {
+      "task": "GSM8K100",
+      "method": "Uniform INT8",
+      "quant_mode": "uniform_int8",
+      "allocation_method": "csi_guided",
+      "exact": 4,
+      "total": 100,
+      "accuracy": 0.04,
+      "role": "bit sweep",
+      "file": "outputs/aaai_sprint_2026_07_07/qwen25_7b_gsm8k100_uniform_int8_v2.json"
     }
   ]
 }

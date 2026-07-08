@@ -25,11 +25,14 @@ Key result: Uniform INT4 retains 63/100 vs FP16 65/100. At 3-to-4 avg 3.5-bit, s
 | Method | Exact / 100 | Accuracy | Role |
 |---|---:|---:|---|
 | FP16 | 4 | 0.04 | upper reference |
+| Uniform INT2 | 0 | 0.00 | bit sweep |
+| Uniform INT3 | 0 | 0.00 | bit sweep |
 | Uniform INT4 | 5 | 0.05 | bit sweep |
+| Uniform INT8 | 4 | 0.04 | bit sweep |
 | Single split 3-to-4 avg3.5 | 3 | 0.03 | equal-budget allocation |
 | CSI consensus 3-to-4 avg3.5 | 2 | 0.02 | equal-budget allocation |
 
-GSM8K100 is weak under the current simple generation and first-number scoring protocol; CSI is 2/100 vs single 3/100 at the 3.5-bit budget.
+GSM8K100 is weak under the current simple generation and first-number scoring protocol; CSI is 2/100 vs single 3/100 at the 3.5-bit budget. Corrected GSM8K bit sweep on `gsm8k_test_subset100.jsonl`: INT2=0/100, INT3=0/100, INT4=5/100, INT8=4/100.
 
 ## Allocation Consistency
 
@@ -51,3 +54,7 @@ GSM8K100 is weak under the current simple generation and first-number scoring pr
 - `outputs/aaai_sprint_2026_07_07/qwen25_7b_gsm8k100_uniform_int4_v2.json`
 - `outputs/aaai_sprint_2026_07_07/qwen25_7b_gsm8k100_single_n64_3to4_budget3p5_v2.json`
 - `outputs/aaai_sprint_2026_07_07/qwen25_7b_gsm8k100_csi_n64_3to4_budget3p5_v2.json`
+
+- `outputs/aaai_sprint_2026_07_07/qwen25_7b_gsm8k100_uniform_int2_v2.json`
+- `outputs/aaai_sprint_2026_07_07/qwen25_7b_gsm8k100_uniform_int3_v2.json`
+- `outputs/aaai_sprint_2026_07_07/qwen25_7b_gsm8k100_uniform_int8_v2.json`

@@ -18,6 +18,12 @@ This 14B extension records downstream task-retention feasibility for the local `
 - `awq_ext` was unavailable, so AutoAWQ used its slower fallback implementation.
 - These runs support the 14B scale/retention story, but they should not be described as evidence that CSI-guided allocation dominates at 14B.
 
+## Module Compatibility Probe
+
+A direct module probe found only one standard `torch.nn.Linear` module (`lm_head`) in the AWQ checkpoint. The transformer body uses `WQLinear_GEMM` modules without standard `.weight` tensors exposed to the existing fake-quant sensitivity path. Therefore, full 14B CSI-guided allocation is a method/tooling boundary rather than a completed result for this checkpoint.
+
+Artifact: `outputs/aaai_sprint_2026_07_07/qwen25_14b_awq_module_compat_probe.json`
+
 ## Claim Boundary
 
 Use this evidence as: "the pipeline can execute 14B AWQ downstream retention on RTX 3090, with MMLU100 at 65/100 and GSM8K100 at 13/100."
