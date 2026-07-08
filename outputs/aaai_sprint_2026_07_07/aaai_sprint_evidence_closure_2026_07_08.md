@@ -74,3 +74,6 @@ Added on 2026-07-09: `aaai_sprint_efficiency_timing_smoke_2026_07_09.{json,md}` 
 ## Calibration Scaling 512 Prompt Readiness
 
 Added on 2026-07-09: `aaai_scaling_512_prompt_manifest_2026_07_09.{json,md}` and `aaai_scaling_512_readiness_audit_2026_07_09.{json,md}` materialize public WikiText2/C4 prompt pools with 512 usable prompts each. This closes the prompt-pool preparation gap for n256/n512 scaling, but the expensive sensitivity/downstream runs for those sizes are still not claimed complete.
+## Calibration Scaling n256 Evidence
+
+Added on 2026-07-09: `qwen25_1p5b_wikitext2_n256_seed0_seed1_csi_consensus_2to4_budget3.{json,md}` and `qwen25_1p5b_n16_n32_n64_n128_n256_csi_scaling_summary.{json,md}` record completed Qwen2.5-1.5B n256 sensitivity/consensus scaling from the 512-prompt WikiText2 pool. The n256 mean high-bit Jaccard is 0.908, with avg bits 2.9999 and 98/99 split across 2-bit/4-bit modules. This upgrades calibration scaling from readiness-only to completed n256 calibration evidence; n256 downstream retention and n512 remain unclaimed.
