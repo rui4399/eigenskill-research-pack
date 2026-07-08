@@ -41,3 +41,13 @@ The sprint now supports a stricter paper narrative: CSI can be used as an alloca
 ## Cross-Family Evidence
 
 Phi-3-mini evidence is recorded in `phi3_mini_cross_family_summary_2026_07_08.{json,md}`. The model exposes 129 standard Linear modules, supports the existing sensitivity path, and provides MMLU/GSM8K FP16, INT4, single-split avg3, and CSI avg3 downstream slices. Results are a stress/failure-boundary case: INT4 retains while avg3 allocation collapses.
+
+## Final Reviewer Tables
+
+Additional reviewer-facing closure artifacts generated on 2026-07-09:
+
+- Win/loss and average rank: `aaai_sprint_win_loss_average_rank_2026_07_09.{json,md}`.
+- Failure recovery audit: `aaai_sprint_failure_recovery_audit_2026_07_09.{json,md}`.
+- Gate behavior distribution: `aaai_sprint_gate_behavior_distribution_2026_07_09.{json,md}`.
+
+These tables should be used as audit/positioning evidence rather than as new positive-only claims; they explicitly preserve loss cases and rejection boundaries.
