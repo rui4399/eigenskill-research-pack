@@ -2,7 +2,7 @@
   "generated_at": "2026-07-09",
   "objective": "?????????????token???????????GitHub?",
   "remote_branch": "codex/rtx3090-experiments-2026-06-16",
-  "latest_pushed_commit_observed": "52dc8097bf78280c7ab42bee8c5f673c26b91968",
+  "latest_pushed_commit_observed": "de08edb35a953d2d404a5e763847fa03f965fe0d",
   "overall_status": "substantially_complete_with_explicit_14b_csi_and_true_efficiency_boundaries",
   "items": [
     {
@@ -138,7 +138,7 @@
     },
     {
       "requirement": "P2 efficiency overhead",
-      "status": "partial_proxy_plus_reproducible_timing_smoke",
+      "status": "partial_proxy_plus_1p5b_3b_7b_timing_smoke",
       "evidence": [
         {
           "path": "outputs/aaai_sprint_2026_07_07/aaai_sprint_efficiency_proxy_2026_07_08.json",
@@ -159,10 +159,25 @@
           "path": "outputs/aaai_sprint_2026_07_07/qwen25_1p5b_efficiency_timing_smoke_wallclock_2026_07_09.json",
           "exists": true,
           "bytes": 568
+        },
+        {
+          "path": "outputs/aaai_sprint_2026_07_07/aaai_sprint_efficiency_timing_smoke_2026_07_09.json",
+          "exists": true,
+          "bytes": 1886
+        },
+        {
+          "path": "outputs/aaai_sprint_2026_07_07/qwen25_3b_efficiency_timing_smoke_wallclock_2026_07_09.json",
+          "exists": true,
+          "bytes": 560
+        },
+        {
+          "path": "outputs/aaai_sprint_2026_07_07/qwen25_7b_efficiency_timing_smoke_wallclock_2026_07_09.json",
+          "exists": true,
+          "bytes": 792
         }
       ],
-      "coverage": "Proxy efficiency/memory accounting from artifacts plus a reproducible wall-clock smoke: Qwen2.5-1.5B, 4 prompts, 1 Linear module, RTX 3090, 12.931 seconds end-to-end.",
-      "claim_boundary": "This is not a full wall-clock efficiency table for all models; use as timing instrumentation evidence and keep broad runtime claims conservative."
+      "coverage": "Proxy efficiency/memory accounting plus reproducible timing smokes for Qwen2.5 1.5B, 3B, and 7B using the same 4-prompt/1-module sensitivity protocol.",
+      "claim_boundary": "This is a scale timing smoke, not a full wall-clock benchmark over all modules or complete downstream evaluation."
     },
     {
       "requirement": "P2 layer-level mechanism visualization/data",
@@ -257,8 +272,8 @@
   "remaining_strict_gaps": [
     "Full 14B CSI-guided allocation/downstream retention requires an FP16/BF16 14B checkpoint plus offload/device_map support, or an AWQ-aware sensitivity path for WQLinear_GEMM modules.",
     "Full calibration-size curve through n256/n512/n1024/n2048/n4096 is not complete for all models/tasks.",
-    "Full wall-clock efficiency table across all model scales is still not complete; current evidence includes one reproducible 1.5B timing smoke plus proxy accounting.",
-    "GPTQ 7B downstream retention remains blocked after dependency installation: gptqmodel imports fail on this Windows Python 3.9 stack with a type-union EnumMeta error."
+    "GPTQ 7B downstream retention remains blocked after dependency installation: gptqmodel imports fail on this Windows Python 3.9 stack with a type-union EnumMeta error.",
+    "Full wall-clock efficiency table over all modules and downstream tasks is still not complete; current evidence includes reproducible 1.5B/3B/7B timing smokes plus proxy accounting."
   ],
   "recommended_paper_claim": "The sprint supports a calibration-aware allocation/audit framework with downstream evidence across 1.5B/3B/7B and one cross-family model, plus 14B AWQ feasibility. It should not claim universal CSI dominance or completed 14B CSI allocation."
 }

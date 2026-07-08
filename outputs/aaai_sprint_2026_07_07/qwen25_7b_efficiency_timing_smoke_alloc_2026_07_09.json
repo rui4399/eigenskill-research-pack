@@ -1,0 +1,128 @@
+{
+  "date": "2026-07-09",
+  "model": "E:\\models\\Qwen2.5-7B-Instruct",
+  "prompt_count": 4,
+  "prompt_selection": {
+    "source": "data_eval\\text_prompts\\wikitext2_validation_128.txt",
+    "pool_size": 128,
+    "limit": 4,
+    "sample_size": 0,
+    "seed": 0,
+    "selected_indices": [
+      0,
+      1,
+      2,
+      3
+    ]
+  },
+  "max_length": 128,
+  "device": "cuda",
+  "dtype": "float16",
+  "probe_bits": 4,
+  "group_size": 128,
+  "base_bits": 2,
+  "high_bits": 4,
+  "budget_avg_bits": 3.0,
+  "lowmem_row_chunk": 16,
+  "complete": true,
+  "linear_modules": 1,
+  "measured_modules": 1,
+  "baseline": {
+    "prompt_count": 4,
+    "tokens": 401,
+    "mean_nll": 1.9579501642550614,
+    "ppl": 7.084789515658122,
+    "per_prompt": [
+      {
+        "tokens": 127,
+        "loss": 1.7349861860275269,
+        "ppl": 5.668849493933232
+      },
+      {
+        "tokens": 127,
+        "loss": 1.504218339920044,
+        "ppl": 4.500634288845246
+      },
+      {
+        "tokens": 79,
+        "loss": 2.252190351486206,
+        "ppl": 9.508540088643272
+      },
+      {
+        "tokens": 68,
+        "loss": 2.87994122505188,
+        "ppl": 17.813226177399322
+      }
+    ]
+  },
+  "groups": [
+    {
+      "index": 0,
+      "module": "model.layers.0.self_attn.q_proj",
+      "name": "model.layers.0.self_attn.q_proj",
+      "layer": 0,
+      "group": 0,
+      "shape": [
+        3584,
+        3584
+      ],
+      "param_count": 12848640,
+      "weight_params": 12845056,
+      "bias_params": 3584,
+      "cost": 12848640.0,
+      "quant_bits": 4,
+      "group_size": 128,
+      "quantized_mean_nll": 1.9569939101426084,
+      "quantized_ppl": 7.078017894759086,
+      "delta_nll": -0.0009562541124530366,
+      "positive_delta_nll": 0.0,
+      "extra_cost_to_keep_fp16": 154183680.0,
+      "score_delta_per_param": 0.0,
+      "score_delta_per_extra_fp16_cost": 0.0,
+      "sensitivity_rank": 1,
+      "sensitivity": 0.0,
+      "variance": 1.0,
+      "outlier": 7.078017894759086
+    }
+  ],
+  "allocations": {
+    "uniform_int2": [
+      2
+    ],
+    "loss_sensitive_4to8": [
+      2
+    ]
+  },
+  "summaries": [
+    {
+      "name": "uniform_int2",
+      "groups": 1,
+      "budget_avg_bits": 3.0,
+      "memory": 25697280.0,
+      "budget": 38545920.0,
+      "budget_used": 0.6666666666666666,
+      "avg_bits": 2.0,
+      "bit_hist": {
+        "2": 1
+      },
+      "positive_delta_nll_total": 0.0,
+      "positive_delta_nll_protected": 0,
+      "positive_delta_nll_protected_ratio": 0.0
+    },
+    {
+      "name": "loss_sensitive_4to8",
+      "groups": 1,
+      "budget_avg_bits": 3.0,
+      "memory": 25697280.0,
+      "budget": 38545920.0,
+      "budget_used": 0.6666666666666666,
+      "avg_bits": 2.0,
+      "bit_hist": {
+        "2": 1
+      },
+      "positive_delta_nll_total": 0.0,
+      "positive_delta_nll_protected": 0,
+      "positive_delta_nll_protected_ratio": 0.0
+    }
+  ]
+}

@@ -68,3 +68,6 @@ Added on 2026-07-09: `qwen25_1p5b_efficiency_timing_smoke_2026_07_09.{json,md}` 
 ## GPTQ Dependency Blocker Follow-up
 
 Added on 2026-07-09: `qwen25_7b_gptq_dependency_blocker_2026_07_09.{json,md}` records a stronger GPTQ blocker. Installing `gptqmodel 2.2.0+cu121torch2.5` moves past the missing `QuantizeConfig` error, but the current Windows Python 3.9 runtime fails importing `gptqmodel` with a PEP-604 type-union/EnumMeta error. The project test subset still passes after restoring numpy/pytest/setuptools/wheel to project-compatible versions.
+## Multi-scale Efficiency Timing Smoke
+
+Added on 2026-07-09: `aaai_sprint_efficiency_timing_smoke_2026_07_09.{json,md}` aggregates reproducible 1.5B/3B/7B timing smokes under the same 4-prompt/1-module sensitivity protocol. Wall-clock times are 12.931s, 15.102s, and 37.691s respectively. This remains a smoke/protocol timing table, not a full all-module benchmark.
