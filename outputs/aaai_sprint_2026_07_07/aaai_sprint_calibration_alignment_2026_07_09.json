@@ -1,6 +1,6 @@
 {
   "generated_at": "2026-07-09",
-  "note": "Calibration-size stability rows, with n64 downstream retention attached where measured; 1.5B now includes completed n512 full-pool sensitivity/allocation evidence.",
+  "note": "Calibration-size stability rows, with n64/n256/n512 downstream retention attached where measured; 1.5B n512 is completed full-pool sensitivity/allocation evidence, not two-split consensus.",
   "rows": [
     {
       "model": "1p5b",
@@ -57,7 +57,23 @@
       "left_high_jaccard": 0.9313725490196079,
       "right_high_jaccard": 0.8846153846153846,
       "avg_bits": 2.9998610233984855,
-      "source": "outputs\\aaai_sprint_2026_07_07\\qwen25_1p5b_wikitext2_n256_seed0_seed1_csi_consensus_2to4_budget3.json"
+      "source": "outputs\\aaai_sprint_2026_07_07\\qwen25_1p5b_wikitext2_n256_seed0_seed1_csi_consensus_2to4_budget3.json",
+      "downstream_retention": [
+        {
+          "task": "mmlu100",
+          "artifact": "qwen25_1p5b_mmlu100_csi_n256_budget3_v2.json",
+          "accuracy": 0.05,
+          "exact": 5,
+          "total": 100
+        },
+        {
+          "task": "gsm8k100",
+          "artifact": "qwen25_1p5b_gsm8k100_csi_n256_budget3_v2.json",
+          "accuracy": 0.0,
+          "exact": 0,
+          "total": 100
+        }
+      ]
     },
     {
       "model": "1p5b",
@@ -65,7 +81,23 @@
       "mean_high_jaccard": null,
       "avg_bits": 2.9988394292871132,
       "source": "outputs\\aaai_sprint_2026_07_07\\qwen25_1p5b_wikitext2_n512_seed0_sensitivity_2to4_budget3.json",
-      "note": "single full-pool sensitivity/allocation; no two-split Jaccard claimed"
+      "note": "single full-pool sensitivity/allocation with downstream retention; no two-split Jaccard or CSI consensus claimed",
+      "downstream_retention": [
+        {
+          "task": "mmlu100",
+          "artifact": "qwen25_1p5b_mmlu100_single_n512_budget3_v2.json",
+          "accuracy": 0.05,
+          "exact": 5,
+          "total": 100
+        },
+        {
+          "task": "gsm8k100",
+          "artifact": "qwen25_1p5b_gsm8k100_single_n512_budget3_v2.json",
+          "accuracy": 0.0,
+          "exact": 0,
+          "total": 100
+        }
+      ]
     },
     {
       "model": "7b",

@@ -1,0 +1,123 @@
+{
+  "generated_at": "2026-07-09",
+  "model": "Qwen2.5-1.5B-Instruct",
+  "budget": "2/4-bit mixed allocation with average target approximately 3 bits",
+  "scope": "Downstream MMLU100/GSM8K100 retention attached to calibration-size scaling evidence.",
+  "claim_boundary": "n64 and n256 are two-split CSI consensus allocations; n512 is a true 512-prompt full-pool single sensitivity/allocation run, not a two-split CSI consensus result.",
+  "rows": [
+    {
+      "calibration_n": 64,
+      "allocation_kind": "two_split_csi_consensus",
+      "task": "mmlu100",
+      "artifact": "qwen25_1p5b_mmlu100_csi_n64_budget3_v2.json",
+      "allocation": "outputs\\aaai_sprint_2026_07_07\\qwen25_1p5b_wikitext2_n64_seed0_seed1_csi_consensus_2to4_budget3.json",
+      "allocation_method": "loss_sensitive_robust_lcb_consensus_4to8",
+      "total": 100,
+      "exact": 1,
+      "accuracy": 0.01,
+      "bit_hist": {
+        "2": 99,
+        "4": 98
+      },
+      "linear_modules_touched": 197,
+      "group_size": 128
+    },
+    {
+      "calibration_n": 64,
+      "allocation_kind": "two_split_csi_consensus",
+      "task": "gsm8k100",
+      "artifact": "qwen25_1p5b_gsm8k100_csi_n64_budget3_v2.json",
+      "allocation": "outputs\\aaai_sprint_2026_07_07\\qwen25_1p5b_wikitext2_n64_seed0_seed1_csi_consensus_2to4_budget3.json",
+      "allocation_method": "loss_sensitive_robust_lcb_consensus_4to8",
+      "total": 100,
+      "exact": 0,
+      "accuracy": 0.0,
+      "bit_hist": {
+        "2": 99,
+        "4": 98
+      },
+      "linear_modules_touched": 197,
+      "group_size": 128
+    },
+    {
+      "calibration_n": 256,
+      "allocation_kind": "two_split_csi_consensus",
+      "task": "mmlu100",
+      "artifact": "qwen25_1p5b_mmlu100_csi_n256_budget3_v2.json",
+      "allocation": "outputs\\aaai_sprint_2026_07_07\\qwen25_1p5b_wikitext2_n256_seed0_seed1_csi_consensus_2to4_budget3.json",
+      "allocation_method": "loss_sensitive_robust_lcb_consensus_4to8",
+      "total": 100,
+      "exact": 5,
+      "accuracy": 0.05,
+      "bit_hist": {
+        "2": 98,
+        "4": 99
+      },
+      "linear_modules_touched": 197,
+      "group_size": 128
+    },
+    {
+      "calibration_n": 256,
+      "allocation_kind": "two_split_csi_consensus",
+      "task": "gsm8k100",
+      "artifact": "qwen25_1p5b_gsm8k100_csi_n256_budget3_v2.json",
+      "allocation": "outputs\\aaai_sprint_2026_07_07\\qwen25_1p5b_wikitext2_n256_seed0_seed1_csi_consensus_2to4_budget3.json",
+      "allocation_method": "loss_sensitive_robust_lcb_consensus_4to8",
+      "total": 100,
+      "exact": 0,
+      "accuracy": 0.0,
+      "bit_hist": {
+        "2": 98,
+        "4": 99
+      },
+      "linear_modules_touched": 197,
+      "group_size": 128
+    },
+    {
+      "calibration_n": 512,
+      "allocation_kind": "single_full_pool_sensitivity",
+      "task": "mmlu100",
+      "artifact": "qwen25_1p5b_mmlu100_single_n512_budget3_v2.json",
+      "allocation": "outputs\\aaai_sprint_2026_07_07\\qwen25_1p5b_wikitext2_n512_seed0_sensitivity_2to4_budget3.json",
+      "allocation_method": "loss_sensitive_4to8",
+      "total": 100,
+      "exact": 5,
+      "accuracy": 0.05,
+      "bit_hist": {
+        "2": 100,
+        "4": 97
+      },
+      "linear_modules_touched": 197,
+      "group_size": 128
+    },
+    {
+      "calibration_n": 512,
+      "allocation_kind": "single_full_pool_sensitivity",
+      "task": "gsm8k100",
+      "artifact": "qwen25_1p5b_gsm8k100_single_n512_budget3_v2.json",
+      "allocation": "outputs\\aaai_sprint_2026_07_07\\qwen25_1p5b_wikitext2_n512_seed0_sensitivity_2to4_budget3.json",
+      "allocation_method": "loss_sensitive_4to8",
+      "total": 100,
+      "exact": 0,
+      "accuracy": 0.0,
+      "bit_hist": {
+        "2": 100,
+        "4": 97
+      },
+      "linear_modules_touched": 197,
+      "group_size": 128
+    }
+  ],
+  "high_level_readout": {
+    "mmlu100": {
+      "n64_csi": "1/100",
+      "n256_csi": "5/100",
+      "n512_single_full_pool": "5/100"
+    },
+    "gsm8k100": {
+      "n64_csi": "0/100",
+      "n256_csi": "0/100",
+      "n512_single_full_pool": "0/100"
+    }
+  }
+}
