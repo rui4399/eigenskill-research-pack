@@ -30,7 +30,7 @@
     },
     {
       "requirement": "P0 calibration size scaling",
-      "status": "complete_to_n256_with_512_prompt_pool_ready_for_n512",
+      "status": "complete_to_n512_sensitivity_with_downstream_boundary",
       "evidence": [
         {
           "path": "outputs/aaai_sprint_2026_07_07/aaai_sprint_calibration_alignment_2026_07_09.json",
@@ -38,9 +38,14 @@
           "bytes": 3588
         },
         {
-          "path": "outputs/aaai_sprint_2026_07_07/qwen25_1p5b_n16_n32_n64_n128_n256_csi_scaling_summary.json",
+          "path": "outputs/aaai_sprint_2026_07_07/qwen25_1p5b_wikitext2_n512_seed0_sensitivity_2to4_budget3.json",
           "exists": true,
-          "bytes": 2855
+          "bytes": 242482
+        },
+        {
+          "path": "outputs/aaai_sprint_2026_07_07/qwen25_1p5b_n16_n32_n64_n128_n256_n512_csi_scaling_summary.json",
+          "exists": true,
+          "bytes": 3724
         },
         {
           "path": "outputs/aaai_sprint_2026_07_07/qwen25_1p5b_wikitext2_n256_seed0_seed1_csi_consensus_2to4_budget3.json",
@@ -63,8 +68,8 @@
           "bytes": 1773
         }
       ],
-      "coverage": "n16/n32/n64/n128/n256 for 1.5B; n16/n32/n64 for 7B; downstream attachment at n64; local 512-prompt WikiText2/C4 pools prepared for n512 follow-up runs.",
-      "claim_boundary": "n256 sensitivity/consensus is complete for 1.5B, but n256 downstream retention and n512 sensitivity/downstream runs are not claimed complete."
+      "coverage": "n16/n32/n64/n128/n256 two-split consensus for 1.5B, plus completed n512 full-pool sensitivity/allocation for 1.5B; n16/n32/n64 for 7B; downstream attachment at n64.",
+      "claim_boundary": "n512 sensitivity/allocation is complete for 1.5B as a full-pool single run, but n512 two-split consensus and n256/n512 downstream retention are not claimed complete."
     },
     {
       "requirement": "P0 seed robustness",
@@ -293,7 +298,7 @@
     "Full 14B fake-quant CSI-guided downstream retention still requires an FP16/BF16 14B checkpoint plus offload/device_map support, or a stronger AWQ-aware perturbation/downstream path beyond the new activation/scale proxy.",
     "GPTQ 7B downstream retention remains blocked after dependency installation: gptqmodel imports fail on this Windows Python 3.9 stack with a type-union EnumMeta error.",
     "Full wall-clock efficiency table over all modules and downstream tasks is still not complete; current evidence includes reproducible 1.5B/3B/7B timing smokes plus proxy accounting.",
-    "Full calibration-size curve through n512 and n256 downstream retention are not complete; 512-prompt WikiText2/C4 pools are materialized and n256 1.5B sensitivity/consensus evidence is now recorded."
+    "n256/n512 downstream retention and n512 two-split consensus are not complete; 1.5B sensitivity/allocation scaling is now recorded through a true 512-prompt full-pool run."
   ],
   "recommended_paper_claim": "The sprint supports a calibration-aware allocation/audit framework with downstream evidence across 1.5B/3B/7B and one cross-family model, plus 14B AWQ feasibility. It should not claim universal CSI dominance or completed 14B CSI allocation."
 }

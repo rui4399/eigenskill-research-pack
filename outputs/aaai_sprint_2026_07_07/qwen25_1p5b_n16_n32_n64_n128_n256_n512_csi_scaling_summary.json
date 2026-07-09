@@ -1,0 +1,100 @@
+{
+  "schema_version": 6,
+  "model": "Qwen2.5-1.5B-Instruct",
+  "calibration_pool": "legacy 128-prompt pool for n16-n128; 512-prompt public WikiText2 pool for n256-n512",
+  "split_pair": "seed0 vs seed1 for n16-n256; n512 uses completed seed0 full-pool sensitivity only",
+  "metric": "consensus high-bit Jaccard for n16-n256; full-pool sensitivity/allocation for n512",
+  "rows": [
+    {
+      "n": 16,
+      "evidence_type": "two_split_consensus",
+      "avg_bits": 2.9998689838720805,
+      "bit_hist": {
+        "2": 108,
+        "4": 89
+      },
+      "left_high_jaccard": 0.7079646017699115,
+      "right_high_jaccard": 0.6454545454545455,
+      "mean_high_jaccard": 0.6767095736122285,
+      "positive_delta_nll_protected_ratio": 0.8888837609877572,
+      "note": "distinct sampled splits",
+      "source": "outputs\\aaai_sprint_2026_07_07\\qwen25_1p5b_wikitext2_n16_seed0_seed1_csi_consensus_2to4_budget3.json"
+    },
+    {
+      "n": 32,
+      "evidence_type": "two_split_consensus",
+      "avg_bits": 2.999865003635283,
+      "bit_hist": {
+        "2": 108,
+        "4": 89
+      },
+      "left_high_jaccard": 0.7523809523809524,
+      "right_high_jaccard": 0.7272727272727273,
+      "mean_high_jaccard": 0.7398268398268398,
+      "positive_delta_nll_protected_ratio": 0.9104081604051453,
+      "note": "distinct sampled splits",
+      "source": "outputs\\aaai_sprint_2026_07_07\\qwen25_1p5b_wikitext2_n32_seed0_seed1_csi_consensus_2to4_budget3.json"
+    },
+    {
+      "n": 64,
+      "evidence_type": "two_split_consensus",
+      "avg_bits": 2.9998706423040793,
+      "bit_hist": {
+        "2": 99,
+        "4": 98
+      },
+      "left_high_jaccard": 0.8490566037735849,
+      "right_high_jaccard": 0.8490566037735849,
+      "mean_high_jaccard": 0.8490566037735849,
+      "positive_delta_nll_protected_ratio": 0.9221648565711029,
+      "note": "distinct sampled splits",
+      "source": "outputs\\aaai_sprint_2026_07_07\\qwen25_1p5b_wikitext2_n64_seed0_seed1_csi_consensus_2to4_budget3.json"
+    },
+    {
+      "n": 128,
+      "evidence_type": "two_split_consensus",
+      "avg_bits": 2.9998706423040793,
+      "bit_hist": {
+        "2": 94,
+        "4": 103
+      },
+      "left_high_jaccard": 0.9902912621359223,
+      "right_high_jaccard": 0.9902912621359223,
+      "mean_high_jaccard": 0.9902912621359223,
+      "positive_delta_nll_protected_ratio": 0.9260075087834929,
+      "note": "legacy full-pool upper bound; seed0/seed1 select same 128-prompt pool",
+      "source": "outputs\\aaai_sprint_2026_07_07\\qwen25_1p5b_wikitext2_n128_seed0_seed1_csi_consensus_2to4_budget3.json"
+    },
+    {
+      "n": 256,
+      "evidence_type": "two_split_consensus",
+      "avg_bits": 2.9998610233984855,
+      "bit_hist": {
+        "2": 98,
+        "4": 99
+      },
+      "left_high_jaccard": 0.9313725490196079,
+      "right_high_jaccard": 0.8846153846153846,
+      "mean_high_jaccard": 0.9079939668174962,
+      "positive_delta_nll_protected_ratio": 0.9112849039254857,
+      "note": "distinct sampled splits from 512-prompt public WikiText2 pool",
+      "source": "outputs\\aaai_sprint_2026_07_07\\qwen25_1p5b_wikitext2_n256_seed0_seed1_csi_consensus_2to4_budget3.json"
+    },
+    {
+      "n": 512,
+      "evidence_type": "single_full_pool_sensitivity",
+      "avg_bits": 2.9988394292871132,
+      "bit_hist": {
+        "2": 100,
+        "4": 97
+      },
+      "left_high_jaccard": null,
+      "right_high_jaccard": null,
+      "mean_high_jaccard": null,
+      "positive_delta_nll_protected_ratio": 0.9135894307389439,
+      "note": "completed 512-prompt full-pool sensitivity/allocation; not seed-perturbation or two-split consensus evidence",
+      "source": "outputs\\aaai_sprint_2026_07_07\\qwen25_1p5b_wikitext2_n512_seed0_sensitivity_2to4_budget3.json"
+    }
+  ],
+  "interpretation": "Agreement improves from n=16 to n=64. n128 is a legacy full-pool upper bound, n256 is the larger distinct-split point, and n512 closes the sensitivity/allocation side as a completed full-pool run rather than a seed-perturbation curve point."
+}
