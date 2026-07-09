@@ -92,3 +92,11 @@ Added on 2026-07-09: `qwen25_1p5b_n64_n256_n512_downstream_scaling_summary_2026_
 
 Added on 2026-07-09: `aaai_mixed_1024_prompt_manifest_2026_07_09.{json,md}` and `qwen25_1p5b_mixed1024_n512_csi_consensus_downstream_summary_2026_07_09.{json,md}` record a true n512 two-split CSI consensus run using two independent 512-sample draws from a mixed public 1024-prompt pool (512 WikiText2 + 512 C4). Both seed runs cover 197/197 modules. The consensus allocation uses avg 2.9999 bits with 103 4-bit and 94 2-bit modules; left/right high-bit Jaccard is 0.8727/0.8899. Downstream retention is MMLU100 4/100 and GSM8K100 0/100. This closes the n512 split-consensus method gap for mixed-domain public calibration while preserving the boundary that pure WikiText2 n512 remains full-pool single-run evidence only.
 
+## 7B n128 Calibration-Scale Extension
+
+Added on 2026-07-10: `qwen25_7b_wikitext2pool512_n128_csi_consensus_summary_2026_07_10.{json,md}` and `qwen25_7b_n16_n32_n64_n128_csi_scale_summary_2026_07_10.{json,md}` extend Qwen2.5-7B full-module calibration stability from n64 to n128 using independent 128-sample draws from the 512-prompt WikiText2 public pool. Both seed runs cover 197/197 modules; the consensus allocation uses avg 2.9997 bits with 94 4-bit and 103 2-bit modules. Left/right high-bit Jaccard is 0.8269/0.7963. This strengthens scale evidence while preserving the boundary that n128 downstream task retention was not rerun.
+
+## 7B n128 Full-Module Wall-Clock Efficiency
+
+Added on 2026-07-10: `qwen25_7b_n128_fullmodule_efficiency_wallclock_2026_07_10.{json,md}` records completed wall-clock evidence for two Qwen2.5-7B n128 full-module sensitivity runs. The seed0/seed1 tool wall times are 1246.1s and 1224.3s for 197/197 modules. This strengthens efficiency evidence beyond timing smokes, while preserving the boundary that complete downstream-task and 14B fake-quant timing tables remain unclaimed.
+

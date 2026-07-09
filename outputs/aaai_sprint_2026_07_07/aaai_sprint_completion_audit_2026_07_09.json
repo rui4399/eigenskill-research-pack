@@ -2,7 +2,7 @@
   "generated_at": "2026-07-09",
   "objective": "?????????????token???????????GitHub?",
   "remote_branch": "codex/rtx3090-experiments-2026-06-16",
-  "latest_pushed_commit_observed": "c854d6a",
+  "latest_pushed_commit_observed": "5f96bf1",
   "overall_status": "substantially_complete_with_explicit_14b_csi_and_true_efficiency_boundaries",
   "items": [
     {
@@ -126,10 +126,35 @@
           "path": "outputs/aaai_sprint_2026_07_07/qwen25_1p5b_mixed1024_n512_csi_consensus_downstream_summary_2026_07_09.json",
           "exists": true,
           "bytes": 2797
+        },
+        {
+          "path": "outputs/aaai_sprint_2026_07_07/qwen25_7b_wikitext2pool512_n128_seed0_sensitivity_2to4_budget3.json",
+          "exists": true,
+          "bytes": 193223
+        },
+        {
+          "path": "outputs/aaai_sprint_2026_07_07/qwen25_7b_wikitext2pool512_n128_seed1_sensitivity_2to4_budget3.json",
+          "exists": true,
+          "bytes": 193026
+        },
+        {
+          "path": "outputs/aaai_sprint_2026_07_07/qwen25_7b_wikitext2pool512_n128_seed0_seed1_csi_consensus_2to4_budget3.json",
+          "exists": true,
+          "bytes": 294929
+        },
+        {
+          "path": "outputs/aaai_sprint_2026_07_07/qwen25_7b_n16_n32_n64_n128_csi_scale_summary_2026_07_10.json",
+          "exists": true,
+          "bytes": 2212
+        },
+        {
+          "path": "outputs/aaai_sprint_2026_07_07/qwen25_7b_wikitext2pool512_n128_csi_consensus_summary_2026_07_10.json",
+          "exists": true,
+          "bytes": 1600
         }
       ],
-      "coverage": "n16/n32/n64/n128/n256 two-split consensus for 1.5B, pure WikiText2 n512 full-pool sensitivity/downstream for 1.5B, and mixed-domain public 1024-pool n512 two-split CSI consensus with MMLU100/GSM8K100 downstream; n16/n32/n64 for 7B.",
-      "claim_boundary": "n512 split-consensus is now complete for the mixed WikiText2+C4 1024 prompt pool. Pure WikiText2 n512 remains full-pool single sensitivity/downstream only because the pure WikiText2 pool has 512 prompts and the 1024-prompt datasets-server fetch timed out."
+      "coverage": "n16/n32/n64/n128 two-split consensus for 7B; n16/n32/n64/n128/n256 plus n512 full-pool/mixed-split evidence for 1.5B; downstream retention attached where measured.",
+      "claim_boundary": "7B calibration-size evidence is extended to n128 with full-module two-split CSI consensus. The new n128 row is calibration stability only; downstream MMLU/GSM8K retention is not rerun for this n128 slice."
     },
     {
       "requirement": "P0 seed robustness",
@@ -218,7 +243,7 @@
     },
     {
       "requirement": "P2 efficiency overhead",
-      "status": "partial_proxy_plus_1p5b_3b_7b_timing_smoke",
+      "status": "partial_proxy_plus_smoke_plus_7b_n128_fullmodule_wallclock",
       "evidence": [
         {
           "path": "outputs/aaai_sprint_2026_07_07/aaai_sprint_efficiency_proxy_2026_07_08.json",
@@ -254,10 +279,15 @@
           "path": "outputs/aaai_sprint_2026_07_07/qwen25_7b_efficiency_timing_smoke_wallclock_2026_07_09.json",
           "exists": true,
           "bytes": 792
+        },
+        {
+          "path": "outputs/aaai_sprint_2026_07_07/qwen25_7b_n128_fullmodule_efficiency_wallclock_2026_07_10.json",
+          "exists": true,
+          "bytes": 1776
         }
       ],
       "coverage": "Proxy efficiency/memory accounting plus reproducible timing smokes for Qwen2.5 1.5B, 3B, and 7B using the same 4-prompt/1-module sensitivity protocol.",
-      "claim_boundary": "This is a scale timing smoke, not a full wall-clock benchmark over all modules or complete downstream evaluation."
+      "claim_boundary": "Efficiency evidence now includes proxy accounting, 1.5B/3B/7B timing smokes, and a completed 7B n128 full-module sensitivity wall-clock pair. It is still not a complete downstream-task timing benchmark or 14B fake-quant timing table."
     },
     {
       "requirement": "P2 layer-level mechanism visualization/data",
@@ -357,7 +387,7 @@
   "remaining_strict_gaps": [
     "Full 14B fake-quant CSI-guided downstream retention still requires an FP16/BF16 14B checkpoint plus offload/device_map support, or a stronger AWQ-aware perturbation/downstream path beyond the new activation/scale proxy.",
     "GPTQ 7B downstream retention remains blocked after dependency installation: gptqmodel imports fail on this Windows Python 3.9 stack with a type-union EnumMeta error.",
-    "Full wall-clock efficiency table over all modules and downstream tasks is still not complete; current evidence includes reproducible 1.5B/3B/7B timing smokes plus proxy accounting.",
+    "Complete downstream-task and 14B fake-quant wall-clock efficiency tables are still not complete; current evidence now includes proxy/smoke timing plus a 7B n128 full-module sensitivity wall-clock pair.",
     "Pure WikiText2 n512 two-split consensus is still not claimed; mixed-domain n512 split-consensus is complete using a 1024-prompt WikiText2+C4 pool."
   ],
   "recommended_paper_claim": "The sprint supports a calibration-aware allocation/audit framework with downstream evidence across 1.5B/3B/7B and one cross-family model, plus 14B AWQ feasibility. It should not claim universal CSI dominance or completed 14B CSI allocation."

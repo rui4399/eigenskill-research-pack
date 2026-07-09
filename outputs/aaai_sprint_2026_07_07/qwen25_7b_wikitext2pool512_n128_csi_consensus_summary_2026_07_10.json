@@ -1,0 +1,46 @@
+{
+  "generated_at": "2026-07-10",
+  "model": "Qwen2.5-7B-Instruct",
+  "calibration_n": 128,
+  "prompt_pool": "data_eval/text_prompts/aaai_scaling_512_2026_07_09/wikitext2_test_ppl_prompts.txt",
+  "claim_boundary": "Full-module 7B calibration-stability evidence; downstream task retention is not rerun for this n128 row.",
+  "seed_runs": [
+    {
+      "seed": 0,
+      "artifact": "qwen25_7b_wikitext2pool512_n128_seed0_sensitivity_2to4_budget3.json",
+      "complete": true,
+      "prompt_count": 128,
+      "measured_modules": 197,
+      "avg_bits": 2.997658117613186,
+      "positive_delta_nll_protected_ratio": 0.9459125281641558
+    },
+    {
+      "seed": 1,
+      "artifact": "qwen25_7b_wikitext2pool512_n128_seed1_sensitivity_2to4_budget3.json",
+      "complete": true,
+      "prompt_count": 128,
+      "measured_modules": 197,
+      "avg_bits": 2.9997382942812014,
+      "positive_delta_nll_protected_ratio": 0.9586278877714197
+    }
+  ],
+  "consensus": {
+    "artifact": "qwen25_7b_wikitext2pool512_n128_seed0_seed1_csi_consensus_2to4_budget3.json",
+    "policy_name": "loss_sensitive_robust_lcb_consensus_4to8",
+    "avg_bits": 2.9997369908216167,
+    "bit_hist": {
+      "2": 103,
+      "4": 94
+    },
+    "overlap": {
+      "left_high_count": 96,
+      "right_high_count": 100,
+      "consensus_high_count": 94,
+      "left_high_overlap": 86,
+      "right_high_overlap": 86,
+      "left_high_jaccard": 0.8269230769230769,
+      "right_high_jaccard": 0.7962962962962963
+    },
+    "positive_delta_nll_protected_ratio": 0.9454494329755222
+  }
+}

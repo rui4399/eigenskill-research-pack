@@ -1,0 +1,51 @@
+{
+  "generated_at": "2026-07-10",
+  "title": "7B n128 full-module sensitivity wall-clock evidence",
+  "claim_boundary": "Wall-clock values are from the completed local command runs for full-module Qwen2.5-7B n128 sensitivity. This is not a full downstream evaluation timing table and does not cover 14B fake-quant.",
+  "hardware": "RTX 3090 24GB, Windows local run",
+  "environment": {
+    "HF_HOME": "E:/hf-cache",
+    "TEMP": "E:/tmp",
+    "python": "D:/Anaconda/python.exe"
+  },
+  "runs": [
+    {
+      "model": "Qwen2.5-7B-Instruct",
+      "calibration_n": 128,
+      "seed": 0,
+      "artifact": "qwen25_7b_wikitext2pool512_n128_seed0_sensitivity_2to4_budget3.json",
+      "prompt_pool": "data_eval/text_prompts/aaai_scaling_512_2026_07_09/wikitext2_test_ppl_prompts.txt",
+      "measured_modules": 197,
+      "complete": true,
+      "tool_wall_time_sec": 1246.1,
+      "script_elapsed_sec_last_progress": 1221.13,
+      "avg_bits": 2.997658117613186,
+      "bit_hist": {
+        "2": 101,
+        "4": 96
+      }
+    },
+    {
+      "model": "Qwen2.5-7B-Instruct",
+      "calibration_n": 128,
+      "seed": 1,
+      "artifact": "qwen25_7b_wikitext2pool512_n128_seed1_sensitivity_2to4_budget3.json",
+      "prompt_pool": "data_eval/text_prompts/aaai_scaling_512_2026_07_09/wikitext2_test_ppl_prompts.txt",
+      "measured_modules": 197,
+      "complete": true,
+      "tool_wall_time_sec": 1224.3,
+      "script_elapsed_sec_last_progress": 1203.97,
+      "avg_bits": 2.9997382942812014,
+      "bit_hist": {
+        "2": 97,
+        "4": 100
+      }
+    }
+  ],
+  "summary": {
+    "runs": 2,
+    "mean_tool_wall_time_sec": 1235.1999999999998,
+    "min_tool_wall_time_sec": 1224.3,
+    "max_tool_wall_time_sec": 1246.1
+  }
+}

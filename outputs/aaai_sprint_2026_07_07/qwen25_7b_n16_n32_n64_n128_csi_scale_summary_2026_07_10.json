@@ -1,0 +1,57 @@
+{
+  "schema_version": 1,
+  "model": "Qwen2.5-7B-Instruct",
+  "split_pair": "seed0 vs seed1",
+  "rows": [
+    {
+      "calibration_n": 16,
+      "avg_bits": 2.9997346735601336,
+      "bit_hist": {
+        "2": 115,
+        "4": 82
+      },
+      "left_high_jaccard": 0.6272727272727273,
+      "right_high_jaccard": 0.7373737373737373,
+      "mean_high_jaccard": 0.6823232323232323,
+      "source": "outputs\\aaai_sprint_2026_07_07\\qwen25_7b_wikitext2_n16_seed0_seed1_csi_consensus_2to4_budget3.json"
+    },
+    {
+      "calibration_n": 32,
+      "avg_bits": 2.999731632154436,
+      "bit_hist": {
+        "2": 115,
+        "4": 82
+      },
+      "left_high_jaccard": 0.7,
+      "right_high_jaccard": 0.6990291262135923,
+      "mean_high_jaccard": 0.699514563106796,
+      "source": "outputs\\aaai_sprint_2026_07_07\\qwen25_7b_wikitext2_n32_seed0_seed1_csi_consensus_2to4_budget3.json"
+    },
+    {
+      "calibration_n": 64,
+      "avg_bits": 2.999735977019718,
+      "bit_hist": {
+        "2": 103,
+        "4": 94
+      },
+      "left_high_jaccard": 0.8431372549019608,
+      "right_high_jaccard": 0.8076923076923077,
+      "mean_high_jaccard": 0.8254147812971342,
+      "source": "outputs\\aaai_sprint_2026_07_07\\qwen25_7b_wikitext2_n64_seed0_seed1_csi_consensus_2to4_budget3.json"
+    },
+    {
+      "calibration_n": 128,
+      "prompt_pool": "data_eval/text_prompts/aaai_scaling_512_2026_07_09/wikitext2_test_ppl_prompts.txt",
+      "avg_bits": 2.9997369908216167,
+      "bit_hist": {
+        "2": 103,
+        "4": 94
+      },
+      "left_high_jaccard": 0.8269230769230769,
+      "right_high_jaccard": 0.7962962962962963,
+      "mean_high_jaccard": 0.8116096866096866,
+      "source": "outputs\\aaai_sprint_2026_07_07\\qwen25_7b_wikitext2pool512_n128_seed0_seed1_csi_consensus_2to4_budget3.json"
+    }
+  ],
+  "interpretation": "Qwen2.5-7B full-module CSI stability now covers n=16, n=32, n=64, and n=128. The n128 row uses independent 128-sample draws from the 512-prompt WikiText2 public pool; agreement remains high but does not monotonically dominate n64, which is useful reviewer-facing stability evidence rather than a positive-only trend."
+}
