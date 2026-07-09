@@ -88,3 +88,7 @@ Added on 2026-07-09: `qwen25_1p5b_wikitext2_n512_seed0_sensitivity_2to4_budget3.
 
 Added on 2026-07-09: `qwen25_1p5b_n64_n256_n512_downstream_scaling_summary_2026_07_09.{json,md}` records downstream retention for the extended calibration-size evidence. Under the average ~3-bit 2/4-bit budget, n256 CSI consensus reaches MMLU100 5/100 and GSM8K100 0/100; the true n512 full-pool single sensitivity allocation reaches MMLU100 5/100 and GSM8K100 0/100. This closes the n256 downstream gap and adds n512 downstream evidence, while preserving the boundary that n512 two-split CSI consensus remains unclaimed.
 
+## Mixed-Domain n512 Split-Consensus Closure
+
+Added on 2026-07-09: `aaai_mixed_1024_prompt_manifest_2026_07_09.{json,md}` and `qwen25_1p5b_mixed1024_n512_csi_consensus_downstream_summary_2026_07_09.{json,md}` record a true n512 two-split CSI consensus run using two independent 512-sample draws from a mixed public 1024-prompt pool (512 WikiText2 + 512 C4). Both seed runs cover 197/197 modules. The consensus allocation uses avg 2.9999 bits with 103 4-bit and 94 2-bit modules; left/right high-bit Jaccard is 0.8727/0.8899. Downstream retention is MMLU100 4/100 and GSM8K100 0/100. This closes the n512 split-consensus method gap for mixed-domain public calibration while preserving the boundary that pure WikiText2 n512 remains full-pool single-run evidence only.
+

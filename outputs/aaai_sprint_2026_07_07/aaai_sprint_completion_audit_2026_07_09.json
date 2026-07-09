@@ -2,7 +2,7 @@
   "generated_at": "2026-07-09",
   "objective": "?????????????token???????????GitHub?",
   "remote_branch": "codex/rtx3090-experiments-2026-06-16",
-  "latest_pushed_commit_observed": "82a5dea",
+  "latest_pushed_commit_observed": "c854d6a",
   "overall_status": "substantially_complete_with_explicit_14b_csi_and_true_efficiency_boundaries",
   "items": [
     {
@@ -30,7 +30,7 @@
     },
     {
       "requirement": "P0 calibration size scaling",
-      "status": "complete_to_n512_sensitivity_with_n256_n512_downstream_boundary",
+      "status": "complete_to_n512_with_mixed_split_consensus_boundary",
       "evidence": [
         {
           "path": "outputs/aaai_sprint_2026_07_07/aaai_sprint_calibration_alignment_2026_07_09.json",
@@ -91,10 +91,45 @@
           "path": "outputs/aaai_sprint_2026_07_07/qwen25_1p5b_gsm8k100_single_n512_budget3_v2.json",
           "exists": true,
           "bytes": 35301
+        },
+        {
+          "path": "outputs/aaai_sprint_2026_07_07/aaai_mixed_1024_prompt_manifest_2026_07_09.json",
+          "exists": true,
+          "bytes": 731
+        },
+        {
+          "path": "outputs/aaai_sprint_2026_07_07/qwen25_1p5b_mixed1024_n512_seed0_sensitivity_2to4_budget3.json",
+          "exists": true,
+          "bytes": 243102
+        },
+        {
+          "path": "outputs/aaai_sprint_2026_07_07/qwen25_1p5b_mixed1024_n512_seed1_sensitivity_2to4_budget3.json",
+          "exists": true,
+          "bytes": 243250
+        },
+        {
+          "path": "outputs/aaai_sprint_2026_07_07/qwen25_1p5b_mixed1024_n512_seed0_seed1_csi_consensus_2to4_budget3.json",
+          "exists": true,
+          "bytes": 301684
+        },
+        {
+          "path": "outputs/aaai_sprint_2026_07_07/qwen25_1p5b_mmlu100_csi_mixed1024_n512_budget3_v2.json",
+          "exists": true,
+          "bytes": 35808
+        },
+        {
+          "path": "outputs/aaai_sprint_2026_07_07/qwen25_1p5b_gsm8k100_csi_mixed1024_n512_budget3_v2.json",
+          "exists": true,
+          "bytes": 34626
+        },
+        {
+          "path": "outputs/aaai_sprint_2026_07_07/qwen25_1p5b_mixed1024_n512_csi_consensus_downstream_summary_2026_07_09.json",
+          "exists": true,
+          "bytes": 2797
         }
       ],
-      "coverage": "n16/n32/n64/n128/n256 two-split consensus for 1.5B, plus completed n512 full-pool sensitivity/allocation for 1.5B; n16/n32/n64 for 7B; downstream retention now attached at n64 and n256 CSI, plus n512 single full-pool allocation.",
-      "claim_boundary": "n256 downstream retention is complete for 1.5B CSI consensus. n512 downstream retention is complete only for the true full-pool single sensitivity/allocation run; n512 two-split consensus remains unclaimed."
+      "coverage": "n16/n32/n64/n128/n256 two-split consensus for 1.5B, pure WikiText2 n512 full-pool sensitivity/downstream for 1.5B, and mixed-domain public 1024-pool n512 two-split CSI consensus with MMLU100/GSM8K100 downstream; n16/n32/n64 for 7B.",
+      "claim_boundary": "n512 split-consensus is now complete for the mixed WikiText2+C4 1024 prompt pool. Pure WikiText2 n512 remains full-pool single sensitivity/downstream only because the pure WikiText2 pool has 512 prompts and the 1024-prompt datasets-server fetch timed out."
     },
     {
       "requirement": "P0 seed robustness",
@@ -323,7 +358,7 @@
     "Full 14B fake-quant CSI-guided downstream retention still requires an FP16/BF16 14B checkpoint plus offload/device_map support, or a stronger AWQ-aware perturbation/downstream path beyond the new activation/scale proxy.",
     "GPTQ 7B downstream retention remains blocked after dependency installation: gptqmodel imports fail on this Windows Python 3.9 stack with a type-union EnumMeta error.",
     "Full wall-clock efficiency table over all modules and downstream tasks is still not complete; current evidence includes reproducible 1.5B/3B/7B timing smokes plus proxy accounting.",
-    "n512 two-split consensus is still not complete; the current n512 downstream result is single full-pool sensitivity/allocation, not CSI consensus."
+    "Pure WikiText2 n512 two-split consensus is still not claimed; mixed-domain n512 split-consensus is complete using a 1024-prompt WikiText2+C4 pool."
   ],
   "recommended_paper_claim": "The sprint supports a calibration-aware allocation/audit framework with downstream evidence across 1.5B/3B/7B and one cross-family model, plus 14B AWQ feasibility. It should not claim universal CSI dominance or completed 14B CSI allocation."
 }

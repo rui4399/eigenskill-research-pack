@@ -1,0 +1,76 @@
+{
+  "generated_at": "2026-07-09",
+  "model": "Qwen2.5-1.5B-Instruct",
+  "prompt_pool": "data_eval/text_prompts/aaai_mixed_1024_2026_07_09/wikitext2_c4_mixed_ppl_prompts.txt",
+  "prompt_pool_manifest": "aaai_mixed_1024_prompt_manifest_2026_07_09.json",
+  "calibration_n": 512,
+  "split_design": "Two independent 512-sample draws from a mixed public 1024-prompt pool (512 WikiText2 + 512 C4).",
+  "claim_boundary": "This closes an n512 split-consensus evidence gap for mixed-domain public calibration. It is not a pure WikiText2 n512 two-split consensus result.",
+  "seed_runs": [
+    {
+      "seed": 0,
+      "artifact": "qwen25_1p5b_mixed1024_n512_seed0_sensitivity_2to4_budget3.json",
+      "complete": true,
+      "prompt_count": 512,
+      "measured_modules": 197,
+      "avg_bits": 2.9998686521856808,
+      "positive_delta_nll_protected_ratio": 0.923794106540143
+    },
+    {
+      "seed": 1,
+      "artifact": "qwen25_1p5b_mixed1024_n512_seed1_sensitivity_2to4_budget3.json",
+      "complete": true,
+      "prompt_count": 512,
+      "measured_modules": 197,
+      "avg_bits": 2.9998646719488833,
+      "positive_delta_nll_protected_ratio": 0.922376646514455
+    }
+  ],
+  "consensus": {
+    "artifact": "qwen25_1p5b_mixed1024_n512_seed0_seed1_csi_consensus_2to4_budget3.json",
+    "policy_name": "loss_sensitive_robust_lcb_consensus_4to8",
+    "avg_bits": 2.9998706423040793,
+    "bit_hist": {
+      "4": 103,
+      "2": 94
+    },
+    "positive_delta_nll_protected_ratio": 0.9206100593674948,
+    "overlap": {
+      "left_high_count": 103,
+      "right_high_count": 103,
+      "consensus_high_count": 103,
+      "left_high_overlap": 96,
+      "right_high_overlap": 97,
+      "left_high_jaccard": 0.8727272727272727,
+      "right_high_jaccard": 0.8899082568807339
+    }
+  },
+  "downstream": {
+    "mmlu100": {
+      "artifact": "qwen25_1p5b_mmlu100_csi_mixed1024_n512_budget3_v2.json",
+      "total": 100,
+      "exact": 4,
+      "accuracy": 0.04,
+      "allocation": "outputs\\aaai_sprint_2026_07_07\\qwen25_1p5b_mixed1024_n512_seed0_seed1_csi_consensus_2to4_budget3.json",
+      "allocation_method": "loss_sensitive_robust_lcb_consensus_4to8",
+      "bit_hist": {
+        "4": 103,
+        "2": 94
+      },
+      "linear_modules_touched": 197
+    },
+    "gsm8k100": {
+      "artifact": "qwen25_1p5b_gsm8k100_csi_mixed1024_n512_budget3_v2.json",
+      "total": 100,
+      "exact": 0,
+      "accuracy": 0.0,
+      "allocation": "outputs\\aaai_sprint_2026_07_07\\qwen25_1p5b_mixed1024_n512_seed0_seed1_csi_consensus_2to4_budget3.json",
+      "allocation_method": "loss_sensitive_robust_lcb_consensus_4to8",
+      "bit_hist": {
+        "4": 103,
+        "2": 94
+      },
+      "linear_modules_touched": 197
+    }
+  }
+}
