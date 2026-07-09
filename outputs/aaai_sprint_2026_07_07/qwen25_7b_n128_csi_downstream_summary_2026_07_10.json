@@ -1,0 +1,50 @@
+{
+  "generated_at": "2026-07-10",
+  "model": "Qwen2.5-7B-Instruct",
+  "calibration_n": 128,
+  "allocation": "qwen25_7b_wikitext2pool512_n128_seed0_seed1_csi_consensus_2to4_budget3.json",
+  "allocation_policy": "loss_sensitive_robust_lcb_consensus_4to8",
+  "avg_bits": 2.9997369908216167,
+  "bit_hist": {
+    "2": 103,
+    "4": 94
+  },
+  "overlap": {
+    "left_high_count": 96,
+    "right_high_count": 100,
+    "consensus_high_count": 94,
+    "left_high_overlap": 86,
+    "right_high_overlap": 86,
+    "left_high_jaccard": 0.8269230769230769,
+    "right_high_jaccard": 0.7962962962962963
+  },
+  "downstream": {
+    "mmlu100": {
+      "artifact": "qwen25_7b_mmlu100_csi_n128_budget3_v2.json",
+      "total": 100,
+      "exact": 3,
+      "accuracy": 0.03,
+      "allocation": "outputs\\aaai_sprint_2026_07_07\\qwen25_7b_wikitext2pool512_n128_seed0_seed1_csi_consensus_2to4_budget3.json",
+      "allocation_method": "loss_sensitive_robust_lcb_consensus_4to8",
+      "bit_hist": {
+        "2": 103,
+        "4": 94
+      },
+      "linear_modules_touched": 197
+    },
+    "gsm8k100": {
+      "artifact": "qwen25_7b_gsm8k100_csi_n128_budget3_v2.json",
+      "total": 100,
+      "exact": 0,
+      "accuracy": 0.0,
+      "allocation": "outputs\\aaai_sprint_2026_07_07\\qwen25_7b_wikitext2pool512_n128_seed0_seed1_csi_consensus_2to4_budget3.json",
+      "allocation_method": "loss_sensitive_robust_lcb_consensus_4to8",
+      "bit_hist": {
+        "2": 103,
+        "4": 94
+      },
+      "linear_modules_touched": 197
+    }
+  },
+  "claim_boundary": "This is a 7B n128 avg-3-bit CSI downstream stress/failure-boundary slice. It closes the missing downstream attachment for n128, but it is not positive dominance evidence."
+}

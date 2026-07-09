@@ -100,3 +100,7 @@ Added on 2026-07-10: `qwen25_7b_wikitext2pool512_n128_csi_consensus_summary_2026
 
 Added on 2026-07-10: `qwen25_7b_n128_fullmodule_efficiency_wallclock_2026_07_10.{json,md}` records completed wall-clock evidence for two Qwen2.5-7B n128 full-module sensitivity runs. The seed0/seed1 tool wall times are 1246.1s and 1224.3s for 197/197 modules. This strengthens efficiency evidence beyond timing smokes, while preserving the boundary that complete downstream-task and 14B fake-quant timing tables remain unclaimed.
 
+## 7B n128 Downstream Stress Slice
+
+Added on 2026-07-10: `qwen25_7b_n128_csi_downstream_summary_2026_07_10.{json,md}` attaches downstream MMLU100/GSM8K100 retention to the new Qwen2.5-7B n128 CSI consensus allocation. Under the aggressive avg-3-bit 2/4-bit allocation, MMLU100 is 3/100 and GSM8K100 is 0/100. This closes the missing n128 downstream attachment while strengthening the failure-boundary narrative: the allocation is stable under calibration agreement, but downstream retention collapses at this low budget.
+

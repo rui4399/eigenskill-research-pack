@@ -2,7 +2,7 @@
   "generated_at": "2026-07-09",
   "objective": "?????????????token???????????GitHub?",
   "remote_branch": "codex/rtx3090-experiments-2026-06-16",
-  "latest_pushed_commit_observed": "5f96bf1",
+  "latest_pushed_commit_observed": "cf17db4",
   "overall_status": "substantially_complete_with_explicit_14b_csi_and_true_efficiency_boundaries",
   "items": [
     {
@@ -23,10 +23,15 @@
           "path": "outputs/aaai_sprint_2026_07_07/aaai_sprint_failure_recovery_audit_2026_07_09.json",
           "exists": true,
           "bytes": 7895
+        },
+        {
+          "path": "outputs/aaai_sprint_2026_07_07/qwen25_7b_n128_csi_downstream_summary_2026_07_10.json",
+          "exists": true,
+          "bytes": 1764
         }
       ],
       "coverage": "Qwen2.5 1.5B/3B/7B plus Phi-3-mini cross-family slices; MMLU100/GSM8K100; uniform, single-split, CSI allocation; equal-budget avg3/avg3.5 where feasible.",
-      "claim_boundary": "CSI is useful as allocation/audit evidence but does not dominate in every slice; 7B avg3.5 is mixed/negative versus single-split."
+      "claim_boundary": "CSI is useful as allocation/audit evidence but does not dominate in every slice. The new 7B n128 avg-3-bit downstream run is explicitly negative/collapse evidence and supports reviewer-facing failure-boundary framing."
     },
     {
       "requirement": "P0 calibration size scaling",
@@ -151,10 +156,25 @@
           "path": "outputs/aaai_sprint_2026_07_07/qwen25_7b_wikitext2pool512_n128_csi_consensus_summary_2026_07_10.json",
           "exists": true,
           "bytes": 1600
+        },
+        {
+          "path": "outputs/aaai_sprint_2026_07_07/qwen25_7b_mmlu100_csi_n128_budget3_v2.json",
+          "exists": true,
+          "bytes": 44654
+        },
+        {
+          "path": "outputs/aaai_sprint_2026_07_07/qwen25_7b_gsm8k100_csi_n128_budget3_v2.json",
+          "exists": true,
+          "bytes": 42256
+        },
+        {
+          "path": "outputs/aaai_sprint_2026_07_07/qwen25_7b_n128_csi_downstream_summary_2026_07_10.json",
+          "exists": true,
+          "bytes": 1764
         }
       ],
-      "coverage": "n16/n32/n64/n128 two-split consensus for 7B; n16/n32/n64/n128/n256 plus n512 full-pool/mixed-split evidence for 1.5B; downstream retention attached where measured.",
-      "claim_boundary": "7B calibration-size evidence is extended to n128 with full-module two-split CSI consensus. The new n128 row is calibration stability only; downstream MMLU/GSM8K retention is not rerun for this n128 slice."
+      "coverage": "n16/n32/n64/n128 two-split consensus for 7B; n128 now includes MMLU100/GSM8K100 downstream stress evidence; n16/n32/n64/n128/n256 plus n512 full-pool/mixed-split evidence for 1.5B.",
+      "claim_boundary": "7B n128 now has downstream attachment, but it is a collapse/failure-boundary slice at avg 3 bits: MMLU100 3/100 and GSM8K100 0/100. Use as audit/gating evidence, not positive dominance evidence."
     },
     {
       "requirement": "P0 seed robustness",
